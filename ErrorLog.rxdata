@@ -1,0 +1,27 @@
+On <<Sat 08 Feb 2014, 16:40:52>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x982c3c0>)>> occured.
+On <<Sat 08 Feb 2014, 16:41:32>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x9813130>)>> occured.
+On <<Sat 08 Feb 2014, 16:43:46>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x99982a8>)>> occured.
+On <<Sat 08 Feb 2014, 16:52:06>> the error <<cannot convert nil into String (#<Scene_Map:0x2e0cc38>)>> occured.
+On <<Sat 08 Feb 2014, 16:56:17>> the file <<Graphics/Characters/0>> was missing.
+On <<Sat 08 Feb 2014, 16:57:38>> the file <<Graphics/Characters/$char22.to_i>> was missing.
+On <<Sat 08 Feb 2014, 16:58:03>> the file <<Graphics/Characters/0>> was missing.
+On <<Sat 08 Feb 2014, 16:58:24>> the file <<Graphics/Characters/0>> was missing.
+On <<Sat 08 Feb 2014, 16:58:55>> the file <<Graphics/Characters/$char22>> was missing.
+On <<Sat 08 Feb 2014, 17:01:36>> the file <<Graphics/Characters/0>> was missing.
+On <<Sat 08 Feb 2014, 17:03:37>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x99d3ea0>)>> occured.
+On <<Sat 08 Feb 2014, 17:04:22>> the file <<Graphics/Characters/0>> was missing.
+On <<Sat 08 Feb 2014, 17:05:48>> the file <<Graphics/Characters/0>> was missing.
+On <<Sat 08 Feb 2014, 17:17:10>> the file <<Graphics/Characters/+$charp+>> was missing.
+On <<Sat 08 Feb 2014, 17:17:44>> the file <<Graphics/Characters/$charp>> was missing.
+On <<Sun 30 Mar 2014, 00:52:32>> the error <<getaddrinfo: no address associated with hostname. (#<Scene_Connect:0x97eb1b8>)>> occured.
+On <<Sun 30 Mar 2014, 00:52:42>> the error <<getaddrinfo: no address associated with hostname. (#<Scene_Connect:0x97eb1b8>)>> occured.
+On <<Sun 06 Apr 2014, 12:39:41>> the error <<Section198:113: syntax error ()>> occured.
+On <<Sun 06 Apr 2014, 12:39:41>> the error <<compile error
+Section198:113: syntax error ()>> occured.
+On <<Sat 11 Oct 2014, 20:49:23>> the error <<(eval):4: syntax error (#<Scene_Reinit:0x93520d8>)>> occured.
+On <<Sat 11 Oct 2014, 20:49:23>> the error <<(eval):4: syntax error
+(eval):5: syntax error (#<Scene_Reinit:0x93520d8>)>> occured.
+On <<Sat 11 Oct 2014, 20:49:23>> the error <<compile error
+(eval):4: syntax error
+(eval):5: syntax error (#<Scene_Reinit:0x93520d8>)>> occured.
+On <<Tue 19 Feb 2019, 22:22:03>> the error <<comparison of String with 0 failed (#<Scene_Map:0x81b6370>)>> occured.

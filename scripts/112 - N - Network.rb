@@ -1190,17 +1190,19 @@ class Main
        end
      end
     
-     #스킬 리스트
-      if $global_x == 25
-        skill = []
-        skill = $1.split('.')
-       for skill_id in skill
-          if skill_id.to_i > 0
-            $game_party.actors[0].skills.push(skill_id)
-          end
-       end
-     end
-     
+					
+					#스킬 리스트
+					
+					if $global_x == 25						
+						skill = []						
+						skill = $1.split(',')					
+						for skill_code in skill													
+							if skill_code.to_i > 0				
+								$game_party.actors[0].learn_skill(skill_code.to_i)				
+							end							
+						end						
+					end
+					
      # 금전
       $game_party.gain_gold($1.to_i) if $global_x == 26
       

@@ -8,9 +8,10 @@ def 자동저장
   @armorlist = ""
   @variablelist = ""
   @switchlist = ""
-  
+		
+		
     for i in 0...$game_party.actors[0].skills.size
-      skill = $data_skills[$game_party.actors[0].skills[i]].id
+      skill = $game_party.actors[0].skills[i].id
       @skilllist += ("#{skill},")
     end
     

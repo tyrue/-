@@ -25,3 +25,6 @@ On <<Sat 11 Oct 2014, 20:49:23>> the error <<compile error
 (eval):4: syntax error
 (eval):5: syntax error (#<Scene_Reinit:0x93520d8>)>> occured.
 On <<Tue 19 Feb 2019, 22:22:03>> the error <<comparison of String with 0 failed (#<Scene_Map:0x81b6370>)>> occured.
+On <<Tue 26 Feb 2019, 01:18:24>> the error <<cannot convert String into Integer (#<Scene_Skill:0x804ff60>)>> occured.
+On <<Tue 26 Feb 2019, 01:47:21>> the error <<comparison of String with 0 failed (#<Scene_Map:0x81cab60>)>> occured.
+On <<Tue 26 Feb 2019, 01:48:59>> the error <<comparison of String with 0 failed (#<Scene_Map:0x81e4458>)>> occured.

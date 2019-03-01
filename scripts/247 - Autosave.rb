@@ -11,7 +11,7 @@ def 자동저장
 		
 		
     for i in 0...$game_party.actors[0].skills.size
-      skill = $game_party.actors[0].skills[i].id
+      skill = $game_party.actors[0].skills[i]
       @skilllist += ("#{skill},")
     end
     

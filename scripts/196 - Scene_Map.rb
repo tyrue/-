@@ -51,30 +51,64 @@ if not Hwnd.include?("NetPartyInv")
     if Key.trigger?(67) and not Hwnd.include?("System")
       Jindow_System.new
     end
-    if Key.trigger?(30) and not Hwnd.include?("Guild")
-      Jindow_Guild.new
-    end
-    
-    if $game_party.actors[0].hp > 0    
-     if Key.trigger?(32) and not Hwnd.include?("Inventory")
-      Jindow_Inventory.new
-  end
-end
-
-    if Key.trigger?(26) and not Hwnd.include?("Status")
-      Jindow_Status.new
-    end
-    
-    if Key.trigger?(34) and not Hwnd.include?("Skill")
-      Jindow_Skill.new
-    end
-          
-    if Key.trigger?(39) and not Hwnd.include?("NetParty")
-        Jindow_NetParty.new
+    if Key.trigger?(67) 
+      if not Hwnd.include?("System")
+        Jindow_System.new
+      else
+        Hwnd.dispose("System")
       end
-    if Key.trigger?(35) and not Hwnd.include?("Jindow_NetPlayer")
+    end
+    
+    if Key.trigger?(30) 
+      if not Hwnd.include?("Guild")
+        Jindow_Guild.new
+      else
+        Hwnd.dispose("Guild")
+      end
+    end	
+
+    if $game_party.actors[0].hp > 0  
+      if Key.trigger?(32)
+        if not Hwnd.include?("Inventory")
+          Jindow_Inventory.new
+        else
+          Hwnd.dispose("Inventory")
+        end
+      end
+    end	 
+ 
+    if Key.trigger?(26) 
+      if not Hwnd.include?("Status")
+        Jindow_Status.new
+      else
+        Hwnd.dispose("Status")
+      end
+    end	
+
+    if Key.trigger?(34)
+      if not Hwnd.include?("Skill")
+        Jindow_Skill.new
+      else
+        Hwnd.dispose("Skill")
+      end
+    end	
+
+    if Key.trigger?(39)
+      if not Hwnd.include?("NetParty")
+        Jindow_NetParty.new
+      else
+        Hwnd.dispose("NetParty")
+      end
+    end	
+
+    if Key.trigger?(35)
+      if not Hwnd.include?("Jindow_NetPlayer")
         Jindow_NetPlayer.new
-      end 
+      else
+        Hwnd.dispose("Jindow_NetPlayer")
+      end
+    end	
+    
     if Key.trigger?(36)
        $scene = Scene_Menu.new(0)
      end 

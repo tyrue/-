@@ -11,7 +11,7 @@ class Jindow_Skill < Jindow
     @mark = true
     @drag = true
     @close = true
-    self.refresh "시스템"
+    self.refresh "Skill"
     self.x = 640 / 2 - self.max_width / 2
     self.y = 480 / 2 - self.max_height / 2
     @a = J::Button.new(self).refresh(100, "스킬창")

@@ -7,7 +7,7 @@ class Jindow_NetPlayer < Jindow
     @mark = true
     @drag = true
     @close = true
-    self.refresh "NetPlayer"
+    self.refresh "Jindow_NetPlayer"
     self.x = 640 / 2 - self.max_width / 2
     self.y = 480 / 2 - self.max_height / 2
     @buttons = {}

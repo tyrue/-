@@ -1283,52 +1283,102 @@ module J
           return
         end
       else
-        if Key.trigger?(KEY_0) || Key.trigger?(50)
+        if Key.trigger?(KEY_0)
           @text.push("0")
           @char = "0"
           return
         end
-        if Key.trigger?(KEY_1) || Key.trigger?(51)
+        if Key.trigger?(50)
+          @text.push("0")
+          @char = "0"
+          return
+        end
+        if Key.trigger?(KEY_1)
           @text.push("1")
           @char = "1"
           return
         end
-        if Key.trigger?(KEY_2) || Key.trigger?(52)
+        if Key.trigger?(51)
+          @text.push("1")
+          @char = "1"
+          return
+        end
+        if Key.trigger?(KEY_2
+          text.push("2")
+          @char = "2"
+          return
+        end
+        if Key.trigger?(52)
           @text.push("2")
           @char = "2"
           return
         end
-        if Key.trigger?(KEY_3) || Key.trigger?(53)
+        if Key.trigger?(KEY_3)
           @text.push("3")
           @char = "3"
           return
         end
-        if Key.trigger?(KEY_4) || Key.trigger?(54)
+        if  Key.trigger?(53)
+          @text.push("3")
+          @char = "3"
+          return
+        end
+        if Key.trigger?(KEY_4)
           @text.push("4")
           @char = "4"
           return
         end
-        if Key.trigger?(KEY_5) || Key.trigger?(55)
+        if Key.trigger?(54)
+          @text.push("4")
+          @char = "4"
+          return
+        end
+        if Key.trigger?(KEY_5)
           @text.push("5")
           @char = "5"
           return
         end
-        if Key.trigger?(KEY_6) || Key.trigger?(56)
+        if Key.trigger?(55)
+          @text.push("5")
+          @char = "5"
+          return
+        end
+        if Key.trigger?(KEY_6)
           @text.push("6")
           @char = "6"
           return
         end
-        if Key.trigger?(KEY_7) || Key.trigger?(57)
+        if Key.trigger?(56)
+          @text.push("6")
+          @char = "6"
+          return
+        end
+        if Key.trigger?(KEY_7)
           @text.push("7")
           @char = "7"
           return
         end
-        if Key.trigger?(KEY_8) || Key.trigger?(58)
+        if Key.trigger?(57)
+          @text.push("7")
+          @char = "7"
+          return
+        end
+        if Key.trigger?(KEY_8)
           @text.push("8")
           @char = "8"
           return
         end
-        if Key.trigger?(KEY_9) || Key.trigger?(59)
+        if Key.trigger?(58)
+          @text.push("8")
+          @char = "8"
+          return
+        end
+        if Key.trigger?(KEY_9)
+          @text.push("9")
+          @char = "9"
+          return
+        end
+        if Key.trigger?(59)
           @text.push("9")
           @char = "9"
           return

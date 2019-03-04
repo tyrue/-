@@ -1303,7 +1303,7 @@ module J
           @char = "1"
           return
         end
-        if Key.trigger?(KEY_2
+        if Key.trigger?(KEY_2)
           text.push("2")
           @char = "2"
           return

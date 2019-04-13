@@ -30,3 +30,9 @@ On <<Tue 26 Feb 2019, 01:47:21>> the error <<comparison of String with 0 failed 
 On <<Tue 26 Feb 2019, 01:48:59>> the error <<comparison of String with 0 failed (#<Scene_Map:0x81e4458>)>> occured.
 On <<Fri 01 Mar 2019, 15:50:22>> the error <<comparison of String with 0 failed (#<Scene_Map:0x81e56d0>)>> occured.
 On <<Fri 01 Mar 2019, 15:50:56>> the error <<comparison of String with 0 failed (#<Scene_Map:0x8078130>)>> occured.
+On <<Sun 14 Apr 2019, 00:33:18>> the error <<Section155:3379: syntax error ()>> occured.
+On <<Sun 14 Apr 2019, 00:33:18>> the error <<compile error
+Section155:3379: syntax error ()>> occured.
+On <<Sun 14 Apr 2019, 00:34:08>> the error <<Section155:3353: syntax error ()>> occured.
+On <<Sun 14 Apr 2019, 00:34:08>> the error <<compile error
+Section155:3353: syntax error ()>> occured.

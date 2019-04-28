@@ -36,3 +36,4 @@ Section155:3379: syntax error ()>> occured.
 On <<Sun 14 Apr 2019, 00:34:08>> the error <<Section155:3353: syntax error ()>> occured.
 On <<Sun 14 Apr 2019, 00:34:08>> the error <<compile error
 Section155:3353: syntax error ()>> occured.
+On <<Sun 28 Apr 2019, 18:37:25>> the error <<Your tileset graphic 주몽의방 needs to be divisible by 32! (#<Scene_Map:0x81dbcc0>)>> occured.

@@ -43,3 +43,23 @@ Section154:3375: syntax error ()>> occured.
 On <<Mon 29 Apr 2019, 22:52:32>> the error <<Section154:3382: syntax error ()>> occured.
 On <<Mon 29 Apr 2019, 22:52:32>> the error <<compile error
 Section154:3382: syntax error ()>> occured.
+On <<Tue 30 Apr 2019, 00:44:18>> the error << (#<Scene_Map:0x7f4fed0>)>> occured.
+On <<Tue 30 Apr 2019, 00:45:21>> the error << (#<Scene_Map:0x825a7e8>)>> occured.
+On <<Tue 30 Apr 2019, 00:45:52>> the error << (#<Scene_Map:0x8064a68>)>> occured.
+On <<Tue 30 Apr 2019, 00:46:15>> the error << (#<Scene_Map:0x81db0d8>)>> occured.
+On <<Tue 30 Apr 2019, 00:47:17>> the error << (#<Scene_Map:0x82b5678>)>> occured.
+On <<Tue 30 Apr 2019, 00:47:35>> the error << (#<Scene_Map:0x824e1e8>)>> occured.
+On <<Tue 30 Apr 2019, 01:40:43>> the error <<Section263:87: syntax error ()>> occured.
+On <<Tue 30 Apr 2019, 01:40:43>> the error <<Section263:87: syntax error
+[출처] 경험치 누적 해제 (RPGXP Korea Cafe [게임만들기, RPG XP 전문]) |작성자 FPG ()>> occured.
+On <<Tue 30 Apr 2019, 01:40:43>> the error <<Section263:87: syntax error
+[출처] 경험치 누적 해제 (RPGXP Korea Cafe [게임만들기, RPG XP 전문]) |작성자 FPG
+                  ^ ()>> occured.
+On <<Tue 30 Apr 2019, 01:40:43>> the error <<compile error
+Section263:87: syntax error
+[출처] 경험치 누적 해제 (RPGXP Korea Cafe [게임만들기, RPG XP 전문]) |작성자 FPG
+                  ^ ()>> occured.
+On <<Tue 30 Apr 2019, 21:59:14>> the error <<Section252:307: syntax error ()>> occured.
+On <<Tue 30 Apr 2019, 21:59:14>> the error <<compile error
+Section252:307: syntax error ()>> occured.
+On <<Tue 30 Apr 2019, 23:16:43>> the error <<wrong number of arguments(0 for 1) (#<Scene_Login:0x833a160>)>> occured.

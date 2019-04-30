@@ -63,3 +63,10 @@ On <<Tue 30 Apr 2019, 21:59:14>> the error <<Section252:307: syntax error ()>> o
 On <<Tue 30 Apr 2019, 21:59:14>> the error <<compile error
 Section252:307: syntax error ()>> occured.
 On <<Tue 30 Apr 2019, 23:16:43>> the error <<wrong number of arguments(0 for 1) (#<Scene_Login:0x833a160>)>> occured.
+On <<Wed 01 May 2019, 02:24:01>> the error <<Section136:207: syntax error ()>> occured.
+On <<Wed 01 May 2019, 02:24:01>> the error <<compile error
+Section136:207: syntax error ()>> occured.
+On <<Wed 01 May 2019, 04:47:24>> the file <<Graphics/Characters/Nada>> was missing.
+On <<Wed 01 May 2019, 04:47:48>> the file <<Graphics/Characters/Nada>> was missing.
+On <<Wed 01 May 2019, 04:50:44>> the file <<Graphics/Autotiles/검정>> was missing.
+On <<Wed 01 May 2019, 04:52:14>> the file <<Graphics/Autotiles/1030115470_69961e0e_19>> was missing.

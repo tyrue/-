@@ -1676,3 +1676,4 @@ Section157:3891: syntax error ()>> occured.
 On <<Wed 01 May 2019, 16:01:55>> the error <<compile error
 Section157:1021: syntax error
 Section157:3891: syntax error ()>> occured.
+On <<Wed 01 May 2019, 20:02:35>> the error <<comparison of String with 5000 failed (#<Scene_Map:0x806e398>)>> occured.

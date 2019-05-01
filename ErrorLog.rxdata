@@ -1670,3 +1670,9 @@ Section156:1607: syntax error
 				when 21 # 다람쥐
 				    ^
 Section156:3495: syntax error ()>> occured.
+On <<Wed 01 May 2019, 16:01:55>> the error <<Section157:1021: syntax error ()>> occured.
+On <<Wed 01 May 2019, 16:01:55>> the error <<Section157:1021: syntax error
+Section157:3891: syntax error ()>> occured.
+On <<Wed 01 May 2019, 16:01:55>> the error <<compile error
+Section157:1021: syntax error
+Section157:3891: syntax error ()>> occured.

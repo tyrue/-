@@ -70,3 +70,7 @@ On <<Wed 01 May 2019, 04:47:24>> the file <<Graphics/Characters/Nada>> was missi
 On <<Wed 01 May 2019, 04:47:48>> the file <<Graphics/Characters/Nada>> was missing.
 On <<Wed 01 May 2019, 04:50:44>> the file <<Graphics/Autotiles/검정>> was missing.
 On <<Wed 01 May 2019, 04:52:14>> the file <<Graphics/Autotiles/1030115470_69961e0e_19>> was missing.
+On <<Wed 01 May 2019, 05:25:04>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x822e768>)>> occured.
+On <<Wed 01 May 2019, 05:45:30>> the error <<Section156:3449: syntax error ()>> occured.
+On <<Wed 01 May 2019, 05:45:30>> the error <<compile error
+Section156:3449: syntax error ()>> occured.

@@ -74,3 +74,1599 @@ On <<Wed 01 May 2019, 05:25:04>> the error <<cannot convert Fixnum into String (
 On <<Wed 01 May 2019, 05:45:30>> the error <<Section156:3449: syntax error ()>> occured.
 On <<Wed 01 May 2019, 05:45:30>> the error <<compile error
 Section156:3449: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:24>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐
+				    ^
+Section156:1607: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐
+				    ^
+Section156:1607: syntax error
+				when 21 # 다람쥐 ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐
+				    ^
+Section156:1607: syntax error
+				when 21 # 다람쥐
+				    ^ ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐
+				    ^
+Section156:1607: syntax error
+				when 21 # 다람쥐
+				    ^
+Section156:3495: syntax error ()>> occured.
+On <<Wed 01 May 2019, 14:34:25>> the error <<compile error
+Section156:1549: syntax error
+				when 4 # 숫사슴
+				    ^
+Section156:1559: syntax error
+				when 5 # 늑대
+				    ^
+Section156:1569: syntax error
+				when 6 # 소
+				    ^
+Section156:1579: syntax error
+				when 7 # 돼지
+				    ^
+Section156:1581: syntax error
+				when 8 # 다람쥐
+				    ^
+Section156:1583: syntax error
+				when 9 # 다람쥐
+				    ^
+Section156:1585: syntax error
+				when 10 # 다람쥐
+				    ^
+Section156:1587: syntax error
+				when 11 # 다람쥐
+				    ^
+Section156:1589: syntax error
+				when 12 # 다람쥐
+				    ^
+Section156:1591: syntax error
+				when 13 # 다람쥐
+				    ^
+Section156:1593: syntax error
+				when 14 # 다람쥐
+				    ^
+Section156:1595: syntax error
+				when 15 # 다람쥐
+				    ^
+Section156:1597: syntax error
+				when 16 # 다람쥐
+				    ^
+Section156:1599: syntax error
+				when 17 # 다람쥐
+				    ^
+Section156:1601: syntax error
+				when 18 # 다람쥐
+				    ^
+Section156:1603: syntax error
+				when 19 # 다람쥐
+				    ^
+Section156:1605: syntax error
+				when 20 # 다람쥐
+				    ^
+Section156:1607: syntax error
+				when 21 # 다람쥐
+				    ^
+Section156:3495: syntax error ()>> occured.

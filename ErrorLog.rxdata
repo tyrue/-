@@ -1677,3 +1677,438 @@ On <<Wed 01 May 2019, 16:01:55>> the error <<compile error
 Section157:1021: syntax error
 Section157:3891: syntax error ()>> occured.
 On <<Wed 01 May 2019, 20:02:35>> the error <<comparison of String with 5000 failed (#<Scene_Map:0x806e398>)>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}" ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^ ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body
+Section157:3770: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body
+Section157:3770: class definition in method body
+Section157:3829: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body
+Section157:3770: class definition in method body
+Section157:3829: class definition in method body
+Section157:3890: syntax error ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body
+Section157:3770: class definition in method body
+Section157:3829: class definition in method body
+Section157:3890: syntax error
+Section157:3891: class definition in method body ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body
+Section157:3770: class definition in method body
+Section157:3829: class definition in method body
+Section157:3890: syntax error
+Section157:3891: class definition in method body
+Section157:3917: syntax error ()>> occured.
+On <<Wed 01 May 2019, 21:31:57>> the error <<compile error
+Section157:1343: syntax error
+			p "#{event.id}, #{event.}"
+			                         ^
+Section157:1381: syntax error
+Section157:2333: syntax error
+Section157:2337: class definition in method body
+Section157:2430: class definition in method body
+Section157:2585: class definition in method body
+Section157:2681: class definition in method body
+Section157:2770: class definition in method body
+Section157:2801: class definition in method body
+Section157:2825: class definition in method body
+Section157:2837: class definition in method body
+Section157:2863: class definition in method body
+Section157:2883: class definition in method body
+Section157:2924: module definition in method body
+Section157:2925: class definition in method body
+Section157:3083: class definition in method body
+Section157:3171: class definition in method body
+Section157:3238: class definition in method body
+Section157:3378: class definition in method body
+Section157:3521: class definition in method body
+Section157:3537: class definition in method body
+Section157:3770: class definition in method body
+Section157:3829: class definition in method body
+Section157:3890: syntax error
+Section157:3891: class definition in method body
+Section157:3917: syntax error ()>> occured.

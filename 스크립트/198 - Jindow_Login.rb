@@ -20,8 +20,8 @@ class Jindow_Login < Jindow
 		@password_s.bitmap = Bitmap.new(40, 32)
 		@password_s.bitmap.font.color.set(0, 0, 0, 255)
 		@password_s.bitmap.draw_text(0, 0, 40, 32, "비밀번호")
-		@type_username = J::Type.new(self).refresh(40, 12, self.width - 40, 18)
-		@type_password = J::Type.new(self).refresh(40, 30, self.width - 40, 18)
+		@type_username = J::Type.new(self).refresh(40, 12, self.width - 40, 18,false)
+		@type_password = J::Type.new(self).refresh(40, 30, self.width - 40, 18,false)
 		@type_password.hide = true
 		@a = J::Button.new(self).refresh(60, "접속하기")
 		@c = J::Button.new(self).refresh(60, "회원가입")

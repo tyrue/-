@@ -47,10 +47,6 @@ class Scene_Map
 						end
 					end
 					
-					
-					if Key.trigger?(67) and not Hwnd.include?("System")
-						Jindow_System.new
-					end
 					if Key.trigger?(67) 
 						if not Hwnd.include?("System")
 							Jindow_System.new
@@ -102,10 +98,10 @@ class Scene_Map
 					end	
 					
 					if Key.trigger?(35)
-						if not Hwnd.include?("Jindow_NetPlayer")
+						if not Hwnd.include?("NetPlayer")
 							Jindow_NetPlayer.new
 						else
-							Hwnd.dispose("Jindow_NetPlayer")
+							Hwnd.dispose("NetPlayer")
 						end
 					end	
 					

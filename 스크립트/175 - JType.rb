@@ -7,9 +7,9 @@ module J
 		#          (출처 : RPGXP 게임 공작소 (http://rpgxp.gameshot.net))
 		# 수정 : 광땡 (psw0107_2) 배포용
 		#=================================================
-		HANGUL_FIRST_CHARACTER_TABLE = ["ㄱ","ㄲ","ㄴ","ㄷ","ㄸ","ㄹ","ㅁ","ㅂ","ㅃ","ㅅ","ㅆ","ㅇ","ㅈ","ㅉ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"]
-		HANGUL_MID_CHARACTER_TABLE = ["ㅏ","ㅐ","ㅑ","ㅒ","ㅓ","ㅔ","ㅕ","ㅖ","ㅗ","ㅘ","ㅙ","ㅚ","ㅛ","ㅜ","ㅝ","ㅞ","ㅟ","ㅠ","ㅡ","ㅢ","ㅣ"]
-		HANGUL_LAST_CHARACTER_TABLE = ["ㄱ","ㄲ","ㄳ","ㄴ","ㄵ","ㄶ","ㄷ","ㄹ","ㄺ","ㄻ","ㄼ","ㄽ","ㄾ","ㄿ","ㅀ","ㅁ","ㅂ","ㅄ","ㅅ","ㅆ","ㅇ","ㅈ","ㅊ","ㅋ","ㅌ","ㅍ","ㅎ"]
+		HANGUL_FIRST_CHARACTER_TABLE = {"ㄱ"=>0,"ㄲ"=>1,"ㄴ"=>2,"ㄷ"=>3,"ㄸ"=>4,"ㄹ"=>5,"ㅁ"=>6,"ㅂ"=>7,"ㅃ"=>8,"ㅅ"=>9,"ㅆ"=>10,"ㅇ"=>11,"ㅈ"=>12,"ㅉ"=>13,"ㅊ"=>14,"ㅋ"=>15,"ㅌ"=>16,"ㅍ"=>17,"ㅎ"=>18}
+		HANGUL_MID_CHARACTER_TABLE = {"ㅏ"=>0,"ㅐ"=>1,"ㅑ"=>2,"ㅒ"=>3,"ㅓ"=>4,"ㅔ"=>5,"ㅕ"=>6,"ㅖ"=>7,"ㅗ"=>8,"ㅘ"=>9,"ㅙ"=>10,"ㅚ"=>11,"ㅛ"=>12,"ㅜ"=>13,"ㅝ"=>14,"ㅞ"=>15,"ㅟ"=>16,"ㅠ"=>17,"ㅡ"=>18,"ㅢ"=>19,"ㅣ"=>20}
+		HANGUL_LAST_CHARACTER_TABLE = {""=>0,"ㄱ"=>1,"ㄲ"=>2,"ㄳ"=>3,"ㄴ"=>4,"ㄵ"=>5,"ㄶ"=>6,"ㄷ"=>7,"ㄹ"=>8,"ㄺ"=>9,"ㄻ"=>10,"ㄼ"=>11,"ㄽ"=>12,"ㄾ"=>13,"ㄿ"=>14,"ㅀ"=>15,"ㅁ"=>16,"ㅂ"=>17,"ㅄ"=>18,"ㅅ"=>19,"ㅆ"=>20,"ㅇ"=>21,"ㅈ"=>22,"ㅊ"=>23,"ㅋ"=>24,"ㅌ"=>25,"ㅍ"=>26,"ㅎ"=>27}
 		HANGUL_CHARACTER_TABLE =
 		[
 			[["가","각","갂","갃","간","갅","갆","갇","갈","갉","갊","갋","갌","갍","갎","갏","감","갑","값","갓","갔","강","갖","갗","갘","같","갚","갛"],
@@ -411,8 +411,7 @@ module J
 				["흐","흑","흒","흓","흔","흕","흖","흗","흘","흙","흚","흛","흜","흝","흞","흟","흠","흡","흢","흣","흤","흥","흦","흧","흨","흩","흪","흫"],
 				["희","흭","흮","흯","흰","흱","흲","흳","흴","흵","흶","흷","흸","흹","흺","흻","흼","흽","흾","흿","힀","힁","힂","힃","힄","힅","힆","힇"],
 				["히","힉","힊","힋","힌","힍","힎","힏","힐","힑","힒","힓","힔","힕","힖","힗","힘","힙","힚","힛","힜","힝","힞","힟","힠","힡","힢","힣"]]
-		]
-		
+		]		
 		attr_reader :id
 		attr_reader :skin
 		attr_reader :file
@@ -519,8 +518,9 @@ module J
 			end
 		end
 		
-		def refresh(x, y, width, height)
+		def refresh(x, y, width, height,hangul=true)
 			@start = true
+			@input_hangul = hangul
 			if x.rect?
 				y = x.y
 				width = x.width
@@ -600,7 +600,7 @@ module J
 				@piece[1] = nil
 				@piece[2] = nil
 			end
-			if HANGUL_FIRST_CHARACTER_TABLE.include?(@char) or HANGUL_MID_CHARACTER_TABLE.include?(@char)
+			if HANGUL_FIRST_CHARACTER_TABLE[@char]!=nil or HANGUL_MID_CHARACTER_TABLE[@char]!=nil
 				make_hangul
 			else
 				@char = nil
@@ -617,14 +617,14 @@ module J
 		end
 		
 		def make_hangul
-			uni = 0
+			uni = ""
 			div_piece = []
 			text = @char
 			if @piece[3] == nil
 				if text == nil
 					return
 				else
-					if HANGUL_MID_CHARACTER_TABLE.include?(text)
+					if HANGUL_MID_CHARACTER_TABLE[text]!=nil
 						@piece[0] = nil
 						@piece[1] = text
 						@piece[2] = nil
@@ -639,7 +639,7 @@ module J
 					end
 				end
 			else
-				if HANGUL_MID_CHARACTER_TABLE.include?(text)
+				if HANGUL_MID_CHARACTER_TABLE[text]!=nil
 					if @piece[0] != nil and @piece[1] == nil and @piece[2] == nil
 						@piece[1] = text
 						make_p
@@ -647,12 +647,12 @@ module J
 						return
 					elsif @piece[0] == nil and @piece[1] != nil and @piece[2] == nil
 						uni = get_union(@piece[1], text)
-						if uni == -1
+						if uni == nil
 							@piece[1] = text
 							make_p
 							return
 						else
-							@piece[1] = HANGUL_MID_CHARACTER_TABLE[uni]
+							@piece[1] = uni
 							make_p
 							edit_text(@piece[3])
 							return
@@ -678,12 +678,12 @@ module J
 						end
 					elsif @piece[0] != nil and @piece[1] != nil and @piece[2] == nil
 						uni = get_union(@piece[1], text)
-						if uni == -1
+						if uni == nil
 							if ["ㅝ","ㅞ","ㅟ","ㅘ","ㅙ","ㅚ","ㅢ"].include?(@piece[1])
 								make_p
 								return
 							else
-								if HANGUL_MID_CHARACTER_TABLE.include?(@text[@text.size - 1])
+								if HANGUL_MID_CHARACTER_TABLE[@text[@text.size - 1]]!=nil
 									@piece[0] = nil
 								end
 								@piece[1] = text
@@ -691,7 +691,7 @@ module J
 								return
 							end
 						else
-							@piece[1] = HANGUL_MID_CHARACTER_TABLE[uni]
+							@piece[1] = uni
 							make_p
 							edit_text(@piece[3])
 							return
@@ -723,13 +723,13 @@ module J
 				else
 					if @piece[0] != nil and @piece[1] == nil and @piece[2] == nil
 						uni = get_union(@piece[0], text)
-						if uni == -1
+						if uni == nil
 							@piece[0] = text
 							make_p
 							return
 						else
 							@piece[0] = nil
-							@piece[2] = HANGUL_LAST_CHARACTER_TABLE[uni]
+							@piece[2] = uni
 							make_p
 							edit_text(@piece[3])
 							return
@@ -746,7 +746,7 @@ module J
 						else
 							uni = get_union(div_piece[1], text)
 						end
-						if uni == -1
+						if uni == nil
 							if @text[@text.size - 1] == text
 								@piece[0] = text
 								@piece[2] = nil
@@ -756,7 +756,7 @@ module J
 						else
 							if div_piece == @piece[2]
 								@piece[2] = nil
-								@piece[0] = HANGUL_LAST_CHARACTER_TABLE[uni]
+								@piece[0] = uni
 								make_p
 								return
 							else
@@ -765,7 +765,7 @@ module J
 								edit_text(@piece[3])
 								@piece[0] = nil
 								@piece[1] = nil
-								@piece[2] = HANGUL_LAST_CHARACTER_TABLE[uni]
+								@piece[2] = uni
 								make_p
 								@text.push(@piece[3])
 								return
@@ -783,7 +783,7 @@ module J
 						else
 							uni = get_union(div_piece[1], text)
 						end
-						if uni == -1
+						if uni == nil
 							if @text[@text.size - 1] == text
 								@piece[0] = @piece[2]
 								@piece[1] = nil
@@ -793,7 +793,7 @@ module J
 							return
 						else
 							if div_piece == @piece[2]
-								@piece[2] = HANGUL_LAST_CHARACTER_TABLE[uni]
+								@piece[2] = uni
 								make_p
 								edit_text(@piece[3])
 								return
@@ -803,7 +803,7 @@ module J
 								edit_text(@piece[3])
 								@piece[0] = nil
 								@piece[1] = nil
-								@piece[2] = HANGUL_LAST_CHARACTER_TABLE[uni]
+								@piece[2] = uni
 								make_p
 								@text.push(@piece[3])
 								return
@@ -816,48 +816,25 @@ module J
 		end
 		
 		def make_p
-			get_index
 			if @piece[0] == nil and @piece[1] == nil and @piece[2] == nil
 				@piece[3] = nil
 				return
 			elsif @piece[0] != nil and @piece[1] == nil and @piece[2] == nil
-				@piece[3] = HANGUL_FIRST_CHARACTER_TABLE[@f_index]
+				@piece[3] = @piece[0]
 				return
 			elsif @piece[0] == nil and @piece[1] != nil and @piece[2] == nil
-				@piece[3] = HANGUL_MID_CHARACTER_TABLE[@m_index]
+				@piece[3] = @piece[1]
 				return
 			elsif @piece[0] == nil and @piece[1] == nil and @piece[2] != nil
-				@piece[3] = HANGUL_LAST_CHARACTER_TABLE[@l_index-1]
+				@piece[3] = @piece[2]
 				return
-			elsif @piece[0] != nil and @piece[1] != nil
-				@piece[3] = HANGUL_CHARACTER_TABLE[@f_index][@m_index][@l_index]
-				return
-			end
-		end
-		
-		def get_index
-			for i in 0...HANGUL_FIRST_CHARACTER_TABLE.size - 1  # 초성 배열 중에서
-				if @piece[0] == HANGUL_FIRST_CHARACTER_TABLE[i]  # @piece[0] 의 인덱스 i 를 찾는다
-					@f_index = i  # 초성의 인덱스를 입력
-					break
+			elsif @piece[0] != nil and @piece[1] != nil 
+				if @piece[2] != nil
+					@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[@piece[2]]]
+					return
 				else
-					@f_index = -1
-				end
-			end
-			for i in 0...HANGUL_MID_CHARACTER_TABLE.size  # 중성 배열 중에서
-				if @piece[1] == HANGUL_MID_CHARACTER_TABLE[i]  # @piece[1] 의 인덱스 i 를 찾는다
-					@m_index = i  # 중성의 인덱스를 입력
-					break
-				else
-					@m_index = -1
-				end
-			end
-			for i in 0...HANGUL_LAST_CHARACTER_TABLE.size  # 종성 배열 중에서
-				if @piece[2] == HANGUL_LAST_CHARACTER_TABLE[i]  # @piece[2] 의 인덱스 i 를 찾는다
-					@l_index = i + 1  # 종성의 인덱스를 입력
-					break
-				else
-					@l_index = 0
+					@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[""]]
+					return
 				end
 			end
 		end
@@ -970,160 +947,106 @@ module J
 		def get_union(text1, text2)
 			if text1 == "ㄱ"
 				if text2 == "ㅅ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄳ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄳ"]!=nil
+						uni = "ㄳ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			elsif text1 == "ㄴ"
 				if text2 == "ㅈ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄵ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄵ"]!=nil
+						uni = "ㄵ"
 					end
 				elsif text2 == "ㅎ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄶ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄶ"]!=nil
+						uni = "ㄶ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			elsif text1 == "ㄹ"
 				if text2 == "ㄱ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄺ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄺ"]!=nil
+						uni = "ㄺ"
 					end
 				elsif text2 == "ㅁ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄻ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄻ"]!=nil
+						uni = "ㄻ"
 					end
 				elsif text2 == "ㅂ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄼ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄼ"]!=nil
+						uni = "ㄼ"
 					end
 				elsif text2 == "ㅅ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄽ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄽ"]!=nil
+						uni = "ㄽ"
 					end
 				elsif text2 == "ㅌ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄾ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄾ"]!=nil
+						uni = "ㄾ"
 					end
 				elsif text2 == "ㅍ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㄿ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㄿ"]!=nil
+						uni = "ㄿ"
 					end
 				elsif text2 == "ㅎ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㅀ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㅀ"]!=nil
+						uni = "ㅀ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			elsif text1 == "ㅂ"
 				if text2 == "ㅅ"
-					for i in 0...HANGUL_LAST_CHARACTER_TABLE.size
-						if HANGUL_LAST_CHARACTER_TABLE[i].to_s == "ㅄ"
-							uni = i
-							break
-						end
+					if HANGUL_LAST_CHARACTER_TABLE["ㅄ"]!=nil
+						uni = "ㅄ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			elsif text1 == "ㅗ"
 				if text2 == "ㅏ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅘ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅘ"]!=nil
+						uni = "ㅘ"
 					end
 				elsif text2 == "ㅐ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅙ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅙ"]!=nil
+						uni = "ㅙ"
 					end
 				elsif text2 == "ㅣ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅚ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅚ"]!=nil
+						uni = "ㅚ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			elsif text1 == "ㅜ"
 				if text2 == "ㅓ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅝ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅝ"]!=nil
+						uni = "ㅝ"
 					end
 				elsif text2 == "ㅔ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅞ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅞ"]!=nil
+						uni = "ㅞ"
 					end
 				elsif text2 == "ㅣ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅟ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅟ"]!=nil
+						uni = "ㅟ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			elsif text1 == "ㅡ"
 				if text2 == "ㅣ"
-					for i in 0...HANGUL_MID_CHARACTER_TABLE.size
-						if HANGUL_MID_CHARACTER_TABLE[i].to_s == "ㅢ"
-							uni = i
-							break
-						end
+					if HANGUL_MID_CHARACTER_TABLE["ㅢ"]!=nil
+						uni = "ㅢ"
 					end
 				else
-					uni = -1
+					uni = nil
 				end
 			else
-				uni = -1
+				uni = nil
 			end
 			return uni
 		end

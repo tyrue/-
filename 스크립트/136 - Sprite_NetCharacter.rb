@@ -31,42 +31,44 @@ class Sprite_NetCharacter < RPG::Sprite
 		@message1 = ""
 		@name = name
 		$ani_character[@netid.to_i] = @character
+		
+		
 		# Creates Display Bitmap
 		bitmap = Bitmap.new(160, 100)
 		# Draws Text Shadow
 		bitmap.font.draw_shadow = false if bitmap.font.respond_to?(:draw_shadow)
 		bitmap.font.color = Color.new(0, 0, 0)
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(1, 1, 160, 24, "Lv: " + @character.level.to_s, 1)
 		bitmap.font.color = Color.new(0, 0, 0)
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(0, 0, 160, 24, "Lv: " + @character.level.to_s, 1)
 		# Changes Font Color
 		bitmap.font.color = Color.new(255, 255, 255)
 		# Draws Text
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(0, 0, 160, 24, "Lv: " + @character.level.to_s, 1)
 		
 		bitmap.font.draw_shadow = false if bitmap.font.respond_to?(:draw_shadow)
 		bitmap.font.color = Color.new(-204, 0, 204)
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(0, 0, 160, 150,@character.guild.to_s, 1)
 		
 		# Draws Text Shadow
 		bitmap.font.name = "굴림"
 		bitmap.font.draw_shadow = false if bitmap.font.respond_to?(:draw_shadow)
 		bitmap.font.color = Color.new(0, 0, 0)
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(1, 1, 160, 47, @character.name.to_s, 1)
 		bitmap.font.name = "굴림"
 		bitmap.font.color = Color.new(0, 0, 0)
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(1, 1, 160, 47, @character.name.to_s, 1)
 		# Changes Font Color
 		bitmap.font.color = Color.new(255, 255, 255)
 		# Draws Text
 		bitmap.font.name = "굴림"
-		bitmap.font.size = 11
+		bitmap.font.size = 13
 		bitmap.draw_text(0, 0, 160, 47, @character.name.to_s, 1)
 		# Creates Display Text Sprite
 		

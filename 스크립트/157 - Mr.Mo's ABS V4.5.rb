@@ -133,6 +133,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	CAN_SNEAK = false #Can the player sneak?
 	#--------------------------------------------------------------------------
 	ATTACK_KEY = Input::Letters["S"]
+	#~ ATTACK_KEY = 32
 	#--------------------------------------------------------------------------
 	# Do not change the '=> 0', part.
 	# To Add more just make a new line; there are 10 examples :P
@@ -141,7 +142,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	#  Input::Numberpad[number]
 	#  Input::Fkeys[number]
 	#  For more keys look in to the Input Script
-	
 	# 넘버 패드로 스킬 지정 
 	SKILL_KEYS = {
 		Input::Numberpad[0] => 1,
@@ -156,7 +156,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		Input::Numberpad[9] => 0,
 		Input::Letters["A"] => 0,
 	}
-	
 	# 위 숫자로 아이템 지정
 	ITEM_KEYS =  {
 		Input::Numberkeys[0] => 0,
@@ -170,7 +169,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		Input::Numberkeys[8] => 0,
 		Input::Numberkeys[9] => 0,
 	}
-	
 	#--------------------------------------------------------------------------
 	SNEAK_KEY = Input::Letters["Z"]
 	DASH_KEY = Input::Letters["X"]
@@ -201,33 +199,27 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[2] = [5, 5, "", 4, 0] 	#백열주
 	RANGE_SKILLS[3] = [5, 5, "", 4, 0] 	#화염주
 	RANGE_SKILLS[4] = [5, 5, "", 4, 0] 	#자무주
-	
 	RANGE_SKILLS[10] = [5, 5, "", 4, 0] #뢰진주 1성
 	RANGE_SKILLS[11] = [5, 5, "", 4, 0] #백열주 1성
 	RANGE_SKILLS[12] = [5, 5, "", 4, 0] #화염주 1성
 	RANGE_SKILLS[13] = [5, 5, "", 4, 0] #자무주 1성
 	RANGE_SKILLS[14] = [5, 5, "", 4, 0] #뢰진주 첨
-	
 	RANGE_SKILLS[16] = [5, 5, "", 4, 0] #뢰진주 2성
 	RANGE_SKILLS[17] = [5, 5, "", 4, 0] #백열주 2성
 	RANGE_SKILLS[18] = [5, 5, "", 4, 0] #화염주 2성
 	RANGE_SKILLS[19] = [5, 5, "", 4, 0] #자무주 2성
-	
 	RANGE_SKILLS[22] = [5, 5, "", 4, 0] #뢰진주 3성
 	RANGE_SKILLS[23] = [5, 5, "", 4, 0] #백열주 3성
 	RANGE_SKILLS[24] = [5, 5, "", 4, 0] #화염주 3성
 	RANGE_SKILLS[25] = [5, 5, "", 4, 0] #자무주 3성
-	
 	RANGE_SKILLS[30] = [5, 5, "", 4, 0] #뢰진주 4성
 	RANGE_SKILLS[31] = [5, 5, "", 4, 0] #백열주 4성
 	RANGE_SKILLS[32] = [5, 5, "", 4, 0] #화염주 4성
 	RANGE_SKILLS[33] = [5, 5, "", 4, 0] #자무주 4성
-	
 	RANGE_SKILLS[37] = [5, 5, "", 4, 0] #뢰진주 5성
 	RANGE_SKILLS[38] = [5, 5, "", 4, 0] #백열주 5성
 	RANGE_SKILLS[39] = [5, 5, "", 4, 0] #화염주 5성
 	RANGE_SKILLS[40] = [5, 5, "", 4, 0] #자무주 5성
-	
 	RANGE_SKILLS[44] = [5, 5, "", 4, 0] #헬파이어
 	RANGE_SKILLS[49] = [5, 5, "", 4, 0] #성려멸주
 	RANGE_SKILLS[52] = [5, 5, "", 4, 0] #성려멸주 1성
@@ -581,7 +573,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				e = enemy.event_id
 				hp = enemy.hp
 				map = $game_map.map_id
-				# 맵, 체력, 적 이벤트 전송
+				# 적 id, 체력, 맵 id
 				Network::Main.socket.send("<23> verificar_hp(#{e},#{hp},#{map}) </23>\n")
 			end
 		end
@@ -623,13 +615,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			update_player if @active
 			#Update Enemy AI
 			update_enemy if @enemies != {} and @active
-			#~ #Update Dash
-			#~ update_dash if @can_dash
-			#~ #Update Sneak
-			#~ update_sneak if @can_sneak
-			#Update States
-			#~ update_states if @can_update_states
-			#Update Ranged
 			for range in @range
 				next if range == nil
 				range.update
@@ -706,23 +691,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				update_states_effects(id)
 			end
-			
 			#~ # 독뎀 구현 움직일 때마다 독 뎀
 			#~ if actor.hp > 0 and actor.slip_damage? and Graphics.frame_count % (40) == 0 and !$game_player.moving?
-				#~ actor.hp -= [actor.maxhp / 100, 1].max
-				#~ if actor.hp == 0
-					#~ $game_system.se_play($data_system.actor_collapse_se)
-					#~ if NEXT_LEADER and !$game_party.all_dead?
-						#~ move_forward
-					#~ else
-						#~ revive_actor
-					#~ end
-				#~ end
-				#~ $game_screen.start_flash(Color.new(255,0,0,128), 4)
+			#~ actor.hp -= [actor.maxhp / 100, 1].max
+			#~ if actor.hp == 0
+			#~ $game_system.se_play($data_system.actor_collapse_se)
+			#~ if NEXT_LEADER and !$game_party.all_dead?
+			#~ move_forward
+			#~ else
+			#~ revive_actor
 			#~ end
-			
+			#~ end
+			#~ $game_screen.start_flash(Color.new(255,0,0,128), 4)
+			#~ end
 		end
-		
 		#--------------------------------------------------------------------------
 		# * Add State Effect(State, ID)
 		#--------------------------------------------------------------------------
@@ -753,7 +735,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 		end
-		
 		#--------------------------------------------------------------------------
 		# * Update State Effect(State, ID)
 		#--------------------------------------------------------------------------
@@ -788,18 +769,25 @@ if SDK.state("Mr.Mo's ABS") == true
 				$game_player.move_speed = @old_speed
 			end
 		end
-		
 		#--------------------------------------------------------------------------
 		# * Update Respawn(enemy) 몬스터의 부활
 		#--------------------------------------------------------------------------
 		def update_respawn(enemy)
 			event = enemy.event
 			# respawn은 젠 딜레이
+			
 			return if enemy.respawn == 0 or event.erased == false
 			enemy.respawn -= 1
 			if enemy.respawn == 0
-				event.moveto(event.event.x,event.event.y)
+				# 여기서 랜덤하게 움직이는걸 해야함
+				for i in 0..10
+					event.move_random
+				end
+				event.moveto(event.x,event.y)
+				# 해당 몹 젠 됐다고 서버에 알림
+				# 해당 맵의 몹의 id 체력을 풀로 채움
 				event.erased = false
+				Network::Main.socket.send("<respawn>#{event.id},#{$game_map.map_id}</respawn>\n")
 				event.refresh
 			end
 		end
@@ -1007,7 +995,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Update click time
 					@button_mash -= 1 if @button_mash > 0
 					return if @button_mash > 0
-					
 					# 공격키가 눌렸니?
 					if Input.trigger?(@attack_key)
 						#Check State Effect
@@ -1021,12 +1008,16 @@ if SDK.state("Mr.Mo's ABS") == true
 						return player_melee
 					end
 					# 적이 없다면 무시
-					return if @enemies == {}
+					#~ return if @enemies == {}
+					# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
 					# 스킬 단축키가 눌렸니?
 					for key in @skill_keys.keys
 						next if @skill_keys[key] == nil or @skill_keys[key] == 0
 						next if !Input.trigger?(key)
-						
+						if $game_switches[24] == true
+							$console.write_line("스킬 사용 불가 지역입니다.")
+							return
+						end
 						if STATE_EFFECTS
 							for i in $game_party.actors[0].states
 								# 죽은 상태면 스킬 못씀
@@ -1057,7 +1048,6 @@ if SDK.state("Mr.Mo's ABS") == true
 						# 해당 키에 등록된 아이템이 없으면 무시
 						next if @item_keys[key] == nil or @item_keys[key] == 0
 						next if !Input.trigger?(key)
-						
 						# 죽으면 당연이 못씀
 						if STATE_EFFECTS
 							for i in $game_party.actors[0].states
@@ -1070,7 +1060,6 @@ if SDK.state("Mr.Mo's ABS") == true
 						return $game_system.se_play($data_system.buzzer_se) if !$game_party.item_can_use?(item.id)
 						# 아이템이 없으면 무시
 						return $game_system.se_play($data_system.buzzer_se) if $game_party.item_number(item.id) == 0
-						
 						# If effect scope is an ally
 						if item.scope >= 3
 							# Apply item use effects to target actor
@@ -1133,7 +1122,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if $data_weapons[@actor.weapon_id] == nil
 			#Get all enemies
 			for e in @enemies.values
-				
 				# m은 무기 각 공격 딜레이를 말함, 만약 없으면 기본 공격속도
 				m = MELEE_CUSTOM[@actor.weapon_id]
 				if m != nil and m[0] != nil
@@ -1143,7 +1131,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				Audio.se_play("Audio/SE/무기001-검")
 				# 여기다가 공격 모션 넣으면 될듯
-				
 				# 적이 없거나 적이 죽으면 공격 안함
 				next if e == nil or e.dead?
 				# 적이 캐릭터가 보는 방향에 없거나 바로 앞에 없으면 무시
@@ -1153,7 +1140,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Show Weapon Aniamtion
 				$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id
 				#Add mash time
-
 				#Attack the enemy
 				e.attack_effect(@actor)
 				#Get Animation
@@ -1178,7 +1164,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			@actor = $game_party.actors[0]
 			#Get Skill
 			skill = $data_skills[id]
-			
 			# 단축키에 스킬이 없으면 실행 안됨
 			return if skill == nil
 			# 액터가 가지고 있는 스킬이 아님
@@ -1194,7 +1179,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
-			
 			# 스킬 아이디
 			id = skill.id 
 			#Activate Common Event
@@ -1357,6 +1341,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Remove from list
 			@enemies.delete(id) if @enemies[id].respawn == 0
 			event = enemy.event
+			#여기다가 이 이벤트를 없애는 명령하기
+			#~ p "#{event.id}, #{$game_map.map_id}"
+			Network::Main.socket.send("<enemy_dead>#{event.id},#{$game_map.map_id}</enemy_dead>\n")
+			
 			case enemy.trigger[0]
 			when 0
 				event.fade = true if FADE_DEAD
@@ -1417,7 +1405,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			return true
 		end
-		
 		#--------------------------------------------------------------------------
 		# * 몬스터를 잡았을 경우 주는것
 		#--------------------------------------------------------------------------
@@ -1459,23 +1446,26 @@ if SDK.state("Mr.Mo's ABS") == true
 					if not $netparty.size < 2   # 파티중일경우 경험치, 돈의 습득
 						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{$game_map.map_id}</nptgain>\n")
 					else
+						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다.")
 						actor.exp += exp    #골드를 습득하는 경우 (파티 아닐때)
 						$game_party.gain_gold(gold)
 					end
+					# 여기다가 
+					drop_enemy(enemy)
 					if actor.level > last_level    #레벨업을 하는 경우 (파티 아닐때)
 						자동저장
 						$console.write_line("[정보]:레벨업!")
 						# 직업에 따라 체력, 마력 증가량 다르게 함
 						if(actor.class_id == 7) # 전사 99때 체력 4500
 							actor.maxhp += 16
+							actor.str += 3
 						elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
 							actor.maxsp += 5
+							actor.int += 3
 						end
-						
 						# 풀체
 						actor.hp = actor.maxhp
 						actor.sp = actor.maxsp
-						
 						$game_player.animation_id = 180
 						Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</player_animation>\n"
 					end
@@ -1493,6 +1483,506 @@ if SDK.state("Mr.Mo's ABS") == true
 					$game_party.gain_armor(item.id, 1)
 					$game_player.show_demage("습득 :  #{item.name}",false)
 				end
+			end
+		end
+		#--------------------------------------------------------------------------
+		# * 몬스터마다의 템 줄 확률 설정
+		#--------------------------------------------------------------------------
+		def drop_enemy(e)
+			#Get Enemy
+			#enemy = $data_enemies[id[1].to_i]
+			#p "e : #{e.id.to_i} mapid : #{$game_map.map_id} x : #{e.event.x} y : #{e.event.y}"
+			r = rand(100)
+			case e.id.to_i
+			when 1 # 토끼
+				if r <= 80 
+					# 토끼 고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 13 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 토끼 화서
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 36 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true	
+			when 2 # 다람쥐
+				if r <= 80 
+					# 도토리
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 12 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 다람쥐 화서
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 35 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 3 # 암사슴
+				if r <= 70 
+					# 사슴고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 14 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 4 # 숫사슴
+				if r <= 50 
+					# 녹용
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 5 # 늑대
+				if r <= 40 
+					# 100전
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 6 # 소
+				if r <= 60 
+					# 쇠고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 17 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 7 # 돼지
+				if r <= 70 
+					# 돼지고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 16#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 8 # 쥐
+				if r <= 70 
+					# 쥐고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 41#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 9 # 병든쥐
+				if r <= 70 
+					# 쥐고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 41#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 100전
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 10 # 시궁창쥐
+				if r <= 30 
+					# 100전 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 11 # 박쥐
+				if r <= 60 
+					# 박쥐고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 42#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 12 # 보라박쥐
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 13 # 평웅
+				if r <= 60 
+					# 웅담
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 19#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 14 # 진웅
+				if r <= 10 
+					# 지력의 투구 1
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 20#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 15 # 호랑이
+				if r <= 60
+					# 호랑이고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 16 # 평호
+				if r <= 70 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 17 # 진호
+				if r <= 70 
+					# 호랑이고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 지력의투구1
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 20#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 21 # 산돼지
+				if r <= 60 
+					# 산돼지고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 21#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 22 # 숲돼지
+				if r <= 60
+					# 숲돼지고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 22#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 23 # 청사슴
+				if r <= 20 
+					# 녹용
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 40
+					# 호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 60
+					# 비철단도
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 47#{e.event.x} #{e.event.y}</drop_create>\n"	
+				end
+				return true
+			when 24 # 주홍사슴
+				if r <= 80 
+					# 사슴고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 14#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 25 # 흑/백순록
+				if r <= 80 
+					# 녹용
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 26 # 자호
+				if r <= 60 
+					# 짙은호랑이고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 37#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 27 # 천자호
+				if r <= 60 
+					# 짙은호랑이고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 37#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 80
+					# 100전
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 28 # 구자호
+				if r <= 60 
+					# 짙은호랑이고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 37#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 80
+					# 100전
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 30 # 해골
+				if r <= 60 
+					# 호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 31 # 날쌘해골
+				if r <= 60 
+					# 호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 32 # 자해골
+				if r <= 50 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 33 # 흑해골
+				if r <= 60 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 34 # 달걀귀신
+				if r <= 70 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 35 # 몽달귀신
+				if r <= 70 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 39 # 불귀신
+				if r <= 60 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40#{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 80
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44#{e.event.x} #{e.event.y}</drop_create>\n"
+					elsif r <= 90
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45#{e.event.x} #{e.event.y}</drop_create>\n"				
+				end
+				return true
+			when 38 # 짚단
+				if r <= 70 
+					# 짚단
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 48#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 40 # 자생원
+				if r <= 80 
+					# 100전
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 49#{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 41 # 청자다람쥐
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 47 # 도깨비
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 48 # 불도깨비
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 49 # 고래
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 50 # 녹/청웅객
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 51 # 흑여우
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 52 # 서여우
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 53 # 백여우
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 54 # 불여우
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 55 # 전갈
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 56 # 전갈장
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 57 # 청웅객
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 58 # 수룡
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 59 # 화룡
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 60 # 청비
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 61 # 주작
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 62 # 백호
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 75 # 청진웅
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 76 # 청순록
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 77 # 청산숲돼지
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 78 # 마령해골
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 79 # 청철해골
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 80 # 청명도깨비
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 81 # 현랑전갈
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 82 # 구미호
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 83 # 불구미호
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 85 # 녹비
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 86 # 용
+				if r <= 80 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 90
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
 			end
 		end
 		#--------------------------------------------------------------------------
@@ -2520,10 +3010,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				if critical
 					bitmap.font.size = 20
 					bitmap.font.color.set(0, 0, 0)
-					bitmap.draw_text(-1, -1, 160, 20, damage_string, 1) # "크리티컬" 자리 
-					bitmap.draw_text(+1, -1, 160, 20, damage_string, 1)
-					bitmap.draw_text(-1, +1, 160, 20, damage_string, 1)
-					bitmap.draw_text(+1, +1, 160, 20, damage_string, 1)
+					bitmap.draw_text(-1, -1, 160, 20, "", 1) # "크리티컬" 자리 
+					bitmap.draw_text(+1, -1, 160, 20, "", 1)
+					bitmap.draw_text(-1, +1, 160, 20, "", 1)
+					bitmap.draw_text(+1, +1, 160, 20, "", 1)
 					bitmap.font.color.set(255, 0, 51) # 빨간색
 					bitmap.draw_text(0, 0, 160, 20, "", 1)
 				end
@@ -3270,7 +3760,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				$game_system.se_play($data_system.decision_se)
 				#Record Skill
 				$ABS.skill_keys[key] = @skill_window.skill.id 
-				
 				@skill_window.active = false
 				@shk_window.active = @shk_window.visible = true
 			end

@@ -40,7 +40,7 @@ class Scene_Map
 		return if Network::Main.mapplayers == {}
 		for mapplayer in Network::Main.mapplayers.values
 			next if mapplayer == nil
-			mapplayer.update if in_range?(mapplayer)
+			mapplayer.update #if in_range?(mapplayer)
 		end
 	end
 	#--------------------------------------------------------------------------

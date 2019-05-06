@@ -22,8 +22,8 @@
 #패러미터（parameter）의 산출이 적당 지나기 때문에 ，각자 수정이 필요나와 ．
 
   BASE_FINAL_LEVEL = 100   #상한 레벨（level）(그다지 큰 값을 설정한다면 항 합니다)
-  MAXHP_LIMIT = 20000    #HP 한계 치
-  MAXSP_LIMIT = 20000    #SP 한계 치
+  MAXHP_LIMIT = 25000    #HP 한계 치
+  MAXSP_LIMIT = 25000    #SP 한계 치
   STR_LIMIT   = 999      #STR 한계 치
   DEX_LIMIT   = 999      #DEX 한계 치
   AGI_LIMIT   = 999      #AGI 한계 치

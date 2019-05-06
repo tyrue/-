@@ -423,7 +423,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					next if player.netid == -1
 					# If the Player is on the same map...
 					# 만약 같은 맵에 있다면?
-					if player.map_id == $game_map.map_id and self.in_range?(player)
+					if player.map_id == $game_map.map_id #and self.in_range?(player)
 						# Update Map Players
 						self.update_map_player(player.netid, nil)
 					elsif @mapplayers[player.netid.to_s] != nil
@@ -444,7 +444,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				for player in @players.values
 					next if player.netid == -1
 					# 플레이어가 같은 맵에 있을 경우
-					if player.map_id == $game_map.map_id and self.in_range?(player)
+					if player.map_id == $game_map.map_id #and self.in_range?(player)
 						# 맵 플레이어 업데이트
 						self.update_map_player(player.netid, nil)
 					elsif @mapplayers[player.netid.to_s] != nil
@@ -735,11 +735,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			def self.update_admmod(line)
 				case line
 					# Admin Command Recieval
-					# (모두 또는 아이디, 메시지, ??)
+					# (모두 또는 아이디, 메시지, 이름)
 				when /<ki>(.*),(.*),(.*)<\/ki>/
 					# Kick All Command
 					if $1.to_s == "모두"
 						if $3.to_s != $game_party.actors[0].name
+							p $2.to_s
 							p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다."
 							self.close_socket
 						end
@@ -761,12 +762,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.update_outgame(line)
 				case line
-				# 인증
+					# 인증
 				when /<0 (.*)>(.*) n=(.*)<\/0>/ 
 					a = self.authenficate($1,$2)
 					@servername = $3.to_s
 					return true if a
-				# 회원가입 처리
+					# 회원가입 처리
 				when /<reges>(.*)<\/reges>/
 					if $1 == "wu" # 회원가입 실패
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
@@ -778,7 +779,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							["확인"], ["Hwnd.dispose(self)"], "성공")
 					end
 					return true
-				# 닉네임 확인 결과
+					# 닉네임 확인 결과
 				when /<nick_name>(.*)<\/nick_name>/
 					data = $1.split(',')
 					if data[0].to_s != "No" # 닉네임 중복 통과
@@ -788,7 +789,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							["이미 이 닉네임은 누군가 사용하고 있습니다."],
 							["확인"], ["Hwnd.dispose(self)"], "에러")
 					end
-				# 아이디 중복 결과
+					# 아이디 중복 결과
 				when /<exist1>(.*)<\/exist1>/
 					data = $1.split(',')
 					if data[0].to_s != "No" # 중복 통과
@@ -798,7 +799,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							["누군가 그 아이디를 사용하고 있습니다."],
 							["확인"], ["Hwnd.dispose(self)"], "에러")
 					end
-				# 로그인 결과
+					# 로그인 결과
 				when /<login>(.*)<\/login>/
 					if not @user_test
 						if $1 == "allow" and not @user_test
@@ -870,22 +871,22 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
-				# Message Of the Day Recieval
+					# Message Of the Day Recieval
 				when /<mod>(.*)<\/mod>/
 					$game_temp.motd = $1.to_s
 					return true
 					
-				# User ID Recieval (Session Based)
+					# User ID Recieval (Session Based)
 				when /<1>(.*)<\/1>/
 					@id = $1.to_s
 					return true
 					
-				# User Name Recieval
+					# User Name Recieval
 				when /<2>(.*)<\/2>/
 					@name = $1.to_s
 					return true
 					
-				# Group Recieval
+					# Group Recieval
 				when /<3>(.*)<\/3>/
 					@group = $1.to_s
 					return true
@@ -893,7 +894,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@group = $1.to_s
 					return true
 					
-				# System Update
+					# System Update
 				when /<10>(.*)<\/10>/
 					eval($1) # 문자열을 코드로 인식하게하는 함수
 					$game_map.need_refresh = true
@@ -965,7 +966,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_player.refresh
 					return true
 					
-				#---------------엔피씨 배치 시스템----------------       	
+					#---------------엔피씨 배치 시스템----------------       	
 				when /<npc_batch>(.*)<\/npc_batch>/ 
 					data = $1.split('.')
 					for npc_data in data
@@ -1024,19 +1025,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update
 					return true
 					
-				when /<23>(.*)<\/23>/
-					eval($1) # 문자열을 코드로 인식하게 하는 함수
-					key = []
-					key.push(@self_key1)
-					key.push(@self_key2)
-					key.push(@self_key3)
-					$game_self_switches[key] = @self_value
-					@self_key1 = nil
-					@self_key2 = nil
-					@self_key3 = nil
-					@self_value = nil
-					$game_map.need_refresh = true
-					key = []
+				when /<23>(.*)<\/23>/ # 체력, 위치 공유?
+					# 맵 id, 몹id, 몹 hp, x, y, 방향
+					# 같은 맵이 아니면 무시
+					return true if $game_map.map_id != $1.to_i
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					$ABS.enemies[$2.to_i].hp = $3.to_i
+					$ABS.enemies[$2.to_i].event.x = $4.to_i
+					$ABS.enemies[$2.to_i].event.y = $5.to_i
+					$ABS.enemies[$2.to_i].event.direction = $6.to_i
+					
 					return true
 				end
 				return false
@@ -1052,6 +1050,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					self.update_net_player($1, $2)
 					return true
 					# Player Processing
+					
+					# 서버에서 방송한 데이터
 				when /<5 (.*)>(.*)<\/5>/
 					# Update Player
 					self.update_net_player($1, $2)
@@ -1062,11 +1062,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# ... and it is on the same map...
 					return true if @players[$1].map_id != $game_map.map_id
 					# ...  Return the Requested Information
-					return true if !self.in_range?(@players[$1])
+					#return true if !self.in_range?(@players[$1])
 					self.send_start_request($1.to_i) 
 					$game_temp.spriteset_refresh = true
 					return true
 					# Map PLayer Processing
+					
 				when /<6 (.*)>(.*)<\/6>/
 					# Return if it is yourself
 					return true if $1.to_i == self.id.to_i
@@ -1305,6 +1306,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							b번하우징
 							c번하우징
 							d번하우징
+							self.send_start
 						end
 					end
 					
@@ -1332,27 +1334,29 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-				# 스위치 공유
+					# 스위치 공유 (1,1.2,0.3,0 .... )
 				when /<switches>(.*)<\/switches>/
 					switches_data = $1.split('.')
 					for data in switches_data
-						eval(data)
+						val = data.split(',')
+						$game_switches[val[0].to_i] = true if val[1].to_i == 1
 						$game_map.need_refresh = true
 					end
 					
-				# id를 600번 변수에 저장 왜?
+					# id를 600번 변수에 저장 왜?
 				when /<idsave>(.*)<\/idsave>/
 					$game_variables[600] = $1.to_s
 					
-				# 변수 공유
+					# 변수 공유
 				when /<variables>(.*)<\/variables>/
 					variables_data = $1.split('.')
 					for data in variables_data
-						eval(data)
+						val = data.split(',')
+						$game_variables[val[0].to_i] = val[1].to_i
 						$game_map.need_refresh = true
 					end
 					
-				# 공지 메시지 받음
+					# 공지 메시지 받음
 				when /<chat>(.*),(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
 						if $2.to_i == 0
@@ -1366,7 +1370,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
-				# 우편 배송 (id, 아이템 id, 템 종류, 보낸이 id, 개수, 편지 내용)
+					# 우편 배송 (id, 아이템 id, 템 종류, 보낸이 id, 개수, 편지 내용)
 				when /<post>(.*),(.*),(.*),(.*),(.*),(.*)<\/post>/
 					if $scene.is_a?(Scene_Map)
 						if $1.to_s == $game_party.actors[0].name
@@ -1390,7 +1394,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					return true
-				# 스킬 배우기
+					# 스킬 배우기
 				when /<skill>(.*)<\/skill>/
 					skill_data = $1.split(',')
 					for index in 0..skill_data.size
@@ -1398,7 +1402,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					#return true
 					
-				# 아이템 얻기 (템 id, 개수.템 id, 개수....)
+					# 아이템 얻기 (템 id, 개수.템 id, 개수....)
 				when /<item>(.*)<\/item>/
 					item_data = $1.split('.')
 					for data in item_data
@@ -1423,7 +1427,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					#return true
 					
-				#유저 소환
+					#유저 소환
 				when /<summon>(.*),([0-9]+),([0-9]+),([0-9]+)<\/summon>/
 					if $1.to_s == $game_party.actors[0].name
 						$console.write_line("운영자님께서 당신을 소환 하셨습니다.")
@@ -1433,7 +1437,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_temp.player_new_direction = 1
 						$game_temp.player_transferring = true
 					end
-				# 모든 유저 소환
+					# 모든 유저 소환
 				when /<all_summon>([0-9]+),([0-9]+),([0-9]+)<\/all_summon>/
 					$console.write_line("운영자님께서 당신을 소환 하셨습니다.")
 					$game_temp.player_new_map_id = $1.to_i
@@ -1487,8 +1491,24 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					간단메세지("[세계후] #{$1.to_s} : #{$2.to_s}")
 					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", Color.new(65, 105, 255))
 					
-					
-					
+				when /<enemy_dead>(.*),(.*)<\/enemy_dead>/	
+					id = $1.to_i
+					map_id = $2.to_i
+					if $game_map.map_id == map_id
+						#~ p "ok"
+						$game_map.events[id].erased = true
+						$game_map.refresh
+					end
+							
+				when /<respawn>(.*),(.*)<\/respawn>/
+					id = $1.to_i
+					map_id = $2.to_i
+					if $game_map.map_id == map_id
+						#~ p "ok"
+						$game_map.events[id].erased = false
+						$game_map.refresh
+					end
+					# 템 드랍 
 				when /<Drop>(.*)<\/Drop>/
 					data = $1.split(',')
 					index = data[0].to_i
@@ -1513,6 +1533,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							create_moneys(data[0].to_i, 8, data[3].to_i, 2, data[4].to_i, data[5].to_i)
 						end
 					end
+					
 				when /<Drop_Get>(.*)<\/Drop_Get>/
 					data = $1.split(',')
 					id = data[0].to_i
@@ -1827,12 +1848,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					return true
+					
 				when /<nptgain>(.*) (.*) (.*) (.*)<\/nptgain>/
 					if $npt == $3.to_s
 						if "#{$game_map.map_id}" == $4.to_s
 							if $netparty.size > 1
 								$game_variables[1010] = $game_party.actors[0].level
-								expgave = $1.to_i / 10
+								
+								expgave = $1.to_i / 7 
 								expgave2 = $1.to_i / $netparty.size
 								expgave3 = expgave + expgave2
 								$game_party.actors[0].exp += expgave3
@@ -1840,7 +1863,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								
 								if $game_variables[1011] > $game_variables[1010]
 									자동저장
-									$console.write_line("[정보]:레벨업!")
+									$console.write_line("[정보]:레벨이 올랐습니다!")
 									$game_player.animation_id = 180
 									Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</player_animation>\n"
 								end

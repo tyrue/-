@@ -102,6 +102,7 @@ class Jindow_Status < Jindow
 		@job.bitmap.font.size = 12
 		@job.bitmap.font.color.set(0, 0, 0, 255)
 		@job.bitmap.draw_text(0, 0, 100, 20, "직업: " + actor.class_name, 1)
+		
 		@hp = Sprite.new(self)
 		@hp.bitmap = Bitmap.new(180, 20)
 		@hp.x = 50
@@ -109,24 +110,27 @@ class Jindow_Status < Jindow
 		@hp.bitmap.font.size = 12
 		@hp.bitmap.font.color.set(0, 0, 0, 255)
 		@hp.bitmap.draw_text(0, 0, 180, 20, "체력: " + actor.hp.to_s + "/" + actor.maxhp.to_s, 1)
+		
 		@mp = Sprite.new(self)
 		@mp.bitmap = Bitmap.new(180, 20)
-		@mp.x = 80
+		@mp.x = 90
 		@mp.y = 45
 		@mp.bitmap.font.size = 12
 		@mp.bitmap.font.color.set(0, 0, 0, 255)
 		@mp.bitmap.draw_text(0, 0, 180, 20, "마력: " + actor.sp.to_s + "/" + actor.maxsp.to_s, 0)
-		#@exp = Sprite.new(self)
-		#@exp.bitmap = Bitmap.new(100, 20)
-		#@exp.x = 53
-		#@exp.y = 45
-		#@exp.bitmap.font.size = 12
-		#@exp.bitmap.font.color.set(0, 0, 0, 255)
-		#@exp.bitmap.draw_text(0, 0, 100, 20, sprintf("경험치: %.2f%%", ($game_party.actors[0].exp_rate*100).to_f), 1)
+		
+		@exp = Sprite.new(self)
+		@exp.bitmap = Bitmap.new(100, 20)
+		@exp.x = 70
+		@exp.y = 60
+		@exp.bitmap.font.size = 12
+		@exp.bitmap.font.color.set(0, 0, 0, 255)
+		@exp.bitmap.draw_text(0, 0, 100, 20, "경험치: " + $game_party.actors[0].exp.to_s, 1)
+		
 		@gold = Sprite.new(self)
 		@gold.bitmap = Bitmap.new(180, 20)
-		@gold.x = 100
-		@gold.y = 60
+		@gold.x = 90
+		@gold.y = 75
 		@gold.bitmap.font.size = 12
 		@gold.bitmap.font.color.set(0, 0, 0, 255)
 		@gold.bitmap.draw_text(0, 0, 180, 20, "골드: " + $game_party.gold.to_s, 0)

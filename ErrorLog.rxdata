@@ -2113,3 +2113,2116 @@ Section157:3890: syntax error
 Section157:3891: class definition in method body
 Section157:3917: syntax error ()>> occured.
 On <<Mon 06 May 2019, 18:54:56>> the error << (#<Scene_Connect:0x7fc5290>)>> occured.
+On <<Thu 09 May 2019, 21:54:01>> the error <<cannot convert nil into String (#<Scene_Map:0x811fd30>)>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\ ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^ ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:34:53>> the error <<compile error
+Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n"\
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n") ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^ ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:23>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:35:24>> the error <<compile error
+Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>\n")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>") ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^ ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:20>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:21>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:21>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:36:21>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:36:21>> the error <<compile error
+Section157:1367: syntax error
+						Network::Main.socket.send("<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>")
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>" ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^ ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.
+On <<Thu 09 May 2019, 23:39:25>> the error <<compile error
+Section157:1367: syntax error
+						Network::Main.socket.send "<variables>#{[enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
+						                                                          ^
+Section157:1370: syntax error
+Section157:1373: syntax error
+Section157:1384: syntax error
+Section157:1387: syntax error
+Section157:2291: syntax error
+Section157:2295: class definition in method body
+Section157:2388: class definition in method body
+Section157:2543: class definition in method body
+Section157:2639: class definition in method body
+Section157:2728: class definition in method body
+Section157:2759: class definition in method body
+Section157:2783: class definition in method body
+Section157:2795: class definition in method body
+Section157:2821: class definition in method body
+Section157:2841: class definition in method body
+Section157:2882: module definition in method body
+Section157:2883: class definition in method body
+Section157:3041: class definition in method body
+Section157:3129: class definition in method body
+Section157:3196: class definition in method body
+Section157:3336: class definition in method body
+Section157:3479: class definition in method body
+Section157:3495: class definition in method body
+Section157:3728: class definition in method body
+Section157:3787: class definition in method body
+Section157:3848: syntax error
+Section157:3849: class definition in method body
+Section157:3875: syntax error ()>> occured.

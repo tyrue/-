@@ -22,13 +22,13 @@
 #패러미터（parameter）의 산출이 적당 지나기 때문에 ，각자 수정이 필요나와 ．
 
   BASE_FINAL_LEVEL = 100   #상한 레벨（level）(그다지 큰 값을 설정한다면 항 합니다)
-  MAXHP_LIMIT = 25000    #HP 한계 치
-  MAXSP_LIMIT = 25000    #SP 한계 치
+  MAXHP_LIMIT = 100000    #HP 한계 치
+  MAXSP_LIMIT = 100000    #SP 한계 치
   STR_LIMIT   = 999      #STR 한계 치
   DEX_LIMIT   = 999      #DEX 한계 치
   AGI_LIMIT   = 999      #AGI 한계 치
   INT_LIMIT   = 999      #INT 한계 치
-	MAX_EXP			= 5000000  #만렙시 경험치 
+	MAX_EXP			= 20000000  #만렙시 경험치 
 
 class Game_Actor < Game_Battler
   def new_final_level
@@ -168,6 +168,11 @@ class Game_Actor < Game_Battler
   def exp=(exp)
     # ★EXP의 상한 체크（check）를 해제
     @exp = [exp, 0].max
+		if @exp > MAX_EXP
+			@exp = MAX_EXP
+			$console.write_line("경험치를 더이상 얻을 수 없습니다.") 
+		end
+		
     # 레벨업（level up）
     while @exp >= @exp_list[@level+1] and @exp_list[@level+1] > 0
       @level += 1
@@ -180,7 +185,7 @@ class Game_Actor < Game_Battler
     end
     # 레벨（level） 다운（down）
     while @exp < @exp_list[@level]
-			if @level == 100
+			if @level == 100 or @level == 6
 				@level -= 1
 			else 
 				break

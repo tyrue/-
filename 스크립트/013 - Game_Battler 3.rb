@@ -81,6 +81,8 @@ class Game_Battler
 			remove_states_shock
 			# Substract damage from HP
 			self.hp -= self.damage
+			# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
+			Network::Main.socket.send("<23>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction}</23>\n")
 			# State change
 			@state_changed = false
 			states_plus(attacker.plus_state_set)

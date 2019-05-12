@@ -21,6 +21,8 @@ class Game_Actor < Game_Battler
 	attr_reader   :level                    # level
 	attr_reader   :exp                      # EXP
 	attr_reader   :skills                   # skills
+	attr_reader   :pdef                   # pdef 물리방어력
+	attr_reader   :mdef                   # mdef 마법방어력
 	#--------------------------------------------------------------------------
 	# * Object Initialization
 	#     actor_id : actor ID
@@ -62,6 +64,8 @@ class Game_Actor < Game_Battler
 		@dex_plus = 0
 		@agi_plus = 0
 		@int_plus = 0
+		@pdef = 0
+		@mdef = 0
 		# Learn skill
 		for i in 1..@level
 			for j in $data_classes[@class_id].learnings
@@ -88,6 +92,22 @@ class Game_Actor < Game_Battler
 	def index
 		return $game_party.actors.index(self)
 	end
+	#--------------------------------------------------------------------------
+	# * Change HP
+	#     hp : new HP
+	#--------------------------------------------------------------------------
+	def pdef=(pdef)
+		@pdef = pdef
+	end
+	#--------------------------------------------------------------------------
+	# * Change HP
+	#     hp : new HP
+	#--------------------------------------------------------------------------
+	def mdef=(mdef)
+		@mdef = mdef
+	end
+	
+	
 	#--------------------------------------------------------------------------
 	# * Calculate EXP
 	#--------------------------------------------------------------------------
@@ -282,7 +302,7 @@ class Game_Actor < Game_Battler
 		pdef3 = armor2 != nil ? armor2.pdef : 0
 		pdef4 = armor3 != nil ? armor3.pdef : 0
 		pdef5 = armor4 != nil ? armor4.pdef : 0
-		return pdef1 + pdef2 + pdef3 + pdef4 + pdef5
+		return pdef1 + pdef2 + pdef3 + pdef4 + pdef5 + @pdef
 	end
 	#--------------------------------------------------------------------------
 	# * Get Basic Magic Defense
@@ -298,7 +318,7 @@ class Game_Actor < Game_Battler
 		mdef3 = armor2 != nil ? armor2.mdef : 0
 		mdef4 = armor3 != nil ? armor3.mdef : 0
 		mdef5 = armor4 != nil ? armor4.mdef : 0
-		return mdef1 + mdef2 + mdef3 + mdef4 + mdef5
+		return mdef1 + mdef2 + mdef3 + mdef4 + mdef5 + @mdef
 	end
 	#--------------------------------------------------------------------------
 	# * Get Basic Evasion Correction

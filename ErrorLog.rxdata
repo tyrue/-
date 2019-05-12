@@ -4227,3 +4227,13 @@ Section157:3848: syntax error
 Section157:3849: class definition in method body
 Section157:3875: syntax error ()>> occured.
 On <<Sun 12 May 2019, 15:29:29>> the error << (#<Scene_Map:0x8044ed8>)>> occured.
+On <<Sun 12 May 2019, 15:46:08>> the error <<Section159:517: syntax error ()>> occured.
+On <<Sun 12 May 2019, 15:46:08>> the error <<Section159:517: syntax error
+		$ a = 0 ()>> occured.
+On <<Sun 12 May 2019, 15:46:08>> the error <<Section159:517: syntax error
+		$ a = 0
+		 ^ ()>> occured.
+On <<Sun 12 May 2019, 15:46:08>> the error <<compile error
+Section159:517: syntax error
+		$ a = 0
+		 ^ ()>> occured.

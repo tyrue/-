@@ -4241,3 +4241,23 @@ On <<Tue 14 May 2019, 22:18:28>> the error <<no implicit conversion from nil to 
 On <<Tue 14 May 2019, 22:18:43>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x7f62d58>)>> occured.
 On <<Tue 14 May 2019, 22:19:00>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x7eddf58>)>> occured.
 On <<Tue 14 May 2019, 22:25:27>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x7e9ea20>)>> occured.
+On <<Tue 14 May 2019, 22:57:00>> the error <<Section191:16: syntax error ()>> occured.
+On <<Tue 14 May 2019, 22:57:00>> the error <<Section191:16: syntax error
+	attr_accessor: console_log ()>> occured.
+On <<Tue 14 May 2019, 22:57:00>> the error <<Section191:16: syntax error
+	attr_accessor: console_log
+	              ^ ()>> occured.
+On <<Tue 14 May 2019, 22:57:00>> the error <<compile error
+Section191:16: syntax error
+	attr_accessor: console_log
+	              ^ ()>> occured.
+On <<Tue 14 May 2019, 22:57:33>> the error <<Section191:16: syntax error ()>> occured.
+On <<Tue 14 May 2019, 22:57:33>> the error <<Section191:16: syntax error
+	attr_accessor: console_log ()>> occured.
+On <<Tue 14 May 2019, 22:57:33>> the error <<Section191:16: syntax error
+	attr_accessor: console_log
+	              ^ ()>> occured.
+On <<Tue 14 May 2019, 22:57:33>> the error <<compile error
+Section191:16: syntax error
+	attr_accessor: console_log
+	              ^ ()>> occured.

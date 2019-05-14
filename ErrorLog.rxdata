@@ -4237,3 +4237,7 @@ On <<Sun 12 May 2019, 15:46:08>> the error <<compile error
 Section159:517: syntax error
 		$ a = 0
 		 ^ ()>> occured.
+On <<Tue 14 May 2019, 22:18:28>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x8205508>)>> occured.
+On <<Tue 14 May 2019, 22:18:43>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x7f62d58>)>> occured.
+On <<Tue 14 May 2019, 22:19:00>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x7eddf58>)>> occured.
+On <<Tue 14 May 2019, 22:25:27>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x7e9ea20>)>> occured.

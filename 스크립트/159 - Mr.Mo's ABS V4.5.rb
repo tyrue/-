@@ -7,7 +7,7 @@
 # Thanks to Near Fantastica's methods;
 # - In Range?, Get Range, In Direction?, enemy_dead?, treasure
 # - Class Game_Range(highly modified for convinience)
-# - Scene_Skill(main, update_shk)
+# - Scene_Skill(main, update_shk) 
 # Most were modified by me to my style and to increase performance and 
 # cleaner code.
 #
@@ -195,53 +195,62 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 범위, 이동속도, 캐릭터이름, 지속시간, 넉백 범위
 	# 데이터베이스 보고 범위 스킬 id넣으면 됨
 	# 주술사 스킬
-	RANGE_SKILLS[1] = [5, 5, "", 4, 0] 	#뢰진주
-	RANGE_SKILLS[2] = [5, 5, "", 4, 0] 	#백열주
-	RANGE_SKILLS[3] = [5, 5, "", 4, 0] 	#화염주
-	RANGE_SKILLS[4] = [5, 5, "", 4, 0] 	#자무주
-	RANGE_SKILLS[10] = [5, 5, "", 4, 0] #뢰진주 1성
-	RANGE_SKILLS[11] = [5, 5, "", 4, 0] #백열주 1성
-	RANGE_SKILLS[12] = [5, 5, "", 4, 0] #화염주 1성
-	RANGE_SKILLS[13] = [5, 5, "", 4, 0] #자무주 1성
-	RANGE_SKILLS[14] = [5, 5, "", 4, 0] #뢰진주 첨
-	RANGE_SKILLS[16] = [5, 5, "", 4, 0] #뢰진주 2성
-	RANGE_SKILLS[17] = [5, 5, "", 4, 0] #백열주 2성
-	RANGE_SKILLS[18] = [5, 5, "", 4, 0] #화염주 2성
-	RANGE_SKILLS[19] = [5, 5, "", 4, 0] #자무주 2성
-	RANGE_SKILLS[22] = [5, 5, "", 4, 0] #뢰진주 3성
-	RANGE_SKILLS[23] = [5, 5, "", 4, 0] #백열주 3성
-	RANGE_SKILLS[24] = [5, 5, "", 4, 0] #화염주 3성
-	RANGE_SKILLS[25] = [5, 5, "", 4, 0] #자무주 3성
-	RANGE_SKILLS[30] = [5, 5, "", 4, 0] #뢰진주 4성
-	RANGE_SKILLS[31] = [5, 5, "", 4, 0] #백열주 4성
-	RANGE_SKILLS[32] = [5, 5, "", 4, 0] #화염주 4성
-	RANGE_SKILLS[33] = [5, 5, "", 4, 0] #자무주 4성
-	RANGE_SKILLS[37] = [5, 5, "", 4, 0] #뢰진주 5성
-	RANGE_SKILLS[38] = [5, 5, "", 4, 0] #백열주 5성
-	RANGE_SKILLS[39] = [5, 5, "", 4, 0] #화염주 5성
-	RANGE_SKILLS[40] = [5, 5, "", 4, 0] #자무주 5성
-	RANGE_SKILLS[44] = [5, 5, "", 4, 0] #헬파이어
-	RANGE_SKILLS[49] = [5, 5, "", 4, 0] #성려멸주
-	RANGE_SKILLS[52] = [5, 5, "", 4, 0] #성려멸주 1성
-	RANGE_SKILLS[53] = [5, 5, "", 4, 0] #삼매진화
-	RANGE_SKILLS[56] = [5, 5, "", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[57] = [5, 5, "", 4, 0] #삼매진화 1성
-	RANGE_SKILLS[58] = [10, 5, "", 4, 0] #지폭지술
+	RANGE_SKILLS[1] = [7, 5, "공격스킬2", 4, 0] 	#뢰진주
+	RANGE_SKILLS[2] = [7, 5, "공격스킬2", 4, 0] 	#백열주
+	RANGE_SKILLS[3] = [7, 5, "공격스킬2", 4, 0] 	#화염주
+	RANGE_SKILLS[4] = [7, 5, "공격스킬2", 4, 0] 	#자무주
+	RANGE_SKILLS[10] = [7, 5, "공격스킬2", 4, 0] #뢰진주 1성
+	RANGE_SKILLS[11] = [7, 5, "공격스킬2", 4, 0] #백열주 1성
+	RANGE_SKILLS[12] = [7, 5, "공격스킬2", 4, 0] #화염주 1성
+	RANGE_SKILLS[13] = [7, 5, "공격스킬2", 4, 0] #자무주 1성
+	RANGE_SKILLS[14] = [7, 5, "공격스킬2", 4, 0] #뢰진주 첨
+	RANGE_SKILLS[16] = [7, 5, "공격스킬2", 4, 0] #뢰진주 2성
+	RANGE_SKILLS[17] = [7, 5, "공격스킬2", 4, 0] #백열주 2성
+	RANGE_SKILLS[18] = [7, 5, "공격스킬2", 4, 0] #화염주 2성
+	RANGE_SKILLS[19] = [7, 5, "공격스킬2", 4, 0] #자무주 2성
+	RANGE_SKILLS[22] = [7, 5, "공격스킬2", 4, 0] #뢰진주 3성
+	RANGE_SKILLS[23] = [7, 5, "공격스킬2", 4, 0] #백열주 3성
+	RANGE_SKILLS[24] = [7, 5, "공격스킬2", 4, 0] #화염주 3성
+	RANGE_SKILLS[25] = [7, 5, "공격스킬2", 4, 0] #자무주 3성
+	RANGE_SKILLS[30] = [7, 5, "공격스킬2", 4, 0] #뢰진주 4성
+	RANGE_SKILLS[31] = [7, 5, "공격스킬2", 4, 0] #백열주 4성
+	RANGE_SKILLS[32] = [7, 5, "공격스킬2", 4, 0] #화염주 4성
+	RANGE_SKILLS[33] = [7, 5, "공격스킬2", 4, 0] #자무주 4성
+	RANGE_SKILLS[37] = [7, 5, "공격스킬2", 4, 0] #뢰진주 5성
+	RANGE_SKILLS[38] = [7, 5, "공격스킬2", 4, 0] #백열주 5성
+	RANGE_SKILLS[39] = [7, 5, "공격스킬2", 4, 0] #화염주 5성
+	RANGE_SKILLS[40] = [7, 5, "공격스킬2", 4, 0] #자무주 5성
+	RANGE_SKILLS[44] = [7, 5, "공격스킬2", 4, 0] #헬파이어
+	RANGE_SKILLS[49] = [7, 5, "공격스킬2", 4, 0] #성려멸주
+	RANGE_SKILLS[52] = [7, 5, "공격스킬2", 4, 0] #성려멸주 1성
+	RANGE_SKILLS[53] = [7, 5, "공격스킬2", 4, 0] #삼매진화
+	RANGE_SKILLS[56] = [7, 5, "공격스킬2", 4, 0] #성려멸주 2성
+	RANGE_SKILLS[57] = [7, 5, "공격스킬2", 4, 0] #삼매진화 1성
+	RANGE_SKILLS[58] = [10, 5, "공격스킬2", 4, 0] #지폭지술
 	
 	#전사 스킬
 	RANGE_SKILLS[65] = [0, 5, "", 4, 0] #뢰마도
 	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
-	RANGE_SKILLS[73] = [4, 5, "", 4, 0] #광량돌격
+	RANGE_SKILLS[73] = [4, 5, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [0, 5, "", 4, 0] #뢰마도 1성
-	RANGE_SKILLS[77] = [0, 5, "", 4, 5] #유비후타
+	RANGE_SKILLS[77] = [0, 5, "", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
 	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
 	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
 	RANGE_SKILLS[101] = [0, 5, "", 4, 0] #백호참
+	
+	
+	#도사 스킬
+	
+	
+	# 적 캐릭터 스킬
+	RANGE_SKILLS[45] = [5, 3, "공격스킬", 4, 0] #산적들의 스킬
+	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
+	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
 	# 폭발 범위
@@ -373,7 +382,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#--------------------------------------------------------------------------
 	DAMAGE_FONT_NAME = "맑은 고딕"
 	#--------------------------------------------------------------------------
-	DAMAGE_FONT_SIZE = 22
+	DAMAGE_FONT_SIZE = 20
 	#--------------------------------------------------------------------------
 	# To change the color you need to adjust the numbers below.
 	# The numbers reperesnt 3 colors, red, greend and blue. All you have to do is
@@ -755,20 +764,20 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_respawn(enemy)
 			event = enemy.event
 			# respawn은 젠 딜레이
-			
 			return if enemy.respawn == 0 or event.erased == false
 			enemy.respawn -= 1
 			if enemy.respawn == 0
+				# 해당 몹 젠 됐다고 서버에 알림
+				# 해당 맵의 몹의 id 체력을 풀로 채움
+				event.erased = false
+				event.refresh
 				# 여기서 랜덤하게 움직이는걸 해야함
 				for i in 0..100
 					event.move_random
 				end
 				event.moveto(event.x,event.y)
-				# 해당 몹 젠 됐다고 서버에 알림
-				# 해당 맵의 몹의 id 체력을 풀로 채움
-				event.erased = false
-				Network::Main.socket.send("<respawn>#{enemy.event_id},#{event.id},#{$game_map.map_id}</respawn>\n")
 				
+				Network::Main.socket.send("<respawn>#{enemy.event_id},#{event.id},#{$game_map.map_id},#{event.x},#{event.y}</respawn>\n")
 				event.refresh
 			end
 		end
@@ -862,7 +871,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false
 		end
 		#--------------------------------------------------------------------------
-		# * Update Enemy Attack(Enemy)
+		# * Update Enemy Attack(Enemy) 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
 		def update_enemy_attack(e,actor)
 			#Return if the enemy can't attack
@@ -874,25 +883,25 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get the current action kind
 				case action.kind
 				when 0 # Basic
-					#Get the action
+					#Get the action 기본 액션 가져옴
 					case action.basic
 					when 0 #Attack
 						next if !in_range?(e.event, actor.event, 1) or !in_direction?(e.event, actor.event)
 						#Attack it's enemy
 						a = actor if actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하면 적
 						a = $game_party.actors[0] if !actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하지 않으면 플레이어
-						# 몬스터가 플레이어, 또는 다른 적을 공격함
+						# 몬스터가 플레이어, 또는 다른 적을 공격함 e가 a를 공격함
 						a.attack_effect(e)
 						#Animate the enemy
 						e.event.animation_id = e.animation1_id
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
 						#Show Animation
 						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
-						#Check if enemy's enemy is dead
+						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
 						return if enemy_dead?(a,e)
 						#Make enemy
-						return if !a.is_a?(ABS_Enemy)
-						return if a.attacking == e and a.in_battle
+						return if !a.is_a?(ABS_Enemy) # a가 플레이어면 무시
+						return if a.attacking == e and a.in_battle # a가 적 캐릭이면 e를 쫒아감
 						#Set the new target for the enemy
 						a.attacking = e
 						#The enemy is now in battle
@@ -903,14 +912,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					when 1..3 #Nothing
 						return
 					end
-				when 1..2 #Skill
+				when 1..2 #Skill 적 캐릭의 스킬 사용
 					#Get the skill
 					skill = $data_skills[action.skill_id]
 					#Return if the skill is NIL
 					return if skill == nil
 					#Get the skill scope
 					case skill.scope
-					when 1 # One Enemy
+					when 1 # One Enemy 적 한놈만 
 						return if Graphics.frame_count % (e.aggressiveness * 30) != 0
 						next if !in_direction?(e.event, actor.event)
 						next if !e.can_use_skill?(skill)
@@ -918,7 +927,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						e.event.animation_id = skill.animation1_id
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						if RANGE_SKILLS.has_key?(skill.id)
-							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # 여기서 알아서 데미지 계산
+							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e는a의 적(플레이어 또는 또 다른 적)여기서 알아서 데미지 계산
 							e.sp -= skill.sp_cost
 							return
 						end
@@ -996,6 +1005,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					for key in @skill_keys.keys
 						next if @skill_keys[key] == nil or @skill_keys[key] == 0
 						next if !Input.trigger?(key)
+						
 						if $game_switches[352] == true
 							$console.write_line("스킬 사용 불가 지역입니다.")
 							return
@@ -1008,6 +1018,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						end
 						# 스킬 아이디 가져옴
 						id = @skill_keys[key]
+						
 						if RANGE_EXPLODE.has_key?(id)
 							return player_explode(id)
 						else
@@ -1151,8 +1162,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if skill == nil
 			# 액터가 가지고 있는 스킬이 아님
 			return if !@actor.skills.include?(skill.id)
-			# 엑터가 사용할 수 없는 스킬이면 무시
-			return if !@actor.can_use_skill?(skill)
+			# 엑터가 사용할 수 없는 상황이면 무시
+			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
 			# 스킬 애니메이션 
 			$game_player.animation_id = skill.animation1_id
 			#Animate
@@ -1214,7 +1225,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				hit_enemy(enemies[0], @actor, skill.animation2_id) if enemies[0].damage != "Miss" and enemies[0].damage != 0
 				e = enemies[0]
 				# 적이 스킬을 맞으면 점프함
-				jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
+				#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 				#Return if enemy is dead 
 				return if enemy_dead?(enemies[0],@actor)
 				return if !enemy.hate_group.include?(0)
@@ -1271,7 +1282,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					e.effect_skill(@actor, skill)
 					#Show Animetion on enemy
 					hit_enemy(e, @actor, 0) if e.damage != "Miss" and e.damage != 0
-					jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
+					#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 					#Skip this enemy if its dead
 					next if enemy_dead?(e,@actor)
 					next if !e.hate_group.include?(0)
@@ -1328,7 +1339,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@actor.sp -= skill.sp_cost
 			return
 		end
-
+		
 		#--------------------------------------------------------------------------
 		# * 적이 죽었니? (몹 또는 유저)
 		#--------------------------------------------------------------------------
@@ -1339,6 +1350,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if !e.dead?
 			enemy = e
 			treasure(enemy) if a != nil and a.is_a?(Game_Actor)
+			# 적 유닛이 적을 죽이면 평상시로 돌아옴
 			a.attacking = nil if a != nil and !a.is_a?(Game_Actor)
 			a.in_battle = false if a != nil and !a.is_a?(Game_Actor)
 			id = enemy.event_id
@@ -1366,10 +1378,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 				if enemy.trigger[2] == 0
 					$game_variables[enemy.trigger[1]] += 1
-					# 파티몹 변수 공유 날림
-					if enemy.trigger[1] == 1
-						Network::Main.socket.send "<variables>#{enemy.trigger[1]},#{$game_variables[enemy.trigger[1]]}</variables>"
-					end
 					$game_map.need_refresh = true
 				else
 					$game_variables[enemy.trigger[1]] = enemy.trigger[2]
@@ -1403,6 +1411,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#return if the player is not dead
 			return false if !a.dead?
 			#If the player is dead;
+			$console.write_line("죽었습니다.. 성황령에가서 기원하십시오.")
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 			e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
@@ -1874,21 +1883,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 61 # 주작
-				if r <= 80 
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 90
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				if r <= 30 
+					# 주작의 깃
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 68 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 62 # 백호
-				if r <= 80 
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 90
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				if r <= 30 
+					# 백호의 발톱
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 69 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 75 # 청진웅
@@ -1899,9 +1902,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				return true
 			when 76 # 청순록
 				if r <= 80 
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 90
 					# 
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -1955,21 +1955,64 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 86 # 용
-				if r <= 80 
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 90
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				if r <= 10 
+					# 용의비늘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
 				end
-				return true
+			when 106 # 뱀
+				if r <= 10 
+					# 뱀고기
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id}  #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end
+			when 107 # 적비
+				if r <= 30 
+					# 빨간시약
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 55 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end
+			when 108 # 겁살수
+				if r <= 40 
+					# 빨간시약
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 55 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				elsif r <= 50
+					# 일월대도
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 70 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end
+			when 109 # 눈괴물
+				if r <= 60 
+					# 얼음
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 71 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end
+			when 110 # 북극사슴
+				if r <= 60 
+					# 얼음
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 71 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				elsif r <= 70
+					# 녹용
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end
 			end
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Hit Enemy(Enemy) or (Player) 몬스터가 공격할 경우
 		#--------------------------------------------------------------------------
 		def hit_enemy(e,a,animation=nil)
 			return if animation == 0
+			# 나한테 적이 아니면 공격 안하게 함
+			if a.is_a?(ABS_Enemy) and e.is_a?(Game_Actor)
+				return if !a.hate_group.include?(0)
+			end
+			if a.is_a?(ABS_Enemy) and e.is_a?(ABS_Enemy)
+				return if !a.hate_group.include?(e.id)
+			end
 			# Animate player
 			# hit 애니메이션 재생
 			animate(e,e.character_name+"_hit") if e.is_a?(Game_Player) and @player_ani
@@ -2463,7 +2506,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Attack Actor
 			actor.effect_skill(enemy, @skill) if enemy != nil
 			#Jump
-			$ABS.jump($game_player,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
+			#$ABS.jump($game_player,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2486,7 +2529,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 				#Jump
 				e = actor
-				$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
+				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
 				#Put enemy in battle
@@ -2504,7 +2547,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 			#Jump
 			e=actor
-			$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
+			#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 			#return if enemy is dead
 			return if $ABS.enemy_dead?(actor, enemy)
 			return if !actor.hate_group.include?(enemy.enemy_id)
@@ -2556,11 +2599,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy = @actor
 			return if enemy == nil
 			#Attack Actor
+			# 만약 내게 호의적인 적이라면 무시
+			if enemy.is_a?(ABS_Enemy) and actor.is_a?(Game_Actor)
+				return if !enemy.hate_group.include?(0)
+			end
 			actor.effect_skill(enemy, @skill)
 			#Show animation on player
 			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 			#Jump
-			$ABS.jump($game_player,self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
+			#$ABS.jump($game_player,self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2577,6 +2624,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			if @parent.is_a?(Game_Player)
 				#Get enemy
 				enemy = $game_party.actors[0]
+				# 만약 내게 호의적인 적이라면 무시
+				if actor.is_a?(ABS_Enemy) and enemy.is_a?(Game_Actor)
+					return if !actor.hate_group.include?(0)
+				end
 				#Attack It's enemy
 				actor.effect_skill(enemy, @skill)
 				#Show animation on event
@@ -2595,12 +2646,16 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get enemy
 			enemy = $ABS.enemies[@parent.id]
 			return if enemy == nil
+			# 적끼리 싸우는게 아니면 무시
+			if enemy.is_a?(ABS_Enemy) and actor.is_a?(ABS_Enemy)
+				return if !actor.hate_group.include?(enemy.id)
+			end
 			#Attack It's enemy
 			actor.effect_skill(enemy, @skill)
 			#Show animation on event
 			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 			#Jump
-			$ABS.jump($game_map.events[id],self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
+			#$ABS.jump($game_map.events[id],self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
 			#return if enemy is dead
 			return if $ABS.enemy_dead?(actor, enemy)
 			return if !actor.hate_group.include?(enemy.enemy_id)
@@ -2655,7 +2710,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Show animation on player
 			$game_player.animation_id = @range_weapon[2] if actor.damage != "Miss" and actor.damage != 0
 			#jump
-			$ABS.jump($game_player, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
+			#$ABS.jump($game_player, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2677,7 +2732,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Show animation on event
 				actor.event.animation_id = @range_weapon[2] if actor.damage != "Miss" and actor.damage != 0
 				#jump
-				$ABS.jump(actor.event, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
+				#$ABS.jump(actor.event, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
 				#Put enemy in battle
@@ -2692,7 +2747,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.attack_effect(enemy)
 			#Show animation on event
 			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
-			$ABS.jump(actor.event, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
+			#$ABS.jump(actor.event, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
 			#return if enemy is dead
 			return if $ABS.enemy_dead?(actor, enemy)
 			return if !actor.hate_group.include?(enemy.enemy_id)
@@ -2926,19 +2981,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			alias mrmo_abs_sprite_update_collapse update
 			#-------------------------------------------------------------------------
 			def update
-				mrmo_abs_sprite_update_collapse
+				mrmo_abs_sprite_update_collapse # sprite의 업데이트
 				#Update Duration
 				if @_collapse_erase_duration > 0
 					@_collapse_erase_duration -= 1
 					@force_opacity = true
+					# 불투명도 조절
 					self.opacity = 256 - (36 - @_collapse_erase_duration) * 10
 					@force_opacity = false
 					if @_collapse_erase_duration == 0
 						@collapse_character.character_name = ""
 						self.opacity = 256
-						self.color.set(0, 0, 0, 0)
+						self.color.set(0, 0, 0, 0) # 검은색으로 만듦
 						self.blend_type = 0
-						@collapse_character.erase
+						@collapse_character.erase # 이벤트 삭제
 					end
 				end
 			end
@@ -2975,31 +3031,29 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					damage_string = value.to_s
 				end
-				bitmap = Bitmap.new(160, 48)
+				bitmap = Bitmap.new(160, 100)
 				bitmap.font.name = $ABS.DAMAGE_FONT_NAME
 				bitmap.font.size = $ABS.DAMAGE_FONT_SIZE
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
 				# draw_text(x, y, width, height, string, align)
-				bitmap.draw_text(-1, 12-1, 160, 36, damage_string, 1)
-				bitmap.draw_text(+1, 12-1, 160, 36, damage_string, 1)
-				bitmap.draw_text(-1, 12+1, 160, 36, damage_string, 1)
-				bitmap.draw_text(+1, 12+1, 160, 36, damage_string, 1)
+				y = 5
+				# 데미지 그림자
+				bitmap.draw_text(-1, y-1, 160, 36, damage_string, 1)
+				bitmap.draw_text(+1, y-1, 160, 36, damage_string, 1)
+				bitmap.draw_text(-1, y+1, 160, 36, damage_string, 1)
+				bitmap.draw_text(+1, y+1, 160, 36, damage_string, 1)
 				# 폰트 칼라 색
 				if value.is_a?(Numeric) and value < 0
 					bitmap.font.color.set(176, 255, 144)
 				else
 					bitmap.font.color.set(255, 255, 255) # 흰색
 				end
-				bitmap.draw_text(0, 12, 160, 36, damage_string, 1)
+				
 				if critical
-					bitmap.font.size = 20
-					bitmap.font.color.set(0, 0, 0)
-					bitmap.draw_text(-1, -1, 160, 20, "", 1) # "크리티컬" 자리 
-					bitmap.draw_text(+1, -1, 160, 20, "", 1)
-					bitmap.draw_text(-1, +1, 160, 20, "", 1)
-					bitmap.draw_text(+1, +1, 160, 20, "", 1)
 					bitmap.font.color.set(255, 0, 51) # 빨간색
-					bitmap.draw_text(0, 0, 160, 20, "", 1)
+					bitmap.draw_text(0, y, 160, 36, damage_string, 1)
+				else
+					bitmap.draw_text(0, y, 160, 36, damage_string, 1)	
 				end
 				@_damage_sprite = ::Sprite.new(self.viewport)
 				@_damage_sprite.bitmap = bitmap
@@ -3095,7 +3149,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) if $ABS.enemies[id].damage != nil
 					#Make Damage nil
 					$ABS.enemies[id].damage = nil
-				elsif @character.is_a?(Game_Player)
+				elsif @character.is_a?(Game_Player)					
+					a = $game_party.actors[0]
+					#Display damage
+					damage(a.damage, a.critical) if !a.dead? and a.damage != nil
+					#Make Damage nil
+					a.damage = nil
 				end
 			end
 		end
@@ -3189,6 +3248,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     skill_id : skill ID
 		#--------------------------------------------------------------------------
 		def can_use_skill?(skill)
+			# 여기다가 스킬 딜레이가 남아있으면 무시하도록 만들어보자
+			
 			# If there's not enough SP, the skill cannot be used.
 			return false if skill.sp_cost > self.sp
 			# Unusable if incapacitated
@@ -3210,6 +3271,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     skill : skill
 		#--------------------------------------------------------------------------
 		def effect_skill(user, skill)
+			# 나한테 적이 아니면 공격 안하게 함
+			if self.is_a?(ABS_Enemy) and user.is_a?(Game_Actor)
+				return if !self.hate_group.include?(0)
+			end
+			if self.is_a?(ABS_Enemy) and user.is_a?(ABS_Enemy)
+				return if !self.hate_group.include?(user.id)
+			end
 			# Clear critical flag
 			self.critical = false
 			# If skill scope is for ally with 1 or more HP, and your own HP = 0,
@@ -3228,38 +3296,35 @@ if SDK.state("Mr.Mo's ABS") == true
 			if skill.atk_f > 0
 				hit *= user.hit / 100
 			end
-			hit_result = (rand(50) < hit)
+			# 스킬 명중률
+			hit_result = (rand(30) < hit)
 			# Set effective flag if skill is uncertain
 			effective |= hit < 100
 			# If hit occurs
 			if hit_result == true
 				# Calculate power
-				power = skill.power + user.atk * skill.atk_f / 100
-				if power > 0
-					power -= self.pdef * skill.pdef_f / 200
-					power -= self.mdef * skill.mdef_f / 200
-					power = [power, 0].max
-				end
+				
+				power = 0
 				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
 				case skill.id
 					# 주술사 스킬
 				when 44 # 헬파이어
-					power = $game_party.actors[0].sp / 10 + 20
+					power = $game_party.actors[0].sp / 20 + 20
 					$game_party.actors[0].sp = 0
 				when 49 # 성려멸주
-					power = $game_party.actors[0].maxsp / 10 + 80
+					power = $game_party.actors[0].maxsp / 20 + 80
 					$game_party.actors[0].sp -= $game_party.actors[0].maxsp / 10
 				when 52 # 성려멸주 1성
-					power = $game_party.actors[0].maxsp / 9 + 80
+					power = $game_party.actors[0].maxsp / 15 + 80
 					$game_party.actors[0].sp -= $game_party.actors[0].maxsp / 15
 				when 53 # 삼매진화 
-					power = $game_party.actors[0].sp / 9 + 20
+					power = $game_party.actors[0].sp / 10 + 40
 					$game_party.actors[0].sp = 0
 				when 56 # 성려멸주 2성
-					power = $game_party.actors[0].maxsp / 8 + 80
+					power = $game_party.actors[0].maxsp / 10 + 100
 					$game_party.actors[0].sp -= $game_party.actors[0].maxsp / 20
 				when 57 # 삼매진화 1성
-					power = $game_party.actors[0].sp / 8 + 20
+					power = $game_party.actors[0].sp / 7 + 60
 					$game_party.actors[0].sp = 0
 				when 58 # 지폭지술
 					$e_v += 1
@@ -3270,36 +3335,47 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					# 전사스킬
 				when 67 # 건곤대나이
-					power = $game_party.actors[0].hp / 10 + 50
-					$game_party.actors[0].hp -= $game_party.actors[0].hp / 2
+					power = $game_party.actors[0].hp / 15 + 50
+					$game_party.actors[0].hp -= $game_party.actors[0].hp / 3
 				when 73 # 광량돌격
 					power = $game_party.actors[0].maxhp / 50 + 50
 					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 8
+					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0 
 				when 74 # 십리건곤
 					power = $game_party.actors[0].maxhp / 100 + 40
 					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 10
+					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0
 				when 78 # 십리건곤 1성
 					power = $game_party.actors[0].maxhp / 90 + 40
 					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 10
+					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0
 				when 79 # 동귀어진
-					power = $game_party.actors[0].hp / 5 + 100
+					power = $game_party.actors[0].hp / 4 + 100
 					$game_party.actors[0].hp -= $game_party.actors[0].hp - 10
 				when 80 # 십리건곤 2성
 					power = $game_party.actors[0].maxhp / 80 + 40
 					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 10
+					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0
 				when 84 # 포효검황
 					power = $game_party.actors[0].hp / 50 + 100
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
-						$game_party.actors[0].hp -= $game_party.actors[0].hp / 3
+						$game_party.actors[0].hp -= $game_party.actors[0].hp / 3 - 1
 					end
 				when 101 # 백호참
-					power = $game_party.actors[0].hp / 9 + 60
+					power = $game_party.actors[0].hp / 10 + 60
 					$game_party.actors[0].hp -= $game_party.actors[0].hp / 2
 					# 도사스킬
-				end
+				else
+					power = skill.power + user.atk * skill.atk_f / 100
+				end				
 				
+				if power > 0
+					power -= self.pdef * skill.pdef_f / 200
+					power -= self.mdef * skill.mdef_f / 200
+					power = [power, 0].max
+				end
 				
 				# Calculate rate
 				rate = 20

@@ -88,7 +88,7 @@ class Scene_Skill
 			# Get currently selected data on the skill window
 			@skill = @skill_window.skill
 			# If unable to use
-			if @skill == nil or not @actor.skill_can_use?(@skill.id)
+			if @skill == nil or not @actor.skill_can_use?(@skill.id) and @skill.id != 8
 				# Play buzzer SE
 				$game_system.se_play($data_system.buzzer_se)
 				return

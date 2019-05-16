@@ -134,6 +134,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Destroys player
 			#-------------------------------------------------------------------------- 
 			def self.destroy(id)
+				if @players[id.to_s] != nil
+					@socket.send("<chat>(알림): '#{@players[id.to_s].name}'님께서 게임을 종료하셨습니다.</chat>\n")
+				end
 				@players[id.to_s] = nil rescue nil
 				@mapplayers[id.to_s] = "" rescue nil
 				for player in @mapplayers
@@ -1035,7 +1038,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$ABS.enemies[data[1].to_i].hp = data[2].to_i
 						$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
 						$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
-						$ABS.enemies[data[1].to_i].respawn = data[6].to_i
+						if data[6].to_i != 0 and data[6].to_i != nil
+							$ABS.enemies[data[1].to_i].respawn = data[6].to_i
+						end
 					end
 					return true
 				end
@@ -1132,6 +1137,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * 데이터들
 			#-------------------------------------------------------------------------- 
 			def self.update_ingame(line)
+				
 				case line
 				when /<6a>(.*)<\/6a>/
 					@send_conf = true
@@ -1307,10 +1313,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 							exit
 						else
-							Network::Main.socket.send("<chat>[알림]:'#{$game_party.actors[0].name}'님께서 흑부엉의 바람의나라 온라인에 접속 하셨습니다.</chat>\n")      
+							Network::Main.socket.send("<chat>[알림]:'#{$game_party.actors[0].name}'님께서 흑부엉의 바람의나라 온라인에 접속 하셨습니다.</chat>\n")
+							@socket.send("<exp_event></exp_event>\n")      
 							$nowtrade = 0
 							$game_player.move_speed = 3
-							$game_switches[401] = true # 경험치 이벤트 ??
+							$game_switches[401] = true # 경험치 이벤트는 켜 있는 상태
 							a번하우징
 							b번하우징
 							c번하우징
@@ -1363,6 +1370,32 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						val = data.split(',')
 						$game_variables[val[0].to_i] = val[1].to_i
 						$game_map.need_refresh = true
+					end
+					
+					# 경험치 이벤트 확인
+				when /<exp_event>(.*)<\/exp_event>/
+					n = $1.to_i
+					case n
+					when 2
+						$game_switches[1500] = true
+						$game_switches[1501] = false
+						$game_switches[1502] = false
+						$chat.write ("                                     <현재 경험치 2배 이벤트가 진행중 입니다.>", Color.new(255, 120, 0)) 
+					when 3
+						$game_switches[1500] = false
+						$game_switches[1501] = true
+						$game_switches[1502] = false
+						$chat.write ("                                     <현재 경험치 3배 이벤트가 진행중 입니다.>", Color.new(255, 120, 0)) 
+					when 5
+						$game_switches[1500] = false
+						$game_switches[1501] = false
+						$game_switches[1502] = true
+						$chat.write ("                                     <현재 경험치 5배 이벤트가 진행중 입니다.>", Color.new(255, 120, 0)) 
+					else
+						$game_switches[1500] = false
+						$game_switches[1501] = false
+						$game_switches[1502] = false
+						$chat.write ("                                     <현재 경험치 이벤트가 종료되었습입니다.>", Color.new(255, 120, 0)) 
 					end
 					
 					# 공지 메시지 받음
@@ -1511,14 +1544,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 						$game_map.refresh
 					end
-					
-				when /<respawn>(.*),(.*),(.*)<\/respawn>/
+				# id, event_id, map_id, x, y
+				when /<respawn>(.*),(.*),(.*),(.*),(.*)<\/respawn>/
 					id = $1.to_i
 					event_id = $2.to_i
 					map_id = $3.to_i
-					#p "#{id}, #{event_id}, #{map_id}"
 					if $game_map.map_id == map_id
 						$game_map.events[event_id].erased = false
+						$game_map.events[event_id].moveto($4.to_i,$5.to_i)
 						$game_map.events[event_id].refresh
 						$game_map.refresh
 					end
@@ -1999,6 +2032,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					
 				when /<27>(.*)<\/27>/
+					#@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id} # 몹 이벤트
+					#@ani_id = #{Network::Main.id}; @ani_number = #{e.event.animation_id}; @ani_map = #{$game_map.map_id} # 자신 이벤트
 					eval($1)
 					if @ani_map == $game_map.map_id
 						if @ani_id != -1

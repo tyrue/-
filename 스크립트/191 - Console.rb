@@ -13,6 +13,7 @@ class Console < Sprite
 	#     height   : 묘화처의 높이
 	#     max_line : 최대 줄 수
 	#--------------------------------------------------------------------------
+	attr_accessor :console_log
 	def initialize(x, y, width, height, max_line = 8)
 		@console_viewport = Viewport.new(x, y, width, height)
 		@console_viewport.z = 999
@@ -31,7 +32,8 @@ class Console < Sprite
 		clear
 		self.bitmap.font.color.set(255, 255, 255, 255)
 		for i in 0...@console_log.size
-			self.bitmap.draw_text(0, i * 16, @console_width, 32, @console_log[i])
+			# x, y, width, height, string
+			self.bitmap.draw_text(0, (5 - i) * 16, @console_width, 32, @console_log[@console_log.size - i - 1])
 		end
 	end
 	#--------------------------------------------------------------------------

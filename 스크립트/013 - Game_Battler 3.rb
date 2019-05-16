@@ -40,6 +40,10 @@ class Game_Battler
 	#     attacker : battler
 	#--------------------------------------------------------------------------
 	def attack_effect(attacker)
+		# 나한테 적이아니면 공격 못함
+		if self.is_a?(ABS_Enemy) and attacker.is_a?(Game_Actor)
+			return if !self.hate_group.include?(0)
+		end
 		# Clear critical flag
 		self.critical = false
 		# First hit detection
@@ -52,6 +56,7 @@ class Game_Battler
 			# Element correction
 			self.damage *= elements_correct(attacker.element_set)
 			self.damage /= 100
+			self.damage = 1 if self.damage <= 0
 			# If damage value is strictly positive
 			if self.damage > 0
 				# Critical correction
@@ -82,7 +87,9 @@ class Game_Battler
 			# Substract damage from HP
 			self.hp -= self.damage
 			# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
-			Network::Main.socket.send("<23>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction}</23>\n")
+			if !self.is_a?(Game_Actor)
+				Network::Main.socket.send("<23>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction}</23>\n")
+			end
 			# State change
 			@state_changed = false
 			states_plus(attacker.plus_state_set)

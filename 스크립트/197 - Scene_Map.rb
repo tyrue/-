@@ -15,8 +15,14 @@ class Scene_Map
 		scene_map_update
 		JS.update
 		
+		if Graphics.frame_count % 600 == 0
+			$console.console_log.clear
+			$console.refresh
+		end
 		
 		if $game_party.actors[0].hp == 0
+			$game_switches[50] = false # 유저 살음 스위치 오프
+			$game_switches[296] = true # 유저 죽음 스위치 온
 			Hwnd.dispose("Inventory")
 			$game_party.actors[0].equip(0, 0)
 			$game_party.actors[0].equip(1, 0)

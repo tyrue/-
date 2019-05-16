@@ -829,8 +829,10 @@ module J
 				@piece[3] = @piece[2]
 				return
 			elsif @piece[0] != nil and @piece[1] != nil 
-				if @piece[2] != nil
-					@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[@piece[2]]]
+				if @piece[2] != nil					
+					if HANGUL_LAST_CHARACTER_TABLE[@piece[2]] != nil
+						@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[@piece[2]]]
+					end
 					return
 				else
 					@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[""]]

@@ -4270,3 +4270,4 @@ Section166:81: syntax error ()>> occured.
 On <<Sat 25 May 2019, 00:49:21>> the error <<Section143:71: syntax error ()>> occured.
 On <<Sat 25 May 2019, 00:49:21>> the error <<compile error
 Section143:71: syntax error ()>> occured.
+On <<Sun 26 May 2019, 16:58:57>> the error <<wrong number of arguments(0 for 1) (#<Scene_Map:0x817b330>)>> occured.

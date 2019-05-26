@@ -10,14 +10,14 @@ class Scene_Map
 	# * Initializes map.
 	#--------------------------------------------------------------------------
 	def initialize
-		$game_temp.spriteset_refresh
+		# 현재 맵의 몬스터 정보를 요청
+		Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		Network::Main.send_map
-		Network::Main.socket.send "<npc>#{$game_map.map_id}</npc>\n"
-		$game_variables[1003] = 0
 		$nowtrade = 0
 		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = 3
 		자동저장 if not $game_party.actors[0].name == "평민"
+		$game_temp.spriteset_refresh
 	end
 	
 	#--------------------------------------------------------------------------

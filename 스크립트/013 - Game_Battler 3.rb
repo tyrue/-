@@ -88,7 +88,7 @@ class Game_Battler
 			self.hp -= self.damage
 			# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 			if !self.is_a?(Game_Actor)
-				Network::Main.socket.send("<23>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction}</23>\n")
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
 			# State change
 			@state_changed = false

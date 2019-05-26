@@ -653,6 +653,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@mapplayers[id].refresh(data)
 				#Send the player's new stats
 				self.send_newstats if g == nil
+				
 			end
 			#--------------------------------------------------------------------------
 			# * Update Net Actors
@@ -1035,11 +1036,28 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true if $game_map.map_id != data[0].to_i
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
+						# 몹 체력 적용
 						$ABS.enemies[data[1].to_i].hp = data[2].to_i
+						if $ABS.enemies[data[1].to_i].hp == 0 # 체력이 0이면 죽은거지
+							$ABS.enemies[data[1].to_i].event.erase
+							$game_map.refresh
+						else
+							$ABS.enemies[data[1].to_i].event.erased = false
+							$ABS.enemies[data[1].to_i].event.refresh
+						end
+						
+						# 몹 방향과 좌표 적용
 						$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
 						$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
-						if data[6].to_i != 0 and data[6].to_i != nil
-							$ABS.enemies[data[1].to_i].respawn = data[6].to_i
+						
+						# 몹 죽었을때 리스폰 시간 적용
+						if data[6].to_i != nil
+							if data[6].to_i != 0  
+								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
+							else
+								$ABS.enemies[data[1].to_i].event.erased = false
+								$ABS.enemies[data[1].to_i].event.refresh
+							end
 						end
 					end
 					return true
@@ -1395,7 +1413,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_switches[1500] = false
 						$game_switches[1501] = false
 						$game_switches[1502] = false
-						$chat.write ("                                     <현재 경험치 이벤트가 종료되었습입니다.>", Color.new(255, 120, 0)) 
+						$chat.write ("                                     <현재 경험치 이벤트가 종료되었습니다.>", Color.new(255, 120, 0)) 
 					end
 					
 					# 공지 메시지 받음
@@ -1544,7 +1562,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 						$game_map.refresh
 					end
-				# id, event_id, map_id, x, y
+					# id, event_id, map_id, x, y
 				when /<respawn>(.*),(.*),(.*),(.*),(.*)<\/respawn>/
 					id = $1.to_i
 					event_id = $2.to_i

@@ -13,7 +13,7 @@ class Sprite_Console< Sprite
 		super(viewport)
 		self.bitmap = Bitmap.new(640, 16)
 		self.bitmap.font.name = "맑은 고딕"
-		self.bitmap.font.size = 12
+		self.bitmap.font.size = 14
 		self.x = 0
 		self.y = viewport.rect.height - self.bitmap.height
 		self.z = 1

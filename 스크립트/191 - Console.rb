@@ -23,13 +23,21 @@ class Console < Sprite
 		@console_width = width
 		@console_max_line = max_line
 		@console_log = []
-		hide
+		
+		@back_sprite = Sprite.new(@console_viewport)
 	end
 	#--------------------------------------------------------------------------
 	# ● 리프레쉬
 	#--------------------------------------------------------------------------
 	def refresh
 		clear
+		if @console_log.size <= 0
+			@back_sprite.visible = false
+			return 
+		end
+		@back_sprite.visible = true
+		@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
+		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
 		self.bitmap.font.color.set(255, 255, 255, 255)
 		for i in 0...@console_log.size
 			# x, y, width, height, string

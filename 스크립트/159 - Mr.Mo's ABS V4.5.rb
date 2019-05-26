@@ -307,6 +307,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	#Mash Time
 	# 공격 딜레이 초단위
 	MASH_TIME = 4
+	
+	# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
+	SKILL_MASH_TIME = {}
+	SKILL_MASH_TIME[5] = [300, 0] # 누리의기원
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -776,7 +780,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					event.move_random
 				end
 				event.moveto(event.x,event.y)
-				
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
 				Network::Main.socket.send("<respawn>#{enemy.event_id},#{event.id},#{$game_map.map_id},#{event.x},#{event.y}</respawn>\n")
 				event.refresh
 			end
@@ -979,10 +983,19 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Update Player  단축키를 이용하여 스킬을 사용한다.
 		#--------------------------------------------------------------------------
 		def update_player
-			if not Hwnd.include?("NetPartyInv")
-				if not $map_chat_input.active
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
 					#Keep the current party leader updated
 					@actor = $game_party.actors[0]
+					# 스킬 딜레이 갱신
+					for skill_mash in SKILL_MASH_TIME
+						if skill_mash[1][1] > 0
+							skill_mash[1][1] -= 1 
+							if skill_mash[1][1] == 0
+								$console.write_line("#{$data_skills[skill_mash[0]].name} 딜레이 끝")
+							end
+						end
+					end
 					#Update click time
 					@button_mash -= 1 if @button_mash > 0
 					return if @button_mash > 0
@@ -1010,19 +1023,27 @@ if SDK.state("Mr.Mo's ABS") == true
 							$console.write_line("스킬 사용 불가 지역입니다.")
 							return
 						end
+						
 						if STATE_EFFECTS
 							for i in $game_party.actors[0].states
-								# 죽은 상태면 스킬 못씀
+								# 상태 이상이면 사용 못함
 								return if STUN_EFFECT.include?(i) or PARALAYZE_EFFECT.include?(i) or MUTE_EFFECT.include?(i)
 							end
 						end
 						# 스킬 아이디 가져옴
 						id = @skill_keys[key]
 						
+						# 아직 스킬 딜레이가 남아있다면 무시
+						skill_mash = SKILL_MASH_TIME[id]
+						if skill_mash != nil and skill_mash[1] > 0
+							$console.write_line("딜레이가 남아있습니다.")
+							return
+						end
+						
 						if RANGE_EXPLODE.has_key?(id)
 							return player_explode(id)
 						else
-							$e_v = 0
+							$e_v = 0 # enemy_value, 맞출 적의 수
 							return player_skill(id)
 						end
 					end
@@ -1089,7 +1110,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		#--------------------------------------------------------------------------
-		# * 캐릭터의 범위 스킬
+		# * 캐릭터의 범위 무기
 		#--------------------------------------------------------------------------
 		def player_range
 			#Get the weapon
@@ -1180,9 +1201,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Common event call reservation
 				$game_temp.common_event_id = skill.common_event_id
 			end
+			
+			skill_mash_time = SKILL_MASH_TIME[id]
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope
+			when 0
+				@button_mash = MASH_TIME*5
+				if skill_mash_time != nil
+					skill_mash_time[1] = skill_mash_time[0]
+				end
 			when 1 #Enemy 적
 				#If the skill is ranged
 				if RANGE_SKILLS.has_key?(skill.id)
@@ -1193,9 +1221,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
 					#Add mash time
+					if skill_mash_time != nil
+						skill_mash_time[1] = skill_mash_time[0]
+					end 
 					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10)
 					return
 				end
+				
 				if SKILL_CUSTOM[id] != nil
 					@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
 				else
@@ -1249,7 +1281,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					w = RANGE_SKILLS[id]
 					#Add mash time
 					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10)
-					
+					if skill_mash_time != nil
+						skill_mash_time[1] = skill_mash_time[0]
+					end 
 				else
 					if SKILL_CUSTOM[id] != nil
 						@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
@@ -3329,7 +3363,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				when 58 # 지폭지술
 					$e_v += 1
 					power = $game_party.actors[0].sp / 10 + 20
-					# 한 맵에 적들이 다 맞을때 마나를 0으로 만듦
+					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						$game_party.actors[0].sp = 0
 					end
@@ -3424,7 +3458,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if !self.is_a?(Game_Actor)
-					Network::Main.socket.send("<23>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction}</23>\n")
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 				end
 				effective |= self.hp != last_hp
 				# State change
@@ -3571,6 +3605,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				if not moving? and sx != 0
 					sx > 0 ? move_left : move_right
 				end
+			end
+			# 이때 계속 몹 정보 보내주면?
+			if !self.is_a?(Game_Actor)				
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
 			turn_to(b)
 		end

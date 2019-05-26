@@ -28,6 +28,21 @@ class Chat
 			sprite.y -= 16
 		end
 	end
+	
+	def toggle
+		if @back_sprite.visible 
+			@back_sprite.visible = false
+			for sprite in @chat_sprites
+				sprite.visible = false
+			end
+		elsif
+			@back_sprite.visible = true
+			for sprite in @chat_sprites
+				sprite.visible = true
+			end
+		end
+	end
+	
 	def clear
 		@back_sprite.dispose
 		for sprite in @chat_sprites
@@ -56,7 +71,7 @@ class Chat
 			@back_sprite.bitmap.dispose
 		end
 		@back_sprite.bitmap = Bitmap.new(@viewport.rect.width, @viewport.rect.height)
-		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100))
+		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
 		@back_sprite.update
 		for sprite in @chat_sprites
 			sprite.update

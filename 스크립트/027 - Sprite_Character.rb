@@ -37,6 +37,7 @@ class Sprite_Character < RPG::Sprite
 			if @tile_id >= 384
 				self.bitmap = RPG::Cache.tile($game_map.tileset_name,
 					@tile_id, @character.character_hue)
+				
 				self.src_rect.set(0, 0, 32, 32)
 				self.ox = 16
 				self.oy = 32

@@ -278,6 +278,7 @@ if SDK.state("Mr.Mo's ABS")
 		def update
 			mrmo_keyhud_update
 			if not $map_chat_input.active
+				# 만약 토글키가 눌리면? 보여줄까 말까
 				if @mrmo_hud.CAN_TOGGLE and Input.trigger?(@mrmo_hud.TOGGLE_KEY)
 					return @mrmo_hud.visible = true if !@mrmo_hud.visible
 					return @mrmo_hud.visible = false if @mrmo_hud.visible

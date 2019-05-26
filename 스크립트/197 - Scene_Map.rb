@@ -15,9 +15,15 @@ class Scene_Map
 		scene_map_update
 		JS.update
 		
-		if Graphics.frame_count % 600 == 0
-			$console.console_log.clear
+		# 콘솔 초기화
+		if Graphics.frame_count % 400 == 0 and $console.console_log.size > 0
+			$console.console_log.delete_at(0)
 			$console.refresh
+		end
+		
+		# 몬스터 정보 요청
+		if Graphics.frame_count % 30 == 0 
+			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
 		
 		if $game_party.actors[0].hp == 0
@@ -35,25 +41,23 @@ class Scene_Map
 		if not Hwnd.include?("NetPartyInv")
 			if not $map_chat_input.active
 				if $cbig == 0
+					#~ if $game_party.actors[0].class_name == "주술사"
+						#~ if $game_switches[16] == true
+							#~ $game_party.actors[0].str = 8
+						#~ else
+							#~ $game_party.actors[0].str = 5      
+						#~ end
+					#~ end
 					
+					#~ if $game_party.actors[0].class_name == "도사"
+						#~ if $game_switches[16] == true
+							#~ $game_party.actors[0].str = 8
+						#~ else
+							#~ $game_party.actors[0].str = 5      
+						#~ end
+					#~ end
 					
-					if $game_party.actors[0].class_name == "주술사"
-						if $game_switches[16] == true
-							$game_party.actors[0].str = 8
-						else
-							$game_party.actors[0].str = 5      
-						end
-					end
-					
-					if $game_party.actors[0].class_name == "도사"
-						if $game_switches[16] == true
-							$game_party.actors[0].str = 8
-						else
-							$game_party.actors[0].str = 5      
-						end
-					end
-					
-					if Key.trigger?(67) 
+					if Key.trigger?(67) # `
 						if not Hwnd.include?("System")
 							Jindow_System.new
 						else
@@ -61,7 +65,7 @@ class Scene_Map
 						end
 					end
 					
-					if Key.trigger?(30) 
+					if Key.trigger?(30) # g
 						if not Hwnd.include?("Guild")
 							Jindow_Guild.new
 						else
@@ -70,7 +74,7 @@ class Scene_Map
 					end	
 					
 					if $game_party.actors[0].hp > 0  
-						if Key.trigger?(32)
+						if Key.trigger?(32) # i
 							if not Hwnd.include?("Inventory")
 								Jindow_Inventory.new
 							else
@@ -79,7 +83,7 @@ class Scene_Map
 						end
 					end	 
 					
-					if Key.trigger?(26) 
+					if Key.trigger?(26) # c
 						if not Hwnd.include?("Status")
 							Jindow_Status.new
 						else
@@ -87,7 +91,18 @@ class Scene_Map
 						end
 					end	
 					
-					if Key.trigger?(34)
+					if Key.trigger?(KEY_F) # f
+						#~ if not Hwnd.include?("Chat_Input")
+							#~ Jindow_Chat_Input.new
+							#~ $chat.toggle
+						#~ else
+							#~ Hwnd.dispose("Chat_Input")
+							#~ $chat.toggle
+						#~ end
+						$chat.toggle # 채팅창 닫고 키기
+					end	
+					
+					if Key.trigger?(34) # k
 						if not Hwnd.include?("Skill")
 							Jindow_Skill.new
 						else
@@ -95,7 +110,7 @@ class Scene_Map
 						end
 					end	
 					
-					if Key.trigger?(39)
+					if Key.trigger?(39) # p
 						if not Hwnd.include?("NetParty")
 							Jindow_NetParty.new
 						else
@@ -103,7 +118,7 @@ class Scene_Map
 						end
 					end	
 					
-					if Key.trigger?(35)
+					if Key.trigger?(35) # l
 						if not Hwnd.include?("NetPlayer")
 							Jindow_NetPlayer.new
 						else
@@ -111,7 +126,7 @@ class Scene_Map
 						end
 					end	
 					
-					if Key.trigger?(36)
+					if Key.trigger?(36) # m
 						$scene = Scene_Menu.new(0)
 					end 
 					
@@ -139,12 +154,8 @@ class Scene_Map
 							end
 						end
 					end
-					
-					
 				end
 			end
-			
-			
 		end
 	end
 end

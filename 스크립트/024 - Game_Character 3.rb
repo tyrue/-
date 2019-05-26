@@ -24,6 +24,10 @@ class Game_Character
 			# Increase steps
 			increase_steps
 			# If impassable
+			# 이때 계속 몹 정보 보내주면?
+			if $ABS.enemies[self.event.id] != nil
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+			end
 		else
 			# Determine if touch event is triggered
 			check_event_trigger_touch(@x, @y+1)
@@ -47,6 +51,10 @@ class Game_Character
 			# Increase steps
 			increase_steps
 			# If impassable
+			# 이때 계속 몹 정보 보내주면?
+			if $ABS.enemies[self.event.id] != nil
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+			end
 		else
 			# Determine if touch event is triggered
 			check_event_trigger_touch(@x-1, @y)
@@ -70,6 +78,10 @@ class Game_Character
 			# Increase steps
 			increase_steps
 			# If impassable
+			# 이때 계속 몹 정보 보내주면?
+			if $ABS.enemies[self.event.id] != nil
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+			end
 		else
 			# Determine if touch event is triggered
 			check_event_trigger_touch(@x+1, @y)
@@ -93,6 +105,10 @@ class Game_Character
 			# Increase steps
 			increase_steps
 			# If impassable
+			# 이때 계속 몹 정보 보내주면?
+			if $ABS.enemies[self.event.id] != nil
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+			end
 		else
 			# Determine if touch event is triggered
 			check_event_trigger_touch(@x, @y-1)

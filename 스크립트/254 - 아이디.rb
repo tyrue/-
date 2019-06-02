@@ -18,7 +18,9 @@ class Game_Character
 	attr_accessor :sprite_id 
 end 
 
-class Sprite_Character < Sprite_Character 
+class Sprite_Character < Sprite_Character
+	attr_accessor :_id_sprite
+	
 	def create_id_sprite(text) 
 		bitmap = Bitmap.new(160, 20) 
 		bitmap.font.name = "궁서체" 
@@ -47,10 +49,11 @@ class Sprite_Character < Sprite_Character
 	end
 	
 	def update_id_sprite 
-		if @character.sprite_id != nil 
-			if not @_id_sprite_visible 
-				create_id_sprite(@character.sprite_id) 
-			end 
+		if @character.sprite_id != nil
+			if not @_id_sprite_visible
+				create_id_sprite(@character.sprite_id)
+			end
+			
 			@_id_sprite.x = self.x 
 			@_id_sprite.y = self.y - self.oy 
 		else 

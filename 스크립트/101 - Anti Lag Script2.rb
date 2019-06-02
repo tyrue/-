@@ -82,17 +82,20 @@ if SDK.state("Anti Lag Script") == true
 			#Make a loop to get the sprites
 			for sprite in @character_sprites
 				#check if its an event
-        #sprite.update
+				#sprite.update
 				if sprite.character.is_a?(Game_Event)
 					#Check if in range
 					if in_range?(sprite.character) or sprite.character.trigger == 3 or sprite.character.trigger == 4
 						#Update event
+						if sprite._id_sprite != nil
+							sprite._id_sprite.visible = true
+						end
 						sprite.update
 					else
-						sprite.visible = false
-						if sprite.character.sprite_id != nil
-							sprite._id_sprite_visible = false
+						if sprite._id_sprite != nil
+							sprite._id_sprite.visible = false
 						end
+						sprite.visible = false
 					end
 				else
 					#Update Sprite if not an event.

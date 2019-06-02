@@ -4342,3 +4342,7 @@ On <<Sat 01 Jun 2019, 23:14:41>> the error <<compile error
 On <<Sat 01 Jun 2019, 23:47:00>> the error <<wrong number of arguments(2 for 0) (#<Scene_Login:0x8227518>)>> occured.
 On <<Sat 01 Jun 2019, 23:56:59>> the error <<wrong number of arguments(0 for 1) (#<Scene_Map:0x81534f8>)>> occured.
 On <<Sun 02 Jun 2019, 19:43:31>> the error <<disposed sprite (#<Scene_Map:0x7f99718>)>> occured.
+On <<Sun 02 Jun 2019, 20:12:32>> the error <<disposed sprite (#<Scene_Map:0x7f75aa8>)>> occured.
+On <<Sun 02 Jun 2019, 21:06:22>> the error <<disposed sprite (#<Scene_Map:0x812d3e0>)>> occured.
+On <<Sun 02 Jun 2019, 21:07:27>> the error <<disposed sprite (#<Scene_Map:0x81624f0>)>> occured.
+On <<Sun 02 Jun 2019, 21:08:57>> the error <<disposed sprite (#<Scene_Map:0x816f9a0>)>> occured.

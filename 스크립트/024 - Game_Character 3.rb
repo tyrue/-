@@ -25,7 +25,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if $ABS.enemies[self.event.id] != nil
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
 		else
@@ -52,7 +52,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if $ABS.enemies[self.event.id] != nil
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
 		else
@@ -79,7 +79,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if $ABS.enemies[self.event.id] != nil
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
 		else
@@ -106,7 +106,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if $ABS.enemies[self.event.id] != nil
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
 		else

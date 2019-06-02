@@ -1041,22 +1041,22 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if $ABS.enemies[data[1].to_i].hp == 0 # 체력이 0이면 죽은거지
 							$ABS.enemies[data[1].to_i].event.erase
 							$game_map.refresh
-						else
-							$ABS.enemies[data[1].to_i].event.erased = false
-							$ABS.enemies[data[1].to_i].event.refresh
 						end
 						
 						# 몹 방향과 좌표 적용
-						$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
-						$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
+						x = $ABS.enemies[data[1].to_i].event.x
+						y = $ABS.enemies[data[1].to_i].event.y
+						if x != data[3].to_i and y != data[4].to_i
+							$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
+							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
+						end
 						
 						# 몹 죽었을때 리스폰 시간 적용
 						if data[6].to_i != nil
 							if data[6].to_i != 0  
 								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
 							else
-								$ABS.enemies[data[1].to_i].event.erased = false
-								$ABS.enemies[data[1].to_i].event.refresh
+								$ABS.enemies[data[1].to_i].respawn = 1
 							end
 						end
 					end
@@ -1563,16 +1563,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.refresh
 					end
 					# id, event_id, map_id, x, y
-				when /<respawn>(.*),(.*),(.*),(.*),(.*)<\/respawn>/
-					id = $1.to_i
-					event_id = $2.to_i
-					map_id = $3.to_i
-					if $game_map.map_id == map_id
-						$game_map.events[event_id].erased = false
-						$game_map.events[event_id].moveto($4.to_i,$5.to_i)
-						$game_map.events[event_id].refresh
-						$game_map.refresh
-					end
+				
 					# 템 드랍 
 				when /<Drop>(.*)<\/Drop>/
 					data = $1.split(',')

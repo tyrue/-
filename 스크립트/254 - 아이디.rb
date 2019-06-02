@@ -42,6 +42,10 @@ class Sprite_Character < Sprite_Character
 		@_id_sprite_visible = false 
 	end 
 	
+	def _id_sprite_visible=(_id_sprite_visible)
+		@_id_sprite_visible = _id_sprite_visible
+	end
+	
 	def update_id_sprite 
 		if @character.sprite_id != nil 
 			if not @_id_sprite_visible 

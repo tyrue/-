@@ -14,9 +14,9 @@ class Scene_Map
 	def update
 		scene_map_update
 		JS.update
-		
+			
 		# 콘솔 초기화
-		if Graphics.frame_count % 400 == 0 and $console.console_log.size > 0
+		if Graphics.frame_count % (Graphics.frame_rate * 7) == 0 and $console.console_log.size > 0
 			$console.console_log.delete_at(0)
 			$console.refresh
 		end

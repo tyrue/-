@@ -325,7 +325,7 @@ class Jindow_Status < Jindow
 		@text6.font.alpha = 1
 		@text6.bitmap.font.size = 12
 		@text6.bitmap.font.color.set(0, 0, 0, 255)
-		@text6.bitmap.draw_text(0, 0, @text6.width, @text6.height, "마법력", 1)
+		@text6.bitmap.draw_text(0, 0, @text6.width, @text6.height, "지력", 1)
 		@text6_2 = J::Text_Box.new(self)
 		@text6_2.set("tb_2", 2).refresh(36, 0)
 		@text6_2.x = @text6.x + @text6.width - 1

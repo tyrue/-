@@ -220,17 +220,17 @@ class Jindow_Item_Info < Jindow
 			end
 			if item.dex_plus != 0
 				rect = @detail.bitmap.text_size(item.dex_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "민첩 + " + item.dex_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "손재주 + " + item.dex_plus.to_s)
 				h += rect.height
 			end
 			if item.agi_plus != 0
 				rect = @detail.bitmap.text_size(item.agi_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지능 + " + item.agi_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "민첩 + " + item.agi_plus.to_s)
 				h += rect.height
 			end
 			if item.int_plus != 0
 				rect = @detail.bitmap.text_size(item.int_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마법력 + " + item.int_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지력 + " + item.int_plus.to_s)
 				h += rect.height
 			end
 		when 2
@@ -256,17 +256,17 @@ class Jindow_Item_Info < Jindow
 			end
 			if item.dex_plus != 0
 				rect = @detail.bitmap.text_size(item.dex_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "민첩 + " + item.dex_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "손재주 + " + item.dex_plus.to_s)
 				h += rect.height
 			end
 			if item.agi_plus != 0
 				rect = @detail.bitmap.text_size(item.agi_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지능 + " + item.agi_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "민첩 + " + item.agi_plus.to_s)
 				h += rect.height
 			end
 			if item.int_plus != 0
 				rect = @detail.bitmap.text_size(item.int_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마법력 + " + item.int_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지력 + " + item.int_plus.to_s)
 				h += rect.height
 			end
 		end

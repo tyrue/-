@@ -308,9 +308,25 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 공격 딜레이 초단위
 	MASH_TIME = 4
 	
+	sec = 60 # 1초
 	# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
 	SKILL_MASH_TIME = {}
-	SKILL_MASH_TIME[5] = [300, 0] # 누리의기원
+	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
+	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
+	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
+	
+	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
+	SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
+	SKILL_MASH_TIME[67] = [4 * sec, 0] # 건곤대나이
+	SKILL_MASH_TIME[73] = [4 * sec, 0] # 광량돌격
+	SKILL_MASH_TIME[75] = [4 * sec, 0] # 뢰마도 1성
+	SKILL_MASH_TIME[77] = [4 * sec, 0] # 유비후타
+	SKILL_MASH_TIME[79] = [20 * sec, 0] # 동귀어진
+	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
+	
+	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
+	SKILL_BUFF_TIME = {}
+	SKILL_BUFF_TIME[1] = [300, 0] 
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -775,14 +791,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 해당 맵의 몹의 id 체력을 풀로 채움
 				event.erased = false
 				event.refresh
-				# 여기서 랜덤하게 움직이는걸 해야함
-				for i in 0..100
-					event.move_random
-				end
-				event.moveto(event.x,event.y)
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
-				Network::Main.socket.send("<respawn>#{enemy.event_id},#{event.id},#{$game_map.map_id},#{event.x},#{event.y}</respawn>\n")
-				event.refresh
+				$game_map.refresh
 			end
 		end
 		#--------------------------------------------------------------------------
@@ -1203,14 +1212,16 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			skill_mash_time = SKILL_MASH_TIME[id]
+			if skill_mash_time != nil
+				skill_mash_time[1] = skill_mash_time[0]
+				# 스킬 딜레이 시작 메시지 표시
+				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+			end
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope
 			when 0
-				@button_mash = MASH_TIME*5
-				if skill_mash_time != nil
-					skill_mash_time[1] = skill_mash_time[0]
-				end
+				@button_mash = MASH_TIME*3
 			when 1 #Enemy 적
 				#If the skill is ranged
 				if RANGE_SKILLS.has_key?(skill.id)
@@ -1221,9 +1232,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
 					#Add mash time
-					if skill_mash_time != nil
-						skill_mash_time[1] = skill_mash_time[0]
-					end 
 					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10)
 					return
 				end
@@ -1280,10 +1288,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					enemies = get_all_range($game_player, RANGE_SKILLS[skill.id][0])
 					w = RANGE_SKILLS[id]
 					#Add mash time
-					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10)
-					if skill_mash_time != nil
-						skill_mash_time[1] = skill_mash_time[0]
-					end 
+					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10) 
 				else
 					if SKILL_CUSTOM[id] != nil
 						@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
@@ -1395,8 +1400,23 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id}</enemy_dead>\n")
 			
+			x = event.x
+			y = event.y
+			d = event.direction
+			
+			# 여기서 랜덤하게 움직이는걸 해야함
+			for i in 0..100
+				event.move_random
+			end
+			event.moveto(event.x,event.y)
+			$game_map.refresh
+			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
+			
+			event.moveto(x,y)
+			event.direction = d
 			case enemy.trigger[0]
 			when 0
+				# 여기서 랜덤하게 움직이는걸 해야함
 				event.fade = true if FADE_DEAD
 				if !FADE_DEAD
 					event.character_name = ""
@@ -3146,6 +3166,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				dispose_damage
 			end
 			mrmo_abs_sc_update
+			
 			#Skip if no demage or dead;
 			if !@character.is_a?(Game_Player) and $ABS.enemies[@character.id] != nil
 				#Show State Animation

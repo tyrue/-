@@ -4346,3 +4346,6 @@ On <<Sun 02 Jun 2019, 20:12:32>> the error <<disposed sprite (#<Scene_Map:0x7f75
 On <<Sun 02 Jun 2019, 21:06:22>> the error <<disposed sprite (#<Scene_Map:0x812d3e0>)>> occured.
 On <<Sun 02 Jun 2019, 21:07:27>> the error <<disposed sprite (#<Scene_Map:0x81624f0>)>> occured.
 On <<Sun 02 Jun 2019, 21:08:57>> the error <<disposed sprite (#<Scene_Map:0x816f9a0>)>> occured.
+On <<Sun 02 Jun 2019, 21:20:45>> the error <<disposed sprite (#<Scene_Map:0x7f38248>)>> occured.
+On <<Sun 02 Jun 2019, 21:21:34>> the error <<disposed sprite (#<Scene_Map:0x7f908e0>)>> occured.
+On <<Sun 02 Jun 2019, 21:23:45>> the error <<disposed sprite (#<Scene_Map:0x7f66e90>)>> occured.

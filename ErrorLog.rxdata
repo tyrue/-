@@ -4280,3 +4280,65 @@ Section159:4033: syntax error ()>> occured.
 On <<Fri 31 May 2019, 23:03:08>> the error <<Section159:4033: syntax error ()>> occured.
 On <<Fri 31 May 2019, 23:03:08>> the error <<compile error
 Section159:4033: syntax error ()>> occured.
+On <<Sat 01 Jun 2019, 10:26:54>> the error <<(eval):1: syntax error (#<Scene_Map:0x7f85760>)>> occured.
+On <<Sat 01 Jun 2019, 10:26:54>> the error <<(eval):1: syntax error
+if 1 <= time.min.to_i  and time.min.to_i < 50 (#<Scene_Map:0x7f85760>)>> occured.
+On <<Sat 01 Jun 2019, 10:26:54>> the error <<(eval):1: syntax error
+if 1 <= time.min.to_i  and time.min.to_i < 50
+                                             ^ (#<Scene_Map:0x7f85760>)>> occured.
+On <<Sat 01 Jun 2019, 10:26:54>> the error <<compile error
+(eval):1: syntax error
+if 1 <= time.min.to_i  and time.min.to_i < 50
+                                             ^ (#<Scene_Map:0x7f85760>)>> occured.
+On <<Sat 01 Jun 2019, 10:28:22>> the error <<(eval):1: syntax error (#<Scene_Map:0x484f4c8>)>> occured.
+On <<Sat 01 Jun 2019, 10:28:22>> the error <<(eval):1: syntax error
+if 1 <= time.min.to_i  and time.min.to_i < 50 (#<Scene_Map:0x484f4c8>)>> occured.
+On <<Sat 01 Jun 2019, 10:28:22>> the error <<(eval):1: syntax error
+if 1 <= time.min.to_i  and time.min.to_i < 50
+                                             ^ (#<Scene_Map:0x484f4c8>)>> occured.
+On <<Sat 01 Jun 2019, 10:28:22>> the error <<compile error
+(eval):1: syntax error
+if 1 <= time.min.to_i  and time.min.to_i < 50
+                                             ^ (#<Scene_Map:0x484f4c8>)>> occured.
+On <<Sat 01 Jun 2019, 10:29:30>> the error <<(eval):1: syntax error (#<Scene_Map:0x7f81f98>)>> occured.
+On <<Sat 01 Jun 2019, 10:29:30>> the error <<(eval):1: syntax error
+if 1 <= @time.min.to_i  and @time.min.to_i < 50 (#<Scene_Map:0x7f81f98>)>> occured.
+On <<Sat 01 Jun 2019, 10:29:30>> the error <<(eval):1: syntax error
+if 1 <= @time.min.to_i  and @time.min.to_i < 50
+                                               ^ (#<Scene_Map:0x7f81f98>)>> occured.
+On <<Sat 01 Jun 2019, 10:29:30>> the error <<compile error
+(eval):1: syntax error
+if 1 <= @time.min.to_i  and @time.min.to_i < 50
+                                               ^ (#<Scene_Map:0x7f81f98>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:20>> the error <<(eval):1: syntax error (#<Scene_Map:0x7ecf3b8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:20>> the error <<(eval):1: syntax error
+if 1 <= $time.min.to_i  and $time.min.to_i < 50 (#<Scene_Map:0x7ecf3b8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:20>> the error <<(eval):1: syntax error
+if 1 <= $time.min.to_i  and $time.min.to_i < 50
+                                               ^ (#<Scene_Map:0x7ecf3b8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:20>> the error <<compile error
+(eval):1: syntax error
+if 1 <= $time.min.to_i  and $time.min.to_i < 50
+                                               ^ (#<Scene_Map:0x7ecf3b8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:58>> the error <<(eval):1: syntax error (#<Scene_Map:0x8265cf8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:58>> the error <<(eval):1: syntax error
+if 1 <= $time.min.to_i (#<Scene_Map:0x8265cf8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:58>> the error <<(eval):1: syntax error
+if 1 <= $time.min.to_i
+                      ^ (#<Scene_Map:0x8265cf8>)>> occured.
+On <<Sat 01 Jun 2019, 10:32:58>> the error <<compile error
+(eval):1: syntax error
+if 1 <= $time.min.to_i
+                      ^ (#<Scene_Map:0x8265cf8>)>> occured.
+On <<Sat 01 Jun 2019, 10:49:49>> the error <<(eval):6: syntax error (#<Scene_Map:0x8163a70>)>> occured.
+On <<Sat 01 Jun 2019, 10:49:49>> the error <<compile error
+(eval):6: syntax error (#<Scene_Map:0x8163a70>)>> occured.
+On <<Sat 01 Jun 2019, 10:50:23>> the error <<(eval):6: syntax error (#<Scene_Map:0x7f0d748>)>> occured.
+On <<Sat 01 Jun 2019, 10:50:23>> the error <<compile error
+(eval):6: syntax error (#<Scene_Map:0x7f0d748>)>> occured.
+On <<Sat 01 Jun 2019, 23:14:41>> the error <<(eval):6: syntax error (#<Scene_Map:0x49c5fa8>)>> occured.
+On <<Sat 01 Jun 2019, 23:14:41>> the error <<compile error
+(eval):6: syntax error (#<Scene_Map:0x49c5fa8>)>> occured.
+On <<Sat 01 Jun 2019, 23:47:00>> the error <<wrong number of arguments(2 for 0) (#<Scene_Login:0x8227518>)>> occured.
+On <<Sat 01 Jun 2019, 23:56:59>> the error <<wrong number of arguments(0 for 1) (#<Scene_Map:0x81534f8>)>> occured.
+On <<Sun 02 Jun 2019, 19:43:31>> the error <<disposed sprite (#<Scene_Map:0x7f99718>)>> occured.

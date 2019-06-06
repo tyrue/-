@@ -11,13 +11,16 @@ class Scene_Map
 	#--------------------------------------------------------------------------
 	def initialize
 		# 현재 맵의 몬스터 정보를 요청
-		Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
+		if $game_map.map_id != 51 # 파티퀘 맵 제외
+			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
+		end
 		Network::Main.send_map
 		$nowtrade = 0
 		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = 3
 		자동저장 if not $game_party.actors[0].name == "평민"
 		$game_temp.spriteset_refresh
+		Network::Main.socket.send "<map_player>#{$game_map.map_id}</map_player>\n"
 	end
 	
 	#--------------------------------------------------------------------------

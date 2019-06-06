@@ -87,14 +87,16 @@ if SDK.state("Anti Lag Script") == true
 					#Check if in range
 					if in_range?(sprite.character) or sprite.character.trigger == 3 or sprite.character.trigger == 4
 						#Update event
-						if sprite._id_sprite != nil
+						if sprite._id_sprite != nil and !sprite._id_sprite.disposed?
 							sprite._id_sprite.visible = true
 						end
+						
 						sprite.update
 					else
-						if sprite._id_sprite != nil
+						if sprite._id_sprite != nil and !sprite._id_sprite.disposed?
 							sprite._id_sprite.visible = false
 						end
+						
 						sprite.visible = false
 					end
 				else

@@ -1037,10 +1037,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
 						# 몹 체력 적용
-						$ABS.enemies[data[1].to_i].hp = data[2].to_i
-						if $ABS.enemies[data[1].to_i].hp == 0 # 체력이 0이면 죽은거지
-							$ABS.enemies[data[1].to_i].event.erase
-							$game_map.refresh
+						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
+							$ABS.enemies[data[1].to_i].hp = data[2].to_i
+							if $ABS.enemies[data[1].to_i].hp == 0 # 체력이 0이면 죽은거지
+								$ABS.enemies[data[1].to_i].event.erase
+								$game_map.refresh
+							end
 						end
 						
 						# 몹 방향과 좌표 적용
@@ -1056,7 +1058,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							if data[6].to_i != 0  
 								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
 							else
-								$ABS.enemies[data[1].to_i].respawn = 1
+								$ABS.enemies[data[1].to_i].event.erased = false
+								$ABS.enemies[data[1].to_i].event.refresh
 							end
 						end
 					end
@@ -1430,6 +1433,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
+					# 현재 맵에 내가 기준인지 확인
+				when /<map_player>(.*)<\/map_player>/
+					if $1.to_i == 1
+						p "내가 기준"
+					else
+						p "내가 기준아님 ㅜㅜ"
+					end
+					return true
+					
 					# 우편 배송 (id, 아이템 id, 템 종류, 보낸이 id, 개수, 편지 내용)
 				when /<post>(.*),(.*),(.*),(.*),(.*),(.*)<\/post>/
 					if $scene.is_a?(Scene_Map)
@@ -1563,7 +1575,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.refresh
 					end
 					# id, event_id, map_id, x, y
-				
+					
 					# 템 드랍 
 				when /<Drop>(.*)<\/Drop>/
 					data = $1.split(',')

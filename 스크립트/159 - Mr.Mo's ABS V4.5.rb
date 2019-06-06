@@ -248,9 +248,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	
 	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [5, 3, "공격스킬", 4, 0] #산적들의 스킬
-	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
-	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
+	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적들의 스킬
+	RANGE_SKILLS[59] = [5, 4, "공격스킬", 4, 0] #주작의 노도성황
+	RANGE_SKILLS[61] = [5, 4, "공격스킬", 4, 0] #백호의 건곤대나이
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
 	# 폭발 범위
@@ -791,6 +791,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 해당 맵의 몹의 id 체력을 풀로 채움
 				event.erased = false
 				event.refresh
+				
+				# 여기서 랜덤하게 움직이는걸 해야함
+				for i in 0..30
+					event.move_random
+				end
+				event.moveto(event.x,event.y)
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
 				$game_map.refresh
 			end
 		end
@@ -1397,23 +1404,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies.delete(id) if @enemies[id].respawn == 0
 			event = enemy.event
 			#여기다가 이 이벤트를 없애는 명령하기
-			
-			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id}</enemy_dead>\n")
-			
-			x = event.x
-			y = event.y
-			d = event.direction
-			
-			# 여기서 랜덤하게 움직이는걸 해야함
-			for i in 0..100
-				event.move_random
-			end
-			event.moveto(event.x,event.y)
-			$game_map.refresh
 			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
-			
-			event.moveto(x,y)
-			event.direction = d
+			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id}</enemy_dead>\n")
 			case enemy.trigger[0]
 			when 0
 				# 여기서 랜덤하게 움직이는걸 해야함
@@ -1701,19 +1693,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 23 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
-			when 23 # 청사슴
-				if r <= 20 
-					# 녹용
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 40
-					# 호박
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 60
-					# 비철단도
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 47 #{e.event.x} #{e.event.y}</drop_create>\n"	
-				end
-				return true
-			when 24 # 주홍사슴
+			when 23 # 주홍사슴
 				if r <= 80 
 					# 사슴고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 14 #{e.event.x} #{e.event.y}</drop_create>\n"
@@ -1805,7 +1785,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 불의 혼
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
 				elsif r <= 90
-					# 불의 혼
+					# 불의 결정
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
 				end
 				return true
@@ -1916,7 +1896,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 80 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 90
+				elsif r <= 85
 					# 수룡의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 62 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -1925,7 +1905,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 80 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 90
+				elsif r <= 85
 					# 화룡의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 61 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -1955,9 +1935,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 76 # 청순록
-				if r <= 80 
-					# 
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				if r <= 20 
+					# 녹용
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 40
+					# 호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 60
+					# 비철단도
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 47 #{e.event.x} #{e.event.y}</drop_create>\n"	
 				end
 				return true
 			when 77 # 청산숲돼지
@@ -2051,6 +2037,39 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 녹용
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
+				end
+			when 116 # 범증
+				if r <= 10 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 20
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 30
+					# 불의 결정
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
+				end
+			when 117 # 범천
+				if r <= 10 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 20
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 30
+					# 불의 결정
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
+				end
+			when 118 # 범수
+				if r <= 10 
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 20
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 30
+					# 불의 결정
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
 				end
 			end
 		end
@@ -3364,63 +3383,63 @@ if SDK.state("Mr.Mo's ABS") == true
 				case skill.id
 					# 주술사 스킬
 				when 44 # 헬파이어
-					power = $game_party.actors[0].sp / 20 + 20
-					$game_party.actors[0].sp = 0
+					power = user.sp / 20 + 20
+					user.sp = 0
 				when 49 # 성려멸주
-					power = $game_party.actors[0].maxsp / 20 + 80
-					$game_party.actors[0].sp -= $game_party.actors[0].maxsp / 10
+					power = user.maxsp / 20 + 80
+					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
-					power = $game_party.actors[0].maxsp / 15 + 80
-					$game_party.actors[0].sp -= $game_party.actors[0].maxsp / 15
+					power = user.maxsp / 15 + 80
+					user.sp -= user.maxsp / 15
 				when 53 # 삼매진화 
-					power = $game_party.actors[0].sp / 10 + 40
-					$game_party.actors[0].sp = 0
+					power = user.sp / 10 + 40
+					user.sp = 0
 				when 56 # 성려멸주 2성
-					power = $game_party.actors[0].maxsp / 10 + 100
-					$game_party.actors[0].sp -= $game_party.actors[0].maxsp / 20
+					power = user.maxsp / 10 + 100
+					user.sp -= user.maxsp / 20
 				when 57 # 삼매진화 1성
-					power = $game_party.actors[0].sp / 7 + 60
-					$game_party.actors[0].sp = 0
+					power = user.sp / 7 + 60
+					user.sp = 0
 				when 58 # 지폭지술
 					$e_v += 1
-					power = $game_party.actors[0].sp / 10 + 20
+					power = user.sp / 10 + 20
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
-						$game_party.actors[0].sp = 0
+						user.sp = 0
 					end
 					# 전사스킬
 				when 67 # 건곤대나이
-					power = $game_party.actors[0].hp / 15 + 50
-					$game_party.actors[0].hp -= $game_party.actors[0].hp / 3
+					power = user.hp / 15 + 50
+					user.hp -= user.hp / 3
 				when 73 # 광량돌격
-					power = $game_party.actors[0].maxhp / 50 + 50
-					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 8
-					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0 
+					power = user.maxhp / 50 + 50
+					user.hp -= user.maxhp / 8
+					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
-					power = $game_party.actors[0].maxhp / 100 + 40
-					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 10
-					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0
+					power = user.maxhp / 100 + 40
+					user.hp -= user.maxhp / 10
+					user.hp = 1 if user.hp <= 0
 				when 78 # 십리건곤 1성
-					power = $game_party.actors[0].maxhp / 90 + 40
-					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 10
-					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0
+					power = user.maxhp / 90 + 40
+					user.hp -= user.maxhp / 10
+					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
-					power = $game_party.actors[0].hp / 4 + 100
-					$game_party.actors[0].hp -= $game_party.actors[0].hp - 10
+					power = user.hp / 4 + 100
+					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
-					power = $game_party.actors[0].maxhp / 80 + 40
-					$game_party.actors[0].hp -= $game_party.actors[0].maxhp / 10
-					$game_party.actors[0].hp = 1 if $game_party.actors[0].hp <= 0
+					power = user.maxhp / 80 + 40
+					user.hp -= user.maxhp / 10
+					user.hp = 1 if user.hp <= 0
 				when 84 # 포효검황
-					power = $game_party.actors[0].hp / 50 + 100
+					power = user.hp / 50 + 100
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
-						$game_party.actors[0].hp -= $game_party.actors[0].hp / 3 - 1
+						user.hp -= user.hp / 3 - 1
 					end
 				when 101 # 백호참
-					power = $game_party.actors[0].hp / 10 + 60
-					$game_party.actors[0].hp -= $game_party.actors[0].hp / 2
+					power = user.hp / 10 + 60
+					user.hp -= user.hp / 2
 					# 도사스킬
 				else
 					power = skill.power + user.atk * skill.atk_f / 100
@@ -3605,33 +3624,40 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 			# Get absolute value of difference
-			abs_sx = sx.abs
-			abs_sy = sy.abs
-			# If horizontal and vertical distances are equal
-			if abs_sx == abs_sy
-				# Increase one of them randomly by 1
-				rand(2) == 0 ? abs_sx += 1 : abs_sy += 1
-			end
-			# If horizontal distance is longer
-			if abs_sx > abs_sy
-				# Move towards player, prioritize left and right directions
-				sx > 0 ? move_left : move_right
-				if not moving? and sy != 0
-					sy > 0 ? move_up : move_down
+			abs_sx = sx > 0 ? sx : -sx
+			abs_sy = sy > 0 ? sy : -sy
+			# Branch by random numbers 0-5
+			case rand(6)
+			when 0..4  # Approach player
+				# If horizontal and vertical distances are equal
+				if abs_sx == abs_sy
+					# Increase one of them randomly by 1
+					rand(2) == 0 ? abs_sx += 1 : abs_sy += 1
 				end
-				# If vertical distance is longer
-			else
-				# Move towards player, prioritize up and down directions
-				sy > 0 ? move_up : move_down
-				if not moving? and sx != 0
+				# If horizontal distance is longer
+				if abs_sx > abs_sy
+					# Move towards player, prioritize left and right directions
 					sx > 0 ? move_left : move_right
+					if not moving? and sy != 0
+						sy > 0 ? move_up : move_down
+					end
+					# If vertical distance is longer
+				else
+					# Move towards player, prioritize up and down directions
+					sy > 0 ? move_up : move_down
+					if not moving? and sx != 0
+						sx > 0 ? move_left : move_right
+					end
 				end
+			when 5  # random
+				move_random
 			end
+			
 			# 이때 계속 몹 정보 보내주면?
 			if !self.is_a?(Game_Actor)				
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 			end
-			turn_to(b)
+			#~ turn_to(b)
 		end
 		#--------------------------------------------------------------------------
 		# * Turn Towards B

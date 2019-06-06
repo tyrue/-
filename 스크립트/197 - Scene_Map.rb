@@ -16,14 +16,14 @@ class Scene_Map
 		JS.update
 			
 		# 콘솔 초기화
-		if Graphics.frame_count % (Graphics.frame_rate * 7) == 0 and $console.console_log.size > 0
+		if Graphics.frame_count % (Graphics.frame_rate * 5) == 0 and $console.console_log.size > 0
 			$console.console_log.delete_at(0)
 			$console.refresh
 		end
 		
 		# 몬스터 정보 요청
 		if Graphics.frame_count % 30 == 0 
-			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
+			#~ Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
 		
 		if $game_party.actors[0].hp == 0

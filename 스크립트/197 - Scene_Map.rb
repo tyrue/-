@@ -22,7 +22,7 @@ class Scene_Map
 		end
 		
 		# 몬스터 정보 요청
-		if Graphics.frame_count % 30 == 0 
+		if Graphics.frame_count % 30 == 0 and !$is_map_first
 			#~ Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
 		

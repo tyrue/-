@@ -11,6 +11,7 @@ p "TCPSocket script not found (class Network)" if not SDK.state('TCPSocket')
 #-------------------------------------------------------------------------------
 # Begin SDK Enabled Check
 #-------------------------------------------------------------------------------
+$is_map_first = false
 if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가능할 때 
 	
 	module Network
@@ -1064,9 +1065,45 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					return true
+					
+				when /<hp>(.*)<\/hp>/ # 체력 공유
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					return true if $game_map.map_id != data[0].to_i
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					if $ABS.enemies[data[1].to_i] != nil
+						# 몹 체력 적용
+						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
+							$ABS.enemies[data[1].to_i].hp = data[2].to_i
+						end
+					end
+					return true
+					
+				when /<mon_move>(.*)<\/mon_move>/ # 몹 이동 공유
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					return true if $game_map.map_id != data[0].to_i
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					if $ABS.enemies[data[1].to_i] != nil
+						# 몹 이동
+						case data[2].to_i
+						when 1
+							$ABS.enemies[data[1].to_i].event.move_down
+						when 2
+							$ABS.enemies[data[1].to_i].event.move_left
+						when 3
+							$ABS.enemies[data[1].to_i].event.move_right
+						when 4
+							$ABS.enemies[data[1].to_i].event.move_up
+						end
+					end
+					return true
 				end
+				
 				return false
 			end
+			
+			
 			
 			#--------------------------------------------------------------------------
 			# * Update Walking
@@ -1436,9 +1473,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
 					if $1.to_i == 1
-						p "내가 기준"
+						$is_map_first = true
 					else
-						p "내가 기준아님 ㅜㅜ"
+						$is_map_first = false
 					end
 					return true
 					

@@ -25,8 +25,9 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil and $is_map_first
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},1</mon_move>\n")
 			end
 		else
 			# Determine if touch event is triggered
@@ -52,8 +53,9 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil and $is_map_first
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},2</mon_move>\n")
 			end
 		else
 			# Determine if touch event is triggered
@@ -79,8 +81,9 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil and $is_map_first
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},3</mon_move>\n")
 			end
 		else
 			# Determine if touch event is triggered
@@ -106,8 +109,9 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil 
+			if !self.is_a?(Game_Ranged_Skill) and $ABS.enemies[self.event.id] != nil and $is_map_first
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},4</mon_move>\n")
 			end
 		else
 			# Determine if touch event is triggered

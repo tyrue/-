@@ -797,7 +797,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					event.move_random
 				end
 				event.moveto(event.x,event.y)
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
+				if $is_map_first
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
+				end	
 				$game_map.refresh
 			end
 		end
@@ -3499,6 +3501,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if !self.is_a?(Game_Actor)
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
 				end
 				effective |= self.hp != last_hp
 				# State change
@@ -3637,16 +3640,41 @@ if SDK.state("Mr.Mo's ABS") == true
 				# If horizontal distance is longer
 				if abs_sx > abs_sy
 					# Move towards player, prioritize left and right directions
-					sx > 0 ? move_left : move_right
+					if sx > 0
+						move_left
+						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},2</monster>\n")				
+					else
+						move_right
+						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},3</monster>\n")
+					end
+					
 					if not moving? and sy != 0
-						sy > 0 ? move_up : move_down
+						if sy > 0
+							move_up
+							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},4</monster>\n")
+						else
+							move_down
+							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},1</monster>\n")
+						end
 					end
 					# If vertical distance is longer
 				else
 					# Move towards player, prioritize up and down directions
-					sy > 0 ? move_up : move_down
-					if not moving? and sx != 0
-						sx > 0 ? move_left : move_right
+					if sy > 0
+						move_up
+						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},4</monster>\n")
+					else
+						move_down
+						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},1</monster>\n")
+					end
+					if not moving? and sx != 0						
+						if sx > 0
+							move_left
+							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},2</monster>\n")				
+						else
+							move_right
+							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},3</monster>\n")
+						end
 					end
 				end
 			when 5  # random
@@ -3655,7 +3683,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 이때 계속 몹 정보 보내주면?
 			if !self.is_a?(Game_Actor)				
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")				
 			end
 			#~ turn_to(b)
 		end

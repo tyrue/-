@@ -9,31 +9,37 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 	def equip_character(type, id)
 		
 		if not $game_party.actors[0].hp == 0
-			return ['(착용)목도', 2] if id == 101 #목도
-			return ['(착용)목도', 2] if id == 102 #목검
-			return ['(착용)목도', 2] if id == 103 #사두목도
-			return ['(착용)목도', 2] if id == 104 #사두목검
-			return ['(착용)목도', 2] if id == 121 #초심자의목도
-			return ['(착용)연두갑주', 2] if id == 1  #초심자의갑주
-			return ['(착용)연두갑주', 2] if id == 38  #연두색남자갑주
-			return ['(착용)초록갑주', 2] if id == 34 #초록색남자갑주
-			return ['(착용)영혼마령봉', 2] if id == 105 #영혼마령봉
-			return ['(착용)현철중검', 2] if id == 106 #현철중검
-			return ['(착용)현철중검', 2] if id == 120 #흑철중검
-			return ['(착용)죄수복', 2] if id == 11  #죄수복
-			return ['(착용)현랑부', 2] if id == 110  #현랑부
-			return ['(착용)현랑부', 2] if id == 111  #이벤트현랑부
-			return ['(착용)주작의검', 2] if id == 114  #주작의검
-			return ['(착용)정화의방패', 2] if id == 39  #정화의방패
-			return ['(착용)가릉빈가의날개옷', 2] if id == 30   #가릉빈가의날개옷
-			return ['(착용)심판의낫', 2] if id == 115  #심판의낫
-			return ['(착용)여신의방패', 2] if id == 40  #여신의방패
-			return ['(착용)양첨목봉', 2] if id == 112  #양첨목봉
-			return ['(착용)양첨목봉', 2] if id == 113  #이벤트양첨목봉
-			return ['(착용)용마제팔검', 2] if id == 122  #용마제팔검
-			return ['(착용)진일신검', 2] if id == 116  #진일신검
-			return ['(착용)다람쥐화서', 2] if id == 9  #다람쥐화서
-			return ['(착용)토끼화서', 2] if id == 10  #토끼화서
+			# 무기
+			return ['(착용)목도', 2] 			if id == 101 	#목도
+			return ['(착용)목도', 2] 			if id == 102 	#목검
+			return ['(착용)목도', 2] 			if id == 103 	#사두목도
+			return ['(착용)목도', 2] 			if id == 104 	#사두목검
+			return ['(착용)영혼마령봉', 2] 	if id == 105 	#영혼마령봉
+			return ['(착용)현철중검', 2] 	if id == 106 	#현철중검
+			return ['(착용)현랑부', 2] 		if id == 110  #현랑부
+			return ['(착용)현랑부', 2] 		if id == 111  #이벤트현랑부
+			return ['(착용)주작의검', 2] 	if id == 114  #주작의검
+			return ['(착용)심판의낫', 2] 	if id == 115  #심판의낫
+			return ['(착용)진일신검', 2] 	if id == 116  #진일신검
+			return ['(착용)양첨목봉', 2] 	if id == 112  #양첨목봉
+			return ['(착용)양첨목봉', 2] 	if id == 113  #이벤트양첨목봉
+			return ['(착용)현철중검', 2] 	if id == 120 	#흑철중검
+			return ['(착용)목도', 2] 			if id == 121 	#초심자의목도
+			return ['(착용)용마제팔검', 2] 	if id == 122  #용마제팔검
+			
+			# 방어구
+			return ['(착용)연두갑주', 2] 	if id == 1  	#초심자의갑주
+			return ['(착용)다람쥐화서', 2] 	if id == 9  	#다람쥐화서
+			return ['(착용)토끼화서', 2] 	if id == 10 	#토끼화서
+			return ['(착용)죄수복', 2] 		if id == 11 	#죄수복
+			return ['(착용)초록갑주', 2] 	if id == 34 	#초록색남자갑주
+			return ['(착용)연두갑주', 2] 	if id == 38  	#연두색남자갑주
+			return ['(착용)정화의방패', 2] 	if id == 39  	#정화의방패
+			return ['(착용)가릉빈가의날개옷', 2] if id == 30 #가릉빈가의날개옷
+			return ['(착용)여신의방패', 2] 	if id == 40  	#여신의방패
+			return ['(착용)검황의영혼', 2] 	if id == 41  	#검황의영혼
+			return ['(착용)황혼의갑주', 2] 	if id == 42  	#황혼의갑주
+			return ['(착용)산신의정화', 2] 	if id == 43  	#산신의정화
 		end
 		
 		#Mulher

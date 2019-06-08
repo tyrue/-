@@ -229,21 +229,21 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[58] = [10, 5, "공격스킬2", 4, 0] #지폭지술
 	
 	#전사 스킬
-	RANGE_SKILLS[65] = [0, 5, "", 4, 0] #뢰마도
+	RANGE_SKILLS[65] = [10, 5, "공격스킬2", 4, 0] #뢰마도
 	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[73] = [4, 5, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
-	RANGE_SKILLS[75] = [0, 5, "", 4, 0] #뢰마도 1성
+	RANGE_SKILLS[75] = [10, 5, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [0, 5, "", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
 	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
 	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
 	RANGE_SKILLS[101] = [0, 5, "", 4, 0] #백호참
-	
-	
+	RANGE_SKILLS[102] = [1, 5, "공격스킬2", 4, 0] #백리건곤 1성
+	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
 	#도사 스킬
 	
 	
@@ -257,7 +257,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_EXPLODE = {}
 	# RANGE_EXPLODE[Skill_ID] = [Range, Move Speed, Character Set Name, Explosive Range, Mash Time(in seconds), Kick Back(in tiles)]
 	# 폭발 스킬 = 범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백
-	#~ RANGE_EXPLODE[58] = [10, 6, "183-Rock02", 5, 3, 2]
+	# 전사스킬
+	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 2, 4, 0] # 어검술
 	#--------------------------------------------------------------------------
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
 	MELEE_CUSTOM = {}
@@ -311,18 +312,22 @@ if SDK.state("Mr.Mo's ABS") == true
 	sec = 60 # 1초
 	# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
 	SKILL_MASH_TIME = {}
+	# 주술사
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
 	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
-	
 	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
-	SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
+	
+	# 전사
+	SKILL_MASH_TIME[65] = [10 * sec, 0] # 뢰마도
 	SKILL_MASH_TIME[67] = [4 * sec, 0] # 건곤대나이
-	SKILL_MASH_TIME[73] = [4 * sec, 0] # 광량돌격
-	SKILL_MASH_TIME[75] = [4 * sec, 0] # 뢰마도 1성
+	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
+	SKILL_MASH_TIME[75] = [7 * sec, 0] # 뢰마도 1성
 	SKILL_MASH_TIME[77] = [4 * sec, 0] # 유비후타
 	SKILL_MASH_TIME[79] = [20 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
+	SKILL_MASH_TIME[103] = [10 * sec, 0] # 어검술
+	SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
 	SKILL_BUFF_TIME = {}
@@ -1059,6 +1064,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						end
 						
 						if RANGE_EXPLODE.has_key?(id)
+							$e_v = 0 # enemy_value, 맞출 적의 수
 							return player_explode(id)
 						else
 							$e_v = 0 # enemy_value, 맞출 적의 수
@@ -1201,8 +1207,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if skill == nil
 			# 액터가 가지고 있는 스킬이 아님
 			return if !@actor.skills.include?(skill.id)
+			# 마력이 부족하면 무시
+			if @actor.sp < skill.sp_cost
+				$console.write_line("마력이 부족합니다.")
+				return
+			end
 			# 엑터가 사용할 수 없는 상황이면 무시
 			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
+			
+			
 			# 스킬 애니메이션 
 			$game_player.animation_id = skill.animation1_id
 			#Animate
@@ -1230,6 +1243,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 스킬 맞는 쪽
 			case skill.scope
 			when 0
+				@actor.sp -= skill.sp_cost
 				@button_mash = MASH_TIME*3
 			when 1 #Enemy 적
 				#If the skill is ranged
@@ -1358,7 +1372,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		#--------------------------------------------------------------------------
-		# * Player Explode Attack  플레이어의 전체 공격
+		# * Player Explode Attack  플레이어의 범위 공격
 		#--------------------------------------------------------------------------
 		def player_explode(id)
 			#Get Skill
@@ -1374,6 +1388,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			$game_player.animation_id = skill.animation1_id
 			#Add mash time
 			@button_mash = (w[4] == nil ? MASH_TIME*10 : w[4]*10)
+			
+			skill_mash_time = SKILL_MASH_TIME[id]
+			if skill_mash_time != nil
+				skill_mash_time[1] = skill_mash_time[0]
+				# 스킬 딜레이 시작 메시지 표시
+				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+			end
+			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]
@@ -1459,7 +1481,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#return if the player is not dead
 			return false if !a.dead?
 			#If the player is dead;
-			$console.write_line("죽었습니다.. 성황령에가서 기원하십시오.")
+			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 			e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
@@ -2541,11 +2563,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Get ALL Range(Element, Range)
 		#--------------------------------------------------------------------------
 		def get_all_range(element, range)
+			$alive_size = 0
 			objects = []
 			for e in $ABS.enemies.values
 				objects.push(e) if in_range?(element, e.event, range)
 			end
-			objects.push($game_player) if in_range?(element, $game_player, range)
+			# 여기다가 개수 추가
+			$alive_size = objects.size
+			#~ objects.push($game_player) if in_range?(element, $game_player, range)
 			return objects
 		end
 		#--------------------------------------------------------------------------
@@ -2592,8 +2617,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			@stop = true
 			#Get enemy
 			actor = $ABS.enemies[id]
+			
 			#Return if actor has NIL value
-			return if actor == nil
+			return if actor == nil or actor.hp == 0
 			#If the parent is player
 			if @parent.is_a?(Game_Player)
 				#Get enemy
@@ -3411,47 +3437,61 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					# 전사스킬
 				when 67 # 건곤대나이
-					power = user.hp / 15 + 50
-					user.hp -= user.hp / 3
+					power = user.hp / 100 + 35
+					user.hp -= (user.hp / 5) * 3
 				when 73 # 광량돌격
 					power = user.maxhp / 50 + 50
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
-					power = user.maxhp / 100 + 40
-					user.hp -= user.maxhp / 10
+					power = user.maxhp / 100 + 10
+					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 78 # 십리건곤 1성
-					power = user.maxhp / 90 + 40
-					user.hp -= user.maxhp / 10
+					power = user.maxhp / 90 + 15
+					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
 					power = user.hp / 4 + 100
 					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
-					power = user.maxhp / 80 + 40
-					user.hp -= user.maxhp / 10
+					power = user.maxhp / 80 + 20
+					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
-				when 84 # 포효검황
+				when 101 # 백호참
+					power = user.hp / 90 + 45
+					user.hp -= user.hp / 2
+				when 102 # 백리건곤 1성
+					power = user.maxhp / 80 + 30
+					user.hp -= user.maxhp / 8
+					user.hp = 1 if user.hp <= 0
+				when 103 # 어검술
+					power = user.hp / 25 + 45
+					$e_v += 1
+					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
+					if $e_v == $alive_size
+						user.hp -= user.hp / 2
+					end
+					
+				when 104 # 포효검황
 					power = user.hp / 50 + 100
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
-						user.hp -= user.hp / 3 - 1
+						user.hp -= user.hp / 3
+						user.hp = 1 if user.hp <= 0
 					end
-				when 101 # 백호참
-					power = user.hp / 10 + 60
-					user.hp -= user.hp / 2
+					
 					# 도사스킬
 				else
 					power = skill.power + user.atk * skill.atk_f / 100
 				end				
-				
 				if power > 0
 					power -= self.pdef * skill.pdef_f / 200
 					power -= self.mdef * skill.mdef_f / 200
 					power = [power, 0].max
 				end
+				
 				
 				# Calculate rate
 				rate = 20
@@ -3466,6 +3506,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage /= 100
 				# If damage value is strictly positive
 				if self.damage > 0
+					
 					# Guard correction
 					if self.guarding?
 						self.damage /= 2
@@ -3508,22 +3549,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				@state_changed = false
 				effective |= states_plus(skill.plus_state_set)
 				effective |= states_minus(skill.minus_state_set)
+				
 				# If power is 0
 				if skill.power == 0
 					# Set damage to an empty string
-					
-					self.damage = ""
+					self.damage = 1
 					# If state is unchanged
 					unless @state_changed
 						# Set damage to "Miss"
-						
 						self.damage = "Miss"
 					end
 				end
 				# If miss occurs
 			else
 				# Set damage to "Miss"
-				
 				self.damage = "Miss"
 			end
 			# End Method

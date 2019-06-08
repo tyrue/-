@@ -3682,6 +3682,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Move toward B
 		#--------------------------------------------------------------------------
 		def move_to(b)
+			return if @stop_count <= (15 - @move_frequency * 2) * (6 - @move_frequency)
+			#~ @stop_count = 0
 			# Get difference in player coordinates
 			sx = @x - b.x
 			sy = @y - b.y

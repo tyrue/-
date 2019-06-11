@@ -1037,6 +1037,26 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true if $game_map.map_id != data[0].to_i
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
+						# 몹 죽었을때 리스폰 시간 적용
+						if data[6].to_i != nil
+							if data[6].to_i != 0  
+								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
+							else
+								$ABS.enemies[data[1].to_i].event.erased = false
+								event = $ABS.enemies[data[1].to_i].event
+								event.refresh
+								for i in 0..30
+									event.move_random
+								end
+								event.moveto(event.x,event.y)
+								if $is_map_first
+									Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{$ABS.enemies[data[1].to_i].hp},#{event.x},#{event.y},#{event.direction},#{$ABS.enemies[data[1].to_i].respawn}</monster>\n")
+								end	
+								$game_map.refresh
+								return
+							end
+						end
+						
 						# 몹 체력 적용
 						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
 							$ABS.enemies[data[1].to_i].hp = data[2].to_i
@@ -1054,15 +1074,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
 						end
 						
-						# 몹 죽었을때 리스폰 시간 적용
-						if data[6].to_i != nil
-							if data[6].to_i != 0  
-								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
-							else
-								$ABS.enemies[data[1].to_i].event.erased = false
-								$ABS.enemies[data[1].to_i].event.refresh
-							end
-						end
+						
 					end
 					return true
 					
@@ -1993,7 +2005,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if $npt == $3.to_s
 							if "#{$game_map.map_id}" == $4.to_s
 								mp = $5.to_i
-								if $netparty.size >= 1
+								
+								if $netparty.size > 1
 									if $2.to_i == 1  #바다의희원
 										$game_player.animation_id = 131
 										$game_party.actors[0].hp += 70
@@ -2056,15 +2069,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("'#{$1.to_s}님의 생명의희원")   
 									elsif $2.to_i == 11       #백호의희원
-										$game_party.actors[0].hp += mp
+										$game_party.actors[0].hp += mp * 2
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
-										$game_party.actors[0].hp += 2000
+										$game_player.animation_id = 139
+										$game_party.actors[0].hp += 2000										
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
-										$game_party.actors[0].hp += 3000
+										$game_player.animation_id = 151
+										$game_party.actors[0].hp += 3500
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end

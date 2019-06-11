@@ -39,7 +39,7 @@ def 자동저장
 			end
 		end
 		
-		for sw in 0..351
+		for sw in 0..450
 			if $game_switches[sw] != nil
 				if $game_switches[sw] == true
 					@swlist += ("1" + ",")

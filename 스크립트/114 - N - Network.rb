@@ -1988,52 +1988,53 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					return true
 					#-----------------------------------------------------------------------      
-				when /<partyhill>(.*) (.*) (.*) (.*)<\/partyhill>/  # $1.to_s : 시전자이름  $2.to._s : 마법번호 $3.to._s : 파티크기 $4.to._s : 맵번호
+				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # $1.to_s : 시전자이름  $2.to._s : 마법번호 $3.to._s : 파티크기 $4.to._s : 맵번호 $5.to_s : 마력
 					if not $game_party.actors[0].hp == 0
 						if $npt == $3.to_s
 							if "#{$game_map.map_id}" == $4.to_s
-								if $netparty.size > 1
+								mp = $5.to_i
+								if $netparty.size >= 1
 									if $2.to_i == 1  #바다의희원
 										$game_player.animation_id = 131
-										$game_party.actors[0].hp += 40
+										$game_party.actors[0].hp += 70
 										$game_player.show_demage("40",false)
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 131; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 바다의희원")
+										$console.write_line("#{$1.to_s}님의 바다의희원")
 									elsif $2.to_i == 2        #동해의희원
 										$game_player.animation_id = 182
-										$game_party.actors[0].hp += 100
+										$game_party.actors[0].hp += 130
 										$game_player.show_demage("100",false)
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 182; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 동해의희원")
+										$console.write_line("'#{$1.to_s}님의 동해의희원")
 									elsif $2.to_i == 3         #야수수금술
 										$game_switches[20] = true
 										$game_player.animation_id = 157
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 157; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 야수수금술")
+										$console.write_line("'#{$1.to_s}님의 야수수금술")
 									elsif $2.to_i == 4        #천공의희원
 										$game_player.animation_id = 136
-										$game_party.actors[0].hp += 150
+										$game_party.actors[0].hp += 200
 										$game_player.show_demage("150",false)
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 136; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 천공의희원")
+										$console.write_line("'#{$1.to_s}님의 천공의희원")
 									elsif $2.to_i == 5        #분량력법
 										$game_switches[338] = true
 										$game_player.animation_id = 159
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 159; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$game_party.actors[0].str += 15
-										$console.write_line("'#{$1.to_i}님의 분량력법")
+										$console.write_line("'#{$1.to_s}님의 분량력법")
 									elsif $2.to_i == 6        #구름의희원
 										$game_player.animation_id = 137
-										$game_party.actors[0].hp += 250
+										$game_party.actors[0].hp += 350
 										$game_player.show_demage("250",false)
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 137; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 구름의희원")
+										$console.write_line("'#{$1.to_s}님의 구름의희원")
 									elsif $2.to_i == 7       #분량방법
 										$game_switches[196] = true
 										$game_player.animation_id = 133
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 133; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$game_party.actors[0].agi += 50
-										$console.write_line("'#{$1.to_i}님의 분량방법")
+										$console.write_line("'#{$1.to_s}님의 분량방법")
 									elsif $2.to_i == 8       #공력주입
 										if $game_switches[405] == false
 											$game_player.animation_id = 172
@@ -2041,19 +2042,31 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 											$game_party.actors[0].sp += $1.to_i
 										else
 											$game_switches[405] = false
-											$console.write_line("#{$1.to_i}만큼 공력주입 시전")
+											$console.write_line("#{$1.to_s}만큼 공력주입 시전")
 										end
 									elsif $2.to_i == 9       #태양의희원
 										$game_player.animation_id = 147
-										$game_party.actors[0].hp += 400
+										$game_party.actors[0].hp += 700
 										$game_player.show_demage("250",false)
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 147; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 태양의희원") 
+										$console.write_line("'#{$1.to_s}님의 태양의희원") 
 									elsif $2.to_i == 10       #생명의희원
 										$game_player.animation_id = 148
-										$game_party.actors[0].hp +=500
+										$game_party.actors[0].hp += 1000
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</player_animation>\n"
-										$console.write_line("'#{$1.to_i}님의 생명의희원")   
+										$console.write_line("'#{$1.to_s}님의 생명의희원")   
+									elsif $2.to_i == 11       #백호의희원
+										$game_party.actors[0].hp += mp
+										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</player_animation>\n"
+										$console.write_line("#{$1.to_s}님의 백호의희원")   
+									elsif $2.to_i == 12       #신령의희원
+										$game_party.actors[0].hp += 2000
+										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</player_animation>\n"
+										$console.write_line("#{$1.to_s}님의 신령의희원")   
+									elsif $2.to_i == 13       #봉황의희원
+										$game_party.actors[0].hp += 3000
+										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</player_animation>\n"
+										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end
 								end
 							end

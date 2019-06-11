@@ -1059,7 +1059,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						# 아직 스킬 딜레이가 남아있다면 무시
 						skill_mash = SKILL_MASH_TIME[id]
 						if skill_mash != nil and skill_mash[1] > 0
-							$console.write_line("딜레이가 남아있습니다.")
+							$console.write_line("딜레이가 남아있습니다. #{skill_mash[1]/60}초")
 							return
 						end
 						
@@ -1482,6 +1482,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if !a.dead?
 			#If the player is dead;
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
+			$cha_name = $game_party.actors[0].character_name
+			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
+			$scene = Scene_Map.new
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 			e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
@@ -3446,16 +3449,16 @@ if SDK.state("Mr.Mo's ABS") == true
 					power = user.sp / 20 + 20
 					user.sp = 0
 				when 49 # 성려멸주
-					power = user.maxsp / 60 + 80
+					power = user.maxsp / 55 + 80
 					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
-					power = user.maxsp / 55 + 90
+					power = user.maxsp / 50 + 90
 					user.sp -= user.maxsp / 9
 				when 53 # 삼매진화 
 					power = user.sp / 10 + 40
 					user.sp = 0
 				when 56 # 성려멸주 2성
-					power = user.maxsp / 50 + 100
+					power = user.maxsp / 45 + 110
 					user.sp -= user.maxsp / 8
 				when 57 # 삼매진화 1성
 					power = user.sp / 7 + 60
@@ -3491,7 +3494,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 101 # 백호참
-					power = user.hp / 90 + 45
+					power = user.hp / 80 + 55
 					user.hp -= user.hp / 2
 				when 102 # 백리건곤 1성
 					power = user.maxhp / 80 + 30

@@ -4352,3 +4352,4 @@ On <<Sun 02 Jun 2019, 21:23:45>> the error <<disposed sprite (#<Scene_Map:0x7f66
 On <<Fri 07 Jun 2019, 00:13:45>> the error << (#<Scene_Map:0xf94b200>)>> occured.
 On <<Fri 07 Jun 2019, 14:34:07>> the error << (#<Scene_Map:0x46d3748>)>> occured.
 On <<Fri 07 Jun 2019, 21:02:13>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0xfa2e108>)>> occured.
+On <<Tue 11 Jun 2019, 22:27:54>> the file <<Graphics/Characters/npc-1>> was missing.

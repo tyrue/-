@@ -48,7 +48,6 @@ class Jindow_hairct < Jindow
 			$game_system.se_play($data_system.decision_se)
 			if $game_variables[165] > 1000
 				$game_party.actors[0].set_graphic("바람머리", 0, 0, 0)
-				
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))           
 				$game_party.lose_gold(1000)

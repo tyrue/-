@@ -2084,40 +2084,48 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도깨비방망이
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 73 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
+				elsif r <= 59
+					# 여명의도복
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 74 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				elsif r <= 64
+					# 산적왕의 칼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 75 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
 				end
 				
 			when 116 # 범증
 				if r <= 10 
 					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 20
-					# 불의 혼
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 30
+				elsif r <= 15
 					# 불의 결정
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 20
+					# 현랑부
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 76 #{e.event.x} #{e.event.y}</drop_create>\n"				
 				end
 			when 117 # 범천
 				if r <= 10 
 					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 20
-					# 불의 혼
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 30
+				elsif r <= 15
 					# 불의 결정
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 19
+					# 백화검
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 77 #{e.event.x} #{e.event.y}</drop_create>\n"				
 				end
 			when 118 # 범수
 				if r <= 10 
 					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 20
-					# 불의 혼
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 30
+				elsif r <= 15
 					# 불의 결정
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"				
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 20
+					# 1만전
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 78 #{e.event.x} #{e.event.y}</drop_create>\n"				
 				end
 			end
 		end
@@ -3438,17 +3446,17 @@ if SDK.state("Mr.Mo's ABS") == true
 					power = user.sp / 20 + 20
 					user.sp = 0
 				when 49 # 성려멸주
-					power = user.maxsp / 20 + 80
+					power = user.maxsp / 60 + 80
 					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
-					power = user.maxsp / 15 + 80
-					user.sp -= user.maxsp / 15
+					power = user.maxsp / 55 + 90
+					user.sp -= user.maxsp / 9
 				when 53 # 삼매진화 
 					power = user.sp / 10 + 40
 					user.sp = 0
 				when 56 # 성려멸주 2성
-					power = user.maxsp / 10 + 100
-					user.sp -= user.maxsp / 20
+					power = user.maxsp / 50 + 100
+					user.sp -= user.maxsp / 8
 				when 57 # 삼매진화 1성
 					power = user.sp / 7 + 60
 					user.sp = 0

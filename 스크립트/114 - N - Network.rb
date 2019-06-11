@@ -1228,7 +1228,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$new_x = $1.to_i if $global_x == 13
 					$new_y = $1.to_i if $global_x == 14
 					$new_d = $1.to_i if $global_x == 15
-					$charp = $1.to_i if $global_x == 16
+					$charp = $1.to_s if $global_x == 16
 					
 					#착용 장비
 					$armedweapon = $1 if $global_x == 17
@@ -1351,6 +1351,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.setup($new_id) 
 						$game_player.moveto($new_x, $new_y) 
 						$game_player.direction = $new_d
+						$game_party.actors[0].set_graphic($charp, 0, 0, 0)
 						$game_party.gain_weapon($armedweapon.to_i,1)
 						$game_party.gain_armor($armedarmor1.to_i,1)
 						$game_party.gain_armor($armedarmor2.to_i,1)

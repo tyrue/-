@@ -11,7 +11,7 @@ class Scene_Map
 	#--------------------------------------------------------------------------
 	def initialize
 		# 현재 맵의 몬스터 정보를 요청
-		if $game_map.map_id != 51 # 파티퀘 맵 제외
+		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
 		Network::Main.send_map

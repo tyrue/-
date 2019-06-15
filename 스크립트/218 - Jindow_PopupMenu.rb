@@ -97,7 +97,7 @@ class Jindow_P_Status < Jindow
 		
 		
 		if @d.click # 정보
-			$chat.write ("[유저정보] - 이름 : #{@usrname} 레벨 : #{@lev} (체력 : #{@hp} / #{@mhp}) ", Color.new(65, 105, 0))
+			$chat.write ("[이름] : #{@usrname} [레벨] : #{@lev} [체력] : (#{@hp} / #{@mhp}) [마력] : (#{@sp} / #{@msp})", Color.new(65, 105, 0))
 			Hwnd.dispose("P_Status")
 		end
 	end

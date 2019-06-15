@@ -1038,20 +1038,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
 						# 몹 죽었을때 리스폰 시간 적용
-						if data[6].to_i != nil
+						if data[6].to_i != nil 
 							if data[6].to_i != 0  
 								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
 							else
 								$ABS.enemies[data[1].to_i].event.erased = false
 								event = $ABS.enemies[data[1].to_i].event
 								event.refresh
-								for i in 0..30
-									event.move_random
-								end
-								event.moveto(event.x,event.y)
-								if $is_map_first
-									Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{$ABS.enemies[data[1].to_i].hp},#{event.x},#{event.y},#{event.direction},#{$ABS.enemies[data[1].to_i].respawn}</monster>\n")
-								end	
 								$game_map.refresh
 								return
 							end
@@ -1073,8 +1066,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
 							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
 						end
-						
-						
 					end
 					return true
 					
@@ -1104,13 +1095,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						# 몹 이동
 						case data[2].to_i
 						when 1
-							$ABS.enemies[data[1].to_i].event.move_down
+							$ABS.enemies[data[1].to_i].event.move_down(true, true)
 						when 2
-							$ABS.enemies[data[1].to_i].event.move_left
+							$ABS.enemies[data[1].to_i].event.move_left(true, true)
 						when 3
-							$ABS.enemies[data[1].to_i].event.move_right
+							$ABS.enemies[data[1].to_i].event.move_right(true, true)
 						when 4
-							$ABS.enemies[data[1].to_i].event.move_up
+							$ABS.enemies[data[1].to_i].event.move_up(true, true)
 						end
 					end
 					return true
@@ -1617,6 +1608,28 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					간단메세지("[세계후] #{$1.to_s} : #{$2.to_s}")
 					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", Color.new(65, 105, 255))
 					
+				when /<respawn>(.*),(.*),(.*),(.*),(.*)<\/respawn>/		
+					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					return true if $game_map.map_id != data[0].to_i
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					if $ABS.enemies[data[1].to_i] != nil
+						# 몹 죽었을때 리스폰 시간 적용
+						$ABS.enemies[data[1].to_i].event.erased = false
+						event = $ABS.enemies[data[1].to_i].event
+						event.refresh
+						
+						# 몹 방향과 좌표 적용
+						x = $ABS.enemies[data[1].to_i].event.x
+						y = $ABS.enemies[data[1].to_i].event.y
+						if x != data[3].to_i and y != data[4].to_i
+							$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
+							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
+						end
+						$game_map.refresh
+					end
+					
 				when /<enemy_dead>(.*),(.*),(.*)<\/enemy_dead>/	
 					id = $1.to_i # 적 id
 					event_id = $2.to_i # 이벤트 id
@@ -2069,6 +2082,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("'#{$1.to_s}님의 생명의희원")   
 									elsif $2.to_i == 11       #백호의희원
+										$game_player.animation_id = 149
 										$game_party.actors[0].hp += mp * 2
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("#{$1.to_s}님의 백호의희원")   

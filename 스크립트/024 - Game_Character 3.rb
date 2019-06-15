@@ -10,7 +10,11 @@ class Game_Character
 	# * Move Down
 	#     turn_enabled : a flag permits direction change on that spot
 	#--------------------------------------------------------------------------
-	def move_down(turn_enabled = true)
+	def move_down(turn_enabled = true, is_ok = false, is_come = false)
+		# 이때 계속 몹 정보 보내주면?
+		if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$is_map_first and !is_ok
+			return
+		end
 		# Turn down
 		if turn_enabled
 			turn_down
@@ -25,7 +29,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $is_map_first
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and ($is_map_first or is_come)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},1</mon_move>\n")
 			end
@@ -38,7 +42,10 @@ class Game_Character
 	# * Move Left
 	#     turn_enabled : a flag permits direction change on that spot
 	#--------------------------------------------------------------------------
-	def move_left(turn_enabled = true)
+	def move_left(turn_enabled = true, is_ok = false, is_come = false)
+		if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$is_map_first and !is_ok
+			return
+		end
 		# Turn left
 		if turn_enabled
 			turn_left
@@ -53,7 +60,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $is_map_first
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and ($is_map_first or is_come)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},2</mon_move>\n")
 			end
@@ -66,7 +73,10 @@ class Game_Character
 	# * Move Right
 	#     turn_enabled : a flag permits direction change on that spot
 	#--------------------------------------------------------------------------
-	def move_right(turn_enabled = true)
+	def move_right(turn_enabled = true, is_ok = false, is_come = false)
+		if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$is_map_first and !is_ok
+			return
+		end
 		# Turn right
 		if turn_enabled
 			turn_right
@@ -81,7 +91,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $is_map_first
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and ($is_map_first or is_come)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},3</mon_move>\n")
 			end
@@ -94,7 +104,10 @@ class Game_Character
 	# * Move up
 	#     turn_enabled : a flag permits direction change on that spot
 	#--------------------------------------------------------------------------
-	def move_up(turn_enabled = true)
+	def move_up(turn_enabled = true, is_ok = false, is_come = false)
+		if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$is_map_first and !is_ok
+			return
+		end
 		# Turn up
 		if turn_enabled
 			turn_up
@@ -109,7 +122,7 @@ class Game_Character
 			increase_steps
 			# If impassable
 			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $is_map_first
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and ($is_map_first or is_come)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 				Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},4</mon_move>\n")
 			end
@@ -197,16 +210,29 @@ class Game_Character
 	#--------------------------------------------------------------------------
 	# * Move at Random
 	#--------------------------------------------------------------------------
-	def move_random
-		case rand(4)
-		when 0  # Move down
-			move_down(false)
-		when 1  # Move left
-			move_left(false)
-		when 2  # Move right
-			move_right(false)
-		when 3  # Move up
-			move_up(false)
+	def move_random(is_come = false)
+		if !is_come
+			case rand(4)
+			when 0  # Move down
+				move_down(false)
+			when 1  # Move left
+				move_left(false)
+			when 2  # Move right
+				move_right(false)
+			when 3  # Move up
+				move_up(false)
+			end
+		else
+			case rand(4)
+			when 0  # Move down
+				move_down(false, true, true)
+			when 1  # Move left
+				move_left(false, true, true)
+			when 2  # Move right
+				move_right(false, true, true)
+			when 3  # Move up
+				move_up(false, true, true)
+			end
 		end
 	end
 	#--------------------------------------------------------------------------

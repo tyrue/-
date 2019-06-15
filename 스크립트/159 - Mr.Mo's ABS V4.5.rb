@@ -320,10 +320,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 전사
 	SKILL_MASH_TIME[65] = [10 * sec, 0] # 뢰마도
-	SKILL_MASH_TIME[67] = [4 * sec, 0] # 건곤대나이
+	SKILL_MASH_TIME[67] = [5 * sec, 0] # 건곤대나이
 	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
 	SKILL_MASH_TIME[75] = [7 * sec, 0] # 뢰마도 1성
-	SKILL_MASH_TIME[77] = [4 * sec, 0] # 유비후타
+	SKILL_MASH_TIME[77] = [5 * sec, 0] # 유비후타
 	SKILL_MASH_TIME[79] = [20 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
 	SKILL_MASH_TIME[103] = [10 * sec, 0] # 어검술
@@ -331,7 +331,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
 	SKILL_BUFF_TIME = {}
-	SKILL_BUFF_TIME[1] = [300, 0] 
+	SKILL_BUFF_TIME[9] = [20 * sec, 0] 
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -802,9 +802,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					event.move_random
 				end
 				event.moveto(event.x,event.y)
-				if $is_map_first
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
-				end	
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
+				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
 				$game_map.refresh
 			end
 		end
@@ -1058,7 +1057,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 						# 아직 스킬 딜레이가 남아있다면 무시
 						skill_mash = SKILL_MASH_TIME[id]
-						if skill_mash != nil and skill_mash[1] > 0
+						if skill_mash != nil and skill_mash[1]/60 > 0
 							$console.write_line("딜레이가 남아있습니다. #{skill_mash[1]/60}초")
 							return
 						end
@@ -1944,13 +1943,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 61 # 주작
-				if r <= 30 
+				if r <= 25 
 					# 주작의 깃
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 68 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 62 # 백호
-				if r <= 30 
+				if r <= 25 
 					# 백호의 발톱
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 69 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2665,6 +2664,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 				#Jump
 				e = actor
+				#몬스터 대상의 애니매이션 공유
+				Network::Main.socket.send("<27>@ani_event = #{actor.event.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
 				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
@@ -2681,6 +2682,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.effect_skill(enemy, @skill)
 			#Show animation on event
 			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
+			#몬스터 대상의 애니매이션 공유
+			Network::Main.socket.send("<27>@ani_event = #{actor.event.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
 			#Jump
 			e=actor
 			#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
@@ -2742,6 +2745,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.effect_skill(enemy, @skill)
 			#Show animation on player
 			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
+			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</player_animation>\n"
+			
 			#Jump
 			#$ABS.jump($game_player,self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
@@ -2790,6 +2795,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.effect_skill(enemy, @skill)
 			#Show animation on event
 			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
+			@enani = actor.event
+			Network::Main.socket.send("<27>@ani_event = #{@enani.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
 			#Jump
 			#$ABS.jump($game_map.events[id],self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
 			#return if enemy is dead
@@ -3441,7 +3448,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if hit_result == true
 				# Calculate power
 				
-				power = 0
+				power = 0 + user.atk / 100
 				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
 				case skill.id
 					# 주술사 스킬
@@ -3717,39 +3724,31 @@ if SDK.state("Mr.Mo's ABS") == true
 				if abs_sx > abs_sy
 					# Move towards player, prioritize left and right directions
 					if sx > 0
-						move_left
-						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},2</monster>\n")				
+						move_left(true, true, true)
 					else
-						move_right
-						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},3</monster>\n")
+						move_right(true, true, true)
 					end
 					
 					if not moving? and sy != 0
 						if sy > 0
-							move_up
-							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},4</monster>\n")
+							move_up(true, true, true)
 						else
-							move_down
-							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},1</monster>\n")
+							move_down(true, true, true)
 						end
 					end
 					# If vertical distance is longer
 				else
 					# Move towards player, prioritize up and down directions
 					if sy > 0
-						move_up
-						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},4</monster>\n")
+						move_up(true, true, true)
 					else
-						move_down
-						Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},1</monster>\n")
+						move_down(true, true, true)
 					end
 					if not moving? and sx != 0						
 						if sx > 0
-							move_left
-							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},2</monster>\n")				
+							move_left(true, true, true)
 						else
-							move_right
-							Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},3</monster>\n")
+							move_right(true, true, true)
 						end
 					end
 				end

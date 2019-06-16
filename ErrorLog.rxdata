@@ -4354,3 +4354,13 @@ On <<Fri 07 Jun 2019, 14:34:07>> the error << (#<Scene_Map:0x46d3748>)>> occured
 On <<Fri 07 Jun 2019, 21:02:13>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0xfa2e108>)>> occured.
 On <<Tue 11 Jun 2019, 22:27:54>> the file <<Graphics/Characters/npc-1>> was missing.
 On <<Sat 15 Jun 2019, 21:32:53>> the file <<Graphics/Characters/*null*>> was missing.
+On <<Sun 16 Jun 2019, 12:00:32>> the error <<Section159:864: syntax error ()>> occured.
+On <<Sun 16 Jun 2019, 12:00:32>> the error <<Section159:864: syntax error
+				or !enemy.aggro ()>> occured.
+On <<Sun 16 Jun 2019, 12:00:32>> the error <<Section159:864: syntax error
+				or !enemy.aggro
+				  ^ ()>> occured.
+On <<Sun 16 Jun 2019, 12:00:32>> the error <<compile error
+Section159:864: syntax error
+				or !enemy.aggro
+				  ^ ()>> occured.

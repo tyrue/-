@@ -85,6 +85,15 @@ class Game_Battler
 			# State Removed by Shock
 			remove_states_shock
 			# Substract damage from HP
+			
+			r = rand(100)
+			if r <= (self.damage * 100 / self.maxhp) or r <= 30
+				if !self.is_a?(Game_Actor)
+					$ABS.enemies[self.event.id].aggro = true
+					Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
+				end
+			end
+			
 			self.hp -= self.damage
 			# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 			if !self.is_a?(Game_Actor)

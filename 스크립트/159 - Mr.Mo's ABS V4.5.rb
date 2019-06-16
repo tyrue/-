@@ -860,7 +860,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If the enemy can't see it's enemy, skip the enemy
 			if (!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and
 					!in_range?(enemy.event, enemy.attacking.event, enemy.hear_range)) or
-				(enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id))
+				(enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id)) or
+				!enemy.aggro
 				# Restore movement
 				# 원래 움직임으로 돌아옴
 				restore_movement(enemy)
@@ -1168,6 +1169,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					@button_mash = MASH_TIME*10
 				end
 				Audio.se_play("Audio/SE/무기001-검")
+				# 여기다가 소리 방송할 수도?
+				
 				# 여기다가 공격 모션 넣으면 될듯
 				# 적이 없거나 적이 죽으면 공격 안함
 				next if e == nil or e.dead?
@@ -3577,6 +3580,15 @@ if SDK.state("Mr.Mo's ABS") == true
 					# Set to effective flag
 					effective = true
 				end
+				
+				r = rand(100)
+				if r <= (self.damage * 100 / self.maxhp) or r <= 30
+					if !self.is_a?(Game_Actor)
+						self.aggro = true
+						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
+					end
+				end
+				
 				# Substract damage from HP
 				last_hp = self.hp
 				self.hp -= self.damage
@@ -3827,6 +3839,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :temp_frequency
 		attr_accessor :actor
 		attr_accessor :respawn
+		attr_accessor :aggro
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
@@ -3852,6 +3865,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@temp_frequency = 0 
 			@actor = self
 			@respawn = 0
+			@aggro = true 
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

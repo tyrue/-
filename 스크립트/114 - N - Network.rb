@@ -136,8 +136,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.destroy(id)
 				if @players[id.to_s] != nil
-					@socket.send("<chat>(알림): '#{@players[id.to_s].name}'님께서 게임을 종료하셨습니다.</chat>\n")
-				end
+					#@socket.send("<chat>(알림): '#{@players[id.to_s].name}'님께서 게임을 종료하셨습니다.</chat>\n")
+				end  
 				@players[id.to_s] = nil rescue nil
 				@mapplayers[id.to_s] = "" rescue nil
 				for player in @mapplayers
@@ -1066,6 +1066,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
 							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
 						end
+						
+						if $is_map_first
+							$ABS.enemies[data[1].to_i].aggro = true
+						else
+							$ABS.enemies[data[1].to_i].aggro = false
+						end
 					end
 					return true
 					
@@ -1086,12 +1092,25 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
+				when /<aggro>(.*)<\/aggro>/ # 체력 공유
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					return true if $game_map.map_id != data[0].to_i
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					if $ABS.enemies[data[1].to_i] != nil
+						# 어그로 해제
+						$ABS.enemies[data[1].to_i].aggro = false
+					end
+					return true	
+					
 				when /<mon_move>(.*)<\/mon_move>/ # 몹 이동 공유
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
+						x = data[3].to_i
+						y = data[4].to_i
 						# 몹 이동
 						case data[2].to_i
 						when 1
@@ -1102,6 +1121,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].event.move_right(true, true)
 						when 4
 							$ABS.enemies[data[1].to_i].event.move_up(true, true)
+						end
+						if $ABS.enemies[data[1].to_i].event.x != x or $ABS.enemies[data[1].to_i].event.y != y
+							$ABS.enemies[data[1].to_i].event.moveto(x,y)
 						end
 					end
 					return true

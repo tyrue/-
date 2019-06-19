@@ -54,11 +54,11 @@ class Game_Battler
 	# * Get Maximum HP
 	#--------------------------------------------------------------------------
 	def maxhp
-		n = [[base_maxhp + @maxhp_plus, 1].max, 999999].min
+		n = [[base_maxhp + @maxhp_plus, 1].max, 9999999].min
 		for i in @states
 			n *= $data_states[i].maxhp_rate / 100.0
 		end
-		n = [[Integer(n), 1].max, 999999].min
+		n = [[Integer(n), 1].max, 9999999].min
 		return n
 	end
 	#--------------------------------------------------------------------------

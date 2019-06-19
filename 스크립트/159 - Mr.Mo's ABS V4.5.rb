@@ -2052,6 +2052,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
+			when 101 # 일본세작대장
+				if r <= 40 
+					# 황금호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 87 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 102 # 반고
+				if r <= 100
+					# 반고의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 90 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
 			when 106 # 뱀
 				if r <= 60 
 					# 뱀고기
@@ -2112,7 +2124,19 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 75 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
 				end
-				
+			when 112 # 청룡
+				if r <= 100
+					# 청룡의 보옥
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 88 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end
+			when 113 # 현무
+				if r <= 100
+					# 현무의 보옥
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 89 #{e.event.x} #{e.event.y}</drop_create>\n"
+					return true
+				end	
+					
 			when 116 # 범증
 				if r <= 10 
 					# 진호박
@@ -2145,6 +2169,58 @@ if SDK.state("Mr.Mo's ABS") == true
 				elsif r <= 20
 					# 1만전
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 78 #{e.event.x} #{e.event.y}</drop_create>\n"				
+				end
+				
+			# 12지신
+			when 119 # 백호왕
+				if r <= 40 
+					# 건괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 79 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 120 # 용왕용마
+				if r <= 40 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 121 # 새끼용
+				if r <= 40 
+					# 
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 123 # 뱀왕
+				if r <= 40 
+					# 곤괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 80 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 124 # 쥐왕
+				if r <= 40 
+					# 감괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 81 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 125 # 양왕
+				if r <= 4 
+					# 리괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 82 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 126 # 돼지왕
+				if r <= 40 
+					# 진괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 83 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 127 # 말왕
+				if r <= 4
+					# 선괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 84 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 128 # 원숭이왕
+				if r <= 40 
+					# 태괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 85 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 129 # 개왕
+				if r <= 4
+					# 간괘
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 86 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			end
 		end

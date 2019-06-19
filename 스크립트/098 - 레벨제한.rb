@@ -28,7 +28,7 @@
   DEX_LIMIT   = 999      #DEX 한계 치
   AGI_LIMIT   = 999      #AGI 한계 치
   INT_LIMIT   = 999      #INT 한계 치
-	MAX_EXP			= 20000000  #만렙시 경험치 
+	MAX_EXP			= 50000000  #만렙시 경험치 
 
 class Game_Actor < Game_Battler
   def new_final_level

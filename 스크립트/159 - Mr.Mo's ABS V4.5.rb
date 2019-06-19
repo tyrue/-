@@ -253,6 +253,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적들의 스킬
 	RANGE_SKILLS[59] = [5, 4, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 4, "공격스킬", 4, 0] #백호의 건곤대나이
+	RANGE_SKILLS[151] = [5, 2, "공격스킬2", 4, 0] # 청룡의 포효
+	RANGE_SKILLS[152] = [5, 2, "공격스킬2", 4, 0] # 현무의 포효
+	
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
 	# 폭발 범위
@@ -264,6 +267,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 전사스킬
 	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 2, 4, 0] # 어검술
+	
+	
+	
 	#--------------------------------------------------------------------------
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
 	MELEE_CUSTOM = {}
@@ -2032,7 +2038,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 86 # 용
-				if r <= 10 
+				if r <= 3 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end

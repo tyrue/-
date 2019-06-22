@@ -1641,14 +1641,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$ABS.enemies[data[1].to_i].event.erased = false
 						event = $ABS.enemies[data[1].to_i].event
 						event.refresh
-						
-						# 몹 방향과 좌표 적용
-						x = $ABS.enemies[data[1].to_i].event.x
-						y = $ABS.enemies[data[1].to_i].event.y
-						if x != data[3].to_i and y != data[4].to_i
-							$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
-							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
-						end
+						$ABS.enemies[data[1].to_i].event.moveto(data[2].to_i, data[3].to_i)
+						$ABS.enemies[data[1].to_i].event.direction = data[4].to_i
 						$game_map.refresh
 					end
 					

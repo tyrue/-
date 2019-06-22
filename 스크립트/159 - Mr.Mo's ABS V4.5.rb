@@ -251,8 +251,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 적 캐릭터 스킬
 	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적들의 스킬
-	RANGE_SKILLS[59] = [5, 4, "공격스킬", 4, 0] #주작의 노도성황
-	RANGE_SKILLS[61] = [5, 4, "공격스킬", 4, 0] #백호의 건곤대나이
+	RANGE_SKILLS[59] = [3, 4, "공격스킬", 4, 0] #주작의 노도성황
+	RANGE_SKILLS[61] = [3, 4, "공격스킬", 4, 0] #백호의 건곤대나이
 	RANGE_SKILLS[151] = [5, 2, "공격스킬2", 4, 0] # 청룡의 포효
 	RANGE_SKILLS[152] = [5, 2, "공격스킬2", 4, 0] # 현무의 포효
 	
@@ -343,9 +343,32 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
 	SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
 	
-	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
+	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 스위치 번호]
 	SKILL_BUFF_TIME = {}
-	SKILL_BUFF_TIME[9] = [20 * sec, 0] 
+	# 주술사
+	SKILL_BUFF_TIME[9] = [60 * sec, 0, 123] # 무장
+	SKILL_BUFF_TIME[46] = [60 * sec, 0, 123] # 무장
+	SKILL_BUFF_TIME[20] = [60 * sec, 0, 124] # 보호
+	SKILL_BUFF_TIME[47] = [60 * sec, 0, 124] # 보호
+	SKILL_BUFF_TIME[26] = [90 * sec, 0, 16] # 누리의힘
+	SKILL_BUFF_TIME[42] = [90 * sec, 0, 24] # 주술마도
+	
+	# 전사
+	SKILL_BUFF_TIME[62] = [90 * sec, 0, 157] # 수심각도
+	SKILL_BUFF_TIME[63] = [90 * sec, 0, 158] # 반영대도
+	SKILL_BUFF_TIME[64] = [40 * sec, 0, 159] # 십량분법
+	SKILL_BUFF_TIME[72] = [50 * sec, 0, 159] # 구량분법
+	SKILL_BUFF_TIME[76] = [60 * sec, 0, 159] # 팔량분법
+	SKILL_BUFF_TIME[71] = [30 * sec, 0, 163] # 혼신의힘
+	
+	
+	# 도사
+	SKILL_BUFF_TIME[88] = [60 * sec, 0, 338] # 분량력법
+	SKILL_BUFF_TIME[90] = [60 * sec, 0, 196] # 분량방법
+	SKILL_BUFF_TIME[91] = [60 * sec, 0, 30] # 석화기탄
+	SKILL_BUFF_TIME[94] = [6 * sec, 0, 32] # 금강불체
+	
+	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -936,6 +959,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						#Animate the enemy
 						e.event.animation_id = e.animation1_id
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
+						
+						Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{e.event.animation_id}; @ani_id = #{Network::Main.id};</player_animation>\n"
 						#Show Animation
 						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
 						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
@@ -1001,6 +1026,52 @@ if SDK.state("Mr.Mo's ABS") == true
 						#Setup movement
 						setup_movement(e)
 						return
+						
+					when 2 #All Emenies 적 전체
+						# 해당 스킬 범위에 적이 있으면 그 적들에게 스킬을 발사
+						return if Graphics.frame_count % (e.aggressiveness * 30) != 0
+						next if !e.can_use_skill?(skill)
+						#Animate the enemy
+						e.event.animation_id = skill.animation1_id
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						
+						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
+						enemies.push($game_player) if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
+						
+						for enemy in enemies
+							# 나한테 적이 아니면 공격 안하게 함
+							next if !e.hate_group.include?(0)
+							next if !e.hate_group.include?(enemy.id)
+							#Skip NIL values
+							next if enemy== nil
+							#Skip 이미 적이 죽은거면 넘어가
+							next if !enemy.is_a?(Game_Player) and enemy.dead?
+							if enemy.is_a?(Game_Player)
+								enemy.actor.effect_skill(e, skill)
+								#Show Animetion on enemy
+								hit_enemy(enemy, e, 0) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
+								next if enemy_dead?(enemy.actor, e)
+								#Show animation on player
+								$game_player.animation_id = skill.animation2_id
+								Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</player_animation>\n"
+							else
+								enemy.effect_skill(e, skill)	
+								hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+								next if enemy_dead?(enemy, e)
+							end
+							
+							#Skip this enemy if its dead
+							next if enemy.is_a?(Game_Player)
+							next if enemy.attacking == e and enemy.in_battle
+							#If its alive, put it in battle
+							enemy.in_battle = true
+							#Make it attack the player
+							enemy.attacking = e
+							#Setup movement
+							setup_movement(e)
+						end
+						return		
+						
 					when 3..4, 7 # User   
 						return if Graphics.frame_count % (e.aggressiveness * 100) != 0
 						next if e.hp > skill.power.abs
@@ -1033,6 +1104,18 @@ if SDK.state("Mr.Mo's ABS") == true
 							end
 						end
 					end
+					
+					# 버프 지속시간 갱신
+					for skill_mash in SKILL_BUFF_TIME
+						if skill_mash[1][1] > 0
+							skill_mash[1][1] -= 1 
+							if skill_mash[1][1] == 0
+								$console.write_line("#{$data_skills[skill_mash[0]].name} 끝")
+								$game_switches[skill_mash[1][2]] = true
+							end
+						end
+					end
+					
 					#Update click time
 					@button_mash -= 1 if @button_mash > 0
 					return if @button_mash > 0
@@ -1074,6 +1157,13 @@ if SDK.state("Mr.Mo's ABS") == true
 						skill_mash = SKILL_MASH_TIME[id]
 						if skill_mash != nil and skill_mash[1]/60 > 0
 							$console.write_line("딜레이가 남아있습니다. #{skill_mash[1]/60}초")
+							return
+						end
+						
+						# 아직 버프가 지속중이면 무시
+						skill_mash = SKILL_BUFF_TIME[id]
+						if skill_mash != nil and skill_mash[1]/60 > 0
+							$console.write_line("이미 걸려있습니다. #{skill_mash[1]/60}초 남음")
 							return
 						end
 						
@@ -1255,6 +1345,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 			end
+			
+			skill_mash_time = SKILL_BUFF_TIME[id]
+			if skill_mash_time != nil
+				skill_mash_time[1] = skill_mash_time[0]
+				# 스킬 딜레이 시작 메시지 표시
+				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+			end
+			
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope
@@ -1338,15 +1436,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				$alive_size = 0
-				for e in enemies#.values
-					#Skip NIL values
-					next if e== nil
-					#Skip 이미 적이 죽은거면 넘어가
-					next if e.dead?
-					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
-					$alive_size += 1
-				end
-				
 				#Get all enemies
 				for e in enemies#.values
 					#Skip NIL values
@@ -1356,6 +1445,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# Skip if the enemy is an ally and can't hurt allies.
 					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
 					
+					$alive_size += 1
 					#Attack enemy
 					e.effect_skill(@actor, skill)
 					#Show Animetion on enemy
@@ -2136,7 +2226,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 89 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
 				end	
-					
+				
 			when 116 # 범증
 				if r <= 10 
 					# 진호박
@@ -2171,7 +2261,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 78 #{e.event.x} #{e.event.y}</drop_create>\n"				
 				end
 				
-			# 12지신
+				# 12지신
 			when 119 # 백호왕
 				if r <= 40 
 					# 건괘
@@ -3272,7 +3362,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap.font.size = $ABS.DAMAGE_FONT_SIZE
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
 				# draw_text(x, y, width, height, string, align)
-				y = 5
+				
+				y = self.height / 20
 				# 데미지 그림자
 				bitmap.draw_text(-1, y-1, 160, 36, damage_string, 1)
 				bitmap.draw_text(+1, y-1, 160, 36, damage_string, 1)
@@ -3646,19 +3737,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					power = skill.power + user.atk * skill.atk_f / 100
 				end				
+				
 				if power > 0
-					power -= self.pdef * skill.pdef_f / 200
-					power -= self.mdef * skill.mdef_f / 200
-					power = [power, 0].max
+					power -= self.pdef * [skill.pdef_f, 10].max / 200
+					power -= self.mdef * skill.mdef_f / 100
+					power = [power, 1].max
 				end
 				
 				
 				# Calculate rate
 				rate = 20
-				rate += (user.str * skill.str_f / 100)
-				rate += (user.dex * skill.dex_f / 100)
-				rate += (user.agi * skill.agi_f / 100)
-				rate += (user.int * skill.int_f / 100)
+				rate += (user.str/2 * skill.str_f / 100)
+				rate += (user.dex/2 * skill.dex_f / 100)
+				rate += (user.agi/2 * skill.agi_f / 100)
+				rate += (user.int/2 * skill.int_f / 100)
 				# Calculate basic damage
 				self.damage = power * rate / 20
 				# Element correction

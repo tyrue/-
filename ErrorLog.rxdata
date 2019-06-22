@@ -4365,3 +4365,783 @@ Section159:864: syntax error
 				or !enemy.aggro
 				  ^ ()>> occured.
 On <<Wed 19 Jun 2019, 21:56:01>> the file <<Audio/BGM/일본신궁>> was missing.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}" ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^ ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0 ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^ ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^ ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면? ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^ ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body
+Section159:4210: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body
+Section159:4210: class definition in method body
+Section159:4269: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body
+Section159:4210: class definition in method body
+Section159:4269: class definition in method body
+Section159:4330: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body
+Section159:4210: class definition in method body
+Section159:4269: class definition in method body
+Section159:4330: syntax error
+Section159:4331: class definition in method body ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body
+Section159:4210: class definition in method body
+Section159:4269: class definition in method body
+Section159:4330: syntax error
+Section159:4331: class definition in method body
+Section159:4357: syntax error ()>> occured.
+On <<Sat 22 Jun 2019, 12:32:54>> the error <<compile error
+Section159:1018: syntax error
+						p "#{if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])}"
+						                                                                    ^
+Section159:1034: syntax error
+							hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
+							                                               ^
+Section159:1054: syntax error
+						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						                                              ^
+Section159:1068: syntax error
+			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			                                 ^
+Section159:1078: syntax error
+Section159:1135: syntax error
+Section159:2571: syntax error
+Section159:2575: class definition in method body
+Section159:2668: class definition in method body
+Section159:2831: class definition in method body
+Section159:2943: class definition in method body
+Section159:3035: class definition in method body
+Section159:3067: class definition in method body
+Section159:3091: class definition in method body
+Section159:3103: class definition in method body
+Section159:3129: class definition in method body
+Section159:3149: class definition in method body
+Section159:3190: module definition in method body
+Section159:3191: class definition in method body
+Section159:3349: class definition in method body
+Section159:3443: class definition in method body
+Section159:3510: class definition in method body
+Section159:3786: class definition in method body
+Section159:3959: class definition in method body
+Section159:3975: class definition in method body
+Section159:4210: class definition in method body
+Section159:4269: class definition in method body
+Section159:4330: syntax error
+Section159:4331: class definition in method body
+Section159:4357: syntax error ()>> occured.

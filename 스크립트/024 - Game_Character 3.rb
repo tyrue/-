@@ -10,7 +10,7 @@ class Game_Character
 	# * Move Down
 	#     turn_enabled : a flag permits direction change on that spot
 	#--------------------------------------------------------------------------
-	def move_down(turn_enabled = true, is_ok = false, is_come = false)
+	def move_down(turn_enabled = true, is_ok = false, is_come = false) # is_ok : 이동 가능, is_come : 저장 및 사람들에게 보내기 가능
 		# 이때 계속 몹 정보 보내주면?
 		if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$is_map_first and !is_ok
 			return

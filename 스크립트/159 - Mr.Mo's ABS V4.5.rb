@@ -250,11 +250,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	
 	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적들의 스킬
+	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적 건곤
 	RANGE_SKILLS[59] = [3, 4, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [3, 4, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[151] = [5, 2, "공격스킬2", 4, 0] # 청룡의 포효
-	RANGE_SKILLS[152] = [5, 2, "공격스킬2", 4, 0] # 현무의 포효
+	RANGE_SKILLS[85] = [5, 4, "공격스킬", 4, 0] # 필살검무
+	RANGE_SKILLS[151] = [10, 2, "공격스킬2", 4, 0] # 청룡의 포효
+	RANGE_SKILLS[152] = [10, 2, "공격스킬2", 4, 0] # 현무의 포효
+	RANGE_SKILLS[153] = [7, 4, "공격스킬", 4, 0] # 필살검무
 	
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
@@ -346,20 +348,20 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 스위치 번호]
 	SKILL_BUFF_TIME = {}
 	# 주술사
-	SKILL_BUFF_TIME[9] = [60 * sec, 0, 123] # 무장
-	SKILL_BUFF_TIME[46] = [60 * sec, 0, 123] # 무장
-	SKILL_BUFF_TIME[20] = [60 * sec, 0, 124] # 보호
-	SKILL_BUFF_TIME[47] = [60 * sec, 0, 124] # 보호
-	SKILL_BUFF_TIME[26] = [90 * sec, 0, 16] # 누리의힘
-	SKILL_BUFF_TIME[42] = [90 * sec, 0, 24] # 주술마도
+	SKILL_BUFF_TIME[9] = [120 * sec, 0, 123] # 무장
+	SKILL_BUFF_TIME[46] = [120 * sec, 0, 123] # 무장
+	SKILL_BUFF_TIME[20] = [120 * sec, 0, 124] # 보호
+	SKILL_BUFF_TIME[47] = [120 * sec, 0, 124] # 보호
+	SKILL_BUFF_TIME[26] = [180 * sec, 0, 16] # 누리의힘
+	SKILL_BUFF_TIME[42] = [180 * sec, 0, 24] # 주술마도
 	
 	# 전사
-	SKILL_BUFF_TIME[62] = [90 * sec, 0, 157] # 수심각도
-	SKILL_BUFF_TIME[63] = [90 * sec, 0, 158] # 반영대도
-	SKILL_BUFF_TIME[64] = [40 * sec, 0, 159] # 십량분법
-	SKILL_BUFF_TIME[72] = [50 * sec, 0, 159] # 구량분법
-	SKILL_BUFF_TIME[76] = [60 * sec, 0, 159] # 팔량분법
-	SKILL_BUFF_TIME[71] = [30 * sec, 0, 163] # 혼신의힘
+	SKILL_BUFF_TIME[62] = [180 * sec, 0, 157] # 수심각도
+	SKILL_BUFF_TIME[63] = [180 * sec, 0, 158] # 반영대도
+	SKILL_BUFF_TIME[64] = [180 * sec, 0, 159] # 십량분법
+	SKILL_BUFF_TIME[72] = [180 * sec, 0, 159] # 구량분법
+	SKILL_BUFF_TIME[76] = [180 * sec, 0, 159] # 팔량분법
+	SKILL_BUFF_TIME[71] = [60 * sec, 0, 163] # 혼신의힘
 	
 	
 	# 도사
@@ -2098,7 +2100,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 80 # 청명도깨비
-				if r <= 30 
+				if r <= 20 
 					# 도깨비 부적
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 67 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2128,7 +2130,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 86 # 용
-				if r <= 3 
+				if r <= 7 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2311,6 +2313,56 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 4
 					# 간괘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 86 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				
+				# 용궁
+			when 141 # 복돌
+				if r <= 30
+					# 복어의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 94 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 142 # 복순
+				if r <= 30
+					# 복어의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 94 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 145 # 사산게
+				if r <= 15
+					# 게집게
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 92 #{e.event.x} #{e.event.y}</drop_create>\n"
+				else r <= 30
+					# 게등껍질
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 93 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 148 # 해마
+				if r <= 10
+					# 해마꼬리
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 91 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 149 # 해마병사
+				if r <= 35
+					# 해마의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 95 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 151 # 고양인어
+				if r <= 27
+					# 인어의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 96 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 152 # 이쁜이인어
+				if r <= 27
+					# 인어의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 96 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 154 # 외칼상어
+				if r <= 20
+					# 상어의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 155 # 쌍칼상어
+				if r <= 20
+					# 상어의심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			end
 		end
@@ -3632,7 +3684,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if hit_result == true
 				# Calculate power
 				
-				power = 0 + user.atk / 10
+				power = 0 + user.atk / 2
 				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
 				case skill.id
 					# 주술사 스킬
@@ -3735,7 +3787,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					# 도사스킬
 				else
-					power = skill.power + user.atk * skill.atk_f / 100
+					power = skill.power + user.atk / 2 
 				end				
 				
 				if power > 0
@@ -3747,10 +3799,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# Calculate rate
 				rate = 20
-				rate += (user.str/2 * skill.str_f / 100)
-				rate += (user.dex/2 * skill.dex_f / 100)
-				rate += (user.agi/2 * skill.agi_f / 100)
-				rate += (user.int/2 * skill.int_f / 100)
+				
+				rate += (user.str * skill.str_f / 100)
+				rate += (user.dex * skill.dex_f / 100)
+				rate += (user.agi * skill.agi_f / 100)
+				rate += (user.int * skill.int_f / 100)
 				# Calculate basic damage
 				self.damage = power * rate / 20
 				# Element correction
@@ -3774,10 +3827,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				eva = 8 * self.agi / user.dex + self.eva
 				hit = self.damage < 0 ? 100 : 100 - eva * skill.eva_f / 100
 				hit = self.cant_evade? ? 100 : hit
-				hit_result = (rand(100) < hit)
+				hit_result = (rand(10) < hit)
 				# Set effective flag if skill is uncertain
 				effective |= hit < 100
 			end
+			
 			# If hit occurs
 			if hit_result == true
 				# If physical attack has power other than 0
@@ -3973,11 +4027,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			when 5  # random
 				move_random
-			end
-			
-			# 이때 계속 몹 정보 보내주면?
-			if !self.is_a?(Game_Actor)				
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")				
 			end
 			#~ turn_to(b)
 		end

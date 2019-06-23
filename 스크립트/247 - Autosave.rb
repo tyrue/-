@@ -10,6 +10,8 @@ def 자동저장
 		@swlist = ""
 		@hotkeylist = ""
 		@itemKeyList = ""
+		@skill_mash_list = ""
+		@buff_mash_list = ""
 		
 		for i in 0...$game_party.actors[0].skills.size
 			skill = $game_party.actors[0].skills[i]
@@ -65,6 +67,14 @@ def 자동저장
 			if $ABS.item_keys[i] != nil
 				@itemKeyList += ($ABS.item_keys[i].to_s + ",")
 			end
+		end
+		
+		for skill_mash_time in SKILL_MASH_TIME
+			
+		end
+		
+		for skill_mash_time in SKILL_BUFF_TIME
+			
 		end
 		
 		Network::Main.socket.send("<userdata>흑부엉 서버|#{$game_party.actors[0].name}|#{$game_party.actors[0].class_id}|#{$game_party.actors[0].level}|#{$game_party.actors[0].exp}|#{$game_party.actors[0].str}|#{$game_party.actors[0].dex}|#{$game_party.actors[0].agi}|#{$game_party.actors[0].int}|#{$game_party.actors[0].maxhp}|#{$game_party.actors[0].maxsp}|#{$game_map.map_id}|#{$game_player.x}|#{$game_player.y}|#{$game_player.direction}|#{$game_party.actors[0].character_name}|#{$game_party.actors[0].weapon_id}|#{$game_party.actors[0].armor1_id}|#{$game_party.actors[0].armor2_id}|#{$game_party.actors[0].armor3_id}|#{$game_party.actors[0].armor4_id}|#{@itemlist}|#{@weaponlist}|#{@armorlist}|#{@skilllist}|#{$game_party.gold}|#{$game_party.actors[0].hp}|#{$game_party.actors[0].sp}|#{@swlist}|#{@valist}|#{@hotkeylist}|#{@itemKeyList}|#{$game_party.actors[0].pdef}|#{$game_party.actors[0].mdef}</userdata>\n")

@@ -1401,7 +1401,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 							exit
 						else
-							Network::Main.socket.send("<chat>[알림]:'#{$game_party.actors[0].name}'님께서 흑부엉의 바람의나라 온라인에 접속 하셨습니다.</chat>\n")
+							Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 							@socket.send("<exp_event></exp_event>\n")      
 							$nowtrade = 0
 							$game_player.move_speed = 3

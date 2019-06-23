@@ -14,8 +14,7 @@ class Jindow_NetPlayer < Jindow
 		player = []
 		i = 0
 		for netplayer in Network::Main.players.values 
-			@buttons[netplayer.username] = J::Button.new(self).refresh(120,
-				netplayer.username)
+			@buttons[netplayer.username] = J::Button.new(self).refresh(120, netplayer.username)
 			@buttons[netplayer.username].y = i * 30 + 12
 			i += 1
 		end

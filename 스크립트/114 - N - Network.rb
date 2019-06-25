@@ -782,6 +782,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
 							["회원가입에 성공 하셨습니다."],
 							["확인"], ["Hwnd.dispose(self)"], "성공")
+						
 					end
 					return true
 					# 닉네임 확인 결과

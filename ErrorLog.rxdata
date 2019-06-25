@@ -5146,3 +5146,69 @@ Section159:4330: syntax error
 Section159:4331: class definition in method body
 Section159:4357: syntax error ()>> occured.
 On <<Sat 22 Jun 2019, 14:51:01>> the file <<Graphics/Characters/*null*>> was missing.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<Section159:4385: syntax error ()>> occured.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0 ()>> occured.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error ()>> occured.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0 ()>> occured.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0
+				                 ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:13:54>> the error <<compile error
+Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0
+				                 ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<Section159:4385: syntax error ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0 ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0 ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0
+				                 ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:06>> the error <<compile error
+Section159:4385: syntax error
+				$ABS.item_keys.[key] = 0
+				                ^
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0
+				                 ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:15>> the error <<Section159:4447: syntax error ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:15>> the error <<Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0 ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:15>> the error <<Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0
+				                 ^ ()>> occured.
+On <<Tue 25 Jun 2019, 22:14:15>> the error <<compile error
+Section159:4447: syntax error
+				$ABS.skill_keys.[key] = 0
+				                 ^ ()>> occured.

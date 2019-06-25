@@ -144,7 +144,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#  For more keys look in to the Input Script
 	# 넘버 패드로 스킬 지정 
 	SKILL_KEYS = {
-		Input::Numberpad[0] => 1,
+		Input::Numberpad[0] => 0,
 		Input::Numberpad[1] => 0,
 		Input::Numberpad[2] => 0,
 		Input::Numberpad[3] => 0,
@@ -154,10 +154,31 @@ if SDK.state("Mr.Mo's ABS") == true
 		Input::Numberpad[7] => 0,
 		Input::Numberpad[8] => 0,
 		Input::Numberpad[9] => 0,
-		Input::Letters["A"] => 0,
+		
+		Input::Numberkeys[0] => 0,
+		Input::Numberkeys[1] => 0,
+		Input::Numberkeys[2] => 0,
+		Input::Numberkeys[3] => 0,
+		Input::Numberkeys[4] => 0,
+		Input::Numberkeys[5] => 0,
+		Input::Numberkeys[6] => 0,
+		Input::Numberkeys[7] => 0,
+		Input::Numberkeys[8] => 0,
+		Input::Numberkeys[9] => 0,
 	}
 	# 위 숫자로 아이템 지정
 	ITEM_KEYS =  {
+		Input::Numberpad[0] => 0,
+		Input::Numberpad[1] => 0,
+		Input::Numberpad[2] => 0,
+		Input::Numberpad[3] => 0,
+		Input::Numberpad[4] => 0,
+		Input::Numberpad[5] => 0,
+		Input::Numberpad[6] => 0,
+		Input::Numberpad[7] => 0,
+		Input::Numberpad[8] => 0,
+		Input::Numberpad[9] => 0,
+		
 		Input::Numberkeys[0] => 0,
 		Input::Numberkeys[1] => 0,
 		Input::Numberkeys[2] => 0,
@@ -1135,6 +1156,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					# 적이 없다면 무시
 					#~ return if @enemies == {}
+					# 아이템 단축키 눌렸니?
+					check_item
+					
 					# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
 					# 스킬 단축키가 눌렸니?
 					for key in @skill_keys.keys
@@ -1177,8 +1201,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							return player_skill(id)
 						end
 					end
-					# 아이템 단축키 눌렸니?
-					check_item
+					
 				end
 			end
 		end
@@ -1797,12 +1820,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				return true
 			when 16 # 평호
 				if r <= 70 
-					# 
+					# 호랑이고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 17 # 진호
-				if r <= 70 
+				if r <= 40 
 					# 호랑이고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18 #{e.event.x} #{e.event.y}</drop_create>\n"
 				elsif r <= 90
@@ -2052,13 +2075,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 61 # 주작
-				if r <= 25 
+				if r <= 30 
 					# 주작의 깃
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 68 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 62 # 백호
-				if r <= 25 
+				if r <= 30 
 					# 백호의 발톱
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 69 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2112,13 +2135,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 82 # 구미호
-				if r <= 20 
+				if r <= 40 
 					# 쇠조각
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 58 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 83 # 불구미호
-				if r <= 30 
+				if r <= 40 
 					# 수정의조각
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 59 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2317,12 +2340,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 용궁
 			when 141 # 복돌
-				if r <= 30
+				if r <= 20
 					# 복어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 94 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 142 # 복순
-				if r <= 30
+				if r <= 20
 					# 복어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 94 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2335,34 +2358,39 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 93 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 148 # 해마
-				if r <= 10
+				if r <= 3
 					# 해마꼬리
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 91 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 149 # 해마병사
-				if r <= 35
+				if r <= 20
 					# 해마의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 95 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 151 # 고양인어
-				if r <= 27
+				if r <= 20
 					# 인어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 96 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 152 # 이쁜이인어
-				if r <= 27
+				if r <= 20
 					# 인어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 96 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 154 # 외칼상어
-				if r <= 20
+				if r <= 15
 					# 상어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 155 # 쌍칼상어
-				if r <= 20
+				if r <= 15
 					# 상어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 157 # 해파리수하
+				if r <= 1 and $game_switches[378] == true # 용궁 전략문서 얻기 퀘
+					# 전략문서
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 98 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			end
 		end
@@ -3823,6 +3851,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					self.damage += rand(amp+1) + rand(amp+1) - amp
 				end
 				
+				p self.damage
+				if self.damage > 0
+					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 10, 2].max + [self.mdef / 20, 2].max))
+				end
+				p self.damage
+				
 				# Second hit detection
 				eva = 8 * self.agi / user.dex + self.eva
 				hit = self.damage < 0 ? 100 : 100 - eva * skill.eva_f / 100
@@ -4345,9 +4379,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Check is the the key is pressed
 				next if !Input.trigger?(key)
 				#Play decision
+				
+				
 				$game_system.se_play($data_system.decision_se)
 				#Record Skill
-				$ABS.skill_keys[key] = @skill_window.skill.id 
+				$ABS.skill_keys[key] = @skill_window.skill.id
+				$ABS.item_keys[key] = 0
+				
 				@skill_window.active = false
 				@shk_window.active = @shk_window.visible = true
 			end
@@ -4407,7 +4445,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Play decision
 				$game_system.se_play($data_system.decision_se)
 				#Record Item
-				$ABS.item_keys[key] = @item_window.item.id 
+				$ABS.item_keys[key] = @item_window.item.id
+				$ABS.skill_keys[key] = 0
 				@item_window.active = false
 				@ihk_window.active = @ihk_window.visible = true
 			end

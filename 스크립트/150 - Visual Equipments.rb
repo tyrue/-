@@ -129,6 +129,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			if SDK.state('SBABS') == true
 				if @character.is_a?(Game_Ally)
 					if $game_party.actors[@character.actor_id] != @actor
+						@actor = $game_party.actors[@character.actor_id]
 						return true
 					end
 				end
@@ -148,10 +149,24 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			if @actor == nil
 				return false
 			end
+			
+			a = false
 			for i in 0..4
-				return true if @equips_id[i] != actor_equip_id(i, @actor)
+				if @equips_id[i] != actor_equip_id(i, @actor)
+					@equips_id[i] = actor_equip_id(i, @actor)
+					a = true
+				end
 			end
-			return false
+			
+			if a
+				
+				# 장비 갈아입는 소리 보내주고 내 상태 보냄
+				Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 189; @ani_id = #{Network::Main.id};</player_animation>\n"
+				Network::Main.send_map
+				return true
+			else
+				return false
+			end
 		end
 		#--------------------------------------------------------------------------
 		def adv_update
@@ -167,6 +182,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@character_name != @character.character_name or
 				@character_hue != @character.character_hue or
 				equip_changed?
+				
 				# Remember tile ID, file name and hue
 				@tile_id = @character.tile_id
 				@character_name = @character.character_name

@@ -2388,9 +2388,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 157 # 해파리수하
-				if r <= 1 and $game_switches[378] == true # 용궁 전략문서 얻기 퀘
+				if r <= 10 and $game_switches[378] == true # 용궁 전략문서 얻기
 					# 전략문서
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 98 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				if r <= 5 
+					# 해파리의 심장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 99 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			end
 		end
@@ -3851,11 +3855,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					self.damage += rand(amp+1) + rand(amp+1) - amp
 				end
 				
-				p self.damage
+				
 				if self.damage > 0
 					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 10, 2].max + [self.mdef / 20, 2].max))
 				end
-				p self.damage
+				
 				
 				# Second hit detection
 				eva = 8 * self.agi / user.dex + self.eva

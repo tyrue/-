@@ -92,10 +92,12 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			return if @netid == Network::Main.id
 			@oldx = @x
 			@oldy = @y
+			
+			eval(data) unless data == nil
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]
 			end
-			eval(data) unless data == nil
+			
 			@transparent = (not $game_map.map_id == @map_id) rescue @transparent =false
 			net_move if @oldx != @x or @oldy != @y 
 			@move_tom = false

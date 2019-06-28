@@ -38,6 +38,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			else
 				equips = []
 				equips = equip_char_array
+				
 				# destruir o velho bitmap
 				self.bitmap.dispose unless self.bitmap == nil
 				# desenhar o bitmap do char

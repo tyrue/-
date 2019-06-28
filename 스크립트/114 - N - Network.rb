@@ -275,6 +275,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Start Data
 			#-------------------------------------------------------------------------- 
 			def self.send_start
+				
 				send = ""
 				# Send Username And character's Graphic Name
 				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
@@ -384,6 +385,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Requested Data
 			#-------------------------------------------------------------------------- 
 			def self.send_start_request(id)
+				
+				
 				send = ""
 				# Send Username And character's Graphic Name
 				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
@@ -409,6 +412,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Map Id data
 			#-------------------------------------------------------------------------- 
 			def self.send_map
+				
+				
 				send = ""
 				# Send Username And character's Graphic Name
 				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
@@ -509,6 +514,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Stats
 			#-------------------------------------------------------------------------- 
 			def self.send_newstats
+				
+				
 				hp = $game_party.actors[0].hp
 				sp = $game_party.actors[0].sp
 				agi = $game_party.actors[0].agi
@@ -529,7 +536,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					m += 1
 				end
 				c += "]"
-				stats = "@hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}"
+				stats = "@hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
 				@socket.send("<5>#{stats}</5>\n")
 			end
 			#--------------------------------------------------------------------------
@@ -1148,6 +1155,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 서버에서 방송한 데이터
 				when /<5 (.*)>(.*)<\/5>/
+					
 					# Update Player
 					self.update_net_player($1, $2)
 					# If it is first time connected...

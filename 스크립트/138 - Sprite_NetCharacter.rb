@@ -98,12 +98,14 @@ class Sprite_NetCharacter < RPG::Sprite
 		# If tile ID, file name, or hue are different from current ones
 		if @tile_id != @character.tile_id or
 			@character_name != @character.character_name or
-			@character_hue != @character.character_hue or 
-			
+			@character_hue != @character.character_hue or
+			@character.equip_change
 			#Updates tile info
+			
 			update_tile
+			@character.equip_change = false
 		end
-		update_tile
+		# update_tile
 		# Set visible situation
 		self.visible = (not @character.transparent)
 		# If graphic is character

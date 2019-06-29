@@ -46,6 +46,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			attr_accessor :armor4_id
 			attr_accessor :capelli
 			attr_accessor :equips
+			attr_accessor :equip_change
 		end  
 		#--------------------------------------------------------------------------
 		# * Initializes a network player.
@@ -75,6 +76,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@pci = $game_party.actors[0].class_name
 			@message = ""
 			if User_Edit::VISUAL_EQUIP_ACTIVE
+				@equip_change = false
 				@weapon_id = 0
 				@armor1_id = 0
 				@armor2_id = 0
@@ -94,6 +96,9 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@oldy = @y
 			
 			eval(data) unless data == nil
+			if new_equip?
+				@equip_change = true
+			end
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]
 			end

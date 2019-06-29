@@ -466,6 +466,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * 방향 보냄
 			#-------------------------------------------------------------------------- 
 			def self.send_direction
+				return if @oldd == $game_player.direction
 				return if @mapplayers == {}
 				send = ""
 				# Increase Steps if the oldx or the oldy do not match the new ones
@@ -483,6 +484,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Move Update
 			#-------------------------------------------------------------------------- 
 			def self.send_move_change
+				
 				return if @oldx == $game_player.x and @oldy == $game_player.y
 				return if @mapplayers == {}
 				send = ""

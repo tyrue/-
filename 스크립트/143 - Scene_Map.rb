@@ -63,6 +63,7 @@ class Scene_Map
 		update_netplayers
 		# Update Move
 		Network::Main.send_move_change
+		Network::Main.send_direction
 		# Update Mouse Position
 		update_mouse
 		$chat.update

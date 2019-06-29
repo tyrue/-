@@ -931,7 +931,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end      
 			# Update the enemy attack or follow
-			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 30) == 0
+			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45) == 0
 			# Skip this if the attack killed the enemy
 			return if enemy == nil or enemy.attacking == nil or enemy.event.moving?
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
@@ -1009,7 +1009,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Get the skill scope
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
-						return if Graphics.frame_count % (e.aggressiveness * 30) != 0
+						return if Graphics.frame_count % (e.aggressiveness * 45) != 0
 						next if !in_direction?(e.event, actor.event)
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
@@ -1052,7 +1052,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 					when 2 #All Emenies 적 전체
 						# 해당 스킬 범위에 적이 있으면 그 적들에게 스킬을 발사
-						return if Graphics.frame_count % (e.aggressiveness * 30) != 0
+						return if Graphics.frame_count % (e.aggressiveness * 45) != 0
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
@@ -2973,7 +2973,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			super(parent,actor,skill)
 			@range_skill = $ABS.RANGE_SKILLS[skill.id]
 			@range = @range_skill[0]
-			@opacity = 10 if @range == 1
+			@opacity = 20 if @range == 1
 			@move_speed = @range_skill[1]
 			@character_name = @range_skill[2]
 			@skill = skill
@@ -2984,6 +2984,15 @@ if SDK.state("Mr.Mo's ABS") == true
 		def check_event_trigger_touch(x, y)
 			return if @stop
 			hit_player if x == $game_player.x and y == $game_player.y
+			
+			# 여기서 넷 플레이어인지 확인해야함
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				if player.x == x and player.y == y
+					hit_net_player(player)
+				end
+			end
+			
 			for event in $game_map.events.values
 				if event.x == x and event.y == y
 					if event.character_name == "" or ($ABS.enemies[event.id] != nil and $ABS.enemies[event.id].dead?) or event.erased
@@ -2994,6 +3003,21 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Hit net_Player
+		#--------------------------------------------------------------------------
+		def hit_net_player(actor)
+			@stop = true
+			#Attack It's enemy
+			#~ actor.effect_skill($game_party.actors[0], @skill)
+			#Show animation on event
+			
+			# 해당 대상 애니메이션 재생하도록 보냄
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</27>\n"
+		end 
+		
+		
 		#--------------------------------------------------------------------------
 		# * Hit Player
 		#--------------------------------------------------------------------------

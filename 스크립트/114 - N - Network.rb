@@ -1121,6 +1121,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $ABS.enemies[data[1].to_i] != nil
 						x = data[3].to_i
 						y = data[4].to_i
+						
+						if $ABS.enemies[data[1].to_i].event.x == x and $ABS.enemies[data[1].to_i].event.y == y
+							# p "#{$ABS.enemies[data[1].to_i].event.x},#{$ABS.enemies[data[1].to_i].event.y} : #{x},#{y}"
+							return
+						end
+						
 						# 몹 이동
 						case data[2].to_i
 						when 1
@@ -1133,6 +1139,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].event.move_up(true, true)
 						end
 						if $ABS.enemies[data[1].to_i].event.x != x or $ABS.enemies[data[1].to_i].event.y != y
+							# p "#{$ABS.enemies[data[1].to_i].event.x},#{$ABS.enemies[data[1].to_i].event.y} : #{x},#{y}"
 							$ABS.enemies[data[1].to_i].event.moveto(x,y)
 						end
 					end
@@ -2169,7 +2176,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					eval($1)
 					if @ani_map == $game_map.map_id
 						if @ani_id != -1
-							$ani_character[@ani_id.to_i].animation_id = @ani_number if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
+							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
+								$ani_character[@ani_id.to_i].animation_id = @ani_number 
+								# 상대방도 애니메이션 뜨도록 해야함
+							end
 						elsif @ani_event >= 0
 							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
 						else

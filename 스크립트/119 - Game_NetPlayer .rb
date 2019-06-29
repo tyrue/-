@@ -241,12 +241,14 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 					# Set to effective flag
 					effective = true
 				end
+				
 				# Substract damage from HP
 				last_hp = @hp
 				@hp -= @damage
 				effective |= @hp != last_hp
 				# State change
 				@state_changed = false
+				
 				#Get all the plus states
 				s = "["
 				m = user.plus_state_set
@@ -257,6 +259,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 				end
 				s += "]"
 				Network::Main.socket.send("<state>states_plus(#{s})</state>\n")
+				
 				#Get all the minus states
 				s = "["
 				m = user.minus_state_set
@@ -267,6 +270,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 				end
 				s += "]"
 				Network::Main.socket.send("<state>states_minus(#{s})</state>\n")
+				
 				# If power is 0
 				if skill.power == 0
 					# Set damage to an empty string
@@ -277,6 +281,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 						@damage = "Miss"
 					end
 				end
+				
 				# If miss occurs
 			else
 				# Set damage to "Miss"

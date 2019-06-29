@@ -75,11 +75,11 @@ end
 # * Updates Input
 #--------------------------------------------------------------------------
 def update_input
-	if Input.trigger?(Input::C)
+	if Input.trigger?(Input::Letters["S"])
 		for player in Network::Main.mapplayers.values
 			next if player == nil
 			next if not face_too?(player)
-			update_pvp if SDK.state('Player_vs_Player2')
+			update_pvp
 		end
 	end
 end
@@ -146,6 +146,14 @@ def in_range?(object)
 	return false if object.real_y <= screne_y
 	return false if object.real_y >= screne_height
 	return true
+end
+#--------------------------------------------------------------------------
+# * update pvp 업데이트 pvp
+#--------------------------------------------------------------------------
+def update_pvp
+	# 만약 pvp 스위치 켜져 있으면  싸움 가능
+	# 데미지 계산해서 보내기
+	p "gd"
 end
 
 

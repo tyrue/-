@@ -153,7 +153,7 @@ end
 def update_pvp
 	# 만약 pvp 스위치 켜져 있으면  싸움 가능
 	# 데미지 계산해서 보내기
-	p "gd"
+	
 end
 
 

@@ -1461,6 +1461,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				$alive_size = 0
+				for e in enemies#.values
+					#Skip NIL values
+					next if e== nil
+					#Skip 이미 적이 죽은거면 넘어가
+					next if e.dead?
+					# Skip if the enemy is an ally and can't hurt allies.
+					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
+					$alive_size += 1
+				end
+				
+				
 				#Get all enemies
 				for e in enemies#.values
 					#Skip NIL values
@@ -1470,7 +1481,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					# Skip if the enemy is an ally and can't hurt allies.
 					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
 					
-					$alive_size += 1
 					#Attack enemy
 					e.effect_skill(@actor, skill)
 					#Show Animetion on enemy
@@ -3739,8 +3749,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If hit occurs
 			if hit_result == true
 				# Calculate power
-				
 				power = 0 + user.atk / 2
+				
 				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
 				case skill.id
 					# 주술사 스킬

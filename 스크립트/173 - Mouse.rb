@@ -41,6 +41,7 @@ module Mouse
 	def update
 		x, y = Input.mouse_pos
 		(x == nil or y == nil) ? return : 0
+		
 		if Input.mouse_lbutton
 			@ox = x; @oy = y
 		else

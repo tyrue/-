@@ -19,6 +19,8 @@ class Jindow_Inventory < Jindow
 	end
 	
 	def sort
+		@item.clear
+		
 		for i in 1..$data_items.size
 			if $game_party.item_number(i) > 0
 				if i != nil
@@ -45,7 +47,7 @@ class Jindow_Inventory < Jindow
 			i.y = (i.id / 6) * 36 + 18
 		end
 	end	
-		
+	
 	def update
 		self.x != 205
 		self.y != 162
@@ -54,7 +56,7 @@ class Jindow_Inventory < Jindow
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
 				case i.type
-				when 0
+				when 0 # 아이템
 					$game_party.actors[0].item_effect(i.item)
 					$game_system.se_play(i.item.menu_se)
 					if i.item.consumable
@@ -77,17 +79,20 @@ class Jindow_Inventory < Jindow
 						$game_system.se_play(i.item.menu_se)
 					end
 					
-				when 1
+				when 1 # 무기
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(0, i.item.id)
 						Audio.se_play("Audio/SE/장비")
+						
 					end
-				when 2
+				when 2 # 방어구
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(i.item.kind + 1, i.item.id)
 						Audio.se_play("Audio/SE/장비")
+						
 					end
 				end
+				sort
 			end
 		else
 			for i in @item
@@ -104,7 +109,7 @@ class Jindow_Inventory < Jindow
 				end
 			end
 		end
-		sort
+		# sort
 		super
 	end	
 	

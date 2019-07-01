@@ -40,7 +40,7 @@ module Input
 		else
 			button = @@key_state.call(VK_LBUTTON)
 		end
-		return(button == -32767 or button == 32768)
+		return(button == -32767 or button == 32768 or button == -32768)
 	end
 	def mouse_rbutton(ignore_swap = false)
 		if @@swapped and !ignore_swap
@@ -48,11 +48,11 @@ module Input
 		else
 			button = @@key_state.call(VK_RBUTTON)
 		end
-		return(button == -32767 or button == 32768)
+		return(button == -32767 or button == 32768 or button == -32768)
 	end
 	def mouse_mbutton
 		button = @@key_state.call(VK_MBUTTON)
-		return(button == -32767 or button == 32768)
+		return(button == -32767 or button == 32768 or button == -32768)
 	end
 end
 $scr2cli = Win32API.new 'user32', 'ScreenToClient', %w(l p), 'i'

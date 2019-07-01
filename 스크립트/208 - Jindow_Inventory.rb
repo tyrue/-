@@ -15,6 +15,10 @@ class Jindow_Inventory < Jindow
 		self.refresh("Inventory")
 		self.x = 360
 		self.y = 95
+		sort
+	end
+	
+	def sort
 		for i in 1..$data_items.size
 			if $game_party.item_number(i) > 0
 				if i != nil
@@ -40,8 +44,8 @@ class Jindow_Inventory < Jindow
 			i.x = (i.id % 6) * 36
 			i.y = (i.id / 6) * 36 + 18
 		end
-	end
-	
+	end	
+		
 	def update
 		self.x != 205
 		self.y != 162
@@ -86,118 +90,30 @@ class Jindow_Inventory < Jindow
 				end
 			end
 		else
-			
 			for i in @item
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
 				if $trade_item1 != 1
-					case i.type
-					when 0
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 0, 1)
-						else
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-							Hwnd.dispose("Trade2")
-						end
-						
-					when 1
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 1, 1)
-						else
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-							Hwnd.dispose("Trade2")
-						end
-						
-					when 2
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 2, 1)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-					end
-					
+					check(i,1)
 				elsif $trade_item2 != 1
-					case i.type
-					when 0
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 0, 2)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-						
-					when 1
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 1, 2)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-						
-					when 2
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 2, 2)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-					end
-					
+					check(i,2)
 				elsif $trade_item3 != 1
-					case i.type
-					when 0
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 0, 3)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-					when 1
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 1, 3)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-						
-					when 2
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 2, 3)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-					end
-					
+					check(i,3)
 				elsif $trade_item4 != 1
-					case i.type
-					when 0
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 0, 4)
-						else
-							Hwnd.dispose("Trade2")
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-						end
-						
-					when 1
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 1, 4)
-						else
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-							Hwnd.dispose("Trade2")
-						end
-					when 2
-						if $game_variables[1003] < 1
-							Jindow_Trade2.new(i.item.id, 2, 4)
-						else
-							$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
-							Hwnd.dispose("Trade2")
-						end
-					end
+					check(i,4)
 				end
 			end
 		end
+		sort
 		super
+	end	
+	
+	def check(i,option)
+		if $game_variables[1003] < 1
+			Jindow_Trade2.new(i.item.id, i.type, option)
+		else
+			Hwnd.dispose("Trade2")
+			$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")
+		end
 	end
 end

@@ -32,6 +32,7 @@ class Game_Character
 	# * Show Demage
 	#--------------------------------------------------------------------------
 	def show_demage(n,c)
+		
 		@damage_show = n
 		@show_critical = c
 	end

@@ -120,6 +120,7 @@ class Sprite_NetCharacter < RPG::Sprite
 		self.bush_depth = @character.bush_depth
 		# Animation
 		update_ani if $ani_character[@netid.to_i].animation_id != 0
+		
 		if @character.damage_show != nil
 			damage(@character.damage_show, @character.show_critical)
 			@character.show_demage(nil, false)

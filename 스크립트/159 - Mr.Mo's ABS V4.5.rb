@@ -1677,8 +1677,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				actor = $game_party.actors[i]
 				if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
 					last_level = actor.level
-					if not $netparty.size < 2   # 파티중일경우 경험치, 돈의 습득
-						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{$game_map.map_id}</nptgain>\n")
+					if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
+						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{$game_map.map_id} #{enemy.event.id}</nptgain>\n")
 					else
 						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다.")
 						actor.exp += exp    #골드를 습득하는 경우 (파티 아닐때)

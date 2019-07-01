@@ -2018,10 +2018,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
-				when /<nptgain>(.*) (.*) (.*) (.*)<\/nptgain>/
+				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/
 					if $npt == $3.to_s
 						if "#{$game_map.map_id}" == $4.to_s
 							if $netparty.size > 1
+								return if $game_party.actors[0].hp <= 0  
 								$game_variables[1010] = $game_party.actors[0].level
 								
 								expgave = $1.to_i / 7 
@@ -2030,17 +2031,68 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								$game_party.actors[0].exp += expgave3
 								$game_variables[1011] = $game_party.actors[0].level
 								
+								goldgave = $2.to_i / $netparty.size
+								$game_party.gain_gold(goldgave)
+								$console.write_line("[파티]:경험치:#{expgave3} 금전:#{goldgave}")
+								
 								if $game_variables[1011] > $game_variables[1010]
 									자동저장
 									$console.write_line("[정보]:레벨이 올랐습니다!")
+									# 직업에 따라 체력, 마력 증가량 다르게 함
+									actor = $game_party.actors[0]
+									
+									if(actor.class_id == 7) # 전사 99때 체력 4500
+										actor.maxhp += 16
+										actor.str += 3
+									elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
+										actor.maxsp += 5
+										actor.int += 3
+									end
+									# 풀체
+									actor.hp = actor.maxhp
+									actor.sp = actor.maxsp
 									$game_player.animation_id = 180
 									Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</player_animation>\n"
 								end
-								if $game_party.actors[0].hp > 0  
-									goldgave = $2.to_i / $netparty.size
-									$game_party.gain_gold(goldgave)
-									$console.write_line("[파티]:경험치:#{expgave3} 금전:#{goldgave}")
-								end
+								
+								if $ABS.enemies[$5.to_i] != nil
+									enemy = $ABS.enemies[$5.to_i]
+									event = enemy.event
+									case enemy.trigger[0]
+									when 0
+										# 여기서 랜덤하게 움직이는걸 해야함
+										event.fade = true if FADE_DEAD
+										if !FADE_DEAD
+											event.character_name = ""
+											event.erase
+										end
+									when 1
+										event.fade = true if FADE_DEAD
+										print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
+										$game_switches[enemy.trigger[1]] = true
+										$game_map.need_refresh = true
+									when 2
+										event.fade = true if FADE_DEAD
+										print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
+										if enemy.trigger[2] == 0
+											$game_variables[enemy.trigger[1]] += 1
+											$game_map.need_refresh = true
+										else
+											$game_variables[enemy.trigger[1]] = enemy.trigger[2]
+											$game_map.need_refresh = true
+										end
+									when 3 
+										event.fade = true if FADE_DEAD
+										value = "A" if enemy.trigger[1] == 1
+										value = "B" if enemy.trigger[1] == 2
+										value = "C" if enemy.trigger[1] == 3
+										value = "D" if enemy.trigger[1] == 4
+										print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
+										key = [$game_map.map_id, event.id, value]
+										$game_self_switches[key] = true
+										$game_map.need_refresh = true
+									end									
+								end								
 							end
 						end
 					end

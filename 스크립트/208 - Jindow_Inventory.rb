@@ -15,6 +15,10 @@ class Jindow_Inventory < Jindow
 		self.refresh("Inventory")
 		self.x = 360
 		self.y = 95
+		sort
+	end
+	
+	def sort
 		for i in 1..$data_items.size
 			if $game_party.item_number(i) > 0
 				if i != nil
@@ -40,8 +44,8 @@ class Jindow_Inventory < Jindow
 			i.x = (i.id % 6) * 36
 			i.y = (i.id / 6) * 36 + 18
 		end
-	end
-	
+	end	
+		
 	def update
 		self.x != 205
 		self.y != 162
@@ -100,6 +104,7 @@ class Jindow_Inventory < Jindow
 				end
 			end
 		end
+		sort
 		super
 	end	
 	

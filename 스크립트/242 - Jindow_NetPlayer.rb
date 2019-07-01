@@ -14,9 +14,15 @@ class Jindow_NetPlayer < Jindow
 		player = []
 		i = 0
 		for netplayer in Network::Main.players.values 
-			@buttons[netplayer.username] = J::Button.new(self).refresh(120, netplayer.username)
-			@buttons[netplayer.username].y = i * 30 + 12
-			i += 1
+			if netplayer.netid == Network::Main.id
+				@buttons[$game_party.actors[0].name] = J::Button.new(self).refresh(120, $game_party.actors[0].name)
+				@buttons[$game_party.actors[0].name].y = i * 30 + 12
+				i += 1
+			else
+				@buttons[netplayer.username] = J::Button.new(self).refresh(120, netplayer.username)
+				@buttons[netplayer.username].y = i * 30 + 12
+				i += 1
+			end
 		end
 		@a = J::Button.new(self).refresh(60, "취소")
 		@a.x = self.width - 60
@@ -30,6 +36,10 @@ class Jindow_NetPlayer < Jindow
 				@buttons[netplayer.username].click ?
 				
 				Jindow_NetPlayer_Info.new(netplayer.id, netplayer.username) : 0
+			elsif @buttons[$game_party.actors[0].name] != nil
+				@buttons[$game_party.actors[0].name].click ?
+				
+				Jindow_Status.new : 0
 			end
 		end
 		if @a.click  # 취소

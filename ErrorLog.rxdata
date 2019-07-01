@@ -5212,3 +5212,15 @@ On <<Tue 25 Jun 2019, 22:14:15>> the error <<compile error
 Section159:4447: syntax error
 				$ABS.skill_keys.[key] = 0
 				                 ^ ()>> occured.
+On <<Mon 01 Jul 2019, 16:51:34>> the error <<Section242:41: syntax error ()>> occured.
+On <<Mon 01 Jul 2019, 16:51:34>> the error <<compile error
+Section242:41: syntax error ()>> occured.
+On <<Mon 01 Jul 2019, 16:58:35>> the error <<Section242:42: syntax error ()>> occured.
+On <<Mon 01 Jul 2019, 16:58:35>> the error <<Section242:42: syntax error
+Section242:50: syntax error ()>> occured.
+On <<Mon 01 Jul 2019, 16:58:35>> the error <<compile error
+Section242:42: syntax error
+Section242:50: syntax error ()>> occured.
+On <<Mon 01 Jul 2019, 18:00:03>> the error <<Section204:131: target of repeat operator is not specified: /*./ ()>> occured.
+On <<Mon 01 Jul 2019, 18:00:03>> the error <<compile error
+Section204:131: target of repeat operator is not specified: /*./ ()>> occured.

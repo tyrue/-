@@ -119,7 +119,7 @@ class Jindow_Item_Info < Jindow
 				end
 			end
 			
-			@description.bitmap = Bitmap.new(self.width, h + bitmap.font.size + 2)
+			@description.bitmap = Bitmap.new(self.width, h + bitmap.font.size * 3)
 			@description.bitmap.font.color.set(255, 255, 255, 255)
 			@description.bitmap.font.alpha = 3
 			@description.bitmap.font.beta = 1
@@ -134,7 +134,6 @@ class Jindow_Item_Info < Jindow
 					w = 0
 					h += rect.height
 					@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
-					w += rect.width
 				else
 					@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
 					w += rect.width
@@ -179,22 +178,22 @@ class Jindow_Item_Info < Jindow
 		when 0
 			if item.recover_hp != 0
 				rect = @detail.bitmap.text_size(item.recover_hp.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 + " + item.recover_hp.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 " + item.recover_hp.to_s + "회복")
 				h += rect.height
 			end
 			if item.recover_sp != 0
 				rect = @detail.bitmap.text_size(item.recover_sp.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 +  " + item.recover_sp.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 " + item.recover_sp.to_s + "회복")
 				h += rect.height
 			end
 			if item.recover_hp_rate != 0
 				rect = @detail.bitmap.text_size(item.recover_hp_rate.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 + " + item.recover_hp_rate.to_s + "%")
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 " + item.recover_hp_rate.to_s + "%회복")
 				h += rect.height
 			end
 			if item.recover_sp_rate != 0
 				rect = @detail.bitmap.text_size(item.recover_sp_rate.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 += " + item.recover_sp_rate.to_s + "%")
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 " + item.recover_sp_rate.to_s + "%회복")
 				h += rect.height
 			end
 		when 1

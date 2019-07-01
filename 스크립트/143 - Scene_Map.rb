@@ -76,10 +76,11 @@ end
 #--------------------------------------------------------------------------
 def update_input
 	if Input.trigger?(Input::Letters["S"])
+		return if $ABS.button_mash <= 38
 		for player in Network::Main.mapplayers.values
 			next if player == nil
 			next if not face_too?(player)
-			update_pvp
+			update_pvp(player)
 		end
 	end
 end
@@ -150,7 +151,7 @@ end
 #--------------------------------------------------------------------------
 # * update pvp 업데이트 pvp
 #--------------------------------------------------------------------------
-def update_pvp
+def update_pvp(player)
 	# 만약 pvp 스위치 켜져 있으면  싸움 가능
 	# 데미지 계산해서 보내기
 	

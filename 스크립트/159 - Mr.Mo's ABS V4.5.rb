@@ -501,6 +501,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :sneak_max
 		attr_accessor :sneak_min
 		attr_accessor :active
+		attr_accessor :button_mash
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		# 생성자, 변수 초기화

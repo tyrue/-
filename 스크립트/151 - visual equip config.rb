@@ -40,8 +40,8 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)진일신검', 2] 	if id == 128  #용량제육봉
 			return ['(착용)현철중검', 2] 	if id == 129  #도깨비방망이
 			return ['(착용)영웅의칼\'뇌', 2] 	if id == 130  #산적왕의칼
-			return ['(착용)불의영혼봉', 2] 	if id == 130  #다문창
-			return ['(착용)불의영혼봉', 2] 	if id == 130  #인어장군지팡이
+			return ['(착용)불의영혼봉', 2] 	if id == 131  #다문창
+			return ['(착용)불의영혼봉', 2] 	if id == 132  #인어장군지팡이
 			
 			# 방어구
 			return ['(착용)연두갑주', 2] 		if id == 1  	#초심자의갑주

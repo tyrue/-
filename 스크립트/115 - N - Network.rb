@@ -1094,10 +1094,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						# 몹 체력 적용
 						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
 							$ABS.enemies[data[1].to_i].hp = data[2].to_i
-							if $ABS.enemies[data[1].to_i].hp == 0 # 체력이 0이면 죽은거지
-								$ABS.enemies[data[1].to_i].event.erase
-								$game_map.refresh
-							end
 						end
 					end
 					return true
@@ -1648,7 +1644,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					간단메세지("[세계후] #{$1.to_s} : #{$2.to_s}")
 					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", Color.new(65, 105, 255))
 					
-				when /<respawn>(.*),(.*),(.*),(.*),(.*)<\/respawn>/		
+				when /<respawn>(.*)<\/respawn>/		
 					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
@@ -1659,23 +1655,76 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$ABS.enemies[data[1].to_i].event.erased = false
 						event = $ABS.enemies[data[1].to_i].event
 						event.refresh
-						$ABS.enemies[data[1].to_i].event.moveto(data[2].to_i, data[3].to_i)
-						$ABS.enemies[data[1].to_i].event.direction = data[4].to_i
-						$game_map.refresh
-					end
-					
-				when /<enemy_dead>(.*),(.*),(.*)<\/enemy_dead>/	
-					id = $1.to_i # 적 id
-					event_id = $2.to_i # 이벤트 id
-					map_id = $3.to_i
-					if $game_map.map_id == map_id
-						if $ABS.enemies[id] != nil
-							$game_map.events[event_id].fade = true
-							$ABS.enemies[id].hp = 0
+						if $ABS.enemies[data[1].to_i].event != nil
+							$ABS.enemies[data[1].to_i].event.moveto(data[2].to_i, data[3].to_i)
+							$ABS.enemies[data[1].to_i].event.direction = data[4].to_i
 						end
 						$game_map.refresh
 					end
-					# id, event_id, map_id, x, y
+					
+				when /<enemy_dead>(.*),(.*),(.*),(.*)<\/enemy_dead>/	
+					id = $1.to_i # 적 id
+					event_id = $2.to_i # 이벤트 id
+					map_id = $3.to_i
+					npt = $4.to_i
+					
+					if $game_map.map_id == map_id
+						if $ABS.enemies[id] != nil and (npt.to_i != $npt.to_i or $netparty.size < 2)
+							
+							$game_map.events[event_id].fade = true
+							$ABS.enemies[id].hp = 0
+						elsif $ABS.enemies[id] != nil and npt.to_i == $npt.to_i
+							
+							enemy = $ABS.enemies[id]
+							event = enemy.event
+							
+							case enemy.trigger[0]
+							when 0
+								# 여기서 랜덤하게 움직이는걸 해야함
+								event.fade = true if FADE_DEAD
+								if !FADE_DEAD
+									event.character_name = ""
+									event.erase
+								end
+							when 1
+								event.fade = true if FADE_DEAD
+								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
+								$game_switches[enemy.trigger[1]] = true
+								$game_map.need_refresh = true
+							when 2
+								
+								event.fade = true if FADE_DEAD
+								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
+								if enemy.trigger[2] == 0
+									
+									$game_variables[enemy.trigger[1]] += 1
+									$game_map.need_refresh = true
+								else
+									
+									$game_variables[enemy.trigger[1]] = enemy.trigger[2]
+									$game_map.need_refresh = true
+								end
+							when 3 
+								
+								event.fade = true if FADE_DEAD
+								value = "A" if enemy.trigger[1] == 1
+								value = "B" if enemy.trigger[1] == 2
+								value = "C" if enemy.trigger[1] == 3
+								value = "D" if enemy.trigger[1] == 4
+								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
+								key = [$game_map.map_id, event.id, value]
+								
+								$game_self_switches[key] = true
+								$game_map.need_refresh = true
+								
+							end						
+						end
+						$game_map.refresh
+						
+					end
+					
+					
+					
 					
 					# 템 드랍 
 				when /<Drop>(.*)<\/Drop>/
@@ -2023,6 +2072,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if "#{$game_map.map_id}" == $4.to_s
 							if $netparty.size > 1
 								return if $game_party.actors[0].hp <= 0  
+								
 								$game_variables[1010] = $game_party.actors[0].level
 								
 								expgave = $1.to_i / 7 
@@ -2053,45 +2103,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									actor.sp = actor.maxsp
 									$game_player.animation_id = 180
 									Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</player_animation>\n"
-								end
-								
-								if $ABS.enemies[$5.to_i] != nil
-									enemy = $ABS.enemies[$5.to_i]
-									event = enemy.event
-									case enemy.trigger[0]
-									when 0
-										# 여기서 랜덤하게 움직이는걸 해야함
-										event.fade = true if FADE_DEAD
-										if !FADE_DEAD
-											event.character_name = ""
-											event.erase
-										end
-									when 1
-										event.fade = true if FADE_DEAD
-										print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
-										$game_switches[enemy.trigger[1]] = true
-										$game_map.need_refresh = true
-									when 2
-										event.fade = true if FADE_DEAD
-										print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
-										if enemy.trigger[2] == 0
-											$game_variables[enemy.trigger[1]] += 1
-											$game_map.need_refresh = true
-										else
-											$game_variables[enemy.trigger[1]] = enemy.trigger[2]
-											$game_map.need_refresh = true
-										end
-									when 3 
-										event.fade = true if FADE_DEAD
-										value = "A" if enemy.trigger[1] == 1
-										value = "B" if enemy.trigger[1] == 2
-										value = "C" if enemy.trigger[1] == 3
-										value = "D" if enemy.trigger[1] == 4
-										print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
-										key = [$game_map.map_id, event.id, value]
-										$game_self_switches[key] = true
-										$game_map.need_refresh = true
-									end									
 								end								
 							end
 						end

@@ -864,7 +864,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					event.move_random
 				end
 				event.moveto(event.x,event.y)
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{enemy.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
 				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
 				$game_map.refresh
 			end
@@ -1572,7 +1572,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			event = enemy.event
 			#여기다가 이 이벤트를 없애는 명령하기
 			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
-			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id}</enemy_dead>\n")
+			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
 			case enemy.trigger[0]
 			when 0
 				# 여기서 랜덤하게 움직이는걸 해야함

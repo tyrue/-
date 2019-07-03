@@ -864,7 +864,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					event.move_random
 				end
 				event.moveto(event.x,event.y)
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{enemy.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
+				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
 				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
 				$game_map.refresh
 			end
@@ -4195,7 +4195,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@temp_frequency = 0 
 			@actor = self
 			@respawn = 0
-			@aggro = true 
+			@aggro = $is_map_first ? true : false
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

@@ -1501,16 +1501,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 					# 공지 메시지 받음
-				when /<chat>(.*),(.*)<\/chat>/
+				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
-						if $2.to_i == 0
-							$game_temp.chat_log.push($1.to_s)
-							$game_temp.chat_refresh = true
-						else
-							$chat.write("공지 : " + $1.to_s, Color.new(0, 0, 0))
-							$game_temp.chat_log.push($1.to_s)
-							$game_temp.chat_refresh = true
-						end
+						$chat.write("공지 : " + $1.to_s, Color.new(0, 0, 0))
+						$game_temp.chat_log.push($1.to_s)
+						$game_temp.chat_refresh = true						
 					end
 					return true
 					
@@ -1651,14 +1646,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true if $game_map.map_id != data[0].to_i
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
+						# p "#{$ABS.enemies[data[1].to_i]}, #{data[1].to_i}"
 						# 몹 죽었을때 리스폰 시간 적용
 						$ABS.enemies[data[1].to_i].event.erased = false
 						event = $ABS.enemies[data[1].to_i].event
-						event.refresh
 						if $ABS.enemies[data[1].to_i].event != nil
 							$ABS.enemies[data[1].to_i].event.moveto(data[2].to_i, data[3].to_i)
 							$ABS.enemies[data[1].to_i].event.direction = data[4].to_i
 						end
+						event.refresh
 						$game_map.refresh
 					end
 					
@@ -1681,32 +1677,32 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							case enemy.trigger[0]
 							when 0
 								# 여기서 랜덤하게 움직이는걸 해야함
-								event.fade = true if FADE_DEAD
+								$game_map.events[event_id].fade = true
+								$ABS.enemies[id].hp = 0
 								if !FADE_DEAD
 									event.character_name = ""
 									event.erase
 								end
 							when 1
-								event.fade = true if FADE_DEAD
+								$game_map.events[event_id].fade = true
+								$ABS.enemies[id].hp = 0
 								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 								$game_switches[enemy.trigger[1]] = true
 								$game_map.need_refresh = true
 							when 2
-								
-								event.fade = true if FADE_DEAD
+								$game_map.events[event_id].fade = true
+								$ABS.enemies[id].hp = 0
 								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 								if enemy.trigger[2] == 0
-									
 									$game_variables[enemy.trigger[1]] += 1
 									$game_map.need_refresh = true
 								else
-									
 									$game_variables[enemy.trigger[1]] = enemy.trigger[2]
 									$game_map.need_refresh = true
 								end
 							when 3 
-								
-								event.fade = true if FADE_DEAD
+								$game_map.events[event_id].fade = true
+								$ABS.enemies[id].hp = 0
 								value = "A" if enemy.trigger[1] == 1
 								value = "B" if enemy.trigger[1] == 2
 								value = "C" if enemy.trigger[1] == 3

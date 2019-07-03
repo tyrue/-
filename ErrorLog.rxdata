@@ -5227,3 +5227,5 @@ Section204:131: target of repeat operator is not specified: /*./ ()>> occured.
 On <<Mon 01 Jul 2019, 19:31:37>> the error << (#<Scene_Connect:0x7f78150>)>> occured.
 On <<Mon 01 Jul 2019, 19:31:51>> the error <<wrong number of arguments(2 for 0) (#<Scene_Map:0x7ecd080>)>> occured.
 On <<Tue 02 Jul 2019, 15:30:03>> the error <<class or module required (#<Scene_Map:0xc634b38>)>> occured.
+On <<Wed 03 Jul 2019, 12:01:42>> the error << (#<Scene_Connect:0xc465870>)>> occured.
+On <<Wed 03 Jul 2019, 16:57:04>> the error << (#<Scene_Map:0xc7e1c30>)>> occured.

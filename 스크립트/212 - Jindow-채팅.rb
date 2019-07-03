@@ -119,7 +119,7 @@ class Jindow_Chat_Input < Jindow
 			
 			
 			
-		else
+		else # 명령어가 아닌 그냥 일반 채팅일때
 			
 			case @chat_type
 				
@@ -167,8 +167,8 @@ class Jindow_Chat_Input < Jindow
 				@chat_type = "전체"
 			end
 			@a.refresh(40, @chat_type)
-			@type.bluck = true
-		elsif Key.trigger?(KEY_ENTER)  # 채팅 메세지를 전송
+			# @type.bluck = true
+		elsif Key.trigger?(KEY_ENTER)# 채팅 메세지를 전송
 			if not @type.result == ""
 				if @active == true
 					send_chat

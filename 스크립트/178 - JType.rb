@@ -1099,7 +1099,7 @@ module J
 		end
 		
 		def update_key
-			if Key.trigger?(KEY_BACKSPACE)  # 한 자 삭제
+			if Key.trigger?(KEY_BACKSPACE)
 				delete_text
 			end
 			if Key.trigger?(98) or Key.trigger?(KEY_ALT)  # 한 / 영 전환

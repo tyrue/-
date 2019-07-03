@@ -3,7 +3,7 @@ class Scene_Map
 	
 	alias scene_map_main main
 	def main
-		$map_chat_input = Jindow_Chat_Input.new
+		$map_chat_input = Jindow_Chat_Input.new # 채팅입력창
 		$game_system.menu_disabled = true
 		scene_map_main
 		$cbig = 0

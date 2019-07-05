@@ -96,7 +96,7 @@ def update_mouse
 				next if player == nil
 				next if player.x != Mouse.map_x or player.y != Mouse.map_y
 				if not Hwnd.include?("P_Status")
-					Jindow_P_Status.new(player.name, player.level, player.hp, player.maxhp, player.sp, player.maxsp, player.pci)
+					Jindow_P_Status.new(player.name, player.level, player.hp, player.maxhp, player.sp, player.maxsp, player.pci, player.netid)
 				end
 			end
 		end

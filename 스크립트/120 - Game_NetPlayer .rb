@@ -38,6 +38,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :guild
 		attr_accessor :saybal
 		attr_accessor :pci
+		attr_accessor :character_name
 		if User_Edit::VISUAL_EQUIP_ACTIVE
 			attr_accessor :weapon_id
 			attr_accessor :armor1_id
@@ -75,6 +76,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@maxsp = $game_party.actors[0].maxsp
 			@pci = $game_party.actors[0].class_name
 			@message = ""
+			@character_name = "바람머리"
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false
 				@weapon_id = 0

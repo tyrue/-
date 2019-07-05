@@ -15,7 +15,7 @@ class Jindow_NetPlayer < Jindow
 		self.y = 480 / 2 - self.max_height / 2
 		@buttons = {}
 		i = 0
-		for p in Network::Main.mapplayers.values
+		for p in Network::Main.players.values
 			@buttons[p.id] = J::Button.new(self).refresh(120, p.name)
 			@buttons[p.id].y = i * 30 + 12
 			i += 1

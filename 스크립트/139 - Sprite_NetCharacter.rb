@@ -101,7 +101,6 @@ class Sprite_NetCharacter < RPG::Sprite
 			@character_hue != @character.character_hue or
 			@character.equip_change
 			#Updates tile info
-			
 			update_tile
 			@character.equip_change = false
 		end

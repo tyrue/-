@@ -4,7 +4,7 @@
 #  - 유저를 클릭하면 해당 유저의 상세 정보를 표시합니다.
 #==============================================================================
 class Jindow_P_Status < Jindow
-	def initialize(usrname, lev, hp, mhp, sp, msp, pci)
+	def initialize(usrname, lev, hp, mhp, sp, msp, pci, netid)
 		super(0, 0, 70, 110)
 		self.name = usrname
 		@usrname = usrname
@@ -18,6 +18,8 @@ class Jindow_P_Status < Jindow
 		@mhp = mhp
 		@sp = sp
 		@msp = msp
+		@netid = netid
+		@netPlayer = Network::Main.players[@netid]
 		self.refresh("P_Status")
 		self.x = Mouse::x
 		self.y = Mouse::y
@@ -97,7 +99,7 @@ class Jindow_P_Status < Jindow
 		
 		
 		if @d.click # 정보
-			$chat.write ("[이름] : #{@usrname} [레벨] : #{@lev} [체력] : (#{@hp} / #{@mhp}) [마력] : (#{@sp} / #{@msp})", Color.new(65, 105, 0))
+			Jindow_NetPlayer_Info.new(@netPlayer.netid, @netPlayer.username)
 			Hwnd.dispose("P_Status")
 		end
 	end

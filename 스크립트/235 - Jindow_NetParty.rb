@@ -17,12 +17,14 @@ class Jindow_NetParty < Jindow
 		self.y = 75
 		
 		@buttons = {}
+		
 		i = 0
 		for netparty in $netparty
 			@buttons[netparty[0]] = J::Button.new(self).refresh(120,
 				netparty.to_s)
 			# "( " + netparty[0].to_s + " ) " + netparty[1].to_s)
 			@buttons[netparty[0]].y = i * 30 + 12
+			
 			i += 1
 		end
 		@a = J::Button.new(self).refresh(50, "탈퇴")

@@ -16,6 +16,7 @@ def nptyes1(npty)
 	data1 = npty
 	$netparty[0] = data
 	$netparty[1] = data1
+	# data1에 이름만 넣는게 아니라 해당 유저의 정보를 넣는게 좋은데..
 	Hwnd.dispose("NetParty")
 	Jindow_NetParty.new
 end

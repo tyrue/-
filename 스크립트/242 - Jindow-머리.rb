@@ -52,7 +52,7 @@ class Jindow_hairct < Jindow
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))           
 				$game_party.lose_gold(1000)
 				Hwnd.dispose(self)
-				
+				Network::Main.send_map
 			else
 				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
 					["금전이 부족합니다."],
@@ -74,7 +74,7 @@ class Jindow_hairct < Jindow
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))    
 				Hwnd.dispose(self)
-				
+				Network::Main.send_map
 			else
 				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
 					["금전이 부족합니다."],
@@ -92,15 +92,13 @@ class Jindow_hairct < Jindow
 				$game_party.actors[0].set_graphic("바람세운머리", 0, 0, 0)
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))    
-				
+				Network::Main.send_map
 			else
 				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
 					["금전이 부족합니다."],
 					["확인"], ["Hwnd.dispose(self)"], "머리변겅")
 				Hwnd.dispose(self)
 			end
-			
-			
 		end
 	end
 end

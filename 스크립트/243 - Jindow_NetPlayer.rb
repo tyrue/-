@@ -35,7 +35,7 @@ class Jindow_NetPlayer < Jindow
 			if @buttons[netplayer.username] != nil
 				@buttons[netplayer.username].click ?
 				
-				Jindow_NetPlayer_Info.new(netplayer.id, netplayer.username) : 0
+				Jindow_NetPlayer_Info.new(netplayer.netid, netplayer.username) : 0
 			elsif @buttons[$game_party.actors[0].name] != nil
 				@buttons[$game_party.actors[0].name].click ?
 				

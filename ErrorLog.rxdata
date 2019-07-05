@@ -5229,3 +5229,12 @@ On <<Mon 01 Jul 2019, 19:31:51>> the error <<wrong number of arguments(2 for 0) 
 On <<Tue 02 Jul 2019, 15:30:03>> the error <<class or module required (#<Scene_Map:0xc634b38>)>> occured.
 On <<Wed 03 Jul 2019, 12:01:42>> the error << (#<Scene_Connect:0xc465870>)>> occured.
 On <<Wed 03 Jul 2019, 16:57:04>> the error << (#<Scene_Map:0xc7e1c30>)>> occured.
+On <<Sat 06 Jul 2019, 01:59:58>> the error <<Section215:321: syntax error ()>> occured.
+On <<Sat 06 Jul 2019, 01:59:58>> the error <<compile error
+Section215:321: syntax error ()>> occured.
+On <<Sat 06 Jul 2019, 02:01:20>> the error <<Section215:321: syntax error ()>> occured.
+On <<Sat 06 Jul 2019, 02:01:20>> the error <<compile error
+Section215:321: syntax error ()>> occured.
+On <<Sat 06 Jul 2019, 02:04:30>> the error <<disposed sprite (#<Scene_Map:0x7eec368>)>> occured.
+On <<Sat 06 Jul 2019, 02:07:40>> the error <<disposed sprite (#<Scene_Map:0x80b3e78>)>> occured.
+On <<Sat 06 Jul 2019, 02:13:17>> the error <<disposed sprite (#<Scene_Map:0x7ed3dc0>)>> occured.

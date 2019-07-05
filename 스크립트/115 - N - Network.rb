@@ -385,8 +385,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Requested Data
 			#-------------------------------------------------------------------------- 
 			def self.send_start_request(id)
-				
-				
 				send = ""
 				# Send Username And character's Graphic Name
 				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
@@ -412,11 +410,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Map Id data
 			#-------------------------------------------------------------------------- 
 			def self.send_map
-				
-				
 				send = ""
 				# Send Username And character's Graphic Name
-				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
+				send += "@username = '#{self.name}'; @character_name = '#{$game_party.actors[0].character_name}'; "
 				# Sends Map ID, X and Y positions
 				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
 				# Sends Direction
@@ -516,8 +512,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Stats
 			#-------------------------------------------------------------------------- 
 			def self.send_newstats
-				
-				
 				hp = $game_party.actors[0].hp
 				sp = $game_party.actors[0].sp
 				agi = $game_party.actors[0].agi
@@ -1160,7 +1154,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 서버에서 방송한 데이터
 				when /<5 (.*)>(.*)<\/5>/
-					
 					# Update Player
 					self.update_net_player($1, $2)
 					# If it is first time connected...
@@ -2181,12 +2174,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
 										$game_player.animation_id = 139
-										$game_party.actors[0].hp += 2000										
+										$game_party.actors[0].hp += 3000										
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
 										$game_player.animation_id = 151
-										$game_party.actors[0].hp += 3500
+										$game_party.actors[0].hp += 5000
 										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</player_animation>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end
@@ -2238,6 +2231,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
 								$ani_character[@ani_id.to_i].animation_id = @ani_number 
 								# 상대방도 애니메이션 뜨도록 해야함
+							end
+							if @ani_id.to_i == @id.to_i
+								$game_player.animation_id = @ani_number
 							end
 						elsif @ani_event >= 0
 							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유

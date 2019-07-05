@@ -73,7 +73,7 @@ module J
 				@item = $data_armors[id]
 			end
 			@num = self.num
-			@num == 0 ? (return nil) : 0
+			#@num == 0 ? (return nil) : 0
 			if @fill
 				self.bitmap = Bitmap.new(@route2 + "item_win")
 				itemwin_mid = Sprite.new
@@ -86,13 +86,18 @@ module J
 				item_bitmap.dispose
 				@memory = JS.get_bitmap(self)
 			else
-				self.bitmap = Bitmap.new(@route2 + "itemwin_mid")
+				self.bitmap = Bitmap.new(@route2 + "item_win")
+				itemwin_mid = Sprite.new
 				item_bitmap = Sprite.new
+				itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
 				item_bitmap.bitmap = Bitmap.new(@route + @item.icon_name)
-				self.bitmap.blt(0, 0, item_bitmap.bitmap, item_bitmap.bitmap.rect)
+				self.bitmap.blt(1, 1, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
+				self.bitmap.blt(1, 1, item_bitmap.bitmap, item_bitmap.bitmap.rect)
+				itemwin_mid.dispose
 				item_bitmap.dispose
 				@memory = JS.get_bitmap(self)
 			end
+			
 			@num > 1 ? 0 : (return self)
 			@viewport.hwnd == "Status" ? (return self) : 0
 			self.bitmap.font = @font
@@ -175,7 +180,7 @@ module J
 					self.bitmap.draw_text(0, self.height - rect.height, self.width, rect.height, @num.to_s, 2)
 				end
 			end
-			if self.num == 0
+			if self.num == 0 and @viewport.hwnd != "NetPlayer_Info"
 				self.dispose
 			end
 		end

@@ -5238,3 +5238,13 @@ Section215:321: syntax error ()>> occured.
 On <<Sat 06 Jul 2019, 02:04:30>> the error <<disposed sprite (#<Scene_Map:0x7eec368>)>> occured.
 On <<Sat 06 Jul 2019, 02:07:40>> the error <<disposed sprite (#<Scene_Map:0x80b3e78>)>> occured.
 On <<Sat 06 Jul 2019, 02:13:17>> the error <<disposed sprite (#<Scene_Map:0x7ed3dc0>)>> occured.
+On <<Sat 06 Jul 2019, 10:46:00>> the error <<(eval):1: syntax error (#<Scene_Map:0x801a360>)>> occured.
+On <<Sat 06 Jul 2019, 10:46:00>> the error <<(eval):1: syntax error
+if (0 <= time.min.to_i and time.min.to_i < 20) (#<Scene_Map:0x801a360>)>> occured.
+On <<Sat 06 Jul 2019, 10:46:00>> the error <<(eval):1: syntax error
+if (0 <= time.min.to_i and time.min.to_i < 20)
+                                              ^ (#<Scene_Map:0x801a360>)>> occured.
+On <<Sat 06 Jul 2019, 10:46:00>> the error <<compile error
+(eval):1: syntax error
+if (0 <= time.min.to_i and time.min.to_i < 20)
+                                              ^ (#<Scene_Map:0x801a360>)>> occured.

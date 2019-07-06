@@ -1856,7 +1856,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					eval($1)
 					if @ani_map == $game_map.map_id
 						if @ani_id != -1
-							$ani_character[@ani_id.to_i].animation_id = @ani_number if $ani_character[@ani_id.to_i]
+							#$ani_character[@ani_id.to_i].animation_id = @ani_number if $ani_character[@ani_id.to_i]
+							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
+								$ani_character[@ani_id.to_i].animation_id = @ani_number 
+								# 상대방도 애니메이션 뜨도록 해야함
+							end
+							if @ani_id.to_i == @id.to_i
+								$game_player.animation_id = @ani_number
+							end
 						end
 					end
 					@ani_id = -1; @ani_map = -1; @ani_number = -1;
@@ -2091,7 +2098,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									actor.hp = actor.maxhp
 									actor.sp = actor.maxsp
 									$game_player.animation_id = 180
-									Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</player_animation>\n"
+									Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
 								end								
 							end
 						end
@@ -2110,47 +2117,47 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$game_player.animation_id = 131
 										$game_party.actors[0].hp += 70
 										$game_player.show_demage("40",false)
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 131; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 131; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 바다의희원")
 									elsif $2.to_i == 2        #동해의희원
 										$game_player.animation_id = 182
 										$game_party.actors[0].hp += 130
 										$game_player.show_demage("100",false)
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 182; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 182; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 동해의희원")
 									elsif $2.to_i == 3         #야수수금술
 										$game_switches[20] = true
 										$game_player.animation_id = 157
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 157; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 157; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 야수수금술")
 									elsif $2.to_i == 4        #천공의희원
 										$game_player.animation_id = 136
 										$game_party.actors[0].hp += 200
 										$game_player.show_demage("150",false)
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 136; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 136; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 천공의희원")
 									elsif $2.to_i == 5        #분량력법
 										$game_switches[338] = true
 										$game_player.animation_id = 159
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 159; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 159; @ani_id = #{Network::Main.id};</27>\n"
 										$game_party.actors[0].str += 15
 										$console.write_line("'#{$1.to_s}님의 분량력법")
 									elsif $2.to_i == 6        #구름의희원
 										$game_player.animation_id = 137
 										$game_party.actors[0].hp += 350
 										$game_player.show_demage("250",false)
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 137; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 137; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 구름의희원")
 									elsif $2.to_i == 7       #분량방법
 										$game_switches[196] = true
 										$game_player.animation_id = 133
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 133; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 133; @ani_id = #{Network::Main.id};</27>\n"
 										$game_party.actors[0].agi += 50
 										$console.write_line("'#{$1.to_s}님의 분량방법")
 									elsif $2.to_i == 8       #공력주입
 										if $game_switches[405] == false
 											$game_player.animation_id = 172
-											Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 172; @ani_id = #{Network::Main.id};</player_animation>\n"
+											Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 172; @ani_id = #{Network::Main.id};</27>\n"
 											$game_party.actors[0].sp += $1.to_i
 										else
 											$game_switches[405] = false
@@ -2160,27 +2167,27 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$game_player.animation_id = 147
 										$game_party.actors[0].hp += 700
 										$game_player.show_demage("250",false)
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 147; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 147; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 태양의희원") 
 									elsif $2.to_i == 10       #생명의희원
 										$game_player.animation_id = 148
 										$game_party.actors[0].hp += 1000
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 생명의희원")   
 									elsif $2.to_i == 11       #백호의희원
 										$game_player.animation_id = 149
 										$game_party.actors[0].hp += mp * 2
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
 										$game_player.animation_id = 139
 										$game_party.actors[0].hp += 3000										
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
 										$game_player.animation_id = 151
 										$game_party.actors[0].hp += 5000
-										Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</player_animation>\n"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end
 								end
@@ -2231,9 +2238,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
 								$ani_character[@ani_id.to_i].animation_id = @ani_number 
 								# 상대방도 애니메이션 뜨도록 해야함
-							end
-							if @ani_id.to_i == @id.to_i
-								$game_player.animation_id = @ani_number
 							end
 						elsif @ani_event >= 0
 							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유

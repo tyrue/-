@@ -985,7 +985,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						e.event.animation_id = e.animation1_id
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
 						
-						Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{e.event.animation_id}; @ani_id = #{Network::Main.id};</player_animation>\n"
+						Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{e.event.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
 						#Show Animation
 						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
 						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
@@ -1078,7 +1078,7 @@ if SDK.state("Mr.Mo's ABS") == true
 								next if enemy_dead?(enemy.actor, e)
 								#Show animation on player
 								$game_player.animation_id = skill.animation2_id
-								Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</player_animation>\n"
+								Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
 							else
 								enemy.effect_skill(e, skill)	
 								hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
@@ -1701,7 +1701,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						actor.hp = actor.maxhp
 						actor.sp = actor.maxsp
 						$game_player.animation_id = 180
-						Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</player_animation>\n"
+						Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
 					end
 				end
 			end
@@ -3026,7 +3026,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Show animation on event
 			
 			# 해당 대상 애니메이션 재생하도록 보냄
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</27>\n"
+			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</player_animation>\n"
 		end 
 		
 		
@@ -3048,7 +3048,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.effect_skill(enemy, @skill)
 			#Show animation on player
 			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
-			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</player_animation>\n"
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
 			
 			#Jump
 			#$ABS.jump($game_player,self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0

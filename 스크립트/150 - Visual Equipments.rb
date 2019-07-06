@@ -160,7 +160,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			
 			if a
 				# 장비 갈아입는 소리 보내주고 내 상태 보냄
-				Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = 189; @ani_id = #{Network::Main.id};</player_animation>\n"
+				Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 189; @ani_id = #{Network::Main.id};</27>\n"
 				Network::Main.send_map
 				return true
 			else

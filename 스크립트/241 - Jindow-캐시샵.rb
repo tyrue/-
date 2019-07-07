@@ -131,8 +131,6 @@ class Jindow_cashshop < Jindow
 					["확인"], ["Hwnd.dispose(self)"], "캐시구매")
 			end
 		end
-		
-		
 	end
 end
 

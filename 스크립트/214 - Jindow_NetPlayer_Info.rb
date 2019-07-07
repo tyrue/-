@@ -25,9 +25,6 @@ class Jindow_NetPlayer_Info < Jindow
 			self.y = self.side_height
 		end
 		
-		
-		
-		
 		@equip_1 = Sprite.new(self)
 		@equip_2 = Sprite.new(self)
 		@equip_3 = Sprite.new(self)

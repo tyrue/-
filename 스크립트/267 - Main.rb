@@ -28,5 +28,6 @@ rescue Errno::ENOENT
 	time = time.strftime("%a %d %b %Y, %X") 
 	File.open("ErrorLog.rxdata","a+"){ |fh| fh.puts("On <<#{time}>> the file <<#{filename}>> was missing." )}
 ensure
+	게임종료 if $scene.is_a?(Scene_Map)
 	Network::Main.close_socket if Network::Main.socket != nil
 end

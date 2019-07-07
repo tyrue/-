@@ -544,6 +544,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@socket.send("<9>#{self.id}</9>\n")
 				@socket.close
 				@socket = nil
+				
 			end
 			#--------------------------------------------------------------------------
 			# * Change Messgae of the Day
@@ -2250,6 +2251,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# Remove Player ( Disconnected )
 				when /<9>(.*)<\/9>/
+					
 					# Destroy Netplayer and MapPlayer things
 					self.destroy($1.to_i)
 					# Redraw Mapplayer Sprites

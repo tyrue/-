@@ -111,6 +111,7 @@ class Jindow_Item_Info < Jindow
 			h = 0
 			for i in item.description.scan(/./)
 				rect = bitmap.text_size(i)
+				
 				if w + rect.width > self.width
 					w = 0
 					h += rect.height
@@ -125,15 +126,16 @@ class Jindow_Item_Info < Jindow
 			@description.bitmap.font.beta = 1
 			@description.bitmap.font.gamma.set(0, 0, 0, 255)
 			@description.bitmap.font.size = 14
-			height += h + bitmap.font.size
+			height += h + bitmap.font.size + 5
 			w = 0
 			h = 0
 			for i in item.description.scan(/./)
 				rect = bitmap.text_size(i)
 				if w + rect.width > self.width
-					w = 0
 					h += rect.height
+					w = 0
 					@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
+					w += rect.width
 				else
 					@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
 					w += rect.width
@@ -146,7 +148,7 @@ class Jindow_Item_Info < Jindow
 		h = 0
 		case type
 		when 0
-			item.recover_hp != 0 ? (h += bitmap.text_size(item.recover_hp .to_s).height) : 0
+			item.recover_hp != 0 ? (h += bitmap.text_size(item.recover_hp.to_s).height) : 0
 			item.recover_sp != 0 ? (h += bitmap.text_size(item.recover_sp.to_s).height) : 0
 			item.recover_hp_rate != 0 ? (h += bitmap.text_size(item.recover_hp_rate.to_s).height) : 0
 			item.recover_sp_rate != 0 ? (h += bitmap.text_size(item.recover_sp_rate.to_s).height) : 0

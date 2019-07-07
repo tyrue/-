@@ -23,7 +23,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			attr_accessor :socket
 			attr_accessor :pm
-			
+			attr_accessor :group
 			#--------------------------------------------------------------------------
 			# * Initialiation
 			#-------------------------------------------------------------------------- 
@@ -109,6 +109,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					group = "standard"
 				end
 				return group
+			end
+			
+			def self.set_admin
+				if @group == "admin"
+					p "운영자모드 off"
+					@group = "standard"
+				else
+					p "운영자모드 on"
+					@group = "admin"
+					p @group
+				end
 			end
 			#--------------------------------------------------------------------------
 			# * Returns Mapplayers
@@ -657,8 +668,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				# Refresh -> Change data to new data
 				@mapplayers[id].refresh(data)
 				#Send the player's new stats
-				self.send_newstats if g == nil
 				
+				if g != nil
+					self.send_newstats 
+				end
 			end
 			#--------------------------------------------------------------------------
 			# * Update Net Actors
@@ -1611,22 +1624,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<cashgive>(.*),(.*)<\/cashgive>/
 					if $1.to_s == $game_party.actors[0].name
-						if $2.to_s == "5000"
-							$game_variables[213] += 5000
-						end
-						if $2.to_s == "3000"
-							$game_variables[213] += 3000
-						end
-						if $2.to_s == "2000"
-							$game_variables[213] += 2000
-						end
-						if $2.to_s == "1000"
-							$game_variables[213] += 1000
-						end
-						if $2.to_s == "500"
-							$game_variables[213] += 500
-						end
-						$console.write_line("#{$2.to_s}Cash 가 충전되었습니다.")
+						$game_variables[213] += $2.to_i
+						$console.write_line("#{$2.to_i}Cash 가 충전되었습니다.")
 					end
 					
 				when /<bigsay>(.*),(.*)<\/bigsay>/

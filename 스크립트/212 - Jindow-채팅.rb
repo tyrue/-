@@ -115,9 +115,7 @@ class Jindow_Chat_Input < Jindow
 			
 			
 		when /\/운영자모드 1367/
-			$game_switches[284] = true
-			
-			
+			Network::Main.set_admin
 			
 		else # 명령어가 아닌 그냥 일반 채팅일때
 			

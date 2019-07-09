@@ -352,6 +352,14 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		def check_event_trigger_touch(x, y)
 			return
 		end
+		
+		def in_range?(range)
+			x = (@oldx - $game_player.x) * (@oldx - $game_player.x)
+			y = (@oldy - $game_player.y) * (@oldy - $game_player.y)
+			r = x + y
+			return true if r <= (range * range)
+			return false
+		end
 	end
 end
 #-------------------------------------------------------------------------------

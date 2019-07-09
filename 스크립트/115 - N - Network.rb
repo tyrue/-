@@ -533,7 +533,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				a = $game_party.actors[0]
 				maxhp = $game_party.actors[0].maxhp
 				maxsp = $game_party.actors[0].maxsp
-				pci = $game_party.actors[0]
+				pci = $game_party.actors[0].class_name
 				c = "["
 				m = 1
 				for i in a.states
@@ -543,7 +543,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					m += 1
 				end
 				c += "]"
-				stats = "@hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
+				
+				stats = "@pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
 				@socket.send("<5>#{stats}</5>\n")
 			end
 			#--------------------------------------------------------------------------
@@ -669,7 +670,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@mapplayers[id].refresh(data)
 				#Send the player's new stats
 				
-				if g != nil
+				if g == nil
 					self.send_newstats 
 				end
 			end
@@ -1751,13 +1752,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-				when /<chat1>(.*),(.*)<\/chat1>/
+				when /<chat1>(.*)<\/chat1>/
 					if $scene.is_a?(Scene_Map)
-						if $2.to_i == 0
-							$chat.write($1.to_s, Color.new(105, 105, 105))
-							$game_temp.chat_log.push($1.to_s)
-							$game_temp.chat_refresh = true
-						end
+						
+						$chat.write($1.to_s, Color.new(105, 105, 105))
+						$game_temp.chat_log.push($1.to_s)
+						$game_temp.chat_refresh = true
 					end
 					
 					#----------------------------길드---------------------------------

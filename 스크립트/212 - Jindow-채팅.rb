@@ -136,7 +136,7 @@ class Jindow_Chat_Input < Jindow
 				
 			when "전체"
 				name = $game_party.actors[0].name
-				Network::Main.socket.send "<chat1>(전체) #{$game_party.actors[0].name} : #{text},0</chat1>\n" 
+				Network::Main.socket.send "<chat1>(전체) #{$game_party.actors[0].name} : #{text}</chat1>\n" 
 				
 			when "파티"
 				if not $netparty == []

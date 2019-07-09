@@ -1042,7 +1042,10 @@ if SDK.state("Mr.Mo's ABS") == true
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
 						#Return if enemy is dead 
 						return if enemy_dead?(enemies[0].actor,e)
-						return if enemies[0].is_a?(Game_Player)
+						if enemies[0].is_a?(Game_Player)
+							Network::Main.send_newstats
+							return 
+						end
 						return if enemies[0].attacking == e and enemies[0].in_battle
 						#If its alive, put it in battle
 						enemies[0].in_battle = true
@@ -1349,6 +1352,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
 			
 			
+			Network::Main.send_newstats
 			# 스킬 애니메이션 
 			$game_player.animation_id = skill.animation1_id
 			#Animate

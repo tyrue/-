@@ -436,6 +436,7 @@ module J
 			@click = false
 			@double_click = false
 			@double_wait = 0
+			@press_wait = 0
 			@hide = false
 			@edit = true
 			@bluck = false
@@ -1099,14 +1100,22 @@ module J
 		end
 		
 		def update_key
+			
 			if Key.trigger?(KEY_BACKSPACE)
 				delete_text
+			elsif Key.repeat?(KEY_BACKSPACE)
+				delete_text
 			end
+			
 			if Key.trigger?(98) or Key.trigger?(KEY_ALT)  # 한 / 영 전환
 				@input_hangul = !@input_hangul
 				return
 			end
 			if Key.trigger?(KEY_SPACE)
+				@text.push(" ")
+				@char = " "
+				return
+			elsif Key.repeat?(KEY_SPACE)
 				@text.push(" ")
 				@char = " "
 				return
@@ -1187,6 +1196,11 @@ module J
 					@char = "}"
 					return
 				end
+				if Key.trigger?(67)
+					@text.push("~")
+					@char = "~"
+					return
+				end
 				if Key.trigger?(68)
 					@text.push("{")
 					@char = "{"
@@ -1207,6 +1221,7 @@ module J
 					@char = "|"
 					return
 				end
+				
 			else
 				if Key.trigger?(KEY_0)
 					@text.push("0")
@@ -1281,6 +1296,11 @@ module J
 				if Key.trigger?(66)
 					@text.push("]")
 					@char = "]"
+					return
+				end
+				if Key.trigger?(67)
+					@text.push("`")
+					@char = "`"
 					return
 				end
 				if Key.trigger?(68)
@@ -1466,6 +1486,10 @@ module J
 					return
 				end
 				if Key.trigger?(KEY_Z)
+					@text.push("ㅋ")
+					@char = "ㅋ"
+					return
+				elsif Key.repeat?(KEY_Z)
 					@text.push("ㅋ")
 					@char = "ㅋ"
 					return

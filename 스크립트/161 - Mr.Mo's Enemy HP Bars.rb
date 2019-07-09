@@ -89,6 +89,88 @@ if SDK.state("Mr.Mo's ABS")
 			self.bitmap.stretch_blt(bar_dest_rect, bar, bar_source_rect)
 		end  
 	end
+	
+	class NetPartyHP_Bars < Sprite
+		#--------------------------------------------------------------------------
+		# * Constants Bar Types and Hues for parameters and parameter names
+		#--------------------------------------------------------------------------
+		HP_BAR = "014-Reds01"
+		# leave this alone if you don't know what you are doing
+		OUTLINE = 1
+		BORDER = 1
+		HP_WIDTH = 35         # WIDTH of the HP Bar
+		HP_HEIGHT = 6         # Height of the HP Bar
+		#--------------------------------------------------------------------------
+		# * Object Initialization
+		#--------------------------------------------------------------------------
+		def initialize(netPlayer, v)
+			super(v)
+			@netPlayer = netPlayer
+			@old_hp = 0
+			@old_x = 0
+			@old_y = 0
+			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
+			update    
+		end
+		#--------------------------------------------------------------------------
+		# * Refresh
+		#--------------------------------------------------------------------------
+		def refresh
+			#First move it
+			@old_x = @netPlayer.screen_x-15
+			@old_y = @netPlayer.screen_y
+			self.x = @old_x
+			self.y = @old_y
+			#HP Bar Check
+			return if @old_hp == @netPlayer.hp
+			self.bitmap.clear
+			@old_hp = @netPlayer.hp
+			#Show the bar
+			draw_gradient_bar(0,0,@netPlayer.hp,@netPlayer.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
+		end  
+		#--------------------------------------------------------------------------
+		# * Something Changed?
+		#--------------------------------------------------------------------------
+		def something_changed?
+			return dispose if @netPlayer.hp <= 0 
+			return true if @old_hp != @netPlayer.hp
+			return true if @old_x != @netPlayer.event.screen_x-10
+			return true if @old_y != @netPlayer.event.screen_y
+			return false
+		end
+		#--------------------------------------------------------------------------
+		# * Update
+		#--------------------------------------------------------------------------
+		def update
+			refresh if something_changed?
+		end
+		#--------------------------------------------------------------------------
+		# * Draw Gradient Bar 
+		#--------------------------------------------------------------------------
+		def draw_gradient_bar(x, y, min, max, file, width = nil, height = nil, hue = 0, back = "Back", back2 = "Back2")
+			bar = RPG::Cache.gradient(file, hue)
+			back = RPG::Cache.gradient(back)
+			back2 = RPG::Cache.gradient(back2)
+			cx = BORDER
+			cy = BORDER
+			dx = OUTLINE
+			dy = OUTLINE
+			zoom_x = width != nil ? width : back.width
+			zoom_y = height != nil ? height : back.height
+			percent = min / max.to_f if max != 0
+			percent = 0 if max == 0
+			back_dest_rect = Rect.new(x,y,zoom_x,zoom_y)
+			back2_dest_rect = Rect.new(x+dx,y+dy,zoom_x -dx*2,zoom_y-dy*2)
+			bar_dest_rect = Rect.new(x+cx,y+cy,zoom_x * percent-cx*2,zoom_y-cy*2)
+			back_source_rect = Rect.new(0,0,back.width,back.height)
+			back2_source_rect = Rect.new(0,0,back2.width,back2.height)
+			bar_source_rect = Rect.new(0,0,bar.width* percent,bar.height)
+			self.bitmap.stretch_blt(back_dest_rect, back, back_source_rect)
+			self.bitmap.stretch_blt(back2_dest_rect, back2, back2_source_rect)
+			self.bitmap.stretch_blt(bar_dest_rect, bar, bar_source_rect)
+		end  
+	end
+	
 	#============================================================================
 	# * Scene Map
 	#============================================================================
@@ -104,6 +186,11 @@ if SDK.state("Mr.Mo's ABS")
 			#Get Enemies
 			for e in $ABS.enemies.values
 				e.bar_showing = false
+			end
+			@netPlayers_hp = {}
+			#Get Enemies
+			for player in Network::Main.mapplayers.values
+				player.bar_showing = false
 			end
 			mrmo_hpeny_scene_map_main_draw
 		end
@@ -130,6 +217,27 @@ if SDK.state("Mr.Mo's ABS")
 				next if bars == nil or bars.disposed?
 				bars.update
 			end
+			
+			#Get Enemies
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				#if in screen
+				if player.in_range?(10)
+					next if player.bar_showing
+					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
+					player.bar_showing = true
+				elsif player.bar_showing and @netPlayers_hp[player.netid] != nil
+					@netPlayers_hp[player.netid].dispose if !@netPlayers_hp[player.netid].disposed?
+					@netPlayers_hp[player.netid] = nil
+					player.bar_showing = false
+				end
+			end
+			#Update HP BARS
+			for bars in @netPlayers_hp.values
+				next if bars == nil or bars.disposed?
+				bars.update
+			end
+			
 			mrmo_hpeny_scene_map_update
 		end
 	end
@@ -149,6 +257,24 @@ if SDK.state("Mr.Mo's ABS")
 			@bar_showing = false
 		end
 	end
+	
+	#============================================================================
+	# * netPlayer
+	#============================================================================
+	class Game_NetPlayer < Game_Character
+		#--------------------------------------------------------------------------
+		attr_accessor :bar_showing
+		#--------------------------------------------------------------------------
+		alias mrmo_hpeny_abs_netPlayer_initialize initialize
+		#--------------------------------------------------------------------------
+		# * Object Initialization
+		#--------------------------------------------------------------------------
+		def initialize
+			mrmo_hpeny_abs_netPlayer_initialize
+			@bar_showing = false
+		end
+	end
+	
 	#==============================================================================
 	# ** Spriteset_Map
 	#------------------------------------------------------------------------------

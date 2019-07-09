@@ -577,6 +577,7 @@ module J
 		def update
 			super
 			self.refresh? ? 0 : return
+			
 			@click ? (@click = false) : 0
 			if not @viewport.hudle
 				if Input.mouse_lbutton

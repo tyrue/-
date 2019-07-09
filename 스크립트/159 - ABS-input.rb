@@ -230,9 +230,9 @@ if SDK.state('Input')
 			when Input::RIGHT
 				keys.push(Input::RT)
 			when Input::C
-				keys.push(Input::Space, Input::Enter)
+				keys.push(Input::Space, Input::Letters["Z"])
 			when Input::B
-				keys.push(Input::Esc, Input::Numberpad[0])
+				keys.push(Input::Esc)
 			when Input::X
 				keys.push(Input::Letters["A"])
 			when Input::L

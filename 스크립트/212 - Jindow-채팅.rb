@@ -166,7 +166,8 @@ class Jindow_Chat_Input < Jindow
 			end
 			@a.refresh(40, @chat_type)
 			# @type.bluck = true
-		elsif Key.trigger?(KEY_ENTER)# 채팅 메세지를 전송
+		elsif Key.trigger?(KEY_ENTER) # 채팅 메세지를 전송
+			
 			if not @type.result == ""
 				if @active == true
 					send_chat

@@ -351,8 +351,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
 	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
-	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
-	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
+	SKILL_MASH_TIME[58] = [70 * sec, 0] # 지폭지술
+	SKILL_MASH_TIME[68] = [120 * sec, 0] # 폭류유성
 	SKILL_MASH_TIME[69] = [7 * sec, 0] # 삼매진화 2성
 	
 	# 전사
@@ -364,8 +364,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[79] = [20 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
 	SKILL_MASH_TIME[103] = [10 * sec, 0] # 어검술
-	SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
-	SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
+	SKILL_MASH_TIME[104] = [70 * sec, 0] # 포효검황
+	SKILL_MASH_TIME[105] = [120 * sec, 0] # 혈겁만파
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 스위치 번호]
 	SKILL_BUFF_TIME = {}
@@ -3788,14 +3788,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.sp = 0
 				when 58 # 지폭지술
 					$e_v += 1
-					power += user.sp / 10 + 20
+					power += user.sp / 30 + 20
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp = 0
 					end
 				when 68 # 폭류유성
 					$e_v += 1
-					power += (user.sp / 10) + (user.hp / 200) + 20
+					power += (user.sp / 25) + (user.hp / 200) + 40
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp -= user.sp / 2
@@ -3848,7 +3848,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					
 				when 104 # 포효검황
-					power += user.hp / 50 + 100
+					power += user.hp / 60 + 100
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
@@ -3857,7 +3857,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				when 105 # 혈겁만파
 					$e_v += 1
-					power += (user.sp / 10) + (user.hp / 50) + 100
+					power += (user.sp / 70) + (user.hp / 65) + 100
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp = 0

@@ -1632,6 +1632,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			$cha_name = $game_party.actors[0].character_name
 			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
 			$scene = Scene_Map.new
+			# 이때 모든 버프들을 지우자
+			for skill_mash in SKILL_BUFF_TIME
+				if skill_mash[1][1] > 0
+					skill_mash[1][1] = 1 
+				end
+			end
+			
+			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 			e.attacking = nil if e != nil and !e.is_a?(Game_Actor)

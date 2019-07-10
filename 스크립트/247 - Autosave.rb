@@ -70,7 +70,9 @@ def 자동저장
 		end
 		
 		for skill_mash_time in SKILL_MASH_TIME
-			
+			if skill_mash_time[1][1] > 0 
+				@skill_mash_list += (skill_mash_time[0].to_s + "," + skill_mash_time[1][1].to_s + ".")
+			end
 		end
 		
 		for skill_mash_time in SKILL_BUFF_TIME

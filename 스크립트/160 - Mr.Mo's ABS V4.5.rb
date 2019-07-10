@@ -859,10 +859,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.erased = false
 				event.refresh
 				
-				# 여기서 랜덤하게 움직이는걸 해야함
-				for i in 0..30
-					event.move_random
-				end
+				#~ # 여기서 랜덤하게 움직이는걸 해야함
+				#~ for i in 0..5
+					#~ event.move_random
+				#~ end
 				event.moveto(event.x,event.y)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
 				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
@@ -1119,7 +1119,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Update Player  단축키를 이용하여 스킬을 사용한다.
 		#--------------------------------------------------------------------------
 		def update_player
-			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Trade")# 파티 초대, 교환 창이 켜지지 않았다면?
 				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
 					#Keep the current party leader updated
 					@actor = $game_party.actors[0]
@@ -1378,12 +1378,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil
+			if skill_mash_time != nil and $game_switches[37] == false
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 			end
-			
+			$game_switches[37] = false
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope

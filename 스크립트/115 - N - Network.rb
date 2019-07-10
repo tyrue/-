@@ -1393,6 +1393,31 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# mdef
 					if $global_x == 34
 						$game_party.actors[0].mdef = $1.to_i 
+					end
+					
+					# 스킬 딜레이 갱신
+					if $global_x == 35
+						data = []
+						data = $1.split "."
+						for d in data
+							break if d == "*null*"
+							i = []
+							i = d.split ","
+							SKILL_MASH_TIME[i[0].to_i][1] = i[1].to_i
+						end
+					end
+					
+					# 버프 지속시간 갱신
+					if $global_x == 36
+						data = []
+						data = $1.split "."
+						for d in data
+							break if d == "*null*"
+							i = []
+							i = d.split ","
+							SKILL_BUFF_TIME[i[0].to_i][1] = i[1].to_i
+						end
+						
 						# 데이터 로드 완료
 						$game_party.actors[0].name = $name
 						$game_map.setup($new_id) 
@@ -1867,6 +1892,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					@ani_id = -1; @ani_map = -1; @ani_number = -1;
+					Network::Main.send_newstats
 					return true
 					
 				when /<trade_invite>(.*),(.*)<\/trade_invite>/

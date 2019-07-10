@@ -19,8 +19,8 @@ class Jindow_NetPlayer < Jindow
 				@buttons[$game_party.actors[0].name].y = i * 30 + 12
 				i += 1
 			else
-				@buttons[netplayer.username] = J::Button.new(self).refresh(120, netplayer.username)
-				@buttons[netplayer.username].y = i * 30 + 12
+				@buttons[netplayer.name] = J::Button.new(self).refresh(120, netplayer.name)
+				@buttons[netplayer.name].y = i * 30 + 12
 				i += 1
 			end
 		end
@@ -32,10 +32,10 @@ class Jindow_NetPlayer < Jindow
 	def update
 		super
 		for netplayer in Network::Main.players.values 
-			if @buttons[netplayer.username] != nil
-				@buttons[netplayer.username].click ?
+			if @buttons[netplayer.name] != nil
+				@buttons[netplayer.name].click ?
 				
-				Jindow_NetPlayer_Info.new(netplayer.netid, netplayer.username) : 0
+				Jindow_NetPlayer_Info.new(netplayer.netid, netplayer.name) : 0
 			elsif @buttons[$game_party.actors[0].name] != nil
 				@buttons[$game_party.actors[0].name].click ?
 				

@@ -5255,3 +5255,11 @@ On <<Wed 10 Jul 2019, 17:19:18>> the error <<Section247:82: syntax error ()>> oc
 On <<Wed 10 Jul 2019, 17:19:18>> the error <<compile error
 Section247:82: syntax error ()>> occured.
 On <<Wed 10 Jul 2019, 23:56:08>> the file <<Audio/BGM/00000998>> was missing.
+On <<Fri 12 Jul 2019, 19:43:59>> the error <<wrong number of arguments(1 for 0) (#<Scene_Map:0x7f07c20>)>> occured.
+On <<Fri 12 Jul 2019, 19:45:01>> the error <<wrong number of arguments(1 for 0) (#<Scene_Map:0x7ea0808>)>> occured.
+On <<Fri 12 Jul 2019, 19:45:16>> the error <<wrong number of arguments(1 for 0) (#<Scene_Map:0x483a5d8>)>> occured.
+On <<Fri 12 Jul 2019, 20:01:25>> the error << (#<Scene_Map:0x8175008>)>> occured.
+On <<Fri 12 Jul 2019, 20:04:17>> the error << (#<Scene_Map:0x7fb1ad8>)>> occured.
+On <<Fri 12 Jul 2019, 21:07:08>> the error <<Section204:59: syntax error ()>> occured.
+On <<Fri 12 Jul 2019, 21:07:08>> the error <<compile error
+Section204:59: syntax error ()>> occured.

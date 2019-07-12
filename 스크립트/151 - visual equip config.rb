@@ -7,8 +7,7 @@
 #--------------------------------------------------------------------------
 if User_Edit::VISUAL_EQUIP_ACTIVE
 	def equip_character(type, id)
-		
-		if not $game_party.actors[0].hp == 0
+		if type == 2
 			# 무기
 			return ['(착용)목도', 2] 			if id == 101 	#목도
 			return ['(착용)목도', 2] 			if id == 102 	#목검
@@ -42,7 +41,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)영웅의칼\'뇌', 2] 	if id == 130  #산적왕의칼
 			return ['(착용)불의영혼봉', 2] 	if id == 131  #다문창
 			return ['(착용)불의영혼봉', 2] 	if id == 132  #인어장군지팡이
-			
+		else
 			# 방어구
 			return ['(착용)연두갑주', 2] 		if id == 1  	#초심자의갑주
 			return ['(착용)다람쥐화서', 2]		if id == 9  	#다람쥐화서

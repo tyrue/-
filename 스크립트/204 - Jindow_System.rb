@@ -2,7 +2,7 @@ class Jindow_System < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 100, 153)
+		super(0, 0, 100, 183)
 		self.name = "⊙ 시스템"
 		@head = true
 		@mark = true
@@ -16,11 +16,13 @@ class Jindow_System < Jindow
 		@c = J::Button.new(self).refresh(100, "카페주소")
 		@d = J::Button.new(self).refresh(100, "캐시샵")
 		@e = J::Button.new(self).refresh(100, "종료하기")
+		@f = J::Button.new(self).refresh(100, "로그아웃")
 		@a.y = 12
 		@b.y = 42
 		@c.y = 72
 		@d.y = 102
 		@e.y = 132
+		@f.y = 162
 	end
 	
 	def update
@@ -46,6 +48,11 @@ class Jindow_System < Jindow
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			JS.game_end
+		elsif @f.click
+			$game_system.se_play($data_system.decision_se)
+			Hwnd.dispose(self)
+			JS.game_title
+		
 		end
 	end
 	

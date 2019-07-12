@@ -133,11 +133,10 @@ module JS
 	end
 	
 	def game_title
-		$game_system.se_play($data_system.decision_se)
-		Audio.bgm_fade(800)
-		Audio.bgs_fade(800)
-		Audio.me_fade(800)
-		$scene = Scene_Title.new
+		Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 200,
+			["정말로 게임을 끝낼까요?"], ["예", "아니오"],
+			["$game_system.se_play($data_system.decision_se); JS.dispose; Audio.bgm_fade(800); Audio.bgs_fade(800); Audio.me_fade(800); 게임종료; $scene = Scene_Connect.new",
+				"Hwnd.dispose(self)"], "알림")
 	end
 	
 	def game_end

@@ -1186,15 +1186,15 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 						# 아직 스킬 딜레이가 남아있다면 무시
 						skill_mash = SKILL_MASH_TIME[id]
-						if skill_mash != nil and skill_mash[1]/60 > 0
-							$console.write_line("딜레이가 남아있습니다. #{skill_mash[1]/60}초")
+						if skill_mash != nil and skill_mash[1]/60.0 > 0
+							$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
 							return
 						end
 						
 						# 아직 버프가 지속중이면 무시
 						skill_mash = SKILL_BUFF_TIME[id]
-						if skill_mash != nil and skill_mash[1]/60 > 0
-							$console.write_line("이미 걸려있습니다. #{skill_mash[1]/60}초 남음")
+						if skill_mash != nil and skill_mash[1]/60.0 > 0
+							$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
 							return
 						end
 						
@@ -1351,10 +1351,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 엑터가 사용할 수 없는 상황이면 무시
 			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
 			
-			
-			Network::Main.send_newstats
-			# 스킬 애니메이션 
-			$game_player.animation_id = skill.animation1_id
+			id = skill.id 
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]
@@ -1363,12 +1360,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
 			# 스킬 아이디
-			id = skill.id 
-			#Activate Common Event
-			if skill.common_event_id > 0
-				# Common event call reservation
-				$game_temp.common_event_id = skill.common_event_id
-			end
 			
 			skill_mash_time = SKILL_MASH_TIME[id]
 			if skill_mash_time != nil
@@ -1378,12 +1369,22 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil and $game_switches[37] == false
+			if skill_mash_time != nil
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 			end
-			$game_switches[37] = false
+			
+			#Activate Common Event
+			if skill.common_event_id > 0
+				# Common event call reservation
+				$game_temp.common_event_id = skill.common_event_id
+			end
+			
+			Network::Main.send_newstats
+			# 스킬 애니메이션 
+			$game_player.animation_id = skill.animation1_id
+			
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope

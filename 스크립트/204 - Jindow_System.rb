@@ -15,8 +15,8 @@ class Jindow_System < Jindow
 		@b = J::Button.new(self).refresh(100, "현재서버")
 		@c = J::Button.new(self).refresh(100, "카페주소")
 		@d = J::Button.new(self).refresh(100, "캐시샵")
-		@e = J::Button.new(self).refresh(100, "종료하기")
-		@f = J::Button.new(self).refresh(100, "로그아웃")
+		@e = J::Button.new(self).refresh(100, "로그아웃")
+		@f = J::Button.new(self).refresh(100, "종료하기")
 		@a.y = 12
 		@b.y = 42
 		@c.y = 72
@@ -44,11 +44,11 @@ class Jindow_System < Jindow
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			Jindow_cashshop.new
-		elsif @e.click
+		elsif @f.click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			JS.game_end
-		elsif @f.click
+		elsif @e.click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			JS.game_title

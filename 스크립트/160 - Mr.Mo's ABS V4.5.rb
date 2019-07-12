@@ -1826,7 +1826,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 13 # 평웅
-				if r <= 60 
+				if r <= 70 
 					# 웅담
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 19 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -1838,7 +1838,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 15 # 호랑이
-				if r <= 60
+				if r <= 70
 					# 호랑이고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2202,6 +2202,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 100
 					# 반고의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 90 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 104 # 왕구렁이
+				if r <= 30 
+					# 힘의투구1
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 100 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 106 # 뱀

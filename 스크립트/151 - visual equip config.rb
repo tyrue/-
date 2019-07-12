@@ -39,8 +39,10 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)진일신검', 2] 	if id == 128  #용량제육봉
 			return ['(착용)현철중검', 2] 	if id == 129  #도깨비방망이
 			return ['(착용)영웅의칼\'뇌', 2] 	if id == 130  #산적왕의칼
-			return ['(착용)불의영혼봉', 2] 	if id == 131  #다문창
-			return ['(착용)불의영혼봉', 2] 	if id == 132  #인어장군지팡이
+			return ['(착용)해골죽장', 2] 	if id == 131  #다문창
+			return ['(착용)영혼죽장', 2] 	if id == 132  #인어장군지팡이
+			return ['(착용)해골죽장', 2] 	if id == 133  #해골죽장
+			return ['(착용)일화접선', 2] 	if id == 134  #일화접선
 		else
 			# 방어구
 			return ['(착용)연두갑주', 2] 		if id == 1  	#초심자의갑주
@@ -65,6 +67,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)망또1', 2] 		if id == 47  	#망또1
 			return ['(착용)망또2', 2] 		if id == 48  	#망또2
 			return ['(착용)망또3', 2] 		if id == 49  	#망또3
+			return ['(착용)현인의영혼', 2] 		if id == 52  	#진인의영혼
 		end
 		
 		#Mulher

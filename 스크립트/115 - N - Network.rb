@@ -1697,6 +1697,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							enemy = $ABS.enemies[id]
 							event = enemy.event
 							
+							self.drop_enemy(enemy)
 							case enemy.trigger[0]
 							when 0
 								# 여기서 랜덤하게 움직이는걸 해야함
@@ -1738,11 +1739,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								
 							end						
 						end
-						$game_map.refresh
-						
+						$game_map.refresh	
 					end
-					
-					
 					
 					
 					# 템 드랍 
@@ -2093,6 +2091,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
+					# 파티 퀘스트 장소로 이동 (npt, 현재 map_id, 이동할 map_id, x, y)
+				when /<npt_move>(.*) (.*) (.*) (.*) (.*)<\/npt_move>/
+					return if $npt != $1.to_s
+					return if $game_map.map_id != $2.to_i
+					$game_temp.player_new_map_id = $3.to_i
+					$game_temp.player_new_x = $4.to_i
+					$game_temp.player_new_y = $5.to_i
+					$game_temp.player_new_direction = 1
+					$game_temp.player_transferring = true
+					
+					
 				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/
 					if $npt == $3.to_s
 						if "#{$game_map.map_id}" == $4.to_s
@@ -2322,7 +2331,25 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				return false if object.real_y >= screne_height
 				return true
 			end
+			
+			# 파티 사냥했을 때, 퀘스트 아이템 떨어지도록
+			def self.drop_enemy(e)
+				r = rand(100)
+				case e.id.to_i
+				when 57 # 청웅객
+					if r <= 60 and $game_switches[141] == true # 승급 퀘스트
+						# 청웅의 환
+						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 52 #{e.event.x} #{e.event.y}</drop_create>\n"
+					end
+				when 157 # 해파리수하
+					if r <= 10 and $game_switches[378] == true # 용궁 전략문서 얻기
+						# 전략문서
+						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 98 #{e.event.x} #{e.event.y}</drop_create>\n"
+					end
+				end
+			end
 		end
+		
 		#-------------------------------------------------------------------------------
 		# End Class
 		#-------------------------------------------------------------------------------

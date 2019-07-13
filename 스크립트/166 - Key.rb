@@ -232,7 +232,7 @@ module Key
 		if @keystatus[id][0] <= 0
 			return false
 		else
-			if @keystatus[id][0] % 5 == 1 and @keystatus[id][0] % 5 != 2
+			if @keystatus[id][0] > 20 and @keystatus[id][0] % 5 == 1
 				return true
 			else
 				return false

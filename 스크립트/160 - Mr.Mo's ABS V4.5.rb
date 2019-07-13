@@ -688,6 +688,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			#Update Player
+			#$skill_Delay_Console.refresh
 			update_player if @active
 			#Update Enemy AI
 			update_enemy if @enemies != {} and @active

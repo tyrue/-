@@ -9,6 +9,8 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 	def equip_character(type, id)
 		if type == 2
 			# 무기
+			return ['(착용)철도', 2] 			if id == 1 or id == 2 or id == 3 or id == 4	#신수둔각도
+			
 			return ['(착용)목도', 2] 			if id == 101 	#목도
 			return ['(착용)목도', 2] 			if id == 102 	#목검
 			return ['(착용)목도', 2] 			if id == 103 	#사두목도

@@ -216,55 +216,55 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 범위, 이동속도, 캐릭터이름, 지속시간, 넉백 범위
 	# 데이터베이스 보고 범위 스킬 id넣으면 됨
 	# 주술사 스킬
-	RANGE_SKILLS[1] = [7, 5, "공격스킬2", 4, 0] 	#뢰진주
-	RANGE_SKILLS[2] = [7, 5, "공격스킬2", 4, 0] 	#백열주
-	RANGE_SKILLS[3] = [7, 5, "공격스킬2", 4, 0] 	#화염주
-	RANGE_SKILLS[4] = [7, 5, "공격스킬2", 4, 0] 	#자무주
-	RANGE_SKILLS[10] = [7, 5, "공격스킬2", 4, 0] #뢰진주 1성
-	RANGE_SKILLS[11] = [7, 5, "공격스킬2", 4, 0] #백열주 1성
-	RANGE_SKILLS[12] = [7, 5, "공격스킬2", 4, 0] #화염주 1성
-	RANGE_SKILLS[13] = [7, 5, "공격스킬2", 4, 0] #자무주 1성
-	RANGE_SKILLS[14] = [7, 5, "공격스킬2", 4, 0] #뢰진주 첨
-	RANGE_SKILLS[16] = [7, 5, "공격스킬2", 4, 0] #뢰진주 2성
-	RANGE_SKILLS[17] = [7, 5, "공격스킬2", 4, 0] #백열주 2성
-	RANGE_SKILLS[18] = [7, 5, "공격스킬2", 4, 0] #화염주 2성
-	RANGE_SKILLS[19] = [7, 5, "공격스킬2", 4, 0] #자무주 2성
-	RANGE_SKILLS[22] = [7, 5, "공격스킬2", 4, 0] #뢰진주 3성
-	RANGE_SKILLS[23] = [7, 5, "공격스킬2", 4, 0] #백열주 3성
-	RANGE_SKILLS[24] = [7, 5, "공격스킬2", 4, 0] #화염주 3성
-	RANGE_SKILLS[25] = [7, 5, "공격스킬2", 4, 0] #자무주 3성
-	RANGE_SKILLS[30] = [7, 5, "공격스킬2", 4, 0] #뢰진주 4성
-	RANGE_SKILLS[31] = [7, 5, "공격스킬2", 4, 0] #백열주 4성
-	RANGE_SKILLS[32] = [7, 5, "공격스킬2", 4, 0] #화염주 4성
-	RANGE_SKILLS[33] = [7, 5, "공격스킬2", 4, 0] #자무주 4성
-	RANGE_SKILLS[37] = [7, 5, "공격스킬2", 4, 0] #뢰진주 5성
-	RANGE_SKILLS[38] = [7, 5, "공격스킬2", 4, 0] #백열주 5성
-	RANGE_SKILLS[39] = [7, 5, "공격스킬2", 4, 0] #화염주 5성
-	RANGE_SKILLS[40] = [7, 5, "공격스킬2", 4, 0] #자무주 5성
-	RANGE_SKILLS[44] = [7, 5, "공격스킬2", 4, 0] #헬파이어
-	RANGE_SKILLS[49] = [7, 5, "공격스킬2", 4, 0] #성려멸주
-	RANGE_SKILLS[52] = [7, 5, "공격스킬2", 4, 0] #성려멸주 1성
-	RANGE_SKILLS[53] = [7, 5, "공격스킬2", 4, 0] #삼매진화
-	RANGE_SKILLS[56] = [7, 5, "공격스킬2", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[57] = [7, 5, "공격스킬2", 4, 0] #삼매진화 1성
-	RANGE_SKILLS[58] = [10, 5, "공격스킬2", 4, 0] #지폭지술
-	RANGE_SKILLS[68] = [10, 5, "공격스킬2", 4, 0] #폭류유성
+	RANGE_SKILLS[1] = [7, 6, "공격스킬2", 4, 0] 	#뢰진주
+	RANGE_SKILLS[2] = [7, 6, "공격스킬2", 4, 0] 	#백열주
+	RANGE_SKILLS[3] = [7, 6, "공격스킬2", 4, 0] 	#화염주
+	RANGE_SKILLS[4] = [7, 6, "공격스킬2", 4, 0] 	#자무주
+	RANGE_SKILLS[10] = [7, 6, "공격스킬2", 4, 0] #뢰진주 1성
+	RANGE_SKILLS[11] = [7, 6, "공격스킬2", 4, 0] #백열주 1성
+	RANGE_SKILLS[12] = [7, 6, "공격스킬2", 4, 0] #화염주 1성
+	RANGE_SKILLS[13] = [7, 6, "공격스킬2", 4, 0] #자무주 1성
+	RANGE_SKILLS[14] = [7, 6, "공격스킬2", 4, 0] #뢰진주 첨
+	RANGE_SKILLS[16] = [7, 6, "공격스킬2", 4, 0] #뢰진주 2성
+	RANGE_SKILLS[17] = [7, 6, "공격스킬2", 4, 0] #백열주 2성
+	RANGE_SKILLS[18] = [7, 6, "공격스킬2", 4, 0] #화염주 2성
+	RANGE_SKILLS[19] = [7, 6, "공격스킬2", 4, 0] #자무주 2성
+	RANGE_SKILLS[22] = [7, 6, "공격스킬2", 4, 0] #뢰진주 3성
+	RANGE_SKILLS[23] = [7, 6, "공격스킬2", 4, 0] #백열주 3성
+	RANGE_SKILLS[24] = [7, 6, "공격스킬2", 4, 0] #화염주 3성
+	RANGE_SKILLS[25] = [7, 6, "공격스킬2", 4, 0] #자무주 3성
+	RANGE_SKILLS[30] = [7, 6, "공격스킬2", 4, 0] #뢰진주 4성
+	RANGE_SKILLS[31] = [7, 6, "공격스킬2", 4, 0] #백열주 4성
+	RANGE_SKILLS[32] = [7, 6, "공격스킬2", 4, 0] #화염주 4성
+	RANGE_SKILLS[33] = [7, 6, "공격스킬2", 4, 0] #자무주 4성
+	RANGE_SKILLS[37] = [7, 6, "공격스킬2", 4, 0] #뢰진주 5성
+	RANGE_SKILLS[38] = [7, 6, "공격스킬2", 4, 0] #백열주 5성
+	RANGE_SKILLS[39] = [7, 6, "공격스킬2", 4, 0] #화염주 5성
+	RANGE_SKILLS[40] = [7, 6, "공격스킬2", 4, 0] #자무주 5성
+	RANGE_SKILLS[44] = [7, 6, "공격스킬2", 4, 0] #헬파이어
+	RANGE_SKILLS[49] = [7, 6, "공격스킬2", 4, 0] #성려멸주
+	RANGE_SKILLS[52] = [7, 6, "공격스킬2", 4, 0] #성려멸주 1성
+	RANGE_SKILLS[53] = [7, 6, "공격스킬2", 4, 0] #삼매진화
+	RANGE_SKILLS[56] = [7, 6, "공격스킬2", 4, 0] #성려멸주 2성
+	RANGE_SKILLS[57] = [7, 6, "공격스킬2", 4, 0] #삼매진화 1성
+	RANGE_SKILLS[58] = [10, 6, "공격스킬2", 4, 0] #지폭지술
+	RANGE_SKILLS[68] = [10, 6, "공격스킬2", 4, 0] #폭류유성
 	
 	#전사 스킬
-	RANGE_SKILLS[65] = [10, 5, "공격스킬2", 4, 0] #뢰마도
+	RANGE_SKILLS[65] = [10, 6, "공격스킬2", 4, 0] #뢰마도
 	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
-	RANGE_SKILLS[73] = [4, 5, "공격스킬2", 4, 0] #광량돌격
+	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
-	RANGE_SKILLS[75] = [10, 5, "공격스킬2", 4, 0] #뢰마도 1성
+	RANGE_SKILLS[75] = [10, 6, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [0, 5, "", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
 	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
 	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
 	RANGE_SKILLS[101] = [0, 5, "", 4, 0] #백호참
-	RANGE_SKILLS[102] = [1, 5, "공격스킬2", 4, 0] #백리건곤 1성
+	RANGE_SKILLS[102] = [1, 6, "공격스킬2", 4, 0] #백리건곤 1성
 	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
 	#도사 스킬
@@ -1042,10 +1042,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
 						#Return if enemy is dead 
 						return if enemy_dead?(enemies[0].actor,e)
-						if enemies[0].is_a?(Game_Player)
-							Network::Main.send_newstats
-							return 
-						end
+						
 						return if enemies[0].attacking == e and enemies[0].in_battle
 						#If its alive, put it in battle
 						enemies[0].in_battle = true
@@ -1381,7 +1378,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				$game_temp.common_event_id = skill.common_event_id
 			end
 			
-			Network::Main.send_newstats
 			# 스킬 애니메이션 
 			$game_player.animation_id = skill.animation1_id
 			

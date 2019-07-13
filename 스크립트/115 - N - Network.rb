@@ -2207,12 +2207,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
 										$game_player.animation_id = 139
-										$game_party.actors[0].hp += 3000										
+										$game_party.actors[0].hp += 4000										
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
 										$game_player.animation_id = 151
-										$game_party.actors[0].hp += 5000
+										$game_party.actors[0].hp += 7000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end
@@ -2232,6 +2232,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 				when /<drop_del>(.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
+					
 					if $1.to_i == $game_map.map_id and $game_map.events[$2.to_i] != nil
 						$game_map.events[$2.to_i].erase
 					end
@@ -2263,6 +2264,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if @ani_id != -1
 							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
 								$ani_character[@ani_id.to_i].animation_id = @ani_number 
+								
 								# 상대방도 애니메이션 뜨도록 해야함
 							end
 						elsif @ani_event >= 0
@@ -2272,11 +2274,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					@ani_id = -1; @ani_map = -1; @ani_number = -1; @ani_event = -1
+					Network::Main.send_newstats
 					return true
 					
 					# Remove Player ( Disconnected )
 				when /<9>(.*)<\/9>/
-					
 					# Destroy Netplayer and MapPlayer things
 					self.destroy($1.to_i)
 					# Redraw Mapplayer Sprites

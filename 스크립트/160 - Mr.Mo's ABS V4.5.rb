@@ -4210,7 +4210,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			@temp_frequency = 0 
 			@actor = self
 			@respawn = 0
-			@aggro = $is_map_first ? true : false
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

@@ -1107,7 +1107,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
-				when /<aggro>(.*)<\/aggro>/ # 체력 공유
+				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
@@ -1548,6 +1548,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$is_map_first = true
 					else
 						$is_map_first = false
+					end
+					
+					for e in $ABS.enemies.values
+						e.aggro = $is_map_first
 					end
 					return true
 					

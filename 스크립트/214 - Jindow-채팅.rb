@@ -29,7 +29,7 @@ class Jindow_Chat_Input < Jindow
 			
 		when /\/도움말/
 			$chat.write ("아이탬창:i 정보창:c 시스템창:~ 공격:s 파티:p 길드:G 전체화면:alt+enter", Color.new(65, 105, 0))    
-			$chat.write ("현재접속자:L 캐시샵:~  상태창/맵이름 숨기기:E  채팅창 숨기기 : F", Color.new(65, 105, 0)) 
+			$chat.write ("현재접속자:L 캐시샵:~  상태창/맵이름 숨기기:E  채팅창 숨기기 : F 딜레이 창 숨기기 : R", Color.new(65, 105, 0)) 
 			
 		when /\/귓 (.*)/  # 귓속말 상대를 변경
 			@whispers = $1.to_s

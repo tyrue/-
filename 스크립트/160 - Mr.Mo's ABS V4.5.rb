@@ -689,7 +689,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			#Update Player
-			$skill_Delay_Console.refresh if $skill_Delay_Console != nil
+			if (Graphics.frame_count % (Graphics.frame_rate / 3) == 0)
+				$skill_Delay_Console.refresh if $skill_Delay_Console != nil and $skill_Delay_Console.tog
+			end
 			update_player if @active
 			#Update Enemy AI
 			update_enemy if @enemies != {} and @active
@@ -2179,7 +2181,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 86 # 용
-				if r <= 7 
+				if r <= 30 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -3785,13 +3787,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					power += user.maxsp / 55 + 80
 					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
-					power += user.maxsp / 50 + 90
+					power += user.maxsp / 45 + 100
 					user.sp -= user.maxsp / 9
 				when 53 # 삼매진화 
 					power += user.sp / 10 + 40
 					user.sp = 0
 				when 56 # 성려멸주 2성
-					power += user.maxsp / 45 + 110
+					power += user.maxsp / 35 + 120
 					user.sp -= user.maxsp / 8
 				when 57 # 삼매진화 1성
 					power += user.sp / 7 + 60

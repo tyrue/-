@@ -14,6 +14,7 @@ class Skill_Delay_Console < Sprite
 	#     max_line : 최대 줄 수
 	#--------------------------------------------------------------------------
 	attr_accessor :console_log
+	attr_accessor :tog
 	def initialize(x, y, width, height, max_line = 8)
 		@console_viewport = Viewport.new(x, y, width, height)
 		@console_viewport.z = 999
@@ -24,7 +25,7 @@ class Skill_Delay_Console < Sprite
 		@console_height = height
 		@console_max_line = max_line
 		@console_log = {}
-		
+		@tog = true
 		# 스킬 딜레이 갱신
 		for skill_mash in SKILL_MASH_TIME
 			if skill_mash[1][1] > 0
@@ -44,7 +45,7 @@ class Skill_Delay_Console < Sprite
 		@back_sprite = Sprite.new(@console_viewport)
 		@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
 		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
-		@back_sprite.visible = false
+		@back_sprite.visible = true
 		self.bitmap.font.color.set(255, 255, 255, 255)
 	end
 	
@@ -129,7 +130,7 @@ class Skill_Delay_Console < Sprite
 				@console_log[id] = [sprite, SKILL_BUFF_TIME[id][1]]
 			end
 		end
-		@console_log.delete_at(0) while @console_log.size > @console_max_line
+		#@console_log.delete_at(0) while @console_log.size > @console_max_line
 		#refresh
 	end
 	#--------------------------------------------------------------------------
@@ -138,6 +139,23 @@ class Skill_Delay_Console < Sprite
 	def show
 		self.opacity = 255
 	end
+	
+	def toggle
+		if @back_sprite.visible 
+			@back_sprite.visible = false
+			@tog = false
+			for sprite in @console_log
+				sprite[1][0].visible = false
+			end
+		elsif
+			@back_sprite.visible = true
+			@tog = true
+			for sprite in @console_log
+				sprite[1][0].visible = true
+			end
+		end
+	end
+	
 	#--------------------------------------------------------------------------
 	# ● 숨긴다
 	#--------------------------------------------------------------------------

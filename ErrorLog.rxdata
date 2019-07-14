@@ -5297,3 +5297,58 @@ On <<Sun 14 Jul 2019, 19:03:19>> the error <<can't convert Skill_Delay_Console i
 On <<Sun 14 Jul 2019, 19:18:52>> the error <<failed to create bitmap (#<Scene_Map:0x81684b0>)>> occured.
 On <<Sun 14 Jul 2019, 19:56:19>> the error <<disposed sprite (#<Scene_Map:0x81942b8>)>> occured.
 On <<Sun 14 Jul 2019, 19:57:00>> the error <<disposed sprite (#<Scene_Map:0x814a4e0>)>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^ ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^ ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error
+				toggle? = true ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error
+				toggle? = true
+				         ^ ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<compile error
+Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error
+				toggle? = true
+				         ^ ()>> occured.

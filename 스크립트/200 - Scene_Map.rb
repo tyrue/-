@@ -92,14 +92,11 @@ class Scene_Map
 					end	
 					
 					if Key.trigger?(KEY_F) # f
-						#~ if not Hwnd.include?("Chat_Input")
-							#~ Jindow_Chat_Input.new
-							#~ $chat.toggle
-						#~ else
-							#~ Hwnd.dispose("Chat_Input")
-							#~ $chat.toggle
-						#~ end
 						$chat.toggle # 채팅창 닫고 키기
+					end	
+					
+					if Key.trigger?(KEY_R) # r
+						$skill_Delay_Console.toggle
 					end	
 					
 					if Key.trigger?(34) # k

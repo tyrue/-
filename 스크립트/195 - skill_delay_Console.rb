@@ -21,53 +21,114 @@ class Skill_Delay_Console < Sprite
 		self.bitmap = Bitmap.new(width, height)
 		self.z = 999
 		@console_width = width
+		@console_height = height
 		@console_max_line = max_line
-		@console_log = []
+		@console_log = {}
 		
-		@back_sprite = Sprite.new(@console_viewport)
-	end
-	
-	#--------------------------------------------------------------------------
-	# ● 리프레쉬
-	#--------------------------------------------------------------------------
-	def refresh
-		clear
 		# 스킬 딜레이 갱신
 		for skill_mash in SKILL_MASH_TIME
 			if skill_mash[1][1] > 0
-				self.write_line("#{$data_skills[skill_mash[0]].name} : #{'%.1f' % (skill_mash[1][1]/60.0)}")
+				sprite = Sprite_Chat.new(@console_viewport)
+				@console_log[skill_mash[0]] = [sprite, SKILL_MASH_TIME[skill_mash[0]][1]]
 			end
 		end
 		
 		# 버프 지속시간 갱신
 		for skill_mash in SKILL_BUFF_TIME
 			if skill_mash[1][1] > 0
-				self.write_line("#{$data_skills[skill_mash[0]].name} : #{'%.1f' % (skill_mash[1][1]/60.0)}")
+				sprite = Sprite_Chat.new(@console_viewport)
+				@console_log[skill_mash[0]] = [sprite, SKILL_BUFF_TIME[skill_mash[0]][1]]
 			end
 		end
 		
+		@back_sprite = Sprite.new(@console_viewport)
+		@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
+		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
+		@back_sprite.visible = false
+		self.bitmap.font.color.set(255, 255, 255, 255)
+	end
+	
+	#--------------------------------------------------------------------------
+	# ● 리프레쉬
+	#--------------------------------------------------------------------------
+	def refresh
 		if @console_log.size <= 0
 			@back_sprite.visible = false
 			return 
 		end
 		
 		@back_sprite.visible = true
-		@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
-		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
-		self.bitmap.font.color.set(255, 255, 255, 255)
-		for i in 0...@console_log.size
-			# x, y, width, height, string
-			self.bitmap.draw_text(0, (i) * 16, @console_width, 32, @console_log[i])
+		
+		i = 0
+		for log in @console_log
+			if SKILL_MASH_TIME[log[0]] != nil
+				if SKILL_MASH_TIME[log[0]][1].to_i == 0 
+					@console_log[log[0]][0].dispose
+					@console_log.delete(log[0])
+					next
+				end
+				
+				if ('%.1f' % (SKILL_MASH_TIME[log[0]][1] / 60.0)) != ('%.1f' % (log[1][1].to_i / 60.0))
+					@console_log[log[0]][1] = SKILL_MASH_TIME[log[0]][1]
+					
+					@console_log[log[0]][0].dispose
+					sprite = Sprite_Chat.new(@console_viewport)
+					sprite.bitmap = Bitmap.new(width, 32)
+					sprite.bitmap.font.size = 12
+					sprite.bitmap.font.color.set(255, 204, 0, 255)
+					sprite.x = 0
+					sprite.y = (i) * 16
+					@console_log[log[0]][0] = sprite
+					@console_log[log[0]][0].bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[log[0]].name} : #{'%.1f' % (@console_log[log[0]][1]/60.0)}초") 
+					# x, y, width, height, string
+					
+				end
+			end
+			
+			if SKILL_BUFF_TIME[log[0]] != nil
+				if SKILL_BUFF_TIME[log[0]][1].to_i == 0 
+					@console_log[log[0]][0].dispose
+					@console_log.delete(log[0])
+					next
+				end
+				if ('%.1f' % (SKILL_BUFF_TIME[log[0]][1] / 60.0)) != ('%.1f' % (log[1][1].to_i / 60.0))
+					@console_log[log[0]][1] = SKILL_BUFF_TIME[log[0]][1] 
+					
+					@console_log[log[0]][0].dispose
+					sprite = Sprite_Chat.new(@console_viewport)
+					sprite.bitmap = Bitmap.new(width, 32)
+					sprite.bitmap.font.size = 12
+					sprite.bitmap.font.color.set(0, 255, 0, 255)
+					sprite.x = 0
+					sprite.y = (i) * 16
+					@console_log[log[0]][0] = sprite
+					@console_log[log[0]][0].bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[log[0]].name} : #{'%.1f' % (@console_log[log[0]][1]/60.0)}초")
+					# x, y, width, height, string
+					
+				end
+			end
+			i += 1
 		end
 	end
-	
 	
 	#--------------------------------------------------------------------------
 	# ● 텍스트 출력
 	#     text : 출력하는 문자열
 	#--------------------------------------------------------------------------
-	def write_line(text)
-		@console_log.push(text)
+	def write_line(id)
+		sprite = Sprite_Chat.new(@console_viewport)
+		
+		if SKILL_MASH_TIME[id] != nil
+			if SKILL_MASH_TIME[id][1] > 0
+				@console_log[id] = [sprite, SKILL_MASH_TIME[id][1]]
+			end
+		end
+		
+		if SKILL_BUFF_TIME[id] != nil
+			if SKILL_BUFF_TIME[id][1] > 0
+				@console_log[id] = [sprite, SKILL_BUFF_TIME[id][1]]
+			end
+		end
 		@console_log.delete_at(0) while @console_log.size > @console_max_line
 		#refresh
 	end

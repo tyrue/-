@@ -664,6 +664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				respawn = parameters[10].split 
 				@enemies[event.id].respawn = respawn[1].to_i * 10
 			end
+			@enemies[event.id].aggro = $is_map_first ? true : false
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -688,7 +689,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			#Update Player
-			#$skill_Delay_Console.refresh
+			$skill_Delay_Console.refresh if $skill_Delay_Console != nil
 			update_player if @active
 			#Update Enemy AI
 			update_enemy if @enemies != {} and @active
@@ -1364,6 +1365,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
 			end
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
@@ -1371,6 +1373,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
 			end
 			
 			#Activate Common Event
@@ -1539,6 +1542,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
 			end
 			
 			#Animate
@@ -3760,10 +3764,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			if skill.atk_f > 0
 				hit *= user.hit / 100
 			end
+			
 			# 스킬 명중률
 			hit_result = (rand(30) < hit)
 			# Set effective flag if skill is uncertain
 			effective |= hit < 100
+			
 			# If hit occurs
 			if hit_result == true
 				# Calculate power
@@ -3962,12 +3968,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					# If state is unchanged
 					unless @state_changed
 						# Set damage to "Miss"
+						
 						self.damage = "Miss"
 					end
 				end
 				# If miss occurs
 			else
 				# Set damage to "Miss"
+				
 				self.damage = "Miss"
 			end
 			# End Method
@@ -4211,6 +4219,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@temp_frequency = 0 
 			@actor = self
 			@respawn = 0
+			@aggro = $is_map_first ? true : false
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

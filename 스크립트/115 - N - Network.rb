@@ -1457,6 +1457,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							b번하우징
 							c번하우징
 							d번하우징
+							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
+							$skill_Delay_Console.show
 							self.send_start
 						end
 					end

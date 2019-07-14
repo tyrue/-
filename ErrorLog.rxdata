@@ -5251,3 +5251,104 @@ if (0 <= time.min.to_i and time.min.to_i < 20)
 On <<Tue 09 Jul 2019, 20:11:22>> the error <<Section178:1746: syntax error ()>> occured.
 On <<Tue 09 Jul 2019, 20:11:22>> the error <<compile error
 Section178:1746: syntax error ()>> occured.
+On <<Wed 10 Jul 2019, 17:19:18>> the error <<Section247:82: syntax error ()>> occured.
+On <<Wed 10 Jul 2019, 17:19:18>> the error <<compile error
+Section247:82: syntax error ()>> occured.
+On <<Wed 10 Jul 2019, 23:56:08>> the file <<Audio/BGM/00000998>> was missing.
+On <<Fri 12 Jul 2019, 19:43:59>> the error <<wrong number of arguments(1 for 0) (#<Scene_Map:0x7f07c20>)>> occured.
+On <<Fri 12 Jul 2019, 19:45:01>> the error <<wrong number of arguments(1 for 0) (#<Scene_Map:0x7ea0808>)>> occured.
+On <<Fri 12 Jul 2019, 19:45:16>> the error <<wrong number of arguments(1 for 0) (#<Scene_Map:0x483a5d8>)>> occured.
+On <<Fri 12 Jul 2019, 20:01:25>> the error << (#<Scene_Map:0x8175008>)>> occured.
+On <<Fri 12 Jul 2019, 20:04:17>> the error << (#<Scene_Map:0x7fb1ad8>)>> occured.
+On <<Fri 12 Jul 2019, 21:07:08>> the error <<Section204:59: syntax error ()>> occured.
+On <<Fri 12 Jul 2019, 21:07:08>> the error <<compile error
+Section204:59: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 17:27:45>> the error <<bad value for range (#<Scene_Map:0x81b7b28>)>> occured.
+On <<Sun 14 Jul 2019, 17:27:45>> the error <<bad value for range (#<Scene_Map:0x81b7b28>)>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<Section195:58: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<Section195:58: syntax error
+					self.bitmap.draw_text(0, (i) * 16, @console_width, 32, "#{$data_skills[log[0]].name} : #{log[1]/60.0)}") ()>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<Section195:58: syntax error
+					self.bitmap.draw_text(0, (i) * 16, @console_width, 32, "#{$data_skills[log[0]].name} : #{log[1]/60.0)}")
+					                                                                                                     ^ ()>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<Section195:58: syntax error
+					self.bitmap.draw_text(0, (i) * 16, @console_width, 32, "#{$data_skills[log[0]].name} : #{log[1]/60.0)}")
+					                                                                                                     ^
+Section195:71: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<Section195:58: syntax error
+					self.bitmap.draw_text(0, (i) * 16, @console_width, 32, "#{$data_skills[log[0]].name} : #{log[1]/60.0)}")
+					                                                                                                     ^
+Section195:71: syntax error
+Section195:74: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<Section195:58: syntax error
+					self.bitmap.draw_text(0, (i) * 16, @console_width, 32, "#{$data_skills[log[0]].name} : #{log[1]/60.0)}")
+					                                                                                                     ^
+Section195:71: syntax error
+Section195:74: syntax error
+Section195:121: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 18:05:42>> the error <<compile error
+Section195:58: syntax error
+					self.bitmap.draw_text(0, (i) * 16, @console_width, 32, "#{$data_skills[log[0]].name} : #{log[1]/60.0)}")
+					                                                                                                     ^
+Section195:71: syntax error
+Section195:74: syntax error
+Section195:121: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 19:03:19>> the error <<can't convert Skill_Delay_Console into Viewport (#<Scene_Map:0x8129598>)>> occured.
+On <<Sun 14 Jul 2019, 19:18:52>> the error <<failed to create bitmap (#<Scene_Map:0x81684b0>)>> occured.
+On <<Sun 14 Jul 2019, 19:56:19>> the error <<disposed sprite (#<Scene_Map:0x81942b8>)>> occured.
+On <<Sun 14 Jul 2019, 19:57:00>> the error <<disposed sprite (#<Scene_Map:0x814a4e0>)>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^ ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^ ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error
+				toggle? = true ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error
+				toggle? = true
+				         ^ ()>> occured.
+On <<Sun 14 Jul 2019, 23:19:36>> the error <<compile error
+Section195:28: syntax error
+		@toggle? = true
+		          ^
+Section195:148: syntax error
+				toggle? = false
+				         ^
+Section195:154: syntax error
+				toggle? = true
+				         ^ ()>> occured.

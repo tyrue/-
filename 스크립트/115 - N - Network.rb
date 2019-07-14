@@ -1107,7 +1107,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
-				when /<aggro>(.*)<\/aggro>/ # 체력 공유
+				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
@@ -1393,6 +1393,31 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# mdef
 					if $global_x == 34
 						$game_party.actors[0].mdef = $1.to_i 
+					end
+					
+					# 스킬 딜레이 갱신
+					if $global_x == 35
+						data = []
+						data = $1.split "."
+						for d in data
+							break if d == "*null*"
+							i = []
+							i = d.split ","
+							SKILL_MASH_TIME[i[0].to_i][1] = i[1].to_i
+						end
+					end
+					
+					# 버프 지속시간 갱신
+					if $global_x == 36
+						data = []
+						data = $1.split "."
+						for d in data
+							break if d == "*null*"
+							i = []
+							i = d.split ","
+							SKILL_BUFF_TIME[i[0].to_i][1] = i[1].to_i
+						end
+						
 						# 데이터 로드 완료
 						$game_party.actors[0].name = $name
 						$game_map.setup($new_id) 
@@ -1432,6 +1457,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							b번하우징
 							c번하우징
 							d번하우징
+							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
+							$skill_Delay_Console.show
 							self.send_start
 						end
 					end
@@ -1523,6 +1550,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$is_map_first = true
 					else
 						$is_map_first = false
+					end
+					
+					for e in $ABS.enemies.values
+						e.aggro = $is_map_first
 					end
 					return true
 					
@@ -1668,6 +1699,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							enemy = $ABS.enemies[id]
 							event = enemy.event
 							
+							self.drop_enemy(enemy)
 							case enemy.trigger[0]
 							when 0
 								# 여기서 랜덤하게 움직이는걸 해야함
@@ -1709,11 +1741,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								
 							end						
 						end
-						$game_map.refresh
-						
+						$game_map.refresh	
 					end
-					
-					
 					
 					
 					# 템 드랍 
@@ -1867,6 +1896,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					@ani_id = -1; @ani_map = -1; @ani_number = -1;
+					Network::Main.send_newstats
 					return true
 					
 				when /<trade_invite>(.*),(.*)<\/trade_invite>/
@@ -2063,6 +2093,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					
+					# 파티 퀘스트 장소로 이동 (npt, 현재 map_id, 이동할 map_id, x, y)
+				when /<npt_move>(.*) (.*) (.*) (.*) (.*)<\/npt_move>/
+					return if $npt != $1.to_s
+					return if $game_map.map_id != $2.to_i
+					$game_temp.player_new_map_id = $3.to_i
+					$game_temp.player_new_x = $4.to_i
+					$game_temp.player_new_y = $5.to_i
+					$game_temp.player_new_direction = 1
+					$game_temp.player_transferring = true
+					
+					
 				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/
 					if $npt == $3.to_s
 						if "#{$game_map.map_id}" == $4.to_s
@@ -2181,12 +2222,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
 										$game_player.animation_id = 139
-										$game_party.actors[0].hp += 3000										
+										$game_party.actors[0].hp += 4000										
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
 										$game_player.animation_id = 151
-										$game_party.actors[0].hp += 5000
+										$game_party.actors[0].hp += 7000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end
@@ -2206,6 +2247,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 				when /<drop_del>(.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
+					
 					if $1.to_i == $game_map.map_id and $game_map.events[$2.to_i] != nil
 						$game_map.events[$2.to_i].erase
 					end
@@ -2237,6 +2279,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if @ani_id != -1
 							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
 								$ani_character[@ani_id.to_i].animation_id = @ani_number 
+								
 								# 상대방도 애니메이션 뜨도록 해야함
 							end
 						elsif @ani_event >= 0
@@ -2246,11 +2289,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					@ani_id = -1; @ani_map = -1; @ani_number = -1; @ani_event = -1
+					Network::Main.send_newstats
 					return true
 					
 					# Remove Player ( Disconnected )
 				when /<9>(.*)<\/9>/
-					
 					# Destroy Netplayer and MapPlayer things
 					self.destroy($1.to_i)
 					# Redraw Mapplayer Sprites
@@ -2290,7 +2333,25 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				return false if object.real_y >= screne_height
 				return true
 			end
+			
+			# 파티 사냥했을 때, 퀘스트 아이템 떨어지도록
+			def self.drop_enemy(e)
+				r = rand(100)
+				case e.id.to_i
+				when 57 # 청웅객
+					if r <= 60 and $game_switches[141] == true # 승급 퀘스트
+						# 청웅의 환
+						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 52 #{e.event.x} #{e.event.y}</drop_create>\n"
+					end
+				when 157 # 해파리수하
+					if r <= 10 and $game_switches[378] == true # 용궁 전략문서 얻기
+						# 전략문서
+						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 98 #{e.event.x} #{e.event.y}</drop_create>\n"
+					end
+				end
+			end
 		end
+		
 		#-------------------------------------------------------------------------------
 		# End Class
 		#-------------------------------------------------------------------------------

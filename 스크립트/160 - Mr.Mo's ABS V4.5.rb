@@ -216,55 +216,55 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 범위, 이동속도, 캐릭터이름, 지속시간, 넉백 범위
 	# 데이터베이스 보고 범위 스킬 id넣으면 됨
 	# 주술사 스킬
-	RANGE_SKILLS[1] = [7, 5, "공격스킬2", 4, 0] 	#뢰진주
-	RANGE_SKILLS[2] = [7, 5, "공격스킬2", 4, 0] 	#백열주
-	RANGE_SKILLS[3] = [7, 5, "공격스킬2", 4, 0] 	#화염주
-	RANGE_SKILLS[4] = [7, 5, "공격스킬2", 4, 0] 	#자무주
-	RANGE_SKILLS[10] = [7, 5, "공격스킬2", 4, 0] #뢰진주 1성
-	RANGE_SKILLS[11] = [7, 5, "공격스킬2", 4, 0] #백열주 1성
-	RANGE_SKILLS[12] = [7, 5, "공격스킬2", 4, 0] #화염주 1성
-	RANGE_SKILLS[13] = [7, 5, "공격스킬2", 4, 0] #자무주 1성
-	RANGE_SKILLS[14] = [7, 5, "공격스킬2", 4, 0] #뢰진주 첨
-	RANGE_SKILLS[16] = [7, 5, "공격스킬2", 4, 0] #뢰진주 2성
-	RANGE_SKILLS[17] = [7, 5, "공격스킬2", 4, 0] #백열주 2성
-	RANGE_SKILLS[18] = [7, 5, "공격스킬2", 4, 0] #화염주 2성
-	RANGE_SKILLS[19] = [7, 5, "공격스킬2", 4, 0] #자무주 2성
-	RANGE_SKILLS[22] = [7, 5, "공격스킬2", 4, 0] #뢰진주 3성
-	RANGE_SKILLS[23] = [7, 5, "공격스킬2", 4, 0] #백열주 3성
-	RANGE_SKILLS[24] = [7, 5, "공격스킬2", 4, 0] #화염주 3성
-	RANGE_SKILLS[25] = [7, 5, "공격스킬2", 4, 0] #자무주 3성
-	RANGE_SKILLS[30] = [7, 5, "공격스킬2", 4, 0] #뢰진주 4성
-	RANGE_SKILLS[31] = [7, 5, "공격스킬2", 4, 0] #백열주 4성
-	RANGE_SKILLS[32] = [7, 5, "공격스킬2", 4, 0] #화염주 4성
-	RANGE_SKILLS[33] = [7, 5, "공격스킬2", 4, 0] #자무주 4성
-	RANGE_SKILLS[37] = [7, 5, "공격스킬2", 4, 0] #뢰진주 5성
-	RANGE_SKILLS[38] = [7, 5, "공격스킬2", 4, 0] #백열주 5성
-	RANGE_SKILLS[39] = [7, 5, "공격스킬2", 4, 0] #화염주 5성
-	RANGE_SKILLS[40] = [7, 5, "공격스킬2", 4, 0] #자무주 5성
-	RANGE_SKILLS[44] = [7, 5, "공격스킬2", 4, 0] #헬파이어
-	RANGE_SKILLS[49] = [7, 5, "공격스킬2", 4, 0] #성려멸주
-	RANGE_SKILLS[52] = [7, 5, "공격스킬2", 4, 0] #성려멸주 1성
-	RANGE_SKILLS[53] = [7, 5, "공격스킬2", 4, 0] #삼매진화
-	RANGE_SKILLS[56] = [7, 5, "공격스킬2", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[57] = [7, 5, "공격스킬2", 4, 0] #삼매진화 1성
-	RANGE_SKILLS[58] = [10, 5, "공격스킬2", 4, 0] #지폭지술
-	RANGE_SKILLS[68] = [10, 5, "공격스킬2", 4, 0] #폭류유성
+	RANGE_SKILLS[1] = [7, 6, "공격스킬2", 4, 0] 	#뢰진주
+	RANGE_SKILLS[2] = [7, 6, "공격스킬2", 4, 0] 	#백열주
+	RANGE_SKILLS[3] = [7, 6, "공격스킬2", 4, 0] 	#화염주
+	RANGE_SKILLS[4] = [7, 6, "공격스킬2", 4, 0] 	#자무주
+	RANGE_SKILLS[10] = [7, 6, "공격스킬2", 4, 0] #뢰진주 1성
+	RANGE_SKILLS[11] = [7, 6, "공격스킬2", 4, 0] #백열주 1성
+	RANGE_SKILLS[12] = [7, 6, "공격스킬2", 4, 0] #화염주 1성
+	RANGE_SKILLS[13] = [7, 6, "공격스킬2", 4, 0] #자무주 1성
+	RANGE_SKILLS[14] = [7, 6, "공격스킬2", 4, 0] #뢰진주 첨
+	RANGE_SKILLS[16] = [7, 6, "공격스킬2", 4, 0] #뢰진주 2성
+	RANGE_SKILLS[17] = [7, 6, "공격스킬2", 4, 0] #백열주 2성
+	RANGE_SKILLS[18] = [7, 6, "공격스킬2", 4, 0] #화염주 2성
+	RANGE_SKILLS[19] = [7, 6, "공격스킬2", 4, 0] #자무주 2성
+	RANGE_SKILLS[22] = [7, 6, "공격스킬2", 4, 0] #뢰진주 3성
+	RANGE_SKILLS[23] = [7, 6, "공격스킬2", 4, 0] #백열주 3성
+	RANGE_SKILLS[24] = [7, 6, "공격스킬2", 4, 0] #화염주 3성
+	RANGE_SKILLS[25] = [7, 6, "공격스킬2", 4, 0] #자무주 3성
+	RANGE_SKILLS[30] = [7, 6, "공격스킬2", 4, 0] #뢰진주 4성
+	RANGE_SKILLS[31] = [7, 6, "공격스킬2", 4, 0] #백열주 4성
+	RANGE_SKILLS[32] = [7, 6, "공격스킬2", 4, 0] #화염주 4성
+	RANGE_SKILLS[33] = [7, 6, "공격스킬2", 4, 0] #자무주 4성
+	RANGE_SKILLS[37] = [7, 6, "공격스킬2", 4, 0] #뢰진주 5성
+	RANGE_SKILLS[38] = [7, 6, "공격스킬2", 4, 0] #백열주 5성
+	RANGE_SKILLS[39] = [7, 6, "공격스킬2", 4, 0] #화염주 5성
+	RANGE_SKILLS[40] = [7, 6, "공격스킬2", 4, 0] #자무주 5성
+	RANGE_SKILLS[44] = [7, 6, "공격스킬2", 4, 0] #헬파이어
+	RANGE_SKILLS[49] = [7, 6, "공격스킬2", 4, 0] #성려멸주
+	RANGE_SKILLS[52] = [7, 6, "공격스킬2", 4, 0] #성려멸주 1성
+	RANGE_SKILLS[53] = [7, 6, "공격스킬2", 4, 0] #삼매진화
+	RANGE_SKILLS[56] = [7, 6, "공격스킬2", 4, 0] #성려멸주 2성
+	RANGE_SKILLS[57] = [7, 6, "공격스킬2", 4, 0] #삼매진화 1성
+	RANGE_SKILLS[58] = [10, 6, "공격스킬2", 4, 0] #지폭지술
+	RANGE_SKILLS[68] = [10, 6, "공격스킬2", 4, 0] #폭류유성
 	
 	#전사 스킬
-	RANGE_SKILLS[65] = [10, 5, "공격스킬2", 4, 0] #뢰마도
+	RANGE_SKILLS[65] = [10, 6, "공격스킬2", 4, 0] #뢰마도
 	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
-	RANGE_SKILLS[73] = [4, 5, "공격스킬2", 4, 0] #광량돌격
+	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
-	RANGE_SKILLS[75] = [10, 5, "공격스킬2", 4, 0] #뢰마도 1성
+	RANGE_SKILLS[75] = [10, 6, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [0, 5, "", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
 	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
 	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
 	RANGE_SKILLS[101] = [0, 5, "", 4, 0] #백호참
-	RANGE_SKILLS[102] = [1, 5, "공격스킬2", 4, 0] #백리건곤 1성
+	RANGE_SKILLS[102] = [1, 6, "공격스킬2", 4, 0] #백리건곤 1성
 	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
 	#도사 스킬
@@ -351,8 +351,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
 	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
-	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
-	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
+	SKILL_MASH_TIME[58] = [70 * sec, 0] # 지폭지술
+	SKILL_MASH_TIME[68] = [120 * sec, 0] # 폭류유성
 	SKILL_MASH_TIME[69] = [7 * sec, 0] # 삼매진화 2성
 	
 	# 전사
@@ -364,8 +364,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[79] = [20 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
 	SKILL_MASH_TIME[103] = [10 * sec, 0] # 어검술
-	SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
-	SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
+	SKILL_MASH_TIME[104] = [70 * sec, 0] # 포효검황
+	SKILL_MASH_TIME[105] = [120 * sec, 0] # 혈겁만파
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 스위치 번호]
 	SKILL_BUFF_TIME = {}
@@ -664,6 +664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				respawn = parameters[10].split 
 				@enemies[event.id].respawn = respawn[1].to_i * 10
 			end
+			@enemies[event.id].aggro = $is_map_first ? true : false
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -688,6 +689,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			#Update Player
+			if (Graphics.frame_count % (Graphics.frame_rate / 3) == 0)
+				$skill_Delay_Console.refresh if $skill_Delay_Console != nil and $skill_Delay_Console.tog
+			end
 			update_player if @active
 			#Update Enemy AI
 			update_enemy if @enemies != {} and @active
@@ -859,10 +863,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.erased = false
 				event.refresh
 				
-				# 여기서 랜덤하게 움직이는걸 해야함
-				for i in 0..30
-					event.move_random
-				end
+				#~ # 여기서 랜덤하게 움직이는걸 해야함
+				#~ for i in 0..5
+					#~ event.move_random
+				#~ end
 				event.moveto(event.x,event.y)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
 				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
@@ -1042,10 +1046,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
 						#Return if enemy is dead 
 						return if enemy_dead?(enemies[0].actor,e)
-						if enemies[0].is_a?(Game_Player)
-							Network::Main.send_newstats
-							return 
-						end
+						
 						return if enemies[0].attacking == e and enemies[0].in_battle
 						#If its alive, put it in battle
 						enemies[0].in_battle = true
@@ -1119,7 +1120,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Update Player  단축키를 이용하여 스킬을 사용한다.
 		#--------------------------------------------------------------------------
 		def update_player
-			if not Hwnd.include?("NetPartyInv") # 파티 초대 창이 켜지지 않았다면?
+			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Trade")# 파티 초대, 교환 창이 켜지지 않았다면?
 				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
 					#Keep the current party leader updated
 					@actor = $game_party.actors[0]
@@ -1186,15 +1187,15 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 						# 아직 스킬 딜레이가 남아있다면 무시
 						skill_mash = SKILL_MASH_TIME[id]
-						if skill_mash != nil and skill_mash[1]/60 > 0
-							$console.write_line("딜레이가 남아있습니다. #{skill_mash[1]/60}초")
+						if skill_mash != nil and skill_mash[1]/60.0 > 0
+							$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
 							return
 						end
 						
 						# 아직 버프가 지속중이면 무시
 						skill_mash = SKILL_BUFF_TIME[id]
-						if skill_mash != nil and skill_mash[1]/60 > 0
-							$console.write_line("이미 걸려있습니다. #{skill_mash[1]/60}초 남음")
+						if skill_mash != nil and skill_mash[1]/60.0 > 0
+							$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
 							return
 						end
 						
@@ -1351,10 +1352,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 엑터가 사용할 수 없는 상황이면 무시
 			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
 			
-			
-			Network::Main.send_newstats
-			# 스킬 애니메이션 
-			$game_player.animation_id = skill.animation1_id
+			id = skill.id 
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]
@@ -1363,18 +1361,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
 			# 스킬 아이디
-			id = skill.id 
-			#Activate Common Event
-			if skill.common_event_id > 0
-				# Common event call reservation
-				$game_temp.common_event_id = skill.common_event_id
-			end
 			
 			skill_mash_time = SKILL_MASH_TIME[id]
 			if skill_mash_time != nil
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
 			end
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
@@ -1382,7 +1375,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
 			end
+			
+			#Activate Common Event
+			if skill.common_event_id > 0
+				# Common event call reservation
+				$game_temp.common_event_id = skill.common_event_id
+			end
+			
+			# 스킬 애니메이션 
+			$game_player.animation_id = skill.animation1_id
 			
 			#Get the skill scope
 			# 스킬 맞는 쪽
@@ -1541,6 +1544,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
 			end
 			
 			#Animate
@@ -1632,6 +1636,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			$cha_name = $game_party.actors[0].character_name
 			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
 			$scene = Scene_Map.new
+			# 이때 모든 버프들을 지우자
+			for skill_mash in SKILL_BUFF_TIME
+				if skill_mash[1][1] > 0
+					skill_mash[1][1] = 1 
+				end
+			end
+			
+			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 			e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
@@ -1817,7 +1829,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 13 # 평웅
-				if r <= 60 
+				if r <= 70 
 					# 웅담
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 19 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -1829,7 +1841,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 15 # 호랑이
-				if r <= 60
+				if r <= 70
 					# 호랑이고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 18 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2169,7 +2181,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 86 # 용
-				if r <= 7 
+				if r <= 30 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2193,6 +2205,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 100
 					# 반고의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 90 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+				return true
+			when 104 # 왕구렁이
+				if r <= 30 
+					# 힘의투구1
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 100 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 106 # 뱀
@@ -3748,10 +3766,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			if skill.atk_f > 0
 				hit *= user.hit / 100
 			end
+			
 			# 스킬 명중률
 			hit_result = (rand(30) < hit)
 			# Set effective flag if skill is uncertain
 			effective |= hit < 100
+			
 			# If hit occurs
 			if hit_result == true
 				# Calculate power
@@ -3767,27 +3787,27 @@ if SDK.state("Mr.Mo's ABS") == true
 					power += user.maxsp / 55 + 80
 					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
-					power += user.maxsp / 50 + 90
+					power += user.maxsp / 45 + 100
 					user.sp -= user.maxsp / 9
 				when 53 # 삼매진화 
 					power += user.sp / 10 + 40
 					user.sp = 0
 				when 56 # 성려멸주 2성
-					power += user.maxsp / 45 + 110
+					power += user.maxsp / 35 + 120
 					user.sp -= user.maxsp / 8
 				when 57 # 삼매진화 1성
 					power += user.sp / 7 + 60
 					user.sp = 0
 				when 58 # 지폭지술
 					$e_v += 1
-					power += user.sp / 10 + 20
+					power += user.sp / 30 + 20
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp = 0
 					end
 				when 68 # 폭류유성
 					$e_v += 1
-					power += (user.sp / 10) + (user.hp / 200) + 20
+					power += (user.sp / 25) + (user.hp / 200) + 40
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp -= user.sp / 2
@@ -3840,7 +3860,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					
 				when 104 # 포효검황
-					power += user.hp / 50 + 100
+					power += user.hp / 60 + 100
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
@@ -3849,7 +3869,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				when 105 # 혈겁만파
 					$e_v += 1
-					power += (user.sp / 10) + (user.hp / 50) + 100
+					power += (user.sp / 70) + (user.hp / 65) + 100
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp = 0
@@ -3950,12 +3970,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					# If state is unchanged
 					unless @state_changed
 						# Set damage to "Miss"
+						
 						self.damage = "Miss"
 					end
 				end
 				# If miss occurs
 			else
 				# Set damage to "Miss"
+				
 				self.damage = "Miss"
 			end
 			# End Method

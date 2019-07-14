@@ -574,6 +574,7 @@ module J
 			return self
 		end
 		
+		#---- update 시작 ----#
 		def update
 			super
 			self.refresh? ? 0 : return
@@ -612,6 +613,7 @@ module J
 				@piece[3] = nil
 			end
 		end
+		#---- update 끝 ----#
 		
 		def click=(value)
 			@click = value

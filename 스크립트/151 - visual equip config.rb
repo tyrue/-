@@ -27,21 +27,21 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)주작의검', 2] 	if id == 114  #주작의검
 			return ['(착용)심판의낫', 2] 	if id == 115  #심판의낫
 			return ['(착용)진일신검', 2] 	if id == 116  #진일신검
-			return ['(착용)진일신검', 2] 	if id == 117  #괴력선창
+			return ['(착용)괴력선창', 2] 	if id == 117  #괴력선창
 			return ['(착용)철도', 2] 			if id == 118 	#철단도
 			return ['(착용)철도', 2] 			if id == 119  #비철단도
 			return ['(착용)현철중검', 2] 	if id == 120 	#흑철중검
 			return ['(착용)목도', 2] 			if id == 121 	#초심자의목도
 			return ['(착용)용마제팔검', 2] 	if id == 122  #용마제팔검
-			return ['(착용)용마제팔검', 2] 	if id == 123  #현무염도
+			return ['(착용)현무염도', 2] 	if id == 123  #현무염도
 			return ['(착용)철도', 2] 			if id == 124  #얼음검
-			return ['(착용)철도', 2] 			if id == 125  #일월대도
-			return ['(착용)녹호박별검', 2]	if id == 126  #참마도
-			return ['(착용)영웅의칼\'뇌', 2] 	if id == 127  #청룡신검
-			return ['(착용)진일신검', 2] 	if id == 128  #용량제육봉
+			return ['(착용)일월대도', 2] 	if id == 125  #일월대도
+			return ['(착용)참마도', 2]			if id == 126  #참마도
+			return ['(착용)청룡신검', 2] 	if id == 127  #청룡신검
+			return ['(착용)용랑제구봉', 2] 	if id == 128  #용량제육봉
 			return ['(착용)현철중검', 2] 	if id == 129  #도깨비방망이
 			return ['(착용)영웅의칼\'뇌', 2] 	if id == 130  #산적왕의칼
-			return ['(착용)해골죽장', 2] 	if id == 131  #다문창
+			return ['(착용)다문창', 2] 	if id == 131  #다문창
 			return ['(착용)영혼죽장', 2] 	if id == 132  #인어장군지팡이
 			return ['(착용)해골죽장', 2] 	if id == 133  #해골죽장
 			return ['(착용)일화접선', 2] 	if id == 134  #일화접선

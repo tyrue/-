@@ -865,7 +865,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				#~ # 여기서 랜덤하게 움직이는걸 해야함
 				#~ for i in 0..5
-					#~ event.move_random
+				#~ event.move_random
 				#~ end
 				event.moveto(event.x,event.y)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
@@ -2322,6 +2322,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 12지신
 			when 119 # 백호왕
+				if r <= 4 
+					# 크리스탈
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 102 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 10 
+					# 수정
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 103 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
 				if r <= 40 
 					# 건괘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 79 #{e.event.x} #{e.event.y}</drop_create>\n"
@@ -2412,12 +2419,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 96 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 154 # 외칼상어
-				if r <= 15
+				if r <= 3
+					# 상어의핵
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 108 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 15
 					# 상어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 155 # 쌍칼상어
-				if r <= 15
+				if r <= 3
+					# 상어의핵
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 108 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 15
 					# 상어의심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 97 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end

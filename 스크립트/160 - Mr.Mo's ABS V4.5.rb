@@ -2222,17 +2222,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 107 # 적비
-				if r <= 30 
+				if r <= 20 
 					# 빨간시약
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 55 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
 				end
 			when 108 # 겁살수
-				if r <= 40 
+				if r <= 30 
 					# 빨간시약
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 55 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
-				elsif r <= 50
+				elsif r <= 40
 					# 일월대도
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 70 #{e.event.x} #{e.event.y}</drop_create>\n"
 					return true
@@ -2293,8 +2293,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
 				elsif r <= 15
-					# 불의 결정
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
 				elsif r <= 20
 					# 현랑부
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 76 #{e.event.x} #{e.event.y}</drop_create>\n"				
@@ -2304,8 +2304,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
 				elsif r <= 15
-					# 불의 결정
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 45 #{e.event.x} #{e.event.y}</drop_create>\n"
+					# 불의 혼
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 44 #{e.event.x} #{e.event.y}</drop_create>\n"
 				elsif r <= 19
 					# 백화검
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 77 #{e.event.x} #{e.event.y}</drop_create>\n"				

@@ -1333,6 +1333,29 @@ if SDK.state("Mr.Mo's ABS") == true
 				setup_movement(e)
 			end
 		end
+		
+		#======================#
+		#=====스킬 딜레이 알려줌======#
+		#======================#
+		def skill_console(id)
+			skill_mash_time = SKILL_MASH_TIME[id]
+			if skill_mash_time != nil
+				skill_mash_time[1] = skill_mash_time[0]
+				# 스킬 딜레이 시작 메시지 표시
+				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
+			end
+			
+			skill_mash_time = SKILL_BUFF_TIME[id]
+			if skill_mash_time != nil
+				skill_mash_time[1] = skill_mash_time[0]
+				# 스킬 딜레이 시작 메시지 표시
+				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+				$skill_Delay_Console.write_line(id)
+			end
+		end
+		
+		
 		#--------------------------------------------------------------------------
 		# *  플레이어의 스킬 공격
 		#--------------------------------------------------------------------------
@@ -1361,22 +1384,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
 			# 스킬 아이디
-			
-			skill_mash_time = SKILL_MASH_TIME[id]
-			if skill_mash_time != nil
-				skill_mash_time[1] = skill_mash_time[0]
-				# 스킬 딜레이 시작 메시지 표시
-				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
-				$skill_Delay_Console.write_line(id)
-			end
-			
-			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil
-				skill_mash_time[1] = skill_mash_time[0]
-				# 스킬 딜레이 시작 메시지 표시
-				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
-				$skill_Delay_Console.write_line(id)
-			end
+			skill_console(id)
 			
 			#Activate Common Event
 			if skill.common_event_id > 0
@@ -1539,13 +1547,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Add mash time
 			@button_mash = (w[4] == nil ? MASH_TIME*10 : w[4]*10)
 			
-			skill_mash_time = SKILL_MASH_TIME[id]
-			if skill_mash_time != nil
-				skill_mash_time[1] = skill_mash_time[0]
-				# 스킬 딜레이 시작 메시지 표시
-				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
-				$skill_Delay_Console.write_line(id)
-			end
+			skill_console(id)
 			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
@@ -2914,7 +2916,16 @@ if SDK.state("Mr.Mo's ABS") == true
 			$alive_size = 0
 			objects = []
 			for e in $ABS.enemies.values
-				objects.push(e) if in_range?(element, e.event, range)
+				#Skip NIL values
+				next if e== nil
+				#Skip 이미 적이 죽은거면 넘어가
+				next if e.dead?
+				# Skip if the enemy is an ally and can't hurt allies.
+				next if !CAN_HURT_ALLY and e.hate_group.include?(0)
+				if in_range?(element, e.event, range)
+					$alive_size += 1				
+					objects.push(e) 
+				end
 			end
 			# 여기다가 개수 추가
 			$alive_size = objects.size
@@ -3929,8 +3940,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				
+				
 				if self.damage > 0
-					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 10, 2].max + [self.mdef / 20, 2].max))
+					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 15, 2].max + [self.mdef / 7, 2].max))
 				end
 				
 				

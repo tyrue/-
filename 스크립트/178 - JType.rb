@@ -444,6 +444,7 @@ module J
 			@input_hangul = true
 			@char = nil
 			@text = []
+			@o_text = ""
 			@piece = []
 			@piece[0] = nil
 			@piece[1] = nil
@@ -471,10 +472,18 @@ module J
 		end
 		
 		def view
+			# 여기서 비트맵을 삭제하고 보여주니까 렉걸림
 			command = ""
 			for i in @text
 				command += i
 			end
+			
+			if @o_text != command
+				@o_text = command
+			elsif @o_text == command
+				return
+			end
+			
 			if self.bitmap.text_size(command).width > self.bitmap.width
 				@text.delete_at(@text.size - 1)
 				return
@@ -1103,6 +1112,7 @@ module J
 		end
 		
 		def update_key
+			
 			
 			if Key.trigger?(KEY_BACKSPACE)
 				delete_text

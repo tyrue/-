@@ -5352,3 +5352,4 @@ Section195:148: syntax error
 Section195:154: syntax error
 				toggle? = true
 				         ^ ()>> occured.
+On <<Tue 16 Jul 2019, 01:27:05>> the error <<disposed sprite (#<Scene_Map:0x7fe1100>)>> occured.

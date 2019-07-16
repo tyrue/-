@@ -32,7 +32,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)철도', 2] 			if id == 119  #비철단도
 			return ['(착용)현철중검', 2] 	if id == 120 	#흑철중검
 			return ['(착용)목도', 2] 			if id == 121 	#초심자의목도
-			return ['(착용)용마제팔검', 2] 	if id == 122  #용마제팔검
+			return ['(착용)용마제구검', 2] 	if id == 122  #용마제팔검
 			return ['(착용)현무염도', 2] 	if id == 123  #현무염도
 			return ['(착용)철도', 2] 			if id == 124  #얼음검
 			return ['(착용)일월대도', 2] 	if id == 125  #일월대도
@@ -45,6 +45,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)영혼죽장', 2] 	if id == 132  #인어장군지팡이
 			return ['(착용)해골죽장', 2] 	if id == 133  #해골죽장
 			return ['(착용)일화접선', 2] 	if id == 134  #일화접선
+			
+			# 용무기
+			
 		else
 			# 방어구
 			return ['(착용)연두갑주', 2] 		if id == 1  	#초심자의갑주

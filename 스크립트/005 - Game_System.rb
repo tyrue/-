@@ -42,8 +42,8 @@ class Game_System
 	#     bgm : background music to be played
 	#--------------------------------------------------------------------------
 	def bgm_play(bgm)
-		@playing_bgm = bgm
 		if bgm != nil and bgm.name != ""
+			@playing_bgm = bgm
 			Audio.bgm_play("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch)
 		else
 			Audio.bgm_stop

@@ -47,6 +47,17 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)일화접선', 2] 	if id == 134  #일화접선
 			
 			# 용무기
+			return ['(착용)용마제일검', 2] 	if id == 141  #용마제일검
+			return ['(착용)용마제사검', 2] 	if id == 142  #용마제사검
+			return ['(착용)용마제칠검', 2] 	if id == 143  #용마제칠검
+			return ['(착용)용마제팔검', 2] 	if id == 144  #용마제팔검
+			return ['(착용)용마제구검', 2] 	if id == 145  #용마제구검
+			
+			return ['(착용)용랑제일봉', 2] 	if id == 146  #용랄제일봉
+			return ['(착용)용랑제사봉', 2] 	if id == 147  #용랄제사봉
+			return ['(착용)용랑제칠봉', 2] 	if id == 148  #용랄제칠봉
+			return ['(착용)용랑제팔봉', 2] 	if id == 149  #용랄제팔봉
+			return ['(착용)용랑제구봉', 2] 	if id == 150  #용랄제구봉
 			
 		else
 			# 방어구

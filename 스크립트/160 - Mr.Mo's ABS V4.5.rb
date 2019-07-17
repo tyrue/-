@@ -1339,7 +1339,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#======================#
 		def skill_console(id)
 			skill_mash_time = SKILL_MASH_TIME[id]
-			if skill_mash_time != nil
+			if skill_mash_time != nil and skill_mash_time[1] <= 0
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
@@ -1347,7 +1347,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil
+			if skill_mash_time != nil and skill_mash_time[1] <= 0
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
@@ -2341,8 +2341,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 121 # 새끼용
-				if r <= 40 
-					# 
+				if r <= 5
+					# 은나무가지
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 104 #{e.event.x} #{e.event.y}</drop_create>\n"
+				elsif r <= 40 
+					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 123 # 뱀왕
@@ -2379,6 +2382,30 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 4
 					# 간괘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 86 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 132 # 건룡
+				if r <= 70
+					# 건룡의어금니
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 105 #{e.event.x} #{e.event.y}</drop_create>\n"
+				else
+					# 은나무가지
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 104 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end
+			when 133 # 감룡
+				if r <= 70
+					# 감룡의어금니
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 106 #{e.event.x} #{e.event.y}</drop_create>\n"
+				else
+					# 은나무가지
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 104 #{e.event.x} #{e.event.y}</drop_create>\n"
+				end	
+			when 134 # 진룡
+				if r <= 70
+					# 진룡의어금니
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 107 #{e.event.x} #{e.event.y}</drop_create>\n"
+				else
+					# 은나무가지
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 104 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				
 				# 용궁
@@ -2445,6 +2472,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 해파리의 심장
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 99 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
+				
+				
 			end
 		end
 		

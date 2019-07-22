@@ -1295,18 +1295,17 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 무기를 안꼈으면 공격 못함
 			return if $data_weapons[@actor.weapon_id] == nil
 			#Get all enemies
+			# m은 무기 각 공격 딜레이를 말함, 만약 없으면 기본 공격속도
+			m = MELEE_CUSTOM[@actor.weapon_id]
+			if m != nil and m[0] != nil
+				@button_mash = m[0]*10
+			else
+				@button_mash = MASH_TIME*10
+			end
+			Audio.se_play("Audio/SE/무기001-검")
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 191; @ani_id = #{Network::Main.id};</27>\n"
+			
 			for e in @enemies.values
-				# m은 무기 각 공격 딜레이를 말함, 만약 없으면 기본 공격속도
-				m = MELEE_CUSTOM[@actor.weapon_id]
-				if m != nil and m[0] != nil
-					@button_mash = m[0]*10
-				else
-					@button_mash = MASH_TIME*10
-				end
-				Audio.se_play("Audio/SE/무기001-검")
-				# 여기다가 소리 방송할 수도?
-				
-				# 여기다가 공격 모션 넣으면 될듯
 				# 적이 없거나 적이 죽으면 공격 안함
 				next if e == nil or e.dead?
 				# 적이 캐릭터가 보는 방향에 없거나 바로 앞에 없으면 무시
@@ -2105,13 +2104,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 61 # 주작
-				if r <= 30 
+				if r <= 100 
 					# 주작의 깃
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 68 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 				return true
 			when 62 # 백호
-				if r <= 30 
+				if r <= 100
 					# 백호의 발톱
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 69 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
@@ -2324,14 +2323,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 12지신
 			when 119 # 백호왕
-				if r <= 4 
+				if r <= 20
 					# 크리스탈
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 102 #{e.event.x} #{e.event.y}</drop_create>\n"
-				elsif r <= 10 
+				elsif r <= 40 
 					# 수정
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 103 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
-				if r <= 40 
+				if r <= 90 
 					# 건괘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 79 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end

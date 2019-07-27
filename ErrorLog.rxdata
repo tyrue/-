@@ -5354,3 +5354,194 @@ Section195:154: syntax error
 				         ^ ()>> occured.
 On <<Tue 16 Jul 2019, 01:27:05>> the error <<disposed sprite (#<Scene_Map:0x7fe1100>)>> occured.
 On <<Wed 17 Jul 2019, 22:31:58>> the error <<disposed sprite (#<Scene_Map:0x81746b8>)>> occured.
+On <<Sat 27 Jul 2019, 12:12:22>> the error <<Section226:173: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:22>> the error <<Section226:173: syntax error
+elsif @b.click ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:22>> the error <<Section226:173: syntax error
+elsif @b.click
+     ^ ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:22>> the error <<Section226:173: syntax error
+elsif @b.click
+     ^
+Section226:177: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:22>> the error <<compile error
+Section226:173: syntax error
+elsif @b.click
+     ^
+Section226:177: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:33>> the error <<Section226:173: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:33>> the error <<Section226:173: syntax error
+elsif @b.click ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:33>> the error <<Section226:173: syntax error
+elsif @b.click
+     ^ ()>> occured.
+On <<Sat 27 Jul 2019, 12:12:33>> the error <<compile error
+Section226:173: syntax error
+elsif @b.click
+     ^ ()>> occured.
+On <<Sat 27 Jul 2019, 12:28:46>> the error <<disposed sprite (#<Scene_Map:0x816dfa8>)>> occured.
+On <<Sat 27 Jul 2019, 12:33:50>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x8157c48>)>> occured.
+On <<Sat 27 Jul 2019, 12:36:40>> the error <<cannot convert Fixnum into String (#<Scene_Map:0x7ebf7a0>)>> occured.
+On <<Sat 27 Jul 2019, 13:04:24>> the error <<failed to create bitmap (#<Scene_Map:0x7ea4248>)>> occured.
+On <<Sat 27 Jul 2019, 13:05:19>> the error <<failed to create bitmap (#<Scene_Map:0x7eaf8f8>)>> occured.
+On <<Sat 27 Jul 2019, 13:06:18>> the error <<failed to create bitmap (#<Scene_Map:0x7e966a0>)>> occured.
+On <<Sat 27 Jul 2019, 13:06:39>> the error <<failed to create bitmap (#<Scene_Map:0x49ac648>)>> occured.
+On <<Sat 27 Jul 2019, 13:07:37>> the error <<failed to create bitmap (#<Scene_Map:0x49aa348>)>> occured.
+On <<Sat 27 Jul 2019, 13:12:30>> the error <<failed to create bitmap (#<Scene_Map:0x7fd5cf0>)>> occured.
+On <<Sat 27 Jul 2019, 13:14:47>> the error <<failed to create bitmap (#<Scene_Map:0x7f789b8>)>> occured.
+On <<Sat 27 Jul 2019, 13:29:03>> the error <<failed to create bitmap (#<Scene_Map:0x817b708>)>> occured.
+On <<Sat 27 Jul 2019, 13:30:29>> the error <<can't convert J::Item into Viewport (#<Scene_Map:0x826c038>)>> occured.
+On <<Sat 27 Jul 2019, 13:35:25>> the error <<failed to create bitmap (#<Scene_Map:0x81a96a0>)>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^ ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0 ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^ ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1 ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^ ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2 ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2
+			    ^ ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2
+			    ^
+Section225:96: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2
+			    ^
+Section225:96: syntax error
+		elsif $trade_item[2] == 1 and @item2 == nil or @item2 == "" ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2
+			    ^
+Section225:96: syntax error
+		elsif $trade_item[2] == 1 and @item2 == nil or @item2 == ""
+		     ^ ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2
+			    ^
+Section225:96: syntax error
+		elsif $trade_item[2] == 1 and @item2 == nil or @item2 == ""
+		     ^
+Section225:182: syntax error ()>> occured.
+On <<Sat 27 Jul 2019, 13:58:27>> the error <<compile error
+Section225:56: syntax error
+			id = $item_number[1].id
+			  ^
+Section225:57: syntax error
+			when 0
+			    ^
+Section225:69: syntax error
+			when 1
+			    ^
+Section225:82: syntax error
+			when 2
+			    ^
+Section225:96: syntax error
+		elsif $trade_item[2] == 1 and @item2 == nil or @item2 == ""
+		     ^
+Section225:182: syntax error ()>> occured.

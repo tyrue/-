@@ -5,7 +5,7 @@ class Jindow_Trade2 < Jindow
 	def initialize(id, type, number)
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 150, 60)
-		self.name = "갯수 입력(오른쪽키 불가)"
+		self.name = "갯수 입력"
 		@head = true
 		@drag = true
 		@close = true
@@ -37,138 +37,45 @@ class Jindow_Trade2 < Jindow
 			$game_system.se_play($data_system.decision_se)
 			@type_sells.bluck = false
 			@sell = @type_sells.result
+			
+			if @sell.to_i == 0
+				$console.write_line("개수는 한 개 이상 정할수 있습니다.")
+				return
+			end 
+			
 			if @type == 0
 				if $game_party.item_number(@item_id.to_i) >= @sell.to_i
-					if @sell != 0 or @sell.to_s != ""
-						case @number
-						when 1
-							$item_number[1] = Jindow_Trade_Data.new
-							$item_number[1].id = @item_id
-							$item_number[1].type = @type
-							$item_number[1].amount = @sell.to_i
-							$trade_item[1] = 1
-							$game_variables[1003] += 2
-							
-						when 2
-							$item_number[2] = Jindow_Trade_Data.new
-							$item_number[2].id = @item_id
-							$item_number[2].type = @type
-							$item_number[2].amount = @sell.to_i
-							$trade_item[2] = 1
-							$game_variables[1003] += 2
-							
-						when 3
-							$item_number[3] = Jindow_Trade_Data.new
-							$item_number[3].id = @item_id
-							$item_number[3].type = @type
-							$item_number[3].amount = @sell.to_i
-							$trade_item[3] = 1
-							$game_variables[1003] += 2
-							
-							
-						when 4
-							$item_number[4] = Jindow_Trade_Data.new
-							$item_number[4].id = @item_id
-							$item_number[4].type = @type
-							$item_number[4].amount = @sell.to_i
-							$trade_item[4] = 1
-							$game_variables[1003] += 2
-							
-							
-						end
-						Hwnd.dispose(self)
-					else
-						$console.write_line("개수는 한 개 이상 정할수 있습니다.")
-					end
+					$item_number[@number] = Jindow_Trade_Data.new
+					$item_number[@number].id = @item_id
+					$item_number[@number].type = @type
+					$item_number[@number].amount = @sell.to_i
+					$trade_item[@number] = 1
+					$game_variables[1003] += 2
+					Hwnd.dispose(self)
 				else
 					$console.write_line("소지하고 있는것 보다 개수가 많습니다.")
 				end
 			elsif @type == 1
 				if $game_party.weapon_number(@item_id.to_i) >= @sell.to_i
-					if @sell != 0 or @sell.to_s != ""
-						case @number
-						when 1
-							$item_number[1] = Jindow_Trade_Data.new
-							$item_number[1].id = @item_id
-							$item_number[1].type = @type
-							$item_number[1].amount = @sell.to_i
-							$trade_item[1] = 1
-							$game_variables[1003] += 2
-							
-						when 2
-							$item_number[2] = Jindow_Trade_Data.new
-							$item_number[2].id = @item_id
-							$item_number[2].type = @type
-							$item_number[2].amount = @sell.to_i
-							$trade_item[2] = 1
-							$game_variables[1003] += 2
-							
-							
-						when 3
-							$item_number[3] = Jindow_Trade_Data.new
-							$item_number[3].id = @item_id
-							$item_number[3].type = @type
-							$item_number[3].amount = @sell.to_i
-							$trade_item[3] = 1
-							$game_variables[1003] += 2
-							
-						when 4
-							$item_number[4] = Jindow_Trade_Data.new
-							$item_number[4].id = @item_id
-							$item_number[4].type = @type
-							$item_number[4].amount = @sell.to_i
-							$trade_item[4] = 1
-							$game_variables[1003] += 2
-							
-						end
-						Hwnd.dispose(self)
-					else
-						$console.write_line("개수는 한 개 이상 정할수 있습니다.")
-					end
+					$item_number[@number] = Jindow_Trade_Data.new
+					$item_number[@number].id = @item_id
+					$item_number[@number].type = @type
+					$item_number[@number].amount = @sell.to_i
+					$trade_item[@number] = 1
+					$game_variables[1003] += 2
+					Hwnd.dispose(self)
 				else
 					$console.write_line("소지하고 있는것 보다 개수가 많습니다.")
 				end
 			elsif @type == 2
 				if $game_party.armor_number(@item_id.to_i) >= @sell.to_i
-					if @sell != 0 or @sell.to_s != ""
-						case @number
-						when 1
-							$item_number[1] = Jindow_Trade_Data.new
-							$item_number[1].id = @item_id
-							$item_number[1].type = @type
-							$item_number[1].amount = @sell.to_i
-							$trade_item[1] = 1
-							$game_variables[1003] += 2
-							
-						when 2
-							$item_number[2] = Jindow_Trade_Data.new
-							$item_number[2].id = @item_id
-							$item_number[2].type = @type
-							$item_number[2].amount = @sell.to_i
-							$trade_item[2] = 1
-							$game_variables[1003] += 2
-							
-						when 3
-							$item_number[3] = Jindow_Trade_Data.new
-							$item_number[3].id = @item_id
-							$item_number[3].type = @type
-							$item_number[3].amount = @sell.to_i
-							$trade_item[3] = 1
-							$game_variables[1003] += 2
-							
-						when 4
-							$item_number[4] = Jindow_Trade_Data.new
-							$item_number[4].id = @item_id
-							$item_number[4].type = @type
-							$item_number[4].amount = @sell.to_i
-							$trade_item[4] = 1
-							$game_variables[1003] += 2
-							
-						end
-						Hwnd.dispose(self)
-					else
-						$console.write_line("개수는 한 개 이상 정할수 있습니다.")
-					end
+					$item_number[@number] = Jindow_Trade_Data.new
+					$item_number[@number].id = @item_id
+					$item_number[@number].type = @type
+					$item_number[@number].amount = @sell.to_i
+					$trade_item[@number] = 1
+					$game_variables[1003] += 2
+					Hwnd.dispose(self)
 				else
 					$console.write_line("소지하고 있는것 보다 개수가 많습니다.")
 				end
@@ -179,3 +86,4 @@ class Jindow_Trade2 < Jindow
 		end
 	end
 end
+

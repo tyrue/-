@@ -1236,52 +1236,52 @@ module J
 				end
 				
 			else
-				if Key.trigger?(KEY_0)
+				if Key.trigger?(KEY_0) or Key.trigger?(50)
 					@text.push("0")
 					@char = "0"
 					return
 				end
-				if Key.trigger?(KEY_1)
+				if Key.trigger?(KEY_1) or Key.trigger?(51)
 					@text.push("1")
 					@char = "1"
 					return
 				end
-				if Key.trigger?(KEY_2)
+				if Key.trigger?(KEY_2) or Key.trigger?(52)
 					@text.push("2")
 					@char = "2"
 					return
 				end
-				if Key.trigger?(KEY_3)
+				if Key.trigger?(KEY_3) or Key.trigger?(53)
 					@text.push("3")
 					@char = "3"
 					return
 				end
-				if Key.trigger?(KEY_4)
+				if Key.trigger?(KEY_4) or Key.trigger?(54)
 					@text.push("4")
 					@char = "4"
 					return
 				end
-				if Key.trigger?(KEY_5)
+				if Key.trigger?(KEY_5) or Key.trigger?(55)
 					@text.push("5")
 					@char = "5"
 					return
 				end
-				if Key.trigger?(KEY_6)
+				if Key.trigger?(KEY_6) or Key.trigger?(56)
 					@text.push("6")
 					@char = "6"
 					return
 				end
-				if Key.trigger?(KEY_7)
+				if Key.trigger?(KEY_7) or Key.trigger?(57)
 					@text.push("7")
 					@char = "7"
 					return
 				end
-				if Key.trigger?(KEY_8)
+				if Key.trigger?(KEY_8) or Key.trigger?(58)
 					@text.push("8")
 					@char = "8"
 					return
 				end
-				if Key.trigger?(KEY_9)
+				if Key.trigger?(KEY_9) or Key.trigger?(59)
 					@text.push("9")
 					@char = "9"
 					return

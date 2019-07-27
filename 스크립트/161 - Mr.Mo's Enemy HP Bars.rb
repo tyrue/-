@@ -188,7 +188,7 @@ if SDK.state("Mr.Mo's ABS")
 				e.bar_showing = false
 			end
 			@netPlayers_hp = {}
-			#Get Enemies
+			#Get netplayers
 			for player in Network::Main.mapplayers.values
 				player.bar_showing = false
 			end

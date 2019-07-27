@@ -18,7 +18,7 @@ module J
 			@route2 = "Graphics/Jindow/" + @skin + "/Window/"
 			@font = Font.new(User_Edit::FONT_DEFAULT_NAME, User_Edit::FONT_DEFAULT_SIZE)
 			@font.alpha = 1
-			@font.color.set(0, 0, 0, 255)
+			@font.color.set(255, 255, 255, 255)
 			@item = ""
 			@num = 0
 			@type = 0
@@ -100,11 +100,14 @@ module J
 			
 			@num > 1 ? 0 : (return self)
 			@viewport.hwnd == "Status" ? (return self) : 0
+			@viewport.hwnd == "Trade" ? (return self) : 0
+			@viewport.hwnd == "NetPlayer_Info" ? (return self) : 0
 			self.bitmap.font = @font
 			self.bitmap.font.alpha = @font.alpha
 			self.bitmap.font.beta = @font.beta
 			self.bitmap.font.gamma = @font.gamma
 			rect = self.bitmap.text_size(@num.to_s)
+			self.bitmap.fill_rect(self.width - rect.width, self.height - rect.height, rect.width, rect.height, Color.new(0, 0, 0, 50)) # 꽉찬 네모
 			self.bitmap.draw_text(0, self.height - rect.height, self.width, rect.height, @num.to_s, 2)
 			return self
 		end
@@ -171,16 +174,17 @@ module J
 						self.bitmap.set_pixel(x, y, @memory.color[x][y])
 					end
 				end
-				if @num > 1 and @viewport.hwnd != "Status"
+				if @num > 1 and (@viewport.hwnd != "Status")
 					self.bitmap.font = @font
 					self.bitmap.font.alpha = @font.alpha
 					self.bitmap.font.beta = @font.beta
 					self.bitmap.font.gamma = @font.gamma
 					rect = self.bitmap.text_size(@num.to_s)
+					self.bitmap.fill_rect(self.width - rect.width, self.height - rect.height, rect.width, rect.height, Color.new(0, 0, 0, 50)) # 꽉찬 네모
 					self.bitmap.draw_text(0, self.height - rect.height, self.width, rect.height, @num.to_s, 2)
 				end
 			end
-			if self.num == 0 and @viewport.hwnd != "NetPlayer_Info"
+			if self.num == 0 and (@viewport.hwnd != "NetPlayer_Info" and @viewport.hwnd != "Trade")
 				self.dispose
 			end
 		end

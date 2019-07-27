@@ -52,67 +52,58 @@ class Jindow_Trade < Jindow
 			@dialog1.bitmap.draw_text(40, 175, 200, 30, @money1.to_s)
 		end
 		if $trade_item[1] == 1 and @item1 == nil or @item1 == ""
+			id = $item_number[1].id
+			@item1_text = Sprite.new(self)
+			@item1_text.bitmap = Bitmap.new(240, 200)
+			@item1_text.bitmap.font.color.set(0, 0, 0, 255)
 			case $item_number[1].type
 			when 0
-				@item1 = Sprite.new(self)
-				@item1.bitmap = Bitmap.new(@icon + $data_items[$item_number[1].id].icon_name)
+				@item1 = J::Item.new(self).refresh($data_items[id].id, 0)
 				@item1.y = 35
-				@item1_text = Sprite.new(self)
-				@item1_text.bitmap = Bitmap.new(240, 200)
-				@item1_text.bitmap.font.color.set(0, 0, 0, 255)
+				
 				@item1_text.bitmap.draw_text(0, 60, 200, 30, $data_items[$item_number[1].id].name) 
-				@item1_text.bitmap.draw_text(30, 50, 200, 30, $item_number[1].amount.to_s)
+				@item1_text.bitmap.draw_text(30, 50, 200, 30, "#{$item_number[1].amount.to_s} 개")
 				Network::Main.socket.send "<trade_item>#{$trade_player},#{$item_number[1].id},#{$item_number[1].amount},0</trade_item>\n"
 			when 1
-				@item1 = Sprite.new(self)
-				@item1.bitmap = Bitmap.new(@icon + $data_weapons[$item_number[1].id].icon_name)
+				@item1 = J::Item.new(self).refresh($data_weapons[id].id, 1)
 				@item1.y = 35
-				@item1_text = Sprite.new(self)
-				@item1_text.bitmap = Bitmap.new(240, 200)
-				@item1_text.bitmap.font.color.set(0, 0, 0, 255)
+				
 				@item1_text.bitmap.draw_text(0, 60, 200, 30, $data_weapons[$item_number[1].id].name) 
-				@item1_text.bitmap.draw_text(30, 50, 200, 30, $item_number[1].amount.to_s)
+				@item1_text.bitmap.draw_text(30, 50, 200, 30, "#{$item_number[1].amount.to_s} 개")
 				Network::Main.socket.send "<trade_item>#{$trade_player},#{$item_number[1].id},#{$item_number[1].amount},1</trade_item>\n"
 			when 2
-				@item1 = Sprite.new(self)
-				@item1.bitmap = Bitmap.new(@icon + $data_armors[$item_number[1].id].icon_name)
+				@item1 = J::Item.new(self).refresh($data_armors[id].id, 2)
 				@item1.y = 35
-				@item1_text = Sprite.new(self)
-				@item1_text.bitmap = Bitmap.new(240, 200)
-				@item1_text.bitmap.font.color.set(0, 0, 0, 255)
+				
 				@item1_text.bitmap.draw_text(0, 60, 200, 30, $data_armors[$item_number[1].id].name) 
-				@item1_text.bitmap.draw_text(30, 50, 200, 30, $item_number[1].amount.to_s)
+				@item1_text.bitmap.draw_text(30, 50, 200, 30, "#{$item_number[1].amount.to_s} 개")
 				Network::Main.socket.send "<trade_item>#{$trade_player},#{$item_number[1].id},#{$item_number[1].amount},2</trade_item>\n"
 			end
 		elsif $trade_item[2] == 1 and @item2 == nil or @item2 == ""
+			id = $item_number[2].id
+			@item2_text = Sprite.new(self)
+			@item2_text.bitmap = Bitmap.new(240, 200)
+			@item2_text.bitmap.font.color.set(0, 0, 0, 255)
+			
 			case $item_number[2].type
 			when 0
-				@item2 = Sprite.new(self)
-				@item2.bitmap = Bitmap.new(@icon + $data_items[$item_number[2].id].icon_name)
+				@item2 = J::Item.new(self).refresh($data_items[id].id, 0)
 				@item2.y = 100
-				@item2_text = Sprite.new(self)
-				@item2_text.bitmap = Bitmap.new(240, 200)
-				@item2_text.bitmap.font.color.set(0, 0, 0, 255)
+				
 				@item2_text.bitmap.draw_text(0, 125, 200, 30, $data_items[$item_number[2].id].name) 
-				@item2_text.bitmap.draw_text(30, 115, 200, 30, $item_number[2].amount.to_s)
+				@item2_text.bitmap.draw_text(30, 115, 200, 30, "#{$item_number[2].amount.to_s} 개")
 			when 1
-				@item2 = Sprite.new(self)
-				@item2.bitmap = Bitmap.new(@icon + $data_weapons[$item_number[2].id].icon_name)
+				@item2 = J::Item.new(self).refresh($data_weapons[id].id, 1)
 				@item2.y = 100
-				@item2_text = Sprite.new(self)
-				@item2_text.bitmap = Bitmap.new(240, 200)
-				@item2_text.bitmap.font.color.set(0, 0, 0, 255)
+				
 				@item2_text.bitmap.draw_text(0, 125, 200, 30, $data_weapons[$item_number[2].id].name) 
-				@item2_text.bitmap.draw_text(30, 115, 200, 30, $item_number[2].amount.to_s)
+				@item2_text.bitmap.draw_text(30, 115, 200, 30, "#{$item_number[2].amount.to_s} 개")
 			when 2
-				@item2 = Sprite.new(self)
-				@item2.bitmap = Bitmap.new(@icon + $data_armors[$item_number[2].id].icon_name)
+				@item2 = J::Item.new(self).refresh($data_armors[id].id, 2)
 				@item2.y = 100
-				@item2_text = Sprite.new(self)
-				@item2_text.bitmap = Bitmap.new(240, 200)
-				@item2_text.bitmap.font.color.set(0, 0, 0, 255)
+				
 				@item2_text.bitmap.draw_text(0, 125, 200, 30, $data_armors[$item_number[2].id].name) 
-				@item2_text.bitmap.draw_text(30, 115, 200, 30, $item_number[2].amount.to_s)
+				@item2_text.bitmap.draw_text(30, 115, 200, 30, "#{$item_number[2].amount.to_s} 개")
 			end
 		end
 		if $trade1_ok == 1 and $trade2_ok == 1
@@ -160,6 +151,9 @@ class Jindow_Trade < Jindow
 			Network::Main.socket.send "<trade_fail>#{$trade_player},#{$game_party.actors[0].name}</trade_fail>\n"
 		elsif @money.click
 			if $game_party.gold.to_i >= @trade_money.to_i
+				@money.visible = false
+				@player_money.visible = false
+				@dialog.bitmap.draw_text(80, 35, 200, 30, @trade_money.to_s)
 				Network::Main.socket.send "<trade_money>#{$trade_player},#{@trade_money.to_i}</trade_money>\n"
 				$game_variables[1003] = 0
 			else

@@ -1953,6 +1953,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 				when /<trade_fail>(.*),(.*)<\/trade_fail>/
 					if $1.to_s == $game_party.actors[0].name
+						$game_variables[1003] = 0
 						$nowtrade = 0
 						$console.write_line("교환이 취소 되었습니다.")
 						Hwnd.dispose("Trade")
@@ -1963,6 +1964,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$trade_player_money = 0
 						$trade_player = ""
 					elsif $2.to_s == $game_party.actors[0].name
+						$game_variables[1003] = 0
 						$nowtrade = 0
 						$console.write_line("교환이 취소 되었습니다.")
 						Hwnd.dispose("Trade")

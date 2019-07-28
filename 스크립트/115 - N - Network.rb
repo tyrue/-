@@ -2159,13 +2159,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									if $2.to_i == 1  #바다의희원
 										$game_player.animation_id = 131
 										$game_party.actors[0].hp += 70
-										$game_player.show_demage("40",false)
+										$game_party.actors[0].damage = 70
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 131; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 바다의희원")
 									elsif $2.to_i == 2        #동해의희원
 										$game_player.animation_id = 182
 										$game_party.actors[0].hp += 130
-										$game_player.show_demage("100",false)
+										$game_party.actors[0].damage = 130
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 182; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 동해의희원")
 									elsif $2.to_i == 3         #야수수금술
@@ -2176,7 +2176,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif $2.to_i == 4        #천공의희원
 										$game_player.animation_id = 136
 										$game_party.actors[0].hp += 200
-										$game_player.show_demage("150",false)
+										$game_party.actors[0].damage = 200
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 136; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 천공의희원")
 									elsif $2.to_i == 5        #분량력법
@@ -2188,7 +2188,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif $2.to_i == 6        #구름의희원
 										$game_player.animation_id = 137
 										$game_party.actors[0].hp += 350
-										$game_player.show_demage("250",false)
+										$game_party.actors[0].damage = 350
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 137; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 구름의희원")
 									elsif $2.to_i == 7       #분량방법
@@ -2209,27 +2209,32 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif $2.to_i == 9       #태양의희원
 										$game_player.animation_id = 147
 										$game_party.actors[0].hp += 700
-										$game_player.show_demage("250",false)
+										$game_party.actors[0].damage = 700
+										
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 147; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 태양의희원") 
 									elsif $2.to_i == 10       #생명의희원
 										$game_player.animation_id = 148
 										$game_party.actors[0].hp += 1000
+										$game_party.actors[0].damage = 1000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 생명의희원")   
 									elsif $2.to_i == 11       #백호의희원
 										$game_player.animation_id = 149
 										$game_party.actors[0].hp += mp * 2
+										$game_party.actors[0].damage = mp * 2
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
 										$game_player.animation_id = 139
 										$game_party.actors[0].hp += 4000										
+										$game_party.actors[0].damage = 4000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
 										$game_player.animation_id = 151
 										$game_party.actors[0].hp += 7000
+										$game_party.actors[0].damage = 7000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end

@@ -101,6 +101,7 @@ if SDK.state('Input')
 		Comma = 188         # => , <
 		Underscore = 189    # => - _
 		Dot = 190           # => . >
+		N_Dot = 110
 		Backslash = 191     # => / ?
 		Lb = 219
 		Rb = 221
@@ -149,6 +150,7 @@ if SDK.state('Input')
 			@keys.push(Input::Comma) if Input.testkey(Input::Comma)
 			@keys.push(Input::Underscore) if Input.testkey(Input::Underscore)
 			@keys.push(Input::Dot) if Input.testkey(Input::Dot)
+			@keys.push(Input::N_Dot) if Input.testkey(Input::N_Dot)
 			@keys.push(Input::Backslash) if Input.testkey(Input::Backslash)
 			@keys.push(Input::Lb) if Input.testkey(Input::Lb)
 			@keys.push(Input::Rb) if Input.testkey(Input::Rb)
@@ -230,7 +232,7 @@ if SDK.state('Input')
 			when Input::RIGHT
 				keys.push(Input::RT)
 			when Input::C
-				keys.push(Input::Space, Input::Letters["Z"])
+				keys.push(Input::Space, Input::Letters["Z"], Input::N_Dot)
 			when Input::B
 				keys.push(Input::Esc)
 			when Input::X

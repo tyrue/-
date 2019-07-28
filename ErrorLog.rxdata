@@ -5545,3 +5545,4 @@ Section225:96: syntax error
 		elsif $trade_item[2] == 1 and @item2 == nil or @item2 == ""
 		     ^
 Section225:182: syntax error ()>> occured.
+On <<Sun 28 Jul 2019, 14:18:51>> the file <<Graphics/Animations/anime_mame>> was missing.

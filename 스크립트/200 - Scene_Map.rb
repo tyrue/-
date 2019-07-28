@@ -123,6 +123,11 @@ class Scene_Map
 						#~ end
 					#~ end
 					
+					if Key.trigger?(65) # ; 감정표현
+						$game_temp.common_event_id = 9
+					end	
+					
+					
 					if Key.trigger?(35) # l
 						if not Hwnd.include?("NetPlayer")
 							Jindow_NetPlayer.new
@@ -159,6 +164,8 @@ class Scene_Map
 							end
 						end
 					end
+					
+					
 				end
 			end
 		end

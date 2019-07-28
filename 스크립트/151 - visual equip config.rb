@@ -10,6 +10,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 		if type == 2
 			# 무기
 			return ['(착용)철도', 2] 			if id == 1 or id == 2 or id == 3 or id == 4	#신수둔각도
+			return ['(착용)현자금봉', 2] 	if id == 6  #현자금봉
+			return ['(착용)검성기검', 2] 	if id == 7  #검성기검
+			return ['(착용)진선역봉', 2] 	if id == 8  #진선역봉
 			
 			return ['(착용)목도', 2] 			if id == 101 	#목도
 			return ['(착용)목도', 2] 			if id == 102 	#목검
@@ -45,6 +48,8 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)영혼죽장', 2] 	if id == 132  #인어장군지팡이
 			return ['(착용)해골죽장', 2] 	if id == 133  #해골죽장
 			return ['(착용)일화접선', 2] 	if id == 134  #일화접선
+			return ['(착용)진일신검', 2] 	if id == 135  #진일신검
+			return ['(착용)이가닌자의검', 2] 	if id == 136  #이가닌자의 검
 			
 			# 용무기
 			return ['(착용)용마제일검', 2] 	if id == 141  #용마제일검

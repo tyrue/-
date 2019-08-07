@@ -663,7 +663,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Respawn
 			if parameters[10] != nil
 				respawn = parameters[10].split 
-				@enemies[event.id].respawn = respawn[1].to_i * 10
+				@enemies[event.id].respawn = respawn[1].to_i * 3
 			end
 			@enemies[event.id].aggro = $is_map_first ? true : false
 		end
@@ -2609,12 +2609,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 110 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 191 # 유성지
-				if r <= 40 
+				if r <= 60 
 					# 유성지의보패
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 114 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
 			when 192 # 해골왕
-				if r <= 40 
+				if r <= 60 
 					# 해골왕의뼈
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 109 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end

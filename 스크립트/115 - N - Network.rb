@@ -794,7 +794,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true
 					
 					# 로그인 결과
-				when /<login>(.*)<\/login>/
+				when /<login>(.*),(.*)<\/login>/
 					if not @user_test
 						if $1 == "allow" and not @user_test
 							@login = true
@@ -810,6 +810,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								break if self.name != "" and self.name != nil and self.id != -1
 							end
 							self.get_group
+							$nickname = $2
 							유저접속
 							
 							return true

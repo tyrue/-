@@ -190,28 +190,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				#@socket.send("<3>'req'</3>\n")
 				@socket.send("<check>#{self.name}</check>\n")
 			end
+			
 			#--------------------------------------------------------------------------
-			# * Registers (Attempt to) 로그인 요청
+			# * 회원가입 요청
 			#-------------------------------------------------------------------------- 
-			def self.send_register(user,pass)
-				# Register with User as name, and Pass as password
-				@socket.send("<reges #{user}>#{pass}</reges>\n")
-				# Start Loop for Retrival
-				loop = 0
-				loop do
-					loop += 1
-					self.update
-					# Break If Registration Succeeded
-					break if @registered
-					# Break if Loop reached 10000
-					break if loop == 10000
-				end
-			end
-			#--------------------------------------------------------------------------
-			# * 닉네임 서버 보내기
-			#-------------------------------------------------------------------------- 
-			def self.send_nickname(username, id, pass)
-				@socket.send("<nickname>#{username},#{id},#{pass}</nickname>\n")
+			def self.send_regist(username, id, pass)
+				@socket.send("<regist>#{username},#{id},#{pass}</regist>\n")
 			end
 			#--------------------------------------------------------------------------
 			# * Send Gold
@@ -790,11 +774,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					a = self.authenficate($1,$2)
 					@servername = $3.to_s
 					return true if a
+					
 					# 회원가입 처리
-				when /<reges>(.*)<\/reges>/
-					if $1 == "wu" # 회원가입 실패
+				when /<regist>(.*)<\/regist>/
+					if $1 == "wi" # 아이디 에러
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-							["비밀번호가 한글 이거나 이미 아이디가 있습니다."],
+							["이미 아이디가 있습니다."],
+							["확인"], ["Hwnd.dispose(self)"], "에러")
+					elsif $1 == "wn" # 닉네임 에러
+						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+							["이미 이 닉네임은 누군가 사용하고 있습니다."],
 							["확인"], ["Hwnd.dispose(self)"], "에러")
 					else # 회원가입 성공
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
@@ -803,26 +792,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 					end
 					return true
-					# 닉네임 확인 결과
-				when /<nick_name>(.*)<\/nick_name>/
-					data = $1.split(',')
-					if data[0].to_s != "No" # 닉네임 중복 통과
-						self.send_register(data[0].to_s,data[1].to_s)
-					else # 닉네임 중복
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-							["이미 이 닉네임은 누군가 사용하고 있습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "에러")
-					end
-					# 아이디 중복 결과
-				when /<exist1>(.*)<\/exist1>/
-					data = $1.split(',')
-					if data[0].to_s != "No" # 중복 통과
-						self.send_login(data[0].to_s,data[1].to_s)
-					else # 중복
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-							["누군가 그 아이디를 사용하고 있습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "에러")
-					end
+					
 					# 로그인 결과
 				when /<login>(.*)<\/login>/
 					if not @user_test
@@ -854,9 +824,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								["비밀번호를 잘못 치셨습니다."],
 								["확인"], ["Hwnd.dispose(self)"], "오류")
 							$scene.set_status(@status) if $scene.is_a?(Jindow_Login)
-						elsif @user_test == true
+						elsif $1 == "al" and not @user_test == true
 							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-								["이미 아이디가 사용되어지고 있습니다."],
+								["이미 로그인 되어 있습니다."],
 								["확인"], ["Hwnd.dispose(self)"], "오류")
 							return true
 						end

@@ -44,7 +44,7 @@ class Jindow_Login < Jindow
 		if @a.click  # 확인
 			@type_username.bluck = false
 			@type_password.bluck = false
-			@type_password.hide = false
+			
 			Network::Main.update
 			Network::Main.send_login(@type_username.result.to_s, @type_password.result.to_s)
 		elsif @c.click and not Hwnd.include?("Register")  # 가입하기

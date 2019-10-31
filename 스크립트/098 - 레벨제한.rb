@@ -22,13 +22,13 @@
 #패러미터（parameter）의 산출이 적당 지나기 때문에 ，각자 수정이 필요나와 ．
 
   BASE_FINAL_LEVEL = 100   #상한 레벨（level）(그다지 큰 값을 설정한다면 항 합니다)
-  MAXHP_LIMIT = 1000000    #HP 한계 치
-  MAXSP_LIMIT = 1000000    #SP 한계 치
-  STR_LIMIT   = 1100      #STR 한계 치
-  DEX_LIMIT   = 1100      #DEX 한계 치
-  AGI_LIMIT   = 1100      #AGI 한계 치
-  INT_LIMIT   = 1100      #INT 한계 치
-	MAX_EXP			= 100000000  #만렙시 경험치 
+  MAXHP_LIMIT = 2000000    #HP 한계 치
+  MAXSP_LIMIT = 2000000    #SP 한계 치
+  STR_LIMIT   = 2000      #STR 한계 치
+  DEX_LIMIT   = 2000      #DEX 한계 치
+  AGI_LIMIT   = 2000      #AGI 한계 치
+  INT_LIMIT   = 2000      #INT 한계 치
+	MAX_EXP			= 200000000  #만렙시 경험치 
 
 class Game_Actor < Game_Battler
   def new_final_level

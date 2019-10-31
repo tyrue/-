@@ -72,15 +72,18 @@ class Game_Map
 				# impassable
 				return false
 				# If obstacle bit is set
-			elsif @passages[tile_id] & bit != 0
+			elsif @passages[tile_id] & bit != 0 # 해당 이동 방향으로 진입 금지라면
+				
 				# impassable
 				return false
 				# If obstacle bit is set in all directions
-			elsif @passages[tile_id] & 0x0f == 0x0f
+			elsif @passages[tile_id] & 0x0f == 0x0f # 전 방향 진입 금지
+				
 				# impassable
 				return false
 				# If priorities other than that are 0
 			elsif @priorities[tile_id] == 0
+				
 				# passable
 				return true
 			end

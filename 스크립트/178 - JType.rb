@@ -444,6 +444,7 @@ module J
 			@input_hangul = true
 			@char = nil
 			@text = []
+			@o_text = ""
 			@piece = []
 			@piece[0] = nil
 			@piece[1] = nil
@@ -471,10 +472,18 @@ module J
 		end
 		
 		def view
+			# 여기서 비트맵을 삭제하고 보여주니까 렉걸림
 			command = ""
 			for i in @text
 				command += i
 			end
+			
+			if @o_text != command
+				@o_text = command
+			elsif @o_text == command
+				return
+			end
+			
 			if self.bitmap.text_size(command).width > self.bitmap.width
 				@text.delete_at(@text.size - 1)
 				return
@@ -1104,6 +1113,7 @@ module J
 		
 		def update_key
 			
+			
 			if Key.trigger?(KEY_BACKSPACE)
 				delete_text
 			elsif Key.repeat?(KEY_BACKSPACE)
@@ -1226,52 +1236,52 @@ module J
 				end
 				
 			else
-				if Key.trigger?(KEY_0)
+				if Key.trigger?(KEY_0) or Key.trigger?(50)
 					@text.push("0")
 					@char = "0"
 					return
 				end
-				if Key.trigger?(KEY_1)
+				if Key.trigger?(KEY_1) or Key.trigger?(51)
 					@text.push("1")
 					@char = "1"
 					return
 				end
-				if Key.trigger?(KEY_2)
+				if Key.trigger?(KEY_2) or Key.trigger?(52)
 					@text.push("2")
 					@char = "2"
 					return
 				end
-				if Key.trigger?(KEY_3)
+				if Key.trigger?(KEY_3) or Key.trigger?(53)
 					@text.push("3")
 					@char = "3"
 					return
 				end
-				if Key.trigger?(KEY_4)
+				if Key.trigger?(KEY_4) or Key.trigger?(54)
 					@text.push("4")
 					@char = "4"
 					return
 				end
-				if Key.trigger?(KEY_5)
+				if Key.trigger?(KEY_5) or Key.trigger?(55)
 					@text.push("5")
 					@char = "5"
 					return
 				end
-				if Key.trigger?(KEY_6)
+				if Key.trigger?(KEY_6) or Key.trigger?(56)
 					@text.push("6")
 					@char = "6"
 					return
 				end
-				if Key.trigger?(KEY_7)
+				if Key.trigger?(KEY_7) or Key.trigger?(57)
 					@text.push("7")
 					@char = "7"
 					return
 				end
-				if Key.trigger?(KEY_8)
+				if Key.trigger?(KEY_8) or Key.trigger?(58)
 					@text.push("8")
 					@char = "8"
 					return
 				end
-				if Key.trigger?(KEY_9)
+				if Key.trigger?(KEY_9) or Key.trigger?(59)
 					@text.push("9")
 					@char = "9"
 					return

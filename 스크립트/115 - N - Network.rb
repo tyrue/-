@@ -190,28 +190,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				#@socket.send("<3>'req'</3>\n")
 				@socket.send("<check>#{self.name}</check>\n")
 			end
+			
 			#--------------------------------------------------------------------------
-			# * Registers (Attempt to) 로그인 요청
+			# * 회원가입 요청
 			#-------------------------------------------------------------------------- 
-			def self.send_register(user,pass)
-				# Register with User as name, and Pass as password
-				@socket.send("<reges #{user}>#{pass}</reges>\n")
-				# Start Loop for Retrival
-				loop = 0
-				loop do
-					loop += 1
-					self.update
-					# Break If Registration Succeeded
-					break if @registered
-					# Break if Loop reached 10000
-					break if loop == 10000
-				end
-			end
-			#--------------------------------------------------------------------------
-			# * 닉네임 서버 보내기
-			#-------------------------------------------------------------------------- 
-			def self.send_nickname(username, id, pass)
-				@socket.send("<nickname>#{username},#{id},#{pass}</nickname>\n")
+			def self.send_regist(username, id, pass)
+				@socket.send("<regist>#{username},#{id},#{pass}</regist>\n")
 			end
 			#--------------------------------------------------------------------------
 			# * Send Gold
@@ -790,11 +774,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					a = self.authenficate($1,$2)
 					@servername = $3.to_s
 					return true if a
+					
 					# 회원가입 처리
-				when /<reges>(.*)<\/reges>/
-					if $1 == "wu" # 회원가입 실패
+				when /<regist>(.*)<\/regist>/
+					if $1 == "wi" # 아이디 에러
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-							["비밀번호가 한글 이거나 이미 아이디가 있습니다."],
+							["이미 아이디가 있습니다."],
+							["확인"], ["Hwnd.dispose(self)"], "에러")
+					elsif $1 == "wn" # 닉네임 에러
+						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+							["이미 이 닉네임은 누군가 사용하고 있습니다."],
 							["확인"], ["Hwnd.dispose(self)"], "에러")
 					else # 회원가입 성공
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
@@ -803,28 +792,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 					end
 					return true
-					# 닉네임 확인 결과
-				when /<nick_name>(.*)<\/nick_name>/
-					data = $1.split(',')
-					if data[0].to_s != "No" # 닉네임 중복 통과
-						self.send_register(data[0].to_s,data[1].to_s)
-					else # 닉네임 중복
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-							["이미 이 닉네임은 누군가 사용하고 있습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "에러")
-					end
-					# 아이디 중복 결과
-				when /<exist1>(.*)<\/exist1>/
-					data = $1.split(',')
-					if data[0].to_s != "No" # 중복 통과
-						self.send_login(data[0].to_s,data[1].to_s)
-					else # 중복
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-							["누군가 그 아이디를 사용하고 있습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "에러")
-					end
+					
 					# 로그인 결과
-				when /<login>(.*)<\/login>/
+				when /<login>(.*),(.*)<\/login>/
 					if not @user_test
 						if $1 == "allow" and not @user_test
 							@login = true
@@ -840,6 +810,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								break if self.name != "" and self.name != nil and self.id != -1
 							end
 							self.get_group
+							$nickname = $2
 							유저접속
 							
 							return true
@@ -854,9 +825,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								["비밀번호를 잘못 치셨습니다."],
 								["확인"], ["Hwnd.dispose(self)"], "오류")
 							$scene.set_status(@status) if $scene.is_a?(Jindow_Login)
-						elsif @user_test == true
+						elsif $1 == "al" and not @user_test == true
 							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-								["이미 아이디가 사용되어지고 있습니다."],
+								["이미 로그인 되어 있습니다."],
 								["확인"], ["Hwnd.dispose(self)"], "오류")
 							return true
 						end
@@ -1953,6 +1924,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 				when /<trade_fail>(.*),(.*)<\/trade_fail>/
 					if $1.to_s == $game_party.actors[0].name
+						$game_variables[1003] = 0
 						$nowtrade = 0
 						$console.write_line("교환이 취소 되었습니다.")
 						Hwnd.dispose("Trade")
@@ -1963,6 +1935,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$trade_player_money = 0
 						$trade_player = ""
 					elsif $2.to_s == $game_party.actors[0].name
+						$game_variables[1003] = 0
 						$nowtrade = 0
 						$console.write_line("교환이 취소 되었습니다.")
 						Hwnd.dispose("Trade")
@@ -2157,13 +2130,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									if $2.to_i == 1  #바다의희원
 										$game_player.animation_id = 131
 										$game_party.actors[0].hp += 70
-										$game_player.show_demage("40",false)
+										$game_party.actors[0].damage = 70
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 131; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 바다의희원")
 									elsif $2.to_i == 2        #동해의희원
 										$game_player.animation_id = 182
 										$game_party.actors[0].hp += 130
-										$game_player.show_demage("100",false)
+										$game_party.actors[0].damage = 130
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 182; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 동해의희원")
 									elsif $2.to_i == 3         #야수수금술
@@ -2174,7 +2147,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif $2.to_i == 4        #천공의희원
 										$game_player.animation_id = 136
 										$game_party.actors[0].hp += 200
-										$game_player.show_demage("150",false)
+										$game_party.actors[0].damage = 200
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 136; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 천공의희원")
 									elsif $2.to_i == 5        #분량력법
@@ -2186,7 +2159,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif $2.to_i == 6        #구름의희원
 										$game_player.animation_id = 137
 										$game_party.actors[0].hp += 350
-										$game_player.show_demage("250",false)
+										$game_party.actors[0].damage = 350
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 137; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 구름의희원")
 									elsif $2.to_i == 7       #분량방법
@@ -2207,27 +2180,32 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif $2.to_i == 9       #태양의희원
 										$game_player.animation_id = 147
 										$game_party.actors[0].hp += 700
-										$game_player.show_demage("250",false)
+										$game_party.actors[0].damage = 700
+										
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 147; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 태양의희원") 
 									elsif $2.to_i == 10       #생명의희원
 										$game_player.animation_id = 148
 										$game_party.actors[0].hp += 1000
+										$game_party.actors[0].damage = 1000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 148; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("'#{$1.to_s}님의 생명의희원")   
 									elsif $2.to_i == 11       #백호의희원
 										$game_player.animation_id = 149
 										$game_party.actors[0].hp += mp * 2
+										$game_party.actors[0].damage = mp * 2
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 149; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 백호의희원")   
 									elsif $2.to_i == 12       #신령의희원
 										$game_player.animation_id = 139
 										$game_party.actors[0].hp += 4000										
+										$game_party.actors[0].damage = 4000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 139; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 신령의희원")   
 									elsif $2.to_i == 13       #봉황의희원
 										$game_player.animation_id = 151
 										$game_party.actors[0].hp += 7000
+										$game_party.actors[0].damage = 7000
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end

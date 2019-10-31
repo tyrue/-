@@ -12,6 +12,7 @@ def 자동저장
 		@itemKeyList = ""
 		@skill_mash_list = ""
 		@buff_mash_list = ""
+		@self_switches = ""
 		
 		for i in 0...$game_party.actors[0].skills.size
 			skill = $game_party.actors[0].skills[i]

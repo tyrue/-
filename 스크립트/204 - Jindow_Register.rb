@@ -73,11 +73,11 @@ class Jindow_Register < Jindow
 				$game_system.se_play($data_system.decision_se)
 				@type_username.bluck = false
 				@type_password.bluck = false
-				Network::Main.send_nickname(@type_nickname.result.to_s,@type_username.result,@type_password.result)
+				Network::Main.send_regist(@type_nickname.result.to_s,@type_username.result,@type_password.result)
 				$nickname = @type_nickname.result.to_s
 				Hwnd.dispose(self)
 				
-			else # 아이디에 영어를 사용하는 경우
+			else # 아이디에 영어를 사용하지 않는 경우
 				
 				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
 					["아이디/비밀번호에 한글 사용 불가"],

@@ -5546,3 +5546,7 @@ Section225:96: syntax error
 		     ^
 Section225:182: syntax error ()>> occured.
 On <<Sun 28 Jul 2019, 14:18:51>> the file <<Graphics/Animations/anime_mame>> was missing.
+On <<Mon 04 Nov 2019, 00:58:21>> the error <<cannot convert Range into Integer (#<Scene_Map:0x7f62ef0>)>> occured.
+On <<Mon 04 Nov 2019, 01:01:08>> the error <<cannot convert Range into Integer (#<Scene_Map:0x7eca3a8>)>> occured.
+On <<Mon 04 Nov 2019, 01:02:39>> the error <<cannot convert Range into Integer (#<Scene_Map:0x81d6558>)>> occured.
+On <<Mon 04 Nov 2019, 01:03:54>> the error <<cannot convert Range into Integer (#<Scene_Map:0x81dd050>)>> occured.

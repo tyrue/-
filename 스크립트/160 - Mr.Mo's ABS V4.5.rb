@@ -1350,9 +1350,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		
-		#======================#
-		#=====스킬 딜레이 알려줌======#
-		#======================#
+		#==============================#
+		#=====스킬 딜레이 알려줌 - 크랩훕흐======#
+		#=============================#
 		def skill_console(id)
 			skill_mash_time = SKILL_MASH_TIME[id]
 			if skill_mash_time != nil and skill_mash_time[1] <= 0
@@ -1371,6 +1371,141 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
+		#==============================#
+		#=====비영사천문 - 크랩훕흐===========#
+		#=============================#
+		def skill_byung(d) # d : 방향, 0 : 동, 1 : 서, 2 : 남, 3: 북
+			$game_temp.player_transferring = true # 이동 가능
+			r = 3
+			case $game_variables[8]
+			when 0 # 부여성
+				$game_temp.player_new_map_id = 1
+				case d
+				when 0
+					$game_temp.player_new_x = 66 + rand(r)
+					$game_temp.player_new_y = 33 + rand(r)
+				when 1
+					$game_temp.player_new_x = 5 + rand(r)
+					$game_temp.player_new_y = 30 + rand(r)
+				when 2
+					$game_temp.player_new_x = 34 + rand(r)
+					$game_temp.player_new_y = 68 + rand(r)
+				when 3
+					$game_temp.player_new_x = 34 + rand(r)
+					$game_temp.player_new_y = 2 + rand(r)
+				end
+				
+			when 1 # 국내성
+				$game_temp.player_new_map_id = 123
+				case d
+				when 0
+					$game_temp.player_new_x = 118 + rand(r)
+					$game_temp.player_new_y = 60 + rand(r)
+				when 1
+					$game_temp.player_new_x = 7 + rand(r)
+					$game_temp.player_new_y = 60 + rand(r)
+				when 2
+					$game_temp.player_new_x = 63 + rand(r)
+					$game_temp.player_new_y = 109 + rand(r)
+				when 3
+					$game_temp.player_new_x = 63 + rand(r)
+					$game_temp.player_new_y = 12 + rand(r)
+				end
+				
+			when 2 # 12지신
+				$game_temp.player_new_map_id = 110
+				case d
+				when 0
+					$game_temp.player_new_x = 35 + rand(r)
+					$game_temp.player_new_y = 16 + rand(r)
+				when 1
+					$game_temp.player_new_x = 1 + rand(r)
+					$game_temp.player_new_y = 16 + rand(r)
+				when 2
+					$game_temp.player_new_x = 17 + rand(r)
+					$game_temp.player_new_y = 33 + rand(r)
+				when 3
+					$game_temp.player_new_x = 17 + rand(r)
+					$game_temp.player_new_y = 2 + rand(r)
+				end
+				
+			when 3 # 용궁
+				$game_temp.player_new_map_id = 203
+				case d
+				when 0
+					$game_temp.player_new_x = 52 + rand(r)
+					$game_temp.player_new_y = 20 + rand(r)
+				when 1
+					$game_temp.player_new_x = 0 + rand(r)
+					$game_temp.player_new_y = 24 + rand(r)
+				when 2
+					$game_temp.player_new_x = 27 + rand(r)
+					$game_temp.player_new_y = 41 + rand(r)
+				when 3
+					$game_temp.player_new_x = 29 + rand(r)
+					$game_temp.player_new_y = 2 + rand(r)
+				end
+				
+			when 4 # 고균도
+				$game_temp.player_new_map_id = 60
+				case d
+				when 0
+					$game_temp.player_new_x = 56 + rand(r)
+					$game_temp.player_new_y = 33 + rand(r)
+				when 1
+					$game_temp.player_new_x = 4 + rand(r)
+					$game_temp.player_new_y = 32 + rand(r)
+				when 2
+					$game_temp.player_new_x = 39 + rand(r)
+					$game_temp.player_new_y = 57 + rand(r)
+				when 3
+					$game_temp.player_new_x = 29 + rand(r)
+					$game_temp.player_new_y = 10 + rand(r)
+				end
+				
+			when 5 # 일본
+				$game_temp.player_new_map_id = 230
+				case d
+				when 0
+					$game_temp.player_new_x = 114 + rand(r)
+					$game_temp.player_new_y = 30 + rand(r)
+				when 1
+					$game_temp.player_new_x = 5 + rand(r)
+					$game_temp.player_new_y = 31 + rand(r)
+				when 2
+					$game_temp.player_new_x = 64 + rand(r)
+					$game_temp.player_new_y = 90 + rand(r)
+				when 3
+					$game_temp.player_new_x = 55 + rand(r)
+					$game_temp.player_new_y = 2 + rand(r)
+				end
+				
+			when 6 # 대방성
+				case d
+				when 0
+					
+				when 1
+					
+				when 2
+					
+				when 3
+					
+				end
+				
+			when 7
+				case d
+				when 0
+					
+				when 1
+					
+				when 2
+					
+				when 3
+					
+				end
+				
+			end	
+		end
 		
 		#--------------------------------------------------------------------------
 		# *  플레이어의 스킬 공격
@@ -1392,6 +1527,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
 			
 			id = skill.id 
+			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]

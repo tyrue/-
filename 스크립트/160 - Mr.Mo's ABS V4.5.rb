@@ -1330,9 +1330,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 여기서 무기 격 넣기
 				
 				#~ #Set the new target for the enemy
-				#~ e.attacking = $game_player
+				e.attacking = $game_player
 				#~ #The enemy is now in battle
-				#~ e.in_battle = true
+				e.in_battle = true
 				#~ #Setup movement
 				setup_movement(e)
 			end
@@ -1371,125 +1371,129 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
+		def map_m(id, x, y)
+			$game_temp.player_transferring = true # 이동 가능
+			$game_temp.player_new_map_id = id
+			$game_temp.player_new_x = x
+			$game_temp.player_new_y = y
+		end
+		
+		#==============================#
+		#=====성황당 - 크랩훕흐===========#
+		#=============================#
+		def skill_sung
+			case $game_variables[8]
+			when 0 # 부여성
+				map_m(17, 11, 8)
+			when 1 # 국내성
+				map_m(135, 11, 7)				
+			when 3 # 용궁
+				map_m(204, 11, 8)
+			when 4 # 고균도
+				map_m(85, 11, 8)
+			when 5 # 일본
+				map_m(234, 11, 8)
+			when 6 # 대방성
+				map_m(17, 11, 8)
+			end
+		end
+		
+		
 		#==============================#
 		#=====비영사천문 - 크랩훕흐===========#
 		#=============================#
 		def skill_byung(d) # d : 방향, 0 : 동, 1 : 서, 2 : 남, 3: 북
-			$game_temp.player_transferring = true # 이동 가능
 			r = 3
 			case $game_variables[8]
 			when 0 # 부여성
-				$game_temp.player_new_map_id = 1
+				id = 1
 				case d
 				when 0
-					$game_temp.player_new_x = 66 + rand(r)
-					$game_temp.player_new_y = 33 + rand(r)
+					map_m(id, 66 + rand(r), 33 + rand(r))
 				when 1
-					$game_temp.player_new_x = 5 + rand(r)
-					$game_temp.player_new_y = 30 + rand(r)
+					map_m(id, 5 + rand(r), 30 + rand(r))
 				when 2
-					$game_temp.player_new_x = 34 + rand(r)
-					$game_temp.player_new_y = 68 + rand(r)
+					map_m(id, 34 + rand(r), 68 + rand(r))
 				when 3
-					$game_temp.player_new_x = 34 + rand(r)
-					$game_temp.player_new_y = 2 + rand(r)
+					map_m(id, 34 + rand(r), 2 + rand(r))
 				end
 				
 			when 1 # 국내성
-				$game_temp.player_new_map_id = 123
+				id = 123
 				case d
 				when 0
-					$game_temp.player_new_x = 118 + rand(r)
-					$game_temp.player_new_y = 60 + rand(r)
+					map_m(id, 118 + rand(r), 60 + rand(r))
 				when 1
-					$game_temp.player_new_x = 7 + rand(r)
-					$game_temp.player_new_y = 60 + rand(r)
+					map_m(id, 7 + rand(r), 60 + rand(r))
 				when 2
-					$game_temp.player_new_x = 63 + rand(r)
-					$game_temp.player_new_y = 109 + rand(r)
+					map_m(id, 63 + rand(r), 109 + rand(r))
 				when 3
-					$game_temp.player_new_x = 63 + rand(r)
-					$game_temp.player_new_y = 12 + rand(r)
+					map_m(id, 63 + rand(r), 12 + rand(r))
 				end
 				
 			when 2 # 12지신
-				$game_temp.player_new_map_id = 110
+				id = 110
 				case d
 				when 0
-					$game_temp.player_new_x = 35 + rand(r)
-					$game_temp.player_new_y = 16 + rand(r)
+					map_m(id, 35 + rand(r), 16 + rand(r))
 				when 1
-					$game_temp.player_new_x = 1 + rand(r)
-					$game_temp.player_new_y = 16 + rand(r)
+					map_m(id, 1 + rand(r), 16 + rand(r))
 				when 2
-					$game_temp.player_new_x = 17 + rand(r)
-					$game_temp.player_new_y = 33 + rand(r)
+					map_m(id, 17 + rand(r), 33 + rand(r))
 				when 3
-					$game_temp.player_new_x = 17 + rand(r)
-					$game_temp.player_new_y = 2 + rand(r)
+					map_m(id, 17 + rand(r), 2 + rand(r))
 				end
 				
 			when 3 # 용궁
-				$game_temp.player_new_map_id = 203
+				id = 203
 				case d
 				when 0
-					$game_temp.player_new_x = 52 + rand(r)
-					$game_temp.player_new_y = 20 + rand(r)
+					map_m(id, 52 + rand(r), 20 + rand(r))
 				when 1
-					$game_temp.player_new_x = 0 + rand(r)
-					$game_temp.player_new_y = 24 + rand(r)
+					map_m(id, 0 + rand(r), 24 + rand(r))
 				when 2
-					$game_temp.player_new_x = 27 + rand(r)
-					$game_temp.player_new_y = 41 + rand(r)
+					map_m(id, 27 + rand(r), 41 + rand(r))
 				when 3
-					$game_temp.player_new_x = 29 + rand(r)
-					$game_temp.player_new_y = 2 + rand(r)
+					map_m(id, 29 + rand(r), 2 + rand(r))
 				end
 				
 			when 4 # 고균도
-				$game_temp.player_new_map_id = 60
+				id = 60
 				case d
 				when 0
-					$game_temp.player_new_x = 56 + rand(r)
-					$game_temp.player_new_y = 33 + rand(r)
+					map_m(id, 56 + rand(r), 33 + rand(r))
 				when 1
-					$game_temp.player_new_x = 4 + rand(r)
-					$game_temp.player_new_y = 32 + rand(r)
+					map_m(id, 4 + rand(r), 32 + rand(r))
 				when 2
-					$game_temp.player_new_x = 39 + rand(r)
-					$game_temp.player_new_y = 57 + rand(r)
+					map_m(id, 39 + rand(r), 57 + rand(r))
 				when 3
-					$game_temp.player_new_x = 29 + rand(r)
-					$game_temp.player_new_y = 10 + rand(r)
+					map_m(id, 29 + rand(r), 10 + rand(r))
 				end
 				
 			when 5 # 일본
-				$game_temp.player_new_map_id = 230
+				id = 230
 				case d
 				when 0
-					$game_temp.player_new_x = 114 + rand(r)
-					$game_temp.player_new_y = 30 + rand(r)
+					map_m(id, 114 + rand(r), 30 + rand(r))
 				when 1
-					$game_temp.player_new_x = 5 + rand(r)
-					$game_temp.player_new_y = 31 + rand(r)
+					map_m(id, 5 + rand(r), 31 + rand(r))
 				when 2
-					$game_temp.player_new_x = 64 + rand(r)
-					$game_temp.player_new_y = 90 + rand(r)
+					map_m(id, 64 + rand(r), 90 + rand(r))
 				when 3
-					$game_temp.player_new_x = 55 + rand(r)
-					$game_temp.player_new_y = 2 + rand(r)
+					map_m(id, 55 + rand(r), 2 + rand(r))
 				end
 				
 			when 6 # 대방성
+				id = 276
 				case d
 				when 0
-					
+					map_m(id, 113 + rand(r), 61 + rand(r))
 				when 1
-					
+					map_m(id, 8 + rand(r), 61 + rand(r))
 				when 2
-					
+					map_m(id, 61 + rand(r), 108 + rand(r))
 				when 3
-					
+					map_m(id, 61 + rand(r), 10 + rand(r))
 				end
 				
 			when 7
@@ -4306,6 +4310,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				r = rand(100)
 				if r <= (self.damage * 100 / self.maxhp) or r <= 30
 					if !self.is_a?(Game_Actor)
+						
 						self.aggro = true
 						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
 					end

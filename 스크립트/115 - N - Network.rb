@@ -1082,7 +1082,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
-					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					
 					if $ABS.enemies[data[1].to_i] != nil
 						# 어그로 해제
 						$ABS.enemies[data[1].to_i].aggro = false

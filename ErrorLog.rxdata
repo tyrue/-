@@ -5550,3 +5550,864 @@ On <<Mon 04 Nov 2019, 00:58:21>> the error <<cannot convert Range into Integer (
 On <<Mon 04 Nov 2019, 01:01:08>> the error <<cannot convert Range into Integer (#<Scene_Map:0x7eca3a8>)>> occured.
 On <<Mon 04 Nov 2019, 01:02:39>> the error <<cannot convert Range into Integer (#<Scene_Map:0x81d6558>)>> occured.
 On <<Mon 04 Nov 2019, 01:03:54>> the error <<cannot convert Range into Integer (#<Scene_Map:0x81dd050>)>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성 ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^ ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신 ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^ ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁 ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^ ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도 ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^ ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본 ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^ ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성 ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^ ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body
+Section160:4575: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body
+Section160:4575: class definition in method body
+Section160:4591: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:38>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body
+Section160:4575: class definition in method body
+Section160:4591: class definition in method body
+Section160:4826: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:39>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body
+Section160:4575: class definition in method body
+Section160:4591: class definition in method body
+Section160:4826: class definition in method body
+Section160:4889: class definition in method body ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:39>> the error <<Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body
+Section160:4575: class definition in method body
+Section160:4591: class definition in method body
+Section160:4826: class definition in method body
+Section160:4889: class definition in method body
+Section160:4978: syntax error ()>> occured.
+On <<Mon 04 Nov 2019, 02:02:39>> the error <<compile error
+Section160:1391: syntax error
+			when 1 # 국내성
+			    ^
+Section160:1395: syntax error
+			when 2 # 12지신
+			    ^
+Section160:1399: syntax error
+			when 3 # 용궁
+			    ^
+Section160:1403: syntax error
+			when 4 # 고균도
+			    ^
+Section160:1407: syntax error
+			when 5 # 일본
+			    ^
+Section160:1411: syntax error
+			when 6 # 대방성
+			    ^
+Section160:1415: syntax error
+Section160:3151: class definition in method body
+Section160:3244: class definition in method body
+Section160:3416: class definition in method body
+Section160:3552: class definition in method body
+Section160:3644: class definition in method body
+Section160:3676: class definition in method body
+Section160:3700: class definition in method body
+Section160:3712: class definition in method body
+Section160:3738: class definition in method body
+Section160:3758: class definition in method body
+Section160:3799: module definition in method body
+Section160:3800: class definition in method body
+Section160:3958: class definition in method body
+Section160:4052: class definition in method body
+Section160:4119: class definition in method body
+Section160:4407: class definition in method body
+Section160:4575: class definition in method body
+Section160:4591: class definition in method body
+Section160:4826: class definition in method body
+Section160:4889: class definition in method body
+Section160:4978: syntax error ()>> occured.

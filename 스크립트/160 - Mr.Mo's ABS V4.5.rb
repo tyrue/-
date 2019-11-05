@@ -1403,7 +1403,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=====비영사천문 - 크랩훕흐===========#
 		#=============================#
 		def skill_byung(d) # d : 방향, 0 : 동, 1 : 서, 2 : 남, 3: 북
-			r = 3
+			r = 4
 			case $game_variables[8]
 			when 0 # 부여성
 				id = 1

@@ -64,6 +64,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)용랑제팔봉', 2] 	if id == 149  #용랄제팔봉
 			return ['(착용)용랑제구봉', 2] 	if id == 150  #용랄제구봉
 			
+			# 중국무기
+			return ['(착용)대모홍접선', 2] 	if id == 11  #대모홍접선
+			
 		else
 			# 방어구
 			return ['(착용)연두갑주', 2] 		if id == 1  	#초심자의갑주

@@ -67,8 +67,10 @@ class Game_Map
 		for i in [2, 1, 0]
 			# Get tile ID
 			tile_id = data[x, y, i]
+			
 			# Tile ID acquistion failure
 			if tile_id == nil
+				
 				# impassable
 				return false
 				# If obstacle bit is set
@@ -88,6 +90,7 @@ class Game_Map
 				return true
 			end
 		end
+		
 		# passable
 		return true
 	end

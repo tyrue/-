@@ -865,9 +865,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.refresh
 				
 				#~ # 여기서 랜덤하게 움직이는걸 해야함
-				#~ for i in 0..5
-				#~ event.move_random
-				#~ end
+				for i in 0..20
+					event.move_random
+				end
 				event.moveto(event.x,event.y)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
 				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	

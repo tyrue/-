@@ -6411,3 +6411,96 @@ Section160:4591: class definition in method body
 Section160:4826: class definition in method body
 Section160:4889: class definition in method body
 Section160:4978: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:11:50>> the error <<disposed sprite (#<Scene_Map:0x8075bf0>)>> occured.
+On <<Sat 09 Nov 2019, 15:12:12>> the error <<disposed sprite (#<Scene_Map:0x7f3a858>)>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error
+Section160:4914: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error
+Section160:4914: class definition in method body
+Section160:4940: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<compile error
+Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error
+Section160:4914: class definition in method body
+Section160:4940: syntax error ()>> occured.

@@ -4135,7 +4135,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			# 스킬 명중률
-			hit_result = (rand(30) < hit)
+			hit_result = (rand(10) < hit)
 			# Set effective flag if skill is uncertain
 			effective |= hit < 100
 			
@@ -4276,17 +4276,24 @@ if SDK.state("Mr.Mo's ABS") == true
 						self.damage /= 2
 					end
 				end
+				
+				if self.damage > 0
+					#~ self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 15, 2].max + [self.mdef / 7, 2].max))
+					sum_def = self.pdef + self.mdef * 1.5
+					d_max = 510
+					if sum_def < d_max
+						self.damage = (self.damage * (1.0 - (sum_def) / (d_max / (1.01)))).to_i
+					else
+						self.damage = (self.damage * 0.01).to_i
+					end
+					#~ p self.damage 
+				end
+				
 				# Dispersion
 				if skill.variance > 0 and self.damage.abs > 0
 					amp = [self.damage.abs * skill.variance / 100, 1].max
 					self.damage += rand(amp+1) + rand(amp+1) - amp
 				end
-				
-				
-				if self.damage > 0
-					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 15, 2].max + [self.mdef / 7, 2].max))
-				end
-				
 				
 				# Second hit detection
 				eva = 8 * self.agi / user.dex + self.eva

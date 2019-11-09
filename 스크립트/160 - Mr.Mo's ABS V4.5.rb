@@ -663,7 +663,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Respawn
 			if parameters[10] != nil
 				respawn = parameters[10].split 
-				@enemies[event.id].respawn = respawn[1].to_i * 3
+				@enemies[event.id].respawn = respawn[1].to_i * 30
 			end
 			@enemies[event.id].aggro = $is_map_first ? true : false
 		end
@@ -4142,46 +4142,46 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If hit occurs
 			if hit_result == true
 				# Calculate power
-				power = 0 + user.atk / 2
+				power = 0
 				
 				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
 				case skill.id
 					# 주술사 스킬
 				when 44 # 헬파이어
-					power += user.sp / 20 + 20
+					power += user.sp * 1.5
 					user.sp = 0
 				when 49 # 성려멸주
-					power += user.maxsp / 55 + 80
+					power += user.maxsp / 8 + 80
 					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
-					power += user.maxsp / 45 + 100
+					power += user.maxsp / 7 + 100
 					user.sp -= user.maxsp / 9
 				when 53 # 삼매진화 
-					power += user.sp / 10 + 40
+					power += user.sp * 2
 					user.sp = 0
 				when 56 # 성려멸주 2성
-					power += user.maxsp / 35 + 120
+					power += user.maxsp / 6 + 120
 					user.sp -= user.maxsp / 8
 				when 57 # 삼매진화 1성
-					power += user.sp / 7 + 60
+					power += user.sp * 2.5
 					user.sp = 0
 				when 58 # 지폭지술
 					$e_v += 1
-					power += user.sp / 30 + 20
+					power += user.sp * 2
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp = 0
 					end
 				when 68 # 폭류유성
 					$e_v += 1
-					power += (user.sp / 25) + (user.hp / 200) + 40
+					power += (user.sp * 2) + (user.hp * 1) 
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp -= user.sp / 2
 						user.hp -= user.hp / 2
 					end	
 				when 69 # 삼매진화 2성
-					power += user.sp / 7 + 60
+					power += user.sp * 2.5
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
@@ -4190,36 +4190,36 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					# 전사스킬
 				when 67 # 건곤대나이
-					power += user.hp / 100 + 35
-					user.hp -= (user.hp / 5) * 3
+					power += user.hp * 3 
+					user.hp -= (user.hp / 3)
 				when 73 # 광량돌격
-					power += user.maxhp / 50 + 50
-					user.hp -= user.maxhp / 8
+					power += user.maxhp * 1.5 
+					user.hp -= user.maxhp / 6
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
-					power += user.maxhp / 100 + 10
+					power += user.maxhp / 5 + 10
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 78 # 십리건곤 1성
-					power += user.maxhp / 90 + 15
+					power += user.maxhp / 4.5 + 15
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
-					power += user.hp / 4 + 100
+					power += user.hp * 5
 					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
-					power += user.maxhp / 80 + 20
+					power += user.maxhp / 4 + 20
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 101 # 백호참
-					power += user.hp / 80 + 55
+					power += user.hp * 2.5
 					user.hp -= user.hp / 2
 				when 102 # 백리건곤 1성
-					power += user.maxhp / 80 + 30
-					user.hp -= user.maxhp / 8
+					power += user.maxhp / 3 + 30
+					user.hp -= user.maxhp / 7
 					user.hp = 1 if user.hp <= 0
 				when 103 # 어검술
-					power += user.hp / 25 + 45
+					power += user.hp
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
@@ -4227,7 +4227,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					
 				when 104 # 포효검황
-					power += user.hp / 60 + 100
+					power += user.hp * 1.2
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
@@ -4236,7 +4236,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				when 105 # 혈겁만파
 					$e_v += 1
-					power += (user.sp / 70) + (user.hp / 65) + 100
+					power += (user.sp) + (user.hp * 2) + 100
 					# 적들이 다 맞을때 마나를 0으로 만듦
 					if $e_v == $alive_size
 						user.sp = 0
@@ -4248,7 +4248,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					power = skill.power + user.atk / 2 
 				end				
-				
+				power = (power * (1.0 + user.atk / 150.0)).to_i
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
 					power -= self.mdef * skill.mdef_f / 100
@@ -4264,7 +4264,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				rate += (user.agi * skill.agi_f / 100)
 				rate += (user.int * skill.int_f / 100)
 				# Calculate basic damage
-				self.damage = power * rate / 20
+				self.damage = (power * rate / 20)
 				# Element correction
 				self.damage *= elements_correct(skill.element_set)
 				self.damage /= 100
@@ -4277,16 +4277,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
+				
 				if self.damage > 0
-					#~ self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 15, 2].max + [self.mdef / 7, 2].max))
-					sum_def = self.pdef + self.mdef * 1.5
-					d_max = 510
-					if sum_def < d_max
-						self.damage = (self.damage * (1.0 - (sum_def) / (d_max / (1.01)))).to_i
-					else
-						self.damage = (self.damage * 0.01).to_i
-					end
-					#~ p self.damage 
+					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 30, 3].max + [self.mdef / 15, 1].max))
 				end
 				
 				# Dispersion

@@ -382,6 +382,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[62] = [180 * sec, 0, 157] # 수심각도
 	SKILL_BUFF_TIME[63] = [180 * sec, 0, 158] # 반영대도
 	SKILL_BUFF_TIME[64] = [180 * sec, 0, 159] # 십량분법
+	SKILL_BUFF_TIME[66] = [20 * sec, 0, 161] # 신수둔각도
 	SKILL_BUFF_TIME[72] = [180 * sec, 0, 159] # 구량분법
 	SKILL_BUFF_TIME[76] = [180 * sec, 0, 159] # 팔량분법
 	SKILL_BUFF_TIME[71] = [60 * sec, 0, 163] # 혼신의힘
@@ -663,7 +664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Respawn
 			if parameters[10] != nil
 				respawn = parameters[10].split 
-				@enemies[event.id].respawn = respawn[1].to_i * 30
+				@enemies[event.id].respawn = respawn[1].to_i * 6
 			end
 			@enemies[event.id].aggro = $is_map_first ? true : false
 		end
@@ -4209,25 +4210,25 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= user.maxhp / 6
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
-					power += user.maxhp / 5 + 10
-					user.hp -= user.maxhp / 8
+					power += user.maxhp / 8 + 10
+					user.hp -= user.maxhp / 9
 					user.hp = 1 if user.hp <= 0
 				when 78 # 십리건곤 1성
-					power += user.maxhp / 4.5 + 15
+					power += user.maxhp / 7 + 15
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
 					power += user.hp * 5
 					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
-					power += user.maxhp / 4 + 20
+					power += user.maxhp / 6 + 20
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 101 # 백호참
 					power += user.hp * 2.5
 					user.hp -= user.hp / 2
 				when 102 # 백리건곤 1성
-					power += user.maxhp / 3 + 30
+					power += user.maxhp / 6 + 30
 					user.hp -= user.maxhp / 7
 					user.hp = 1 if user.hp <= 0
 				when 103 # 어검술

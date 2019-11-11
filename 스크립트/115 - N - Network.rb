@@ -1570,6 +1570,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					#return true
+					
 				when /<weapon>(.*)<\/weapon>/
 					weapon_data = $1.split('.')
 					for data in weapon_data
@@ -2224,8 +2225,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						보관이벤트($2.to_i).moveto($3.to_i, $4.to_i)
 					end
 					
-				when /<drop_del>(.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
 					
+				when /<drop_del>(.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
 					if $1.to_i == $game_map.map_id and $game_map.events[$2.to_i] != nil
 						$game_map.events[$2.to_i].erase
 					end

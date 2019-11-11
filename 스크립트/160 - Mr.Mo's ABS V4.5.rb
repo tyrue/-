@@ -1906,63 +1906,75 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= 80 
 					# 토끼 고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 13 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 13 #{e.event.x} #{e.event.y}</map_item>\n"
 				elsif r <= 90
 					# 토끼 화서
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 36 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 36 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true	
 			when 2 # 다람쥐
 				if r <= 80 
 					# 도토리
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 12 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 12 #{e.event.x} #{e.event.y}</map_item>\n"
 				elsif r <= 90
 					# 다람쥐 화서
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 35 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 35 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 3 # 암사슴
 				if r <= 70 
 					# 사슴고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 14 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 14 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 4 # 숫사슴
 				if r <= 50 
 					# 녹용
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 15 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 5 # 늑대
 				if r <= 40 
 					# 100전
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 38 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 6 # 소
 				if r <= 60 
 					# 쇠고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 17 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 17 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 7 # 돼지
 				if r <= 70 
 					# 돼지고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 16 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 16 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 8 # 쥐
 				if r <= 70 
 					# 쥐고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 41 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 41 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 9 # 병든쥐
 				if r <= 70 
 					# 쥐고기
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 41 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 41 #{e.event.x} #{e.event.y}</map_item>\n"
 				elsif r <= 90
 					# 100전
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 38 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 38 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 10 # 시궁창쥐

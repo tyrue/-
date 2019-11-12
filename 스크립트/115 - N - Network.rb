@@ -2104,10 +2104,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									
 									if(actor.class_id == 7) # 전사 99때 체력 4500
 										actor.maxhp += 16
-										actor.str += 3
+										actor.str += 2
 									elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
 										actor.maxsp += 5
-										actor.int += 3
+										actor.int += 2
 									end
 									# 풀체
 									actor.hp = actor.maxhp

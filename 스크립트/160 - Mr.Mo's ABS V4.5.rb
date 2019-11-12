@@ -394,7 +394,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[91] = [60 * sec, 0, 30] # 석화기탄
 	SKILL_BUFF_TIME[94] = [6 * sec, 0, 32] # 금강불체
 	
-	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -4395,6 +4394,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
+				
 				# Substract damage from HP
 				last_hp = self.hp
 				self.hp -= self.damage
@@ -4648,6 +4648,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def initialize(enemy_id)
 			super()
+			# 보스 최대 체력, 경험치등 정할 수 있음
+			$data_enemies[102].maxhp = 1300000 # 반고
+			$data_enemies[159].maxhp = 1300000 # 거북장군
+			
 			@event_id= 0
 			@see_range = 0
 			@hear_range = 0

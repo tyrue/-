@@ -76,6 +76,7 @@ if SDK.state("Mr.Mo's ABS")
 			dy = OUTLINE
 			zoom_x = width != nil ? width : back.width
 			zoom_y = height != nil ? height : back.height
+			
 			percent = min / max.to_f if max != 0
 			percent = 0 if max == 0
 			back_dest_rect = Rect.new(x,y,zoom_x,zoom_y)

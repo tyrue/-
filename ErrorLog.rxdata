@@ -6510,3 +6510,7 @@ On <<Mon 11 Nov 2019, 21:40:03>> the file <<Graphics/Characters/[중국남부]�
 On <<Mon 11 Nov 2019, 21:40:26>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
 On <<Mon 11 Nov 2019, 22:11:45>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
 On <<Mon 11 Nov 2019, 22:12:57>> the file <<Graphics/Characters/[남양,남경]연청산소>> was missing.
+On <<Tue 12 Nov 2019, 23:10:19>> the error <<float 3.5e+012 out of range of integer (#<Scene_Map:0x7f83ef8>)>> occured.
+On <<Tue 12 Nov 2019, 23:16:08>> the error <<float 3.499999999e+010 out of range of integer (#<Scene_Map:0x7ec5480>)>> occured.
+On <<Tue 12 Nov 2019, 23:16:40>> the error <<float 3499999995 out of range of integer (#<Scene_Map:0x8034b10>)>> occured.
+On <<Tue 12 Nov 2019, 23:56:16>> the error <<nil can't be coerced into Fixnum (#<Scene_Map:0x7f0d440>)>> occured.

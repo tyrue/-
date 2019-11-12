@@ -11,6 +11,7 @@ begin
 	$global_house4 = 0
 	$scene = Scene_Connect.new
 	
+	
 	while $scene != nil
 		$scene.main
 	end

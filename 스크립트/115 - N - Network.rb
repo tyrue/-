@@ -1029,7 +1029,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $ABS.enemies[data[1].to_i] != nil
 						# 몹 죽었을때 리스폰 시간 적용
 						if data[6].to_i != nil 
-							if data[6].to_i != 0  
+							if data[6].to_i > 0  
 								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
 							else
 								$ABS.enemies[data[1].to_i].event.erased = false

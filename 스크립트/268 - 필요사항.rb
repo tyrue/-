@@ -15,6 +15,7 @@ def 게임종료
 	#Network::Main.socket.send("<chat>(알림):'#{$game_party.actors[0].name}'님께서 게임을 종료하셨습니다.</chat>\n")
 	if Network::Main.socket != nil
 		자동저장
+		$ABS.close_buff 
 		#거래를 종료한다
 		Network::Main.socket.send "<trade_fail>#{$trade_player},#{$game_party.actors[0].name}</trade_fail>\n"
 		

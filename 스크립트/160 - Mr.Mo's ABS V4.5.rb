@@ -701,6 +701,29 @@ if SDK.state("Mr.Mo's ABS") == true
 				range.update
 			end
 		end
+		
+		#--------------------------------------------------------------------------
+		# * 로그아웃 등 스킬 버프, 딜레이 초기화
+		#--------------------------------------------------------------------------
+		def close_buff
+			# 스킬 딜레이 초기화
+			for skill_mash in SKILL_MASH_TIME
+				if skill_mash[1][1] > 0
+					skill_mash[1][1] = 0
+				end
+			end
+			
+			# 버프 지속시간 초기화
+			for skill_mash in SKILL_BUFF_TIME
+				if skill_mash[1][1] > 0
+					skill_mash[1][1] = 0 
+				end
+			end
+			$skill_Delay_Console.refresh
+			$skill_Delay_Console.refresh
+			$skill_Delay_Console.dispose
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Revive Actor 캐릭터 부활!
 		#--------------------------------------------------------------------------
@@ -1385,7 +1408,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			case $game_variables[8]
 			when 0 # 부여성
 				map_m(17, 11, 8)
-			when 1 # 국내성
+			when 1, 2 # 국내성
 				map_m(135, 11, 7)				
 			when 3 # 용궁
 				map_m(204, 11, 8)
@@ -1448,13 +1471,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				id = 203
 				case d
 				when 0
-					map_m(id, 52 + rand(r), 20 + rand(r))
+					map_m(id, 52, 23)
 				when 1
-					map_m(id, 0 + rand(r), 24 + rand(r))
+					map_m(id, 4, 24)
 				when 2
-					map_m(id, 27 + rand(r), 41 + rand(r))
+					map_m(id, 27, 43)
 				when 3
-					map_m(id, 29 + rand(r), 2 + rand(r))
+					map_m(id, 29, 8)
 				end
 				
 			when 4 # 고균도
@@ -1793,6 +1816,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			$cha_name = $game_party.actors[0].character_name
 			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
+			$game_party.actors[0].equip(0, 0)
+			$game_party.actors[0].equip(1, 0)
+			$game_party.actors[0].equip(2, 0)
+			$game_party.actors[0].equip(3, 0)
+			$game_party.actors[0].equip(4, 0)
 			$scene = Scene_Map.new
 			# 이때 모든 버프들을 지우자
 			for skill_mash in SKILL_BUFF_TIME
@@ -4649,8 +4677,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		def initialize(enemy_id)
 			super()
 			# 보스 최대 체력, 경험치등 정할 수 있음
-			$data_enemies[102].maxhp = 1300000 # 반고
-			$data_enemies[159].maxhp = 1300000 # 거북장군
+			$data_enemies[102].maxhp = 3000000 # 반고
+			$data_enemies[159].maxhp = 2000000 # 거북장군
 			
 			@event_id= 0
 			@see_range = 0

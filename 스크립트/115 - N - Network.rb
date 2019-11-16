@@ -1394,7 +1394,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.setup($new_id) 
 						$game_player.moveto($new_x, $new_y) 
 						$game_player.direction = $new_d
-						$game_party.actors[0].set_graphic($charp, 0, 0, 0)
+						$game_party.actors[0].set_graphic($charp, 0, 0, 0) # 캐릭터 칩 설정
+						$cha_name = $charp
+						
 						$game_party.gain_weapon($armedweapon.to_i,1)
 						$game_party.gain_armor($armedarmor1.to_i,1)
 						$game_party.gain_armor($armedarmor2.to_i,1)

@@ -1,3 +1,4 @@
+# 게임을 시작할 때가 아님, 로그인 부터임
 def 유저접속
 	if $nickname
 		$game_party.actors[0].name = $nickname

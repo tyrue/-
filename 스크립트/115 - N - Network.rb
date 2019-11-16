@@ -1029,7 +1029,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $ABS.enemies[data[1].to_i] != nil
 						# 몹 죽었을때 리스폰 시간 적용
 						if data[6].to_i != nil 
-							if data[6].to_i != 0  
+							if data[6].to_i > 0  
 								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
 							else
 								$ABS.enemies[data[1].to_i].event.erased = false
@@ -1394,7 +1394,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.setup($new_id) 
 						$game_player.moveto($new_x, $new_y) 
 						$game_player.direction = $new_d
-						$game_party.actors[0].set_graphic($charp, 0, 0, 0)
+						$game_party.actors[0].set_graphic($charp, 0, 0, 0) # 캐릭터 칩 설정
+						$cha_name = $charp
+						
 						$game_party.gain_weapon($armedweapon.to_i,1)
 						$game_party.gain_armor($armedarmor1.to_i,1)
 						$game_party.gain_armor($armedarmor2.to_i,1)
@@ -1570,6 +1572,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					#return true
+					
 				when /<weapon>(.*)<\/weapon>/
 					weapon_data = $1.split('.')
 					for data in weapon_data
@@ -2103,10 +2106,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									
 									if(actor.class_id == 7) # 전사 99때 체력 4500
 										actor.maxhp += 16
-										actor.str += 3
+										actor.str += 2
 									elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
 										actor.maxsp += 5
-										actor.int += 3
+										actor.int += 2
 									end
 									# 풀체
 									actor.hp = actor.maxhp
@@ -2224,8 +2227,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						보관이벤트($2.to_i).moveto($3.to_i, $4.to_i)
 					end
 					
-				when /<drop_del>(.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
 					
+				when /<drop_del>(.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
 					if $1.to_i == $game_map.map_id and $game_map.events[$2.to_i] != nil
 						$game_map.events[$2.to_i].erase
 					end

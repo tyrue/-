@@ -96,6 +96,9 @@ class Scene_Map
 					end	
 					
 					if Key.trigger?(KEY_R) # r
+						if($skill_Delay_Console == nil)
+							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
+						end
 						$skill_Delay_Console.toggle
 					end	
 					

@@ -6411,3 +6411,106 @@ Section160:4591: class definition in method body
 Section160:4826: class definition in method body
 Section160:4889: class definition in method body
 Section160:4978: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:11:50>> the error <<disposed sprite (#<Scene_Map:0x8075bf0>)>> occured.
+On <<Sat 09 Nov 2019, 15:12:12>> the error <<disposed sprite (#<Scene_Map:0x7f3a858>)>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error
+Section160:4914: class definition in method body ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error
+Section160:4914: class definition in method body
+Section160:4940: syntax error ()>> occured.
+On <<Sat 09 Nov 2019, 15:31:09>> the error <<compile error
+Section160:4292: syntax error
+Section160:4294: syntax error
+Section160:4306: syntax error
+Section160:4361: syntax error
+Section160:4369: class definition in method body
+Section160:4537: class definition in method body
+Section160:4553: class definition in method body
+Section160:4788: class definition in method body
+Section160:4851: class definition in method body
+Section160:4913: syntax error
+Section160:4914: class definition in method body
+Section160:4940: syntax error ()>> occured.
+On <<Mon 11 Nov 2019, 21:35:22>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
+On <<Mon 11 Nov 2019, 21:39:16>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
+On <<Mon 11 Nov 2019, 21:40:03>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
+On <<Mon 11 Nov 2019, 21:40:26>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
+On <<Mon 11 Nov 2019, 22:11:45>> the file <<Graphics/Characters/[중국남부]뇌신`x>> was missing.
+On <<Mon 11 Nov 2019, 22:12:57>> the file <<Graphics/Characters/[남양,남경]연청산소>> was missing.
+On <<Tue 12 Nov 2019, 23:10:19>> the error <<float 3.5e+012 out of range of integer (#<Scene_Map:0x7f83ef8>)>> occured.
+On <<Tue 12 Nov 2019, 23:16:08>> the error <<float 3.499999999e+010 out of range of integer (#<Scene_Map:0x7ec5480>)>> occured.
+On <<Tue 12 Nov 2019, 23:16:40>> the error <<float 3499999995 out of range of integer (#<Scene_Map:0x8034b10>)>> occured.
+On <<Tue 12 Nov 2019, 23:56:16>> the error <<nil can't be coerced into Fixnum (#<Scene_Map:0x7f0d440>)>> occured.

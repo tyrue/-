@@ -20,11 +20,10 @@ class Scene_Map
 		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
-		if $game_map.map_id < 230 
-			$game_switches[407] = false
-		end
 		$game_temp.spriteset_refresh
 		맵이동
+		# 현재 맵의 아이템을 요청
+		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 	end
 	
 	#--------------------------------------------------------------------------

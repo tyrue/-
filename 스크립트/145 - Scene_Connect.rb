@@ -4,6 +4,7 @@ class Scene_Connect
 	attr_reader :status_console
 	
 	def main
+		$loading.dispose if $loading != nil
 		$trade_item = []
 		$item_number = []
 		$party_name = ""
@@ -34,7 +35,7 @@ class Scene_Connect
 		$data_tilesets      = load_data("Data/Tilesets.rxdata")
 		$data_common_events = load_data("Data/CommonEvents.rxdata")
 		$data_system        = load_data("Data/System.rxdata")
-		$game_system = Game_System.new
+		$game_system 				= Game_System.new
 		$game_temp          = Game_Temp.new
 		$game_system        = Game_System.new
 		$game_switches      = Game_Switches.new
@@ -52,6 +53,7 @@ class Scene_Connect
 		
 		@login_window = Jindow_Server.new
 		Graphics.transition
+		
 		#Network::Main.retrieve_version
 		$game_system.bgm_play($data_system.title_bgm)
 		loop do

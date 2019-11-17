@@ -1361,6 +1361,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
+		
+		#==============================#
+		#=====무기 격 설정 - 크랩훕흐======#
+		#=============================#
 		def weapon_skill(id, e)
 			r = rand(100)
 			case id
@@ -1764,7 +1768,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
 			case enemy.trigger[0]
 			when 0
-				# 여기서 랜덤하게 움직이는걸 해야함
+				
 				event.fade = true if FADE_DEAD
 				if !FADE_DEAD
 					event.character_name = ""

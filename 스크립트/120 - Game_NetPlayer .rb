@@ -319,7 +319,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			# Get absolute value of difference
 			abs_sx = sx.abs
 			abs_sy = sy.abs
-			moveto(@x,@y) if abs_sx > 2 or abs_sy > 2
+			moveto(@x,@y) if (abs_sx + abs_sy) >= 2
 		end
 		#-------------------------------------------------------------------------
 		# * Set NetId

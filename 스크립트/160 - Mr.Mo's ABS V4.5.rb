@@ -1399,10 +1399,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def map_m(id, x, y)
-			$game_temp.player_transferring = true # 이동 가능
-			$game_temp.player_new_map_id = id
-			$game_temp.player_new_x = x
-			$game_temp.player_new_y = y
+			if $game_map.map_id != id
+				$game_temp.player_transferring = true # 이동 가능
+				$game_temp.player_new_map_id = id
+				$game_temp.player_new_x = x
+				$game_temp.player_new_y = y
+			else
+				$game_player.moveto(x, y)
+			end
 		end
 		
 		#==============================#
@@ -4300,8 +4304,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					# 전사스킬
 				when 67 # 건곤대나이
-					power += user.hp * 3 
-					user.hp -= (user.hp / 3)
+					power += user.hp * 2 
+					user.hp -= (user.hp / 3) * 2
 				when 73 # 광량돌격
 					power += user.maxhp * 1.5 
 					user.hp -= user.maxhp / 6

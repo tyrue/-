@@ -303,29 +303,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	# MELEE_CUSTOM[Weapon_ID] = [Mash Time(in seconds), Kick Back(in tiles), animation suffix]
 	#무기 딜레이
 	#~ MELEE_CUSTOM[101] = [5, 0]
-	#~ MELEE_CUSTOM[102] = [5, 0] 
-	#~ MELEE_CUSTOM[103] = [5, 0]
-	#~ MELEE_CUSTOM[104] = [5, 0]
-	#~ MELEE_CUSTOM[105] = [5, 0]
-	#~ MELEE_CUSTOM[106] = [5, 0]
-	#~ MELEE_CUSTOM[107] = [5, 0]
-	#~ MELEE_CUSTOM[108] = [5, 0]
-	#~ MELEE_CUSTOM[109] = [5, 0]
-	#~ MELEE_CUSTOM[110] = [5, 0]
-	#~ MELEE_CUSTOM[111] = [5, 0]
-	#~ MELEE_CUSTOM[112] = [5, 0]
-	#~ MELEE_CUSTOM[113] = [5, 0]
-	#~ MELEE_CUSTOM[114] = [5, 0]
-	#~ MELEE_CUSTOM[115] = [5, 0]
-	#~ MELEE_CUSTOM[116] = [5, 0]
-	#~ MELEE_CUSTOM[117] = [5, 0]
-	#~ MELEE_CUSTOM[118] = [5, 0]
-	#~ MELEE_CUSTOM[119] = [5, 0]
-	#~ MELEE_CUSTOM[120] = [5, 0]
-	#~ MELEE_CUSTOM[121] = [5, 0]
-	#~ MELEE_CUSTOM[122] = [5, 0]
-	#~ MELEE_CUSTOM[123] = [5, 0]
-	#~ MELEE_CUSTOM[124] = [5, 0]
+	
 	#--------------------------------------------------------------------------
 	# Since some skills won't be listed(i.e non-ranged) I made this for customazation of melee weapons.
 	SKILL_CUSTOM = {}
@@ -393,6 +371,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[90] = [60 * sec, 0, 196] # 분량방법
 	SKILL_BUFF_TIME[91] = [60 * sec, 0, 30] # 석화기탄
 	SKILL_BUFF_TIME[94] = [6 * sec, 0, 32] # 금강불체
+	
+	# 도적
+	SKILL_BUFF_TIME[131] = [60 * sec, 0, 41] # 투명
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -1315,7 +1296,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * 캐릭터의 밀리 공격(때리는거)
 		#--------------------------------------------------------------------------
-		def player_melee # 왠지 여기서 때리는 모션 만들 수 있을 듯?
+		def player_melee(sw = false) # 왠지 여기서 때리는 모션 만들 수 있을 듯?
 			# 무기를 안꼈으면 공격 못함
 			return if $data_weapons[@actor.weapon_id] == nil
 			#Get all enemies
@@ -1326,6 +1307,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				@button_mash = MASH_TIME*10
 			end
+			
+			if sw
+				@button_mash = MASH_TIME*6 
+			end
+			
 			Audio.se_play("Audio/SE/무기001-검")
 			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 191; @ani_id = #{Network::Main.id};</27>\n"
 			
@@ -4216,6 +4202,98 @@ if SDK.state("Mr.Mo's ABS") == true
 				return false
 			end
 		end
+		#--------------------------------------------------------------------------
+		# * Applying Normal Attack Effects
+		#     attacker : battler
+		#--------------------------------------------------------------------------
+		def attack_effect(attacker)
+			
+			# 나한테 적이아니면 공격 못함
+			if self.is_a?(ABS_Enemy) and attacker.is_a?(Game_Actor)
+				return if !self.hate_group.include?(0)
+			end
+			# Clear critical flag
+			self.critical = false
+			# First hit detection
+			hit_result = (rand(100) < attacker.hit)
+			# If hit occurs
+			if hit_result == true
+				# Calculate basic damage
+				atk = [attacker.atk - self.pdef / 2, 0].max
+				self.damage = atk * (20 + attacker.str) / 20
+				# Element correction
+				self.damage *= elements_correct(attacker.element_set)
+				self.damage /= 100
+				self.damage = 1 if self.damage <= 0
+				# If damage value is strictly positive
+				if self.damage > 0
+					# Critical correction
+					# 여기다가 크리티컬 확률 높힐 수도 있음
+					if rand(100) < 4 * attacker.dex / self.agi
+						self.damage *= 2
+						self.critical = true
+					end
+					# Guard correction
+					if self.guarding?
+						self.damage /= 2
+					end
+				end
+				
+				# Dispersion
+				if self.damage.abs > 0
+					amp = [self.damage.abs * 15 / 100, 1].max
+					self.damage += rand(amp+1) + rand(amp+1) - amp
+				end
+				# Second hit detection
+				eva = 8 * self.agi / attacker.dex + self.eva
+				hit = self.damage < 0 ? 100 : 100 - eva
+				hit = self.cant_evade? ? 100 : hit
+				hit_result = (rand(100) < hit)
+			end
+			# If hit occurs
+			if hit_result == true
+				# State Removed by Shock
+				remove_states_shock
+				# Substract damage from HP
+				
+				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
+				if attacker.is_a?(Game_Actor)
+					if SKILL_BUFF_TIME[131][1] > 0 # 투명
+						self.damage *= 5
+						SKILL_BUFF_TIME[131][1] = 1
+					end
+				end
+				
+				r = rand(100)
+				if r <= (self.damage * 100 / self.maxhp) or r <= 30
+					if !self.is_a?(Game_Actor)
+						
+						$ABS.enemies[self.event.id].aggro = true
+						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
+					end
+				end
+				
+				self.hp -= self.damage
+				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
+				if !self.is_a?(Game_Actor)
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
+				end
+				# State change
+				@state_changed = false
+				states_plus(attacker.plus_state_set)
+				states_minus(attacker.minus_state_set)
+				# When missing
+			else
+				# Set damage to "Miss"
+				self.damage = "Miss"
+				# Clear critical flag
+				self.critical = false
+			end
+			# End Method
+			return true
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Apply Skill Effects
 		#     user  : the one using skills (battler)

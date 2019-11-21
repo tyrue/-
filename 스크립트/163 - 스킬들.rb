@@ -1,4 +1,8 @@
 class Rpg_skill
+	def 투명
+		$game_variables[9] = 1
+	end
+	
 	def 비영승보
 		x = $game_player.x
 		y = $game_player.y
@@ -10,6 +14,7 @@ class Rpg_skill
 				
 				$game_player.moveto(new_x, new_y) 
 				$game_player.direction = 10 - d
+				$ABS.player_melee(true)
 			else
 				r = rand(100)
 				new_x = x 
@@ -58,6 +63,7 @@ class Rpg_skill
 				end
 				$game_player.moveto(new_x, new_y) 
 				$game_player.direction = d
+				$ABS.player_melee(true)
 			end
 		end
 	end

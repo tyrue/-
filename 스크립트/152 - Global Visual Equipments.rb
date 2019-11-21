@@ -52,6 +52,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 						next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
 						bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
 						self.bitmap.blt(0, 0, bmp2, src_rect, 255)
+						
+						# 여기다가 넷 캐릭터의 투명 여부 확인해서 같은 파티원이 아니면 아예 안보이게 하고 
+						# 같은 파티원이면 불투명하게
 					end
 				else
 					src_rect = Rect.new(0, 0, bmp.width, bmp.height)

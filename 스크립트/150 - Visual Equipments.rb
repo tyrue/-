@@ -164,6 +164,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				Network::Main.send_map
 				return true
 			else
+				return true if $game_variables[9] == 1
 				return false
 			end
 		end
@@ -228,7 +229,13 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 						for i in 0..size
 							next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
 							bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
-							self.bitmap.blt(0, 0, bmp2, src_rect, 255)
+							
+							if SKILL_BUFF_TIME[131][1] > 0
+								self.bitmap.blt(0, 0, bmp2, src_rect, 125)
+							else
+								self.bitmap.blt(0, 0, bmp2, src_rect, 255)
+							end
+							$game_variables[9] = 0
 						end
 					else
 						src_rect = Rect.new(0, 0, bmp.width, bmp.height)

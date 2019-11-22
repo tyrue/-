@@ -51,7 +51,25 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 					for i in 0..size
 						next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
 						bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
-						self.bitmap.blt(0, 0, bmp2, src_rect, 255)
+						
+						if @character.is_transparency
+							ok = false
+							if $netparty != nil
+								for i in 0..$netparty.size
+									if @character.name.to_s == $netparty[i].to_s 
+										ok = true
+										break
+									end
+								end
+							end
+							if ok 
+								self.bitmap.blt(0, 0, bmp2, src_rect, 125)
+							else
+								self.bitmap.blt(0, 0, bmp2, src_rect, 0)
+							end
+						else
+							self.bitmap.blt(0, 0, bmp2, src_rect, 255)
+						end
 						
 						# 여기다가 넷 캐릭터의 투명 여부 확인해서 같은 파티원이 아니면 아예 안보이게 하고 
 						# 같은 파티원이면 불투명하게

@@ -1,6 +1,7 @@
 class Rpg_skill
 	def 투명
 		$game_variables[9] = 1
+		Network::Main.send_trans(true)
 	end
 	
 	def 비영승보

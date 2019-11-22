@@ -48,6 +48,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			attr_accessor :capelli
 			attr_accessor :equips
 			attr_accessor :equip_change
+			attr_accessor :is_transparency # 스킬 투명 썼는지 여부
 		end  
 		#--------------------------------------------------------------------------
 		# * Initializes a network player.
@@ -86,6 +87,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 				@armor4_id = 0
 				@capelli = 0
 				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]
+				@is_transparency = false
 			end
 			$game_temp.spriteset_refresh = true
 		end
@@ -96,9 +98,10 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			return if @netid == Network::Main.id
 			@oldx = @x
 			@oldy = @y
+			@tran = @is_transparency
 			
 			eval(data) unless data == nil
-			if new_equip?
+			if new_equip? or (@tran != @is_transparency)
 				@equip_change = true
 			end
 			if User_Edit::VISUAL_EQUIP_ACTIVE

@@ -418,6 +418,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
 				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
 				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
+				
+				if SKILL_BUFF_TIME[131][1] > 0 # 투명
+					send += "@is_transparency = true;"
+				else
+					send += "@is_transparency = false;"
+				end
+				
 				@socket.send("<5>#{send}</5>\n")
 				for player in @players.values
 					next if player.netid == -1
@@ -432,6 +439,27 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 				end
 			end
+			
+			def self.send_trans(sw)
+				send = ""
+				# Send 투명도 여부
+				send += "@is_transparency = #{sw};"
+				@socket.send("<5>#{send}</5>\n")
+				for player in @players.values
+					next if player.netid == -1
+					# If the Player is on the same map...
+					# 만약 같은 맵에 있다면?
+					if player.map_id == $game_map.map_id #and self.in_range?(player)
+						# Update Map Players
+						self.update_map_player(player.netid, nil)
+					elsif @mapplayers[player.netid.to_s] != nil
+						# Remove from Map Players
+						self.update_map_player(player.netid, nil, true)
+					end
+				end
+			end
+			
+			
 			
 			#--------------------------------------------------------------------------
 			# * 채팅 데이터 보냄

@@ -1538,7 +1538,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
-						$chat.write("공지 : " + $1.to_s, Color.new(0, 0, 0))
+						$chat.write($1.to_s, Color.new(0, 0, 0))
 						$game_temp.chat_log.push($1.to_s)
 						$game_temp.chat_refresh = true						
 					end

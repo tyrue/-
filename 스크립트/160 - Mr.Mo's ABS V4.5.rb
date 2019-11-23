@@ -2293,22 +2293,22 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 58 # 수룡
-				if r <= 80 
+				if r <= 60 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</map_item>\n"
-				elsif r <= 83
+				elsif r <= 62
 					# 수룡의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 62 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 62 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 59 # 화룡
-				if r <= 80 
+				if r <= 60 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</map_item>\n"
-				elsif r <= 83
+				elsif r <= 62
 					# 화룡의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 61 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 61 #{e.event.x} #{e.event.y}</map_item>\n"

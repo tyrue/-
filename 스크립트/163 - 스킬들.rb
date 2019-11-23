@@ -1,5 +1,10 @@
 class Rpg_skill
 	def 투명
+		u_hp = $game_party.actors[0].hp
+		u_hp -= u_hp / 50
+		u_hp = 1 if u_hp <= 0
+		$game_party.actors[0].hp = u_hp 
+		
 		$game_variables[9] = 1
 		Network::Main.send_trans(true)
 	end

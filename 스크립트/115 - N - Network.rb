@@ -1450,16 +1450,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							exit
 						else
 							Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
-							@socket.send("<exp_event></exp_event>\n")      
+							
 							$nowtrade = 0
 							$game_player.move_speed = 3
-							$game_switches[401] = true # 경험치 이벤트는 켜 있는 상태
+							
 							a번하우징
 							b번하우징
 							c번하우징
 							d번하우징
-							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
-							$skill_Delay_Console.show
+							
 							self.send_start
 						end
 					end
@@ -2138,6 +2137,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
 										actor.maxsp += 5
 										actor.int += 2
+									elsif(actor.class_id == 17) # 도적
+										actor.maxhp += 8
+										actor.dex += 2 # 손재주(명중률)
+										actor.agi += 2 # 민첩 (회피율)
 									end
 									# 풀체
 									actor.hp = actor.maxhp

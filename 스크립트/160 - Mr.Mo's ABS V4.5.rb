@@ -269,6 +269,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
 	#도사 스킬
 	
+	#도적 스킬
+	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
 	
 	# 적 캐릭터 스킬
 	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적 건곤
@@ -346,6 +348,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[104] = [70 * sec, 0] # 포효검황
 	SKILL_MASH_TIME[105] = [120 * sec, 0] # 혈겁만파
 	
+	# 도적
+	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
+	
+	# 도사
+	
+	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 스위치 번호]
 	SKILL_BUFF_TIME = {}
 	# 주술사
@@ -374,6 +382,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도적
 	SKILL_BUFF_TIME[131] = [60 * sec, 0, 41] # 투명
+	SKILL_BUFF_TIME[134] = [60 * sec, 0, 1] # 분신
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -1355,9 +1364,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			r = rand(100)
 			case id
 			when 114 # 주작의 검
-				if r < 30
-					e.damage = 10000
-					e.hp -= 10000
+				if r < 10
+					e.damage = 1500
+					e.hp -= 1500
 				end
 			end
 		end
@@ -1892,6 +1901,10 @@ if SDK.state("Mr.Mo's ABS") == true
 						elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
 							actor.maxsp += 5
 							actor.int += 2
+						elsif(actor.class_id == 17) # 도적
+							actor.maxhp += 8
+							actor.dex += 2 # 손재주(명중률)
+							actor.agi += 2 # 민첩 (회피율)
 						end
 						# 풀체
 						actor.hp = actor.maxhp
@@ -2191,6 +2204,10 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 고급보물상자
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 57 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 57 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 16
+					# 최고급보물상자
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 121 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 121 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 47, 48 # 도깨비, 불도깨비
@@ -2201,7 +2218,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 49 # 고래
-				if r <= 60 
+				if r <= 30 
 					# 작은보물상자
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 56 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 56 #{e.event.x} #{e.event.y}</map_item>\n"
@@ -2209,6 +2226,10 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 고급보물상자
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 57 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 57 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 95
+					# 최고급보물상자
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 121 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 121 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 50 # 녹웅객
@@ -2344,17 +2365,41 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 78 # 마령해골
-				if r <= 50 
+				if r <= 10 
 					# 불의 영혼봉
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 64 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 64 #{e.event.x} #{e.event.y}</map_item>\n"
-				end
-				return true
-			when 79 # 청철해골
-				if r <= 50 
+				elsif r <= 20
 					# 흑철중검
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 66 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 66 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 30
+					# 영혼죽장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 122 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 122 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 40
+					# 흑월도
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 125 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 125 #{e.event.x} #{e.event.y}</map_item>\n"	
+				end
+				return true
+			when 79 # 청철해골
+				if r <= 15 
+					# 불의 영혼봉
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 64 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 64 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 30
+					# 흑철중검
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 66 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 66 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 45
+					# 영혼죽장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 122 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 122 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 60
+					# 흑월도
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 125 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 125 #{e.event.x} #{e.event.y}</map_item>\n"	
 				end
 				return true
 			when 80 # 청명도깨비
@@ -2365,10 +2410,22 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 81 # 현랑전갈
-				if r <= 40 
-					# 불의 영혼봉
-					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 64 #{e.event.x} #{e.event.y}</drop_create>\n"
-					Network::Main.socket.send "<map_item>#{$game_map.map_id} 64 #{e.event.x} #{e.event.y}</map_item>\n"
+				if r <= 10 
+					# 영혼마령봉
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 124 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 124 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 20
+					# 현철중검
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 65 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 65 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 30
+					# 해골죽장
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 101 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 101 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 40
+					# 야월도
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 123 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 123 #{e.event.x} #{e.event.y}</map_item>\n"	
 				end
 				return true
 			when 82 # 구미호
@@ -4219,7 +4276,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If hit occurs
 			if hit_result == true
 				# Calculate basic damage
-				atk = [attacker.atk - self.pdef / 2, 0].max
+				atk = [attacker.atk - self.pdef / 2, 1].max
 				self.damage = atk * (20 + attacker.str) / 20
 				# Element correction
 				self.damage *= elements_correct(attacker.element_set)
@@ -4245,8 +4302,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					self.damage += rand(amp+1) + rand(amp+1) - amp
 				end
 				# Second hit detection
-				eva = 8 * self.agi / attacker.dex + self.eva
-				hit = self.damage < 0 ? 100 : 100 - eva
+				# agi : 민첩 (회피율), dex : 손재주 (명중률)
+				eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
+				hit = self.damage < 0 ? 100 : [100 - eva, 25].max
 				hit = self.cant_evade? ? 100 : hit
 				hit_result = (rand(100) < hit)
 			end
@@ -4256,11 +4314,24 @@ if SDK.state("Mr.Mo's ABS") == true
 				remove_states_shock
 				# Substract damage from HP
 				
+				if self.is_a?(Game_Actor) and attacker.is_a?(ABS_Enemy)
+					if $game_player.direction == attacker.event.direction
+						self.damage *= 2
+					end
+				elsif attacker.is_a?(Game_Actor) and self.is_a?(ABS_Enemy)
+					if self.event.direction == $game_player.direction
+						self.damage *= 2
+					end
+				end
+				
 				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
 				if attacker.is_a?(Game_Actor)
 					if SKILL_BUFF_TIME[131][1] > 0 # 투명
-						self.damage *= 5
+						self.damage *= (5 + $game_variables[10]) # 투명 숙련도
 						SKILL_BUFF_TIME[131][1] = 1
+					end
+					if SKILL_BUFF_TIME[134][1] > 0 # 분신
+						self.damage *= 2 
 					end
 				end
 				
@@ -4436,6 +4507,13 @@ if SDK.state("Mr.Mo's ABS") == true
 						user.hp = 1 if user.hp <= 0
 					end		
 					
+					# 도적 스킬
+				when 133 # 필살검무
+					power += (user.hp * 1 + user.sp * 0.5).to_i
+					
+					user.hp -= (user.hp / 2) 
+					user.sp = 0
+					
 					# 도사스킬
 				else
 					power = skill.power + user.atk / 2 
@@ -4481,10 +4559,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				# Second hit detection
-				eva = 8 * self.agi / user.dex + self.eva
-				hit = self.damage < 0 ? 100 : 100 - eva * skill.eva_f / 100
+				eva = [(8 * self.agi / user.dex + self.eva), 100].min
+				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 25].max
 				hit = self.cant_evade? ? 100 : hit
-				hit_result = (rand(10) < hit)
+				hit_result = (rand(100) < hit)
 				# Set effective flag if skill is uncertain
 				effective |= hit < 100
 			end

@@ -42,7 +42,7 @@ def 자동저장
 			end
 		end
 		
-		for sw in 0..450
+		for sw in 0..550
 			if $game_switches[sw] != nil
 				if $game_switches[sw] == true
 					@swlist += ("1" + ",")
@@ -52,7 +52,7 @@ def 자동저장
 			end
 		end
 		
-		for va in 0..250
+		for va in 0..400
 			if $game_variables[va] != nil
 				@valist += ($game_variables[va].to_s + ",")
 			end

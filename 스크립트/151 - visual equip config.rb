@@ -14,7 +14,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)검성기검', 2] 	if id == 7  #검성기검
 			return ['(착용)진선역봉', 2] 	if id == 8  #진선역봉
 			
-			return ['(착용)철도', 2] 	if id == 22 or id == 23  #비철단도, 철도
+			return ['(착용)철도', 2] 			if id == 22 or id == 23  #비철단도, 철도
+			return ['(착용)야월도', 2] 		if id == 24   #야월도
+			return ['(착용)흑월도', 2] 		if id == 25   #흑월도
 			
 			return ['(착용)목도', 2] 			if id == 101 	#목도
 			return ['(착용)목도', 2] 			if id == 102 	#목검

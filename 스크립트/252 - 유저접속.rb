@@ -15,7 +15,5 @@ def 유저접속
 	Network::Main.socket.send("<dtloadreq>'req'</dtloadreq>\n")
 	Network::Main.socket.send("<exp_event></exp_event>\n")     
 	$game_switches[401] = true # 경험치 이벤트는 켜 있는 상태
-	$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
-	$skill_Delay_Console.show
 	$scene = Scene_Reinit.new
 end

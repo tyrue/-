@@ -1,7 +1,7 @@
 class Rpg_skill
 	def 투명
 		u_hp = $game_party.actors[0].hp
-		u_hp -= u_hp / 50
+		u_hp -= u_hp / 30
 		u_hp = 1 if u_hp <= 0
 		$game_party.actors[0].hp = u_hp 
 		
@@ -133,7 +133,7 @@ class Rpg_skill
 			# If event coordinates are consistent with move destination
 			if event.x == new_x and event.y == new_y
 				# If through is OFF
-				return false if event.through
+				return false if event.through and event.character_name == ""
 				return true
 			end
 		end

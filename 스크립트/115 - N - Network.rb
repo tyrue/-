@@ -766,6 +766,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Update Admin and Mod Command Recievals -> 18
 			#  운영자 명령어
 			#-------------------------------------------------------------------------- 
+			
+			def self.over
+				Audio.bgm_fade(800); 
+				Audio.bgs_fade(800); 
+				Audio.me_fade(800); 
+				게임종료; 
+				self.close_socket; 
+				$scene = nil
+			end
+			
 			# 리붓 또는 강퇴
 			def self.update_admmod(line)
 				case line
@@ -775,15 +785,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Kick All Command
 					if $1.to_s == "모두"
 						if $3.to_s != $game_party.actors[0].name
-							p $2.to_s
 							p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다."
-							self.close_socket
+							p $2.to_s
+							self.over
+							
 						end
 						return true
 						# Kick Command
 					elsif $1.to_s == $game_party.actors[0].name
 						p $2.to_s
-						self.close_socket
+						self.over
+						
 						return true
 					end
 					return false
@@ -1458,7 +1470,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							b번하우징
 							c번하우징
 							d번하우징
-							
+							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
+							$skill_Delay_Console.show
 							self.send_start
 						end
 					end

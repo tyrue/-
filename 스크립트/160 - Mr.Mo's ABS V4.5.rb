@@ -381,6 +381,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[94] = [6 * sec, 0, 32] # 금강불체
 	
 	# 도적
+	SKILL_BUFF_TIME[130] = [180 * sec, 0, 42] # 무영보법
 	SKILL_BUFF_TIME[131] = [60 * sec, 0, 41] # 투명
 	SKILL_BUFF_TIME[134] = [60 * sec, 0, 1] # 분신
 	
@@ -709,9 +710,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					skill_mash[1][1] = 0 
 				end
 			end
-			$skill_Delay_Console.refresh
-			$skill_Delay_Console.refresh
-			$skill_Delay_Console.dispose
+			if $skill_Delay_Console != nil
+				$skill_Delay_Console.refresh
+				$skill_Delay_Console.refresh
+				$skill_Delay_Console.dispose
+			end
 		end
 		
 		#--------------------------------------------------------------------------

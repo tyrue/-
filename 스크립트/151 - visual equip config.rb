@@ -92,9 +92,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)황혼의갑주', 2] 		if id == 42  	#황혼의갑주
 			return ['(착용)산신의정화', 2] 		if id == 43  	#산신의정화
 			return ['(착용)여명의도복', 2] 		if id == 44  	#여명의도복
-			return ['(착용)망또1', 2] 		if id == 47  	#망또1
-			return ['(착용)망또2', 2] 		if id == 48  	#망또2
-			return ['(착용)망또3', 2] 		if id == 49  	#망또3
+			return ['(착용)망또1', 2] 			if id == 47  	#망또1
+			return ['(착용)망또2', 2] 			if id == 48  	#망또2
+			return ['(착용)망또3', 2] 			if id == 49  	#망또3
 			return ['(착용)현인의영혼', 2] 		if id == 52  	#진인의영혼
 		end
 		

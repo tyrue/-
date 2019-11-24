@@ -1,7 +1,7 @@
 class Rpg_skill
 	def 투명
 		u_hp = $game_party.actors[0].hp
-		u_hp -= u_hp / 30
+		u_hp -= u_hp / (20 - $game_variables[10])
 		u_hp = 1 if u_hp <= 0
 		$game_party.actors[0].hp = u_hp 
 		
@@ -82,8 +82,9 @@ class Rpg_skill
 		return false unless $game_map.valid?(new_x, new_y)
 		# If through is ON; passable
 		return true if @through
-		# If unable to enter move tile in designated directionimpassable
+		
 		return false unless $game_map.passable?(new_x, new_y, 10 - d)
+		
 		# Loop all events
 		for event in $game_map.events.values
 			# If event coordinates are consistent with move destination

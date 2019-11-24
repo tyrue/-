@@ -271,6 +271,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
+	RANGE_SKILLS[135] = [0, 5, "", 4, 0] #백호검무
+	RANGE_SKILLS[137] = [0, 5, "", 4, 0] #이기어검
 	
 	# 적 캐릭터 스킬
 	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적 건곤
@@ -332,8 +334,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
 	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
-	SKILL_MASH_TIME[58] = [70 * sec, 0] # 지폭지술
-	SKILL_MASH_TIME[68] = [120 * sec, 0] # 폭류유성
+	SKILL_MASH_TIME[58] = [80 * sec, 0] # 지폭지술
+	SKILL_MASH_TIME[68] = [140 * sec, 0] # 폭류유성
 	SKILL_MASH_TIME[69] = [7 * sec, 0] # 삼매진화 2성
 	
 	# 전사
@@ -342,15 +344,16 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
 	SKILL_MASH_TIME[75] = [7 * sec, 0] # 뢰마도 1성
 	SKILL_MASH_TIME[77] = [5 * sec, 0] # 유비후타
-	SKILL_MASH_TIME[79] = [20 * sec, 0] # 동귀어진
+	SKILL_MASH_TIME[79] = [60 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
-	SKILL_MASH_TIME[103] = [10 * sec, 0] # 어검술
-	SKILL_MASH_TIME[104] = [70 * sec, 0] # 포효검황
-	SKILL_MASH_TIME[105] = [120 * sec, 0] # 혈겁만파
+	SKILL_MASH_TIME[103] = [20 * sec, 0] # 어검술
+	SKILL_MASH_TIME[104] = [80 * sec, 0] # 포효검황
+	SKILL_MASH_TIME[105] = [140 * sec, 0] # 혈겁만파
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
-	
+	SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
+	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	# 도사
 	
 	
@@ -384,6 +387,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[130] = [180 * sec, 0, 42] # 무영보법
 	SKILL_BUFF_TIME[131] = [60 * sec, 0, 41] # 투명
 	SKILL_BUFF_TIME[134] = [60 * sec, 0, 1] # 분신
+	SKILL_BUFF_TIME[136] = [10 * sec, 0, 43] # 파무쾌보
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -1089,17 +1093,17 @@ if SDK.state("Mr.Mo's ABS") == true
 							next if !e.hate_group.include?(0)
 							next if !e.hate_group.include?(enemy.id)
 							#Skip NIL values
-							next if enemy== nil
+							next if enemy == nil
 							#Skip 이미 적이 죽은거면 넘어가
 							next if !enemy.is_a?(Game_Player) and enemy.dead?
 							if enemy.is_a?(Game_Player)
 								enemy.actor.effect_skill(e, skill)
 								#Show Animetion on enemy
-								hit_enemy(enemy, e, 0) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
+								if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
+									$game_player.animation_id = skill.animation2_id 
+									Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
+								end
 								next if enemy_dead?(enemy.actor, e)
-								#Show animation on player
-								$game_player.animation_id = skill.animation2_id
-								Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
 							else
 								enemy.effect_skill(e, skill)	
 								hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
@@ -1342,7 +1346,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get Animation 무기 공격 애니메이션
 				a = $data_weapons[@actor.weapon_id].animation2_id
 				#Hit enemy if the attack succeeds  몬스터에게 밀리 이미지
-				Network::Main.socket.send("<27>@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id}</27>\n") if e.damage != "Miss" and e.damage != 0
+				if e.damage != "Miss" and e.damage != 0
+					Audio.se_play("Audio/SE/타격")
+					Network::Main.socket.send("<27>@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id}</27>\n") 
+				end
 				#Return if the enemy is dead
 				weapon_skill(@actor.weapon_id, e)
 				return if enemy_dead?(e,@actor)
@@ -1379,6 +1386,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=====스킬 딜레이 알려줌 - 크랩훕흐======#
 		#=============================#
 		def skill_console(id)
+			
 			skill_mash_time = SKILL_MASH_TIME[id]
 			if skill_mash_time != nil and skill_mash_time[1] <= 0
 				skill_mash_time[1] = skill_mash_time[0]
@@ -1386,6 +1394,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 				$skill_Delay_Console.write_line(id)
 			end
+			
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
 			if skill_mash_time != nil and skill_mash_time[1] <= 0
@@ -2214,10 +2223,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 47, 48 # 도깨비, 불도깨비
-				if r <= 60 
+				if r <= 40 
 					# 호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 39 #{e.event.x} #{e.event.y}</map_item>\n"
+				elsif r <= 60
+					# 진호박
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 49 # 고래
@@ -2268,14 +2281,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 55 # 전갈
-				if r <= 60 
+				if r <= 30 
 					# 호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 39 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 39 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 				return true
 			when 56 # 전갈장
-				if r <= 60 
+				if r <= 30 
 					# 진호박
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 40 #{e.event.x} #{e.event.y}</map_item>\n"
@@ -3430,6 +3443,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					objects.push(e) 
 				end
 			end
+			
+			# 여기서 넷 플레이어인지 확인해야함
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				if in_range?(element, player, range)
+					hit_net_player(player)
+				end
+			end
 			# 여기다가 개수 추가
 			$alive_size = objects.size
 			#~ objects.push($game_player) if in_range?(element, $game_player, range)
@@ -3456,6 +3477,21 @@ if SDK.state("Mr.Mo's ABS") == true
 				hit_event(e.event_id)
 			end
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Hit net_Player
+		#--------------------------------------------------------------------------
+		def hit_net_player(actor)
+			@stop = true
+			#Attack It's enemy
+			#~ actor.effect_skill($game_party.actors[0], @skill)
+			#Show animation on event
+			
+			# 해당 대상 애니메이션 재생하도록 보냄
+			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</player_animation>\n"
+		end 
+		
+		
 		#--------------------------------------------------------------------------
 		# * Hit Player
 		#--------------------------------------------------------------------------
@@ -3466,7 +3502,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get Enemy
 			enemy = @actor
 			#Attack Actor
-			actor.effect_skill(enemy, @skill) if enemy != nil
+			actor.effect_skill(enemy, @skill) if enemy != nil 
+			
+			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
 			#Jump
 			#$ABS.jump($game_player,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
@@ -4240,6 +4279,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			mrmo_abs_gb_int
 			@state_time = 0
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Change 물리방어력
+		#--------------------------------------------------------------------------
+		def pdef=(pdef)
+			@pdef = pdef
+		end
+		#--------------------------------------------------------------------------
+		# * Change 마법방어력
+		#--------------------------------------------------------------------------
+		def mdef=(mdef)
+			@mdef = mdef
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Determine Usable Skills
 		#     skill_id : skill ID
@@ -4279,7 +4332,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If hit occurs
 			if hit_result == true
 				# Calculate basic damage
-				atk = [attacker.atk - self.pdef / 2, 1].max
+				atk = [attacker.atk - (self.pdef * 2 / 5), 1].max
 				self.damage = atk * (20 + attacker.str) / 20
 				# Element correction
 				self.damage *= elements_correct(attacker.element_set)
@@ -4330,7 +4383,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
 				if attacker.is_a?(Game_Actor)
 					if SKILL_BUFF_TIME[131][1] > 0 # 투명
-						self.damage *= (5 + $game_variables[10]) # 투명 숙련도
+						self.damage *= (4 + $game_variables[10]) # 투명 숙련도
 						SKILL_BUFF_TIME[131][1] = 1
 					end
 					if SKILL_BUFF_TIME[134][1] > 0 # 분신
@@ -4513,9 +4566,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도적 스킬
 				when 133 # 필살검무
 					power += (user.hp * 1 + user.sp * 0.5).to_i
-					
 					user.hp -= (user.hp / 2) 
 					user.sp = 0
+				when 135 # 백호검무
+					power += (user.hp * 1.2 + user.sp * 0.75).to_i
+					user.hp -= (user.hp / 3) 
+					user.sp = 0	
+				when 137 # 이기어검
+					power += (user.hp * 1.6 + user.sp * 1).to_i
+					user.hp -= (user.hp / 10) 
+					user.sp -= user.sp / 2
+					self.pdef -= 10
+					self.mdef -= 10
 					
 					# 도사스킬
 				else

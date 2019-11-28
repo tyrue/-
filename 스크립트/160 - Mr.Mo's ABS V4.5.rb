@@ -352,8 +352,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
-	SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
-	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
+	SKILL_MASH_TIME[135] = [1 * sec, 0] # 백호검무
+	SKILL_MASH_TIME[137] = [40 * sec, 0] # 이기어검
 	# 도사
 	
 	
@@ -4569,12 +4569,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= (user.hp / 2) 
 					user.sp = 0
 				when 135 # 백호검무
-					power += (user.hp * 1.2 + user.sp * 0.75).to_i
-					user.hp -= (user.hp / 3) 
-					user.sp = 0	
+					power += (user.hp * 2).to_i
+					user.hp -= (user.hp / 2) 	
 				when 137 # 이기어검
 					power += (user.hp * 1.6 + user.sp * 1).to_i
-					user.hp -= (user.hp / 10) 
+					user.hp -= (user.hp / 6) 
 					user.sp -= user.sp / 2
 					self.pdef -= 10
 					self.mdef -= 10

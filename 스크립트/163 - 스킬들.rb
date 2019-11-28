@@ -27,41 +27,44 @@ class Rpg_skill
 				new_y = y 
 				case d
 				when 4
-					if r <= 50
+					if 비영_passable?(x - 1, y - 1, 2)
 						d = 8
 						new_x -= 1
 						new_y += 1
-					else
+					elsif 비영_passable?(x - 1, y + 1, 8)
 						d = 2
 						new_x -= 1
 						new_y -= 1
 					end
+					
 				when 6
-					if r <= 50
+					if 비영_passable?(x + 1, y - 1, 2)
 						d = 8
 						new_x += 1
 						new_y += 1
-					else
+					elsif 비영_passable?(x + 1, y + 1, 8)
 						d = 2
 						new_x += 1
 						new_y -= 1
 					end
+					
 				when 2
-					if r <= 50
+					if 비영_passable?(x - 1, y + 1, 6)
 						d = 4
 						new_x += 1
 						new_y += 1
-					else
+					elsif 비영_passable?(x + 1, y + 1, 4)
 						d = 6
 						new_x -= 1
 						new_y += 1
 					end
+					
 				when 8
-					if r <= 50
+					if 비영_passable?(x - 1, y - 1, 6)
 						d = 4
 						new_x += 1
 						new_y -= 1
-					else
+					elsif 비영_passable?(x + 1, y - 1, 4)
 						d = 6
 						new_x -= 1
 						new_y -= 1
@@ -74,7 +77,7 @@ class Rpg_skill
 		end
 	end
 	
-	def 비영_passable?(x, y, d)
+	def 비영_passable?(x, y, d) # 해당 위치로 이동할 수 있는가?
 		# Get new coordinates
 		new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)
 		new_y = y + (d == 2 ? 2 : d == 8 ? -2 : 0)
@@ -89,10 +92,7 @@ class Rpg_skill
 		for event in $game_map.events.values
 			# If event coordinates are consistent with move destination
 			if event.x == new_x and event.y == new_y
-				# If through is OFF
 				unless event.through
-					# If self is event; impassable
-					return false if self != $game_player
 					# With self as the player and partner graphic as character; impassable
 					return false if event.character_name != ""
 				end
@@ -124,7 +124,7 @@ class Rpg_skill
 		return true
 	end
 	
-	def 비영_passable2?(x, y, d)
+	def 비영_passable2?(x, y, d) # 해당 이벤트를 뛰어 넘을 수 있는가?
 		# Get new coordinates
 		new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
 		new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
@@ -134,7 +134,7 @@ class Rpg_skill
 			# If event coordinates are consistent with move destination
 			if event.x == new_x and event.y == new_y
 				# If through is OFF
-				return false if event.through and event.character_name == ""
+				return false if event.through or event.character_name == ""
 				return true
 			end
 		end

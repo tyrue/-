@@ -660,7 +660,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				respawn = parameters[10].split 
 				@enemies[event.id].respawn = respawn[1].to_i * 6
 			end
-			@enemies[event.id].aggro = $is_map_first ? true : false
+			@enemies[event.id].aggro = $is_map_first
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -4772,6 +4772,152 @@ if SDK.state("Mr.Mo's ABS") == true
 			@character_name = @old_char
 			@direction_fix = false
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Move Down
+		#     turn_enabled : a flag permits direction change on that spot
+		#--------------------------------------------------------------------------
+		def move_down(turn_enabled = true, is_ok = false) # is_ok : 이동 가능
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+				return if !is_ok
+			end
+			# Turn down
+			if turn_enabled
+				turn_down
+			end
+			# If passable
+			if passable?(@x, @y, 2)
+				# Turn down
+				turn_down
+				# Update coordinates
+				@y += 1
+				# Increase steps
+				increase_steps
+				# If impassable
+				# 이때 계속 몹 정보 보내주면?
+				
+				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},1,#{self.x},#{self.y}</mon_move>\n")
+				end
+			else
+				# Determine if touch event is triggered
+				check_event_trigger_touch(@x, @y+1)
+			end
+		end
+		#--------------------------------------------------------------------------
+		# * Move Left
+		#     turn_enabled : a flag permits direction change on that spot
+		#--------------------------------------------------------------------------
+		def move_left(turn_enabled = true, is_ok = false)		
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+				return if !is_ok
+			end	
+			# Turn left
+			if turn_enabled
+				turn_left
+			end
+			# If passable
+			if passable?(@x, @y, 4)
+				# Turn left
+				turn_left
+				# Update coordinates
+				@x -= 1
+				# Increase steps
+				increase_steps
+				# If impassable
+				# 이때 계속 몹 정보 보내주면?
+				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},2,#{self.x},#{self.y}</mon_move>\n")
+				end
+			else
+				# Determine if touch event is triggered
+				check_event_trigger_touch(@x-1, @y)
+			end
+		end
+		#--------------------------------------------------------------------------
+		# * Move Right
+		#     turn_enabled : a flag permits direction change on that spot
+		#--------------------------------------------------------------------------
+		def move_right(turn_enabled = true, is_ok = false)
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+				return if !is_ok
+			end
+			# Turn right
+			if turn_enabled
+				turn_right
+			end
+			# If passable
+			if passable?(@x, @y, 6)
+				# Turn right
+				turn_right
+				# Update coordinates
+				@x += 1
+				# Increase steps
+				increase_steps
+				# If impassable
+				# 이때 계속 몹 정보 보내주면?
+				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},3,#{self.x},#{self.y}</mon_move>\n")
+				end
+			else
+				# Determine if touch event is triggered
+				check_event_trigger_touch(@x+1, @y)
+			end
+		end
+		#--------------------------------------------------------------------------
+		# * Move up
+		#     turn_enabled : a flag permits direction change on that spot
+		#--------------------------------------------------------------------------
+		def move_up(turn_enabled = true, is_ok = false)
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+				return if !is_ok
+			end
+			# Turn up
+			if turn_enabled
+				turn_up
+			end
+			# If passable
+			if passable?(@x, @y, 8)
+				# Turn up
+				turn_up
+				# Update coordinates
+				@y -= 1
+				# Increase steps
+				increase_steps
+				# If impassable
+				# 이때 계속 몹 정보 보내주면?
+				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},4,#{self.x},#{self.y}</mon_move>\n")
+				end
+			else
+				# Determine if touch event is triggered
+				check_event_trigger_touch(@x, @y-1)
+			end
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Move at Random
+		#--------------------------------------------------------------------------
+		def move_random()
+			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+				return true
+			end
+			case rand(4)
+			when 0  # Move down
+				move_down()
+			when 1  # Move left
+				move_left()
+			when 2  # Move right
+				move_right()
+			when 3  # Move up
+				move_up()
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Move toward B
 		#--------------------------------------------------------------------------
@@ -4800,31 +4946,31 @@ if SDK.state("Mr.Mo's ABS") == true
 				if abs_sx > abs_sy
 					# Move towards player, prioritize left and right directions
 					if sx > 0
-						move_left(true, true, true)
+						move_left()
 					else
-						move_right(true, true, true)
+						move_right()
 					end
 					
 					if not moving? and sy != 0
 						if sy > 0
-							move_up(true, true, true)
+							move_up()
 						else
-							move_down(true, true, true)
+							move_down()
 						end
 					end
 					# If vertical distance is longer
 				else
 					# Move towards player, prioritize up and down directions
 					if sy > 0
-						move_up(true, true, true)
+						move_up()
 					else
-						move_down(true, true, true)
+						move_down()
 					end
 					if not moving? and sx != 0						
 						if sx > 0
-							move_left(true, true, true)
+							move_left()
 						else
-							move_right(true, true, true)
+							move_right()
 						end
 					end
 				end
@@ -4928,7 +5074,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@temp_frequency = 0 
 			@actor = self
 			@respawn = 0
-			@aggro = $is_map_first ? true : false
+			@aggro = $is_map_first
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

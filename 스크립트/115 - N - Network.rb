@@ -1133,13 +1133,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
-					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
 						x = data[3].to_i
 						y = data[4].to_i
 						
 						if $ABS.enemies[data[1].to_i].event.x == x and $ABS.enemies[data[1].to_i].event.y == y
-							# p "#{$ABS.enemies[data[1].to_i].event.x},#{$ABS.enemies[data[1].to_i].event.y} : #{x},#{y}"
 							return
 						end
 						
@@ -1155,7 +1154,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].event.move_up(true, true)
 						end
 						if $ABS.enemies[data[1].to_i].event.x != x or $ABS.enemies[data[1].to_i].event.y != y
-							# p "#{$ABS.enemies[data[1].to_i].event.x},#{$ABS.enemies[data[1].to_i].event.y} : #{x},#{y}"
 							$ABS.enemies[data[1].to_i].event.moveto(x,y)
 						end
 					end

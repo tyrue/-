@@ -15,7 +15,7 @@ class Scene_Map
 		$nowtrade = 0
 		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = 3
-		if SKILL_BUFF_TIME[136][1] > 0 # 분신
+		if SKILL_BUFF_TIME[136][1] > 0 # 파무쾌보
 			$game_player.move_speed = 3.5
 		end
 		자동저장 if not $game_party.actors[0].name == "평민"

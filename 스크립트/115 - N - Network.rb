@@ -1158,6 +1158,28 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					return true
+					
+					# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
+				when /<mon_damage>(.*)<\/mon_damage>/
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					return true if $game_map.map_id != data[0].to_i
+					return true if $ABS.enemies[data[1].to_i] == nil
+					
+					$scene.spriteset.character_sprites[data[1].to_i].damage(data[2], data[3])
+					return true
+					
+					# 플레이어 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
+				when /<player_damage>(.*)<\/player_damage>/
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					return true if $game_map.map_id != data[0].to_i
+					return true if @mapplayers[data[1].to_s] == nil
+					
+					if $scene.spriteset.network_sprites[data[1].to_i] != nil
+						$scene.spriteset.network_sprites[data[1].to_i].damage(data[2], data[3])
+					end
+					return true
 				end
 				
 				return false
@@ -1912,9 +1934,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					Network::Main.send_newstats
 					return true
 					
-				#-------------------------------------------------------------  
-				#---------------------------교환 시스템---------------------------  
-				#-------------------------------------------------------------      		
+					
+					
+					#-------------------------------------------------------------  
+					#---------------------------교환 시스템---------------------------  
+					#-------------------------------------------------------------      		
 					
 				when /<trade_invite>(.*),(.*)<\/trade_invite>/
 					if $1.to_s == $game_party.actors[0].name
@@ -2135,7 +2159,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								
 								$game_variables[1010] = $game_party.actors[0].level
 								
-								expgave = $1.to_i / 7 
+								expgave = $1.to_i / 4 
 								expgave2 = $1.to_i / $netparty.size
 								expgave3 = expgave + expgave2
 								$game_party.actors[0].exp += expgave3

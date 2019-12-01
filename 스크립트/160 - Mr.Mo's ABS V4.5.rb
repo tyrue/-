@@ -4184,7 +4184,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Display damage  #몬스터한태 데미지 표시        
 					if $ABS.enemies[id].damage != nil
 						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
+						
+						id2 = 0
+						for i in $game_map.events.keys.sort
+							break if i == id
+							id2 += 1
+						end
 						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
+						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id2},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	
 					end
 					#Make Damage nil
 					$ABS.enemies[id].damage = nil
@@ -4194,6 +4201,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					if a.damage != nil
 						damage(a.damage, a.critical) 
 						# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
+						Network::Main.socket.send("<player_damage>#{$game_map.map_id},#{Network::Main.id},#{a.damage},#{a.critical}</player_damage>\n")	
 					end
 					#Make Damage nil
 					a.damage = nil

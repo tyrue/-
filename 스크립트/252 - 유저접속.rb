@@ -11,7 +11,7 @@ def 유저접속
 	$game_player.refresh
 	$game_map.autoplay
 	$game_map.update
-
+	
 	Network::Main.socket.send("<dtloadreq>'req'</dtloadreq>\n")
 	Network::Main.socket.send("<exp_event></exp_event>\n")     
 	$game_switches[401] = true # 경험치 이벤트는 켜 있는 상태

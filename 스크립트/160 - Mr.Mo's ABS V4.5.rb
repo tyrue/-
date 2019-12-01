@@ -1374,7 +1374,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			r = rand(100)
 			case id
 			when 114 # 주작의 검
-				if r < 10
+				if r < 100
 					e.damage = 1500
 					e.hp -= 1500
 				end
@@ -1904,25 +1904,25 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 여기다가 
 					drop_enemy(enemy)
 					if actor.level > last_level    #레벨업을 하는 경우 (파티 아닐때)
-						자동저장
-						$console.write_line("[정보]:레벨업!")
-						# 직업에 따라 체력, 마력 증가량 다르게 함
-						if(actor.class_id == 7) # 전사 99때 체력 4500
-							actor.maxhp += 16
-							actor.str += 2
-						elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-							actor.maxsp += 5
-							actor.int += 2
-						elsif(actor.class_id == 17) # 도적
-							actor.maxhp += 8
-							actor.dex += 2 # 손재주(명중률)
-							actor.agi += 2 # 민첩 (회피율)
-						end
-						# 풀체
-						actor.hp = actor.maxhp
-						actor.sp = actor.maxsp
-						$game_player.animation_id = 180
-						Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
+						#~ 자동저장
+						#~ $console.write_line("[정보]:레벨업!")
+						#~ # 직업에 따라 체력, 마력 증가량 다르게 함
+						#~ if(actor.class_id == 7) # 전사 99때 체력 4500
+							#~ actor.maxhp += 16
+							#~ actor.str += 2
+						#~ elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
+							#~ actor.maxsp += 5
+							#~ actor.int += 2
+						#~ elsif(actor.class_id == 17) # 도적
+							#~ actor.maxhp += 8
+							#~ actor.dex += 2 # 손재주(명중률)
+							#~ actor.agi += 2 # 민첩 (회피율)
+						#~ end
+						#~ # 풀체
+						#~ actor.hp = actor.maxhp
+						#~ actor.sp = actor.maxsp
+						#~ $game_player.animation_id = 180
+						#~ Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
 					end
 				end
 			end
@@ -4182,13 +4182,19 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Skip if no demage or dead;
 				if !@character.is_a?(Game_Player) and $ABS.enemies[id] != nil
 					#Display damage  #몬스터한태 데미지 표시        
-					damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) if $ABS.enemies[id].damage != nil
+					if $ABS.enemies[id].damage != nil
+						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
+						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
+					end
 					#Make Damage nil
 					$ABS.enemies[id].damage = nil
 				elsif @character.is_a?(Game_Player)					
 					a = $game_party.actors[0]
 					#Display damage
-					damage(a.damage, a.critical) if !a.dead? and a.damage != nil
+					if a.damage != nil
+						damage(a.damage, a.critical) 
+						# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
+					end
 					#Make Damage nil
 					a.damage = nil
 				end

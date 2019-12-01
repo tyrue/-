@@ -1470,6 +1470,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							d번하우징
 							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
 							$skill_Delay_Console.show
+							
 							self.send_start
 						end
 					end
@@ -1911,6 +1912,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					Network::Main.send_newstats
 					return true
 					
+				#-------------------------------------------------------------  
+				#---------------------------교환 시스템---------------------------  
+				#-------------------------------------------------------------      		
+					
 				when /<trade_invite>(.*),(.*)<\/trade_invite>/
 					if $1.to_s == $game_party.actors[0].name
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 250,
@@ -1988,6 +1993,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$trade_player = ""
 					end
 					return true  
+					
+					
+					#-------------------------------------------------------------  
+					#---------------------------파티 시스템---------------------------  
 					#-------------------------------------------------------------      
 				when /<nptreq>(.*) (.*) (.*) (.*)<\/nptreq>/
 					$nowpartyreq = 1
@@ -2134,31 +2143,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								
 								goldgave = $2.to_i / $netparty.size
 								$game_party.gain_gold(goldgave)
-								$console.write_line("[파티]:경험치:#{expgave3} 금전:#{goldgave}")
-								
-								if $game_variables[1011] > $game_variables[1010]
-									자동저장
-									$console.write_line("[정보]:레벨이 올랐습니다!")
-									# 직업에 따라 체력, 마력 증가량 다르게 함
-									actor = $game_party.actors[0]
-									
-									if(actor.class_id == 7) # 전사 99때 체력 4500
-										actor.maxhp += 16
-										actor.str += 2
-									elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-										actor.maxsp += 5
-										actor.int += 2
-									elsif(actor.class_id == 17) # 도적
-										actor.maxhp += 8
-										actor.dex += 2 # 손재주(명중률)
-										actor.agi += 2 # 민첩 (회피율)
-									end
-									# 풀체
-									actor.hp = actor.maxhp
-									actor.sp = actor.maxsp
-									$game_player.animation_id = 180
-									Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
-								end								
+								$console.write_line("[파티]:경험치:#{expgave3} 금전:#{goldgave}")				
 							end
 						end
 					end

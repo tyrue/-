@@ -268,11 +268,15 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
 	#도사 스킬
+	# 부활 스킬을 넣어볼까 생각
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
 	RANGE_SKILLS[135] = [0, 5, "", 4, 0] #백호검무
 	RANGE_SKILLS[137] = [0, 5, "", 4, 0] #이기어검
+	RANGE_SKILLS[138] = [5, 6, "공격스킬2", 4, 0] #무형검
+	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
+	
 	
 	# 적 캐릭터 스킬
 	RANGE_SKILLS[45] = [5, 4, "공격스킬", 4, 0] #산적 건곤
@@ -354,6 +358,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
 	SKILL_MASH_TIME[135] = [1 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [40 * sec, 0] # 이기어검
+	SKILL_MASH_TIME[138] = [50 * sec, 0] # 무형검
+	SKILL_MASH_TIME[139] = [140 * sec, 0] # 분혼경천
 	# 도사
 	
 	
@@ -2295,25 +2301,24 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				return true
 			when 57 # 청웅객
-				if $game_switches[141] == true # 승급 퀘스트
-					if r <= 60 
-						# 청웅의 환
-						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 52 #{e.event.x} #{e.event.y}</drop_create>\n"
-					end
-				else
-					if r <= 62 
-						# 낡은 수리검
-						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 51 #{e.event.x} #{e.event.y}</drop_create>\n"
-						Network::Main.socket.send "<map_item>#{$game_map.map_id} 51 #{e.event.x} #{e.event.y}</map_item>\n"
-					end
+				if r <= 60 and $game_switches[141] == true # 승급 퀘스트
+					# 청웅의 환
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 52 #{e.event.x} #{e.event.y}</drop_create>\n"
 				end
+			
+				if r <= 62 
+					# 낡은 수리검
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 51 #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} 51 #{e.event.x} #{e.event.y}</map_item>\n"
+				end
+				
 				return true
 			when 58 # 수룡
 				if r <= 60 
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</map_item>\n"
-				elsif r <= 62
+				elsif r <= 61
 					# 수룡의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 62 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 62 #{e.event.x} #{e.event.y}</map_item>\n"
@@ -2324,7 +2329,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 용의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 60 #{e.event.x} #{e.event.y}</map_item>\n"
-				elsif r <= 62
+				elsif r <= 61
 					# 화룡의비늘
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 61 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 61 #{e.event.x} #{e.event.y}</map_item>\n"
@@ -2747,17 +2752,17 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 94 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 			when 145 # 사산게
-				if r <= 15
+				if r <= 5
 					# 게집게
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 92 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 92 #{e.event.x} #{e.event.y}</map_item>\n"
-				else r <= 30
+				else r <= 10
 					# 게등껍질
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 93 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 93 #{e.event.x} #{e.event.y}</map_item>\n"
 				end
 			when 148 # 해마
-				if r <= 3
+				if r <= 2
 					# 해마꼬리
 					Network::Main.socket.send "<drop_create>#{$game_map.map_id} 91 #{e.event.x} #{e.event.y}</drop_create>\n"
 					Network::Main.socket.send "<map_item>#{$game_map.map_id} 91 #{e.event.x} #{e.event.y}</map_item>\n"
@@ -3662,6 +3667,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				#Attack It's enemy
 				actor.effect_skill(enemy, @skill)
+				
+				if @skill.id == 138
+					$rpg_skill.비영승보(x, y, @move_direction)
+				end
+				
 				#Show animation on event
 				@enani = actor.event
 				#몬스터 대상의 애니매이션 공유
@@ -4591,6 +4601,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.sp -= user.sp / 2
 					self.pdef -= 10
 					self.mdef -= 10
+				when 138 # 무형검
+					power += (user.hp * 3).to_i
+					user.hp -= (user.hp / 2) 	
+				when 139 # 분혼경천
+					$e_v += 1
+					power += (user.sp) + (user.hp * 2) + 100
+					# 적들이 다 맞을때 마나를 0으로 만듦
+					if $e_v == $alive_size
+						user.sp = 0
+						user.hp -= user.hp / 2
+						user.hp = 1 if user.hp <= 0
+					end		
 					
 					# 도사스킬
 				else

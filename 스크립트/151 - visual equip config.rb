@@ -13,6 +13,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)현자금봉', 2] 	if id == 6  #현자금봉
 			return ['(착용)검성기검', 2] 	if id == 7  #검성기검
 			return ['(착용)진선역봉', 2] 	if id == 8  #진선역봉
+			return ['(착용)태성태도', 2] 	if id == 9  #태성태도
 			
 			return ['(착용)철도', 2] 			if id == 22 or id == 23  #비철단도, 철도
 			return ['(착용)야월도', 2] 		if id == 24   #야월도
@@ -96,6 +97,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)망또2', 2] 			if id == 48  	#망또2
 			return ['(착용)망또3', 2] 			if id == 49  	#망또3
 			return ['(착용)현인의영혼', 2] 		if id == 52  	#진인의영혼
+			return ['(착용)검황의영혼', 2] 		if id == 54  	#귀검의영혼
 		end
 		
 		#Mulher

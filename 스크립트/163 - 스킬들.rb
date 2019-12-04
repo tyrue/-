@@ -9,10 +9,7 @@ class Rpg_skill
 		Network::Main.send_trans(true)
 	end
 	
-	def 비영승보
-		x = $game_player.x
-		y = $game_player.y
-		d = $game_player.direction
+	def 비영승보(x = $game_player.x, y = $game_player.y, d = $game_player.direction)
 		if 비영_passable2?(x, y, d) 
 			if 비영_passable?(x, y, d)
 				new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)

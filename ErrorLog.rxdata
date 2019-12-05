@@ -6517,3 +6517,5 @@ On <<Tue 12 Nov 2019, 23:56:16>> the error <<nil can't be coerced into Fixnum (#
 On <<Fri 29 Nov 2019, 02:07:16>> the error <<disposed sprite (#<Scene_Map:0x829ebd0>)>> occured.
 On <<Sat 30 Nov 2019, 12:13:54>> the error <<wrong number of arguments(2 for 1) (#<Scene_Map:0x4556d20>)>> occured.
 On <<Sun 01 Dec 2019, 17:12:23>> the error << (#<Scene_Connect:0x7f83940>)>> occured.
+On <<Fri 06 Dec 2019, 01:12:36>> the error <<String can't be coerced into Fixnum (#<Scene_Map:0x7feb238>)>> occured.
+On <<Fri 06 Dec 2019, 01:13:43>> the error <<String can't be coerced into Fixnum (#<Scene_Map:0x80f8bd8>)>> occured.

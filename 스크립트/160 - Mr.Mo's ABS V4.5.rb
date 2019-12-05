@@ -358,7 +358,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
 	SKILL_MASH_TIME[135] = [1 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [40 * sec, 0] # 이기어검
-	SKILL_MASH_TIME[138] = [50 * sec, 0] # 무형검
+	SKILL_MASH_TIME[138] = [40 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [140 * sec, 0] # 분혼경천
 	# 도사
 	
@@ -4094,12 +4094,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					bitmap.font.color.set(255, 255, 255) # 흰색
 				end
 				
-				if critical
-					bitmap.font.color.set(255, 0, 51) # 빨간색
-					bitmap.draw_text(0, y, 160, 36, damage_string, 1)
-				else
-					bitmap.draw_text(0, y, 160, 36, damage_string, 1)	
-				end
+				bitmap.font.color.set(255, 0, 51) if critical # 빨간색 
+				bitmap.font.color.set(255, 255, 255) if !critical # 흰색	
+				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
+					
+				bitmap.draw_text(0, y, 160, 36, damage_string, 1)	
 				@_damage_sprite = ::Sprite.new(self.viewport)
 				@_damage_sprite.bitmap = bitmap
 				@_damage_sprite.ox = 80

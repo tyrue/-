@@ -142,7 +142,7 @@ class Scene_Map
         run_it = part_of_event_system(event)
         # Check to see if it's a run event or not
         run_it = part_of_event_system(event)
-				run_it = 20
+				
         # Run it if it is
         if run_it != false and event.trigger == 0
           range = get_object_range($game_player, event)
@@ -251,6 +251,8 @@ class Scene_Map
           if item.code == 108 and item.parameters[0].include?("RUN=")
             id = item.parameters[0].split('=')
             return (id[1].to_i)
+					else
+						return 20
           end
         end
       end

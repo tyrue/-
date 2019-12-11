@@ -603,26 +603,42 @@ class MrMo_ABS
 			#------------------#
 			#--------중국--------#
 			#------------------#
-		when 202 # 청인묘
+		when 202, 205, 209 # 청인묘, 청염유, 청기린
 			if r <= 30 
 				i_id = 126 # 청색구슬조각
 			end
-		when 203 # 자인묘
+		when 203, 206, 210 # 자인묘, 자염유, 자기린
 			if r <= 30 
 				i_id = 127 # 자색구슬조각
 			end
-		when 204 # 인묘
+		when 204, 207, 211 # 인묘, 염유장군, 흑마기린
 			if r <= 50 
 				i_id = 126 # 청색구슬조각
 			elsif r <= 100
 				i_id = 127 # 자색구슬조각
 			end
-			
+		when 208 # 염유왕
+			if r <= 50 
+				# 청색보주 등
+			end	
+		when 212 # 기린왕
+			if r <= 50 
+				# 청색보주 등
+			end		
 		when 213, 214 # 청악어, 자악어
 			if r <= 20 
 				i_id = 128 # 악어의피
 			end
-		
+		when 215 # 악어왕
+			if r <= 50 
+				# 청색보주 등
+			end
+		when 216 # 연청산소
+			if r <= 50 
+				# 산소 뿔 등
+			end	
+			
+			
 		end
 		if i_id != 0
 			Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</drop_create>\n"

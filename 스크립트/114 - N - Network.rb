@@ -2190,12 +2190,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true
 					#-----------------------------------------------------------------------      
 				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # $1.to_s : 시전자이름  $2.to._s : 마법번호 $3.to._s : 파티크기 $4.to._s : 맵번호 $5.to_s : 마력
-					if not $game_party.actors[0].hp == 0
-						if $npt == $3.to_s
-							if "#{$game_map.map_id}" == $4.to_s
-								mp = $5.to_i
-								
-								if $netparty.size > 1
+					if $npt == $3.to_s
+						if "#{$game_map.map_id}" == $4.to_s
+							mp = $5.to_i
+							if $netparty.size > 1
+								if not $game_party.actors[0].hp == 0
 									if $2.to_i == 1  #바다의희원
 										$game_player.animation_id = 131
 										$game_party.actors[0].hp += 70
@@ -2278,7 +2277,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 151; @ani_id = #{Network::Main.id};</27>\n"
 										$console.write_line("#{$1.to_s}님의 봉황의희원")   
 									end
-								end
+								else
+									if $2.to_i == 14  #부활
+										$game_temp.common_event_id = 24
+										$game_player.animation_id = 145
+										$game_party.actors[0].damage = "부활"
+										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
+										$console.write_line("#{$1.to_s}님의 부활")
+									end
+								end								
 							end
 						end
 					end

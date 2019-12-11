@@ -6519,3 +6519,282 @@ On <<Sat 30 Nov 2019, 12:13:54>> the error <<wrong number of arguments(2 for 1) 
 On <<Sun 01 Dec 2019, 17:12:23>> the error << (#<Scene_Connect:0x7f83940>)>> occured.
 On <<Fri 06 Dec 2019, 01:12:36>> the error <<String can't be coerced into Fixnum (#<Scene_Map:0x7feb238>)>> occured.
 On <<Fri 06 Dec 2019, 01:13:43>> the error <<String can't be coerced into Fixnum (#<Scene_Map:0x80f8bd8>)>> occured.
+On <<Tue 10 Dec 2019, 22:02:41>> the error <<Section164:5450: syntax error ()>> occured.
+On <<Tue 10 Dec 2019, 22:02:41>> the error <<compile error
+Section164:5450: syntax error ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body
+Section164:5451: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body
+Section164:5451: class definition in method body
+Section164:5477: syntax error ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<compile error
+Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body
+Section164:5451: class definition in method body
+Section164:5477: syntax error ()>> occured.

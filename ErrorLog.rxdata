@@ -6798,3 +6798,131 @@ Section164:5325: class definition in method body
 Section164:5388: class definition in method body
 Section164:5451: class definition in method body
 Section164:5477: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:12:16>> the error <<disposed sprite (#<Scene_Map:0x7ef2708>)>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                                            ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:49>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                                            ^
+Section214:361: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:49>> the error <<compile error
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                                            ^
+Section214:361: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<Section214:183: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<Section214:183: syntax error
+			@state2_2[i]. = J::Text_Box.new(self) ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<Section214:183: syntax error
+			@state2_2[i]. = J::Text_Box.new(self)
+			               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<compile error
+Section214:183: syntax error
+			@state2_2[i]. = J::Text_Box.new(self)
+			               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 05:06:36>> the error <<disposed sprite (#<Scene_Map:0x815af70>)>> occured.
+On <<Fri 13 Dec 2019, 05:07:18>> the error <<disposed sprite (#<Scene_Map:0x816df18>)>> occured.
+On <<Fri 13 Dec 2019, 05:08:29>> the error <<disposed sprite (#<Scene_Map:0x8199578>)>> occured.
+On <<Fri 13 Dec 2019, 05:09:39>> the error <<disposed sprite (#<Scene_Map:0x80b1b40>)>> occured.
+On <<Fri 13 Dec 2019, 05:58:57>> the error <<cannot convert nil into String (#<Scene_Map:0x45aa998>)>> occured.
+On <<Fri 13 Dec 2019, 05:59:17>> the error <<cannot convert nil into String (#<Scene_Map:0x7efbdc8>)>> occured.
+On <<Fri 13 Dec 2019, 06:05:30>> the error <<cannot convert nil into String (#<Scene_Map:0x7f0ea90>)>> occured.
+On <<Fri 13 Dec 2019, 06:07:46>> the error <<cannot convert nil into String (#<Scene_Map:0x8051dd8>)>> occured.
+On <<Fri 13 Dec 2019, 06:09:47>> the error <<cannot convert nil into String (#<Scene_Map:0x7ee4758>)>> occured.
+On <<Fri 13 Dec 2019, 06:12:25>> the error <<cannot convert nil into String (#<Scene_Map:0x7f3a908>)>> occured.
+On <<Fri 13 Dec 2019, 06:15:56>> the error <<cannot convert nil into String (#<Scene_Map:0x7f09f00>)>> occured.
+On <<Fri 13 Dec 2019, 06:16:51>> the error <<cannot convert nil into String (#<Scene_Map:0x8290978>)>> occured.

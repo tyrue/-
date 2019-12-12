@@ -31,6 +31,8 @@ INT_LIMIT   = 2000      #INT 한계 치
 MAX_EXP			= 200000000  #만렙시 경험치 
 
 class Game_Actor < Game_Battler
+	attr_accessor :exp_list
+	
 	def new_final_level
 		lv = BASE_FINAL_LEVEL
 		#이하 상한 LV 개별 지정 용

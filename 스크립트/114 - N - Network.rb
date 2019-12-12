@@ -408,10 +408,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send = ""
 				# Send Username And character's Graphic Name
 				send += "@username = '#{self.name}'; @character_name = '#{$game_party.actors[0].character_name}'; "
+				send += "@name = '#{$game_party.actors[0].name}';" if User_Edit::Bandwith >= 1
 				# Sends Map ID, X and Y positions
 				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
 				# Sends Direction
 				send += "@direction = #{$game_player.direction};" if User_Edit::Bandwith >= 2
+				send += "@move_speed = #{$game_player.move_speed};" if User_Edit::Bandwith >= 3 
 				send += "@guild = '#{$guild}';"
 				send += "@weapon_id = #{$game_party.actors[0].weapon_id};"
 				send += "@armor1_id = #{$game_party.actors[0].armor1_id};"

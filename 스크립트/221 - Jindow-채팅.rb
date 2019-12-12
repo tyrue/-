@@ -6,13 +6,13 @@ class Jindow_Chat_Input < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 400, 20)
+		super(0, 0, 530, 20)
 		self.refresh "Chat_Input"
 		self.y = 460
 		self.opacity = 0
 		@active = false
 		@chat_type = "전체"
-		@type = J::Type.new(self).refresh(64, 2, self.width - 108, 12)
+		@type = J::Type.new(self).refresh(64, 2, self.width - 98, 12)
 		@type.set "(대화하려면 Enter 키를 누르세요)"
 		@type.view
 		@a = J::Button.new(self).refresh(40, @chat_type)
@@ -28,8 +28,9 @@ class Jindow_Chat_Input < Jindow
 		case text
 			
 		when /\/도움말/
-			$chat.write ("아이탬창:i 정보창:c 시스템창:~ 공격:s 파티:p 길드:G 전체화면:alt+enter", Color.new(65, 105, 0))    
-			$chat.write ("현재접속자:L 캐시샵:~  상태창/맵이름 숨기기:E  채팅창 숨기기 : F 딜레이 창 숨기기 : R", Color.new(65, 105, 0)) 
+			$chat.write ("아이탬창:i, 정보창:c, 시스템창:~, 공격:s, 파티:p, 길드:G, 전체화면:alt+enter", Color.new(65, 105, 0))    
+			$chat.write ("현재접속자:L, 상태창/맵이름 숨기기:E, 채팅창 숨기기:F, 딜레이 창 숨기기:R", Color.new(65, 105, 0)) 
+			$chat.write ("스킬창:K, 아이템 먹기:스페이스바/del, 메뉴 화면:m, 단축키 확인:J", Color.new(65, 105, 0)) 
 			
 		when /\/귓 (.*)/  # 귓속말 상대를 변경
 			@whispers = $1.to_s

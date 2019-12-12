@@ -113,6 +113,14 @@ class Scene_Map
 						end
 					end	
 					
+					if Key.trigger?(KEY_J) # j
+						if not Hwnd.include?("Keyset")
+							Jindow_Keyset.new
+						else
+							Hwnd.dispose("Keyset")
+						end
+					end	
+					
 					#~ if Key.trigger?(KEY_T) and Network::Main.group == 'admin' # t
 						#~ if not Hwnd.include?("Post")
 							#~ Jindow_Post.new
@@ -161,9 +169,7 @@ class Scene_Map
 								end
 							end
 						end
-					end
-					
-					
+					end	
 				end
 			end
 		end

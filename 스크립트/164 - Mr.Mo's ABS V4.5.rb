@@ -283,12 +283,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[59] = [3, 4, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [3, 4, "공격스킬", 4, 0] #백호의 건곤대나이
 	RANGE_SKILLS[85] = [8, 5, "공격스킬2", 4, 0] # 필살검무
-	RANGE_SKILLS[151] = [10, 2, "공격스킬2", 4, 0] # 청룡의 포효
-	RANGE_SKILLS[152] = [10, 2, "공격스킬2", 4, 0] # 현무의 포효
+	RANGE_SKILLS[151] = [4, 2, "공격스킬2", 4, 0] # 청룡의 포효
+	RANGE_SKILLS[152] = [4, 2, "공격스킬2", 4, 0] # 현무의 포효
 	RANGE_SKILLS[153] = [7, 5, "공격스킬", 4, 0] # 백호검무
-	RANGE_SKILLS[154] = [7, 4, "공격스킬", 4, 0] # 청룡마령참
-	RANGE_SKILLS[155] = [7, 2, "공격스킬", 4, 0] # 암흑진파
-	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 0] # 흑룡광포
+	RANGE_SKILLS[154] = [3, 4, "공격스킬", 4, 0] # 청룡마령참
+	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 0] # 암흑진파
+	RANGE_SKILLS[156] = [5, 2, "공격스킬", 4, 0] # 흑룡광포
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
 	# 폭발 범위
@@ -3522,11 +3522,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
 					power += user.maxhp / 8 + 10
-					user.hp -= user.maxhp / 9
+					user.hp -= user.maxhp / 10
 					user.hp = 1 if user.hp <= 0
 				when 78 # 십리건곤 1성
 					power += user.maxhp / 7 + 15
-					user.hp -= user.maxhp / 8
+					user.hp -= user.maxhp / 9
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
 					power += user.hp * 5
@@ -4069,7 +4069,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def initialize(enemy_id)
 			super()
 			# 보스 최대 체력, 경험치등 정할 수 있음
-			$data_enemies[102].maxhp = 3000000 # 반고
+			$data_enemies[102].maxhp = 4000000 # 반고
 			$data_enemies[159].maxhp = 2000000 # 거북장군
 			
 			@event_id= 0

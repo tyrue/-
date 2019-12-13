@@ -45,13 +45,13 @@ class Jindow_Status < Jindow
 			@equip[i] = Sprite.new(self)
 			@equip[i].bitmap = Bitmap.new(@route + "item_win")
 			@equip[i].bitmap.blt(1, 1, itemwin_mid, itemwin_mid.rect)
-			@equip[i].y = 125
+			@equip[i].y = 135
 			@equip[i].x = 36 * (i)
 			
 			@armor_n[i] = Sprite.new(self)
 			@armor_n[i].bitmap = Bitmap.new(100, 20)
 			@armor_n[i].x = 36 * i
-			@armor_n[i].y = 105
+			@armor_n[i].y = 115
 			@armor_n[i].bitmap.font.size = 12
 			@armor_n[i].bitmap.font.color.set(0, 0, 0, 255)
 			@armor_n[i].bitmap.draw_text(0, 0, 100, 20, @armor_name[i], 0)
@@ -62,11 +62,12 @@ class Jindow_Status < Jindow
 				else
 					@armor_i[i] = J::Item.new(self).refresh(@armor_id[i], 2)
 				end
-				@armor_i[i].y = 125
+				@armor_i[i].y = 135
 				@armor_i[i].x = 36 * i
 			end
 		end
-			
+		
+		
 		# 캐릭터 비트맵
 		@character = Sprite.new(self)
 		@character.bitmap = Bitmap.new(@route + "character_win")
@@ -75,14 +76,14 @@ class Jindow_Status < Jindow
 		@actor = Sprite.new(self)
 		actor = $game_party.actors[0]
 		@character_name = actor.character_name
+		draw_actor(actor, @character)
+		
+		# 캐릭터 비트맵
 		bitmap = Bitmap.new("Graphics/Characters/#{@character_name}")
 		
 		cw = bitmap.width / 4
 		ch = bitmap.height / 4
 		@actor.bitmap = Bitmap.new(cw, ch)
-		@actor.bitmap.blt(0, 0, bitmap, @actor.bitmap.rect)
-		@actor.x = @character.x + (@character.width / 2 - @actor.width / 2)
-		@actor.y = @character.height - @actor.height - 10 + @character.y
 		
 		# 상태 비트맵
 		@state = []
@@ -92,7 +93,7 @@ class Jindow_Status < Jindow
 			"직업: " + actor.class_name,
 			"체력: " + actor.hp.to_s + "/" + actor.maxhp.to_s,
 			"마력: " + actor.sp.to_s + "/" + actor.maxsp.to_s,
-			"경험치: " + actor.exp.to_s,
+			"경험치: " + actor.exp.to_s + "/" + actor.exp_list[actor.level + 1].to_s,
 			"금전: " + $game_party.gold.to_s,
 			
 			"물리 공격력: " + actor.base_atk.to_s,
@@ -103,7 +104,7 @@ class Jindow_Status < Jindow
 		
 		for i in 0..10
 			@state[i] = Sprite.new(self)
-			@state[i].bitmap = Bitmap.new(180, 20)
+			@state[i].bitmap = Bitmap.new(160, 20)
 			if i <= 6
 				@state[i].x = 80
 				@state[i].y = 15 * i
@@ -114,7 +115,7 @@ class Jindow_Status < Jindow
 			
 			@state[i].bitmap.font.size = 12
 			@state[i].bitmap.font.color.set(0, 0, 0, 255)
-			@state[i].bitmap.draw_text(0, 0, 180, 20, @state_name[i], 0)
+			@state[i].bitmap.draw_text(0, 0, 160, 20, @state_name[i], 0)
 		end
 		
 		@guild = Sprite.new(self)
@@ -210,6 +211,7 @@ class Jindow_Status < Jindow
 			@state2_3[i].bitmap.font.color.set(0, 0, 0, 255)
 			@state2_3[i].bitmap.draw_text(0, 1, @state2_3[i].width - 5, @state2_3[i].height, @state2_v[i].to_s, 2)
 		end
+		
 	end
 	
 	def update
@@ -224,7 +226,7 @@ class Jindow_Status < Jindow
 			"직업: " + actor.class_name,
 			"체력: " + actor.hp.to_s + "/" + actor.maxhp.to_s,
 			"마력: " + actor.sp.to_s + "/" + actor.maxsp.to_s,
-			"경험치: " + actor.exp.to_s,
+			"경험치: " + actor.exp.to_s + "/" + actor.exp_list[actor.level + 1].to_s,
 			"금전: " + $game_party.gold.to_s,
 			
 			"물리 공격력: " + actor.base_atk.to_s,
@@ -237,17 +239,17 @@ class Jindow_Status < Jindow
 			if @state_name[i] != @state_name2[i]
 				@state[i].dispose
 				@state[i] = Sprite.new(self)
-				@state[i].bitmap = Bitmap.new(180, 20)
+				@state[i].bitmap = Bitmap.new(160, 20)
 				if i <= 6
 					@state[i].x = 80
 					@state[i].y = 15 * i
 				else
-					@state[i].x = 177
+					@state[i].x = 220
 					@state[i].y = 90 + 15 * (i - 7)
 				end
 				@state[i].bitmap.font.size = 12
 				@state[i].bitmap.font.color.set(0, 0, 0, 255)
-				@state[i].bitmap.draw_text(0, 0, 180, 20, @state_name2[i], 0)
+				@state[i].bitmap.draw_text(0, 0, 160, 20, @state_name2[i], 0)
 				@state_name[i] = @state_name2[i]
 			end
 		end
@@ -322,30 +324,6 @@ class Jindow_Status < Jindow
 			end
 		end
 		
-		@armor_id2 = [
-			$game_party.actors[0].weapon_id, 
-			$game_party.actors[0].armor2_id,
-			$game_party.actors[0].armor3_id,
-			$game_party.actors[0].armor1_id,
-			$game_party.actors[0].armor4_id
-		]
-		
-		for i in 0..4
-			if @armor_id[i] != @armor_id2[i]
-				@armor_id[i] = @armor_id2[i]
-				@armor_i[i] ? (@armor_i[i].dispose; @armor_i[i] = nil) : 0
-				if @armor_id[i] != 0
-					if i == 0
-						@armor_i[i] = J::Item.new(self).refresh(@armor_id[i], 1)
-					else
-						@armor_i[i] = J::Item.new(self).refresh(@armor_id[i], 2)
-					end
-					@armor_i[i].y = 125
-					@armor_i[i].x = 36 * i
-				end
-			end
-		end
-		
 		# 0, 2, 3, 1, 4
 		if @armor_i[0] and @armor_i[0].double_click
 			$game_party.actors[0].equip(0, 0)
@@ -367,6 +345,84 @@ class Jindow_Status < Jindow
 			$game_party.actors[0].equip(4, 0)
 			Audio.se_play("Audio/SE/장")
 		end
+		
+		@armor_id2 = [
+			$game_party.actors[0].weapon_id, 
+			$game_party.actors[0].armor2_id,
+			$game_party.actors[0].armor3_id,
+			$game_party.actors[0].armor1_id,
+			$game_party.actors[0].armor4_id
+		]
+		
+		equip_change = false
+		
+		for i in 0..4
+			if @armor_id[i] != @armor_id2[i]
+				equip_change = true
 				
+				@armor_id[i] = @armor_id2[i]
+				@armor_i[i] ? (@armor_i[i].dispose; @armor_i[i] = nil) : 0
+				if @armor_id[i] != 0
+					if i == 0
+						@armor_i[i] = J::Item.new(self).refresh(@armor_id[i], 1)
+					else
+						@armor_i[i] = J::Item.new(self).refresh(@armor_id[i], 2)
+					end
+					@armor_i[i].y = 135
+					@armor_i[i].x = 36 * i
+				end
+			end
+		end
+		
+		if equip_change
+			# 캐릭터 비트맵
+			@character = Sprite.new(self)
+			@character.bitmap = Bitmap.new(@route + "character_win")
+			@character.y = 10
+			
+			@actor = Sprite.new(self)
+			actor = $game_party.actors[0]
+			@character_name = actor.character_name
+			draw_actor(actor, @character)
+			
+			bitmap = Bitmap.new("Graphics/Characters/#{@character_name}")
+			
+			cw = bitmap.width / 4
+			ch = bitmap.height / 4
+			@actor.bitmap = Bitmap.new(cw, ch)
+		end
+	end
+	
+	
+	def draw_actor(actor, character)
+		@s.dispose if @s != nil
+		@s = Sprite.new(self)
+		bmp = RPG::Cache.character(actor.character_name, actor.character_hue)
+		bitmap = Bitmap.new(bmp.width, bmp.height)
+		src_rect = Rect.new(0, 0, bmp.width, bmp.height)
+		
+		# Setup actor equipment
+		equips = actor.equip_char_array
+		
+		# If character fits the size
+		if equips.size > 0 and bmp.width == 236 and bmp.height == 236
+			size = equips.size -1
+			for i in 0..size
+				next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
+				bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
+				bitmap.blt(0, 0, bmp2, src_rect, 255)
+			end
+		else
+			bitmap.blt(0, 0, bmp, src_rect, 255)
+		end
+		
+		cw = bitmap.width / 4
+		ch = bitmap.height / 4
+		src_rect = Rect.new(0, 0, cw, ch)
+		
+		@s.bitmap = Bitmap.new(cw, ch)
+		@s.bitmap.blt(0, 0, bitmap, src_rect)
+		@s.x = (character.width - @s.width) / 2
+		@s.y = character.height - @s.height - 10 + character.y
 	end
 end

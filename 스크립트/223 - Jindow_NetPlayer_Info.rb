@@ -74,7 +74,7 @@ class Jindow_NetPlayer_Info < Jindow
 				@armor_i[i].x = 36 * i
 			end
 		end
-			
+		
 		# 캐릭터 비트맵
 		@character = Sprite.new(self)
 		@character.bitmap = Bitmap.new(@route + "character_win")
@@ -84,12 +84,11 @@ class Jindow_NetPlayer_Info < Jindow
 		@character_name = actor.character_name
 		bitmap = Bitmap.new("Graphics/Characters/#{@character_name}")
 		
+		draw_actor(actor, @character)
+		
 		cw = bitmap.width / 4
 		ch = bitmap.height / 4
 		@actor.bitmap = Bitmap.new(cw, ch)
-		@actor.bitmap.blt(0, 0, bitmap, @actor.bitmap.rect)
-		@actor.x = @character.x + (@character.width / 2 - @actor.width / 2)
-		@actor.y = @character.height - @actor.height - 10 + @character.y
 		
 		# 상태 비트맵
 		@state = []
@@ -128,7 +127,7 @@ class Jindow_NetPlayer_Info < Jindow
 		super
 		actor = @netPlayer
 		
-	@state_name2 = [
+		@state_name2 = [
 			"이름: " + actor.name,
 			"레벨: " + actor.level.to_s,
 			"직업: " + actor.pci,
@@ -164,8 +163,11 @@ class Jindow_NetPlayer_Info < Jindow
 			@netPlayer.armor4_id
 		]
 		
+		equip_change = false
+		
 		for i in 0..4
 			if @armor_id[i] != @armor_id2[i]
+				equip_change = true
 				@armor_id[i] = @armor_id2[i]
 				@armor_i[i] ? (@armor_i[i].dispose; @armor_i[i] = nil) : 0
 				if @armor_id[i] != 0 and @armor_id[i] != nil
@@ -179,5 +181,54 @@ class Jindow_NetPlayer_Info < Jindow
 				end
 			end
 		end
+		
+		if equip_change
+			# 캐릭터 비트맵
+			@character = Sprite.new(self)
+			@character.bitmap = Bitmap.new(@route + "character_win")
+			@character.y = 10
+			
+			@actor = Sprite.new(self)
+			@character_name = actor.character_name
+			draw_actor(actor, @character)
+			
+			bitmap = Bitmap.new("Graphics/Characters/#{@character_name}")
+			
+			cw = bitmap.width / 4
+			ch = bitmap.height / 4
+			@actor.bitmap = Bitmap.new(cw, ch)
+		end
 	end
+	
+	def draw_actor(actor, character)
+		@s.dispose if @s != nil
+		@s = Sprite.new(self)
+		bmp = RPG::Cache.character(actor.character_name, actor.character_hue)
+		bitmap = Bitmap.new(bmp.width, bmp.height)
+		src_rect = Rect.new(0, 0, bmp.width, bmp.height)
+		
+		# Setup actor equipment
+		equips = actor.equip_char_array
+		
+		# If character fits the size
+		if equips.size > 0 and bmp.width == 236 and bmp.height == 236
+			size = equips.size -1
+			for i in 0..size
+				next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
+				bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
+				bitmap.blt(0, 0, bmp2, src_rect, 255)
+			end
+		else
+			bitmap.blt(0, 0, bmp, src_rect, 255)
+		end
+		
+		cw = bitmap.width / 4
+		ch = bitmap.height / 4
+		src_rect = Rect.new(0, 0, cw, ch)
+		
+		@s.bitmap = Bitmap.new(cw, ch)
+		@s.bitmap.blt(0, 0, bitmap, src_rect)
+		@s.x = (character.width - @s.width) / 2
+		@s.y = character.height - @s.height - 10 + character.y
+	end	
 end

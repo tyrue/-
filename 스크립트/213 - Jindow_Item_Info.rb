@@ -271,7 +271,7 @@ class Jindow_Item_Info < Jindow
 				h += rect.height
 			end
 		end
-		self.height = height
+		self.height = height + 22
 		self.refresh("Item_Info")
 	end
 end

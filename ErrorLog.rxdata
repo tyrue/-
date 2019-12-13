@@ -6926,3 +6926,245 @@ On <<Fri 13 Dec 2019, 06:09:47>> the error <<cannot convert nil into String (#<S
 On <<Fri 13 Dec 2019, 06:12:25>> the error <<cannot convert nil into String (#<Scene_Map:0x7f3a908>)>> occured.
 On <<Fri 13 Dec 2019, 06:15:56>> the error <<cannot convert nil into String (#<Scene_Map:0x7f09f00>)>> occured.
 On <<Fri 13 Dec 2019, 06:16:51>> the error <<cannot convert nil into String (#<Scene_Map:0x8290978>)>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s
+			               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s
+			               ^
+Section214:102: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<compile error
+Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s
+			               ^
+Section214:102: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 12:48:59>> the error <<wrong number of arguments(0 for 4) (#<Scene_Map:0x7f309e0>)>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error
+				equip_change? = true ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error
+				equip_change? = true
+				               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<compile error
+Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error
+				equip_change? = true
+				               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 13:31:58>> the error <<Section214:400: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 13:31:58>> the error <<compile error
+Section214:400: syntax error ()>> occured.

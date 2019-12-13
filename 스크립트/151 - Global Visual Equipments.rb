@@ -104,6 +104,36 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 	end
 	
 	class Game_NetPlayer
+		@@body = "Nada"
+		def equip_char_array
+			equips = []
+			equips.push([@@body, 0])
+			item = equip_character(0, net_actor_equip_id(0, self))
+			equips.push(item) unless item == false
+			equips.push([@character_name, @character_hue])
+			for i in 1..4
+				item = equip_character(i, net_actor_equip_id(i, self))
+				equips.push(item) unless item == false
+			end
+			return equips
+		end
+		
+		def net_actor_equip_id(i, actor)
+			case i
+				# tem que prestar atenção no script Game_NetActor
+			when 0 # Body
+				return @armor2_id
+			when 1 # Helmet
+				return @armor3_id
+			when 2 # Weapon
+				return @weapon_id
+			when 3 # Accessory
+				return @armor2_id
+			when 4 # Shield
+				return @armor1_id
+			end
+		end
+		
 		def new_equip?
 			if @ove[0] != @weapon_id
 				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]

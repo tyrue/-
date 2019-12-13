@@ -72,6 +72,10 @@ if SDK.state("Mr.Mo's ABS")
 			@sneak = $ABS.sneak_min
 			#Create Bitmap
 			self.contents = Bitmap.new(width - 32, height - 32)
+			@pos = Sprite.new(Viewport.new(200, 200, 320, 320))
+			@pos.visible = true
+			@pos.bitmap = Bitmap.new(width - 32, height - 32)
+			
 			#Hide Window
 			self.opacity = 0
 			#Refresh
@@ -137,7 +141,18 @@ if SDK.state("Mr.Mo's ABS")
 			#맵이름의 표시
 			map_infos = load_data("Data/MapInfos.rxdata")
 			mapname = map_infos[$game_map.map_id].name.to_s
-			self.contents.draw_text(320 - mapname.size, 0, 400, 12, mapname)
+			self.contents.draw_frame_text(320 - mapname.size, 0, 400, 12, mapname)
+			
+			# 좌표의 표시
+			@pos.x = 320
+			@pos.y = 330
+			@pos.bitmap.font.color.set(0, 0, 0, 255)
+			@pos.bitmap.font.size = 12
+			@pos.bitmap.draw_text(0, 0, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
+			
+			#self.contents.draw_frame_text(520, 330, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
+			@old_x = $game_player.x
+			@old_y = $game_player.y
 			
 			#If the HP is too low
 			if @actor.hp.to_i <= LOW_HP
@@ -203,6 +218,20 @@ if SDK.state("Mr.Mo's ABS")
 		# * Update
 		#--------------------------------------------------------------------------
 		def update
+			if @old_x != $game_player.x or @old_y != $game_player.y
+				#self.contents.draw_frame_text(520, 330, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
+				@pos.dispose
+				@pos = Sprite.new(Viewport.new(200, 200, 320, 320))
+				@pos.bitmap = Bitmap.new(width - 32, height - 32)
+				@pos.bitmap.font.size = 12
+				
+				@pos.x = 320
+				@pos.y = 330
+				@pos.bitmap.font.color.set(0, 0, 0, 255)
+				@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
+				@old_x = $game_player.x
+				@old_y = $game_player.y
+			end
 			refresh if something_changed?
 		end
 		#--------------------------------------------------------------------------
@@ -218,6 +247,8 @@ if SDK.state("Mr.Mo's ABS")
 			return true if @states.to_s != @actor.states.to_s
 			return true if @dash != $ABS.dash_min or @sneak != $ABS.sneak_min
 			return true if $kts != nil and @time != $kts.time.to_s
+			#~ return true if @old_x != $game_player.x
+			#~ return true if @old_y != $game_player.y
 			return false
 		end
 		#--------------------------------------------------------------------------

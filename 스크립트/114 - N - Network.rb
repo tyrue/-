@@ -1077,8 +1077,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								$ABS.enemies[data[1].to_i].event.erased = false
 								event = $ABS.enemies[data[1].to_i].event
 								event.refresh
-								$game_map.refresh
-								return
 							end
 						end
 						
@@ -1087,7 +1085,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.enemies[data[1].to_i].hp = data[2].to_i
 							if $ABS.enemies[data[1].to_i].hp == 0 # 체력이 0이면 죽은거지
 								$ABS.enemies[data[1].to_i].event.erase
-								$game_map.refresh
 							end
 						end
 						

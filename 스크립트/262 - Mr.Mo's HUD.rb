@@ -56,6 +56,7 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
+		attr_accessor :pos
 		def initialize
 			super(-16, -16, 700, 700)
 			#Record Old Data
@@ -72,9 +73,15 @@ if SDK.state("Mr.Mo's ABS")
 			@sneak = $ABS.sneak_min
 			#Create Bitmap
 			self.contents = Bitmap.new(width - 32, height - 32)
-			@pos = Sprite.new(Viewport.new(200, 200, 320, 320))
-			@pos.visible = true
-			@pos.bitmap = Bitmap.new(width - 32, height - 32)
+			@pos = Sprite.new
+			@pos.bitmap = Bitmap.new(100, 100)
+			
+			@pos.visible = self.visible
+			@pos.x = 520
+			@pos.y = 330
+			@pos.bitmap.font.color = normal_color
+			@pos.bitmap.font.size = 12
+			@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표: [#{'%03d' % ($game_player.x + 1)}] [#{'%03d' % ($game_player.y + 1)}]")
 			
 			#Hide Window
 			self.opacity = 0
@@ -144,13 +151,6 @@ if SDK.state("Mr.Mo's ABS")
 			self.contents.draw_frame_text(320 - mapname.size, 0, 400, 12, mapname)
 			
 			# 좌표의 표시
-			@pos.x = 320
-			@pos.y = 330
-			@pos.bitmap.font.color.set(0, 0, 0, 255)
-			@pos.bitmap.font.size = 12
-			@pos.bitmap.draw_text(0, 0, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
-			
-			#self.contents.draw_frame_text(520, 330, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
 			@old_x = $game_player.x
 			@old_y = $game_player.y
 			
@@ -219,16 +219,16 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def update
 			if @old_x != $game_player.x or @old_y != $game_player.y
-				#self.contents.draw_frame_text(520, 330, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
 				@pos.dispose
-				@pos = Sprite.new(Viewport.new(200, 200, 320, 320))
-				@pos.bitmap = Bitmap.new(width - 32, height - 32)
+				@pos = Sprite.new
+				@pos.bitmap = Bitmap.new(100, 100)
 				@pos.bitmap.font.size = 12
 				
-				@pos.x = 320
-				@pos.y = 330
-				@pos.bitmap.font.color.set(0, 0, 0, 255)
-				@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표:#{$game_player.x}, #{$game_player.y}")
+				@pos.visible = self.visible
+				@pos.x = 410
+				@pos.y = 338
+				@pos.bitmap.font.color = normal_color
+				@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표: [#{'%03d' % ($game_player.x + 1)}] [#{'%03d' % ($game_player.y + 1)}]")
 				@old_x = $game_player.x
 				@old_y = $game_player.y
 			end
@@ -247,8 +247,6 @@ if SDK.state("Mr.Mo's ABS")
 			return true if @states.to_s != @actor.states.to_s
 			return true if @dash != $ABS.dash_min or @sneak != $ABS.sneak_min
 			return true if $kts != nil and @time != $kts.time.to_s
-			#~ return true if @old_x != $game_player.x
-			#~ return true if @old_y != $game_player.y
 			return false
 		end
 		#--------------------------------------------------------------------------
@@ -311,8 +309,15 @@ if SDK.state("Mr.Mo's ABS")
 			if not $map_chat_input.active
 				# 만약 토글키가 눌리면? 보여줄까 말까
 				if @mrmo_hud.CAN_TOGGLE and Input.trigger?(@mrmo_hud.TOGGLE_KEY)
-					return @mrmo_hud.visible = true if !@mrmo_hud.visible
-					return @mrmo_hud.visible = false if @mrmo_hud.visible
+					if !@mrmo_hud.visible
+						@mrmo_hud.visible = true 
+						@mrmo_hud.pos.visible = true 
+						return 
+					elsif @mrmo_hud.visible
+						@mrmo_hud.visible = false
+						@mrmo_hud.pos.visible = false
+						return 
+					end
 				end
 			end
 		end

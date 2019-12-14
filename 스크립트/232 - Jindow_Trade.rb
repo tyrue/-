@@ -20,14 +20,17 @@ class Jindow_Trade < Jindow
 		@dialog.bitmap.draw_text(0, 5, 200, 30, $game_party.actors[0].name) 
 		@dialog.bitmap.draw_text(0, 70, 200, 30, $trade_player) 
 		@dialog.bitmap.draw_text(40, 35, 200, 30, "금전 : ")
+		@dialog.bitmap.draw_text(40, 100, 200, 30, "금전 : ")
+		
 		@player_money = J::Type.new(self).refresh(74, 40, 60, 18)
 		@money = J::Button.new(self).refresh(40, "입력")
 		@money.x = 138
 		@money.y = 39
-		@dialog.bitmap.draw_text(40, 100, 200, 30, "금전 : ")
+		
 		@dialog1 = Sprite.new(self)
 		@dialog1.bitmap = Bitmap.new(240, 150)
 		@dialog1.bitmap.draw_text(40, 100, 200, 30, @money1.to_s)
+		
 		@equip_1 = Sprite.new(self)
 		@equip_2 = Sprite.new(self)
 		@equip_1.bitmap = Bitmap.new(@route + "item_win")

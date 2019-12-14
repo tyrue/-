@@ -44,7 +44,7 @@ class Jindow_cashshop < Jindow
 		
 		# 하급 보물상자
 		text.bitmap.font.color.set(0, 0, 0, 255)
-		text.bitmap.draw_text(0, 118, self.width, 32, "*하급보물상자(소모성 아이탬)")
+		text.bitmap.draw_text(0, 118, self.width, 32, "*최고급보물상자(소모성 아이탬)")
 		
 		text.bitmap.draw_text(240, 118, self.width, 32, "*가격 : 300 Cash")   
 		

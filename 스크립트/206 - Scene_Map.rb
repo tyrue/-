@@ -32,7 +32,6 @@ class Scene_Map
 			$game_party.actors[0].equip(4, 0)
 		end
 		
-		
 		if not Hwnd.include?("NetPartyInv")
 			if not $map_chat_input.active
 				if $cbig == 0

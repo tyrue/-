@@ -1,12 +1,12 @@
 #----------------------------------------------------------------------------------
-# *진도우 스킬창
+# *진도우 단축키 확인 창
 #----------------------------------------------------------------------------------
 class Jindow_Keyset < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 250, 170)
-		self.name = "⊙ 단축키 지정"
+		self.name = "⊙ 단축키 확인"
 		@head = true
 		@mark = true
 		@drag = true

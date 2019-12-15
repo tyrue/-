@@ -5,6 +5,7 @@ module J
 		attr_reader :file
 		attr_reader :push
 		attr_reader :click
+		attr_reader :r_click
 		attr_reader :double_click
 		attr_reader :command
 		attr_reader :bluck
@@ -25,6 +26,7 @@ module J
 			@command = ""
 			@push = false
 			@click = false
+			@r_click = false
 			@double_click = false
 			@double_wait = 0
 			@bluck = false
@@ -40,7 +42,7 @@ module J
 			@file = @route + val
 		end
 		
-		def refresh(width = @width, command = @command)
+		def refresh(width = @width, command = @command, type = 1)
 			@width = width
 			@command = command
 			@start = true
@@ -56,13 +58,20 @@ module J
 			self.bitmap.blt(0, 0, left.bitmap, left.bitmap.rect)
 			self.bitmap.blt(left.bitmap.width, 0, mid.bitmap, mid.bitmap.rect)
 			self.bitmap.blt(@width - right.bitmap.width, 0, right.bitmap, right.bitmap.rect)
+			
 			message.bitmap = Bitmap.new(@width, self.bitmap.height)
 			message.bitmap.font = @font
 			message.bitmap.font.alpha = @font.alpha
 			message.bitmap.font.beta = @font.beta
 			message.bitmap.font.gamma = @font.gamma
-			message.bitmap.draw_text(self.bitmap.rect, command, 1)
-			self.bitmap.blt(0, 0, message.bitmap, message.bitmap.rect)
+			message.bitmap.draw_text(self.bitmap.rect, command, type)
+			
+			if type == 0
+				self.bitmap.blt(5, 0, message.bitmap, message.bitmap.rect)
+			else
+				self.bitmap.blt(0, 0, message.bitmap, message.bitmap.rect)
+			end
+			
 			left.dispose
 			mid.dispose
 			right.dispose
@@ -93,11 +102,17 @@ module J
 			super
 			self.refresh? ? 0 : return
 			@click ? (@click = false) : 0
+			@r_click ? (@r_click = false) : 0
 			if not @viewport.hudle
 				if Input.mouse_lbutton
 					if not @push and not @viewport.push? and Mouse.arrive_sprite?(self) and @viewport.base?
 						@push = true
 						self.bluck = true
+					end
+				elsif Input.mouse_rbutton
+					if not @push and not @viewport.push? and Mouse.arrive_sprite?(self) and @viewport.base?
+						self.bluck = true
+						@r_click = true
 					end
 				else
 					if @push and Mouse.arrive_sprite?(self) and @viewport.base?

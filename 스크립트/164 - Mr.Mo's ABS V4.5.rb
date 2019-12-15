@@ -1150,7 +1150,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Update Player  단축키를 이용하여 스킬을 사용한다.
 		#--------------------------------------------------------------------------
 		def update_player
-			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Trade")# 파티 초대, 교환 창이 켜지지 않았다면?
+			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Trade") and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
 				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
 					#Keep the current party leader updated
 					@actor = $game_party.actors[0]
@@ -1230,10 +1230,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						end
 						
 						if RANGE_EXPLODE.has_key?(id)
-							$e_v = 0 # enemy_value, 맞출 적의 수
 							return player_explode(id)
 						else
-							$e_v = 0 # enemy_value, 맞출 적의 수
 							return player_skill(id)
 						end
 					end
@@ -1245,7 +1243,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Check Item  아이탬 단축키를 이용해서 사용할 경우
 		#--------------------------------------------------------------------------
 		def check_item
-			if not Hwnd.include?("NetPartyInv")
+			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Keyset_menu")
 				if not $map_chat_input.active
 					#Check for item usage
 					for key in @item_keys.keys
@@ -1562,6 +1560,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		# *  플레이어의 스킬 공격
 		#--------------------------------------------------------------------------
 		def player_skill(id)
+			$e_v = 0 # enemy_value, 맞출 적의 수
+			
 			@actor = $game_party.actors[0]
 			#Get Skill
 			skill = $data_skills[id]
@@ -1736,6 +1736,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Player Explode Attack  플레이어의 범위 공격
 		#--------------------------------------------------------------------------
 		def player_explode(id)
+			return if !RANGE_EXPLODE.has_key?(id)
+			$e_v = 0 # enemy_value, 맞출 적의 수
 			#Get Skill
 			skill = $data_skills[id]
 			#Return if the skill doesn't exist

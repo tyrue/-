@@ -14,6 +14,8 @@ class Jindow_Item_Info < Jindow
 		
 		height = 0
 		
+		@item_id = item_id
+		@type = type
 		item = nil
 		case type
 		when 0
@@ -43,6 +45,7 @@ class Jindow_Item_Info < Jindow
 		@item_name.bitmap.font.beta = 1
 		@item_name.bitmap.font.color.set(255, 255, 255, 255) 
 		@item_name.bitmap.font.gamma.set(0, 0, 0, 255) 
+		
 		for i in (type == 2 ? item.guard_element_set : item.element_set)
 			case $data_system.elements[i]
 			when "[하급]"
@@ -94,11 +97,18 @@ class Jindow_Item_Info < Jindow
 			@equip.y = @element.y + @element.height
 			if $game_party.actors[0].equippable?(item)
 				@equip.bitmap.font.color.set(0, 128, 0, 255)
-				@equip.bitmap.draw_text(0, 0, @equip.width, @equip.height, "[착용 가능]", 2)
+				@equip.bitmap.draw_text(0, 0, @equip.width, @equip.height, "[착용 가능]", 0)
 			else
 				@equip.bitmap.font.color.set(128, 0, 0, 255)
-				@equip.bitmap.draw_text(0, 0, @equip.width, @equip.height, "[착용 불가]", 2)
+				@equip.bitmap.draw_text(0, 0, @equip.width, @equip.height, "[착용 불가]", 0)
 			end
+		end
+		
+		if type == 0
+			# 여기다가 단축키 지정 진도우 버튼 넣으면 되나
+			@button_key = J::Button.new(self).refresh(60, "단축키 지정")
+			@button_key.x = @item_name.width + 30
+			@button_key.y = @element.y + @element.height - 10
 		end
 		
 		if item.description != ""
@@ -273,5 +283,17 @@ class Jindow_Item_Info < Jindow
 		end
 		self.height = height + 22
 		self.refresh("Item_Info")
+	end
+	
+	def update
+		super
+		if @button_key != nil and @button_key.click
+			if not Hwnd.include?("Keyset_menu")
+				Jindow_Keyset_menu.new(@item_id, @type)
+			else
+				Hwnd.dispose("Keyset_menu")
+				Jindow_Keyset_menu.new(@item_id, @type)
+			end
+		end
 	end
 end

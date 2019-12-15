@@ -35,7 +35,7 @@ class Jindow_Keyset_menu < Jindow
 			"단축키는 키보드의 숫자 또는",
 			"키패드의 숫자만 가능합니다.(0~9)",
 			"#{@id_value.name}의 단축키 지정",
-			" "
+			"숫자를 입력해 주세요"
 		]
 		@description_size = [
 			12,

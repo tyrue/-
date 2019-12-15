@@ -7560,3 +7560,4 @@ On <<Sun 15 Dec 2019, 21:46:21>> the error <<disposed sprite (#<Scene_Map:0x4124
 On <<Sun 15 Dec 2019, 21:46:48>> the error <<disposed sprite (#<Scene_Map:0xf683398>)>> occured.
 On <<Sun 15 Dec 2019, 21:48:19>> the error <<disposed sprite (#<Scene_Map:0xf6bc9e0>)>> occured.
 On <<Sun 15 Dec 2019, 21:59:06>> the error <<disposed sprite (#<Scene_Map:0xf6e7790>)>> occured.
+On <<Sun 15 Dec 2019, 22:35:42>> the error <<cannot convert Fixnum into String (#<Scene_Map:0xf6aa3e0>)>> occured.

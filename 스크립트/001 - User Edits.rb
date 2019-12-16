@@ -103,7 +103,7 @@ module User_Edit
 	CONNFAILTRY       = 3
 	SERVERREFRESH     = 300
 	# IP              # Port   # Display
-	SERVERS           = [["127.0.0.1" ,52000 , "흑부엉 서버"]]
+	SERVERS           = [["222.106.247.39" ,52000 , "흑부엉 서버"]]
 	
 	#Avialbe Chat Systems;
 	#Chat[0]          => No Chat

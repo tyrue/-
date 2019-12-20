@@ -149,7 +149,8 @@ class Window_Message < Window_Selectable
 					next
 				end
 				# 문자를 묘화
-				self.contents.draw_text(4 + x, 32 * y, 40, 32, c)
+				self.contents.font.size = 14
+				self.contents.draw_frame_text(4 + x, 32 * y, 40, 32, c)
 				# x 에 묘화 한 문자의 폭을 가산
 				x += self.contents.text_size(c).width
 			end

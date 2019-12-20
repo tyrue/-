@@ -12,6 +12,9 @@ class Jindow_Skill_Info < Jindow
 		@mark = true
 		@drag = true
 		@close = true
+		
+		self.x = Mouse.x + 5
+		self.y = Mouse.y + 5
 		self.refresh "Skill_Info"
 		
 		@button_key = J::Button.new(self).refresh(60, "단축키 지정")
@@ -70,9 +73,6 @@ class Jindow_Skill_Info < Jindow
 		end
 		
 		self.height = height
-		
-		self.x = 640 / 2 - self.max_width / 2
-		self.y = 480 / 2 - self.max_height / 2
 		self.refresh("Skill_Info")
 	end
 	

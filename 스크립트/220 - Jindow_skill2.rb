@@ -5,7 +5,7 @@ class Jindow_Skill < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 400, 100)
+		super(0, 0, 300, 100)
 		self.name = "⊙ 스킬창"
 		@head = true
 		@mark = true
@@ -47,8 +47,13 @@ class Jindow_Skill < Jindow
 		@s2.bitmap.draw_text(0, 0, @s2.width, 20, "마우스 왼쪽:스킬 사용 / 마우스 오른쪽:정보 확인", 0)
 		
 		@p_x = 30
+		
 		for i in 0...@page_n
-			@page[i] = J::Button.new(self).refresh(120, "#{i + 1} : " + @data[i].name, 0)
+			if @data[i] == nil
+				@page[i] = J::Button.new(self).refresh(120, "#{i + 1} : ", 0)
+			else
+				@page[i] = J::Button.new(self).refresh(120, "#{i + 1} : " + @data[i].name, 0)
+			end
 			@page[i].x = @p_x
 			@page[i].y = (@page[i].y + @page[i].height + 3) * (i) + (@s2.y + @s2.height)
 		end
@@ -61,7 +66,7 @@ class Jindow_Skill < Jindow
 		@next_button.x = @prev_button.x + @prev_button.width + 5
 		@next_button.y = @page[@page_n - 1].y + @page[@page_n - 1].height+ 10
 		
-		self.width = @s2.x + @s2.width
+		self.width = @s2.width
 		self.height = @next_button.y + @next_button.height + 10
 		self.x = 640 / 2 - self.max_width / 2
 		self.y = 480 / 2 - self.max_height / 2

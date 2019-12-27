@@ -1576,7 +1576,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			# 엑터가 사용할 수 없는 상황이면 무시
 			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
-			
+			# 스킬 사용 불가 지역
+			if $game_switches[25]
+				$console.write_line("스킬 사용 불가 지역입니다.")
+				return
+			end
 			id = skill.id 
 			
 			#Animate

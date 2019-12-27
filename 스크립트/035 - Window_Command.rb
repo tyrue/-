@@ -12,6 +12,7 @@ class Window_Command < Window_Selectable
 	#--------------------------------------------------------------------------
 	def initialize(width, commands, font = 32)
 		# Compute window height from command quantity
+		return if commands == nil
 		super(0, 0, width, commands.size * 32 + 32)
 		@item_max = commands.size
 		@commands = commands

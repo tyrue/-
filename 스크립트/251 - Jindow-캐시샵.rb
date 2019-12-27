@@ -78,7 +78,7 @@ class Jindow_cashshop < Jindow
 		super
 		if @a.click  #세계후두루마리
 			$game_system.se_play($data_system.decision_se)
-			if $game_variables[213] > 50
+			if $game_variables[213] >= 50
 				$game_variables[213] -= 50
 				$game_party.gain_item(91, 1)
 				Hwnd.dispose(self)
@@ -100,7 +100,7 @@ class Jindow_cashshop < Jindow
 			
 		elsif @c.click  #하급보물상자
 			$game_system.se_play($data_system.decision_se)
-			if $game_variables[213] > 300
+			if $game_variables[213] >= 300
 				$game_variables[213] -= 300
 				$game_party.gain_item(92, 1)
 				Hwnd.dispose(self)
@@ -117,7 +117,7 @@ class Jindow_cashshop < Jindow
 			
 		elsif @d.click  #삿갓머리화서
 			$game_system.se_play($data_system.decision_se)
-			if $game_variables[213] > 2000
+			if $game_variables[213] >= 2000
 				$game_variables[213] -= 2000
 				$game_party.gain_item(98, 1)
 				Hwnd.dispose(self)

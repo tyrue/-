@@ -1,4 +1,37 @@
 class Rpg_skill
+	def party_heal(skill_id, heal_v = 1)
+		if skill_id == 50 # 야수수금술
+			
+		elsif skill_id == 88 # 분량력법
+			
+		elsif skill_id == 90 # 분량방법
+			
+		elsif skill_id == 92 # 공력주입
+			heal_v = $game_party.actors[0].sp
+			$game_party.actors[0].sp = 0
+			
+		elsif skill_id == 117 # 백호의희원
+			heal_v = $game_party.actors[0].sp * 2
+			$game_party.actors[0].sp = 0
+			
+		else
+			heal_v = ((heal_v + ($game_party.actors[0].maxsp / 1000.0)) * (1 + $game_party.actors[0].int / 1000.0)).to_i
+		end
+		
+		ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
+	
+		if $netparty.size > 1
+			name = $game_party.actors[0].name
+			Network::Main.socket.send("<partyhill>#{name} #{skill_id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")
+		else
+			$game_party.actors[0].damage = heal_v.to_s
+			$game_party.actors[0].critical = "heal"
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{ani_id}; @ani_id = #{Network::Main.id};</27>\n"
+			
+			$game_party.actors[0].hp += heal_v
+		end
+	end
+	
 	def 투명
 		u_hp = $game_party.actors[0].hp
 		u_hp -= u_hp / (20 - $game_variables[10])

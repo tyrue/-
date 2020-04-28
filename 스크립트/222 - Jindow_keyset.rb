@@ -53,21 +53,30 @@ class Jindow_Keyset < Jindow
 		
 		for i in 0..9
 			@keyset[i] = Sprite.new(self)
-			@keyset[i].bitmap = Bitmap.new(100, 20) # x, y 크기의 비트맵 상자를 생성
+			@keyset[i].bitmap = Bitmap.new(150, 20) # x, y 크기의 비트맵 상자를 생성
 			@keyset[i].x = 0
-			@keyset[i].y = (i + 1) * 15
+			if i == 0
+				@keyset[i].y = (10) * 15
+			else
+				@keyset[i].y = (i) * 15
+			end
 			@keyset[i].bitmap.font.size = 13
 			@keyset[i].bitmap.font.color.set(0, 0, 0, 255)
-			@keyset[i].bitmap.draw_text(0, 0, 100, 20, "#{i} : #{@k_value[i].to_s}", 0)
+			@keyset[i].bitmap.draw_text(0, 0, 150, 20, "#{i} : #{@k_value[i].to_s}", 0)
 			
 			@keyset2[i] = Sprite.new(self)
-			@keyset2[i].bitmap = Bitmap.new(100, 20) # x, y 크기의 비트맵 상자를 생성
+			@keyset2[i].bitmap = Bitmap.new(150, 20) # x, y 크기의 비트맵 상자를 생성
 			@keyset2[i].x = @x2
-			@keyset2[i].y = (i + 1) * 15
+			if i == 0
+				@keyset2[i].y = (10) * 15
+			else
+				@keyset2[i].y = (i) * 15
+			end
 			@keyset2[i].bitmap.font.size = 13
 			@keyset2[i].bitmap.font.color.set(0, 0, 0, 255)
-			@keyset2[i].bitmap.draw_text(0, 0, 100, 20, "#{i} : #{@k_value[i + 10].to_s}", 0)
+			@keyset2[i].bitmap.draw_text(0, 0, 150, 20, "#{i} : #{@k_value[i + 10].to_s}", 0)
 		end
+		
 	end
 	
 	def update

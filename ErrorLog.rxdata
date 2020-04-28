@@ -6514,3 +6514,1050 @@ On <<Tue 12 Nov 2019, 23:10:19>> the error <<float 3.5e+012 out of range of inte
 On <<Tue 12 Nov 2019, 23:16:08>> the error <<float 3.499999999e+010 out of range of integer (#<Scene_Map:0x7ec5480>)>> occured.
 On <<Tue 12 Nov 2019, 23:16:40>> the error <<float 3499999995 out of range of integer (#<Scene_Map:0x8034b10>)>> occured.
 On <<Tue 12 Nov 2019, 23:56:16>> the error <<nil can't be coerced into Fixnum (#<Scene_Map:0x7f0d440>)>> occured.
+On <<Fri 29 Nov 2019, 02:07:16>> the error <<disposed sprite (#<Scene_Map:0x829ebd0>)>> occured.
+On <<Sat 30 Nov 2019, 12:13:54>> the error <<wrong number of arguments(2 for 1) (#<Scene_Map:0x4556d20>)>> occured.
+On <<Sun 01 Dec 2019, 17:12:23>> the error << (#<Scene_Connect:0x7f83940>)>> occured.
+On <<Fri 06 Dec 2019, 01:12:36>> the error <<String can't be coerced into Fixnum (#<Scene_Map:0x7feb238>)>> occured.
+On <<Fri 06 Dec 2019, 01:13:43>> the error <<String can't be coerced into Fixnum (#<Scene_Map:0x80f8bd8>)>> occured.
+On <<Tue 10 Dec 2019, 22:02:41>> the error <<Section164:5450: syntax error ()>> occured.
+On <<Tue 10 Dec 2019, 22:02:41>> the error <<compile error
+Section164:5450: syntax error ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body
+Section164:5451: class definition in method body ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body
+Section164:5451: class definition in method body
+Section164:5477: syntax error ()>> occured.
+On <<Tue 10 Dec 2019, 22:03:04>> the error <<compile error
+Section164:3306: class definition in method body
+Section164:3399: class definition in method body
+Section164:3597: class definition in method body
+Section164:3738: class definition in method body
+Section164:3830: class definition in method body
+Section164:3862: class definition in method body
+Section164:3886: class definition in method body
+Section164:3898: class definition in method body
+Section164:3924: class definition in method body
+Section164:3944: class definition in method body
+Section164:3985: module definition in method body
+Section164:3986: class definition in method body
+Section164:4143: class definition in method body
+Section164:4251: class definition in method body
+Section164:4318: class definition in method body
+Section164:4756: class definition in method body
+Section164:5070: class definition in method body
+Section164:5086: class definition in method body
+Section164:5325: class definition in method body
+Section164:5388: class definition in method body
+Section164:5451: class definition in method body
+Section164:5477: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:12:16>> the error <<disposed sprite (#<Scene_Map:0x7ef2708>)>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:48>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                                            ^ ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:49>> the error <<Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                                            ^
+Section214:361: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 03:24:49>> the error <<compile error
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			 ^
+Section214:357: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                                           ^
+Section214:358: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                                            ^
+Section214:359: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                                            ^
+Section214:361: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<Section214:183: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<Section214:183: syntax error
+			@state2_2[i]. = J::Text_Box.new(self) ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<Section214:183: syntax error
+			@state2_2[i]. = J::Text_Box.new(self)
+			               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 04:17:55>> the error <<compile error
+Section214:183: syntax error
+			@state2_2[i]. = J::Text_Box.new(self)
+			               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 05:06:36>> the error <<disposed sprite (#<Scene_Map:0x815af70>)>> occured.
+On <<Fri 13 Dec 2019, 05:07:18>> the error <<disposed sprite (#<Scene_Map:0x816df18>)>> occured.
+On <<Fri 13 Dec 2019, 05:08:29>> the error <<disposed sprite (#<Scene_Map:0x8199578>)>> occured.
+On <<Fri 13 Dec 2019, 05:09:39>> the error <<disposed sprite (#<Scene_Map:0x80b1b40>)>> occured.
+On <<Fri 13 Dec 2019, 05:58:57>> the error <<cannot convert nil into String (#<Scene_Map:0x45aa998>)>> occured.
+On <<Fri 13 Dec 2019, 05:59:17>> the error <<cannot convert nil into String (#<Scene_Map:0x7efbdc8>)>> occured.
+On <<Fri 13 Dec 2019, 06:05:30>> the error <<cannot convert nil into String (#<Scene_Map:0x7f0ea90>)>> occured.
+On <<Fri 13 Dec 2019, 06:07:46>> the error <<cannot convert nil into String (#<Scene_Map:0x8051dd8>)>> occured.
+On <<Fri 13 Dec 2019, 06:09:47>> the error <<cannot convert nil into String (#<Scene_Map:0x7ee4758>)>> occured.
+On <<Fri 13 Dec 2019, 06:12:25>> the error <<cannot convert nil into String (#<Scene_Map:0x7f3a908>)>> occured.
+On <<Fri 13 Dec 2019, 06:15:56>> the error <<cannot convert nil into String (#<Scene_Map:0x7f09f00>)>> occured.
+On <<Fri 13 Dec 2019, 06:16:51>> the error <<cannot convert nil into String (#<Scene_Map:0x8290978>)>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s, ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s
+			               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s
+			               ^
+Section214:102: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 06:38:09>> the error <<compile error
+Section214:95: syntax error
+			"경험치: " + actor.exp.to_s + "/" + actor.@exp_list[actor.level].to_s,
+			                                                      ^
+Section214:96: syntax error
+			"금전: " + $game_party.gold.to_s,
+			            ^
+Section214:98: syntax error
+			"물리 공격력: " + actor.base_atk.to_s,
+			                      ^
+Section214:99: syntax error
+			"물리 방어력: " + actor.base_pdef.to_s,
+			                      ^
+Section214:100: syntax error
+			"마법 방어력: " + actor.base_mdef.to_s,
+			                      ^
+Section214:101: syntax error
+			"회피율: " + actor.base_eva.to_s
+			               ^
+Section214:102: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 12:48:59>> the error <<wrong number of arguments(0 for 4) (#<Scene_Map:0x7f309e0>)>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error
+				equip_change? = true ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error
+				equip_change? = true
+				               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 13:04:13>> the error <<compile error
+Section214:360: syntax error
+		equip_change? = false
+		               ^
+Section214:364: syntax error
+				equip_change? = true
+				               ^ ()>> occured.
+On <<Fri 13 Dec 2019, 13:31:58>> the error <<Section214:400: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 13:31:58>> the error <<compile error
+Section214:400: syntax error ()>> occured.
+On <<Fri 13 Dec 2019, 15:19:26>> the error <<wrong number of arguments(4 for 2) (#<Scene_Map:0x801f2a8>)>> occured.
+On <<Sun 15 Dec 2019, 13:43:34>> the error <<cannot convert nil into String (#<Scene_Map:0xf74f020>)>> occured.
+On <<Sun 15 Dec 2019, 13:56:07>> the error <<cannot convert Array into String (#<Scene_Map:0x41d1ea0>)>> occured.
+On <<Sun 15 Dec 2019, 13:57:17>> the error <<cannot convert nil into String (#<Scene_Map:0xf7851f0>)>> occured.
+On <<Sun 15 Dec 2019, 14:04:05>> the error <<disposed viewport (#<Scene_Map:0xf725e78>)>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body
+Section164:4028: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body
+Section164:4028: class definition in method body
+Section164:4044: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body
+Section164:4028: class definition in method body
+Section164:4044: class definition in method body
+Section164:4283: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body
+Section164:4028: class definition in method body
+Section164:4044: class definition in method body
+Section164:4283: class definition in method body
+Section164:4346: class definition in method body ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body
+Section164:4028: class definition in method body
+Section164:4044: class definition in method body
+Section164:4283: class definition in method body
+Section164:4346: class definition in method body
+Section164:4435: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 14:20:15>> the error <<compile error
+Section164:2264: class definition in method body
+Section164:2357: class definition in method body
+Section164:2555: class definition in method body
+Section164:2696: class definition in method body
+Section164:2788: class definition in method body
+Section164:2820: class definition in method body
+Section164:2844: class definition in method body
+Section164:2856: class definition in method body
+Section164:2882: class definition in method body
+Section164:2902: class definition in method body
+Section164:2943: module definition in method body
+Section164:2944: class definition in method body
+Section164:3101: class definition in method body
+Section164:3209: class definition in method body
+Section164:3276: class definition in method body
+Section164:3714: class definition in method body
+Section164:4028: class definition in method body
+Section164:4044: class definition in method body
+Section164:4283: class definition in method body
+Section164:4346: class definition in method body
+Section164:4435: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<Section229:87: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	 ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:26>> the error <<compile error
+Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:48>> the error <<Section229:89: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:48>> the error <<Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:48>> the error <<Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:20:48>> the error <<compile error
+Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:21:50>> the error <<Section229:89: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:21:50>> the error <<Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key ()>> occured.
+On <<Sun 15 Dec 2019, 17:21:50>> the error <<Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:21:50>> the error <<compile error
+Section229:89: syntax error
+			elsif Input::Numberpad.values.include? key
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:22:20>> the error <<Section229:89: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:22:20>> the error <<Section229:89: syntax error
+				elsif Input::Numberpad.values.include? key ()>> occured.
+On <<Sun 15 Dec 2019, 17:22:20>> the error <<Section229:89: syntax error
+				elsif Input::Numberpad.values.include? key
+				     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:22:20>> the error <<Section229:89: syntax error
+				elsif Input::Numberpad.values.include? key
+				     ^
+Section229:104: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:22:20>> the error <<compile error
+Section229:89: syntax error
+				elsif Input::Numberpad.values.include? key
+				     ^
+Section229:104: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<Section229:87: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	 ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error
+			elsif (Input::Numberpad.values.include? key) ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error
+			elsif (Input::Numberpad.values.include? key)
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:06>> the error <<compile error
+Section229:87: syntax error
+				@description_v[@description_v[length - 1].bitmap.font.color.set(255, 255, 255, 255) 	
+				              ^
+Section229:89: syntax error
+			elsif (Input::Numberpad.values.include? key)
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:43>> the error <<Section229:87: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:43>> the error <<Section229:87: syntax error
+			elsif (Input::Numberpad.values.include? key) ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:43>> the error <<Section229:87: syntax error
+			elsif (Input::Numberpad.values.include? key)
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 17:23:43>> the error <<compile error
+Section229:87: syntax error
+			elsif (Input::Numberpad.values.include? key)
+			     ^ ()>> occured.
+On <<Sun 15 Dec 2019, 18:37:20>> the error <<wrong number of arguments (0 for 1) (#<Scene_Map:0xf638d50>)>> occured.
+On <<Sun 15 Dec 2019, 18:42:12>> the error <<Section220:31: syntax error ()>> occured.
+On <<Sun 15 Dec 2019, 18:42:12>> the error <<Section220:31: syntax error
+		@page = Array.new(@data.size / @page_n){Array.new(@data.size 5 @page_n){0}} #[@data.size / @page_n][@data.size % @page_n] ()>> occured.
+On <<Sun 15 Dec 2019, 18:42:12>> the error <<Section220:31: syntax error
+		@page = Array.new(@data.size / @page_n){Array.new(@data.size 5 @page_n){0}} #[@data.size / @page_n][@data.size % @page_n]
+		                                                                      ^ ()>> occured.
+On <<Sun 15 Dec 2019, 18:42:12>> the error <<compile error
+Section220:31: syntax error
+		@page = Array.new(@data.size / @page_n){Array.new(@data.size 5 @page_n){0}} #[@data.size / @page_n][@data.size % @page_n]
+		                                                                      ^ ()>> occured.
+On <<Sun 15 Dec 2019, 18:43:42>> the error <<wrong number of arguments (0 for 1) (#<Scene_Map:0x418a1b0>)>> occured.
+On <<Sun 15 Dec 2019, 19:44:27>> the error <<failed to create bitmap (#<Scene_Map:0xf7182a0>)>> occured.
+On <<Sun 15 Dec 2019, 19:44:50>> the error <<failed to create bitmap (#<Scene_Map:0xf65f0e0>)>> occured.
+On <<Sun 15 Dec 2019, 19:45:13>> the error <<failed to create bitmap (#<Scene_Map:0xf769758>)>> occured.
+On <<Sun 15 Dec 2019, 19:45:32>> the error <<failed to create bitmap (#<Scene_Map:0xf6600f8>)>> occured.
+On <<Sun 15 Dec 2019, 20:02:39>> the error <<disposed sprite (#<Scene_Map:0xf6f1160>)>> occured.
+On <<Sun 15 Dec 2019, 20:04:46>> the error <<disposed sprite (#<Scene_Map:0xf732380>)>> occured.
+On <<Sun 15 Dec 2019, 21:10:33>> the error <<disposed sprite (#<Scene_Map:0xf75eb40>)>> occured.
+On <<Sun 15 Dec 2019, 21:12:08>> the error <<disposed sprite (#<Scene_Map:0xf695ab8>)>> occured.
+On <<Sun 15 Dec 2019, 21:12:47>> the error <<disposed sprite (#<Scene_Map:0xf673a68>)>> occured.
+On <<Sun 15 Dec 2019, 21:13:14>> the error <<disposed sprite (#<Scene_Map:0xf6aae68>)>> occured.
+On <<Sun 15 Dec 2019, 21:13:47>> the error <<disposed sprite (#<Scene_Map:0xf8be7a0>)>> occured.
+On <<Sun 15 Dec 2019, 21:14:26>> the error <<disposed sprite (#<Scene_Map:0xf6eed88>)>> occured.
+On <<Sun 15 Dec 2019, 21:15:32>> the error <<disposed sprite (#<Scene_Map:0xf787f98>)>> occured.
+On <<Sun 15 Dec 2019, 21:16:56>> the error <<disposed sprite (#<Scene_Map:0xf6d8fe0>)>> occured.
+On <<Sun 15 Dec 2019, 21:19:21>> the error <<disposed sprite (#<Scene_Map:0xf68d0b0>)>> occured.
+On <<Sun 15 Dec 2019, 21:41:11>> the error <<disposed sprite (#<Scene_Map:0xf6a8058>)>> occured.
+On <<Sun 15 Dec 2019, 21:41:37>> the error <<disposed sprite (#<Scene_Map:0xf6eb760>)>> occured.
+On <<Sun 15 Dec 2019, 21:46:21>> the error <<disposed sprite (#<Scene_Map:0x4124b40>)>> occured.
+On <<Sun 15 Dec 2019, 21:46:48>> the error <<disposed sprite (#<Scene_Map:0xf683398>)>> occured.
+On <<Sun 15 Dec 2019, 21:48:19>> the error <<disposed sprite (#<Scene_Map:0xf6bc9e0>)>> occured.
+On <<Sun 15 Dec 2019, 21:59:06>> the error <<disposed sprite (#<Scene_Map:0xf6e7790>)>> occured.
+On <<Sun 15 Dec 2019, 22:35:42>> the error <<cannot convert Fixnum into String (#<Scene_Map:0xf6aa3e0>)>> occured.

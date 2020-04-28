@@ -230,7 +230,7 @@ class Game_Character
 	#--------------------------------------------------------------------------
 	# * Move at Random
 	#--------------------------------------------------------------------------
-	def move_random(is_come = false)
+	def move_random(is_come)
 		if !is_come
 			case rand(4)
 			when 0  # Move down

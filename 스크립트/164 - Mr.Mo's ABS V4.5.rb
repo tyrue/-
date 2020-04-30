@@ -90,7 +90,7 @@
 #--Triggers :
 # Trigger 0     - Will erase the event. 이벤트 없음 
 # Trigger 1 2   - Will turn on a switch with the ID of 2. 2번 스위치를 킴
-# Trigger 2 5 9 - Will change the Varaible's value with the ID of 5 to 9. If 9 is 5번 변수는 1증가, 9번 변수는 0됨
+# Trigger 2 5 9 - Will change the Varaible's value with the ID of 5 to 9. If 9 is 5번 변수는 1증가, 9가 
 #                 set to 0, the the Variable 5 will be added 1.
 # Trigger 3 1   - Will change the local switch of the enemy to 1("A"). 셀프 스위치 A 킴
 #                   1 = A
@@ -634,38 +634,69 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies[event.id].event_id = event.id
 			#Get Event 
 			@enemies[event.id].event = event
-			#Set Behavior
-			behavior = parameters[1].split
-			@enemies[event.id].behavior = behavior[1].to_i
-			#Set See Range
-			see_range = parameters[2].split
-			@enemies[event.id].see_range = see_range[1].to_i
-			#Set Hear Range
-			hear_range = parameters[3].split
-			@enemies[event.id].hear_range = hear_range[1].to_i
-			#Set Closest Enemy Boolean
-			closest_enemy = parameters[4].split
-			@enemies[event.id].closest_enemy = eval(closest_enemy[1])
-			#Set Hate Group
-			hate_group = parameters[5].split
-			@enemies[event.id].hate_group = eval(hate_group[1])    
-			#Set Aggresiveness
-			aggressiveness = parameters[6].split
-			@enemies[event.id].aggressiveness = aggressiveness[1].to_i
-			#Set Speed
-			speed = parameters[7].split
-			@enemies[event.id].temp_speed = speed[1].to_i
-			#Set Frequency
-			freq = parameters[8].split
-			@enemies[event.id].temp_frequency = freq[1].to_i
-			#Set Trigger
-			trigger = parameters[9].split
-			@enemies[event.id].trigger= [trigger[1].to_i, trigger[2].to_i, trigger[3].to_i]
-			#Respawn
-			if parameters[10] != nil
-				respawn = parameters[10].split 
-				@enemies[event.id].respawn = respawn[1].to_i * 6
+			n = id[1].to_i
+			
+			if $enemy_spec.spec(n) != nil #
+				spec = $enemy_spec.spec(n)
+				
+				#Set Behavior
+				@enemies[event.id].behavior = spec[0].to_i
+				#Set See Range
+				@enemies[event.id].see_range = spec[1].to_i
+				#Set Hear Range
+				@enemies[event.id].hear_range = spec[2].to_i
+				#Set Closest Enemy Boolean
+				@enemies[event.id].closest_enemy = spec[3]
+				#Set Hate Group
+				@enemies[event.id].hate_group = spec[4]   
+				#Set Aggresiveness
+				@enemies[event.id].aggressiveness = spec[5].to_i
+				#Set Speed
+				@enemies[event.id].temp_speed = spec[6].to_i
+				#Set Frequency
+				@enemies[event.id].temp_frequency = spec[7].to_i
+				#Set Trigger
+				@enemies[event.id].trigger = spec[8]
+				#Respawn
+				if spec[9] != nil
+					@enemies[event.id].respawn = spec[9].to_i * 6
+				end
+				
+			else
+				#Set Behavior
+				behavior = parameters[1].split
+				@enemies[event.id].behavior = behavior[1].to_i
+				#Set See Range
+				see_range = parameters[2].split
+				@enemies[event.id].see_range = see_range[1].to_i
+				#Set Hear Range
+				hear_range = parameters[3].split
+				@enemies[event.id].hear_range = hear_range[1].to_i
+				#Set Closest Enemy Boolean
+				closest_enemy = parameters[4].split
+				@enemies[event.id].closest_enemy = eval(closest_enemy[1])
+				#Set Hate Group
+				hate_group = parameters[5].split
+				@enemies[event.id].hate_group = eval(hate_group[1])    
+				#Set Aggresiveness
+				aggressiveness = parameters[6].split
+				@enemies[event.id].aggressiveness = aggressiveness[1].to_i
+				#Set Speed
+				speed = parameters[7].split
+				@enemies[event.id].temp_speed = speed[1].to_i
+				#Set Frequency
+				freq = parameters[8].split
+				@enemies[event.id].temp_frequency = freq[1].to_i
+				#Set Trigger
+				trigger = parameters[9].split
+				@enemies[event.id].trigger= [trigger[1].to_i, trigger[2].to_i, trigger[3].to_i]
+				#Respawn
+				if parameters[10] != nil
+					respawn = parameters[10].split 
+					@enemies[event.id].respawn = respawn[1].to_i * 6
+				end
 			end
+			
 			@enemies[event.id].aggro = $is_map_first
 		end
 		#--------------------------------------------------------------------------
@@ -1147,7 +1178,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		#--------------------------------------------------------------------------
-		# * Update Player  단축키를 이용하여 스킬을 사용한다.
+		# * Update Player  실시간 반영 되는 함수
 		#--------------------------------------------------------------------------
 		def update_player
 			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Trade") and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
@@ -1924,15 +1955,15 @@ if SDK.state("Mr.Mo's ABS") == true
 						#~ $console.write_line("[정보]:레벨업!")
 						#~ # 직업에 따라 체력, 마력 증가량 다르게 함
 						#~ if(actor.class_id == 7) # 전사 99때 체력 4500
-							#~ actor.maxhp += 16
-							#~ actor.str += 2
+						#~ actor.maxhp += 16
+						#~ actor.str += 2
 						#~ elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-							#~ actor.maxsp += 5
-							#~ actor.int += 2
+						#~ actor.maxsp += 5
+						#~ actor.int += 2
 						#~ elsif(actor.class_id == 17) # 도적
-							#~ actor.maxhp += 8
-							#~ actor.dex += 2 # 손재주(명중률)
-							#~ actor.agi += 2 # 민첩 (회피율)
+						#~ actor.maxhp += 8
+						#~ actor.dex += 2 # 손재주(명중률)
+						#~ actor.agi += 2 # 민첩 (회피율)
 						#~ end
 						#~ # 풀체
 						#~ actor.hp = actor.maxhp
@@ -3085,7 +3116,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap.font.color.set(255, 0, 51) if critical # 빨간색 
 				bitmap.font.color.set(255, 255, 255) if !critical # 흰색	
 				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
-					
+				
 				bitmap.draw_text(0, y, 160, 36, damage_string, 1)	
 				@_damage_sprite = ::Sprite.new(self.viewport)
 				@_damage_sprite.bitmap = bitmap

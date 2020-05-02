@@ -68,6 +68,19 @@ class Jindow_Chat_Input < Jindow
 				Network::Main.socket.send "<summon>#{$1.to_s},#{mapid},#{x},#{y}</summon>\n"
 			end     
 			
+		when /\/출두 (.*)/ #출두 명령어
+			if Network::Main.group == 'admin'		
+				for player in Network::Main.players.values
+					if player.name == $1.to_s 
+						$game_temp.player_transferring = true # 이동 가능
+						$game_temp.player_new_map_id = player.map_id
+						$game_temp.player_new_x = player.x
+						$game_temp.player_new_y = player.y
+						break
+					end
+				end	
+			end 	
+			
 		when /\/강퇴 (.*) (.*)/ #강퇴
 			if Network::Main.group == 'admin'
 				Network::Main.socket.send "<ki>#{$1.to_s},#{$2.to_s},#{$game_party.actors[0].name}</ki>\n"
@@ -113,10 +126,16 @@ class Jindow_Chat_Input < Jindow
 				Network::Main.socket.send "<cashgive>#{$1.to_s},#{$2.to_s}</cashgive>\n"
 				$console.write_line("#{$2.to_s}캐시를 유저에게 지급하였습니다.")
 			end
+				
+		when /\/운영자모드 (.*)/
+			if $1.to_i == 1367
+				Network::Main.set_admin
+			else
+				$console.write_line("틀렸습니다.")
+			end
 			
-			
-		when /\/운영자모드 1367/
-			Network::Main.set_admin
+		when /\/운영자모드/
+			$console.write_line("비밀 번호를 입력하세요")	
 			
 		else # 명령어가 아닌 그냥 일반 채팅일때
 			

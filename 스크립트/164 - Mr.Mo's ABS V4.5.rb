@@ -998,7 +998,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end      
 			# Update the enemy attack or follow
-			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45) == 0
+			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45).to_i == 0
 			# Skip this if the attack killed the enemy
 			return if enemy == nil or enemy.attacking == nil or enemy.event.moving?
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
@@ -1076,7 +1076,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Get the skill scope
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
-						return if Graphics.frame_count % (e.aggressiveness * 45) != 0
+						return if Graphics.frame_count % (e.aggressiveness * 45).to_i != 0
 						next if !in_direction?(e.event, actor.event)
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
@@ -1119,7 +1119,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 					when 2 #All Emenies 적 전체
 						# 해당 스킬 범위에 적이 있으면 그 적들에게 스킬을 발사
-						return if Graphics.frame_count % (e.aggressiveness * 45) != 0
+						return if Graphics.frame_count % (e.aggressiveness * 45).to_i != 0
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
@@ -3370,8 +3370,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			# Clear critical flag
 			self.critical = false
 			# First hit detection
+			
 			hit_result = (rand(100) < attacker.hit)
 			# If hit occurs
+			
+			# 1차로 명중률을 계산함
 			if hit_result == true
 				# Calculate basic damage
 				atk = [(attacker.atk + attacker.str / 100)- (self.pdef * 2 / 5), 2].max
@@ -3384,7 +3387,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if self.damage > 0
 					# Critical correction
 					# 여기다가 크리티컬 확률 높힐 수도 있음
-					if rand(100) < 4 * attacker.dex / self.agi
+					if rand(100) < 4.0 * attacker.dex / self.agi
 						self.damage *= 2
 						self.critical = true
 					end
@@ -3401,9 +3404,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				# Second hit detection
 				# agi : 민첩 (회피율), dex : 손재주 (명중률)
-				eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
+				# eva : 절대 회피율..
+				a_dex = attacker.dex - attacker.dex * (self.eva / 100.0)
+				#eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
+				eva = [(8 * self.agi / a_dex), 100].min
+				
 				hit = self.damage < 0 ? 100 : [100 - eva, 25].max
-				hit = self.cant_evade? ? 100 : hit
+				hit = self.cant_evade? ? 100 : hit # 피할 수 없는 경우?
+				
 				hit_result = (rand(100) < hit)
 			end
 			# If hit occurs
@@ -3454,6 +3462,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				states_minus(attacker.minus_state_set)
 				# When missing
 			else
+				
 				# Set damage to "Miss"
 				self.damage = "Miss"
 				# Clear critical flag
@@ -4106,8 +4115,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		def initialize(enemy_id)
 			super()
 			# 보스 최대 체력, 경험치등 정할 수 있음
-			$data_enemies[102].maxhp = 4000000 # 반고
-			$data_enemies[159].maxhp = 2000000 # 거북장군
+			$data_enemies[102].maxhp = 8000000 # 반고
+			$data_enemies[159].maxhp = 3000000 # 거북장군
 			
 			@event_id= 0
 			@see_range = 0

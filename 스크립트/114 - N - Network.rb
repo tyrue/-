@@ -24,6 +24,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			attr_accessor :socket
 			attr_accessor :pm
 			attr_accessor :group
+			attr_accessor :players
 			#--------------------------------------------------------------------------
 			# * Initialiation
 			#-------------------------------------------------------------------------- 

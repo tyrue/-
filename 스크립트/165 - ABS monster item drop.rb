@@ -7,14 +7,32 @@ class MrMo_ABS
 		case type
 		when 0 # 아이템
 			item = $data_items[id]
+			n = $game_party.item_number(item.id)
+			if n >= $item_maximum
+				$console.write_line("더 이상 가질 수 없습니다.")
+				return
+			end
+			
 			$game_party.gain_item(item.id, num)
 			n = $game_party.item_number(item.id)
 		when 1 # 무기
 			item = $data_weapons[id]
+			n = $game_party.weapon_number(item.id)
+			if n >= $item_maximum
+				$console.write_line("더 이상 가질 수 없습니다.")
+				return
+			end
+			
 			$game_party.gain_weapon(item.id, num)
 			n = $game_party.weapon_number(item.id)
 		when 2 # 방어구
 			item = $data_armors[id]
+			n = $game_party.armor_number(item.id)
+			if n >= $item_maximum
+				$console.write_line("더 이상 가질 수 없습니다.")
+				return
+			end
+			
 			$game_party.gain_armor(item.id, num)
 			n = $game_party.armor_number(item.id)
 		end

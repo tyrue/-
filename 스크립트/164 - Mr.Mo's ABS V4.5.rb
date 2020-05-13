@@ -1470,7 +1470,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			when 5 # 일본
 				map_m(234, 11, 8)
 			when 6 # 대방성
-				map_m(17, 11, 8)
+				map_m(298, 11, 8)
 			end
 		end
 		

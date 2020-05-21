@@ -7564,3 +7564,4 @@ On <<Sun 15 Dec 2019, 22:35:42>> the error <<cannot convert Fixnum into String (
 On <<Wed 29 Apr 2020, 02:17:22>> the error <<cannot convert String into Integer (#<Scene_Map:0x420d518>)>> occured.
 On <<Wed 29 Apr 2020, 02:18:02>> the error <<cannot convert String into Integer (#<Scene_Map:0xcadb908>)>> occured.
 On <<Thu 07 May 2020, 03:24:42>> the error <<cannot convert Range into Integer (#<Scene_Map:0x137cbb40>)>> occured.
+On <<Thu 21 May 2020, 22:47:20>> the error <<divided by 0 (#<Scene_Map:0x173996b8>)>> occured.

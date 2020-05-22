@@ -650,7 +650,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Set Hate Group
 				@enemies[event.id].hate_group = spec[4]   
 				#Set Aggresiveness
-				@enemies[event.id].aggressiveness = spec[5].to_i
+				@enemies[event.id].aggressiveness = spec[5]
 				#Set Speed
 				@enemies[event.id].temp_speed = spec[6].to_i
 				#Set Frequency
@@ -998,7 +998,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end      
 			# Update the enemy attack or follow
-			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45).to_i == 0
+			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
 			# Skip this if the attack killed the enemy
 			return if enemy == nil or enemy.attacking == nil or enemy.event.moving?
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
@@ -1076,7 +1076,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Get the skill scope
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
-						return if Graphics.frame_count % (e.aggressiveness * 45).to_i != 0
+						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
 						next if !in_direction?(e.event, actor.event)
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
@@ -1119,7 +1119,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 					when 2 #All Emenies 적 전체
 						# 해당 스킬 범위에 적이 있으면 그 적들에게 스킬을 발사
-						return if Graphics.frame_count % (e.aggressiveness * 45).to_i != 0
+						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
@@ -1163,7 +1163,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						return		
 						
 					when 3..4, 7 # User   
-						return if Graphics.frame_count % (e.aggressiveness * 100) != 0
+						return if Graphics.frame_count % (e.aggressiveness * 100.0).to_i != 0
 						next if e.hp > skill.power.abs
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
@@ -1572,7 +1572,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					map_m(id, 61 + rand(r), 10 + rand(r))
 				end
 				
-			when 7
+			when 7 # 현도성
 				case d
 				when 0
 					
@@ -1584,6 +1584,20 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 				end
 				
+			when 8 # 대방성
+				case d
+				when 0
+					
+				when 1
+					
+				when 2
+					
+				when 3
+					
+				end	
+				
+			when -1
+						
 			end	
 		end
 		

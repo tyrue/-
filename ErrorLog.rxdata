@@ -7566,3 +7566,12 @@ On <<Wed 29 Apr 2020, 02:18:02>> the error <<cannot convert String into Integer 
 On <<Thu 07 May 2020, 03:24:42>> the error <<cannot convert Range into Integer (#<Scene_Map:0x137cbb40>)>> occured.
 On <<Thu 21 May 2020, 22:47:20>> the error <<divided by 0 (#<Scene_Map:0x173996b8>)>> occured.
 On <<Sat 23 May 2020, 01:23:13>> the error <<divided by 0 (#<Scene_Map:0x10879a98>)>> occured.
+On <<Thu 04 Jun 2020, 01:33:01>> the error <<disposed window (#<Scene_Gameover:0xcb25910>)>> occured.
+On <<Thu 04 Jun 2020, 01:46:12>> the error <<disposed window (#<Scene_Gameover:0xcc4ba10>)>> occured.
+On <<Thu 04 Jun 2020, 01:47:16>> the error <<disposed window (#<Scene_Gameover:0xccb5860>)>> occured.
+On <<Thu 04 Jun 2020, 02:00:32>> the error <<disposed window (#<Scene_Gameover:0xcb836e0>)>> occured.
+On <<Thu 04 Jun 2020, 02:01:20>> the error <<disposed window (#<Scene_Gameover:0xce7e560>)>> occured.
+On <<Thu 04 Jun 2020, 02:05:23>> the error <<disposed window (#<Scene_Gameover:0xcaf5f28>)>> occured.
+On <<Thu 04 Jun 2020, 02:05:55>> the error <<disposed window (#<Scene_Gameover:0xcd6a220>)>> occured.
+On <<Thu 04 Jun 2020, 02:17:41>> the error <<disposed window (#<Scene_Gameover:0xce80910>)>> occured.
+On <<Thu 04 Jun 2020, 02:28:55>> the error <<disposed window (#<Scene_Gameover:0xcde9d60>)>> occured.

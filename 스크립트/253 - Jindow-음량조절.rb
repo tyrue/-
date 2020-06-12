@@ -37,6 +37,7 @@ class Jindow_volume < Jindow
 		end
 	end
 	
+	# 12 : 배경음, 13 : 효과음
 	def update
 		super
 		

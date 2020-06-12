@@ -660,7 +660,7 @@ class MrMo_ABS
 			if r <= 30 
 				i_id = 127 # 자색구슬조각
 			end
-		when 204, 207, 211 # 인묘, 염유장군, 흑마기린
+		when 204, 207, 211, 223, 227 # 인묘, 염유장군, 흑마기린, 동괴성, 뇌신'태
 			if r <= 50 
 				i_id = 126 # 청색구슬조각
 			elsif r <= 100
@@ -668,26 +668,77 @@ class MrMo_ABS
 			end
 		when 208 # 염유왕
 			if r <= 50 
-				# 청색보주 등
+				i_id = 129 # 갈색보주
 			end	
 		when 212 # 기린왕
 			if r <= 50 
-				# 청색보주 등
+				i_id = 130 # 자색보주
 			end		
 		when 213, 214 # 청악어, 자악어
-			if r <= 20 
+			if r <= 10 
 				i_id = 128 # 악어의피
 			end
 		when 215 # 악어왕
 			if r <= 50 
-				i_id = 132 # 청색보주 등
+				i_id = 131 # 녹색보주
 			end
 		when 216 # 연청산소
-			if r <= 50 
-				# 산소 뿔 등
+			if r <= 30
+				i_id = 126 # 청색구슬조각
 			end	
-			
-			
+		when 217 # 연자산소
+			if r <= 30 
+				i_id = 127 # 자색구슬조각
+			end	
+		when 218 # 청산소괴
+			if r <= 30 
+				i_id = 126 # 청색구슬조각
+			end	
+		when 219 # 황산소괴
+			if r <= 30 
+				i_id = 127 # 자색구슬조각
+			end	
+		when 220 # 산소괴왕
+			if r <= 15 
+				i_id = 133 # 동지패
+			end	
+		when 221 # 청괴성
+			if r <= 30 
+				i_id = 126 # 청색구슬조각
+			end	
+		when 222 # 자괴성
+			if r <= 30 
+				i_id = 127 # 자색구슬조각
+			end	
+		when 224 # 괴성왕
+			if r <= 30 
+				i_id = 132 # 청색보주
+			end	
+		when 225 # 뇌신'청
+			if r <= 30 
+				i_id = 126 # 청색구슬조각
+			end	
+		when 226 # 뇌신'자
+			if r <= 30 
+				i_id = 127 # 자색구슬조각
+			end	
+		when 228 # 뇌신'왕
+			if r <= 15 
+				i_id = 134 # 동인패
+			end	
+		when 229 # 연청천구
+			if r <= 30 
+				i_id = 126 # 청색구슬조각
+			end	
+		when 230 # 연자천구
+			if r <= 30 
+				i_id = 127 # 자색구슬조각
+			end	
+		when 231 # 천구왕
+			if r <= 15
+				i_id = 135 # 동천패
+			end	
+
 		end
 		if i_id != 0
 			Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</drop_create>\n"

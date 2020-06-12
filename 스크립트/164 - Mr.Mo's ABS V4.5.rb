@@ -1573,28 +1573,30 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 			when 7 # 현도성
+				id = 301
 				case d
 				when 0
-					
+					map_m(id, 113 + rand(r), 61 + rand(r))
 				when 1
-					
+					map_m(id, 8 + rand(r), 61 + rand(r))
 				when 2
-					
+					map_m(id, 61 + rand(r), 108 + rand(r))
 				when 3
-					
+					map_m(id, 61 + rand(r), 10 + rand(r))
 				end
 				
 			when 8 # 대방성
+				id = 276
 				case d
 				when 0
-					
+					map_m(id, 113 + rand(r), 61 + rand(r))
 				when 1
-					
+					map_m(id, 8 + rand(r), 61 + rand(r))
 				when 2
-					
+					map_m(id, 61 + rand(r), 108 + rand(r))
 				when 3
-					
-				end	
+					map_m(id, 61 + rand(r), 10 + rand(r))
+				end
 				
 			when -1
 						
@@ -3634,7 +3636,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= (user.hp / 2) 
 					user.sp = 0
 				when 135 # 백호검무
-					power += (user.hp * 1.5 + user.sp * 0.01).to_i
+					power += (user.hp * 1.5 + user.sp * 0.1).to_i
 					user.hp -= (user.hp / 2) 	
 				when 137 # 이기어검
 					power += (user.hp * 1.6 + user.sp * 0.5).to_i

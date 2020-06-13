@@ -35,21 +35,6 @@ class Scene_Map
 		if not Hwnd.include?("NetPartyInv")
 			if not $map_chat_input.active
 				if $cbig == 0
-					#~ if $game_party.actors[0].class_name == "주술사"
-						#~ if $game_switches[16] == true
-							#~ $game_party.actors[0].str = 8
-						#~ else
-							#~ $game_party.actors[0].str = 5      
-						#~ end
-					#~ end
-					
-					#~ if $game_party.actors[0].class_name == "도사"
-						#~ if $game_switches[16] == true
-							#~ $game_party.actors[0].str = 8
-						#~ else
-							#~ $game_party.actors[0].str = 5      
-						#~ end
-					#~ end
 					
 					if Key.trigger?(67) # `
 						if not Hwnd.include?("System")

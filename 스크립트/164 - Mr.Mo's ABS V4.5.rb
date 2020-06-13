@@ -1310,6 +1310,8 @@ if SDK.state("Mr.Mo's ABS") == true
 								# If common event ID is valid; Common event call reservation
 								return $game_temp.common_event_id = item.common_event_id if item.common_event_id > 0
 								# If effect scope is other than an ally
+								n = $game_party.item_number(item.id)
+								$console.write_line("#{item.name}을 사용했습니다. #{n}개 남음")
 							end
 						else
 							# 아이템이 1개 이상 있으면 사용
@@ -1321,6 +1323,8 @@ if SDK.state("Mr.Mo's ABS") == true
 								$game_system.se_play(item.menu_se)
 								# If consumable; Decrease used items by 1
 								$game_party.lose_item(item.id, 1) if item.consumable
+								n = $game_party.item_number(item.id)
+								$console.write_line("#{item.name}을 사용했습니다. #{n}개 남음")
 							end
 						end
 					end
@@ -1622,7 +1626,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 			# 엑터가 사용할 수 없는 상황이면 무시
-			return if !@actor.can_use_skill?(skill) and skill.id != 8 #성황령은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
+			return if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
 			# 스킬 사용 불가 지역
 			if $game_switches[25]
 				$console.write_line("스킬 사용 불가 지역입니다.")

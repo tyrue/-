@@ -126,7 +126,15 @@ class Jindow_Chat_Input < Jindow
 				Network::Main.socket.send "<cashgive>#{$1.to_s},#{$2.to_s}</cashgive>\n"
 				$console.write_line("#{$2.to_s}캐시를 유저에게 지급하였습니다.")
 			end
-				
+			
+		when /\/테스트/
+			if Network::Main.group == 'admin'		
+				$game_temp.player_transferring = true # 이동 가능
+				$game_temp.player_new_map_id = 306
+				$game_temp.player_new_x = 21
+				$game_temp.player_new_y = 36
+			end 	
+					
 		when /\/운영자모드 (.*)/
 			if $1.to_i == 1367
 				Network::Main.set_admin

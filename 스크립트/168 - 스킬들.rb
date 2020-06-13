@@ -3,9 +3,9 @@ class Rpg_skill
 		if skill_id == 50 # 야수수금술
 			
 		elsif skill_id == 88 # 분량력법
-			
+			$game_party.actors[0].str += 15
 		elsif skill_id == 90 # 분량방법
-			
+			$game_party.actors[0].agi += 50
 		elsif skill_id == 92 # 공력주입
 			heal_v = $game_party.actors[0].sp
 			$game_party.actors[0].sp = 0
@@ -14,6 +14,8 @@ class Rpg_skill
 			heal_v = $game_party.actors[0].sp * 2
 			$game_party.actors[0].sp = 0
 			
+		elsif skill_id == 120 # 부활
+			$game_temp.common_event_id = 24
 		else
 			heal_v = ((heal_v + ($game_party.actors[0].maxsp / 1000.0)) * (1 + $game_party.actors[0].int / 1000.0)).to_i
 		end

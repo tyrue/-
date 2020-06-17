@@ -5,6 +5,8 @@
 #------------------------------------------------------------------------------
 class Jindow_Server < Jindow
 	def initialize
+		$game_variables[12] = 80
+		$game_variables[13] = 80
 		super(0, 0, 120, User_Edit::SERVERS.size * 30 + 35)
 		self.name = "서버 선택"
 		@head = true

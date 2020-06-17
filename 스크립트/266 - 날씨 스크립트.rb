@@ -219,7 +219,7 @@ module RPG
 					sprite.opacity -= 8
 					if @thunder and (rand(8000 - @max) == 0)
 						$game_screen.start_flash(Color.new(255, 255, 255, 255), 5)
-						Audio.se_play("Audio/SE/061-Thunderclap01")
+						Audio.se_play("Audio/SE/061-Thunderclap01", $game_variables[13])
 					end
 				end
 				if @type == 2 # storm

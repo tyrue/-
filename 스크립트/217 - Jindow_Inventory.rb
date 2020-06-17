@@ -82,13 +82,13 @@ class Jindow_Inventory < Jindow
 				when 1 # 무기
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(0, i.item.id)
-						Audio.se_play("Audio/SE/장비")
+						Audio.se_play("Audio/SE/장비", $game_variables[13])
 						
 					end
 				when 2 # 방어구
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(i.item.kind + 1, i.item.id)
-						Audio.se_play("Audio/SE/장비")
+						Audio.se_play("Audio/SE/장비", $game_variables[13])
 						
 					end
 				end

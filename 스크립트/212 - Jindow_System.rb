@@ -2,7 +2,7 @@ class Jindow_System < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 100, 183)
+		super(0, 0, 100, 83)
 		self.name = "⊙ 시스템"
 		@head = true
 		@mark = true
@@ -21,55 +21,38 @@ class Jindow_System < Jindow
 		]
 		
 		@menu = []
-		
-		
-		@a = J::Button.new(self).refresh(100, "계속하기")
-		@b = J::Button.new(self).refresh(100, "현재서버")
-		@c = J::Button.new(self).refresh(100, "카페주소")
-		@d = J::Button.new(self).refresh(100, "캐시샵")
-		@e = J::Button.new(self).refresh(100, "로그아웃")
-		@f = J::Button.new(self).refresh(100, "종료하기")
-		
-		
-		@a.y = 12
-		@b.y = 42
-		@c.y = 72
-		@d.y = 102
-		@e.y = 132
-		@f.y = 162
-	end
+		for i in 0..@menu_t.size - 1
+			@menu[i] = J::Button.new(self).refresh(100, @menu_t[i].to_s)
+			@menu[i].y = 12 + i * 30
+		end
+		self.height = @menu[@menu.size - 1].y + 30 
+		self.refresh "System"
+	end	
 	
 	def update
 		super
-		if @a.click
+		if @menu[0].click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
-		elsif @b.click and not Hwnd.include?("현재서버")
-			$console.write_line("현재서버: 흑부엉서버")
+			Jindow_volume.new
+		elsif @menu[1].click
 			$game_system.se_play($data_system.decision_se)
-			Hwnd.dispose(self)
-		elsif @c.click and not Hwnd.include?("카페주소")
-			$game_system.se_play($data_system.decision_se)
-			
 			$chat.write ("카페주소: http://cafe.naver.com/blackowlsbaram", Color.new(65, 105, 0))
-			
 			Hwnd.dispose(self)
-		elsif @d.click
+		elsif @menu[2].click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			Jindow_cashshop.new
-		elsif @f.click
-			$game_system.se_play($data_system.decision_se)
-			Hwnd.dispose(self)
-			JS.game_end
-		elsif @e.click
+		elsif @menu[3].click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			JS.game_title
-		
+		elsif @menu[4].click
+			$game_system.se_play($data_system.decision_se)
+			Hwnd.dispose(self)
+			JS.game_end
 		end
 	end
-	
 end
 
 

@@ -1370,7 +1370,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@button_mash = MASH_TIME*6 
 			end
 			
-			Audio.se_play("Audio/SE/무기001-검")
+			Audio.se_play("Audio/SE/무기001-검", $game_variables[13])
 			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 191; @ani_id = #{Network::Main.id};</27>\n"
 			
 			for e in @enemies.values
@@ -1389,7 +1389,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				a = $data_weapons[@actor.weapon_id].animation2_id
 				#Hit enemy if the attack succeeds  몬스터에게 밀리 이미지
 				if e.damage != "Miss" and e.damage != 0
-					Audio.se_play("Audio/SE/타격")
+					Audio.se_play("Audio/SE/타격", $game_variables[13])
 					Network::Main.socket.send("<27>@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id}</27>\n") 
 				end
 				#Return if the enemy is dead
@@ -3640,7 +3640,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= (user.hp / 2) 
 					user.sp = 0
 				when 135 # 백호검무
-					power += (user.hp * 1.5 + user.sp * 0.1).to_i
+					power += (user.hp * 1.5 + user.sp * 0.5).to_i
 					user.hp -= (user.hp / 2) 	
 				when 137 # 이기어검
 					power += (user.hp * 1.6 + user.sp * 0.5).to_i

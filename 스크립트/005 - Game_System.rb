@@ -41,10 +41,10 @@ class Game_System
 	# * Play Background Music
 	#     bgm : background music to be played
 	#--------------------------------------------------------------------------
-	def bgm_play(bgm)
+	def bgm_play(bgm, volume = $game_variables[12])
 		if bgm != nil and bgm.name != ""
 			@playing_bgm = bgm
-			Audio.bgm_play("Audio/BGM/" + bgm.name, bgm.volume, bgm.pitch)
+			Audio.bgm_play("Audio/BGM/" + bgm.name, volume, bgm.pitch)
 		else
 			Audio.bgm_stop
 		end
@@ -80,10 +80,10 @@ class Game_System
 	# * Play Background Sound
 	#     bgs : background sound to be played
 	#--------------------------------------------------------------------------
-	def bgs_play(bgs)
+	def bgs_play(bgs, volume = $game_variables[13])
 		@playing_bgs = bgs
 		if bgs != nil and bgs.name != ""
-			Audio.bgs_play("Audio/BGS/" + bgs.name, bgs.volume, bgs.pitch)
+			Audio.bgs_play("Audio/BGS/" + bgs.name, volume, bgs.pitch)
 		else
 			Audio.bgs_stop
 		end
@@ -113,9 +113,9 @@ class Game_System
 	# * Play Music Effect
 	#     me : music effect to be played
 	#--------------------------------------------------------------------------
-	def me_play(me)
+	def me_play(me, volume = $game_variables[13])
 		if me != nil and me.name != ""
-			Audio.me_play("Audio/ME/" + me.name, me.volume, me.pitch)
+			Audio.me_play("Audio/ME/" + me.name, volume, me.pitch)
 		else
 			Audio.me_stop
 		end
@@ -125,9 +125,9 @@ class Game_System
 	# * Play Sound Effect
 	#     se : sound effect to be played
 	#--------------------------------------------------------------------------
-	def se_play(se)
+	def se_play(se, volume = $game_variables[13])
 		if se != nil and se.name != ""
-			Audio.se_play("Audio/SE/" + se.name, se.volume, se.pitch)
+			Audio.se_play("Audio/SE/" + se.name, volume, se.pitch)
 		end
 	end
 	#--------------------------------------------------------------------------

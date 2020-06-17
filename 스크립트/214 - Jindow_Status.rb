@@ -327,23 +327,23 @@ class Jindow_Status < Jindow
 		# 0, 2, 3, 1, 4
 		if @armor_i[0] and @armor_i[0].double_click
 			$game_party.actors[0].equip(0, 0)
-			Audio.se_play("Audio/SE/장")
+			Audio.se_play("Audio/SE/장", $game_variables[13])
 		end
 		if @armor_i[1] and @armor_i[1].double_click
 			$game_party.actors[0].equip(2, 0)
-			Audio.se_play("Audio/SE/장")
+			Audio.se_play("Audio/SE/장", $game_variables[13])
 		end
 		if @armor_i[2] and @armor_i[2].double_click
 			$game_party.actors[0].equip(3, 0)
-			Audio.se_play("Audio/SE/장")
+			Audio.se_play("Audio/SE/장", $game_variables[13])
 		end
 		if @armor_i[3] and @armor_i[3].double_click
 			$game_party.actors[0].equip(1, 0)
-			Audio.se_play("Audio/SE/장")
+			Audio.se_play("Audio/SE/장", $game_variables[13])
 		end
 		if @armor_i[4] and @armor_i[4].double_click
 			$game_party.actors[0].equip(4, 0)
-			Audio.se_play("Audio/SE/장")
+			Audio.se_play("Audio/SE/장", $game_variables[13])
 		end
 		
 		@armor_id2 = [

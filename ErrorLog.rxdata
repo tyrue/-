@@ -7604,3 +7604,4 @@ On <<Thu 18 Jun 2020, 03:01:25>> the error <<failed to create bitmap (#<Scene_Ma
 On <<Thu 18 Jun 2020, 03:01:43>> the error <<failed to create bitmap (#<Scene_Map:0x418a4d8>)>> occured.
 On <<Thu 18 Jun 2020, 03:14:07>> the error <<wrong number of arguments(2 for 1) (#<Scene_Map:0xcb89378>)>> occured.
 On <<Thu 18 Jun 2020, 03:32:58>> the error <<nil can't be coerced into Fixnum (#<Scene_Login:0xccc26b0>)>> occured.
+On <<Thu 18 Jun 2020, 04:22:21>> the file <<Graphics/Icons/>> was missing.

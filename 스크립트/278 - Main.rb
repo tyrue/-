@@ -9,6 +9,7 @@ begin
 	$global_house2 = 0
 	$global_house3 = 0
 	$global_house4 = 0
+	
 	$scene = Scene_Connect.new
 	
 	

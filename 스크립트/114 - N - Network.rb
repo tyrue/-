@@ -1597,6 +1597,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
+					
 					if $1.to_i == 1
 						$is_map_first = true
 					else

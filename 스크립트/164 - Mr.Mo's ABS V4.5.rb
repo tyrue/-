@@ -4137,6 +4137,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 보스 최대 체력, 경험치등 정할 수 있음
 			$data_enemies[102].maxhp = 8000000 # 반고
 			$data_enemies[159].maxhp = 3000000 # 거북장군
+			$data_enemies[231].maxhp = 2300000 # 천구왕
 			
 			@event_id= 0
 			@see_range = 0

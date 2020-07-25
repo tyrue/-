@@ -50,11 +50,13 @@ class Jindow_Chat_Input < Jindow
 			
 		when /\/세계후 (.*)/
 			if  $game_variables[212] > 0
+				간단메세지("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}")
+				$chat.write("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}", Color.new(65, 105, 255))
 				Network::Main.socket.send("<bigsay>#{$game_party.actors[0].name},#{$1.to_s}</bigsay>\n")
 				$game_variables[212] -= 1
 				$chat.write ("세계후두루마리 남은 보유량: #{$game_variables[212]}", Color.new(65, 105, 0))  
 			else
-				$chat.write ("세계후두루마리 아이템을 사용하셔야 합니다.", Color.new(65, 105, 0))        
+				$chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", Color.new(65, 105, 0))        
 			end
 			
 			
@@ -154,7 +156,8 @@ class Jindow_Chat_Input < Jindow
 					if @whispers == $game_party.actors[0].name
 						$console.write_line("자기 자신에게는 귓속말을 할 수 없습니다.")
 					else
-						name = $game_party.actors[0].name       
+						name = $game_party.actors[0].name 
+						$chat.write("(귓속말) #{@whispers} <<< #{text}", Color.new(136, 255, 50))
 						Network::Main.socket.send "<whispers>#{@whispers},#{name},#{text}</whispers>\n"
 					end
 				else
@@ -165,11 +168,13 @@ class Jindow_Chat_Input < Jindow
 			when "전체"
 				name = $game_party.actors[0].name
 				Network::Main.socket.send "<chat1>(전체) #{$game_party.actors[0].name} : #{text}</chat1>\n" 
+				$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", Color.new(105, 105, 105))
 				
 			when "파티"
 				if not $netparty == []
 					name = $game_party.actors[0].name 
 					name2 = $game_party.actors[0].class_name
+					$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", Color.new(205, 133, 63))
 					Network::Main.socket.send "<partymessage>#{name},#{name2},#{text},#{$npt}</partymessage>\n"    
 				else
 					$console.write_line("가입된 파티가 없습니다.")   

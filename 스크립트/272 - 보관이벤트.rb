@@ -36,7 +36,7 @@ def 보관이벤트_a(dst, id)
 	$game_map.events[dst].instance_eval do
 		@id = dst
 	end
-	$game_map.events[dst].moveto(rand($game_map.width), rand($game_map.height))
+	#$game_map.events[dst].moveto(rand($game_map.width), rand($game_map.height))
 	create_sprite $game_map.events[dst]
 	return $game_map.events[dst]
 end

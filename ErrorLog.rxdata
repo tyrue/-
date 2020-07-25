@@ -7610,3 +7610,6 @@ On <<Fri 19 Jun 2020, 10:59:59>> the error << (#<Scene_Connect:0x1063d140>)>> oc
 On <<Fri 19 Jun 2020, 11:00:33>> the error << (#<Scene_Connect:0x1063b140>)>> occured.
 On <<Fri 19 Jun 2020, 11:02:00>> the error << (#<Scene_Connect:0x1063f140>)>> occured.
 On <<Wed 22 Jul 2020, 22:05:23>> the file <<Graphics/Icons/>> was missing.
+On <<Wed 22 Jul 2020, 23:53:10>> the error << (#<Scene_Connect:0xcb864b8>)>> occured.
+On <<Thu 23 Jul 2020, 05:00:19>> the error << (#<Scene_Login:0x106cef88>)>> occured.
+On <<Thu 23 Jul 2020, 05:00:27>> the error << (#<Scene_Login:0x10744700>)>> occured.

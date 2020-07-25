@@ -26,12 +26,12 @@ class Rpg_skill
 			name = $game_party.actors[0].name
 			Network::Main.socket.send("<partyhill>#{name} #{skill_id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")
 		else
-			$game_party.actors[0].damage = heal_v.to_s
-			$game_party.actors[0].critical = "heal"
+			$game_player.animation_id = ani_id
 			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{ani_id}; @ani_id = #{Network::Main.id};</27>\n"
-			
-			$game_party.actors[0].hp += heal_v
 		end
+		$game_party.actors[0].damage = heal_v.to_s
+		$game_party.actors[0].critical = "heal"
+		$game_party.actors[0].hp += heal_v
 	end
 	
 	def 투명

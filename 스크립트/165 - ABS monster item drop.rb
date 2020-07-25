@@ -741,6 +741,7 @@ class MrMo_ABS
 
 		end
 		if i_id != 0
+			보관이벤트(i_id).moveto(e.event.x, e.event.y)
 			Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</drop_create>\n"
 			Network::Main.socket.send "<map_item>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</map_item>\n"
 		end

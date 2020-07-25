@@ -1382,6 +1382,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				next if !CAN_HURT_ALLY and e.hate_group.include?(0)
 				# Show Weapon Aniamtion
 				$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id
+				e.event.animation_id = $data_weapons[@actor.weapon_id].animation2_id
 				#Add mash time
 				#Attack the enemy 적 공격
 				e.attack_effect(@actor)
@@ -1969,28 +1970,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					
 					drop_enemy(enemy) # ABS monster item drop 파일 참조
-					
-					if actor.level > last_level    #레벨업을 하는 경우 (파티 아닐때)
-						#~ 자동저장
-						#~ $console.write_line("[정보]:레벨업!")
-						#~ # 직업에 따라 체력, 마력 증가량 다르게 함
-						#~ if(actor.class_id == 7) # 전사 99때 체력 4500
-						#~ actor.maxhp += 16
-						#~ actor.str += 2
-						#~ elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-						#~ actor.maxsp += 5
-						#~ actor.int += 2
-						#~ elsif(actor.class_id == 17) # 도적
-						#~ actor.maxhp += 8
-						#~ actor.dex += 2 # 손재주(명중률)
-						#~ actor.agi += 2 # 민첩 (회피율)
-						#~ end
-						#~ # 풀체
-						#~ actor.hp = actor.maxhp
-						#~ actor.sp = actor.maxsp
-						#~ $game_player.animation_id = 180
-						#~ Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
-					end
 				end
 			end
 			for item in treasures      #아이템 드롭
@@ -2530,7 +2509,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Attack It's enemy
 			#~ actor.effect_skill($game_party.actors[0], @skill)
 			#Show animation on event
-			
+			$ani_character[actor.netid].animation_id = @skill.animation2_id
 			# 해당 대상 애니메이션 재생하도록 보냄
 			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</player_animation>\n"
 		end 
@@ -2571,6 +2550,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemy = $game_party.actors[0]
 				#Attack It's enemy
 				actor.effect_skill(enemy, @skill)
+				
 				#Show animation on event
 				actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 				#Jump
@@ -2713,6 +2693,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				#Show animation on event
 				@enani = actor.event
+				@enani.animation_id = @skill.animation2_id
 				#몬스터 대상의 애니매이션 공유
 				Network::Main.socket.send("<27>@ani_event = #{@enani.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
 				#Jump

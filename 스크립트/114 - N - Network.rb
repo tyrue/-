@@ -392,7 +392,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@direction = #{$game_player.direction}; " if User_Edit::Bandwith >= 2
 				# Sends Move Speed
 				send += "@move_speed = #{$game_player.move_speed};" if User_Edit::Bandwith >= 3 
-				#@socket.send("<6a>#{id.to_i}</6a>\n")
 				send += "@weapon_id = #{$game_party.actors[0].weapon_id};"
 				send += "@armor1_id = #{$game_party.actors[0].armor1_id};"
 				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
@@ -407,15 +406,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.send_map
 				send = ""
-				# Send Username And character's Graphic Name
-				send += "@username = '#{self.name}'; @character_name = '#{$game_party.actors[0].character_name}'; "
-				send += "@name = '#{$game_party.actors[0].name}';" if User_Edit::Bandwith >= 1
 				# Sends Map ID, X and Y positions
 				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
 				# Sends Direction
 				send += "@direction = #{$game_player.direction};" if User_Edit::Bandwith >= 2
 				send += "@move_speed = #{$game_player.move_speed};" if User_Edit::Bandwith >= 3 
-				send += "@guild = '#{$guild}';"
 				send += "@weapon_id = #{$game_party.actors[0].weapon_id};"
 				send += "@armor1_id = #{$game_party.actors[0].armor1_id};"
 				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
@@ -428,7 +423,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					send += "@is_transparency = false;"
 				end
 				
-				@socket.send("<5>#{send}</5>\n")
+				@socket.send("<m5>#{send}</m5>\n")
 				for player in @players.values
 					next if player.netid == -1
 					# If the Player is on the same map...
@@ -447,19 +442,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send = ""
 				# Send 투명도 여부
 				send += "@is_transparency = #{sw};"
+				
 				@socket.send("<5>#{send}</5>\n")
-				for player in @players.values
-					next if player.netid == -1
-					# If the Player is on the same map...
-					# 만약 같은 맵에 있다면?
-					if player.map_id == $game_map.map_id #and self.in_range?(player)
-						# Update Map Players
-						self.update_map_player(player.netid, nil)
-					elsif @mapplayers[player.netid.to_s] != nil
-						# Remove from Map Players
-						self.update_map_player(player.netid, nil, true)
-					end
-				end
 			end
 			
 			
@@ -500,7 +484,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@oldd = $game_player.direction
 				end
 				# Send everything that needs to be sended
-				@socket.send("<5>#{send}</5>\n")
+				@socket.send("<m5>#{send}</m5>\n")
 			end
 			#--------------------------------------------------------------------------
 			# * Send Move Update
@@ -532,7 +516,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 				end
 				# Send everything that needs to be sended
-				@socket.send("<5>#{send}</5>\n") if send != ""
+				@socket.send("<m5>#{send}</m5>\n") if send != ""
 			end
 			#--------------------------------------------------------------------------
 			# * Send Stats
@@ -560,6 +544,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				c += "]"
 				
 				stats = "@pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
+				if SKILL_BUFF_TIME[131][1] > 0 # 투명
+					stats += "@is_transparency = true;"
+				else
+					stats += "@is_transparency = false;"
+				end
 				@socket.send("<5>#{stats}</5>\n")
 			end
 			#--------------------------------------------------------------------------
@@ -1063,7 +1052,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update
 					return true
 					
-				when /<23>(.*)<\/23>/ # 체력, 위치 공유?
+				when /<23>(.*)<\/23>/ # 서버로부터 저장된 몬스터 정보를 받아옴
 					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
@@ -1216,7 +1205,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Player Processing
 					
 					# 서버에서 방송한 데이터
-				when /<5 (.*)>(.*)<\/5>/
+				when /<5 (.*)>(.*)</
 					# Update Player
 					self.update_net_player($1, $2)
 					# If it is first time connected...
@@ -1232,25 +1221,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true
 					# Map PLayer Processing
 					
-				when /<6 (.*)>(.*)<\/6>/
-					# Return if it is yourself
-					return true if $1.to_i == self.id.to_i
-					# Update Map Player
-					#self.update_map_player($1, $2)
-					self.update_net_player($1, $2)
-					# If it is first time connected...
-					if $2.include?("start") or $2.include?("map")
-						# ... and it is not yourself ...
-						return true if $1.to_i != self.id.to_i
-						# ... and it is on the same map...
-						return true if @players[$1].map_id != $game_map.map_id
-						# ...  Return the Requested Information
-						return true if !self.in_range?(@players[$1])
-						self.send_start_request($1.to_i)
-						$game_temp.spriteset_refresh = true
-					end
-					return true
-					# Map PLayer Processing
+				
 				when /<netact (.*)>data=(.*) id=(.*)<\/netact>/
 					# Return if it is yourself
 					return true if $1.to_i == self.id.to_i
@@ -1498,6 +1469,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 							exit
 						else
+							$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", Color.new(105, 105, 105))        
 							Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 							
 							$nowtrade = 0
@@ -1597,7 +1569,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
-					
 					if $1.to_i == 1
 						$is_map_first = true
 					else
@@ -1716,6 +1687,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<bigsay>(.*),(.*)<\/bigsay>/
 					간단메세지("[세계후] #{$1.to_s} : #{$2.to_s}")
 					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", Color.new(65, 105, 255))
+					
 					
 				when /<respawn>(.*)<\/respawn>/		
 					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간

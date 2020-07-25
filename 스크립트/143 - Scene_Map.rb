@@ -10,6 +10,8 @@ class Scene_Map
 	# * Initializes map.
 	#--------------------------------------------------------------------------
 	def initialize
+		Network::Main.socket.send "<map_player>#{$game_map.map_id}</map_player>\n"
+		
 		#맵이름의 표시
 		map_infos = load_data("Data/MapInfos.rxdata")
 		mapname = map_infos[$game_map.map_id].name.to_s

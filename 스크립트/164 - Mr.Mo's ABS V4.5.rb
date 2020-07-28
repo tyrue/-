@@ -1604,7 +1604,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 			when -1
-						
+				
 			end	
 		end
 		
@@ -1961,14 +1961,31 @@ if SDK.state("Mr.Mo's ABS") == true
 				actor = $game_party.actors[i]
 				if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
 					last_level = actor.level
+					in_map_player = 1
 					if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
-						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{$game_map.map_id} #{enemy.event.id}</nptgain>\n")
+						# 여기서 파티원이 맵에 있는지 확인			
+						for player in Network::Main.mapplayers.values
+							next if player == nil
+							if $netparty.include? player.name and player.name != $game_party.actors[0].name
+								in_map_player = in_map_player + 1
+							end
+						end
+					end
+					
+					if in_map_player > 1
+						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
+						expgave = (exp * 1.5).to_i / in_map_player
+						$game_party.actors[0].exp += expgave
+						
+						goldgave = (gold * 1.5).to_i / in_map_player
+						$game_party.gain_gold(goldgave)
+						
+						$console.write_line("[파티]:경험치:#{expgave} 금전:#{goldgave}")
 					else
 						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다.")
 						actor.exp += exp    #골드를 습득하는 경우 (파티 아닐때)
 						$game_party.gain_gold(gold)
 					end
-					
 					drop_enemy(enemy) # ABS monster item drop 파일 참조
 				end
 			end

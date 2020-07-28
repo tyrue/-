@@ -26,6 +26,7 @@ class Jindow_Party < Jindow
 		@dialog.bitmap.draw_text(0, 0, 200, 30, "파티명 : " + $party_name)
 		@dialog.bitmap.draw_text(120, 0, 200, 30, "파티장 :" + $party_reader)
 		@dialog.bitmap.draw_text(0, 20, 200, 30, "파티초대 입력:")
+		
 		@username = J::Type.new(self).refresh(80, 25, 90, 18)
 		@dialog.bitmap.draw_text(0, 40, 230, 30, "파티원 : " + a)
 		@Invite = J::Button.new(self).refresh(60, "파티 초대")

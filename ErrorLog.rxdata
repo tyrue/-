@@ -7613,3 +7613,6 @@ On <<Wed 22 Jul 2020, 22:05:23>> the file <<Graphics/Icons/>> was missing.
 On <<Wed 22 Jul 2020, 23:53:10>> the error << (#<Scene_Connect:0xcb864b8>)>> occured.
 On <<Thu 23 Jul 2020, 05:00:19>> the error << (#<Scene_Login:0x106cef88>)>> occured.
 On <<Thu 23 Jul 2020, 05:00:27>> the error << (#<Scene_Login:0x10744700>)>> occured.
+On <<Tue 28 Jul 2020, 15:05:26>> the error <<divided by 0 (#<Scene_Map:0xcf08be0>)>> occured.
+On <<Tue 28 Jul 2020, 15:06:37>> the error <<divided by 0 (#<Scene_Map:0x40cf458>)>> occured.
+On <<Tue 28 Jul 2020, 15:09:43>> the error <<divided by 0 (#<Scene_Map:0xce04c98>)>> occured.

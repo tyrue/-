@@ -23,15 +23,19 @@ class Jindow_P_Status < Jindow
 		self.refresh("P_Status")
 		self.x = Mouse::x
 		self.y = Mouse::y
+		
 		@a = J::Button.new(self).refresh(50, "파티 초대")
 		@a.x = 10
 		@a.y = 10
+		
 		@b = J::Button.new(self).refresh(50, "문파 초대")
 		@b.x = 10
 		@b.y = 35
+		
 		@c = J::Button.new(self).refresh(50, "교환 신청")
 		@c.x = 10
 		@c.y = 60
+		
 		@d = J::Button.new(self).refresh(50, "유저 정보")
 		@d.x = 10
 		@d.y = 85
@@ -41,36 +45,27 @@ class Jindow_P_Status < Jindow
 		super
 		
 		if @a.click # 파초
-			if not $netparty == [] and $nowparty == 0
-				if $netparty.size == 1
-					Network::Main.socket.send("<nptreq>#{@usrname} #{$netparty[0]} #{$game_party.actors[0].name} #{$npt}</nptreq>\n")
-					$console.write_line("[파티]: '#{@usrname}' 님을 파티로 초대했습니다.")
-					if Hwnd.include?("NetParty")
-						Hwnd.dispose("P_Status")
-						Hwnd.dispose("NetParty")
-						Jindow_NetParty.new
-					end
-				elsif $netparty.size == 2
-					Network::Main.socket.send("<nptreq2>#{@usrname} #{$netparty[0]} #{$netparty[1]} #{$game_party.actors[0].name} #{$npt}</nptreq2>\n")
-					$console.write_line(" [파티] [#{@usrname}] 님을 파티로 초대했습니다.")
-					if Hwnd.include?("NetParty")
-						Hwnd.dispose("P_Status")
-						Hwnd.dispose("NetParty")
-						Jindow_NetParty.new
-					end
-				elsif $netparty.size == 3
-					Network::Main.socket.send("<nptreq3>#{@usrname} #{$netparty[0]} #{$netparty[1]} #{$netparty[2]} #{$game_party.actors[0].name} #{$npt}</nptreq3>\n")
-					$console.write_line(" [파티] [#{@usrname}] 님을 파티로 초대했습니다.")
-					if Hwnd.include?("NetParty")
-						Hwnd.dispose("P_Status")
-						Hwnd.dispose("NetParty")
-						Jindow_NetParty.new
-					end
-				else
-					$console.write_line("[파티]:파티는 최대 4인까지 가능합니다.")
+			if $netparty.size < $MAX_PARTY
+				if $netparty.size == 0
+					$npt = $game_party.actors[0].name
+					$console.write_line("[파티]:파티가 생성되었습니다.")
+					$netparty.push($game_party.actors[0].name)
 				end
-			elsif $netparty == []
-				$console.write_line("[파티]:가입한 파티가 없습니다.")
+				
+				party_mem = $netparty[0]
+				for i in 1..$netparty.size - 1
+					party_mem = party_mem.to_s + ",#{$netparty[i]}"
+				end
+				
+				Network::Main.socket.send("<nptreq>#{@usrname} #{party_mem} #{$game_party.actors[0].name} #{$npt}</nptreq>\n")
+				$console.write_line("[파티]: '#{@usrname}' 님을 파티에 초대했습니다.")
+				if Hwnd.include?("NetParty")
+					Hwnd.dispose("P_Status")
+					Hwnd.dispose("NetParty")
+					Jindow_NetParty.new
+				end
+			else
+				$console.write_line("[파티]:파티는 최대 #{$MAX_PARTY}인까지 가능합니다.")
 			end
 		end
 		

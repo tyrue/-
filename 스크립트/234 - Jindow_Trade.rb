@@ -6,6 +6,7 @@ class Jindow_Trade < Jindow
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 240, 150)
 		self.name = "교환"
+		
 		@head = true
 		@mark = true
 		@drag = true

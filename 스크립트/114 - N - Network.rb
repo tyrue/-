@@ -2012,119 +2012,50 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#-------------------------------------------------------------  
 					#---------------------------파티 시스템---------------------------  
 					#-------------------------------------------------------------      
-				when /<nptreq>(.*) (.*) (.*) (.*)<\/nptreq>/
-					$nowpartyreq = 1
-					$nptdt = $2.to_s
-					$nptna = $4.to_s
-					$nptor = $3.to_s
+				when /<nptreq>(.*) (.*) (.*) (.*)<\/nptreq>/ # 내 이름, 파티원 목록, 초대한 사람, 파티장
+					$n_name = $3
+					$n_data = $2
+					
 					if $game_party.actors[0].name == $1.to_s
-						if $netparty == []
+						if $netparty.size == 0
 							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 130,
 								["파티 요청 : #{$3.to_s}"], ["예", "아니오"],
-								["nptreq1($nptdt); $npt = $nptna; Hwnd.dispose(self)",
-									"nptnot; Hwnd.dispose(self)"], "파티 초대")
+								["nptreq($n_name, $n_data); Hwnd.dispose(self)",
+									"nptnot($n_name); Hwnd.dispose(self)"], "파티 초대")
 						else
-							Network::Main.socket.send("<nptno>#{$3.to_s}</nptno>\n")
+							Network::Main.socket.send("<nptno>#{$n_name}</nptno>\n")
 						end
 					end
 					return true
-				when /<nptreq2>(.*) (.*) (.*) (.*) (.*)<\/nptreq2>/
-					$nowpartyreq = 1
-					$nptdta = $2.to_s
-					$nptdtb = $3.to_s
-					$nptna1 = $5.to_s
-					$nptor = $4.to_s
-					if $game_party.actors[0].name == $1.to_s
-						if $netparty == []
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 130,
-								["파티 요청 : #{$4.to_s}"], ["예", "아니오"],
-								["nptreq2($nptdta, $nptdtb); $npt = $nptna1; Hwnd.dispose(self)",
-									"nptnot; Hwnd.dispose(self)"], "파티 초대")
-						else
-							Network::Main.socket.send("<nptno>#{$4.to_s}</nptno>\n")
-						end
-					end
-					return true
-				when /<nptreq3>(.*) (.*) (.*) (.*) (.*) (.*)<\/nptreq3>/
-					$nowpartyreq = 1
-					$nptdt3 = $2.to_s
-					$nptdt4 = $3.to_s
-					$nptdt5 = $4.to_s
-					$nptna2 = $6.to_s
-					$nptor = $5.to_s
-					if $game_party.actors[0].name == $1.to_s
-						if $netparty == []
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 130,
-								["파티 요청 : #{$5.to_s}"], ["수락", "거절"],
-								["nptreq3($nptdt3, $nptdt4, $nptdt5); $npt = $nptna2; $now_dialog = false; Hwnd.dispose(self)",
-									"nptnot; $now_dialog = false; Hwnd.dispose(self)"], "파티 초대")
-						else
-							Network::Main.socket.send("<nptno>#{$5.to_s}</nptno>\n")
-						end
-					end
-					return true
+					
 				when /<nptno>(.*)<\/nptno>/
 					if $game_party.actors[0].name == $1.to_s
-						$nowparty = 0
 						$console.write_line("[파티]:상대방이 파티에 참가할 수 없습니다.")
 					end
 					return true
+					
 				when /<nptyes>(.*) (.*)<\/nptyes>/
-					$nptye = $2.to_s
-					if $game_party.actors[0].name == $1.to_s
-						nptyes1($nptye)
-						$nowparty = 0
+					if $npt == $1.to_s
+						nptyes($2.to_s)
 						$console.write_line("[파티]:'#{$2.to_s}'님과 파티가 되었습니다.")
 					end
 					return true
-				when /<nptyes1>(.*) (.*) (.*)<\/nptyes1>/
-					$nptye1 = $1.to_s
-					$nptye2 = $2.to_s
-					$nptye3 = $3.to_s
-					if $game_party.actors[0].name == $1.to_s
-						nptyes2($nptye2, $nptye3)
-						$nowparty = 0
-						$console.write_line("[파티]:#{$3.to_s}' 님과 파티가 되었습니다.")
-					elsif $game_party.actors[0].name == $2.to_s
-						nptyes2($nptye1, $nptye3)
-						$nowparty = 0
-						$console.write_line("[파티]:'#{$3.to_s}' 님과 파티가 되었습니다.")
-					end
-					return true
-				when /<nptyes2>(.*) (.*) (.*) (.*)<\/nptyes2>/
-					$nptye4 = $1.to_s
-					$nptye5 = $2.to_s
-					$nptye6 = $3.to_s
-					$nptye7 = $4.to_s
-					if $game_party.actors[0].name == $1.to_s
-						nptyes3($nptye5, $nptye6, $nptye7)
-						$nowparty = 0
-						$console.write_line("[파티]:'#{$4.to_s}'님과 파티가 되었습니다.")
-					elsif $game_party.actors[0].name == $2.to_s
-						nptyes3($nptye4, $nptye6, $nptye7)
-						$nowparty = 0
-						$console.write_line("[파티]:'#{$4.to_s}'님과 파티가 되었습니다.")
-					elsif $game_party.actors[0].name == $3.to_s
-						nptyes3($nptye4, $nptye5, $nptye7)
-						$nowparty = 0
-						$console.write_line("[파티]:'#{$4.to_s}'님과 파티가 되었습니다.")
-					end
-					return true
+					
 				when /<nptout>(.*) (.*)<\/nptout>/
-					$nptoutmem = $1.to_s
-					#         if $npt == $2.to_s
+					return if $npt != $2.to_s
+					out_mem = $1.to_s
+					
 					for netparty in $netparty
-						if netparty == $nptoutmem
+						if netparty == out_mem
 							if $npt == netparty
 								$npt = ""
 								$netparty.clear
-								nptout1
+								nptout
 								$console.write_line("[파티]:파티장이 탈퇴하여 파티가 해체되었습니다.")
 							else
-								$netparty.delete($nptoutmem)
-								nptout1
-								$console.write_line("[파티]:'#{$1.to_s}' 님이 파티를 나가셨습니다.")
-								#               end
+								$netparty.delete(out_mem)
+								nptout
+								$console.write_line("[파티]:'#{out_mem}' 님이 파티를 나가셨습니다.")
 							end
 						end
 					end
@@ -2141,25 +2072,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_temp.player_transferring = true
 					
 					
-				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/
+				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/ # 경험치, 돈, 파티장, 맵의 파티원 수, 몬스터 아이디
 					if $npt == $3.to_s
-						if "#{$game_map.map_id}" == $4.to_s
-							if $netparty.size > 1
-								return if $game_party.actors[0].hp <= 0  
-								
-								$game_variables[1010] = $game_party.actors[0].level
-								
-								expgave = $1.to_i / 4 
-								expgave2 = $1.to_i / $netparty.size
-								expgave3 = expgave + expgave2
-								$game_party.actors[0].exp += expgave3
-								$game_variables[1011] = $game_party.actors[0].level
-								
-								goldgave = $2.to_i / $netparty.size
-								$game_party.gain_gold(goldgave)
-								$console.write_line("[파티]:경험치:#{expgave3} 금전:#{goldgave}")				
-							end
-						end
+						return if $game_party.actors[0].hp <= 0  
+						expgave = ($1.to_i * 1.5).to_i / $4.to_i
+						$game_party.actors[0].exp += expgave
+						
+						goldgave = ($2.to_i * 1.5).to_i / $4.to_i
+						$game_party.gain_gold(goldgave)
+						
+						$console.write_line("[파티]:경험치:#{expgave} 금전:#{goldgave}")				
 					end
 					
 					return true

@@ -3,6 +3,8 @@
 #------------------------------------------------------------------------------
 #   캐릭터 인벤토리 창
 #------------------------------------------------------------------------------
+$trade_num = 1
+
 class Jindow_Inventory < Jindow
 	def initialize
 		$game_system.se_play($data_system.decision_se)
@@ -98,24 +100,16 @@ class Jindow_Inventory < Jindow
 			for i in @item
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
-				if $trade_item1 != 1
-					check(i,1)
-				elsif $trade_item2 != 1
-					check(i,2)
-				elsif $trade_item3 != 1
-					check(i,3)
-				elsif $trade_item4 != 1
-					check(i,4)
-				end
+				check(i)
 			end
 		end
 		# sort
 		super
 	end	
 	
-	def check(i,option)
-		if $game_variables[1003] < 1
-			Jindow_Trade2.new(i.item.id, i.type, option)
+	def check(i)
+		if $trade_num <= $MAX_TRADE
+			Jindow_Trade2.new(i.item.id, i.type, $trade_num)
 		else
 			Hwnd.dispose("Trade2")
 			$console.write_line("[교환]:더이상 아이탬을 올릴수 없습니다.")

@@ -1221,7 +1221,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true
 					# Map PLayer Processing
 					
-				
+					
 				when /<netact (.*)>data=(.*) id=(.*)<\/netact>/
 					# Return if it is yourself
 					return true if $1.to_i == self.id.to_i
@@ -1934,7 +1934,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $1.to_s == $game_party.actors[0].name
 						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 250,
 							["'#{$2.to_s}'님께서 교환 신청을 하셨습니다.수락 하시겠습니까?"], ["예", "아니오"],
-							["$trade_player = '#{$2.to_s}'; Network::Main.trade_system('#{$1.to_s}', '#{$2.to_s}'); $chat.write '#{$2.to_s}님의 교환 신청을 수락 하셨습니다.'; Hwnd.dispose(self)" ,
+							["$trade_player = '#{$2.to_s}'; Network::Main.trade_system('#{$1.to_s}', '#{$2.to_s}'); Jindow_Trade.new; $chat.write '#{$2.to_s}님의 교환 신청을 수락 하셨습니다.'; Hwnd.dispose(self)" ,
 								"$chat.write '#{$2.to_s}님의 교환 신청을 거절 하셨습니다.'; Hwnd.dispose(self)"], "교환 신청")
 					end
 					return true
@@ -1946,30 +1946,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						Jindow_Trade.new
 					end
 					return true
-				when /<trade_item>(.*),(.*),(.*),(.*)<\/trade_item>/
+				when /<trade_item>(.*),(.*),(.*),(.*),(.*)<\/trade_item>/ # 교환자, 아이템 id, 개수, 타입, 번호
 					if $1.to_s == $game_party.actors[0].name
-						if $trade_item[5] != 1
-							case $4.to_i
-							when 0
-								$item_number[2] = Jindow_Trade_Data.new
-								$item_number[2].id = $2.to_i
-								$item_number[2].type = 0
-								$item_number[2].amount = $3.to_i
-								$trade_item[2] = 1
-							when 1
-								$item_number[2] = Jindow_Trade_Data.new
-								$item_number[2].id = $2.to_i
-								$item_number[2].type = 1
-								$item_number[2].amount = $3.to_i
-								$trade_item[2] = 1
-							when 2
-								$item_number[2] = Jindow_Trade_Data.new
-								$item_number[2].id = $2.to_i
-								$item_number[2].type = 2
-								$item_number[2].amount = $3.to_i
-								$trade_item[2] = 1
-							end
-						end
+						id = $2.to_i
+						amount = $3.to_i
+						type = $4.to_i
+						num = $5.to_i
+						
+						$item_number2[num] = Jindow_Trade_Data.new
+						$item_number2[num].id = id
+						$item_number2[num].type = type
+						$item_number2[num].amount = amount
 					end
 					return true
 				when /<trade_money>(.*),(.*)<\/trade_money>/
@@ -1982,25 +1969,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$trade2_ok = 1
 						$console.write_line("상대방이 교환 준비 완료 상태입니다.")
 					end
-				when /<trade_fail>(.*),(.*)<\/trade_fail>/
+				when /<trade_fail>(.*)<\/trade_fail>/
 					if $1.to_s == $game_party.actors[0].name
-						$game_variables[1003] = 0
-						$nowtrade = 0
 						$console.write_line("교환이 취소 되었습니다.")
 						Hwnd.dispose("Trade")
 						$item_number.clear
-						$trade_item.clear
-						$trade2_ok = 0
-						$trade1_ok = 0
-						$trade_player_money = 0
-						$trade_player = ""
-					elsif $2.to_s == $game_party.actors[0].name
-						$game_variables[1003] = 0
 						$nowtrade = 0
-						$console.write_line("교환이 취소 되었습니다.")
-						Hwnd.dispose("Trade")
-						$item_number.clear
-						$trade_item.clear
 						$trade2_ok = 0
 						$trade1_ok = 0
 						$trade_player_money = 0

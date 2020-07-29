@@ -7616,3 +7616,6 @@ On <<Thu 23 Jul 2020, 05:00:27>> the error << (#<Scene_Login:0x10744700>)>> occu
 On <<Tue 28 Jul 2020, 15:05:26>> the error <<divided by 0 (#<Scene_Map:0xcf08be0>)>> occured.
 On <<Tue 28 Jul 2020, 15:06:37>> the error <<divided by 0 (#<Scene_Map:0x40cf458>)>> occured.
 On <<Tue 28 Jul 2020, 15:09:43>> the error <<divided by 0 (#<Scene_Map:0xce04c98>)>> occured.
+On <<Wed 29 Jul 2020, 14:59:22>> the error <<cannot convert J::Type into Integer (#<Scene_Map:0xcdda558>)>> occured.
+On <<Wed 29 Jul 2020, 14:59:32>> the error <<cannot convert J::Type into Integer (#<Scene_Map:0xcc4df18>)>> occured.
+On <<Wed 29 Jul 2020, 15:00:17>> the error <<cannot convert J::Type into Integer (#<Scene_Map:0xcbf9c60>)>> occured.

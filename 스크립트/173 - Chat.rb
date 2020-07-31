@@ -6,7 +6,7 @@
 class Chat
 	MAX_SCALE = 2
 	def initialize          # 채팅바의 표시 x, y, 채팅창 크기의 x, y
-		@viewport = Viewport.new(0, 360, 513, 200)#, 340, 101)#(0, 354, 340, 100)
+		@viewport = Viewport.new(0, 360, 513, 200)
 		@viewport.z = 1000
 		@original_y = @viewport.rect.y
 		@original_height = @viewport.rect.height

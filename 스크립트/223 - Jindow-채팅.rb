@@ -19,6 +19,10 @@ class Jindow_Chat_Input < Jindow
 		@a.x = 2
 		@b = J::Button.new(self).refresh(20, "▶")
 		@b.x = 42
+		
+		@sec = 0
+		@ox = 0
+		@oy = 0
 	end
 	
 	def send_chat
@@ -49,12 +53,12 @@ class Jindow_Chat_Input < Jindow
 			end      
 			
 		when /\/세계후 (.*)/
-			if  $game_variables[212] > 0
+			if  $game_party.item_number(91) > 0
 				간단메세지("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}")
 				$chat.write("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}", Color.new(65, 105, 255))
 				Network::Main.socket.send("<bigsay>#{$game_party.actors[0].name},#{$1.to_s}</bigsay>\n")
-				$game_variables[212] -= 1
-				$chat.write ("세계후두루마리 남은 보유량: #{$game_variables[212]}", Color.new(65, 105, 0))  
+				$game_party.lose_item(91, 1)
+				$chat.write ("세계후두루마리 남은 보유량: #{$game_party.item_number(91)}", Color.new(65, 105, 0))  
 			else
 				$chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", Color.new(65, 105, 0))        
 			end
@@ -136,7 +140,7 @@ class Jindow_Chat_Input < Jindow
 				$game_temp.player_new_x = 21
 				$game_temp.player_new_y = 36
 			end 	
-					
+			
 		when /\/운영자모드 (.*)/
 			if $1.to_i == 1367
 				Network::Main.set_admin
@@ -169,6 +173,8 @@ class Jindow_Chat_Input < Jindow
 				name = $game_party.actors[0].name
 				Network::Main.socket.send "<chat1>(전체) #{$game_party.actors[0].name} : #{text}</chat1>\n" 
 				$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", Color.new(105, 105, 105))
+				color = Color.new(255, 255, 255)
+				chat_balloon(text, color)
 				
 			when "파티"
 				if not $netparty == []
@@ -184,8 +190,59 @@ class Jindow_Chat_Input < Jindow
 		end
 	end
 	
+	def chat_balloon(msg, color, sec = 4)
+		$m_s = Sprite.new(Viewport.new(0, 0, 640, 480))
+		bitmap = Bitmap.new(500, 16)
+		bitmap.font.name = "맑은 고딕"
+		bitmap.font.size = 16
+		bitmap.font.color = color
+		rect = bitmap.text_size(msg)
+		bitmap.fill_rect(0, 0, rect.width, rect.height, Color.new(0, 0, 0, 125)) # 꽉찬 네모
+		bitmap.draw_text(0, 0, 500, 16, msg)
+		
+		$m_s.bitmap = bitmap
+		$m_s.x = ($game_player.x - $game_map.display_x / 128) * 32 - (rect.width / 2)
+		$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
+		
+		$m_s.z = 3000
+		$m_s.visible = true
+		@sec = sec * 60
+		
+		@ox = $game_player.x
+		@oy = $game_player.y
+		
+		Network::Main.socket.send("<map_chat>#{$game_party.actors[0].name}<map_chat>")
+	end
+	
 	def update
 		super
+		if @sec > 0
+			@sec -= 1
+			if @ox != $game_player.x
+				if $game_player.x <= 10
+					$m_s.x = ($game_player.x) * 32
+					@ox = $game_player.x
+				elsif $game_map.width - $game_player.x <= 10
+					$m_s.x = ($game_player.x - 2) * 32
+					@ox = $game_player.x
+				end
+			end
+			
+			if @oy != $game_player.y
+				if $game_player.y <= 10
+					$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
+					@oy = $game_player.y
+				elsif $game_map.height - $game_player.y <= 10
+					$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
+					@oy = $game_player.y
+				end
+			end
+			
+			if @sec == 0
+				$m_s.visible = false
+			end
+		end
+		
 		if @b.click or Key.trigger?(KEY_TAB)  # 채팅 모드를 변경
 			case @chat_type
 			when "전체"

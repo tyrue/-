@@ -1561,12 +1561,29 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
-						$chat.write($1.to_s, Color.new(0, 0, 0))
+						$chat.write($1.to_s, Color.new(105, 105, 0))
 						$game_temp.chat_log.push($1.to_s)
 						$game_temp.chat_refresh = true						
 					end
 					return true
 					
+				when /<chat1>(.*)<\/chat1>/
+					if $scene.is_a?(Scene_Map)
+						$chat.write($1.to_s, Color.new(105, 105, 105))
+						$game_temp.chat_log.push($1.to_s)
+						$game_temp.chat_refresh = true
+					end	
+					
+				when /<map_chat>(.*)<\/map_chat>/
+					if $scene.is_a?(Scene_Map)
+						for player in @mapplayers.values
+							next if player == nil
+							if $1.to_s == player.name
+								
+							end
+						end
+					end		
+						
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
 					if $1.to_i == 1
@@ -1806,13 +1823,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-				when /<chat1>(.*)<\/chat1>/
-					if $scene.is_a?(Scene_Map)
-						
-						$chat.write($1.to_s, Color.new(105, 105, 105))
-						$game_temp.chat_log.push($1.to_s)
-						$game_temp.chat_refresh = true
-					end
+				
 					
 					#----------------------------길드---------------------------------
 					return true
@@ -2121,15 +2132,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					return true       
 					# Chat Recieval
-				when /<chat>(.*)<\/chat>/ 
-					if $scene.is_a?(Scene_Map)
-						if $2.to_i == 0
-							$chat.write($1.to_s, Color.new(105, 105, 105))
-							$game_temp.chat_log.push($1.to_s)
-							$game_temp.chat_refresh = true
-						end
-					end
-					return true
+					
 					
 					
 					

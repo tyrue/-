@@ -34,6 +34,8 @@ class Scene_Map
 		# 현재 맵의 아이템을 요청
 		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 		$game_switches[25] = false # 스킬 사용 불가 off
+		
+		
 	end
 	
 	#--------------------------------------------------------------------------
@@ -80,6 +82,7 @@ class Scene_Map
 		# Update Mouse Position
 		update_mouse
 		$chat.update
+		
 	end
 end
 

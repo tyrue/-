@@ -10,29 +10,26 @@ class Jindow_N < Jindow
 		self.name = $npc_name.to_s
 		@head = true
 		@drag = true
+		@close = true
+		
 		self.refresh("N")
 		self.x = 640 / 2 - 400 / 2
 		self.y = 255
 		texts = []
 		texts.push("( " + $npc_name.to_s + " )")
-		text = Sprite.new(self)
-		text.bitmap = Bitmap.new(self.width, texts.size * 18 + 12)
-		text.bitmap.font.color.set(90, 80, 70, 255)
-		for i in 0...texts.size
-			text.bitmap.draw_text(0, i * 18, self.width, 32, texts[i])
-		end
-		texts = []
 		texts.push("")
 		texts.push("                     " + $npc_say1.to_s)
 		texts.push("                     " + $npc_say2.to_s)
 		texts.push("                     " + $npc_say3.to_s)
 		texts.push("                     " + $npc_say4.to_s)
+		
 		text = Sprite.new(self)
 		text.bitmap = Bitmap.new(self.width, texts.size * 18 + 12)
 		text.bitmap.font.color.set(0, 0, 0, 255)
 		for i in 0...texts.size
 			text.bitmap.draw_text(0, i * 18, self.width, 32, texts[i])
 		end
+		
 		if $npcchoice != true
 			@a = J::Button.new(self).refresh(45, "다음")
 			@b = J::Button.new(self).refresh(45, "닫기")
@@ -57,8 +54,10 @@ class Jindow_N < Jindow
 				if $npcsgb == true
 					if $npcsuc == true
 						$npcclosed = true
+						Hwnd.dispose(self)
 					else
 						$npcsuccess = true
+						
 					end
 					Audio.se_play("Audio/SE/047-Book02")
 				else
@@ -68,7 +67,9 @@ class Jindow_N < Jindow
 			elsif @b.click
 				$npcclosed = true
 				Audio.se_play("Audio/SE/047-Book02")
+				Hwnd.dispose(self)
 			end
+			
 		elsif $npcchoice == true
 			if @a.click
 				$npcchoice2 = 1
@@ -78,19 +79,17 @@ class Jindow_N < Jindow
 				$npcchoice3 = 1
 				$npcchoice = false
 				Audio.se_play("Audio/SE/046-Book01")
+				Hwnd.dispose(self)
 			end
 		end
 	end
 end
 
-#------------------------------------------------------------------------------
-#  This interpreter runs event commands. This class is used within the
-#  Game_System class and the Game_Event class.
-#==============================================================================
 
+# 클라에서의 명령문을 수정한다.
 class Interpreter
 	#--------------------------------------------------------------------------
-	# * Show Text
+	# * npc 대화
 	#--------------------------------------------------------------------------
 	def command_101
 		# If other text has been set to message_text
@@ -143,7 +142,7 @@ class Interpreter
 		end
 	end
 	#--------------------------------------------------------------------------
-	# * Show Choices
+	# * 선택 메시지
 	#--------------------------------------------------------------------------
 	def command_102
 		# If text has been set to message_text

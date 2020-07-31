@@ -7619,3 +7619,11 @@ On <<Tue 28 Jul 2020, 15:09:43>> the error <<divided by 0 (#<Scene_Map:0xce04c98
 On <<Wed 29 Jul 2020, 14:59:22>> the error <<cannot convert J::Type into Integer (#<Scene_Map:0xcdda558>)>> occured.
 On <<Wed 29 Jul 2020, 14:59:32>> the error <<cannot convert J::Type into Integer (#<Scene_Map:0xcc4df18>)>> occured.
 On <<Wed 29 Jul 2020, 15:00:17>> the error <<cannot convert J::Type into Integer (#<Scene_Map:0xcbf9c60>)>> occured.
+On <<Fri 31 Jul 2020, 13:59:57>> the error <<wrong number of arguments(0 for 1) (#<Scene_Map:0xcd5f290>)>> occured.
+On <<Fri 31 Jul 2020, 14:00:20>> the error <<Rect can't be coerced into Fixnum (#<Scene_Map:0xcd1dd40>)>> occured.
+On <<Fri 31 Jul 2020, 16:04:59>> the error <<Section143:85: syntax error ()>> occured.
+On <<Fri 31 Jul 2020, 16:04:59>> the error <<Section143:85: syntax error
+Section143:187: syntax error ()>> occured.
+On <<Fri 31 Jul 2020, 16:04:59>> the error <<compile error
+Section143:85: syntax error
+Section143:187: syntax error ()>> occured.

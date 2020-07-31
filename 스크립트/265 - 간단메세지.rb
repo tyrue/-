@@ -55,6 +55,7 @@ def 간단메세지(text)
 	bitmap.draw_text(1, 1, 400, 16, text, 1)
 	bitmap.font.color.set(255, 255, 255)
 	bitmap.draw_text(0, 0, 400, 16, text, 1)
+	
 	@simple_sprite = Sprite.new
 	@simple_sprite.bitmap = bitmap
 	@simple_sprite.ox = 0

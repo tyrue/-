@@ -1,3 +1,4 @@
+$exp_limit = 8
 #============================================================================
 # *  Mr.Mo's ABS
 #============================================================================
@@ -1931,18 +1932,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			gold = 0
 			treasures = []
 			unless enemy.hidden
-				# 경험치 이벤트!
-				if $game_switches[1500] == true  
-					exp += enemy.exp*2
-				elsif
-					$game_switches[1501] == true 
-					exp += enemy.exp*3
-				elsif
-					$game_switches[1502] == true 
-					exp += enemy.exp*5
-				else
-					exp += enemy.exp
-				end
+				exp = enemy.exp
 				gold += enemy.gold
 				if rand(100) < enemy.treasure_prob
 					if enemy.item_id > 0
@@ -1957,11 +1947,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			treasures = treasures[0..5]
+			
 			for i in 0...$game_party.actors.size
 				actor = $game_party.actors[i]
 				if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
 					last_level = actor.level
 					in_map_player = 1
+					
 					if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
 						# 여기서 파티원이 맵에 있는지 확인			
 						for player in Network::Main.mapplayers.values
@@ -1974,17 +1966,45 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					if in_map_player > 1
 						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
-						expgave = (exp * 1.5).to_i / in_map_player
-						$game_party.actors[0].exp += expgave
+						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
+							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
+						end
+						exp = (exp * 1.5).to_i / in_map_player
+						gold = (gold * 1.5).to_i / in_map_player
 						
-						goldgave = (gold * 1.5).to_i / in_map_player
-						$game_party.gain_gold(goldgave)
+						# 경험치 이벤트!
+						if $game_switches[1500] == true  
+							exp *= 2
+						elsif
+							$game_switches[1501] == true 
+							exp *= 3
+						elsif
+							$game_switches[1502] == true 
+							exp *= 5
+						end
 						
-						$console.write_line("[파티]:경험치:#{expgave} 금전:#{goldgave}")
+						actor.exp += exp
+						$game_party.gain_gold(gold)
+						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold}")
 					else
-						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다.")
+						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
+							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
+						end
+						
+						# 경험치 이벤트!
+						if $game_switches[1500] == true  
+							exp *= 2
+						elsif
+							$game_switches[1501] == true 
+							exp *= 3
+						elsif
+							$game_switches[1502] == true 
+							exp *= 5
+						end
+						
 						actor.exp += exp    #골드를 습득하는 경우 (파티 아닐때)
 						$game_party.gain_gold(gold)
+						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다.")
 					end
 					drop_enemy(enemy) # ABS monster item drop 파일 참조
 				end

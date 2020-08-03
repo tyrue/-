@@ -168,7 +168,6 @@ class Game_Actor < Game_Battler
 	#     exp : 새롭다 EXP
 	#--------------------------------------------------------------------------
 	def exp=(exp)
-		# ★EXP의 상한 체크（check）를 해제
 		@exp = [exp, 0].max
 		if @exp > MAX_EXP
 			@exp = MAX_EXP

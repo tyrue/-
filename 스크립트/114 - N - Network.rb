@@ -416,6 +416,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
 				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
 				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
+				send += "@level = #{$game_party.actors[0].level};"
 				
 				if SKILL_BUFF_TIME[131][1] > 0 # 투명
 					send += "@is_transparency = true;"
@@ -423,7 +424,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					send += "@is_transparency = false;"
 				end
 				
-				@socket.send("<m5>#{send}</m5>\n")
+				@socket.send("<5>#{send}</5>\n")
 				for player in @players.values
 					next if player.netid == -1
 					# If the Player is on the same map...
@@ -431,9 +432,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if player.map_id == $game_map.map_id #and self.in_range?(player)
 						# Update Map Players
 						self.update_map_player(player.netid, nil)
-					elsif @mapplayers[player.netid.to_s] != nil
+					else
+						if @mapplayers[player.netid.to_s] != nil
 						# Remove from Map Players
-						self.update_map_player(player.netid, nil, true)
+							self.update_map_player(player.netid, nil, true)
+						end
 					end
 				end
 			end
@@ -443,7 +446,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				# Send 투명도 여부
 				send += "@is_transparency = #{sw};"
 				
-				@socket.send("<5>#{send}</5>\n")
+				@socket.send("<m5>#{send}</m5>\n")
 			end
 			
 			
@@ -549,7 +552,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				else
 					stats += "@is_transparency = false;"
 				end
-				@socket.send("<5>#{stats}</5>\n")
+				@socket.send("<m5>#{stats}</m5>\n")
 			end
 			#--------------------------------------------------------------------------
 			# *게임을 종료 할경우
@@ -643,9 +646,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				if @players[id].map_id == $game_map.map_id
 					# Update Map Players
 					self.update_map_player(id, data)
-				elsif @mapplayers[id] != nil
+				else
+					if @mapplayers[id] != nil
 					# Remove from Map Players
-					self.update_map_player(id, data, true)
+						self.update_map_player(id, data, true)
+					end
 				end
 			end
 			#--------------------------------------------------------------------------
@@ -657,9 +662,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				# If Kill (remove) is true...
 				if kill and @mapplayers[id] != nil
 					# Delete Map Player
-					@mapplayers.delete(id.to_i) rescue nil
+					@mapplayers.delete(id) rescue nil
 					if $scene.is_a?(Scene_Map)
-						$scene.spriteset.delete(id.to_i) rescue nil
+						$scene.spriteset.delete(id) rescue nil
 					end
 					$game_temp.spriteset_refresh = true
 					return
@@ -2059,14 +2064,33 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/ # 경험치, 돈, 파티장, 맵의 파티원 수, 몬스터 아이디
 					if $npt == $3.to_s
-						return if $game_party.actors[0].hp <= 0  
-						expgave = ($1.to_i * 1.5).to_i / $4.to_i
-						$game_party.actors[0].exp += expgave
+						return if $game_party.actors[0].hp <= 0 
+						actor = $game_party.actors[0]
+						exp = $1.to_i
+						gold = $2.to_i
+						in_map_player = $4.to_i
 						
-						goldgave = ($2.to_i * 1.5).to_i / $4.to_i
-						$game_party.gain_gold(goldgave)
+						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
+							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
+						end 
 						
-						$console.write_line("[파티]:경험치:#{expgave} 금전:#{goldgave}")				
+						exp = (exp * 1.5).to_i / in_map_player
+						gold = (gold * 1.5).to_i / in_map_player
+						
+						# 경험치 이벤트!
+						if $game_switches[1500] == true  
+							exp *= 2
+						elsif
+							$game_switches[1501] == true 
+							exp *= 3
+						elsif
+							$game_switches[1502] == true 
+							exp *= 5
+						end
+						
+						actor.exp += exp
+						$game_party.gain_gold(gold)
+						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold}")		
 					end
 					
 					return true

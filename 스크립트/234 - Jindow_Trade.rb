@@ -68,6 +68,8 @@ class Jindow_Trade < Jindow
 		$item_number2 = [] # 상대방의 아이템
 		@item_img2 = []
 		@item_txt2 = []
+		
+		$trade_num = 1
 	end
 	
 	def update

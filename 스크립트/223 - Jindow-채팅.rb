@@ -211,7 +211,7 @@ class Jindow_Chat_Input < Jindow
 		@ox = $game_player.x
 		@oy = $game_player.y
 		
-		Network::Main.socket.send("<map_chat>#{$game_party.actors[0].name}<map_chat>")
+		Network::Main.socket.send "<map_chat>#{$game_party.actors[0].name}</map_chat>\n"
 	end
 	
 	def update

@@ -99,7 +99,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@oldx = @x
 			@oldy = @y
 			@tran = @is_transparency
-			
+		
 			eval(data) unless data == nil
 			if new_equip? or (@tran != @is_transparency)
 				@equip_change = true

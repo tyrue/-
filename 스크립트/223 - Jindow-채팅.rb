@@ -171,10 +171,13 @@ class Jindow_Chat_Input < Jindow
 				
 			when "전체"
 				name = $game_party.actors[0].name
-				Network::Main.socket.send "<chat1>(전체) #{$game_party.actors[0].name} : #{text}</chat1>\n" 
-				$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", Color.new(105, 105, 105))
+				Network::Main.socket.send "<chat1>(전체) #{name} : #{text}</chat1>\n" 
+				$chat.write("(#{@chat_type}) #{name} : #{text}", Color.new(105, 105, 105))
 				color = Color.new(255, 255, 255)
-				chat_balloon(text, color)
+				
+				$chat_b.input(name + ": " + text, 1, 4, $game_player)
+				
+				Network::Main.socket.send "<map_chat>#{name} #{text}</map_chat>\n"
 				
 			when "파티"
 				if not $netparty == []
@@ -190,6 +193,8 @@ class Jindow_Chat_Input < Jindow
 		end
 	end
 	
+	# 말풍선 코드
+=begin
 	def chat_balloon(msg, color, sec = 4)
 		$m_s = Sprite.new(Viewport.new(0, 0, 640, 480))
 		bitmap = Bitmap.new(500, 16)
@@ -213,6 +218,7 @@ class Jindow_Chat_Input < Jindow
 		
 		Network::Main.socket.send "<map_chat>#{$game_party.actors[0].name}</map_chat>\n"
 	end
+=end
 	
 	def update
 		super

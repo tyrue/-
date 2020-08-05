@@ -136,6 +136,8 @@ if SDK.state("Mr.Mo's ABS")
 			return dispose if @netPlayer.hp <= 0
 			return dispose if @netPlayer.map_id != $game_map.map_id
 			return dispose if Network::Main.mapplayers[@netPlayer.netid] == nil
+			
+			self.visible = !@netPlayer.is_transparency
 			return true if @old_hp != @netPlayer.hp
 			return true if @old_x != @netPlayer.event.screen_x-10
 			return true if @old_y != @netPlayer.event.screen_y

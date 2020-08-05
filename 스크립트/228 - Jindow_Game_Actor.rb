@@ -33,6 +33,8 @@ class Game_Actor
 	
 	alias game_actor_equip equip
 	def equip(equip_type, id)
+		$game_temp.common_event_id = 2
+		
 		case equip_type
 		when 0  # 무기
 			if $game_party.weapon_number(id) > 0

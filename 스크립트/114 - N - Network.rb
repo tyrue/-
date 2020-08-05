@@ -407,6 +407,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			def self.send_map
 				send = ""
 				# Sends Map ID, X and Y positions
+				send += "@character_name = '#{$game_player.character_name}';"
 				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
 				# Sends Direction
 				send += "@direction = #{$game_player.direction};" if User_Edit::Bandwith >= 2
@@ -450,27 +451,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			end
 			
 			
-			
-			#--------------------------------------------------------------------------
-			# * 채팅 데이터 보냄
-			#-------------------------------------------------------------------------- 
-			def self.send_chat
-				return if @mapplayers == {}
-				send = ""
-				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
-				@socket.send("<5>#{send}</5>\n")
-				for player in @players.values
-					next if player.netid == -1
-					# 플레이어가 같은 맵에 있을 경우
-					if player.map_id == $game_map.map_id #and self.in_range?(player)
-						# 맵 플레이어 업데이트
-						self.update_map_player(player.netid, nil)
-					elsif @mapplayers[player.netid.to_s] != nil
-						# 해당 플레이어 삭제
-						self.update_map_player(player.netid, nil, true)
-					end
-				end
-			end
 			#--------------------------------------------------------------------------
 			# * 방향 보냄
 			#-------------------------------------------------------------------------- 
@@ -525,6 +505,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Send Stats
 			#-------------------------------------------------------------------------- 
 			def self.send_newstats
+				return if @mapplayers == {}
 				hp = $game_party.actors[0].hp
 				sp = $game_party.actors[0].sp
 				agi = $game_party.actors[0].agi
@@ -1233,17 +1214,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Update Map Player
 					self.update_net_actor($1, $2, $3)
 					return true
+					
 				when /<state>(.*)<\/state>/
 					$game_party.actors[0].refresh_states($1)
-					
-				when /<pskill>(.*),(.*),(.*),(.*)<\/pskill>/  
-					
-					if $party.include? ($1.to_s)
-						if $4.to_i == $game_map.map_id
-							$game_party.actors[0].hp += $2.to_i
-							$game_player.animation_id = $3.to_i
-						end
-					end
 					
 					# Attacked!
 				when /<attack_effect>dam=(.*) ani=(.*) id=(.*)<\/attack_effect>/
@@ -1252,6 +1225,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_player.animation_id = $2.to_i if $1.to_i > 0 and $1 != "Miss"
 					$game_player.show_demage($1.to_i,false) if $1.to_i > 0 and $1 != "Miss"
 					self.send_newstats
+					
 					if $game_party.actors[0].hp <= 0 or $game_party.actors[0].dead?
 						self.send_result($3.to_i)
 						self.send_dead
@@ -1259,6 +1233,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					return true
 					# Killed
+					
 				when /<result_effect>(.*)<\/result_effect>/ 
 					$ABS.netplayer_killed
 					return true
@@ -1441,6 +1416,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							i = d.split ","
 							SKILL_BUFF_TIME[i[0].to_i][1] = i[1].to_i
 						end
+					end
+					if $global_x == 37
+						$cha_name = $1.to_s
+						$cha_name = "바람머리" if $cha_name == nil or $cha_name == ""
 						
 						# 데이터 로드 완료
 						$game_party.actors[0].name = $name
@@ -1448,7 +1427,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_player.moveto($new_x, $new_y) 
 						$game_player.direction = $new_d
 						$game_party.actors[0].set_graphic($charp, 0, 0, 0) # 캐릭터 칩 설정
-						$cha_name = $charp
 						
 						$game_party.gain_weapon($armedweapon.to_i,1)
 						$game_party.gain_armor($armedarmor1.to_i,1)
@@ -1579,12 +1557,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_temp.chat_refresh = true
 					end	
 					
-				when /<map_chat>(.*)<\/map_chat>/
+				when /<map_chat>(.*) (.*)<\/map_chat>/
 					if $scene.is_a?(Scene_Map)
 						for player in @mapplayers.values
 							next if player == nil
 							if $1.to_s == player.name
-								
+								$chat_b.input(player.name + ": " + $2.to_s, $3.to_i, 4, player)
 							end
 						end
 					end		

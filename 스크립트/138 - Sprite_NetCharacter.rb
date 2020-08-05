@@ -31,7 +31,7 @@ class Sprite_NetCharacter < RPG::Sprite
 		@message1 = ""
 		@name = name
 		$ani_character[@netid.to_i] = @character
-		
+		@test = false
 		
 		# Creates Display Bitmap
 		bitmap = Bitmap.new(160, 100)
@@ -106,7 +106,9 @@ class Sprite_NetCharacter < RPG::Sprite
 		end
 		# update_tile
 		# Set visible situation
-		self.visible = (not @character.transparent)
+		self.visible = !@character.is_transparency
+		@_text_display.visible = !@character.is_transparency
+		
 		# If graphic is character
 		animate_player if @tile_id == 0
 		# Set sprite coordinates

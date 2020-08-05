@@ -7627,3 +7627,13 @@ Section143:187: syntax error ()>> occured.
 On <<Fri 31 Jul 2020, 16:04:59>> the error <<compile error
 Section143:85: syntax error
 Section143:187: syntax error ()>> occured.
+On <<Tue 04 Aug 2020, 15:07:22>> the error <<Section164:1986: syntax error ()>> occured.
+On <<Tue 04 Aug 2020, 15:07:22>> the error <<Section164:1986: syntax error
+						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{(actor.exp + exp) * 1.0 / actor.exp_list[actor.level + 1] * 100).to_i}%)") ()>> occured.
+On <<Tue 04 Aug 2020, 15:07:22>> the error <<Section164:1986: syntax error
+						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{(actor.exp + exp) * 1.0 / actor.exp_list[actor.level + 1] * 100).to_i}%)")
+						                                                                                                                                 ^ ()>> occured.
+On <<Tue 04 Aug 2020, 15:07:22>> the error <<compile error
+Section164:1986: syntax error
+						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{(actor.exp + exp) * 1.0 / actor.exp_list[actor.level + 1] * 100).to_i}%)")
+						                                                                                                                                 ^ ()>> occured.

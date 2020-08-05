@@ -1840,7 +1840,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			a.in_battle = false if a != nil and !a.is_a?(Game_Actor)
 			id = enemy.event_id
 			#Remove from list 리스폰이 없으면 아예 지워버림
-			@enemies.delete(id) if @enemies[id].respawn == 0
+			@enemies.delete(id) if @enemies[id].respawn == 0 or @enemies[id].respawn == nil
 			event = enemy.event
 			#여기다가 이 이벤트를 없애는 명령하기
 			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
@@ -1983,9 +1983,9 @@ if SDK.state("Mr.Mo's ABS") == true
 							exp *= 5
 						end
 						
+						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
 						actor.exp += exp
 						$game_party.gain_gold(gold)
-						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold}")
 					else
 						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
 							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
@@ -2002,9 +2002,9 @@ if SDK.state("Mr.Mo's ABS") == true
 							exp *= 5
 						end
 						
+						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다. (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
 						actor.exp += exp    #골드를 습득하는 경우 (파티 아닐때)
 						$game_party.gain_gold(gold)
-						$console.write_line("경험치:#{exp} 금전:#{gold}을 얻었습니다.")
 					end
 					drop_enemy(enemy) # ABS monster item drop 파일 참조
 				end

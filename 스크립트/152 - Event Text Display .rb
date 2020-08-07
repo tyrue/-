@@ -152,7 +152,8 @@ if SDK.state('Event Text Display') == true
 			# Changes Font Color
 			bitmap.font.color = args[1]
 			# Draws Text
-			bitmap.draw_text(0, 0, 160, 24, args[0], 1)
+			bitmap.draw_frame_text(0, 0, 160, 24, args[0], 1)
+			
 			# Creates Display Text Sprite
 			@_text_display = Sprite.new(self.viewport)
 			@_text_display.bitmap = bitmap

@@ -763,6 +763,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Revive Actor 캐릭터 부활!
 		#--------------------------------------------------------------------------
 		def revive_actor
+			
 			items = []
 			# Get the item that revives
 			for i in $game_party.items.keys
@@ -1477,6 +1478,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				map_m(234, 11, 8)
 			when 6 # 대방성
 				map_m(298, 11, 8)
+			when 7 # 대방성
+				map_m(326, 11, 8)
+			else
+				map_m(17, 11, 8)
 			end
 		end
 		
@@ -1899,12 +1904,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			$cha_name = $game_party.actors[0].character_name
 			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
+			$game_player.refresh
 			$game_party.actors[0].equip(0, 0)
 			$game_party.actors[0].equip(1, 0)
 			$game_party.actors[0].equip(2, 0)
 			$game_party.actors[0].equip(3, 0)
 			$game_party.actors[0].equip(4, 0)
 			$scene = Scene_Map.new
+			
 			# 이때 모든 버프들을 지우자
 			for skill_mash in SKILL_BUFF_TIME
 				if skill_mash[1][1] > 0
@@ -1920,7 +1927,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if NEXT_LEADER and !$game_party.all_dead?
 				#~ move_forward
 			else
-				revive_actor
+				# revive_actor
 			end
 			return true
 		end
@@ -2546,9 +2553,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Attack It's enemy
 			#~ actor.effect_skill($game_party.actors[0], @skill)
 			#Show animation on event
-			$ani_character[actor.netid].animation_id = @skill.animation2_id
+			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			# 해당 대상 애니메이션 재생하도록 보냄
-			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</player_animation>\n"
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</27>\n"
 		end 
 		
 		
@@ -2674,8 +2681,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			#~ actor.effect_skill($game_party.actors[0], @skill)
 			#Show animation on event
 			
+			if @skill.id == 138
+				$rpg_skill.비영승보(x, y, @move_direction)
+			end
+			
 			# 해당 대상 애니메이션 재생하도록 보냄
-			Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</player_animation>\n"
+			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
+			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</27>\n"
 		end 
 		
 		
@@ -3473,6 +3485,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					if SKILL_BUFF_TIME[131][1] > 0 # 투명
 						self.damage *= (4 + $game_variables[10]) # 투명 숙련도
 						SKILL_BUFF_TIME[131][1] = 1
+						$game_variables[9] = 1
 					end
 					if SKILL_BUFF_TIME[134][1] > 0 # 분신
 						self.damage *= 2 

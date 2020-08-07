@@ -171,7 +171,9 @@ def update_pvp(player)
 	# 만약 pvp 스위치 켜져 있으면  싸움 가능
 	# 데미지 계산해서 보내기
 	# 해당 대상 애니메이션 재생하도록 보냄
-	Network::Main.socket.send "<player_animation>@ani_map = #{$game_map.map_id}; @ani_number = #{$data_weapons[$game_party.actors[0].weapon_id].animation2_id}; @ani_id = #{player.netid};</player_animation>\n"
+	
+	$ani_character[player.netid.to_i].animation_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id 
+	Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$data_weapons[$game_party.actors[0].weapon_id].animation2_id}; @ani_id = #{player.netid};</27>\n"
 end
 
 

@@ -18,13 +18,13 @@ class Chat_balloon_net
 		when 1 # 일반
 			bitmap.font.color = Color.new(255, 255, 255)
 		when 2 # 파티
-			
+			bitmap.font.color = Color.new(205, 133, 63)
 		else # 기타
 			
 		end
 		rect = bitmap.text_size(txt)
 		bitmap.fill_rect(0, 0, rect.width, rect.height, Color.new(0, 0, 0, 125)) # 꽉찬 네모
-		bitmap.draw_text(0, 0, 500, 16, txt)
+		bitmap.draw_frame_text(0, 0, 500, 16, txt)
 		
 		cx = ch.screen_x - (rect.width / 2)
 		cy = ch.screen_y - 55
@@ -36,6 +36,8 @@ class Chat_balloon_net
 			@chat_b[ch.name].ox = cx
 			@chat_b[ch.name].oy = cy
 			@chat_b[ch.name].txt = txt
+			
+			$chat_s[ch.name].dispose if $chat_s[ch.name] != nil and not $chat_s[ch.name].disposed?
 			
 			$chat_s[ch.name] = Sprite.new
 			$chat_s[ch.name].bitmap = bitmap
@@ -53,6 +55,8 @@ class Chat_balloon_net
 			@chat_b[0].ox = cx
 			@chat_b[0].oy = cy
 			@chat_b[0].txt = txt
+			
+			$chat_s[0].dispose if $chat_s[0] != nil and not $chat_s[0].disposed?
 			
 			$chat_s[0] = Sprite.new
 			$chat_s[0].bitmap = bitmap

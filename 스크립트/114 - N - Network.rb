@@ -1557,7 +1557,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_temp.chat_refresh = true
 					end	
 					
-				when /<map_chat>(.*) (.*)<\/map_chat>/
+				when /<map_chat>(.*)&(.*)&(.*)<\/map_chat>/
 					if $scene.is_a?(Scene_Map)
 						for player in @mapplayers.values
 							next if player == nil
@@ -1899,26 +1899,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.events[$1.to_i].animation_id = $2.to_i
 					end
 					return true
-					
-				when /<player_animation>(.*)<\/player_animation>/
-					eval($1)
-					if @ani_map == $game_map.map_id
-						if @ani_id != -1
-							#$ani_character[@ani_id.to_i].animation_id = @ani_number if $ani_character[@ani_id.to_i]
-							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
-								$ani_character[@ani_id.to_i].animation_id = @ani_number 
-								# 상대방도 애니메이션 뜨도록 해야함
-							end
-							if @ani_id.to_i == @id.to_i
-								$game_player.animation_id = @ani_number
-							end
-						end
-					end
-					@ani_id = -1; @ani_map = -1; @ani_number = -1;
-					Network::Main.send_newstats
-					return true
-					
-					
+													
 					
 					#-------------------------------------------------------------  
 					#---------------------------교환 시스템---------------------------  
@@ -2136,21 +2117,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Chat Recieval
 					
 					
-					
-					
 				when /<27>(.*)<\/27>/
 					#@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id} # 몹 이벤트
 					#@ani_id = #{Network::Main.id}; @ani_number = #{e.event.animation_id}; @ani_map = #{$game_map.map_id} # 자신 이벤트
 					eval($1)
 					if @ani_map == $game_map.map_id
-						if @ani_id != -1
+						if @ani_event >= 0
+							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
+						end
+						
+						if @ani_id.to_i != @id.to_i
 							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
 								$ani_character[@ani_id.to_i].animation_id = @ani_number 
-								
 								# 상대방도 애니메이션 뜨도록 해야함
 							end
-						elsif @ani_event >= 0
-							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
 						else
 							$game_player.animation_id = @ani_number # 각각의 플레이어에게만 보이는 애니메이션 공유.
 						end

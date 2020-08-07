@@ -59,6 +59,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 		def initialize(actor_id)
 			geso_visual_actor_init(actor_id)
 			@body = DEFAULT_ACTOR_BODY[actor_id]
+			@trans_sw = false
 		end
 		#--------------------------------------------------------------------------
 		def equip_char_array
@@ -175,9 +176,6 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 		end
 		#--------------------------------------------------------------------------
 		def update
-			is_trans = 255
-			is_trans = 125 if SKILL_BUFF_TIME[131][1] > 0 
-			
 			# If character is a event
 			super
 			# If tile ID, file name, hue or equipment are different from current ones
@@ -185,6 +183,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@character_name != @character.character_name or
 				@character_hue != @character.character_hue or
 				equip_changed?
+				
+				is_trans = 255
+				is_trans = 125 if SKILL_BUFF_TIME[131][1] > 0 
 				
 				# Remember tile ID, file name and hue
 				@tile_id = @character.tile_id
@@ -221,7 +222,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 						equips = @actor.equip_char_array
 					end
 					# Dispose old bitmap
-					self.bitmap.dispose unless self.bitmap == nil
+					self.bitmap.dispose unless self.bitmap == nil 
 					# Draws the character bitmap
 					bmp = RPG::Cache.character(@character_name, @character_hue)
 					self.bitmap = Bitmap.new(bmp.width, bmp.height)
@@ -233,7 +234,6 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 							next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
 							bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
 							self.bitmap.blt(0, 0, bmp2, src_rect, is_trans)
-							$game_variables[9] = 0
 						end
 					else
 						src_rect = Rect.new(0, 0, bmp.width, bmp.height)
@@ -243,6 +243,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 					@ch = bitmap.height / 4
 					self.ox = @cw / 2
 					self.oy = @ch
+					$game_variables[9] = 0
 				end
 			end
 			# Set visible situationw

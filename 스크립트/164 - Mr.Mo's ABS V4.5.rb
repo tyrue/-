@@ -364,37 +364,42 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 도사
 	
 	
-	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 스위치 번호]
+	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 커먼 이벤트 번호]
 	SKILL_BUFF_TIME = {}
 	# 주술사
-	SKILL_BUFF_TIME[9] = [120 * sec, 0, 123] # 무장
-	SKILL_BUFF_TIME[46] = [120 * sec, 0, 123] # 무장
-	SKILL_BUFF_TIME[20] = [120 * sec, 0, 124] # 보호
-	SKILL_BUFF_TIME[47] = [120 * sec, 0, 124] # 보호
-	SKILL_BUFF_TIME[26] = [180 * sec, 0, 16] # 누리의힘
-	SKILL_BUFF_TIME[42] = [180 * sec, 0, 24] # 주술마도
+	SKILL_BUFF_TIME[9] = [10 * sec, 0, 36] # 무장
+	SKILL_BUFF_TIME[46] = [10 * sec, 0, 36] # 무장
+	SKILL_BUFF_TIME[20] = [120 * sec, 0, 38] # 보호
+	SKILL_BUFF_TIME[47] = [120 * sec, 0, 38] # 보호
+	SKILL_BUFF_TIME[26] = [180 * sec, 0, 31] # 누리의힘
+	SKILL_BUFF_TIME[28] = [120 * sec, 0, 41] # 야수
+	SKILL_BUFF_TIME[35] = [120 * sec, 0, 41] # 비호
+	SKILL_BUFF_TIME[42] = [180 * sec, 0, 47] # 주술마도
+	SKILL_BUFF_TIME[51] = [180 * sec, 0, 57] # 대지의힘
+	
 	
 	# 전사
-	SKILL_BUFF_TIME[62] = [180 * sec, 0, 157] # 수심각도
-	SKILL_BUFF_TIME[63] = [180 * sec, 0, 158] # 반영대도
-	SKILL_BUFF_TIME[64] = [180 * sec, 0, 159] # 십량분법
-	SKILL_BUFF_TIME[66] = [20 * sec, 0, 161] # 신수둔각도
-	SKILL_BUFF_TIME[72] = [180 * sec, 0, 159] # 구량분법
-	SKILL_BUFF_TIME[76] = [180 * sec, 0, 159] # 팔량분법
-	SKILL_BUFF_TIME[71] = [60 * sec, 0, 163] # 혼신의힘
+	SKILL_BUFF_TIME[62] = [180 * sec, 0, 72] # 수심각도
+	SKILL_BUFF_TIME[63] = [180 * sec, 0, 74] # 반영대도
+	SKILL_BUFF_TIME[64] = [180 * sec, 0, 76] # 십량분법
+	SKILL_BUFF_TIME[66] = [20 * sec, 0, 80] # 신수둔각도
+	SKILL_BUFF_TIME[72] = [180 * sec, 0, 76] # 구량분법
+	SKILL_BUFF_TIME[76] = [180 * sec, 0, 76] # 팔량분법
+	SKILL_BUFF_TIME[71] = [60 * sec, 0, 85] # 혼신의힘
 	
 	
 	# 도사
-	SKILL_BUFF_TIME[88] = [60 * sec, 0, 338] # 분량력법
-	SKILL_BUFF_TIME[90] = [60 * sec, 0, 196] # 분량방법
-	SKILL_BUFF_TIME[91] = [60 * sec, 0, 30] # 석화기탄
-	SKILL_BUFF_TIME[94] = [6 * sec, 0, 32] # 금강불체
+	SKILL_BUFF_TIME[50] = [60 * sec, 0, 41] # 야수금술술
+	SKILL_BUFF_TIME[88] = [60 * sec, 0, 125] # 분량력법
+	SKILL_BUFF_TIME[90] = [60 * sec, 0, 128] # 분량방법
+	SKILL_BUFF_TIME[91] = [60 * sec, 0, 130] # 석화기탄
+	SKILL_BUFF_TIME[94] = [6 * sec, 0, 134] # 금강불체
 	
 	# 도적
-	SKILL_BUFF_TIME[130] = [180 * sec, 0, 42] # 무영보법
-	SKILL_BUFF_TIME[131] = [60 * sec, 0, 41] # 투명
-	SKILL_BUFF_TIME[134] = [60 * sec, 0, 1] # 분신
-	SKILL_BUFF_TIME[136] = [10 * sec, 0, 43] # 파무쾌보
+	SKILL_BUFF_TIME[130] = [180 * sec, 0, 96] # 무영보법
+	SKILL_BUFF_TIME[131] = [60 * sec, 0, 98] # 투명
+	SKILL_BUFF_TIME[134] = [60 * sec, 0, 102] # 분신
+	SKILL_BUFF_TIME[136] = [10 * sec, 0, 101] # 파무쾌보
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -917,8 +922,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# respawn은 젠 딜레이
 			return if enemy.respawn == 0 or event.erased == false
-			return if !$is_map_first
-			
 			enemy.respawn -= 1
 			if enemy.respawn == 0
 				# 해당 몹 젠 됐다고 서버에 알림
@@ -926,11 +929,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.erased = false
 				event.refresh
 				
-				#~ # 여기서 랜덤하게 움직이는걸 해야함
-				for i in 0..20
-					event.move_random
-				end
-				event.moveto(event.x,event.y)
 				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
 				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
 				$game_map.refresh
@@ -965,7 +963,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_enemy_state(enemy)
 			for id in enemy.states
 				next if !STATES.has_key?(id)
-				state = STATES[id]
+				state = STATES[id] # 해당 상태의 지속 시간
 				next if state == 0
 				enemy.state_time += 1
 				if enemy.state_time >= state
@@ -981,6 +979,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					enemy_dead?(enemy,nil)
 				end
 			end
+			
+			# 움직일 수 없다면?
+			if !enemy.movable?
+				
+			end
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Update Enemy Battle(Enemy)
@@ -1052,7 +1056,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						e.event.animation_id = e.animation1_id
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
 						
-						Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{e.event.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
+						Network::Main.ani(Network::Main.id, e.event.animation_id)
 						#Show Animation
 						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
 						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
@@ -1143,7 +1147,7 @@ if SDK.state("Mr.Mo's ABS") == true
 								#Show Animetion on enemy
 								if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
 									$game_player.animation_id = skill.animation2_id 
-									Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
+									Network::Main.ani(Network::Main.id, $game_player.animation_id)									
 								end
 								next if enemy_dead?(enemy.actor, e)
 							else
@@ -1183,34 +1187,39 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Update Player  실시간 반영 되는 함수
 		#--------------------------------------------------------------------------
 		def update_player
-			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Trade") and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+			# 스킬 딜레이 갱신
+			for skill_mash in SKILL_MASH_TIME
+				if skill_mash[1][1] > 0
+					skill_mash[1][1] -= 1 
+					if skill_mash[1][1] == 0
+						$console.write_line("#{$data_skills[skill_mash[0]].name} 딜레이 끝")
+					end
+				end
+			end
+			
+			# 버프 지속시간 갱신
+			for skill_mash in SKILL_BUFF_TIME
+				if skill_mash[1][1] > 0
+					skill_mash[1][1] -= 1 
+					if skill_mash[1][1] == 0
+						$console.write_line("#{$data_skills[skill_mash[0]].name} 끝")
+						$game_temp.common_event_id = skill_mash[1][2]
+					end
+				end
+			end
+			
+			#Update click time
+			@button_mash -= 1 if @button_mash > 0
+			return if @button_mash > 0
+			
+			if !Hwnd.include?("NetPartyInv") or 
+				!Hwnd.include?("Trade") or 
+				!Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+				
 				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
 					#Keep the current party leader updated
 					@actor = $game_party.actors[0]
-					# 스킬 딜레이 갱신
-					for skill_mash in SKILL_MASH_TIME
-						if skill_mash[1][1] > 0
-							skill_mash[1][1] -= 1 
-							if skill_mash[1][1] == 0
-								$console.write_line("#{$data_skills[skill_mash[0]].name} 딜레이 끝")
-							end
-						end
-					end
 					
-					# 버프 지속시간 갱신
-					for skill_mash in SKILL_BUFF_TIME
-						if skill_mash[1][1] > 0
-							skill_mash[1][1] -= 1 
-							if skill_mash[1][1] == 0
-								$console.write_line("#{$data_skills[skill_mash[0]].name} 끝")
-								$game_switches[skill_mash[1][2]] = true
-							end
-						end
-					end
-					
-					#Update click time
-					@button_mash -= 1 if @button_mash > 0
-					return if @button_mash > 0
 					# 공격키가 눌렸니?
 					if Input.trigger?(@attack_key)
 						#Check State Effect
@@ -1223,8 +1232,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
 						return player_melee
 					end
-					# 적이 없다면 무시
-					#~ return if @enemies == {}
+					
 					# 아이템 단축키 눌렸니?
 					check_item
 					
@@ -1373,7 +1381,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			Audio.se_play("Audio/SE/무기001-검", $game_variables[13])
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 191; @ani_id = #{Network::Main.id};</27>\n"
+			Network::Main.ani(Network::Main.id, 191)
 			
 			for e in @enemies.values
 				# 적이 없거나 적이 죽으면 공격 안함
@@ -1393,7 +1401,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Hit enemy if the attack succeeds  몬스터에게 밀리 이미지
 				if e.damage != "Miss" and e.damage != 0
 					Audio.se_play("Audio/SE/타격", $game_variables[13])
-					Network::Main.socket.send("<27>@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id}</27>\n") 
+					Network::Main.ani(e.event.id, a)					
 				end
 				#Return if the enemy is dead
 				weapon_skill(@actor.weapon_id, e)
@@ -1639,7 +1647,23 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("스킬 사용 불가 지역입니다.")
 				return
 			end
+			
 			id = skill.id 
+			
+			# 아직 스킬 딜레이가 남아있다면 무시
+			skill_mash = SKILL_MASH_TIME[id]
+			if skill_mash != nil and skill_mash[1]/60.0 > 0
+				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
+				return
+			end
+			
+			# 아직 버프가 지속중이면 무시
+			skill_mash = SKILL_BUFF_TIME[id]
+			if skill_mash != nil and skill_mash[1]/60.0 > 0
+				$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
+				return
+			end
+			
 			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
@@ -1659,6 +1683,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 스킬 애니메이션 
 			$game_player.animation_id = skill.animation1_id
+			Network::Main.ani(Network::Main.id, skill.animation1_id)
+			
+			# 이게 회복 스킬인지 확인
+			$rpg_skill.heal(id)
 			
 			#Get the skill scope
 			# 스킬 맞는 쪽
@@ -1845,7 +1873,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			a.in_battle = false if a != nil and !a.is_a?(Game_Actor)
 			id = enemy.event_id
 			#Remove from list 리스폰이 없으면 아예 지워버림
-			@enemies.delete(id) if @enemies[id].respawn == 0 or @enemies[id].respawn == nil
+			@enemies.delete(id) if (@enemies[id] != nil and (@enemies[id].respawn == 0 or @enemies[id].respawn == nil))
 			event = enemy.event
 			#여기다가 이 이벤트를 없애는 명령하기
 			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
@@ -2050,7 +2078,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			animate(e.event, e.event.character_name+"_hit") if e.is_a?(ABS_Enemy) and @enemy_ani
 			if animation == nil
 				e.event.animation_id = a.animation2_id
-				Network::Main.socket.send("<27>@ani_id = #{Network::Main.id}; @ani_number = #{e.event.animation_id}; @ani_map = #{$game_map.map_id}</27>\n")
+				Network::Main.ani(Network::Main.id, e.event.animation_id)
 			else
 				e.event.animation_id = animation
 			end
@@ -2555,7 +2583,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Show animation on event
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			# 해당 대상 애니메이션 재생하도록 보냄
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</27>\n"
+			Network::Main.ani(actor.netid, @skill.animation2_id)
 		end 
 		
 		
@@ -2596,11 +2624,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				actor.effect_skill(enemy, @skill)
 				
 				#Show animation on event
-				actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
-				#Jump
+				if actor.damage != "Miss" and actor.damage != 0
+					actor.event.animation_id = @skill.animation2_id 
+					Network::Main.ani(actor.event.id, @skill.animation2_id) #몬스터 대상의 애니매이션 공유
+				end
+				
 				e = actor
-				#몬스터 대상의 애니매이션 공유
-				Network::Main.socket.send("<27>@ani_event = #{actor.event.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
+				
+				
 				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
@@ -2616,9 +2647,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Attack It's enemy
 			actor.effect_skill(enemy, @skill)
 			#Show animation on event
-			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
-			#몬스터 대상의 애니매이션 공유
-			Network::Main.socket.send("<27>@ani_event = #{actor.event.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
+			if actor.damage != "Miss" and actor.damage != 0
+				actor.event.animation_id = @skill.animation2_id 
+				Network::Main.ani(actor.event.id, @skill.animation2_id) #몬스터 대상의 애니매이션 공유
+			end
+			
 			#Jump
 			e=actor
 			#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
@@ -2687,7 +2720,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 해당 대상 애니메이션 재생하도록 보냄
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{@skill.animation2_id}; @ani_id = #{actor.netid};</27>\n"
+			Network::Main.ani(actor.netid, @skill.animation2_id) #몬스터 대상의 애니매이션 공유
 		end 
 		
 		
@@ -2708,8 +2741,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			actor.effect_skill(enemy, @skill)
 			#Show animation on player
-			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
+			if actor.damage != "Miss" and actor.damage != 0
+				$game_player.animation_id = @skill.animation2_id 
+				Network::Main.ani(Network::Main.id, $game_player.animation_id) #몬스터 대상의 애니매이션 공유
+			end
 			
 			#Jump
 			#$ABS.jump($game_player,self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
@@ -2743,8 +2778,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Show animation on event
 				@enani = actor.event
 				@enani.animation_id = @skill.animation2_id
-				#몬스터 대상의 애니매이션 공유
-				Network::Main.socket.send("<27>@ani_event = #{@enani.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
+				Network::Main.ani(@enani.id, @skill.animation2_id)
+				
 				#Jump
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
@@ -2764,9 +2799,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Attack It's enemy
 			actor.effect_skill(enemy, @skill)
 			#Show animation on event
-			actor.event.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 			@enani = actor.event
-			Network::Main.socket.send("<27>@ani_event = #{@enani.id}; @ani_number = #{@skill.animation2_id}; @ani_map = #{$game_map.map_id}</27>\n") if actor.damage != "Miss" and actor.damage != 0
+			if actor.damage != "Miss" and actor.damage != 0
+				actor.event.animation_id = @skill.animation2_id 
+				Network::Main.ani(@enani.id, @skill.animation2_id)
+			end
+			
 			#Jump
 			#$ABS.jump($game_map.events[id],self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
 			#return if enemy is dead

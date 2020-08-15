@@ -1,7 +1,7 @@
 class Rpg_skill
 	def party_heal(skill_id, heal_v = 1)
 		if skill_id == 50 # 야수수금술
-			
+			$game_temp.common_event_id = 40
 		elsif skill_id == 88 # 분량력법
 			$game_party.actors[0].str += 15
 		elsif skill_id == 90 # 분량방법
@@ -21,17 +21,79 @@ class Rpg_skill
 		end
 		
 		ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
-	
+		
 		if $netparty.size > 1
 			name = $game_party.actors[0].name
 			Network::Main.socket.send("<partyhill>#{name} #{skill_id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")
 		else
 			$game_player.animation_id = ani_id
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{ani_id}; @ani_id = #{Network::Main.id};</27>\n"
+			Network::Main.ani(Network::Main.id, ani_id)
 		end
 		$game_party.actors[0].damage = heal_v.to_s
 		$game_party.actors[0].critical = "heal"
 		$game_party.actors[0].hp += heal_v
+	end
+	
+	def heal(id)
+		is_heal = false
+		heal_v = 0
+		case id
+		when 5 # 누리의기원
+			heal_v = 75
+			is_heal = true
+		when 21 # 바다의기원
+			heal_v = 100
+			is_heal = true
+		when 27 # 동해의기원
+			heal_v = 170
+			is_heal = true
+		when 29 # 천공의기원
+			heal_v = 300
+			is_heal = true
+		when 36 # 구름의기원
+			heal_v = 500
+			is_heal = true
+		when 48 # 태양의기원
+			heal_v = 1000
+			is_heal = true
+		when 54 # 태양의기원 1성
+			heal_v = 2000
+			is_heal = true
+		when 55 # 현인의기원
+			heal_v = 5000
+			is_heal = true
+		end
+		
+		if is_heal
+			$game_party.actors[0].critical = "heal"
+			$game_party.actors[0].damage = heal_v.to_s
+			$game_party.actors[0].hp += heal_v
+		end
+	end
+	
+	def buff(id)
+		case id 
+		when 26 # 누리의힘
+			
+		when 28 # 야수
+			
+		when 35 # 비호
+			
+		when 41 # 체마혈식
+			
+		when 42 # 주술마도
+			
+		when 43 # 위태응기
+			
+		when 46 # 무장
+			
+		when 47 # 보호
+				
+		end
+	end
+	
+	def buff_del(id)
+		
 	end
 	
 	def 투명

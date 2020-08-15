@@ -425,21 +425,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					send += "@is_transparency = false;"
 				end
 				
-				@socket.send("<5>#{send}</5>\n")
-				for player in @players.values
-					next if player.netid == -1
-					# If the Player is on the same map...
-					# 만약 같은 맵에 있다면?
-					if player.map_id == $game_map.map_id #and self.in_range?(player)
-						# Update Map Players
-						self.update_map_player(player.netid, nil)
-					else
-						if @mapplayers[player.netid.to_s] != nil
-						# Remove from Map Players
-							self.update_map_player(player.netid, nil, true)
-						end
-					end
-				end
+				@socket.send("<m5>#{send}</m5>\n")
 			end
 			
 			def self.send_trans(sw)
@@ -456,7 +442,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.send_direction
 				return if @oldd == $game_player.direction
-				return if @mapplayers == {}
+				return if @mapplayers.size == 0
 				send = ""
 				# Increase Steps if the oldx or the oldy do not match the new ones
 				if User_Edit::Bandwith >= 1
@@ -629,7 +615,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					self.update_map_player(id, data)
 				else
 					if @mapplayers[id] != nil
-					# Remove from Map Players
+						# Remove from Map Players
 						self.update_map_player(id, data, true)
 					end
 				end
@@ -712,6 +698,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@socket.send("<5>#{send}</5>\n")
 				end
 			end
+			
+			#--------------------------------------------------------------------------
+			# * Send animation
+			#-------------------------------------------------------------------------- 
+			def self.ani(id, number)
+				return if @mapplayers.size == 0
+				@socket.send("<27>@ani_id = #{id}; @ani_number = #{number};</27>\n")
+			end
+			
+			
 			#--------------------------------------------------------------------------
 			# * 길드 시스템
 			#-------------------------------------------------------------------------- 
@@ -1566,7 +1562,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							end
 						end
 					end		
-						
+					
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
 					if $1.to_i == 1
@@ -1806,7 +1802,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-				
+					
 					
 					#----------------------------길드---------------------------------
 					return true
@@ -1899,7 +1895,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.events[$1.to_i].animation_id = $2.to_i
 					end
 					return true
-													
+					
 					
 					#-------------------------------------------------------------  
 					#---------------------------교환 시스템---------------------------  
@@ -2063,12 +2059,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									$game_player.animation_id = ani_id
 									case $2.to_i
 									when 50 # 야수수금술
-										$game_switches[20] = true
+										$ABS.skill_console(50)
+										$game_temp.common_event_id = 40
 									when 88 # 분량력법
-										$game_switches[338] = true
+										$ABS.skill_console(88)
 										$game_party.actors[0].str += 15
 									when 90 # 분량방법
-										$game_switches[196] = true
+										$ABS.skill_console(90)
 										$game_party.actors[0].agi += 50
 									when 92 # 공력주입
 										$game_party.actors[0].sp += $5.to_i
@@ -2077,14 +2074,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$game_party.actors[0].critical = "heal"
 										$game_party.actors[0].damage = $5.to_s
 									end								
-									Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{ani_id}; @ani_id = #{Network::Main.id};</27>\n"
+									self.ani(@id, ani_id)
 									$console.write_line("#{$1.to_s}님의 #{$data_skills[$2.to_i].name}")	
 								else
 									case $2.to_i
 									when 120 # 부활
 										$game_player.animation_id = ani_id
 										$game_temp.common_event_id = 24
-										Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{ani_id}; @ani_id = #{Network::Main.id};</27>\n"
+										self.ani(@id, ani_id)	
 										$console.write_line("#{$1.to_s}님의 #{$data_skills[$2.to_i].name}")
 									end	
 								end
@@ -2121,21 +2118,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id} # 몹 이벤트
 					#@ani_id = #{Network::Main.id}; @ani_number = #{e.event.animation_id}; @ani_map = #{$game_map.map_id} # 자신 이벤트
 					eval($1)
-					if @ani_map == $game_map.map_id
-						if @ani_event >= 0
-							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
-						end
-						
-						if @ani_id.to_i != @id.to_i
-							if $ani_character[@ani_id.to_i] # 캐릭터 애니 공유
-								$ani_character[@ani_id.to_i].animation_id = @ani_number 
-								# 상대방도 애니메이션 뜨도록 해야함
-							end
-						else
-							$game_player.animation_id = @ani_number # 각각의 플레이어에게만 보이는 애니메이션 공유.
-						end
+					if @ani_event >= 0
+						$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
 					end
-					@ani_id = -1; @ani_map = -1; @ani_number = -1; @ani_event = -1
+					
+					if @ani_id.to_i != @id.to_i
+						if $ani_character[@ani_id.to_i] != nil # 다른 유저 애니 공유
+							$ani_character[@ani_id.to_i].animation_id = @ani_number 
+						end
+					else
+						$game_player.animation_id = @ani_number # 각각의 플레이어에게만 보이는 애니메이션 공유.
+					end
+					
+					@ani_id = -1; @ani_number = -1; @ani_event = -1
 					Network::Main.send_newstats
 					return true
 					

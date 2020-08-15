@@ -200,7 +200,7 @@ class Game_Actor < Game_Battler
 			actor.hp = actor.maxhp
 			actor.sp = actor.maxsp
 			$game_player.animation_id = 180
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = 180; @ani_id = #{Network::Main.id};</27>\n"
+			Network::Main.ani(Network::Main.id, 180)
 			
 			# 숙련（skill） 습득
 			for j in $data_classes[@class_id].learnings

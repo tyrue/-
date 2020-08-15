@@ -7645,3 +7645,41 @@ On <<Sat 08 Aug 2020, 03:18:48>> the error <<disposed window (#<Scene_Gameover:0
 On <<Sat 08 Aug 2020, 03:22:39>> the error <<disposed window (#<Scene_Gameover:0x1437c088>)>> occured.
 On <<Sat 08 Aug 2020, 03:31:36>> the error <<disposed window (#<Scene_Gameover:0xcd49cf0>)>> occured.
 On <<Sat 08 Aug 2020, 03:38:12>> the error <<disposed window (#<Scene_Gameover:0xcbd1f40>)>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<Section164:1213: syntax error ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Trade")  ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Trade") 
+				   ^ ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Trade") 
+				   ^
+Section164:1214: syntax error ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Trade") 
+				   ^
+Section164:1214: syntax error
+				and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면? ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Trade") 
+				   ^
+Section164:1214: syntax error
+				and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+				   ^ ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:05>> the error <<compile error
+Section164:1213: syntax error
+				and not Hwnd.include?("Trade") 
+				   ^
+Section164:1214: syntax error
+				and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+				   ^ ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:58>> the error <<Section164:1213: syntax error ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:58>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면? ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:58>> the error <<Section164:1213: syntax error
+				and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+				   ^ ()>> occured.
+On <<Sat 15 Aug 2020, 15:13:59>> the error <<compile error
+Section164:1213: syntax error
+				and not Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+				   ^ ()>> occured.

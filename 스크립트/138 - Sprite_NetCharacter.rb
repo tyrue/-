@@ -51,7 +51,7 @@ class Sprite_NetCharacter < RPG::Sprite
 		bitmap.font.color = Color.new(-204, 0, 204)
 		bitmap.font.size = 13
 		bitmap.draw_text(0, 0, 160, 150,@character.guild.to_s, 1)
-			
+		
 		# Changes Font Color
 		bitmap.font.color = Color.new(255, 255, 255)
 		# Draws Text
@@ -94,8 +94,19 @@ class Sprite_NetCharacter < RPG::Sprite
 		end
 		# update_tile
 		# Set visible situation
-		self.visible = !@character.is_transparency
-		@_text_display.visible = !@character.is_transparency
+		ok = $netparty.include? @character.name.to_s
+		if @character.is_transparency
+			if ok
+				self.visible = true
+				@_text_display.visible = true
+			else
+				self.visible = false
+				@_text_display.visible = false
+			end
+		else
+			self.visible = true
+			@_text_display.visible = true
+		end
 		
 		# If graphic is character
 		animate_player if @tile_id == 0

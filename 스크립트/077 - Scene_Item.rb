@@ -182,7 +182,7 @@ class Scene_Item
 				# If all party members are dead
 				if $game_party.all_dead?
 					# Switch to game over screen
-					$scene = Scene_Gameover.new
+					#$scene = Scene_Gameover.new
 					return
 				end
 				# If common event ID is valid

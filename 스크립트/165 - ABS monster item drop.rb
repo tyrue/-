@@ -251,11 +251,12 @@ class MrMo_ABS
 				i_id = 40 # 진호박
 			end
 		when 57 # 청웅객
+			i_id = []
 			if r <= 60 and $game_switches[141] == true # 승급 퀘스트
-				i_id = 52 # 청웅의 환
+				i_id.push(52) # 청웅의 환
 			end
-			if r <= 62 
-				i_id = 51 # 낡은 수리검
+			if r <= 62
+				i_id.push(51) # 낡은 수리검
 			end
 		when 58 # 수룡
 			if r <= 98 
@@ -534,11 +535,12 @@ class MrMo_ABS
 				i_id = 97 # 상어의심장
 			end
 		when 157 # 해파리수하
+			i_id = []
 			if r <= 6 and $game_switches[378] == true # 용궁 전략문서 얻기
-				i_id = 98 # 전략문서
+				i_id.push(98) # 전략문서
 			end
 			if r <= 5 
-				i_id = 99 # 해파리의 심장
+				i_id.push(99) # 해파리의 심장
 			end
 			
 			#-----------#
@@ -738,12 +740,20 @@ class MrMo_ABS
 			if r <= 15
 				i_id = 135 # 동천패
 			end	
-
 		end
+		
 		if i_id != 0
-			보관이벤트(i_id).moveto(e.event.x, e.event.y)
-			Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</drop_create>\n"
-			Network::Main.socket.send "<map_item>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</map_item>\n"
+			if i_id.is_a?(Array)
+				for i in i_id
+					보관이벤트(i.to_i).moveto(e.event.x, e.event.y)
+					Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{i.to_i} #{e.event.x} #{e.event.y}</drop_create>\n"
+					Network::Main.socket.send "<map_item>#{$game_map.map_id} #{i.to_i} #{e.event.x} #{e.event.y}</map_item>\n"
+				end
+			else
+				보관이벤트(i_id).moveto(e.event.x, e.event.y)
+				Network::Main.socket.send "<drop_create>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</drop_create>\n"
+				Network::Main.socket.send "<map_item>#{$game_map.map_id} #{i_id} #{e.event.x} #{e.event.y}</map_item>\n"
+			end
 		end
 	end
 end

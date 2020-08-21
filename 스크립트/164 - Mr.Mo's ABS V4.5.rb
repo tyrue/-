@@ -1401,7 +1401,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Hit enemy if the attack succeeds  몬스터에게 밀리 이미지
 				if e.damage != "Miss" and e.damage != 0
 					Audio.se_play("Audio/SE/타격", $game_variables[13])
-					Network::Main.ani(e.event.id, a)					
+					Network::Main.ani(e.event.id, a, 1)					
 				end
 				#Return if the enemy is dead
 				weapon_skill(@actor.weapon_id, e)
@@ -1619,7 +1619,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 			when -1
 				
-			end	
+			end
+			Network::Main.ani(Network::Main.id, 129)
 		end
 		
 		#--------------------------------------------------------------------------
@@ -1931,13 +1932,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			#If the player is dead;
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			$cha_name = $game_party.actors[0].character_name
-			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
-			$game_player.refresh
 			$game_party.actors[0].equip(0, 0)
 			$game_party.actors[0].equip(1, 0)
 			$game_party.actors[0].equip(2, 0)
 			$game_party.actors[0].equip(3, 0)
 			$game_party.actors[0].equip(4, 0)
+			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
+			$game_player.refresh
 			$scene = Scene_Map.new
 			
 			# 이때 모든 버프들을 지우자
@@ -2626,7 +2627,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Show animation on event
 				if actor.damage != "Miss" and actor.damage != 0
 					actor.event.animation_id = @skill.animation2_id 
-					Network::Main.ani(actor.event.id, @skill.animation2_id) #몬스터 대상의 애니매이션 공유
+					Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
 				end
 				
 				e = actor
@@ -2649,7 +2650,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Show animation on event
 			if actor.damage != "Miss" and actor.damage != 0
 				actor.event.animation_id = @skill.animation2_id 
-				Network::Main.ani(actor.event.id, @skill.animation2_id) #몬스터 대상의 애니매이션 공유
+				Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
 			end
 			
 			#Jump
@@ -2720,7 +2721,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 해당 대상 애니메이션 재생하도록 보냄
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
-			Network::Main.ani(actor.netid, @skill.animation2_id) #몬스터 대상의 애니매이션 공유
+			Network::Main.ani(actor.netid, @skill.animation2_id) #유저 애니매이션 공유
 		end 
 		
 		
@@ -2778,7 +2779,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Show animation on event
 				@enani = actor.event
 				@enani.animation_id = @skill.animation2_id
-				Network::Main.ani(@enani.id, @skill.animation2_id)
+				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 				
 				#Jump
 				return if $ABS.enemy_dead?(actor, enemy)
@@ -2802,7 +2803,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enani = actor.event
 			if actor.damage != "Miss" and actor.damage != 0
 				actor.event.animation_id = @skill.animation2_id 
-				Network::Main.ani(@enani.id, @skill.animation2_id)
+				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 			end
 			
 			#Jump

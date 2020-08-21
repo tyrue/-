@@ -75,7 +75,7 @@ class Scene_Map
 		# If game over
 		if $game_temp.gameover
 			# Switch to game over screen
-			$scene = Scene_Gameover.new
+			#$scene = Scene_Gameover.new
 			return
 		end
 		# If returning to title screen

@@ -68,11 +68,14 @@ class Jindow < Viewport
 		@hwnd = hwnd
 		@start = true
 		# 스프라이트 선언
+		# 위쪽 가장자리
 		@ul = Sprite.new(@back)
 		@um = Sprite.new(@back)
 		@ur = Sprite.new(@back)
+		# 중간 가장자리
 		@ml = Sprite.new(@back)
 		@mr = Sprite.new(@back)
+		# 아래쪽 가장자리
 		@dl = Sprite.new(@back)
 		@dm = Sprite.new(@back)
 		@dr = Sprite.new(@back)
@@ -267,13 +270,16 @@ class Jindow < Viewport
 			@scroll1mid = Sprite.new(@back)
 			@scroll1left = Sprite.new(@back)
 			@scroll1right = Sprite.new(@back)
+			
 			@scroll1bar_mid = Sprite.new(@back)
 			@scroll1bar_left = Sprite.new(@back)
 			@scroll1bar_right = Sprite.new(@back)
+			
 			@scroll1left.bitmap = Bitmap.new(@route + "scroll1left")
 			@scroll1right.bitmap = Bitmap.new(@route + "scroll1right")
 			@scroll1bar_left.bitmap = Bitmap.new(@route + "scroll1bar_left")
 			@scroll1bar_right.bitmap = Bitmap.new(@route + "scroll1bar_right")
+			
 			cw = @dm.bitmap.width - @scroll1left.bitmap.width - @scroll1right.bitmap.width
 			@scroll1mid.bitmap = Bitmap.new(cw, @scroll1left.bitmap.height, @route + "scroll1mid", 1)
 			ccw = cw / ((self.width + oh) * 1.0)
@@ -291,9 +297,11 @@ class Jindow < Viewport
 			@scroll0mid = Sprite.new(@back)
 			@scroll0up = Sprite.new(@back)
 			@scroll0down = Sprite.new(@back)
+			
 			@scroll0bar_mid = Sprite.new(@back)
 			@scroll0bar_up = Sprite.new(@back)
 			@scroll0bar_down = Sprite.new(@back)
+			
 			@scroll0up.bitmap = Bitmap.new(@route + "scroll0up")
 			@scroll0down.bitmap = Bitmap.new(@route + "scroll0down")
 			@scroll0bar_up.bitmap = Bitmap.new(@route + "scroll0bar_up")

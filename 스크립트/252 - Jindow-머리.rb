@@ -50,6 +50,7 @@ class Jindow_hairct < Jindow
 			$game_system.se_play($data_system.decision_se)
 			if $game_variables[165] > 1000
 				$game_party.actors[0].set_graphic("바람머리", 0, 0, 0)
+				$cha_name = "바람머리"
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))           
 				$game_party.lose_gold(1000)
@@ -73,6 +74,7 @@ class Jindow_hairct < Jindow
 				$game_party.lose_gold(1000)
 				
 				$game_party.actors[0].set_graphic("주인공", 0, 0, 0)
+				$cha_name = "주인공"
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))    
 				Hwnd.dispose(self)
@@ -92,6 +94,7 @@ class Jindow_hairct < Jindow
 				Hwnd.dispose(self)
 				
 				$game_party.actors[0].set_graphic("바람세운머리", 0, 0, 0)
+				$cha_name = "바람세운머리"
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))    
 				Network::Main.send_map
@@ -109,6 +112,7 @@ class Jindow_hairct < Jindow
 				Hwnd.dispose(self)
 				
 				$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
+				$cha_name = "죽음"
 				$scene = Scene_Map.new
 				$chat.write ("머리가 변경되었습니다.", Color.new(65, 105, 0))    
 				Network::Main.send_map

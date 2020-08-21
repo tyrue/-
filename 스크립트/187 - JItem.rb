@@ -79,6 +79,10 @@ module J
 				itemwin_mid = Sprite.new
 				item_bitmap = Sprite.new
 				itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
+				
+				if @item.icon_name == "" or @item.icon_name == nil
+					@item.icon_name = "null"	
+				end
 				item_bitmap.bitmap = Bitmap.new(@route + @item.icon_name)
 				self.bitmap.blt(1, 1, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
 				self.bitmap.blt(1, 1, item_bitmap.bitmap, item_bitmap.bitmap.rect)

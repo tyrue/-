@@ -702,9 +702,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#--------------------------------------------------------------------------
 			# * Send animation
 			#-------------------------------------------------------------------------- 
-			def self.ani(id, number)
+			def self.ani(id, number, type = 0)
 				return if @mapplayers.size == 0
-				@socket.send("<27>@ani_id = #{id}; @ani_number = #{number};</27>\n")
+				case type
+				when 0
+					@socket.send("<27>@ani_id = #{id}; @ani_number = #{number};</27>\n") # 유저 이펙트
+				when 1
+					@socket.send("<27>@ani_event = #{id}; @ani_number = #{number};</27>\n") # 유저 이펙트
+				end
 			end
 			
 			
@@ -825,6 +830,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							end
 							self.get_group
 							$nickname = $2
+							$cha_name = "바람머리"
 							유저접속
 							
 							return true
@@ -1225,7 +1231,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $game_party.actors[0].hp <= 0 or $game_party.actors[0].dead?
 						self.send_result($3.to_i)
 						self.send_dead
-						$scene = Scene_Gameover.new 
+						#$scene = Scene_Gameover.new 
 					end
 					return true
 					# Killed
@@ -1286,7 +1292,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						item = $1.split('.')
 						for data in item
 							info = data.split(',')
-							if info[0].to_i != nil or info[0].to_i != 0 or info[0].to_i != ""
+							if info[0].to_i != nil and info[0].to_i != 0 and info[0].to_i != ""
 								$game_party.gain_item(info[0].to_i, info[1].to_i)
 							end
 						end
@@ -1298,7 +1304,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						weapon = $1.split('.')
 						for data2 in weapon
 							info1 = data2.split(',')
-							if info1[0].to_i != nil or info1[0].to_i != 0 or info1[0].to_i != ""
+							if info1[0].to_i != nil and info1[0].to_i != 0 and info1[0].to_i != ""
 								$game_party.gain_weapon(info1[0].to_i, info1[1].to_i)
 							end
 						end
@@ -1310,7 +1316,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						armor = $1.split('.')
 						for data3 in armor
 							info2 = data3.split(',')
-							if info2[0].to_i != nil or info2[0].to_i != 0 or info2[0].to_i != ""
+							if info2[0].to_i != nil and info2[0].to_i != 0 and info2[0].to_i != ""
 								$game_party.gain_armor(info2[0].to_i, info2[1].to_i)
 							end
 						end
@@ -1392,79 +1398,82 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 스킬 딜레이 갱신
 					if $global_x == 35
+						return if $1.to_s == "*null*"
 						data = []
 						data = $1.split "."
 						for d in data
 							break if d == "*null*"
 							i = []
 							i = d.split ","
-							SKILL_MASH_TIME[i[0].to_i][1] = i[1].to_i
+							SKILL_MASH_TIME[i[0].to_i][1] = i[1].to_i if i[1] != nil and SKILL_MASH_TIME[i[0].to_i] != nil
 						end
 					end
 					
 					# 버프 지속시간 갱신
 					if $global_x == 36
+						return if $1.to_s == "*null*"
 						data = []
 						data = $1.split "."
 						for d in data
 							break if d == "*null*"
 							i = []
 							i = d.split ","
-							SKILL_BUFF_TIME[i[0].to_i][1] = i[1].to_i
+							SKILL_BUFF_TIME[i[0].to_i][1] = i[1].to_i if i[1] != nil and SKILL_BUFF_TIME[i[0].to_i] != nil
 						end
 					end
 					if $global_x == 37
 						$cha_name = $1.to_s
-						$cha_name = "바람머리" if $cha_name == nil or $cha_name == ""
-						
-						# 데이터 로드 완료
-						$game_party.actors[0].name = $name
-						$game_map.setup($new_id) 
-						$game_player.moveto($new_x, $new_y) 
-						$game_player.direction = $new_d
-						$game_party.actors[0].set_graphic($charp, 0, 0, 0) # 캐릭터 칩 설정
-						
-						$game_party.gain_weapon($armedweapon.to_i,1)
-						$game_party.gain_armor($armedarmor1.to_i,1)
-						$game_party.gain_armor($armedarmor2.to_i,1)
-						$game_party.gain_armor($armedarmor3.to_i,1)
-						$game_party.gain_armor($armedarmor4.to_i,1)
-						$game_party.actors[0].equip(0, $armedweapon.to_i)
-						$game_party.actors[0].equip(1, $armedarmor1.to_i)
-						$game_party.actors[0].equip(2, $armedarmor2.to_i)
-						$game_party.actors[0].equip(3, $armedarmor3.to_i)
-						$game_party.actors[0].equip(4, $armedarmor4.to_i)
-						$game_party.lose_weapon(1,1)
-						$game_party.actors[0].str = $str
-						$game_party.actors[0].dex = $dex
-						$game_party.actors[0].agi = $agi
-						$game_party.actors[0].int = $int
-						$game_player.refresh
-						$game_map.autoplay
-						$game_map.update 
-						$scene = Scene_Map.new 
-						
-						if $game_party.actors[0].name == "평민"
-							p "데이터 로드에 실패했습니다. 다시 실행해주세요."
-							exit
-						else
-							$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", Color.new(105, 105, 105))        
-							Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
-							
-							$nowtrade = 0
-							$game_player.move_speed = 3
-							
-							a번하우징
-							b번하우징
-							c번하우징
-							d번하우징
-							$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
-							$skill_Delay_Console.show
-							
-							self.send_start
-						end
 					end
 					
+				when /<dataLoadEnd>(.*)<\/dataLoadEnd>/	
+					$cha_name = "바람머리" if $cha_name == nil or $cha_name == "*null*"
+					
+					# 데이터 로드 완료
+					$game_party.actors[0].name = $name
+					$game_map.setup($new_id) 
+					$game_player.moveto($new_x, $new_y) 
+					$game_player.direction = $new_d
+					$game_party.actors[0].set_graphic($charp, 0, 0, 0) # 캐릭터 칩 설정
+					
+					$game_party.gain_weapon($armedweapon.to_i,1)
+					$game_party.gain_armor($armedarmor1.to_i,1)
+					$game_party.gain_armor($armedarmor2.to_i,1)
+					$game_party.gain_armor($armedarmor3.to_i,1)
+					$game_party.gain_armor($armedarmor4.to_i,1)
+					$game_party.actors[0].equip(0, $armedweapon.to_i)
+					$game_party.actors[0].equip(1, $armedarmor1.to_i)
+					$game_party.actors[0].equip(2, $armedarmor2.to_i)
+					$game_party.actors[0].equip(3, $armedarmor3.to_i)
+					$game_party.actors[0].equip(4, $armedarmor4.to_i)
+					$game_party.lose_weapon(1,1)
+					$game_party.actors[0].str = $str
+					$game_party.actors[0].dex = $dex
+					$game_party.actors[0].agi = $agi
+					$game_party.actors[0].int = $int
+					$game_player.refresh
+					$game_map.autoplay
+					$game_map.update 
+					$scene = Scene_Map.new 
+					
+					if $game_party.actors[0].name == "평민"
+						p "데이터 로드에 실패했습니다. 다시 실행해주세요."
+						exit
+					else
+						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", Color.new(105, 105, 105))        
+						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
+						
+						$nowtrade = 0
+						$game_player.move_speed = 3
+						
+						a번하우징
+						b번하우징
+						c번하우징
+						d번하우징
+						$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
+						$skill_Delay_Console.show
+						
+						self.send_start
+					end
 					
 				when /<guild_load>(.*)<\/guild_load>/
 					if @value == 0 # 길드 로드.
@@ -1494,7 +1503,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					switches_data = $1.split('.')
 					for data in switches_data
 						val = data.split(',')
-						$game_switches[val[0].to_i] = true if val[1].to_i == 1
+						if val[1].to_i == 1
+							$game_switches[val[0].to_i] = true 
+						else
+							$game_switches[val[0].to_i] = false
+						end
+						
 						$game_map.need_refresh = true
 					end
 					

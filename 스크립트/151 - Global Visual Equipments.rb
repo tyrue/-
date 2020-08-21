@@ -46,37 +46,36 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				self.bitmap = Bitmap.new(bmp.width, bmp.height)
 				src_rect = Rect.new(0, 0, bmp.width, bmp.height)
 				# condição do tamanho
-				if equips.size > 0 and bmp.width == 236 and bmp.height == 236
+				if equips.size > 0 and bmp.width == 236 and bmp.height == 236 # 사람 캐릭터
 					size = equips.size -1
 					for i in 0..size
 						next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
 						bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
 						
-						if @character.is_transparency
-							ok = false
+						if @character.is_transparency # 투명임
+							ok = $netparty.include? @character.name.to_s
 							
-							# 파티원이면 불투명, 아니면 아예 투명
-							if $netparty != nil
-								for i in 0..$netparty.size
-									if @character.name.to_s == $netparty[i].to_s 
-										ok = true
-										break
-									end
-								end
-							end
-							
-							if ok 
+							if ok # 파티원
 								self.bitmap.blt(0, 0, bmp2, src_rect, 125)
 							else
 								self.bitmap.blt(0, 0, bmp2, src_rect, 0)
 							end
-						else
+						else # 투명 아님
 							self.bitmap.blt(0, 0, bmp2, src_rect, 255)
 						end
 					end
-				else
+				else # 둔갑임
 					src_rect = Rect.new(0, 0, bmp.width, bmp.height)
-					self.bitmap.blt(0, 0, bmp, src_rect, 255)
+					if @character.is_transparency # 투명?
+							ok = $netparty.include? @character.name.to_s
+							if ok 
+								self.bitmap.blt(0, 0, bmp2, src_rect, 125)
+							else
+								self.bitmap.blt(0, 0, bmp2, src_rect, 0)
+						end
+					else
+						self.bitmap.blt(0, 0, bmp, src_rect, 255)
+					end
 				end
 				@cw = bitmap.width / 4
 				@ch = bitmap.height / 4

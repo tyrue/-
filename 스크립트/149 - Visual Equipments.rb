@@ -191,6 +191,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@tile_id = @character.tile_id
 				@character_name = @character.character_name
 				@character_hue = @character.character_hue
+				
 				# If tile ID value is valid
 				if @tile_id >= 384
 					self.bitmap = RPG::Cache.tile($game_map.tileset_name,

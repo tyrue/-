@@ -55,6 +55,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)일화접선', 2] 		if id == 134  #일화접선
 			return ['(착용)진일신검', 2] 		if id == 135  #진일신검
 			return ['(착용)이가닌자의검', 2] if id == 136  #이가닌자의 검
+			return ['(착용)영혼죽장', 2] if id == 137  #영혼죽장
 			
 			# 용무기
 			return ['(착용)용마제일검', 2] 	if id == 141  #용마제일검

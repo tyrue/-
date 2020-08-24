@@ -433,7 +433,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				# Send 투명도 여부
 				send += "@is_transparency = #{sw};"
 				
-				@socket.send("<m5>#{send}</m5>\n")
+				@socket.send("<5>#{send}</5>\n")
 			end
 			
 			
@@ -1197,7 +1197,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Update Player
 					self.update_net_player($1, $2)
 					# If it is first time connected...
-					return true if !$2.include?("start")
+					#return true if !$2.include?("start")
 					# ... and it is not yourself ...
 					return true if $1.to_i == self.id.to_i
 					# ... and it is on the same map...

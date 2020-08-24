@@ -69,9 +69,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 					if @character.is_transparency # 투명?
 							ok = $netparty.include? @character.name.to_s
 							if ok 
-								self.bitmap.blt(0, 0, bmp2, src_rect, 125)
+								self.bitmap.blt(0, 0, bmp, src_rect, 125)
 							else
-								self.bitmap.blt(0, 0, bmp2, src_rect, 0)
+								self.bitmap.blt(0, 0, bmp, src_rect, 0)
 						end
 					else
 						self.bitmap.blt(0, 0, bmp, src_rect, 255)

@@ -172,7 +172,7 @@ def update_pvp(player)
 	# 데미지 계산해서 보내기
 	# 해당 대상 애니메이션 재생하도록 보냄
 	ani_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id
-	$ani_character[player.netid.to_i].animation_id = ani_id
+	$ani_character[player.netid.to_i].animation_id = ani_id if $ani_character[player.netid.to_i] != nil
 	Network::Main.ani(player.netid, ani_id)
 end
 

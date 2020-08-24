@@ -273,8 +273,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[135] = [0, 5, "", 4, 0] #백호검무
-	RANGE_SKILLS[137] = [0, 5, "", 4, 0] #이기어검
+	RANGE_SKILLS[137] = [0, 20, "", 4, 0] #이기어검
 	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0] #무형검
 	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
 	
@@ -286,7 +285,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[85] = [8, 5, "공격스킬2", 4, 0] # 필살검무
 	RANGE_SKILLS[151] = [4, 2, "공격스킬2", 4, 0] # 청룡의 포효
 	RANGE_SKILLS[152] = [4, 2, "공격스킬2", 4, 0] # 현무의 포효
-	RANGE_SKILLS[153] = [7, 5, "공격스킬", 4, 0] # 백호검무
+	RANGE_SKILLS[153] = [4, 6, "공격스킬2", 4, 0] # 백호검무
 	RANGE_SKILLS[154] = [3, 4, "공격스킬", 4, 0] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 0] # 암흑진파
 	RANGE_SKILLS[156] = [5, 2, "공격스킬", 4, 0] # 흑룡광포
@@ -302,7 +301,11 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 전사스킬
 	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 2, 4, 0] # 어검술
 	
+	# 도적 스킬
+	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
 	
+	# 도사 스킬
+	RANGE_EXPLODE[96] = [7, 6, "공격스킬2", 2, 4, 0] # 지진
 	
 	#--------------------------------------------------------------------------
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
@@ -357,9 +360,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
-	SKILL_MASH_TIME[135] = [1 * sec, 0] # 백호검무
+	SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [10 * sec, 0] # 이기어검
-	SKILL_MASH_TIME[138] = [10 * sec, 0] # 무형검
+	SKILL_MASH_TIME[138] = [3 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [140 * sec, 0] # 분혼경천
 	# 도사
 	
@@ -367,8 +370,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 커먼 이벤트 번호]
 	SKILL_BUFF_TIME = {}
 	# 주술사
-	SKILL_BUFF_TIME[9] = [10 * sec, 0, 36] # 무장
-	SKILL_BUFF_TIME[46] = [10 * sec, 0, 36] # 무장
+	SKILL_BUFF_TIME[9] = [120 * sec, 0, 36] # 무장
+	SKILL_BUFF_TIME[46] = [120 * sec, 0, 36] # 무장
 	SKILL_BUFF_TIME[20] = [120 * sec, 0, 38] # 보호
 	SKILL_BUFF_TIME[47] = [120 * sec, 0, 38] # 보호
 	SKILL_BUFF_TIME[26] = [180 * sec, 0, 31] # 누리의힘
@@ -399,7 +402,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[130] = [180 * sec, 0, 96] # 무영보법
 	SKILL_BUFF_TIME[131] = [60 * sec, 0, 98] # 투명
 	SKILL_BUFF_TIME[134] = [60 * sec, 0, 102] # 분신
-	SKILL_BUFF_TIME[136] = [10 * sec, 0, 101] # 파무쾌보
+	SKILL_BUFF_TIME[136] = [10 * sec, 0, 101] # 운상미보
+	SKILL_BUFF_TIME[140] = [10 * sec, 0, 1] # 운기
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -1604,8 +1608,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					map_m(id, 61 + rand(r), 10 + rand(r))
 				end
 				
-			when 8 # 대방성
-				id = 276
+			when 8 # 장안성
+				id = 303
 				case d
 				when 0
 					map_m(id, 113 + rand(r), 61 + rand(r))
@@ -3466,7 +3470,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 1차로 명중률을 계산함
 			if hit_result == true
 				# Calculate basic damage
-				atk = [(attacker.atk + attacker.str / 100)- (self.pdef * 2 / 5), 2].max
+				if self.is_a?(Game_Actor)
+					atk = [(attacker.atk + attacker.str / 100)- (self.base_pdef * 2 / 5), 2].max
+				else
+					atk = [(attacker.atk + attacker.str / 100)- (self.pdef * 2 / 5), 2].max
+				end
+				
 				self.damage = atk * (20 + attacker.str) / 20
 				# Element correction
 				self.damage *= elements_correct(attacker.element_set)
@@ -3710,16 +3719,21 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= (user.hp / 2) 
 					user.sp = 0
 				when 135 # 백호검무
-					power += (user.hp * 1.5 + user.sp * 0.5).to_i
-					user.hp -= (user.hp / 2) 	
+					power += (user.hp * 0.4 + user.sp * 0.2).to_i
+					$e_v += 1
+					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
+					if $e_v == $alive_size
+						user.hp -= (user.hp / 3)
+					end
+					
 				when 137 # 이기어검
-					power += (user.hp * 1.6 + user.sp * 0.5).to_i
+					power += (user.hp * 2 + user.sp * 0.5).to_i
 					user.hp -= (user.hp / 6) 
 					user.sp -= user.sp / 2
 					self.pdef -= 5
 					self.mdef -= 5
 				when 138 # 무형검
-					power += (user.hp * 3 + user.sp * 0.5).to_i
+					power += (user.hp * 1 + user.sp * 0.2).to_i
 					user.hp -= (user.hp / 2) 	
 					user.sp -= user.sp / 2
 				when 139 # 분혼경천
@@ -3733,6 +3747,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					end		
 					
 					# 도사스킬
+				when 96 # 지진
+					$e_v += 1
+					power += user.maxsp / 100
+					if $e_v == $alive_size
+						user.sp -= user.maxsp / 10
+						
+					end		
 				else
 					power = skill.power + user.atk / 2 
 				end				
@@ -3747,12 +3768,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Calculate rate
 				rate = 20
 				
-				rate += (user.str * skill.str_f / 100)
-				rate += (user.dex * skill.dex_f / 100)
-				rate += (user.agi * skill.agi_f / 100)
-				rate += (user.int * skill.int_f / 100)
+				rate += (user.str * skill.str_f / 100.0)
+				rate += (user.dex * skill.dex_f / 100.0)
+				rate += (user.agi * skill.agi_f / 100.0)
+				rate += (user.int * skill.int_f / 100.0)
 				# Calculate basic damage
-				self.damage = (power * rate / 20)
+				self.damage = (power * rate / 20.0).to_i
 				# Element correction
 				self.damage *= elements_correct(skill.element_set)
 				self.damage /= 100
@@ -3767,7 +3788,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				
 				if self.damage > 0
-					self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 30, 3].max + [self.mdef / 15, 1].max))
+					if self.is_a?(Game_Actor)
+						self.damage = (self.damage/4) + ((self.damage * 3) / ([self.base_pdef / 10, 3].max + [self.base_mdef / 5, 1].max))
+					else
+						self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 30, 3].max + [self.mdef / 15, 1].max))
+					end
 				end
 				
 				# Dispersion

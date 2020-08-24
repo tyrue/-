@@ -59,6 +59,7 @@ class Sprite_NetCharacter < RPG::Sprite
 		bitmap.font.size = 12
 		bitmap.draw_frame_text(0, 0, 160, 47, @character.name.to_s, 1)
 		# Creates Display Text Sprite
+		self.visible = true #true
 		
 		@_text_display = Sprite.new(self.viewport)
 		@_text_display.bitmap = bitmap
@@ -67,8 +68,8 @@ class Sprite_NetCharacter < RPG::Sprite
 		@_text_display.x = self.x
 		@_text_display.y = self.y - self.oy / 2 - 24
 		@_text_display.z = 30000
-		@_text_display.visible = self.visible #true
-		self.opacity = 0
+		@_text_display.visible = self.visible
+		self.opacity = 255
 		update
 	end
 	#--------------------------------------------------------------------------
@@ -128,7 +129,6 @@ class Sprite_NetCharacter < RPG::Sprite
 		# Name Sprite
 		@_text_display.x = self.x
 		@_text_display.y = self.y - self.oy / 2 - 24
-		
 	end
 	#--------------------------------------------------------------------------
 	# * Update Tile

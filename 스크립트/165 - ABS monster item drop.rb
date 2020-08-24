@@ -252,11 +252,11 @@ class MrMo_ABS
 			end
 		when 57 # 청웅객
 			i_id = []
-			if r <= 60 and $game_switches[141] == true # 승급 퀘스트
-				i_id.push(52) # 청웅의 환
-			end
-			if r <= 62
+			if r <= 60
 				i_id.push(51) # 낡은 수리검
+			end
+			if r <= 30 and $game_switches[141] == true # 승급 퀘스트
+				i_id.push(52) # 청웅의 환
 			end
 		when 58 # 수룡
 			if r <= 98 
@@ -536,11 +536,11 @@ class MrMo_ABS
 			end
 		when 157 # 해파리수하
 			i_id = []
-			if r <= 6 and $game_switches[378] == true # 용궁 전략문서 얻기
-				i_id.push(98) # 전략문서
-			end
 			if r <= 5 
 				i_id.push(99) # 해파리의 심장
+			end
+			if r <= 6 and $game_switches[378] == true # 용궁 전략문서 얻기
+				i_id.push(98) # 전략문서
 			end
 			
 			#-----------#

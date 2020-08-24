@@ -238,7 +238,11 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 						end
 					else
 						src_rect = Rect.new(0, 0, bmp.width, bmp.height)
-						self.bitmap.blt(0, 0, bmp, src_rect, 255)
+						if @actor == $game_party.actors[0]
+							self.bitmap.blt(0, 0, bmp, src_rect, is_trans)
+						else
+							self.bitmap.blt(0, 0, bmp, src_rect, 255)
+						end
 					end
 					@cw = bitmap.width / 4
 					@ch = bitmap.height / 4

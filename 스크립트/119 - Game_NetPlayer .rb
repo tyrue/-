@@ -78,6 +78,8 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@pci = $game_party.actors[0].class_name
 			@message = ""
 			@character_name = "바람머리"
+			@is_transparency = false
+			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false
 				@weapon_id = 0
@@ -87,7 +89,6 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 				@armor4_id = 0
 				@capelli = 0
 				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]
-				@is_transparency = false
 			end
 			$game_temp.spriteset_refresh = true
 		end

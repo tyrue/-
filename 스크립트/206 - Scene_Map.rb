@@ -22,14 +22,9 @@ class Scene_Map
 		end
 		
 		if $game_party.actors[0].hp == 0
-			$game_switches[50] = false # 유저 살음 스위치 오프
-			$game_switches[296] = true # 유저 죽음 스위치 온
+			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
+			$game_switches[296] = true if $game_switches[296] != true# 유저 죽음 스위치 온
 			Hwnd.dispose("Inventory")
-			$game_party.actors[0].equip(0, 0)
-			$game_party.actors[0].equip(1, 0)
-			$game_party.actors[0].equip(2, 0)
-			$game_party.actors[0].equip(3, 0)
-			$game_party.actors[0].equip(4, 0)
 		end
 		
 		if not Hwnd.include?("NetPartyInv")

@@ -360,50 +360,50 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
-	SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
-	SKILL_MASH_TIME[137] = [10 * sec, 0] # 이기어검
-	SKILL_MASH_TIME[138] = [3 * sec, 0] # 무형검
+	SKILL_MASH_TIME[135] = [4 * sec, 0] # 백호검무
+	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
+	SKILL_MASH_TIME[138] = [5 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [140 * sec, 0] # 분혼경천
 	# 도사
 	
 	
-	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간, 커먼 이벤트 번호]
+	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
 	SKILL_BUFF_TIME = {}
 	# 주술사
-	SKILL_BUFF_TIME[9] = [120 * sec, 0, 36] # 무장
-	SKILL_BUFF_TIME[46] = [120 * sec, 0, 36] # 무장
-	SKILL_BUFF_TIME[20] = [120 * sec, 0, 38] # 보호
-	SKILL_BUFF_TIME[47] = [120 * sec, 0, 38] # 보호
-	SKILL_BUFF_TIME[26] = [180 * sec, 0, 31] # 누리의힘
-	SKILL_BUFF_TIME[28] = [120 * sec, 0, 41] # 야수
-	SKILL_BUFF_TIME[35] = [120 * sec, 0, 41] # 비호
-	SKILL_BUFF_TIME[42] = [180 * sec, 0, 47] # 주술마도
-	SKILL_BUFF_TIME[51] = [180 * sec, 0, 57] # 대지의힘
+	SKILL_BUFF_TIME[9] = [120 * sec, 0] # 무장
+	SKILL_BUFF_TIME[46] = [120 * sec, 0] # 무장
+	SKILL_BUFF_TIME[20] = [120 * sec, 0] # 보호
+	SKILL_BUFF_TIME[47] = [120 * sec, 0] # 보호
+	SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
+	SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
+	SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
+	SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
+	SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
 	
 	
 	# 전사
-	SKILL_BUFF_TIME[62] = [180 * sec, 0, 72] # 수심각도
-	SKILL_BUFF_TIME[63] = [180 * sec, 0, 74] # 반영대도
-	SKILL_BUFF_TIME[64] = [180 * sec, 0, 76] # 십량분법
-	SKILL_BUFF_TIME[66] = [20 * sec, 0, 80] # 신수둔각도
-	SKILL_BUFF_TIME[72] = [180 * sec, 0, 76] # 구량분법
-	SKILL_BUFF_TIME[76] = [180 * sec, 0, 76] # 팔량분법
-	SKILL_BUFF_TIME[71] = [60 * sec, 0, 85] # 혼신의힘
+	SKILL_BUFF_TIME[62] = [180 * sec, 0] # 수심각도
+	SKILL_BUFF_TIME[63] = [180 * sec, 0] # 반영대도
+	SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
+	SKILL_BUFF_TIME[66] = [20 * sec, 0] # 신수둔각도
+	SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
+	SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
+	SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
 	
 	
 	# 도사
-	SKILL_BUFF_TIME[50] = [60 * sec, 0, 41] # 야수금술술
-	SKILL_BUFF_TIME[88] = [60 * sec, 0, 125] # 분량력법
-	SKILL_BUFF_TIME[90] = [60 * sec, 0, 128] # 분량방법
-	SKILL_BUFF_TIME[91] = [60 * sec, 0, 130] # 석화기탄
-	SKILL_BUFF_TIME[94] = [6 * sec, 0, 134] # 금강불체
+	SKILL_BUFF_TIME[50] = [60 * sec, 0] # 야수금술술
+	SKILL_BUFF_TIME[88] = [60 * sec, 0] # 분량력법
+	SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
+	SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
+	SKILL_BUFF_TIME[94] = [6 * sec, 0] # 금강불체
 	
 	# 도적
-	SKILL_BUFF_TIME[130] = [180 * sec, 0, 96] # 무영보법
-	SKILL_BUFF_TIME[131] = [60 * sec, 0, 98] # 투명
-	SKILL_BUFF_TIME[134] = [60 * sec, 0, 102] # 분신
-	SKILL_BUFF_TIME[136] = [10 * sec, 0, 101] # 운상미보
-	SKILL_BUFF_TIME[140] = [10 * sec, 0, 1] # 운기
+	SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
+	SKILL_BUFF_TIME[131] = [60 * sec, 0] # 투명
+	SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
+	SKILL_BUFF_TIME[136] = [10 * sec, 0] # 운상미보
+	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -563,6 +563,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@pvp_active = true
 			# ABS Active
 			@active = true
+			
+			
 		end
 		# 반환 함수들
 		#--------------------------------------------------------------------------
@@ -742,6 +744,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				next if range == nil
 				range.update
 			end
+			$rpg_skill.update_buff
 		end
 		
 		#--------------------------------------------------------------------------
@@ -759,6 +762,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			for skill_mash in SKILL_BUFF_TIME
 				if skill_mash[1][1] > 0
 					skill_mash[1][1] = 0 
+					$rpg_skill.buff_del(skill_mash[0])
 				end
 			end
 			if $skill_Delay_Console != nil
@@ -1207,7 +1211,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					skill_mash[1][1] -= 1 
 					if skill_mash[1][1] == 0
 						$console.write_line("#{$data_skills[skill_mash[0]].name} 끝")
-						$game_temp.common_event_id = skill_mash[1][2]
+						$rpg_skill.buff_del(skill_mash[0])
 					end
 				end
 			end
@@ -1288,7 +1292,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Check Item  아이탬 단축키를 이용해서 사용할 경우
 		#--------------------------------------------------------------------------
 		def check_item
-			if not Hwnd.include?("NetPartyInv") and not Hwnd.include?("Keyset_menu")
+			if !Hwnd.include?("NetPartyInv") and !Hwnd.include?("Keyset_menu") and !Hwnd.include?("Trade")
 				if not $map_chat_input.active
 					#Check for item usage
 					for key in @item_keys.keys
@@ -1679,7 +1683,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			# 스킬 아이디
 			skill_console(id)
-			
 			#Activate Common Event
 			if skill.common_event_id > 0
 				# Common event call reservation
@@ -1690,8 +1693,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			$game_player.animation_id = skill.animation1_id
 			Network::Main.ani(Network::Main.id, skill.animation1_id)
 			
-			# 이게 회복 스킬인지 확인
-			$rpg_skill.heal(id)
+			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
+			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			
 			#Get the skill scope
 			# 스킬 맞는 쪽
@@ -1832,7 +1835,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def player_explode(id)
 			return if !RANGE_EXPLODE.has_key?(id)
-			$e_v = 0 # enemy_value, 맞출 적의 수
 			#Get Skill
 			skill = $data_skills[id]
 			#Return if the skill doesn't exist
@@ -1841,6 +1843,22 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if !@actor.skills.include?(skill.id)
 			#Return if the actor can't use the skill
 			return if !@actor.can_use_skill?(skill)
+			
+			# 아직 스킬 딜레이가 남아있다면 무시
+			skill_mash = SKILL_MASH_TIME[id]
+			if skill_mash != nil and skill_mash[1]/60.0 > 0
+				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
+				return
+			end
+			
+			# 아직 버프가 지속중이면 무시
+			skill_mash = SKILL_BUFF_TIME[id]
+			if skill_mash != nil and skill_mash[1]/60.0 > 0
+				$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
+				return
+			end
+			
+			$e_v = 0 # enemy_value, 맞출 적의 수
 			w = RANGE_EXPLODE[skill.id]
 			# Show Animation
 			$game_player.animation_id = skill.animation1_id
@@ -3471,15 +3489,16 @@ if SDK.state("Mr.Mo's ABS") == true
 			if hit_result == true
 				# Calculate basic damage
 				if self.is_a?(Game_Actor)
-					atk = [(attacker.atk + attacker.str / 100)- (self.base_pdef * 2 / 5), 2].max
+					atk = [(attacker.atk + attacker.str / 100.0)- (self.base_pdef * 2 / 5), (attacker.atk / 20.0)].max
 				else
-					atk = [(attacker.atk + attacker.str / 100)- (self.pdef * 2 / 5), 2].max
+					atk = [(attacker.atk + attacker.str / 100.0)- (self.pdef * 2 / 5), (attacker.atk / 20.0)].max
 				end
 				
-				self.damage = atk * (20 + attacker.str) / 20
+				self.damage = (atk * (20 + attacker.str) / 20.0)
 				# Element correction
 				self.damage *= elements_correct(attacker.element_set)
 				self.damage /= 100
+				self.damage = self.damage.to_i
 				self.damage = 1 if self.damage <= 0
 				# If damage value is strictly positive
 				if self.damage > 0
@@ -3719,7 +3738,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= (user.hp / 2) 
 					user.sp = 0
 				when 135 # 백호검무
-					power += (user.hp * 0.4 + user.sp * 0.2).to_i
+					power += (user.hp * 0.35 + user.sp * 0.2).to_i
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size

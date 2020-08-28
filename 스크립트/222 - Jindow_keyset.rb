@@ -44,6 +44,7 @@ class Jindow_Keyset < Jindow
 			next if key[1] == nil or key[1] == 0
 			@k_value[@i] = $data_skills[key[1]].name
 		end
+		
 		@i = -1
 		for key in $ABS.item_keys.sort
 			@i += 1
@@ -53,7 +54,7 @@ class Jindow_Keyset < Jindow
 		
 		for i in 0..9
 			@keyset[i] = Sprite.new(self)
-			@keyset[i].bitmap = Bitmap.new(150, 20) # x, y 크기의 비트맵 상자를 생성
+			@keyset[i].bitmap = Bitmap.new(150, 20) # width, height 크기의 비트맵 상자를 생성
 			@keyset[i].x = 0
 			if i == 0
 				@keyset[i].y = (10) * 15

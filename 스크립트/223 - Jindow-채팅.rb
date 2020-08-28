@@ -133,6 +133,13 @@ class Jindow_Chat_Input < Jindow
 				$console.write_line("#{$2.to_s}캐시를 유저에게 지급하였습니다.")
 			end
 			
+		when /\/이벤트 고래/ 
+			if Network::Main.group == 'admin'
+				Network::Main.socket.send("<switches>1001,1</switches>\n")
+				$game_switches[5] = true
+				$console.write_line("고래를 소환합니다.")
+			end	
+				
 		when /\/테스트/
 			if Network::Main.group == 'admin'		
 				$game_temp.player_transferring = true # 이동 가능

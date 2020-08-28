@@ -309,11 +309,11 @@ class Jindow < Viewport
 			ch = self.height - @scroll0up.bitmap.height - @scroll0down.bitmap.height
 			@scroll0mid.bitmap = Bitmap.new(@scroll0up.bitmap.width, ch, @route + "scroll0mid", 1)
 			cch = ch / ((self.height + oh) * 1.0)
-			@scroll0bar_mid.bitmap = Bitmap.new(@scroll0up.bitmap.width, (cch * self.height).round, @route + "scroll0bar_mid", 1)
+			@scroll0bar_mid.bitmap = Bitmap.new(@scroll0up.bitmap.width + 5, (cch * self.height).round, @route + "scroll0bar_mid", 1)
 			@scroll0up.x = @mr.x; @scroll0up.y = @mr.y
 			@scroll0down.x = @mr.x; @scroll0down.y = @dr.y - @scroll0down.bitmap.height
 			@scroll0mid.x = @mr.x; @scroll0mid.y = @scroll0up.y + @scroll0up.bitmap.height
-			@scroll0bar_mid.x = @scroll0mid.x; @scroll0bar_mid.y = @scroll0mid.y
+			@scroll0bar_mid.x = @scroll0mid.x - 5; @scroll0bar_mid.y = @scroll0mid.y
 			@scroll0bar_up.x = @scroll0mid.x; @scroll0bar_up.y = @scroll0bar_mid.y - @scroll0bar_up.bitmap.height
 			@scroll0bar_down.x = @scroll0mid.x; @scroll0bar_down.y = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height
 		end

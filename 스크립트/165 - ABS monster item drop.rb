@@ -187,27 +187,27 @@ class MrMo_ABS
 				i_id = 40 # 진호박
 			end
 		when 39 # 불귀신
-			if r <= 60 
+			if r <= 40 
 				i_id = 40 # 진호박
-			elsif r <= 80
+			elsif r <= 65
 				i_id = 44 # 불의 혼
-			elsif r <= 90
+			elsif r <= 80
 				i_id = 45 # 불의 결정
 			end
 		when 38 # 짚단
-			if r <= 70 
+			if r <= 60 
 				i_id = 48 # 짚단
 			end
 		when 40 # 자생원
-			if r <= 90 
+			if r <= 60 
 				i_id = 49 # 200전
 			end
 		when 41 # 청자다람쥐
-			if r <= 10 
+			if r <= 5 
 				i_id = 56 # 작은보물상자
-			elsif r <= 15
+			elsif r <= 9
 				i_id = 57 # 고급보물상자
-			elsif r <= 16
+			elsif r <= 10
 				i_id = 121 # 최고급보물상자
 			end
 		when 47, 48 # 도깨비, 불도깨비
@@ -225,7 +225,7 @@ class MrMo_ABS
 				i_id = 121 # 최고급보물상자
 			end
 		when 50 # 녹웅객
-			if r <= 60 
+			if r <= 30 
 				i_id = 51 # 낡은 수리검
 			end
 		when 51 # 흑여우
@@ -252,7 +252,7 @@ class MrMo_ABS
 			end
 		when 57 # 청웅객
 			i_id = []
-			if r <= 60
+			if r <= 20
 				i_id.push(51) # 낡은 수리검
 			end
 			if r <= 30 and $game_switches[141] == true # 승급 퀘스트
@@ -485,21 +485,21 @@ class MrMo_ABS
 				i_id = 86 # 간괘
 			end
 		when 132 # 건룡
-			if r <= 70
+			if r <= 60
 				i_id = 105 # 건룡의어금니
-			else
+			elsif r <= 80
 				i_id = 104 # 은나무가지
 			end
 		when 133 # 감룡
-			if r <= 70
+			if r <= 60
 				i_id = 106 # 감룡의어금니
-			else
+			elsif r <= 80
 				i_id = 104 # 은나무가지
-			end	
+			end
 		when 134 # 진룡
-			if r <= 70
+			if r <= 60
 				i_id = 107 # 진룡의어금니
-			else
+			elsif r <= 80
 				i_id = 104 # 은나무가지
 			end
 			

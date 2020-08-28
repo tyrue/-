@@ -1,4 +1,19 @@
 class Rpg_skill
+	def update_buff
+		if SKILL_BUFF_TIME[140][1] > 0 # 운기 중
+			if !$game_player.moving?
+				if (Graphics.frame_count % (Graphics.frame_rate) == 0)
+					$game_party.actors[0].sp += $game_party.actors[0].maxsp / 10
+					$game_player.animation_id = 4
+					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
+				end
+			else
+				SKILL_BUFF_TIME[140][1] = 1
+			end
+			
+		end
+	end
+	
 	def party_heal(skill_id, heal_v = 1)
 		if skill_id == 50 # 야수수금술
 			$game_temp.common_event_id = 40
@@ -73,27 +88,224 @@ class Rpg_skill
 	
 	def buff(id)
 		case id 
+			# 주술사
 		when 26 # 누리의힘
+			$game_party.actors[0].str += 10
 			
 		when 28 # 야수
+			$game_temp.common_event_id = 40
 			
 		when 35 # 비호
-			
-		when 41 # 체마혈식
+			$game_temp.common_event_id = 42
 			
 		when 42 # 주술마도
-			
-		when 43 # 위태응기
+			@a = $game_party.actors[0].int / 10
+			$game_party.actors[0].int += @a
 			
 		when 46 # 무장
-			
+			$game_party.actors[0].mdef += 7
+			$game_party.actors[0].pdef += 7
 		when 47 # 보호
+			$game_party.actors[0].mdef += 10
+			$game_party.actors[0].pdef += 10
+			
+			# 전사
+		when 62  # 수심각도
+			$game_party.actors[0].dex += 30
+			
+		when 63  # 반영대도
+			$game_party.actors[0].agi += 30
+			
+		when 64  # 십량분법
+			@b = $game_party.actors[0].str / 10
+			$game_party.actors[0].str += @b
+			
+		when 66  # 신수둔각도
+			if $game_switches[1] == true # 청룡
+				$game_party.gain_weapon(4, 1)
+				$game_party.actors[0].equip(0, 4)
 				
+			elsif $game_switches[2] == true # 백호
+				$game_party.gain_weapon(2, 1)
+				$game_party.actors[0].equip(0, 2)
+				
+			elsif $game_switches[3] == true # 주작
+				$game_party.gain_weapon(1, 1)
+				$game_party.actors[0].equip(0, 1)
+				
+			elsif $game_switches[4] == true # 현무
+				$game_party.gain_weapon(3, 1)
+				$game_party.actors[0].equip(0, 3)
+			end
+			
+		when 71  # 구량분법
+			@b = $game_party.actors[0].str / 9
+			$game_party.actors[0].str += @b
+			
+		when 72  # 혼신의힘
+			$game_party.actors[0].str += 50
+			
+		when 76  # 팔량분법
+			@b = $game_party.actors[0].str / 8
+			$game_party.actors[0].str += @b
+			
+			# 도사
+		when 50 # 야수금술
+			self.party_heal(id)
+			
+		when 88 # 분량력법
+			self.party_heal(id)
+			
+		when 90 # 분량방법
+			self.party_heal(id)
+			
+		when 91 # 석화기탄
+			$game_temp.common_event_id = 129
+			
+		when 94 # 금강불체
+			$game_party.actors[0].mdef += 999
+			$game_party.actors[0].pdef += 999
+			
+			# 도적
+		when 130 # 무영보법
+			$game_party.actors[0].dex += 30
+			$game_party.actors[0].agi += 30
+			
+		when 131 # 투명
+			self.투명
+			
+		when 134 # 분신
+			$console.write_line("분신을 생성합니다.")
+			
+		when 136 # 운상미보
+			$game_player.move_speed = 3.5
+			Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+			
+		when 140 # 운기
+			$console.write_line("마력을 회복합니다.")
+			
+			# 도사 희원류
+		when 81 # 동해의희원
+			self.party_heal(id, 170)
+			
+		when 83	# 천공의희원
+			self.party_heal(id, 200)
+			
+		when 86	# 바다의희원	
+			self.party_heal(id, 75)
+			
+		when 87	# 천공의희원	
+			self.party_heal(id, 200)
+			
+		when 89	# 구름의희원	
+			self.party_heal(id, 500)
+			
+		when 93	# 태양의희원
+			self.party_heal(id, 1000)
+			
+		when 92 # 공력주입	
+			self.party_heal(id)
+			
+		when 95	# 생명의희원
+			self.party_heal(id, 3000)
+			
+		when 117 # 백호의희원
+			self.party_heal(id)
+			
+		when 118 # 신령의희원
+			self.party_heal(id, 7000)
+			
+		when 119 # 봉황의희원
+			self.party_heal(id, 15000)
+			
+		when 120 # 부활
+			self.party_heal(id)
+			
 		end
 	end
 	
 	def buff_del(id)
-		
+		case id 
+			# 주술사
+		when 26 # 누리의힘
+			$game_party.actors[0].str -= 10
+			
+		when 28 # 야수
+			$game_temp.common_event_id = 41
+			
+		when 35 # 비호
+			$game_temp.common_event_id = 41
+			
+		when 42 # 주술마도
+			$game_party.actors[0].int -= @a
+			
+		when 46 # 무장
+			$game_party.actors[0].mdef -= 7
+			$game_party.actors[0].pdef -= 7
+		when 47 # 보호
+			$game_party.actors[0].mdef -= 10
+			$game_party.actors[0].pdef -= 10
+			
+			# 전사
+		when 62  # 수심각도
+			$game_party.actors[0].dex -= 30
+			
+		when 63  # 반영대도
+			$game_party.actors[0].agi -= 30
+			
+		when 64  # 십량분법
+			$game_party.actors[0].str -= @b
+			
+		when 66  # 신수둔각도
+			$game_party.actors[0].equip(0, 0)
+			$game_party.lose_weapon(1, 99)
+			$game_party.lose_weapon(2, 99)
+			$game_party.lose_weapon(3, 99)
+			$game_party.lose_weapon(4, 99)
+			
+		when 71  # 구량분법
+			$game_party.actors[0].str -= @b
+			
+		when 72  # 혼신의힘
+			$game_party.actors[0].str -= 50
+			
+		when 76  # 팔량분법
+			$game_party.actors[0].str -= @b
+			
+			# 도사
+		when 50 # 야수금술
+			$game_temp.common_event_id = 41
+			
+		when 88 # 분량력법
+			$game_party.actors[0].str -= 15
+			
+		when 90 # 분량방법
+			$game_party.actors[0].agi -= 50	
+			
+		when 94 # 금강불체
+			$game_party.actors[0].mdef -= 999
+			$game_party.actors[0].pdef -= 999
+			
+			# 도적
+		when 130 # 무영보법
+			$game_party.actors[0].dex -= 30
+			$game_party.actors[0].agi -= 30
+			
+		when 131 # 투명
+			$game_variables[9] = 1
+			Network::Main.send_trans(false)
+			
+		when 134 # 분신
+			$console.write_line("분신이 사라집니다.")
+			
+		when 136 # 운상미보
+			$game_player.move_speed = 3
+			Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+			
+		when 140 # 운기
+			$console.write_line("운기가 종료 됩니다.")
+				
+		end
 	end
 	
 	def 투명

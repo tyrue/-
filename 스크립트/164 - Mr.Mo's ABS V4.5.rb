@@ -1781,7 +1781,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$alive_size = 0
 				for e in enemies#.values
 					#Skip NIL values
-					next if e== nil
+					next if e == nil
 					#Skip 이미 적이 죽은거면 넘어가
 					next if e.dead?
 					# Skip if the enemy is an ally and can't hurt allies.

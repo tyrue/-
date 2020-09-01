@@ -76,12 +76,10 @@ class Window_Message < Window_Selectable
 		end
 		# 표시 기다리는 메세지가 있는 경우
 		if $game_temp.message_text != nil
-			
-			if $game_variables[408] == 0
+			if $mess == nil or $mess.bitmap == nil or $mess.bitmap.disposed?
 				$mess = Sprite.new
 				$mess.bitmap = RPG::Cache.picture("MessageBack.png")
 				$mess.y = 160
-				$game_variables[408] = 1
 			end
 			text = $game_temp.message_text
 			# 제어 문자 처리
@@ -267,10 +265,7 @@ class Window_Message < Window_Selectable
 		end
 		# 표시해야 할 메세지가 없지만, 윈도우가 가시 상태의 경우
 		if self.visible
-			if $game_variables[408] == 1   
-				$mess.bitmap.dispose
-				$game_variables[408] = 0
-			end
+			$mess.bitmap.dispose if !$mess.bitmap.disposed?
 			@fade_out = true
 			self.opacity -= 48
 			if self.opacity == 0

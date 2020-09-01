@@ -383,6 +383,7 @@ class Rpg_skill
 		end
 	end
 	
+	# 비영_passable 시작
 	def 비영_passable?(x, y, d) # 해당 위치로 이동할 수 있는가?
 		# Get new coordinates
 		new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)
@@ -429,7 +430,9 @@ class Rpg_skill
 		# passable
 		return true
 	end
+	# end
 	
+	# 비영_passable2 시작
 	def 비영_passable2?(x, y, d) # 해당 이벤트를 뛰어 넘을 수 있는가?
 		# Get new coordinates
 		new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
@@ -457,5 +460,24 @@ class Rpg_skill
 		
 		return false
 	end
+	# 비영_passable2 end
+	
+	# 해당 스킬을 배우는데 필요한 재료
+	def req_skill_item(id)
+		
+	end
 end	
 $rpg_skill = Rpg_skill.new
+
+
+class Game_Actor < Game_Battler
+	#--------------------------------------------------------------------------
+	# * Learn Skill
+	#     skill_id : skill ID
+	#--------------------------------------------------------------------------
+	alias rpg_skill_learn learn_skill
+	def learn_skill(skill_id)
+		rpg_skill_learn(skill_id)
+		$console.write_line("#{$data_skills[skill_id].name}을(를) 배웠다!") if $global_x >= 26
+	end
+end

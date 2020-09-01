@@ -7688,3 +7688,57 @@ On <<Fri 21 Aug 2020, 01:06:07>> the file <<Graphics/Characters/*null*>> was mis
 On <<Fri 21 Aug 2020, 01:10:42>> the file <<Graphics/Characters/*null*>> was missing.
 On <<Fri 21 Aug 2020, 01:22:17>> the file <<Graphics/Icons/>> was missing.
 On <<Fri 21 Aug 2020, 01:31:40>> the file <<Graphics/Icons/>> was missing.
+On <<Mon 31 Aug 2020, 02:47:34>> the error <<nil can't be coerced into Fixnum (#<Scene_Login:0xcbc63a0>)>> occured.
+On <<Wed 02 Sep 2020, 02:30:42>> the error <<wrong number of arguments(0 for 1) (#<Scene_Map:0xcddf9c8>)>> occured.
+On <<Wed 02 Sep 2020, 03:44:42>> the error <<Section216:254: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 03:44:42>> the error <<Section216:254: syntax error
+				do  ()>> occured.
+On <<Wed 02 Sep 2020, 03:44:42>> the error <<Section216:254: syntax error
+				do 
+				  ^ ()>> occured.
+On <<Wed 02 Sep 2020, 03:44:42>> the error <<Section216:254: syntax error
+				do 
+				  ^
+Section216:258: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 03:44:42>> the error <<Section216:254: syntax error
+				do 
+				  ^
+Section216:258: syntax error
+Section216:344: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 03:44:42>> the error <<compile error
+Section216:254: syntax error
+				do 
+				  ^
+Section216:258: syntax error
+Section216:344: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 04:06:13>> the error <<(eval):1: syntax error (#<Scene_Map:0x10690528>)>> occured.
+On <<Wed 02 Sep 2020, 04:06:13>> the error <<compile error
+(eval):1: syntax error (#<Scene_Map:0x10690528>)>> occured.
+On <<Wed 02 Sep 2020, 04:07:28>> the error <<(eval):1: syntax error (#<Scene_Map:0x106f0510>)>> occured.
+On <<Wed 02 Sep 2020, 04:07:28>> the error <<compile error
+(eval):1: syntax error (#<Scene_Map:0x106f0510>)>> occured.
+On <<Wed 02 Sep 2020, 04:09:16>> the error <<Section216:254: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:16>> the error <<Section216:254: syntax error
+Section216:256: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:16>> the error <<Section216:254: syntax error
+Section216:256: syntax error
+				} ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:16>> the error <<Section216:254: syntax error
+Section216:256: syntax error
+				}
+				 ^ ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:16>> the error <<compile error
+Section216:254: syntax error
+Section216:256: syntax error
+				}
+				 ^ ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:42>> the error <<Section216:253: odd number list for Hash ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:42>> the error <<Section216:253: odd number list for Hash
+					{ eval($1).to_s } ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:42>> the error <<Section216:253: odd number list for Hash
+					{ eval($1).to_s }
+					                 ^ ()>> occured.
+On <<Wed 02 Sep 2020, 04:09:42>> the error <<compile error
+Section216:253: odd number list for Hash
+					{ eval($1).to_s }
+					                 ^ ()>> occured.

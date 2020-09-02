@@ -254,6 +254,9 @@ class Window_Message < Window_Selectable
 				text.gsub!(/\\[Ss]\[([0-9]+)\]/) do 
 					$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].name : ""
 				end
+				text.gsub!(/\\[Dd]\[([0-9]+)\]/) do 
+					$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].description : ""
+				end
 				text.gsub!(/\\[Ii]\[([0-9]+)\]/) do
 					$data_items[$1.to_i] != nil ? $data_items[$1.to_i].name : ""
 				end

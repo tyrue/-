@@ -7742,3 +7742,169 @@ On <<Wed 02 Sep 2020, 04:09:42>> the error <<compile error
 Section216:253: odd number list for Hash
 					{ eval($1).to_s }
 					                 ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법 ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:17: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:17: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법 ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:17: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:17: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:20: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:17: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:20: syntax error
+Section168:566: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:34>> the error <<compile error
+Section168:15: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:17: syntax error
+		[8, 30, 10, 5, 3, 74], # 신수마법
+		                      ^
+Section168:20: syntax error
+Section168:566: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:45>> the error <<Section168:19: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:45>> the error <<Section168:19: syntax error
+	[8, 30, 10, 5, 3, 74] # 누리의기원 ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:45>> the error <<Section168:19: syntax error
+	[8, 30, 10, 5, 3, 74] # 누리의기원
+	 ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:45>> the error <<Section168:19: syntax error
+	[8, 30, 10, 5, 3, 74] # 누리의기원
+	 ^
+Section168:20: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:45>> the error <<compile error
+Section168:19: syntax error
+	[8, 30, 10, 5, 3, 74] # 누리의기원
+	 ^
+Section168:20: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:59>> the error <<Section168:19: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:59>> the error <<Section168:19: syntax error
+	,[8, 30, 10, 5, 3, 74] # 누리의기원 ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:59>> the error <<Section168:19: syntax error
+	,[8, 30, 10, 5, 3, 74] # 누리의기원
+	 ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:59>> the error <<Section168:19: syntax error
+	,[8, 30, 10, 5, 3, 74] # 누리의기원
+	 ^
+Section168:20: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:20:59>> the error <<compile error
+Section168:19: syntax error
+	,[8, 30, 10, 5, 3, 74] # 누리의기원
+	 ^
+Section168:20: syntax error ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡 ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호 ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment
+		TEMP = 2 if $game_switches[3] # 주작 ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment
+		TEMP = 2 if $game_switches[3] # 주작
+		      ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment
+		TEMP = 2 if $game_switches[3] # 주작
+		      ^
+Section168:514: dynamic constant assignment ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment
+		TEMP = 2 if $game_switches[3] # 주작
+		      ^
+Section168:514: dynamic constant assignment
+		TEMP = 3 if $game_switches[4] # 현무 ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment
+		TEMP = 2 if $game_switches[3] # 주작
+		      ^
+Section168:514: dynamic constant assignment
+		TEMP = 3 if $game_switches[4] # 현무
+		      ^ ()>> occured.
+On <<Wed 02 Sep 2020, 21:33:13>> the error <<compile error
+Section168:511: dynamic constant assignment
+		TEMP = 0 if $game_switches[1] # 청룡
+		      ^
+Section168:512: dynamic constant assignment
+		TEMP = 1 if $game_switches[2] # 백호
+		      ^
+Section168:513: dynamic constant assignment
+		TEMP = 2 if $game_switches[3] # 주작
+		      ^
+Section168:514: dynamic constant assignment
+		TEMP = 3 if $game_switches[4] # 현무
+		      ^ ()>> occured.

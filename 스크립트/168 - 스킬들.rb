@@ -1,3 +1,74 @@
+# 신수 스킬 아이디
+SINSU_SKILL_ID = 
+[
+	1,
+	10,
+	16,
+	22,
+	30,
+	37
+]
+
+# 0~15 : 도토리, 토끼고기, 사슴고기, 녹용
+# 15~25 : 쥐고기, 박쥐고기, 뱀고기
+# 25~35 : 웅담, 호랑이고기
+# 35~45 : 여우고기, 산돼지, 숲돼지고기
+# 45~55 : 짙은호랑이고기, 돼지의뿔
+# 55~85 : 호박, 진호박
+# 85~99 : 진호박, 불의혼, 불의결정
+
+REQ_SKILL_DATA = {}
+# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
+# 전사
+REQ_SKILL_DATA[1] = 
+[
+	[10, 30, 10, 5, 3, 74],
+	[13, 10, 10, 26, 5, 6]
+]
+
+# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
+# 주술사
+REQ_SKILL_DATA[2] = 
+[
+	[8, 30, 10, 5, 3, 74], # 누리의기원
+	[10, 20, 20, 1, 5, 6], # 신수마법
+	[12, 10, 10, 46, 9, 10], # 무장
+	[15, 20, 20, 10, 9, 10], # 신수 1성
+	[22, 15, 15, 15, 10, 104], # 공력증강
+	[25, 10, 15, 16, 104, 11], # 신수 2성
+	[28, 10, 10, 47, 11, 12], # 보호
+	[32, 10, 10, 21, 11, 50], # 바다의기원
+	[37, 20, 5, 22, 50, 19], # 신수 3성
+	[42, 5, 5, 26, 19, 20], # 누리의힘
+	[45, 10, 10, 27, 19, 20], # 동해의기원
+	[52, 10, 10, 28, 20, 22], # 야수
+	[56, 10, 3, 29, 22, 28], # 천공의기원
+	[62, 10, 5, 30, 29, 30], # 신수 4성
+	[65, 5, 5, 34, 29, 30], # 귀환
+	[70, 5, 5, 35, 29, 30], # 비호
+	[78, 15, 15, 36, 29, 30], # 구름의기원
+	[84, 10, 30, 37, 29, 30], # 신수 5성
+	[90, 10, 3, 41, 30, 31], # 체마혈식
+	[94, 10, 3, 42, 30, 31], # 주술마도
+	[97, 3, 1, 43, 31, 37], # 위태응기
+	[99, 30, 3, 44, 30, 37], # 헬파이어
+]
+
+# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
+# 도사
+REQ_SKILL_DATA[3] = 
+[
+	[10, 30, 10, 5, 3, 74],
+	[]
+]
+
+# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
+# 도적
+REQ_SKILL_DATA[4] = 
+[
+	[10, 30, 10, 5, 3, 74],
+	[]
+]
 class Rpg_skill
 	def update_buff
 		if SKILL_BUFF_TIME[140][1] > 0 # 운기 중
@@ -304,7 +375,7 @@ class Rpg_skill
 			
 		when 140 # 운기
 			$console.write_line("운기가 종료 됩니다.")
-				
+			
 		end
 	end
 	
@@ -463,8 +534,67 @@ class Rpg_skill
 	# 비영_passable2 end
 	
 	# 해당 스킬을 배우는데 필요한 재료
-	def req_skill_item(id)
+	def req_skill_item(type, num, s_num) # 직업, 몇 번째 스킬
+		# type : 1 전사, 2 주술사, 3 도사, 4 도적
+		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 		
+		temp = 0 if $game_switches[1] # 청룡
+		temp = 1 if $game_switches[2] # 백호
+		temp = 2 if $game_switches[3] # 주작
+		temp = 3 if $game_switches[4] # 현무
+		
+		data = REQ_SKILL_DATA[type][num]
+		if data != nil
+			if s_num == 1
+				$game_variables[26] = data[0]
+				$game_variables[28] = data[1]
+				$game_variables[29] = data[2]
+				
+				if SINSU_SKILL_ID.include?(data[3]) 
+					$game_variables[32] = data[3] + temp
+				else
+					$game_variables[32] = data[3]
+				end
+				$game_variables[34] = data[4]
+				$game_variables[35] = data[5]
+				
+				$game_variables[103] = $game_party.items[data[4]]
+				$game_variables[104] = $game_party.items[data[5]]
+				
+			elsif s_num == 2
+				$game_variables[27] = data[0]
+				$game_variables[30] = data[1]
+				$game_variables[31] = data[2]
+				$game_variables[33] = data[3]
+				$game_variables[36] = data[4]
+				$game_variables[37] = data[5]
+				
+				$game_variables[105] = $game_party.items[data[4]]
+				$game_variables[106] = $game_party.items[data[5]]
+			end
+		else
+			if s_num == 1
+				$game_variables[26] = 0
+				$game_variables[28] = 0
+				$game_variables[29] = 0
+				$game_variables[32] = 0
+				$game_variables[34] = 0
+				$game_variables[35] = 0
+				
+				$game_variables[103] = 0
+				$game_variables[104] = 0
+			elsif s_num == 2
+				$game_variables[27] = 0
+				$game_variables[30] = 0
+				$game_variables[31] = 0
+				$game_variables[33] = 0
+				$game_variables[36] = 0
+				$game_variables[37] = 0
+				
+				$game_variables[105] = 0
+				$game_variables[106] = 0
+			end
+		end
 	end
 end	
 $rpg_skill = Rpg_skill.new

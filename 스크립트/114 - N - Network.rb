@@ -419,7 +419,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
 				send += "@level = #{$game_party.actors[0].level};"
 				
-				if SKILL_BUFF_TIME[131][1] > 0 # 투명
+				if $state_trans # 투명
 					send += "@is_transparency = true;"
 				else
 					send += "@is_transparency = false;"
@@ -514,7 +514,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				c += "]"
 				
 				stats = "@pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
-				if SKILL_BUFF_TIME[131][1] > 0 # 투명
+				if $state_trans # 투명
 					stats += "@is_transparency = true;"
 				else
 					stats += "@is_transparency = false;"

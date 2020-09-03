@@ -1,13 +1,21 @@
 # 신수 스킬 아이디
 SINSU_SKILL_ID = 
 [
-	1,
-	10,
-	16,
-	22,
-	30,
-	37
+	1, # 신수마법
+	10, # 신수 1성
+	16, # 신수 2성
+	22, # 신수 3성
+	30, # 신수 4성
+	37 # 신수 5성
 ]
+
+# 업그레이드 하는 스킬들
+UPGRADE_SKILL_ID = {}
+UPGRADE_SKILL_ID[1] =	[1, 2, 3, 4, 10, 11, 12, 13, 16, 17, 18, 19, 22, 23, 24, 25, 30, 31, 32, 33, 37, 38, 39, 40] # 신수 마법
+UPGRADE_SKILL_ID[2]	= [64, 72, 76] # 십량분법류
+UPGRADE_SKILL_ID[3]	= [65, 75] # 뢰마도
+UPGRADE_SKILL_ID[4]	= [74, 78, 80] # 십리건곤
+UPGRADE_SKILL_ID[5] = [131, 141, 142] # 투명
 
 # 0~15 : 도토리, 토끼고기, 사슴고기, 녹용
 # 15~25 : 쥐고기, 박쥐고기, 뱀고기
@@ -22,8 +30,31 @@ REQ_SKILL_DATA = {}
 # 전사
 REQ_SKILL_DATA[1] = 
 [
-	[10, 30, 10, 5, 3, 74],
-	[13, 10, 10, 26, 5, 6]
+	[10, 30, 10, 5, 3, 74], 		# 누리의기원
+	[13, 10, 10, 26, 5, 6], 		# 누리의힘
+	[18, 20, 20, 62, 9, 10], 		# 수심각도
+	[20, 20, 20, 74, 9, 10], 		# 십리건곤
+	[25, 15, 15, 63, 10, 104], 	# 반영대도
+	[32, 15, 15, 64, 11, 12], 	# 십량분법
+	[38, 10, 10, 65, 12, 50], 	# 뢰마도
+	[42, 10, 10, 21, 19, 20], 	# 바다의기원
+	[46, 20, 15, 66, 19, 20], 	# 신수둔각도
+	
+	[50, 2, 10, 1, 28, 22], 		# 신수마법
+	[55, 20, 1, 67, 22, 59], 	# 건곤대나이
+	[62, 10, 10, 71, 29, 30], 	# 혼신의힘
+	
+	[67, 5, 5, 27, 29, 30], 		# 동해의기원
+	[71, 20, 20, 72, 29, 30], 	# 구량분법
+	[74, 10, 30, 43, 29, 30], 	# 광량돌격
+	[81, 5, 5, 10, 29, 30], 		# 신수 1성
+	[84, 15, 15, 78, 29, 30],		# 십리건곤 1성
+	[86, 10, 30, 75, 29, 30],		# 뢰마도 1성
+	[90, 10, 3, 77, 30, 31], 		# 유비후타
+	[94, 10, 3, 76, 30, 31], 		# 팔분량법
+	[97, 3, 1, 80, 31, 37],			# 십리건곤 2성
+	[99, 30, 3, 79, 30, 37],		# 동귀어진
+	[99, 30, 3, 140, 30, 37]		# 운기
 ]
 
 # data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
@@ -51,24 +82,60 @@ REQ_SKILL_DATA[2] =
 	[90, 10, 3, 41, 30, 31], # 체마혈식
 	[94, 10, 3, 42, 30, 31], # 주술마도
 	[97, 3, 1, 43, 31, 37], # 위태응기
-	[99, 30, 3, 44, 30, 37], # 헬파이어
+	[99, 30, 3, 44, 30, 37] # 헬파이어
 ]
 
 # data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 # 도사
 REQ_SKILL_DATA[3] = 
 [
-	[10, 30, 10, 5, 3, 74],
-	[]
+	[8, 30, 10, 5, 3, 74], 			# 누리의기원
+	[10, 10, 10, 1, 5, 6], 			# 신수마법
+	[12, 10, 10, 46, 9, 10], 		# 무장
+	[18, 20, 20, 15, 9, 10], 		# 공력증강
+	[22, 15, 15, 86, 10, 104], 	# 바다의희원
+	[27, 15, 15, 10, 11, 12], 	# 신수 1성
+	[32, 10, 10, 47, 12, 50], 	# 보호
+	[36, 10, 10, 81, 19, 20], 	# 동해의희원
+	[42, 20, 15, 90, 19, 20], 	# 분량방법
+	
+	[48, 2, 10, 50, 28, 22], 		# 야수수금술
+	[54, 20, 1, 83, 22, 59], 		# 천공의희원
+	[61, 10, 10, 88, 29, 30], 	# 분량력법
+	[67, 15, 15, 89, 29, 30], 		# 구름의희원
+	[71, 10, 10, 91, 29, 30], 	# 석화기탄
+	[74, 10, 30, 92, 29, 30], 	# 공력주입
+	[80, 25, 15, 96, 29, 30], 		# 지진
+	[84, 15, 15, 93, 29, 30],		# 태양의희원
+	[92, 30, 3, 95, 30, 31],		# 생명의희원
+	[96, 3, 3, 94, 31, 37], 		# 금강불체
+	[99, 10, 3, 120, 31, 37] 		# 부활
 ]
 
 # data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 # 도적
 REQ_SKILL_DATA[4] = 
 [
-	[10, 30, 10, 5, 3, 74],
-	[]
+	[8, 30, 10, 5, 3, 74], 			# 누리의기원
+	[13, 15, 15, 26, 5, 6], 		# 누리의힘
+	[18, 15, 15, 1, 9, 10], 		# 신수마법
+	[23, 10, 20, 27, 10, 104], 		# 동해의기원
+	[28, 15, 15, 130, 104, 11], # 무영보법
+	[32, 20, 20, 131, 11, 12], 	# 투명
+	[40, 20, 10, 132, 50, 12], 	# 비영승보
+	[50, 15, 15, 29, 19, 20], 	# 천공의기원
+	[56, 5, 15, 133, 28, 22], 	# 필살검무
+	
+	[60, 10, 15, 64, 22, 29], 		# 십량분법
+	[64, 5, 5, 34, 29, 30], 		# 귀환
+	[70, 10, 10, 10, 29, 30], 	# 신수마법 1성
+	[76, 15, 20, 141, 29, 30], 	# 투명 1성
+	[82, 10, 10, 28, 29, 30], 	# 야수
+	[90, 20, 3, 142, 30, 31], 	# 투명 2성
+	[92, 5, 3, 140, 31, 37], 	# 운기
+	[99, 5, 3, 134, 31, 37],	# 분신
 ]
+
 class Rpg_skill
 	def update_buff
 		if SKILL_BUFF_TIME[140][1] > 0 # 운기 중
@@ -81,7 +148,16 @@ class Rpg_skill
 			else
 				SKILL_BUFF_TIME[140][1] = 1
 			end
-			
+		end
+		
+		if SKILL_BUFF_TIME[131][1] > 0 # 투명 중
+			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
+		end
+		if SKILL_BUFF_TIME[141][1] > 0 # 투명 중
+			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
+		end
+		if SKILL_BUFF_TIME[142][1] > 0 # 투명 중
+			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
 		end
 	end
 	
@@ -242,7 +318,7 @@ class Rpg_skill
 			$game_party.actors[0].dex += 30
 			$game_party.actors[0].agi += 30
 			
-		when 131 # 투명
+		when 131, 141, 142 # 투명
 			self.투명
 			
 		when 134 # 분신
@@ -296,6 +372,8 @@ class Rpg_skill
 	end
 	
 	def buff_del(id)
+		@a = $game_party.actors[0].int / 10 if @a == nil
+		@b = $game_party.actors[0].str / 10 if @b == nil
 		case id 
 			# 주술사
 		when 26 # 누리의힘
@@ -362,9 +440,10 @@ class Rpg_skill
 			$game_party.actors[0].dex -= 30
 			$game_party.actors[0].agi -= 30
 			
-		when 131 # 투명
+		when 131, 141, 142 # 투명, 1, 2성
 			$game_variables[9] = 1
 			Network::Main.send_trans(false)
+			$state_trans = false
 			
 		when 134 # 분신
 			$console.write_line("분신이 사라집니다.")
@@ -386,6 +465,7 @@ class Rpg_skill
 		$game_party.actors[0].hp = u_hp 
 		
 		$game_variables[9] = 1
+		$state_trans = true # 현재 자신이 투명상태인걸 뜻함
 		Network::Main.send_trans(true)
 	end
 	
@@ -549,12 +629,8 @@ class Rpg_skill
 				$game_variables[26] = data[0]
 				$game_variables[28] = data[1]
 				$game_variables[29] = data[2]
-				
-				if SINSU_SKILL_ID.include?(data[3]) 
-					$game_variables[32] = data[3] + temp
-				else
-					$game_variables[32] = data[3]
-				end
+				$game_variables[32] = data[3]
+				$game_variables[32] += temp if SINSU_SKILL_ID.include?(data[3]) 
 				$game_variables[34] = data[4]
 				$game_variables[35] = data[5]
 				
@@ -566,6 +642,7 @@ class Rpg_skill
 				$game_variables[30] = data[1]
 				$game_variables[31] = data[2]
 				$game_variables[33] = data[3]
+				$game_variables[33] += temp if SINSU_SKILL_ID.include?(data[3]) 
 				$game_variables[36] = data[4]
 				$game_variables[37] = data[5]
 				
@@ -607,7 +684,30 @@ class Game_Actor < Game_Battler
 	#--------------------------------------------------------------------------
 	alias rpg_skill_learn learn_skill
 	def learn_skill(skill_id)
-		rpg_skill_learn(skill_id)
-		$console.write_line("#{$data_skills[skill_id].name}을(를) 배웠다!") if $global_x >= 26
+		rpg_skill_learn(skill_id) # 이전 함수 코드 실행
+		
+		$console.write_line("마법 #{$data_skills[skill_id].name}을(를) 배웠다!") if $global_x >= 26
+		
+		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
+		for i in 1..UPGRADE_SKILL_ID.size
+			u_skill = UPGRADE_SKILL_ID[i]
+			if u_skill.include?(skill_id)
+				for j in u_skill
+					return if j == skill_id
+					forget_skill(j)
+					$console.write_line("이전 마법 #{$data_skills[j].name}은(는) 사라졌다!") if $global_x >= 26
+				end
+			end
+		end
+		
+		# 투명 등 숙련도 설정
+		case skill_id
+		when 131
+			$game_variables[10] = 0
+		when 141
+			$game_variables[10] = 1
+		when 142
+			$game_variables[10] = 2
+		end
 	end
 end

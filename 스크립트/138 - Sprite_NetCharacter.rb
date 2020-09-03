@@ -169,8 +169,8 @@ class Sprite_NetCharacter < RPG::Sprite
 	#--------------------------------------------------------------------------
 	def update_ani
 		animation = $data_animations[@character.animation_id]
-		animation(animation, true)
 		$game_map.need_refresh = true
+		animation(animation, true)
 		$ani_character[@netid].animation_id = 0
 	end
 end

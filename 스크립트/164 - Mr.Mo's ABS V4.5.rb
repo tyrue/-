@@ -259,7 +259,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
-	RANGE_SKILLS[77] = [0, 5, "", 4, 7] #유비후타
+	RANGE_SKILLS[77] = [1, 5, "공격스킬2", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
 	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
@@ -279,13 +279,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	
 	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 0] #산적 건곤
+	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [3, 4, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [3, 4, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[85] = [8, 5, "공격스킬2", 4, 0] # 필살검무
+	RANGE_SKILLS[85] = [8, 5, "공격스킬2", 4, 2] # 필살검무
 	RANGE_SKILLS[151] = [4, 2, "공격스킬2", 4, 0] # 청룡의 포효
 	RANGE_SKILLS[152] = [4, 2, "공격스킬2", 4, 0] # 현무의 포효
-	RANGE_SKILLS[153] = [4, 6, "공격스킬2", 4, 0] # 백호검무
+	RANGE_SKILLS[153] = [4, 6, "공격스킬2", 4, 2] # 백호검무
 	RANGE_SKILLS[154] = [3, 4, "공격스킬", 4, 0] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 0] # 암흑진파
 	RANGE_SKILLS[156] = [5, 2, "공격스킬", 4, 0] # 흑룡광포
@@ -404,6 +404,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
 	SKILL_BUFF_TIME[136] = [10 * sec, 0] # 운상미보
 	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
+	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
+	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -1793,7 +1795,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get all enemies
 				for e in enemies#.values
 					#Skip NIL values
-					next if e== nil
+					next if e == nil
 					#Skip 이미 적이 죽은거면 넘어가
 					next if e.dead?
 					# Skip if the enemy is an ally and can't hurt allies.
@@ -2770,7 +2772,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			#Jump
-			#$ABS.jump($game_player,self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
+			$ABS.jump($game_player, self, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] > 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2804,12 +2806,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 				
 				#Jump
+				$ABS.jump(@enani, $game_player, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] > 0
+				
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
 				#Put enemy in battle
 				actor.in_battle = true
 				actor.attacking = $game_player
-				$ABS.setup_movement(actor)
+				$ABS.setup_movement(actor)				
 				return
 			end
 			#Get enemy
@@ -2829,7 +2833,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			#Jump
-			#$ABS.jump($game_map.events[id],self,@range_skill[4]) if actor.damage != "Miss" and actor.damage != 0
+			$ABS.jump($game_map.events[id], self, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] > 0
 			#return if enemy is dead
 			return if $ABS.enemy_dead?(actor, enemy)
 			return if !actor.hate_group.include?(enemy.enemy_id)
@@ -3549,9 +3553,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
 				if attacker.is_a?(Game_Actor)
-					if SKILL_BUFF_TIME[131][1] > 0 # 투명
+					if $state_trans # 투명
 						self.damage *= (4 + $game_variables[10]) # 투명 숙련도
-						SKILL_BUFF_TIME[131][1] = 1
+						$state_trans = false
 						$game_variables[9] = 1
 					end
 					if SKILL_BUFF_TIME[134][1] > 0 # 분신

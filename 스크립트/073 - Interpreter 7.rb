@@ -235,7 +235,7 @@ class Interpreter
 	#--------------------------------------------------------------------------
 	def command_353
 		# Set game over flag
-		$game_temp.gameover = true
+		#$game_temp.gameover = true
 		# End
 		return false
 	end

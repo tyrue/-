@@ -1954,6 +1954,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#return if the player is not dead
 			return false if !a.dead?
 			#If the player is dead;
+			
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			$cha_name = $game_party.actors[0].character_name
 			$game_party.actors[0].equip(0, 0)
@@ -1963,15 +1964,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			$game_party.actors[0].equip(4, 0)
 			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
 			$game_player.refresh
-			$scene = Scene_Map.new
 			
+			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
+			$game_switches[296] = true if $game_switches[296] != true# 유저 죽음 스위치 온
 			# 이때 모든 버프들을 지우자
 			for skill_mash in SKILL_BUFF_TIME
 				if skill_mash[1][1] > 0
 					skill_mash[1][1] = 1 
 				end
 			end
-			
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
@@ -1982,6 +1983,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				# revive_actor
 			end
+			$scene = Scene_Map.new
 			return true
 		end
 		#--------------------------------------------------------------------------
@@ -3554,7 +3556,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
 				if attacker.is_a?(Game_Actor)
 					if $state_trans # 투명
-						self.damage *= (4 + $game_variables[10]) # 투명 숙련도
+						self.damage *= (5 + $game_variables[10]) # 투명 숙련도
 						$state_trans = false
 						$game_variables[9] = 1
 					end

@@ -262,6 +262,7 @@ class Game_Party
 	# ● 전멸 판정 
 	#-------------------------------------------------------------------------- 
 	def all_dead? 
+		return false
 		# 파티 인원수가 0 명의 경우 
 		if $game_party.actors.size == 0 
 			return false 

@@ -198,7 +198,7 @@ class Window_Message < Window_Selectable
 	#--------------------------------------------------------------------------
 	# ● 메세지 종료 처리
 	#--------------------------------------------------------------------------
-	def terminate_message
+	def terminate_message(sw = true)
 		self.active = false
 		self.pause = false
 		self.index = -1
@@ -206,7 +206,7 @@ class Window_Message < Window_Selectable
 		# 표시중 플래그를 클리어
 		@contents_showing = false
 		# 메세지 콜백을 부른다
-		if $game_temp.message_proc != nil
+		if $game_temp.message_proc != nil and sw
 			$game_temp.message_proc.call  
 			
 		end
@@ -372,6 +372,11 @@ class Window_Message < Window_Selectable
 	#--------------------------------------------------------------------------
 	def update
 		super
+		# 캔슬
+		if Input.trigger?(Input::B)
+			terminate_message
+		end
+		
 		# 용명의 경우
 		if @fade_in
 			self.contents_opacity += 24

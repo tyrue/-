@@ -185,7 +185,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				equip_changed?
 				
 				is_trans = 255
-				is_trans = 125 if $state_trans > 0 
+				is_trans = 125 if $state_trans 
 				
 				# Remember tile ID, file name and hue
 				@tile_id = @character.tile_id

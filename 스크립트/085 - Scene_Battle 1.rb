@@ -113,7 +113,7 @@ class Scene_Battle
 				return true
 			end
 			# Set game over flag
-			$game_temp.gameover = true
+			#$game_temp.gameover = true
 			# Return true
 			return true
 		end
@@ -277,7 +277,7 @@ class Scene_Battle
 		# If game over
 		if $game_temp.gameover
 			# Switch to game over screen
-			$scene = Scene_Gameover.new
+			#$scene = Scene_Gameover.new
 			return
 		end
 		# If returning to title screen

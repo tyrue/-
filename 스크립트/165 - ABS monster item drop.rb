@@ -38,9 +38,14 @@ class MrMo_ABS
 		end
 		$console.write_line("#{item.name} #{num}개 획득, 현재 #{n}개")
 		
+		$state_trans = false # 투명 풀림
+		
 		eid = $game_variables[218]
 		ex = $game_variables[215]
 		ey = $game_variables[216]
+		
+		Audio.se_play("Audio/SE/장", $game_variables[13])
+		Network::Main.ani(Network::Main.id, 198)
 		
 		Network::Main.socket.send "<drop_del>#{$game_map.map_id} #{eid}</drop_del>\n"
 		Network::Main.socket.send "<del_item>#{$game_map.map_id} #{eid} #{ex} #{ey} </del_item>\n"
@@ -105,7 +110,7 @@ class MrMo_ABS
 				i_id = 38 # 100전 
 			end
 		when 11 # 박쥐
-			if r <= 60 
+			if r <= 70 
 				i_id = 42 # 박쥐고기
 			end
 		when 12 # 보라박쥐
@@ -139,13 +144,13 @@ class MrMo_ABS
 		when 21 # 산돼지
 			if r <= 60 
 				i_id = 21 # 산돼지고기
-			elsif r <= 80
+			elsif r <= 70
 				i_id = 23 # 돼지의 뿔
 			end
 		when 22 # 숲돼지
 			if r <= 60
 				i_id = 22 # 숲돼지고기
-			elsif r <= 80
+			elsif r <= 70
 				i_id = 23 # 돼지의 뿔
 			end
 		when 23 # 주홍사슴
@@ -155,6 +160,8 @@ class MrMo_ABS
 		when 25 # 흑/백순록
 			if r <= 80 
 				i_id = 15 # 녹용
+			elsif r <= 85
+				i_id = 47 # 비철단도
 			end
 		when 26 # 자호
 			if r <= 60 
@@ -169,7 +176,7 @@ class MrMo_ABS
 		when 29 # 적호
 			if r <= 30 
 				i_id = 37 # 짙은호랑이고기
-			elsif r <= 50
+			elsif r <= 40
 				i_id = 38 # 100전
 			elsif r <= 70
 				i_id = 63 # 철도
@@ -297,6 +304,8 @@ class MrMo_ABS
 		when 77 # 청산숲돼지
 			if r <= 70 
 				i_id = 50 # 청산돼지뿔
+			elsif r <= 80
+				i_id = 63 # 철도
 			end
 		when 78 # 마령해골
 			if r <= 10 
@@ -366,8 +375,15 @@ class MrMo_ABS
 			if r <= 30 
 				i_id = 100 # 힘의투구1
 			end
+		when 105 # 에메랄드인형(극지방 보스)
+			if r <= 30 
+				i_id = 71 # 얼음
+			elsif r <= 70
+				i_id = 87 # 황금호박
+			end	
+		
 		when 106 # 뱀
-			if r <= 60 
+			if r <= 70 
 				i_id = 72 # 뱀고기
 			end
 		when 107 # 적비
@@ -443,7 +459,7 @@ class MrMo_ABS
 				i_id = 102 # 크리스탈
 			elsif r <= 40 
 				i_id = 103 # 수정
-			elsif r <= 90 
+			elsif r <= 70 
 				i_id = 79 # 건괘
 			end
 		when 120 # 용왕용마
@@ -451,55 +467,55 @@ class MrMo_ABS
 				i_id = 40 # 진호박
 			end
 		when 121 # 새끼용
-			if r <= 5
+			if r <= 2
 				i_id = 104 # 은나무가지
 			elsif r <= 40 
 				i_id = 40 # 진호박
 			end
 		when 123 # 뱀왕
-			if r <= 40 
+			if r <= 30 
 				i_id = 80 # 곤괘
 			end
 		when 124 # 쥐왕
-			if r <= 40 
+			if r <= 30 
 				i_id = 81 # 감괘
 			end
 		when 125 # 양왕
-			if r <= 3 
+			if r <= 2 
 				i_id = 82 # 리괘
 			end
 		when 126 # 돼지왕
-			if r <= 40 
+			if r <= 30 
 				i_id = 83 # 진괘
 			end
 		when 127 # 말왕
-			if r <= 3
+			if r <= 2
 				i_id = 84 # 선괘
 			end
 		when 128 # 원숭이왕
-			if r <= 40 
+			if r <= 30 
 				i_id = 85 # 태괘
 			end
 		when 129 # 개왕
-			if r <= 3
+			if r <= 2
 				i_id = 86 # 간괘
 			end
 		when 132 # 건룡
-			if r <= 60
+			if r <= 40
 				i_id = 105 # 건룡의어금니
-			elsif r <= 80
+			elsif r <= 60
 				i_id = 104 # 은나무가지
 			end
 		when 133 # 감룡
-			if r <= 60
+			if r <= 40
 				i_id = 106 # 감룡의어금니
-			elsif r <= 80
+			elsif r <= 60
 				i_id = 104 # 은나무가지
 			end
 		when 134 # 진룡
-			if r <= 60
+			if r <= 40
 				i_id = 107 # 진룡의어금니
-			elsif r <= 80
+			elsif r <= 60
 				i_id = 104 # 은나무가지
 			end
 			
@@ -539,7 +555,7 @@ class MrMo_ABS
 			if r <= 5 
 				i_id.push(99) # 해파리의 심장
 			end
-			if r <= 6 and $game_switches[378] == true # 용궁 전략문서 얻기
+			if r <= 4 and $game_switches[378] == true # 용궁 전략문서 얻기
 				i_id.push(98) # 전략문서
 			end
 			

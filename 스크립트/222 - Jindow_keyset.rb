@@ -42,6 +42,7 @@ class Jindow_Keyset < Jindow
 		for key in $ABS.skill_keys.sort
 			@i += 1
 			next if key[1] == nil or key[1] == 0
+			next if !$game_party.actors[0].skill_learn?(key[1])
 			@k_value[@i] = $data_skills[key[1]].name
 		end
 		

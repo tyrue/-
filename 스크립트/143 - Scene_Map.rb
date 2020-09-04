@@ -29,7 +29,7 @@ class Scene_Map
 		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
-		$game_temp.spriteset_refresh
+		$game_temp.spriteset_refresh == true
 		$chat_b.refresh
 		
 		맵이동

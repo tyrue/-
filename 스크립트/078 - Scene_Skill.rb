@@ -209,7 +209,7 @@ class Scene_Skill
 				# If entire party is dead
 				if $game_party.all_dead?
 					# Switch to game over screen
-					$scene = Scene_Gameover.new
+					#$scene = Scene_Gameover.new
 					return
 				end
 				# If command event ID is valid

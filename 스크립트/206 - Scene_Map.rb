@@ -22,9 +22,7 @@ class Scene_Map
 		end
 		
 		if $game_party.actors[0].hp == 0
-			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
-			$game_switches[296] = true if $game_switches[296] != true# 유저 죽음 스위치 온
-			Hwnd.dispose("Inventory")
+			Hwnd.dispose("Inventory") if Hwnd.include?("Inventory")
 		end
 		
 		if not Hwnd.include?("NetPartyInv")
@@ -122,7 +120,7 @@ class Scene_Map
 					end	
 					
 					if Key.trigger?(36) # m
-						$scene = Scene_Menu.new(0)
+						# 나중에 지도 열기 메뉴로 쓸 예정
 					end 
 					
 					if Key.trigger?(11)  #아이템, 돈 줍기

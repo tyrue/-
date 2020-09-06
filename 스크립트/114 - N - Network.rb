@@ -290,6 +290,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
 				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
 				send += "@guild = '#{$guild}';"
+				
+				if $state_trans # 투명
+					send += "@is_transparency = true;"
+				else
+					send += "@is_transparency = false;"
+				end
 				send+= "start(#{self.id});"
 				@socket.send("<5>#{send}</5>\n")
 				self.send_newstats
@@ -398,6 +404,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
 				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
 				send += "@guild = '#{$guild}';"
+				
+				if $state_trans # 투명
+					send += "@is_transparency = true;"
+				else
+					send += "@is_transparency = false;"
+				end
 				@socket.send("<5>#{send}</5>\n")
 				#self.send_map
 			end
@@ -418,13 +430,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
 				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
 				send += "@level = #{$game_party.actors[0].level};"
+				send += "@bar_showing = false;" 
 				
 				if $state_trans # 투명
 					send += "@is_transparency = true;"
 				else
 					send += "@is_transparency = false;"
 				end
-				
+				send+= "start(#{self.id});"
 				@socket.send("<m5>#{send}</m5>\n")
 			end
 			
@@ -492,33 +505,26 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.send_newstats
 				return if @mapplayers == {}
-				hp = $game_party.actors[0].hp
-				sp = $game_party.actors[0].sp
-				agi = $game_party.actors[0].agi
-				eva = $game_party.actors[0].eva
-				pdef = $game_party.actors[0].pdef
-				mdef = $game_party.actors[0].mdef
-				level = $game_party.actors[0].level
 				a = $game_party.actors[0]
-				maxhp = $game_party.actors[0].maxhp
-				maxsp = $game_party.actors[0].maxsp
-				pci = $game_party.actors[0].class_name
-				c = "["
-				m = 1
-				for i in a.states
-					next if $data_states[i] == nil
-					c += i.to_s
-					c += ", " if m != a.states.size
-					m += 1
-				end
-				c += "]"
+				hp = a.hp
+				sp = a.sp
+				agi = a.agi
+				eva = a.eva
+				pdef = a.pdef
+				mdef = a.mdef
+				level = a.level
+				maxhp = a.maxhp
+				maxsp = a.maxsp
+				pci = a.class_name
 				
-				stats = "@pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @states = #{c}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
+				stats = "@str = #{a.str}; @dex = #{a.dex}; @pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
+				stats += "@character_name = '#{$game_player.character_name}';"
 				if $state_trans # 투명
 					stats += "@is_transparency = true;"
 				else
 					stats += "@is_transparency = false;"
 				end
+				
 				@socket.send("<m5>#{stats}</m5>\n")
 			end
 			#--------------------------------------------------------------------------
@@ -637,7 +643,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return
 				end
 				g = @mapplayers[id]
-				@mapplayers[id] ||= @players[id] if @players[id] != nil
+				
+				if @players[id] != nil
+					@mapplayers[id] ||= @players[id] 
+					$game_temp.spriteset_refresh = true
+				end
 				# Turn Id in Hash into Netplayer (if not yet)
 				@mapplayers[id] ||= Game_NetPlayer.new
 				# Set the Global NetId if it is not Set yet
@@ -646,9 +656,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@mapplayers[id].refresh(data)
 				#Send the player's new stats
 				
-				if g == nil
-					self.send_newstats 
-				end
+				self.send_newstats 
 			end
 			#--------------------------------------------------------------------------
 			# * Update Net Actors
@@ -1197,7 +1205,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Update Player
 					self.update_net_player($1, $2)
 					# If it is first time connected...
-					return true if !$2.include?("start") and !$2.include?("@is_transparency")
+					return true if !$2.include?("start")
 					# ... and it is not yourself ...
 					return true if $1.to_i == self.id.to_i
 					# ... and it is on the same map...
@@ -1205,6 +1213,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# ...  Return the Requested Information
 					#return true if !self.in_range?(@players[$1])
 					self.send_start_request($1.to_i) 
+					
 					$game_temp.spriteset_refresh = true
 					return true
 					# Map PLayer Processing
@@ -1221,21 +1230,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_party.actors[0].refresh_states($1)
 					
 					# Attacked!
-				when /<attack_effect>dam=(.*) ani=(.*) id=(.*)<\/attack_effect>/
-					$game_party.actors[0].hp -= $1.to_i if $1.to_i > 0 and $1 != "Miss"
-					$game_player.jump(0, 0) if $1.to_i > 0 and $1 != "Miss"
-					$game_player.animation_id = $2.to_i if $1.to_i > 0 and $1 != "Miss"
-					$game_player.show_demage($1.to_i,false) if $1.to_i > 0 and $1 != "Miss"
-					self.send_newstats
+				when /<attack_effect>(.*)<\/attack_effect>/
+					data = $1.split(",")
+					return if data[0] != @id
 					
-					if $game_party.actors[0].hp <= 0 or $game_party.actors[0].dead?
-						self.send_result($3.to_i)
-						self.send_dead
-						#$scene = Scene_Gameover.new 
-					end
-					return true
-					# Killed
+					$game_party.actors[0].attack_effect(@players[data[1]]) if @players[data[1]] != nil
 					
+					# Attacked!
+				when /<skill_effect>(.*)<\/skill_effect>/
+					data = $1.split(",")
+					return if data[0] != @id
+					
+							
 				when /<result_effect>(.*)<\/result_effect>/ 
 					$ABS.netplayer_killed
 					return true

@@ -24,7 +24,7 @@ class Scene_Map
 		if SKILL_BUFF_TIME[136][1] > 0 # 파무쾌보
 			$game_player.move_speed = 3.5
 		end
-		자동저장 if not $game_party.actors[0].name == "평민"
+		자동저장 # if not $game_party.actors[0].name == "평민"
 		# 현재 맵의 몬스터 정보를 요청
 		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
@@ -36,6 +36,7 @@ class Scene_Map
 		# 현재 맵의 아이템을 요청
 		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 		$game_switches[25] = false # 스킬 사용 불가 off
+		$game_switches[302] = false # pk off
 	end
 	
 	#--------------------------------------------------------------------------
@@ -91,14 +92,7 @@ end
 # * Updates Input
 #--------------------------------------------------------------------------
 def update_input
-	if Input.trigger?(Input::Letters["S"])
-		return if $ABS.button_mash <= 38
-		for player in Network::Main.mapplayers.values
-			next if player == nil
-			next if not face_too?(player)
-			update_pvp(player)
-		end
-	end
+
 end
 #--------------------------------------------------------------------------
 # * Updates Mouse
@@ -167,14 +161,7 @@ end
 #--------------------------------------------------------------------------
 # * update pvp 업데이트 pvp
 #--------------------------------------------------------------------------
-def update_pvp(player)
-	# 만약 pvp 스위치 켜져 있으면  싸움 가능
-	# 데미지 계산해서 보내기
-	# 해당 대상 애니메이션 재생하도록 보냄
-	ani_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id
-	$ani_character[player.netid.to_i].animation_id = ani_id if $ani_character[player.netid.to_i] != nil
-	Network::Main.ani(player.netid, ani_id)
-end
+
 
 
 =begin

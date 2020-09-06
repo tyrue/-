@@ -1427,6 +1427,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				#~ #Setup movement
 				setup_movement(e)
 			end
+			
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				next if !in_direction?($game_player, player) or !in_range?($game_player, player, 1)
+				# next if not $game_switches[302] == false
+				# 만약 pvp 스위치 켜져 있으면  싸움 가능
+				# 해당 대상 애니메이션 재생하도록 보냄
+				ani_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id
+				$ani_character[player.netid.to_i].animation_id = ani_id if $ani_character[player.netid.to_i] != nil
+				Network::Main.ani(player.netid, ani_id)
+				
+				# 상대방 아이디, 자신의 아이디
+				Network::Main.socket.send("<attack_effect>#{player.netid},#{Network::Main.id}</attack_effect>\n")	# if $game_switches[302] # pk on
+			end
 		end
 		
 		
@@ -1944,6 +1958,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Player Dead(Player,Enemy)
 		#--------------------------------------------------------------------------
 		def player_dead?(a,e)
+			return true if $game_switches[296]
 			#Check State Effect
 			if STATE_EFFECTS
 				for id in $game_party.actors[0].states
@@ -1975,13 +1990,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
-			e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
-			e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
-			#Game Over?
-			if NEXT_LEADER and !$game_party.all_dead?
-				#~ move_forward
-			else
-				# revive_actor
+			if !e.is_a?(Game_NetPlayer)
+				e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
+				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
 			end
 			$scene = Scene_Map.new
 			return true
@@ -2383,6 +2394,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return true if element.direction == 8 and object.y <= element.y and object.x == element.x
 			return false
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Animate(object, name)
 		#--------------------------------------------------------------------------
@@ -2605,8 +2617,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def hit_net_player(actor)
 			@stop = true
-			#Attack It's enemy
-			#~ actor.effect_skill($game_party.actors[0], @skill)
 			#Show animation on event
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			# 해당 대상 애니메이션 재생하도록 보냄
@@ -2737,9 +2747,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def hit_net_player(actor)
 			@stop = true
-			#Attack It's enemy
-			#~ actor.effect_skill($game_party.actors[0], @skill)
-			#Show animation on event
 			
 			if @skill.id == 138
 				$rpg_skill.비영승보(x, y, @move_direction)
@@ -3479,7 +3486,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     attacker : battler
 		#--------------------------------------------------------------------------
 		def attack_effect(attacker)
-			
 			# 나한테 적이아니면 공격 못함
 			if self.is_a?(ABS_Enemy) and attacker.is_a?(Game_Actor)
 				return if !self.hate_group.include?(0)
@@ -3488,22 +3494,27 @@ if SDK.state("Mr.Mo's ABS") == true
 			self.critical = false
 			# First hit detection
 			
-			hit_result = (rand(100) < attacker.hit)
-			# If hit occurs
 			
+			# If hit occurs
+			hit_result = true
 			# 1차로 명중률을 계산함
 			if hit_result == true
 				# Calculate basic damage
+				
 				if self.is_a?(Game_Actor)
 					atk = [(attacker.atk + attacker.str / 100.0)- (self.base_pdef * 2 / 5), (attacker.atk / 20.0)].max
 				else
 					atk = [(attacker.atk + attacker.str / 100.0)- (self.pdef * 2 / 5), (attacker.atk / 20.0)].max
 				end
 				
+				
 				self.damage = (atk * (20 + attacker.str) / 20.0)
 				# Element correction
-				self.damage *= elements_correct(attacker.element_set)
-				self.damage /= 100
+				if !attacker.is_a?(Game_NetPlayer)
+					self.damage *= elements_correct(attacker.element_set) 
+					self.damage /= 100 
+				end
+				
 				self.damage = self.damage.to_i
 				self.damage = 1 if self.damage <= 0
 				# If damage value is strictly positive
@@ -3575,6 +3586,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				self.hp -= self.damage
+				return $ABS.player_dead?(self, attacker) if self.is_a?(Game_Actor)
+				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if !self.is_a?(Game_Actor)
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
@@ -3582,8 +3595,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				# State change
 				@state_changed = false
-				states_plus(attacker.plus_state_set)
-				states_minus(attacker.minus_state_set)
+				if !attacker.is_a?(Game_NetPlayer)
+					states_plus(attacker.plus_state_set)
+					states_minus(attacker.minus_state_set)
+				end
 				# When missing
 			else
 				

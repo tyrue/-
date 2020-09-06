@@ -227,11 +227,21 @@ if SDK.state("Mr.Mo's ABS")
 			#Get net Players
 			for player in Network::Main.mapplayers.values
 				next if player == nil
+				
+				if @netPlayers_hp[player.netid] == nil
+					if player.bar_showing
+						player.bar_showing = false 
+						next
+					end
+				end
+				
+				
 				#if in screen
 				if player.in_range?(10)
 					next if player.bar_showing
 					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
 					player.bar_showing = true
+					
 				elsif player.bar_showing and @netPlayers_hp[player.netid] != nil
 					player.bar_showing = false
 					@netPlayers_hp[player.netid].dispose if !@netPlayers_hp[player.netid].disposed?

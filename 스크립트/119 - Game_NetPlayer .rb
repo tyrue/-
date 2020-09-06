@@ -27,6 +27,10 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :username
 		attr_accessor :event
 		attr_accessor :agi
+		attr_accessor :str
+		attr_accessor :dex
+		attr_accessor :int
+		attr_accessor :atk
 		attr_accessor :pdef
 		attr_accessor :eva
 		attr_accessor :mdef
@@ -66,7 +70,10 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@move_tom = true
 			@event = self
 			@eva = 0
+			@str = 0
+			@dex = 0
 			@agi = 0
+			@int = 0
 			@pdef = 0
 			@mdef = 0
 			@states = []
@@ -113,189 +120,12 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			net_move if @oldx != @x or @oldy != @y 
 			@move_tom = false
 		end
-		#--------------------------------------------------------------------------
-		# * Get the Demage
-		#--------------------------------------------------------------------------
-		def attack_effect(attacker = $game_party.actors[0])
-			# First hit detection
-			hit_result = (rand(100) < attacker.hit)
-			@damage = "Miss" if !hit_result
-			return "Miss" if !hit_result
-			# Calculate basic damage
-			atk = [attacker.atk - @pdef / 2, 0].max
-			damage = atk * (20 + attacker.str) / 20
-			# Element correction
-			damage *= attacker.elements_correct(attacker.element_set)
-			damage /= 100
-			# If damage value is strictly positive
-			if damage > 0
-				# Critical correction
-				if rand(100) < 4 * attacker.dex / @agi
-					damage *= 2
-					@critical = true
-				end
-			end
-			# Dispersion
-			if damage.abs > 0
-				amp = [damage.abs * 15 / 100, 1].max
-				damage += rand(amp+1) + rand(amp+1) - amp
-			end
-			# Second hit detection
-			eva = 8 * @agi / attacker.dex + @eva
-			hit = damage < 0 ? 100 : 100 - eva
-			hit = cant_evade? ? 100 : hit
-			hit_result = (rand(100) < hit)
-			# State change
-			netid = @netid
-			Network::Main.socket.send("<state_id>#{netid}\n")
-			# State Removed by Shock
-			Network::Main.socket.send("<state>remove_states_shock</state>\n")
-			# Substract damage from HP
-			@hp -= damage
-			#Get all the plus states
-			s = "["
-			m = attacker.plus_state_set
-			for i in 0..m.size
-				k = m[i]
-				s += "#{k}"
-				s += ", " if i != m.size 
-			end
-			s += "]"
-			Network::Main.socket.send("<state>states_plus(#{s})</state>\n")
-			#Get all the minus states
-			s = "["
-			m = attacker.minus_state_set
-			for i in 0..m.size
-				k = m[i]
-				s += "#{k}"
-				s += ", " if i != m.size 
-			end
-			s += "]"
-			Network::Main.socket.send("<state>states_minus(#{s})</state>\n")
-			@damage = damage
-			return damage
+		
+		def atk
+			weapon = $data_weapons[@weapon_id]
+			return weapon != nil ? weapon.atk : 0
 		end
-		#--------------------------------------------------------------------------
-		# * Apply Skill Effects
-		#     user  : the one using skills (battler)
-		#     skill : skill
-		#--------------------------------------------------------------------------
-		def effect_skill(user, skill)
-			# Clear critical flag
-			@critical = false
-			# If skill scope is for ally with 1 or more HP, and your own HP = 0,
-			# or skill scope is for ally with 0, and your own HP = 1 or more
-			if ((skill.scope == 3 or skill.scope == 4) and @hp == 0) or
-				((skill.scope == 5 or skill.scope == 6) and @hp >= 1)
-				# End Method
-				return false
-			end
-			# Clear effective flag
-			effective = false
-			# Set effective flag if common ID is effective
-			effective |= skill.common_event_id > 0
-			# First hit detection
-			hit = skill.hit
-			if skill.atk_f > 0
-				hit *= user.hit / 100
-			end
-			hit_result = (rand(100) < hit)
-			# Set effective flag if skill is uncertain
-			effective |= hit < 100
-			# If hit occurs
-			if hit_result == true
-				# Calculate power
-				power = skill.power + user.atk * skill.atk_f / 100
-				if power > 0
-					power -= @pdef * skill.pdef_f / 200
-					power -= @mdef * skill.mdef_f / 200
-					power = [power, 0].max
-				end
-				# Calculate rate
-				rate = 20
-				rate += (user.str * skill.str_f / 100)
-				rate += (user.dex * skill.dex_f / 100)
-				rate += (user.agi * skill.agi_f / 100)
-				rate += (user.int * skill.int_f / 100)
-				# Calculate basic damage
-				@damage = power * rate / 20
-				# Element correction
-				@damage *= user.elements_correct(skill.element_set)
-				@damage /= 100
-				# Dispersion
-				if skill.variance > 0 and @damage.abs > 0
-					amp = [@damage.abs * skill.variance / 100, 1].max
-					@damage += rand(amp+1) + rand(amp+1) - amp
-				end
-				# Second hit detection
-				eva = 8 * @agi / user.dex + @eva
-				hit = @damage < 0 ? 100 : 100 - eva * skill.eva_f / 100
-				hit = cant_evade? ? 100 : hit
-				hit_result = (rand(100) < hit)
-				# Set effective flag if skill is uncertain
-				effective |= hit < 100
-			end
-			# If hit occurs
-			if hit_result == true
-				# If physical attack has power other than 0
-				if skill.power != 0 and skill.atk_f > 0
-					# State change
-					netid = @netid
-					Network::Main.socket.send("<state_id>#{netid}\n")
-					# State Removed by Shock
-					Network::Main.socket.send("<state>remove_states_shock</state>\n")
-					# Set to effective flag
-					effective = true
-				end
-				
-				# Substract damage from HP
-				last_hp = @hp
-				@hp -= @damage
-				effective |= @hp != last_hp
-				# State change
-				@state_changed = false
-				
-				#Get all the plus states
-				s = "["
-				m = user.plus_state_set
-				for i in 0..m.size
-					k = m[i]
-					s += "#{k}"
-					s += ", " if i != m.size 
-				end
-				s += "]"
-				Network::Main.socket.send("<state>states_plus(#{s})</state>\n")
-				
-				#Get all the minus states
-				s = "["
-				m = user.minus_state_set
-				for i in 0..m.size
-					k = m[i]
-					s += "#{k}"
-					s += ", " if i != m.size 
-				end
-				s += "]"
-				Network::Main.socket.send("<state>states_minus(#{s})</state>\n")
-				
-				# If power is 0
-				if skill.power == 0
-					# Set damage to an empty string
-					@damage = ""
-					# If state is unchanged    
-					unless @state_changed
-						# Set damage to "Miss"
-						@damage = "Miss"
-					end
-				end
-				
-				# If miss occurs
-			else
-				# Set damage to "Miss"
-				@damage = "Miss"
-			end
-			# End Method
-			return effective
-		end
+		
 		#--------------------------------------------------------------------------
 		# * Determine [Can't Evade] States
 		#--------------------------------------------------------------------------

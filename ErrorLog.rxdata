@@ -7908,3 +7908,37 @@ Section168:513: dynamic constant assignment
 Section168:514: dynamic constant assignment
 		TEMP = 3 if $game_switches[4] # 현무
 		      ^ ()>> occured.
+On <<Sat 05 Sep 2020, 23:01:58>> the error <<(eval):1: syntax error (#<Scene_Map:0x108eae00>)>> occured.
+On <<Sat 05 Sep 2020, 23:01:58>> the error <<(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ; (#<Scene_Map:0x108eae00>)>> occured.
+On <<Sat 05 Sep 2020, 23:01:58>> the error <<(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ;
+                                                                                                                                                                     ^ (#<Scene_Map:0x108eae00>)>> occured.
+On <<Sat 05 Sep 2020, 23:01:58>> the error <<compile error
+(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ;
+                                                                                                                                                                     ^ (#<Scene_Map:0x108eae00>)>> occured.
+On <<Sat 05 Sep 2020, 23:02:56>> the error <<(eval):1: syntax error (#<Scene_Map:0x10896d10>)>> occured.
+On <<Sat 05 Sep 2020, 23:02:56>> the error <<(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ; (#<Scene_Map:0x10896d10>)>> occured.
+On <<Sat 05 Sep 2020, 23:02:56>> the error <<(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ;
+                                                                                                                                                                     ^ (#<Scene_Map:0x10896d10>)>> occured.
+On <<Sat 05 Sep 2020, 23:02:56>> the error <<compile error
+(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ;
+                                                                                                                                                                     ^ (#<Scene_Map:0x10896d10>)>> occured.
+On <<Sat 05 Sep 2020, 23:03:31>> the error <<(eval):1: syntax error (#<Scene_Map:0x1088f2a8>)>> occured.
+On <<Sat 05 Sep 2020, 23:03:31>> the error <<(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ; (#<Scene_Map:0x1088f2a8>)>> occured.
+On <<Sat 05 Sep 2020, 23:03:31>> the error <<(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ;
+                                                                                                                                                                     ^ (#<Scene_Map:0x1088f2a8>)>> occured.
+On <<Sat 05 Sep 2020, 23:03:31>> the error <<compile error
+(eval):1: syntax error
+@pci = '전사'; @hp = 20550; @sp = 21493; @agi = 200; @eva = 0; @pdef = 0; @mdef = 0; @states = []; @level = 99; @maxhp = 23655; @maxsp = 21493;@is_transparency = ;
+                                                                                                                                                                     ^ (#<Scene_Map:0x1088f2a8>)>> occured.
+On <<Sun 06 Sep 2020, 23:48:27>> the error <<Section166:300: syntax error ()>> occured.
+On <<Sun 06 Sep 2020, 23:48:27>> the error <<compile error
+Section166:300: syntax error ()>> occured.
+On <<Mon 07 Sep 2020, 00:20:58>> the error << (#<Scene_Login:0x106fbb10>)>> occured.

@@ -78,6 +78,12 @@ class Bitmap
 	end
 end
 
+class Float
+	def string?
+		return false
+	end
+end
+
 class Integer
 	def integer?
 		return true

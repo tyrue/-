@@ -10,14 +10,17 @@ class Scene_Map
 	# * Initializes map.
 	#--------------------------------------------------------------------------
 	def initialize
-		Network::Main.socket.send "<map_player>#{$game_map.map_id}</map_player>\n"
+		$game_switches[25] = false # 스킬 사용 불가 off
+		$game_switches[302] = false # pk off
 		
 		#맵이름의 표시
 		map_infos = load_data("Data/MapInfos.rxdata")
 		mapname = map_infos[$game_map.map_id].name.to_s
 		
+		Network::Main.socket.send "<map_player>#{$game_map.map_id}</map_player>\n"
 		Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
 		Network::Main.send_map
+		
 		$nowtrade = 0
 		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = 3
@@ -25,18 +28,16 @@ class Scene_Map
 			$game_player.move_speed = 3.5
 		end
 		자동저장 # if not $game_party.actors[0].name == "평민"
+		
 		# 현재 맵의 몬스터 정보를 요청
 		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
 		end
-		$game_temp.spriteset_refresh == true
-		$chat_b.refresh
-		
-		맵이동
 		# 현재 맵의 아이템을 요청
 		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
-		$game_switches[25] = false # 스킬 사용 불가 off
-		$game_switches[302] = false # pk off
+		$game_temp.spriteset_refresh == true
+		$chat_b.refresh
+		맵이동
 	end
 	
 	#--------------------------------------------------------------------------
@@ -92,7 +93,7 @@ end
 # * Updates Input
 #--------------------------------------------------------------------------
 def update_input
-
+	
 end
 #--------------------------------------------------------------------------
 # * Updates Mouse

@@ -7,4 +7,10 @@
 #==============================================================================
 class Game_Player
 	attr_reader :move_speed
+	
+	alias net_update update
+	def update
+		Network::Main.ani(Network::Main.id, @animation_id) if @animation_id != 0
+		net_update
+	end
 end

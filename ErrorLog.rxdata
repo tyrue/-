@@ -7942,3 +7942,130 @@ On <<Sun 06 Sep 2020, 23:48:27>> the error <<Section166:300: syntax error ()>> o
 On <<Sun 06 Sep 2020, 23:48:27>> the error <<compile error
 Section166:300: syntax error ()>> occured.
 On <<Mon 07 Sep 2020, 00:20:58>> the error << (#<Scene_Login:0x106fbb10>)>> occured.
+On <<Mon 07 Sep 2020, 20:48:57>> the error <<cannot convert String into Integer (#<Scene_Map:0x10703328>)>> occured.
+On <<Wed 09 Sep 2020, 20:03:18>> the error <<disposed window (#<Scene_Map:0x109d4370>)>> occured.
+On <<Wed 09 Sep 2020, 20:05:03>> the error <<disposed window (#<Scene_Map:0x1061bec8>)>> occured.
+On <<Wed 09 Sep 2020, 20:05:25>> the error <<disposed window (#<Scene_Map:0x41a4968>)>> occured.
+On <<Wed 09 Sep 2020, 20:18:59>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x105f3990>)>> occured.
+On <<Wed 09 Sep 2020, 20:19:57>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x105ee858>)>> occured.
+On <<Wed 09 Sep 2020, 20:20:31>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x42b2a80>)>> occured.
+On <<Wed 09 Sep 2020, 20:21:49>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x105f26a8>)>> occured.
+On <<Wed 09 Sep 2020, 20:23:20>> the error <<no implicit conversion from nil to integer (#<Scene_Map:0x105c9b28>)>> occured.
+On <<Wed 09 Sep 2020, 20:42:38>> the error <<Section267:189: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:42:38>> the error <<Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = v_max.to_f / PLAN_Map_Window::WIN_WIDTH ()>> occured.
+On <<Wed 09 Sep 2020, 20:42:38>> the error <<Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = v_max.to_f / PLAN_Map_Window::WIN_WIDTH
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:42:38>> the error <<compile error
+Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = v_max.to_f / PLAN_Map_Window::WIN_WIDTH
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:10>> the error <<Section267:189: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:10>> the error <<Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:10>> the error <<Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:10>> the error <<compile error
+Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:58>> the error <<Section267:189: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:58>> the error <<Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = 1 ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:58>> the error <<Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = 1
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:43:58>> the error <<compile error
+Section267:189: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = 1
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:24>> the error <<Section267:33: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:24>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:24>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:24>> the error <<compile error
+Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:53>> the error <<Section267:33: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:53>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:53>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:46:53>> the error <<compile error
+Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:48:38>> the error <<Section267:190: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:48:38>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH) ()>> occured.
+On <<Wed 09 Sep 2020, 20:48:38>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH)
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:48:38>> the error <<compile error
+Section267:190: dynamic constant assignment
+		ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH)
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<Section267:190: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = 1 ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = 1
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = 1
+		      ^
+Section267:191: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = 1
+		      ^
+Section267:191: dynamic constant assignment
+		ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH) ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<Section267:190: dynamic constant assignment
+		ZOOM = 1
+		      ^
+Section267:191: dynamic constant assignment
+		ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH)
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:49:00>> the error <<compile error
+Section267:190: dynamic constant assignment
+		ZOOM = 1
+		      ^
+Section267:191: dynamic constant assignment
+		ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH)
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:50:21>> the error <<Section267:33: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:50:22>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v ()>> occured.
+On <<Wed 09 Sep 2020, 20:50:22>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:50:22>> the error <<compile error
+Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:51:31>> the error <<Section267:193: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:51:31>> the error <<Section267:193: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH) ()>> occured.
+On <<Wed 09 Sep 2020, 20:51:31>> the error <<Section267:193: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH)
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:51:31>> the error <<compile error
+Section267:193: dynamic constant assignment
+		PLAN_Map_Window::ZOOM = (v_max * (1.0) / PLAN_Map_Window::WIN_WIDTH)
+		                       ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:52:07>> the error <<Section267:33: dynamic constant assignment ()>> occured.
+On <<Wed 09 Sep 2020, 20:52:07>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v ()>> occured.
+On <<Wed 09 Sep 2020, 20:52:07>> the error <<Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.
+On <<Wed 09 Sep 2020, 20:52:07>> the error <<compile error
+Section267:33: dynamic constant assignment
+		ZOOM = v
+		      ^ ()>> occured.

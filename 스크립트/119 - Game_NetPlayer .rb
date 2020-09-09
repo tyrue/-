@@ -43,6 +43,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :saybal
 		attr_accessor :pci
 		attr_accessor :character_name
+		attr_accessor :trans_v
 		if User_Edit::VISUAL_EQUIP_ACTIVE
 			attr_accessor :weapon_id
 			attr_accessor :armor1_id
@@ -86,6 +87,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@message = ""
 			@character_name = "바람머리"
 			@is_transparency = false
+			@trans_v = 0
 			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false

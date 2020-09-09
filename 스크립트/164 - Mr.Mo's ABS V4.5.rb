@@ -1064,9 +1064,9 @@ if SDK.state("Mr.Mo's ABS") == true
 						a.attack_effect(e)
 						#Animate the enemy
 						e.event.animation_id = e.animation1_id
+						Network::Main.ani(e.event.id, e.animation1_id, 1)
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
 						
-						Network::Main.ani(Network::Main.id, e.event.animation_id)
 						#Show Animation
 						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
 						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
@@ -1097,6 +1097,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
+						Network::Main.ani(e.event.id, skill.animation1_id, 1)
+						
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						if RANGE_SKILLS.has_key?(skill.id)
 							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e는a의 적(플레이어 또는 또 다른 적)여기서 알아서 데미지 계산
@@ -1139,6 +1141,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
+						Network::Main.ani(e.event.id, skill.animation1_id, 1)
+						
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						
 						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
@@ -1222,8 +1226,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@button_mash -= 1 if @button_mash > 0
 			return if @button_mash > 0
 			
-			if !Hwnd.include?("NetPartyInv") or 
-				!Hwnd.include?("Trade") or 
+			if !Hwnd.include?("NetPartyInv") and 
+				!Hwnd.include?("Trade") and 
 				!Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
 				
 				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
@@ -1402,16 +1406,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				next if !CAN_HURT_ALLY and e.hate_group.include?(0)
 				# Show Weapon Aniamtion
 				$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id
-				e.event.animation_id = $data_weapons[@actor.weapon_id].animation2_id
+				a = $data_weapons[@actor.weapon_id].animation2_id
+				e.event.animation_id = a
+				Network::Main.ani(e.event.id, a, 1)
 				#Add mash time
 				#Attack the enemy 적 공격
 				e.attack_effect(@actor)
 				#Get Animation 무기 공격 애니메이션
-				a = $data_weapons[@actor.weapon_id].animation2_id
+				
 				#Hit enemy if the attack succeeds  몬스터에게 밀리 이미지
 				if e.damage != "Miss" and e.damage != 0
-					Audio.se_play("Audio/SE/타격", $game_variables[13])
-					Network::Main.ani(e.event.id, a, 1)					
+					Audio.se_play("Audio/SE/타격", $game_variables[13])					
 				end
 				#Return if the enemy is dead
 				weapon_skill(@actor.weapon_id, e)
@@ -1440,6 +1445,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 상대방 아이디, 자신의 아이디
 				Network::Main.socket.send("<attack_effect>#{player.netid},#{Network::Main.id}</attack_effect>\n")	# if $game_switches[302] # pk on
+				
+				$state_trans = false
+				$game_variables[9] = 1
 			end
 		end
 		
@@ -1449,15 +1457,30 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=============================#
 		def weapon_skill(id, e)
 			r = rand(100)
+			ani = 0
+			dmg = 0
 			case id
+			when 115 # 심판의낫
+				if r < 20
+					dmg = 100000
+					ani = 194
+				end
 			when 114 # 주작의 검
-				if r < 100
-					e.damage = 1500
-					e.hp -= 1500
+				if r < 40
+					dmg = 1500
+					ani = 153
 				end
 			end
+			
+			if dmg != 0
+				e.damage = dmg
+				e.hp -= dmg
+			end
+			if ani != 0
+				e.event.animation_id = ani
+				Network::Main.ani(e.event.id, ani, 1)
+			end
 		end
-		
 		
 		#==============================#
 		#=====스킬 딜레이 알려줌 - 크랩훕흐======#
@@ -2621,6 +2644,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			# 해당 대상 애니메이션 재생하도록 보냄
 			Network::Main.ani(actor.netid, @skill.animation2_id)
+			Network::Main.socket.send("<skill_effect>#{actor.netid},#{Network::Main.id},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
 		end 
 		
 		
@@ -2637,7 +2661,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.effect_skill(enemy, @skill) if enemy != nil 
 			
 			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
-			Network::Main.socket.send "<27>@ani_map = #{$game_map.map_id}; @ani_number = #{$game_player.animation_id}; @ani_id = #{Network::Main.id};</27>\n"
+			Network::Main.ani(Network::Main.id, @skill.animation2_id)
 			#Jump
 			#$ABS.jump($game_player,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
@@ -2755,6 +2779,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 해당 대상 애니메이션 재생하도록 보냄
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			Network::Main.ani(actor.netid, @skill.animation2_id) #유저 애니매이션 공유
+			Network::Main.socket.send("<skill_effect>#{actor.netid},#{Network::Main.id},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
 		end 
 		
 		
@@ -3564,6 +3589,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
+				
 				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
 				if attacker.is_a?(Game_Actor)
 					if $state_trans # 투명
@@ -3573,7 +3599,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					if SKILL_BUFF_TIME[134][1] > 0 # 분신
 						self.damage *= 2 
-					end
+					end	
 				end
 				
 				r = rand(100)
@@ -3640,8 +3666,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			# First hit detection
 			hit = skill.hit
 			if skill.atk_f > 0
-				hit *= user.hit / 100
+				hit *= user.hit / 100 if !user.is_a?(Game_NetPlayer)
 			end
+			
 			
 			# 스킬 명중률
 			hit_result = (rand(10) < hit)
@@ -3797,7 +3824,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					power = skill.power + user.atk / 2 
 				end				
-				power = (power * (1.0 + user.atk / 150.0)).to_i
+				power = (power * (1.0 + user.atk / 150.0))
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
 					power -= self.mdef * skill.mdef_f / 100
@@ -3813,10 +3840,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				rate += (user.agi * skill.agi_f / 100.0)
 				rate += (user.int * skill.int_f / 100.0)
 				# Calculate basic damage
-				self.damage = (power * rate / 20.0).to_i
+				self.damage = (power * rate / 20.0)
 				# Element correction
 				self.damage *= elements_correct(skill.element_set)
 				self.damage /= 100
+				self.damage = self.damage.to_i
+				
 				# If damage value is strictly positive
 				if self.damage > 0
 					
@@ -3825,7 +3854,6 @@ if SDK.state("Mr.Mo's ABS") == true
 						self.damage /= 2
 					end
 				end
-				
 				
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
@@ -3874,6 +3902,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				last_hp = self.hp
 				self.hp -= self.damage
 				
+				return $ABS.player_dead?(self, user) if self.is_a?(Game_Actor)
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if !self.is_a?(Game_Actor)
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")

@@ -3,6 +3,11 @@ class MrMo_ABS
 	# * 아이템의 처리
 	#--------------------------------------------------------------------------
 	def take_item(type, id, num) # 아이템의 종류(무기, 방어구, 아이템), id, 개수
+		if $game_switches[296] # 죽었으면 못 먹음
+			$console.write_line("귀신은 할 수 없습니다.") 
+			return
+		end
+		
 		n = 0
 		case type
 		when 0 # 아이템
@@ -110,13 +115,13 @@ class MrMo_ABS
 				i_id = 38 # 100전 
 			end
 		when 11 # 박쥐
-			if r <= 70 
+			if r <= 80 
 				i_id = 42 # 박쥐고기
 			end
 		when 12 # 보라박쥐
-			if r <= 60 
+			if r <= 80 
 				i_id = 42 # 박쥐고기
-			elsif r <= 80 
+			elsif r <= 90 
 				i_id = 38 # 100전 
 			end
 		when 13 # 평웅
@@ -196,7 +201,7 @@ class MrMo_ABS
 		when 39 # 불귀신
 			if r <= 40 
 				i_id = 40 # 진호박
-			elsif r <= 65
+			elsif r <= 70
 				i_id = 44 # 불의 혼
 			elsif r <= 80
 				i_id = 45 # 불의 결정
@@ -259,22 +264,23 @@ class MrMo_ABS
 			end
 		when 57 # 청웅객
 			i_id = []
+			if r <= 50 and $game_switches[141] == true # 승급 퀘스트
+				i_id.push(52) # 청웅의 환
+			end
 			if r <= 20
 				i_id.push(51) # 낡은 수리검
 			end
-			if r <= 30 and $game_switches[141] == true # 승급 퀘스트
-				i_id.push(52) # 청웅의 환
-			end
+			
 		when 58 # 수룡
-			if r <= 98 
+			if r <= 80 
 				i_id = 60 # 용의비늘
-			elsif r <= 99
+			elsif r <= 81
 				i_id = 62 # 수룡의비늘
 			end
 		when 59 # 화룡
-			if r <= 98 
+			if r <= 80 
 				i_id = 60 # 용의비늘
-			elsif r <= 99
+			elsif r <= 81
 				i_id = 61 # 화룡의비늘
 			end
 		when 60 # 청비
@@ -435,7 +441,7 @@ class MrMo_ABS
 				i_id = 40 # 진호박
 			elsif r <= 15
 				i_id = 44 # 불의 혼
-			elsif r <= 17
+			elsif r <= 16
 				i_id = 76 # 현랑부
 			end
 		when 117 # 범천
@@ -443,15 +449,15 @@ class MrMo_ABS
 				i_id = 40 # 진호박
 			elsif r <= 15
 				i_id = 44 # 불의 혼
-			elsif r <= 17
+			elsif r <= 16
 				i_id = 77 # 백화검
 			end
 		when 118 # 범수
 			if r <= 10 
 				i_id = 40 # 진호박
-			elsif r <= 15
+			elsif r <= 25
 				i_id = 45 # 불의 결정
-			elsif r <= 20
+			elsif r <= 30
 				i_id = 78 # 1만전
 			end
 		when 119 # 백호왕

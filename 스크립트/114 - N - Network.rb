@@ -510,8 +510,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				sp = a.sp
 				agi = a.agi
 				eva = a.eva
-				pdef = a.pdef
-				mdef = a.mdef
+				pdef = a.base_pdef
+				mdef = a.base_mdef
 				level = a.level
 				maxhp = a.maxhp
 				maxsp = a.maxsp
@@ -519,6 +519,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				
 				stats = "@str = #{a.str}; @dex = #{a.dex}; @pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
 				stats += "@character_name = '#{$game_player.character_name}';"
+				stats += "@trans_v = #{$game_variables[10]};"
 				if $state_trans # 투명
 					stats += "@is_transparency = true;"
 				else
@@ -1231,6 +1232,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# Attacked!
 				when /<attack_effect>(.*)<\/attack_effect>/
+					return if !$game_switches[302] # pk off
 					data = $1.split(",")
 					return if data[0] != @id
 					
@@ -1238,10 +1240,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# Attacked!
 				when /<skill_effect>(.*)<\/skill_effect>/
+					return if !$game_switches[302] # pk off
 					data = $1.split(",")
 					return if data[0] != @id
 					
-							
+					$game_party.actors[0].effect_skill(@players[data[1]], $data_skills[data[2].to_i]) if @players[data[1]] != nil
+					
 				when /<result_effect>(.*)<\/result_effect>/ 
 					$ABS.netplayer_killed
 					return true

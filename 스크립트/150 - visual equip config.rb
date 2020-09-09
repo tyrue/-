@@ -9,7 +9,11 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 	def equip_character(type, id)
 		if type == 2
 			# 무기
-			return ['(착용)철도', 2] 			if id == 1 or id == 2 or id == 3 or id == 4	#신수둔각도
+			return ['(착용)주작의검', 2] 			if id == 1 # 신수둔각도(주작)
+			return ['(착용)녹호박별검', 2] 			if id == 2 # 신수둔각도(백호)
+			return ['(착용)현무염도', 2] 			if id == 3 # 신수둔각도(현무)
+			return ['(착용)청룡신검', 2] 			if id == 4 # 신수둔각도(청룡)
+			
 			return ['(착용)현자금봉', 2]		if id == 6  #현자금봉
 			return ['(착용)검성기검', 2]		if id == 7  #검성기검
 			return ['(착용)진선역봉', 2]		if id == 8  #진선역봉

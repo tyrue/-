@@ -154,10 +154,10 @@ class Rpg_skill
 			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
 		end
 		if SKILL_BUFF_TIME[141][1] > 0 # 투명 중
-			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
+			SKILL_BUFF_TIME[141][1] = 1 if !$state_trans
 		end
 		if SKILL_BUFF_TIME[142][1] > 0 # 투명 중
-			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
+			SKILL_BUFF_TIME[142][1] = 1 if !$state_trans
 		end
 	end
 	

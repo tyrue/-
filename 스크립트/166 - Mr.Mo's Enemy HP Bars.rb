@@ -238,7 +238,7 @@ if SDK.state("Mr.Mo's ABS")
 				
 				#if in screen
 				if player.in_range?(10)
-					next if player.bar_showing
+					next if player.bar_showing and @netPlayers_hp[player.netid] != nil
 					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
 					player.bar_showing = true
 					

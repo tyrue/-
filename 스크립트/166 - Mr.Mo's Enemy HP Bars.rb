@@ -231,10 +231,8 @@ if SDK.state("Mr.Mo's ABS")
 				if @netPlayers_hp[player.netid] == nil
 					if player.bar_showing
 						player.bar_showing = false 
-						next
 					end
 				end
-				
 				
 				#if in screen
 				if player.in_range?(10)

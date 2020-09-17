@@ -272,15 +272,15 @@ class MrMo_ABS
 			end
 			
 		when 58 # 수룡
-			if r <= 80 
+			if r <= 98 
 				i_id = 60 # 용의비늘
-			elsif r <= 81
+			elsif r <= 100
 				i_id = 62 # 수룡의비늘
 			end
 		when 59 # 화룡
-			if r <= 80 
+			if r <= 98 
 				i_id = 60 # 용의비늘
-			elsif r <= 81
+			elsif r <= 100
 				i_id = 61 # 화룡의비늘
 			end
 		when 60 # 청비
@@ -288,11 +288,11 @@ class MrMo_ABS
 				i_id = 53 # 갈색시약
 			end
 		when 61 # 주작
-			if r <= 100 
+			if r <= 60 
 				i_id = 68 # 주작의 깃
 			end
 		when 62 # 백호
-			if r <= 100
+			if r <= 60
 				i_id = 69 # 백호의 발톱
 			end
 		when 75 # 청진웅
@@ -360,7 +360,7 @@ class MrMo_ABS
 				i_id = 54 # 초록시약
 			end
 		when 86 # 용
-			if r <= 30 
+			if r <= 10 
 				i_id = 60 # 용의비늘
 			end
 		when 100 # 일본세작

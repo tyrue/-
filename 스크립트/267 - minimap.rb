@@ -27,7 +27,7 @@ module PLAN_Map_Window
 	OVER_Y = 8 # 이동 후의 Y 좌표(초기 위치와 왕복합니다) 
 	
 	OPACITY = 124 # 윈도우의 투명도
-	C_OPACITY = 190 # 맵의 투명도 
+	C_OPACITY = 255 # 맵의 투명도 
 	VISIBLE = false # 최초, 표시할까 하지 않는가(true:하는, false:하지 않는다) 
 end 
 
@@ -47,7 +47,7 @@ class Game_Temp
 		# 되돌린다 
 		plan_map_window_initialize 
 		
-		@map_visible = true 
+		@map_visible = PLAN_Map_Window::VISIBLE
 	end 
 end 
 #============================================================================== 

@@ -8069,3 +8069,4 @@ On <<Wed 09 Sep 2020, 20:52:07>> the error <<compile error
 Section267:33: dynamic constant assignment
 		ZOOM = v
 		      ^ ()>> occured.
+On <<Fri 11 Sep 2020, 15:35:44>> the error <<failed to create bitmap (#<Scene_Map:0xcd61cd0>)>> occured.

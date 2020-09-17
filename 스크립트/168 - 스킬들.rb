@@ -16,6 +16,8 @@ UPGRADE_SKILL_ID[2]	= [64, 72, 76] # 십량분법류
 UPGRADE_SKILL_ID[3]	= [65, 75] # 뢰마도
 UPGRADE_SKILL_ID[4]	= [74, 78, 80] # 십리건곤
 UPGRADE_SKILL_ID[5] = [131, 141, 142] # 투명
+UPGRADE_SKILL_ID[6] = [49, 52, 56] # 성려멸주
+
 
 # 0~15 : 도토리, 토끼고기, 사슴고기, 녹용
 # 15~25 : 쥐고기, 박쥐고기, 뱀고기

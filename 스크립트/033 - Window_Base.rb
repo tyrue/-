@@ -29,7 +29,7 @@ class Window_Base < Window
 	#--------------------------------------------------------------------------
 	def dispose
 		# 윈도우 내용의 비트 맵이 설정되어 있으면 해방
-		if !self.contents.disposed? and self.contents != nil
+		if self.contents != nil and !self.contents.disposed?
 			self.contents.dispose
 		end
 		super

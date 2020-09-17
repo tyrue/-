@@ -505,6 +505,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.send_newstats
 				return if @mapplayers == {}
+				
 				a = $game_party.actors[0]
 				hp = a.hp
 				sp = a.sp
@@ -646,13 +647,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				g = @mapplayers[id]
 				
 				if @players[id] != nil
-					@mapplayers[id] ||= @players[id] 
-					$game_temp.spriteset_refresh = true
+					if @mapplayers[id] == nil
+						@mapplayers[id] = @players[id] 
+						$game_temp.spriteset_refresh = true
+					end
+				else
+					if @mapplayers[id] == nil
+						@mapplayers[id] = Game_NetPlayer.new
+						$game_temp.spriteset_refresh = true
+					end
 				end
-				# Turn Id in Hash into Netplayer (if not yet)
-				@mapplayers[id] ||= Game_NetPlayer.new
 				# Set the Global NetId if it is not Set yet
-				@mapplayers[id].netid = id if @mapplayers[id].netid == -1
+				if @mapplayers[id].netid == -1
+					@mapplayers[id].netid = id 
+				end
 				# Refresh -> Change data to new data
 				@mapplayers[id].refresh(data)
 				#Send the player's new stats

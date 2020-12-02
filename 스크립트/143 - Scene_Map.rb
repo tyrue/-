@@ -14,9 +14,12 @@ class Scene_Map
 		$game_switches[302] = false # pk off
 		
 		#맵이름의 표시
-		map_infos = load_data("Data/MapInfos.rxdata")
-		mapname = map_infos[$game_map.map_id].name.to_s
-		
+		if $game_map.map_id != nil
+			map_infos = load_data("Data/MapInfos.rxdata")
+			if map_infos[$game_map.map_id] != nil
+				mapname = map_infos[$game_map.map_id].name.to_s
+			end
+		end
 		Network::Main.socket.send "<map_player>#{$game_map.map_id}</map_player>\n"
 		Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
 		Network::Main.send_map

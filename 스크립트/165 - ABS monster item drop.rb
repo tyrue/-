@@ -583,7 +583,7 @@ class MrMo_ABS
 				i_id = 111 # 희귀호박
 			end
 		when 177 # 하선녀
-			if r <= 10 
+			if r <= 20 
 				i_id = 113 # 하선녀의실타래
 			end
 		when 178, 179 # 단선녀, 파선녀

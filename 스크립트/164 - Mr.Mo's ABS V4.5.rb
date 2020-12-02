@@ -1043,7 +1043,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Update Enemy Attack(Enemy) 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
-		def update_enemy_attack(e,actor)
+		def update_enemy_attack(e, actor)
 			#Return if the enemy can't attack
 			return if e.actions == nil or e.actions == [] or e == nil
 			#Get all actions
@@ -1116,7 +1116,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						enemies.push($game_player) if e.hate_group.include?(0)
 						#Order them from closest to the farthest
 						enemies.sort! {|a,b|
-							get_range(e.event,a.event) - get_range(e.event,b.event)}
+							get_range(e.event, a.event) - get_range(e.event, b.event)}
 						#Attack the closest one
 						enemies[0].actor.effect_skill(e, skill)
 						#Take off SP
@@ -1124,7 +1124,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						#Show Animetion on enemy
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
 						#Return if enemy is dead 
-						return if enemy_dead?(enemies[0].actor,e)
+						return if enemy_dead?(enemies[0].actor, e)
 						
 						return if enemies[0].attacking == e and enemies[0].in_battle
 						#If its alive, put it in battle
@@ -1142,34 +1142,19 @@ if SDK.state("Mr.Mo's ABS") == true
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
-						
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						
 						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
-						enemies.push($game_player) if in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
+						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
 						
 						for enemy in enemies
 							# 나한테 적이 아니면 공격 안하게 함
-							next if !e.hate_group.include?(0)
 							next if !e.hate_group.include?(enemy.id)
 							#Skip NIL values
 							next if enemy == nil
-							#Skip 이미 적이 죽은거면 넘어가
-							next if !enemy.is_a?(Game_Player) and enemy.dead?
-							if enemy.is_a?(Game_Player)
-								enemy.actor.effect_skill(e, skill)
-								#Show Animetion on enemy
-								if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
-									$game_player.animation_id = skill.animation2_id 
-									Network::Main.ani(Network::Main.id, $game_player.animation_id)									
-								end
-								next if enemy_dead?(enemy.actor, e)
-							else
-								enemy.effect_skill(e, skill)	
-								hit_enemy(enemy, e, 0) if enemy.damage != "Miss" and enemy.damage != 0
-								next if enemy_dead?(enemy, e)
-							end
-							
+							enemy.actor.effect_skill(e, skill)
+							hit_enemy(enemy, e, skill.animation2_id) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
+							next if enemy_dead?(enemy.actor, e)
 							#Skip this enemy if its dead
 							next if enemy.is_a?(Game_Player)
 							next if enemy.attacking == e and enemy.in_battle
@@ -1533,9 +1518,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				map_m(234, 11, 8)
 			when 6 # 대방성
 				map_m(298, 11, 8)
-			when 7 # 대방성
+			when 7 # 현도성
 				map_m(326, 11, 8)
-			else
+			when 8 # 장안성
+				map_m(369, 11, 8)
+			else # 딱히 안정했다면 부여성으로..
 				map_m(17, 11, 8)
 			end
 		end
@@ -1981,7 +1968,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Player Dead(Player,Enemy)
 		#--------------------------------------------------------------------------
 		def player_dead?(a,e)
-			return true if $game_switches[296]
+			return false if $game_party.actors[0].hp > 0
+				
+			# 플레이어가 죽으면 몹들 다가가는거 멈춤
+			if !e.is_a?(Game_NetPlayer)
+				e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
+				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
+			end
+			return true if $game_switches[296] # 죽음 표시 스위치
 			#Check State Effect
 			if STATE_EFFECTS
 				for id in $game_party.actors[0].states
@@ -1989,8 +1983,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					$game_party.actors[0].states.delete(id) if SLEEP_EFFECT.include?(id)
 				end
 			end
-			#return if the player is not dead
-			return false if !a.dead?
 			#If the player is dead;
 			
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
@@ -2010,12 +2002,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				if skill_mash[1][1] > 0
 					skill_mash[1][1] = 1 
 				end
-			end
-			
-			# 플레이어가 죽으면 몹들 다가가는거 멈춤
-			if !e.is_a?(Game_NetPlayer)
-				e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
-				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
 			end
 			$scene = Scene_Map.new
 			return true
@@ -4027,6 +4013,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def move_down(turn_enabled = true, is_ok = false) # is_ok : 이동 가능
 			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+				# 내 어그로가 아닌데 움직여도 되는가? 
 				return if !is_ok
 			end
 			# Turn down
@@ -4152,7 +4139,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def move_random()
 			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
-				return true
+				return true if !$is_map_first
 			end
 			case rand(4)
 			when 0  # Move down

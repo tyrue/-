@@ -8070,3 +8070,32 @@ Section267:33: dynamic constant assignment
 		ZOOM = v
 		      ^ ()>> occured.
 On <<Fri 11 Sep 2020, 15:35:44>> the error <<failed to create bitmap (#<Scene_Map:0xcd61cd0>)>> occured.
+On <<Tue 01 Dec 2020, 18:54:05>> the error <<class or module required (#<Scene_Map:0x11570200>)>> occured.
+On <<Tue 01 Dec 2020, 18:55:29>> the error <<class or module required (#<Scene_Map:0x115a0b00>)>> occured.
+On <<Tue 01 Dec 2020, 19:01:19>> the error <<class or module required (#<Scene_Map:0x11529dd8>)>> occured.
+On <<Tue 01 Dec 2020, 19:02:09>> the error <<class or module required (#<Scene_Map:0x115b0910>)>> occured.
+On <<Tue 01 Dec 2020, 20:48:05>> the error << (#<Scene_Map:0x1b651ee8>)>> occured.
+On <<Tue 01 Dec 2020, 22:30:30>> the error <<Section168:627: syntax error ()>> occured.
+On <<Tue 01 Dec 2020, 22:30:30>> the error <<Section168:627: syntax error
+					return true $Game_Actor.skill_learn?(j) and s_id < j ()>> occured.
+On <<Tue 01 Dec 2020, 22:30:30>> the error <<Section168:627: syntax error
+					return true $Game_Actor.skill_learn?(j) and s_id < j
+					                       ^ ()>> occured.
+On <<Tue 01 Dec 2020, 22:30:30>> the error <<compile error
+Section168:627: syntax error
+					return true $Game_Actor.skill_learn?(j) and s_id < j
+					                       ^ ()>> occured.
+On <<Tue 01 Dec 2020, 22:31:28>> the error <<(eval):8: syntax error (#<Scene_Map:0x115c5a68>)>> occured.
+On <<Tue 01 Dec 2020, 22:31:28>> the error <<compile error
+(eval):8: syntax error (#<Scene_Map:0x115c5a68>)>> occured.
+On <<Tue 01 Dec 2020, 22:32:04>> the error <<(eval):10: syntax error (#<Scene_Map:0x1130ab60>)>> occured.
+On <<Tue 01 Dec 2020, 22:32:04>> the error <<compile error
+(eval):10: syntax error (#<Scene_Map:0x1130ab60>)>> occured.
+On <<Tue 01 Dec 2020, 22:34:37>> the error <<(eval):11: syntax error (#<Scene_Map:0x115c9878>)>> occured.
+On <<Tue 01 Dec 2020, 22:34:37>> the error <<compile error
+(eval):11: syntax error (#<Scene_Map:0x115c9878>)>> occured.
+On <<Wed 02 Dec 2020, 18:06:50>> the error <<Section168:675: syntax error ()>> occured.
+On <<Wed 02 Dec 2020, 18:06:50>> the error <<compile error
+Section168:675: syntax error ()>> occured.
+On <<Wed 02 Dec 2020, 18:24:59>> the error <<cannot convert nil into String (#<Scene_Map:0x115d9e40>)>> occured.
+On <<Wed 02 Dec 2020, 18:26:31>> the error <<cannot convert nil into String (#<Scene_Map:0x113675f8>)>> occured.

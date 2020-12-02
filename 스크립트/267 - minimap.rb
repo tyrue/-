@@ -145,11 +145,13 @@ class Window_Map < Window_Base
 		self.contents_opacity = PLAN_Map_Window::C_OPACITY 
 		@map_data = $game_map.data 
 		# ??C????b?v?????? 
-		@tileset = RPG::Cache.tileset($game_map.tileset_name) 
+		@tileset = RPG::Cache.tileset($game_map.tileset_name) if $game_map.tileset_name != nil
 		@autotiles = [] 
 		for i in 0..6 
-			autotile_name = $game_map.autotile_names[i] 
-			@autotiles[i] = RPG::Cache.autotile(autotile_name) 
+			if $game_map.autotile_names != nil
+				autotile_name = $game_map.autotile_names[i] 
+				@autotiles[i] = RPG::Cache.autotile(autotile_name) 
+			end
 		end 
 		# ???????v???C??????u???m?? 
 		@old_real_x = $game_player.real_x 
@@ -289,13 +291,16 @@ class Window_Map < Window_Base
 			#~ return if $game_map.priorities[tile] > 0 
 			#~ end 
 			actor = $game_party.actors[0] 
-			bitmap = RPG::Cache.character(actor.character_name, actor.character_hue) 
+			size = 40
+			bitmap = Bitmap.new(size, size)
+			bitmap.fill_rect(bitmap.rect, Color.new(255, 255, 0)) # 꽉찬 네모 
+			#bitmap = RPG::Cache.character(actor.character_name, actor.character_hue) 
 			width = bitmap.width / 4 
 			height = bitmap.height / 4 
 			src_rect = Rect.new(0, 0, width, height) 
 			# 액터를 중앙에 표시 
-			w = width / $zoom 
-			h = height / $zoom
+			w = width #/ $zoom 
+			h = height #/ $zoom
 			# 타일의 폭만 짝수이므로 반타일분 늦춘다 
 			x = self.contents.width / 2 - w / 2 + one_tile_size / 2 - rev_x 
 			y = self.contents.height / 2 - h / 2 - rev_y 

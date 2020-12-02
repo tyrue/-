@@ -615,11 +615,29 @@ class Rpg_skill
 	end
 	# 비영_passable2 end
 	
+	# 이미 가지고 있던 스킬인가?
+	def has_skill?(type) # 직업
+		return false if REQ_SKILL_DATA[type][$game_variables[38]] == nil
+		s_id = REQ_SKILL_DATA[type][$game_variables[38]][3]
+		
+		return true if $game_party.actors[0].skill_learn?(s_id)
+		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
+		for i in 1..UPGRADE_SKILL_ID.size
+			u_skill = UPGRADE_SKILL_ID[i]
+			if u_skill.include?(s_id)
+				for j in u_skill
+					return true if $game_party.actors[0].skill_learn?(j) and s_id < j
+				end
+				return false
+			end
+		end
+		return false
+	end
+	
 	# 해당 스킬을 배우는데 필요한 재료
 	def req_skill_item(type, num, s_num) # 직업, 몇 번째 스킬
 		# type : 1 전사, 2 주술사, 3 도사, 4 도적
-		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
-		
+		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디		
 		temp = 0 if $game_switches[1] # 청룡
 		temp = 1 if $game_switches[2] # 백호
 		temp = 2 if $game_switches[3] # 주작
@@ -627,52 +645,49 @@ class Rpg_skill
 		
 		data = REQ_SKILL_DATA[type][num]
 		if data != nil
-			if s_num == 1
-				$game_variables[26] = data[0]
-				$game_variables[28] = data[1]
-				$game_variables[29] = data[2]
-				$game_variables[32] = data[3]
-				$game_variables[32] += temp if SINSU_SKILL_ID.include?(data[3]) 
-				$game_variables[34] = data[4]
-				$game_variables[35] = data[5]
-				
-				$game_variables[103] = $game_party.items[data[4]]
-				$game_variables[104] = $game_party.items[data[5]]
-				
-			elsif s_num == 2
-				$game_variables[27] = data[0]
-				$game_variables[30] = data[1]
-				$game_variables[31] = data[2]
-				$game_variables[33] = data[3]
-				$game_variables[33] += temp if SINSU_SKILL_ID.include?(data[3]) 
-				$game_variables[36] = data[4]
-				$game_variables[37] = data[5]
-				
-				$game_variables[105] = $game_party.items[data[4]]
-				$game_variables[106] = $game_party.items[data[5]]
-			end
+			$game_variables[26] = data[0]
+			$game_variables[28] = data[1]
+			$game_variables[29] = data[2]
+			$game_variables[32] = data[3]
+			$game_variables[32] += temp if SINSU_SKILL_ID.include?(data[3]) 
+			$game_variables[34] = data[4]
+			$game_variables[35] = data[5]
+			
+			$game_variables[103] = $game_party.items[data[4]]
+			$game_variables[104] = $game_party.items[data[5]]
 		else
-			if s_num == 1
-				$game_variables[26] = 0
-				$game_variables[28] = 0
-				$game_variables[29] = 0
-				$game_variables[32] = 0
-				$game_variables[34] = 0
-				$game_variables[35] = 0
-				
-				$game_variables[103] = 0
-				$game_variables[104] = 0
-			elsif s_num == 2
-				$game_variables[27] = 0
-				$game_variables[30] = 0
-				$game_variables[31] = 0
-				$game_variables[33] = 0
-				$game_variables[36] = 0
-				$game_variables[37] = 0
-				
-				$game_variables[105] = 0
-				$game_variables[106] = 0
-			end
+			$game_variables[26] = 0
+			$game_variables[28] = 0
+			$game_variables[29] = 0
+			$game_variables[32] = 0
+			$game_variables[34] = 0
+			$game_variables[35] = 0
+			
+			$game_variables[103] = 0
+			$game_variables[104] = 0
+		end
+	end
+	
+	# 자기 직업 스위치 온
+	def job_select
+		n = $game_party.actors[0].class_id
+		$game_switches[6] = false
+		$game_switches[156] = false
+		$game_switches[144] = false
+		$game_switches[426] = false
+		case n
+			# 주술사
+		when 2, 3, 5, 6, 14 
+			$game_switches[6] = true
+			# 전사
+		when 7, 8, 9, 10, 15
+			$game_switches[156] = true
+			# 도사
+		when 4, 11, 12, 13, 16
+			$game_switches[144] = true
+			# 도적
+		when 17..21
+			$game_switches[426] = true
 		end
 	end
 end	

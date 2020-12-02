@@ -725,7 +725,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when 0
 					@socket.send("<27>@ani_id = #{id}; @ani_number = #{number};</27>\n") # 유저 이펙트
 				when 1
-					@socket.send("<27>@ani_event = #{id}; @ani_number = #{number};</27>\n") # 유저 이펙트
+					@socket.send("<27>@ani_event = #{id}; @ani_number = #{number};</27>\n") # 이벤트 이펙트
 				end
 			end
 			
@@ -1131,6 +1131,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true if $game_map.map_id != data[0].to_i
 					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
+						$ABS.enemies[data[1].to_i].aggro = false if $ABS.enemies[data[1].to_i].aggro and !$is_map_first
 						x = data[3].to_i
 						y = data[4].to_i
 						
@@ -1303,7 +1304,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$armedarmor3 = $1 if $global_x == 20
 					$armedarmor4 = $1 if $global_x == 21
 					
-					
 					# 아이템
 					if $global_x == 22
 						item = []
@@ -1458,6 +1458,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_party.gain_armor($armedarmor2.to_i,1)
 					$game_party.gain_armor($armedarmor3.to_i,1)
 					$game_party.gain_armor($armedarmor4.to_i,1)
+					
 					$game_party.actors[0].equip(0, $armedweapon.to_i)
 					$game_party.actors[0].equip(1, $armedarmor1.to_i)
 					$game_party.actors[0].equip(2, $armedarmor2.to_i)
@@ -1473,7 +1474,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update 
 					$scene = Scene_Map.new 
 					
-					if $game_party.actors[0].name == "평민"
+					if $game_party.actors[0].name == "/no"
 						p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 						exit
 					else
@@ -1490,6 +1491,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
 						$skill_Delay_Console.show
 						
+						$rpg_skill.job_select
 						self.send_start
 					end
 					
@@ -2150,8 +2152,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id} # 몹 이벤트
 					#@ani_id = #{Network::Main.id}; @ani_number = #{e.event.animation_id}; @ani_map = #{$game_map.map_id} # 자신 이벤트
 					eval($1)
+					
 					if @ani_event >= 0
-						$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
+						if $game_map.events[@ani_event] != nil
+							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
+						end
 					end
 					
 					if @ani_id.to_i != @id.to_i

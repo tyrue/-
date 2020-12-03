@@ -8099,3 +8099,7 @@ On <<Wed 02 Dec 2020, 18:06:50>> the error <<compile error
 Section168:675: syntax error ()>> occured.
 On <<Wed 02 Dec 2020, 18:24:59>> the error <<cannot convert nil into String (#<Scene_Map:0x115d9e40>)>> occured.
 On <<Wed 02 Dec 2020, 18:26:31>> the error <<cannot convert nil into String (#<Scene_Map:0x113675f8>)>> occured.
+On <<Wed 02 Dec 2020, 18:52:30>> the error <<nil can't be coerced into Fixnum (#<Scene_Map:0x115e6030>)>> occured.
+On <<Wed 02 Dec 2020, 18:54:01>> the error <<nil can't be coerced into Fixnum (#<Scene_Map:0x1168e4f8>)>> occured.
+On <<Wed 02 Dec 2020, 18:55:24>> the error <<nil can't be coerced into Fixnum (#<Scene_Map:0x411ded0>)>> occured.
+On <<Thu 03 Dec 2020, 16:12:48>> the error << (#<Scene_Connect:0x1136dc58>)>> occured.

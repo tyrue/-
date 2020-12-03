@@ -650,11 +650,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if @mapplayers[id] == nil
 						@mapplayers[id] = @players[id] 
 						$game_temp.spriteset_refresh = true
+						self.send_newstats 
 					end
 				else
 					if @mapplayers[id] == nil
 						@mapplayers[id] = Game_NetPlayer.new
 						$game_temp.spriteset_refresh = true
+						self.send_newstats 
 					end
 				end
 				# Set the Global NetId if it is not Set yet
@@ -664,8 +666,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				# Refresh -> Change data to new data
 				@mapplayers[id].refresh(data)
 				#Send the player's new stats
-				
-				self.send_newstats 
 			end
 			#--------------------------------------------------------------------------
 			# * Update Net Actors
@@ -692,6 +692,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return if line.include?("\000\000\000\000")
 					p "#{line}" unless line.include?("<5>") or line.include?("<6>")or not $DEBUG or not User_Edit::PRINTLINES
 					# Set Used line to false
+					
+					if (line.include?("<dataload>") and !line.include?("</dataload>")) or 
+						(!line.include?("<dataload>") and line.include?("</dataload>"))
+						$temp_s += line
+					else
+						$temp_s = ""
+					end
+					line = $temp_s if $temp_s != ""
+					
+					
 					updatebool = false
 					#Update Walking
 					updatebool = self.update_walking(line) if @login and $game_map != nil
@@ -1492,6 +1502,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$skill_Delay_Console.show
 						
 						$rpg_skill.job_select
+						
 						self.send_start
 					end
 					
@@ -2243,8 +2254,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				Input.update
 				# Update Graphics
 				Graphics.update
-				# Update Mouse
-				$chat = Chat.new
 				# Update Main (if Connected)
 				Main.update if Main.socket != nil
 			end

@@ -14,7 +14,7 @@ UPGRADE_SKILL_ID = {}
 UPGRADE_SKILL_ID[1] =	[1, 2, 3, 4, 10, 11, 12, 13, 16, 17, 18, 19, 22, 23, 24, 25, 30, 31, 32, 33, 37, 38, 39, 40] # 신수 마법
 UPGRADE_SKILL_ID[2]	= [64, 72, 76] # 십량분법류
 UPGRADE_SKILL_ID[3]	= [65, 75] # 뢰마도
-UPGRADE_SKILL_ID[4]	= [74, 78, 80] # 십리건곤
+UPGRADE_SKILL_ID[4]	= [74, 78, 80, 102] # 십리건곤
 UPGRADE_SKILL_ID[5] = [131, 141, 142] # 투명
 UPGRADE_SKILL_ID[6] = [49, 52, 56] # 성려멸주
 
@@ -638,6 +638,7 @@ class Rpg_skill
 	def req_skill_item(type, num, s_num) # 직업, 몇 번째 스킬
 		# type : 1 전사, 2 주술사, 3 도사, 4 도적
 		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디		
+		temp = 0
 		temp = 0 if $game_switches[1] # 청룡
 		temp = 1 if $game_switches[2] # 백호
 		temp = 2 if $game_switches[3] # 주작

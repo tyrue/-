@@ -86,7 +86,7 @@ class Scene_Map
 		Network::Main.send_direction
 		# Update Mouse Position
 		update_mouse
-		$chat.update
+		$chat.update if $chat != nil
 		$chat_b.update
 	end
 end

@@ -52,21 +52,25 @@ def 자동저장
 			end
 		end
 		
-		for va in 0..400
+		for va in 0..500
 			if $game_variables[va] != nil
 				@valist += ($game_variables[va].to_s + ",")
 			end
 		end
 		
-		for i in $ABS.skill_keys.keys
-			if $ABS.skill_keys[i] != nil
-				@hotkeylist += ($ABS.skill_keys[i].to_s + ",")
+		if $ABS != nil
+			for i in $ABS.skill_keys.keys
+				if $ABS.skill_keys[i] != nil
+					@hotkeylist += ($ABS.skill_keys[i].to_s + ",")
+				end
 			end
 		end
 		
-		for i in $ABS.item_keys.keys
-			if $ABS.item_keys[i] != nil
-				@itemKeyList += ($ABS.item_keys[i].to_s + ",")
+		if $ABS != nil
+			for i in $ABS.item_keys.keys
+				if $ABS.item_keys[i] != nil
+					@itemKeyList += ($ABS.item_keys[i].to_s + ",")
+				end
 			end
 		end
 		

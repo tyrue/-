@@ -43,14 +43,14 @@ class Jindow_Keyset < Jindow
 			@i += 1
 			next if key[1] == nil or key[1] == 0
 			next if !$game_party.actors[0].skill_learn?(key[1])
-			@k_value[@i] = $data_skills[key[1]].name
+			@k_value[@i] = $data_skills[key[1]].name if $data_skills[key[1]] != nil
 		end
 		
 		@i = -1
 		for key in $ABS.item_keys.sort
 			@i += 1
 			next if key[1] == nil or key[1] == 0
-			@k_value[@i] = $data_items[key[1]].name
+			@k_value[@i] = $data_items[key[1]].name if $data_items[key[1]] != nil
 		end
 		
 		for i in 0..9

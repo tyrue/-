@@ -723,7 +723,7 @@ class MrMo_ABS
 				i_id = 127 # 자색구슬조각
 			end	
 		when 220 # 산소괴왕
-			if r <= 15 
+			if r <= 40
 				i_id = 133 # 동지패
 			end	
 		when 221 # 청괴성
@@ -747,7 +747,7 @@ class MrMo_ABS
 				i_id = 127 # 자색구슬조각
 			end	
 		when 228 # 뇌신'왕
-			if r <= 15 
+			if r <= 40 
 				i_id = 134 # 동인패
 			end	
 		when 229 # 연청천구
@@ -759,7 +759,7 @@ class MrMo_ABS
 				i_id = 127 # 자색구슬조각
 			end	
 		when 231 # 천구왕
-			if r <= 15
+			if r <= 40
 				i_id = 135 # 동천패
 			end	
 		end

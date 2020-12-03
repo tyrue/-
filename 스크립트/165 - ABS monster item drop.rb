@@ -507,21 +507,21 @@ class MrMo_ABS
 				i_id = 86 # 간괘
 			end
 		when 132 # 건룡
-			if r <= 40
+			if r <= 50
 				i_id = 105 # 건룡의어금니
-			elsif r <= 60
+			elsif r <= 70
 				i_id = 104 # 은나무가지
 			end
 		when 133 # 감룡
-			if r <= 40
+			if r <= 50
 				i_id = 106 # 감룡의어금니
-			elsif r <= 60
+			elsif r <= 70
 				i_id = 104 # 은나무가지
 			end
 		when 134 # 진룡
-			if r <= 40
+			if r <= 50
 				i_id = 107 # 진룡의어금니
-			elsif r <= 60
+			elsif r <= 70
 				i_id = 104 # 은나무가지
 			end
 			
@@ -723,7 +723,7 @@ class MrMo_ABS
 				i_id = 127 # 자색구슬조각
 			end	
 		when 220 # 산소괴왕
-			if r <= 40
+			if r <= 60
 				i_id = 133 # 동지패
 			end	
 		when 221 # 청괴성
@@ -747,7 +747,7 @@ class MrMo_ABS
 				i_id = 127 # 자색구슬조각
 			end	
 		when 228 # 뇌신'왕
-			if r <= 40 
+			if r <= 60 
 				i_id = 134 # 동인패
 			end	
 		when 229 # 연청천구
@@ -759,7 +759,7 @@ class MrMo_ABS
 				i_id = 127 # 자색구슬조각
 			end	
 		when 231 # 천구왕
-			if r <= 40
+			if r <= 60
 				i_id = 135 # 동천패
 			end	
 		end

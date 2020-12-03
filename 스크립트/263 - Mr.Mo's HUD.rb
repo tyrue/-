@@ -232,7 +232,11 @@ if SDK.state("Mr.Mo's ABS")
 				@old_x = $game_player.x
 				@old_y = $game_player.y
 			end
-			refresh if something_changed?
+			
+			if something_changed?
+				refresh 
+				Network::Main.send_newstats
+			end
 		end
 		#--------------------------------------------------------------------------
 		# * Something Changed?

@@ -79,6 +79,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)구곡검'] 			if id == 12  #구곡검
 			return ['(착용)영후단봉'] 		if id == 13  #영후단봉
 			return ['(착용)협가검'] 			if id == 14  #협가검
+			return ['(착용)석단장'] 			if id == 15  #석단장
+			return ['(착용)백사도'] 			if id == 16  #백사도
+			return ['(착용)음양도'] 			if id == 17  #음양도
 			
 		else
 			# 방어구

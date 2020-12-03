@@ -692,7 +692,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return if line.include?("\000\000\000\000")
 					p "#{line}" unless line.include?("<5>") or line.include?("<6>")or not $DEBUG or not User_Edit::PRINTLINES
 					# Set Used line to false
-					
 					if (line.include?("<dataload>") and !line.include?("</dataload>")) or 
 						(!line.include?("<dataload>") and line.include?("</dataload>"))
 						$temp_s += line
@@ -700,7 +699,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$temp_s = ""
 					end
 					line = $temp_s if $temp_s != ""
-					
 					
 					updatebool = false
 					#Update Walking
@@ -2179,7 +2177,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 					@ani_id = -1; @ani_number = -1; @ani_event = -1
-					Network::Main.send_newstats
+					#Network::Main.send_newstats
 					return true
 					
 					# Remove Player ( Disconnected )

@@ -87,20 +87,8 @@ class Game_Battler
 			# Substract damage from HP
 			
 			r = rand(100)
-			if r <= (self.damage * 100 / self.maxhp) or r <= 30
-				if !self.is_a?(Game_Actor)
-					
-					$ABS.enemies[self.event.id].aggro = true
-					Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
-				end
-			end
 			
 			self.hp -= self.damage
-			# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
-			if !self.is_a?(Game_Actor)
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-				Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
-			end
 			# State change
 			@state_changed = false
 			states_plus(attacker.plus_state_set)

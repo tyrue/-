@@ -37,7 +37,7 @@ class Jindow_System < Jindow
 			Jindow_volume.new
 		elsif @menu[1].click
 			$game_system.se_play($data_system.decision_se)
-			$chat.write ("카페주소: http://cafe.naver.com/blackowlsbaram", Color.new(65, 105, 0))
+			$chat.write ("카페주소: http://cafe.naver.com/blackowlsbaram", COLOR_HELP)
 			Hwnd.dispose(self)
 		elsif @menu[2].click
 			$game_system.se_play($data_system.decision_se)

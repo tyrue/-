@@ -16,9 +16,9 @@ class Chat_balloon_net
 		bitmap.font.size = 16
 		case type
 		when 1 # 일반
-			bitmap.font.color = Color.new(255, 255, 255)
+			bitmap.font.color = COLOR_NORMAL
 		when 2 # 파티
-			bitmap.font.color = Color.new(205, 133, 63)
+			bitmap.font.color = COLOR_PARTY
 		else # 기타
 			
 		end

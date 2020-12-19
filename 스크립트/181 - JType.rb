@@ -7,6 +7,8 @@ module J
 		#          (출처 : RPGXP 게임 공작소 (http://rpgxp.gameshot.net))
 		# 수정 : 광땡 (psw0107_2) 배포용
 		#=================================================
+		Sh_others = [")", "!", "@", "#", "$", "%", "^", "&", "*", "("]
+		
 		HANGUL_FIRST_CHARACTER_TABLE = {"ㄱ"=>0,"ㄲ"=>1,"ㄴ"=>2,"ㄷ"=>3,"ㄸ"=>4,"ㄹ"=>5,"ㅁ"=>6,"ㅂ"=>7,"ㅃ"=>8,"ㅅ"=>9,"ㅆ"=>10,"ㅇ"=>11,"ㅈ"=>12,"ㅉ"=>13,"ㅊ"=>14,"ㅋ"=>15,"ㅌ"=>16,"ㅍ"=>17,"ㅎ"=>18}
 		HANGUL_MID_CHARACTER_TABLE = {"ㅏ"=>0,"ㅐ"=>1,"ㅑ"=>2,"ㅒ"=>3,"ㅓ"=>4,"ㅔ"=>5,"ㅕ"=>6,"ㅖ"=>7,"ㅗ"=>8,"ㅘ"=>9,"ㅙ"=>10,"ㅚ"=>11,"ㅛ"=>12,"ㅜ"=>13,"ㅝ"=>14,"ㅞ"=>15,"ㅟ"=>16,"ㅠ"=>17,"ㅡ"=>18,"ㅢ"=>19,"ㅣ"=>20}
 		HANGUL_LAST_CHARACTER_TABLE = {""=>0,"ㄱ"=>1,"ㄲ"=>2,"ㄳ"=>3,"ㄴ"=>4,"ㄵ"=>5,"ㄶ"=>6,"ㄷ"=>7,"ㄹ"=>8,"ㄺ"=>9,"ㄻ"=>10,"ㄼ"=>11,"ㄽ"=>12,"ㄾ"=>13,"ㄿ"=>14,"ㅀ"=>15,"ㅁ"=>16,"ㅂ"=>17,"ㅄ"=>18,"ㅅ"=>19,"ㅆ"=>20,"ㅇ"=>21,"ㅈ"=>22,"ㅊ"=>23,"ㅋ"=>24,"ㅌ"=>25,"ㅍ"=>26,"ㅎ"=>27}
@@ -472,7 +474,6 @@ module J
 		end
 		
 		def view
-			# 여기서 비트맵을 삭제하고 보여주니까 렉걸림
 			command = ""
 			for i in @text
 				command += i
@@ -528,7 +529,7 @@ module J
 			end
 		end
 		
-		def refresh(x, y, width, height,hangul=true)
+		def refresh(x, y, width, height, hangul=true)
 			@start = true
 			@input_hangul = hangul
 			if x.rect?
@@ -540,6 +541,7 @@ module J
 			self.x = x
 			self.y = y
 			self.bitmap = Bitmap.new(width, height)
+			
 			ul = Sprite.new
 			um = Sprite.new
 			ur = Sprite.new
@@ -570,6 +572,7 @@ module J
 			self.bitmap.font.alpha = @font.alpha
 			self.bitmap.font.beta = @font.beta
 			self.bitmap.font.gamma = @font.gamma
+			
 			@memory = JS.get_bitmap(self)
 			ul.dispose
 			um.dispose
@@ -600,19 +603,21 @@ module J
 				end
 			else
 			end
+			
 			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4)
 				@click = true
 			end
 			self.bluck? ? 0 : return
 			Hwnd.highlight? == @viewport ? 0 : return
 			update_key if @edit == true
-			old_char = @char
+			
 			if @piece[3] == nil
 				@piece[0] = nil
 				@piece[1] = nil
 				@piece[2] = nil
 			end
-			if HANGUL_FIRST_CHARACTER_TABLE[@char]!=nil or HANGUL_MID_CHARACTER_TABLE[@char]!=nil
+			
+			if HANGUL_FIRST_CHARACTER_TABLE[@char] != nil or HANGUL_MID_CHARACTER_TABLE[@char] != nil
 				make_hangul
 			else
 				@char = nil
@@ -633,11 +638,12 @@ module J
 			uni = ""
 			div_piece = []
 			text = @char
+			
 			if @piece[3] == nil
 				if text == nil
 					return
 				else
-					if HANGUL_MID_CHARACTER_TABLE[text]!=nil
+					if HANGUL_MID_CHARACTER_TABLE[text] != nil
 						@piece[0] = nil
 						@piece[1] = text
 						@piece[2] = nil
@@ -1113,252 +1119,156 @@ module J
 		
 		def update_key
 			
-			
-			if Key.trigger?(KEY_BACKSPACE)
+			if Key.trigger?(KEY_BACKSPACE) or Key.repeat?(KEY_BACKSPACE)
 				delete_text
-			elsif Key.repeat?(KEY_BACKSPACE)
-				delete_text
+				return 
 			end
 			
 			if Key.trigger?(98) or Key.trigger?(KEY_ALT)  # 한 / 영 전환
 				@input_hangul = !@input_hangul
 				return
 			end
-			if Key.trigger?(KEY_SPACE)
-				@text.push(" ")
-				@char = " "
-				return
-			elsif Key.repeat?(KEY_SPACE)
+			
+			if Key.trigger?(KEY_SPACE) or Key.repeat?(KEY_SPACE)
 				@text.push(" ")
 				@char = " "
 				return
 			end
+			
 			if Key.press?(KEY_SHIFT)
-				if Key.trigger?(KEY_0)
-					@text.push(")")
-					@char = ")"
-					return
+				for i in KEY_0..KEY_9
+					if Key.trigger?(i) or Key.repeat?(i)
+						@text.push(Sh_others[i - KEY_0])
+						@char = Sh_others[i - KEY_0]
+						return
+					end
 				end
-				if Key.trigger?(KEY_1)
-					@text.push("!")
-					@char = "!"
-					return
-				end
-				if Key.trigger?(KEY_2)
-					@text.push("@")
-					@char = "@"
-					return
-				end
-				if Key.trigger?(KEY_3)
-					@text.push("#")
-					@char = "#"
-					return
-				end
-				if Key.trigger?(KEY_4)
-					@text.push("$")
-					@char = "$"
-					return
-				end
-				if Key.trigger?(KEY_5)
-					@text.push("%")
-					@char = "%"
-					return
-				end
-				if Key.trigger?(KEY_6)
-					@text.push("^")
-					@char = "^"
-					return
-				end
-				if Key.trigger?(KEY_7)
-					@text.push("&")
-					@char = "&"
-					return
-				end
-				if Key.trigger?(KEY_8)
-					@text.push("*")
-					@char = "*"
-					return
-				end
-				if Key.trigger?(KEY_9)
-					@text.push("(")
-					@char = "("
-					return
-				end
-				#if Key.trigger?(60)
-				#  @text.push("<")
-				#  @char = "<"
-				#  return
-				#end
-				#if Key.trigger?(61)
-				#  @text.push(">")
-				#  @char = ">"
-				#  return
-				#end
-				if Key.trigger?(62)
+				
+				if Key.trigger?(62) or Key.repeat?(62)
 					@text.push("\?")
 					@char = "\?"
 					return
 				end
-				if Key.trigger?(65)
+				
+				if Key.trigger?(65) or Key.repeat?(65)
 					@text.push(":")
 					@char = ":"
 					return
 				end
-				if Key.trigger?(66)
+				if Key.trigger?(66) or Key.repeat?(66)
 					@text.push("}")
 					@char = "}"
 					return
 				end
-				if Key.trigger?(67)
+				if Key.trigger?(67) or Key.repeat?(67)
 					@text.push("~")
 					@char = "~"
 					return
 				end
-				if Key.trigger?(68)
+				if Key.trigger?(68) or Key.repeat?(68)
 					@text.push("{")
 					@char = "{"
 					return
 				end
-				if Key.trigger?(69)
+				if Key.trigger?(69) or Key.repeat?(69)
 					@text.push("_")
 					@char = "_"
 					return
 				end
-				if Key.trigger?(70)
+				if Key.trigger?(70) or Key.repeat?(70)
 					@text.push("\"")
 					@char = "\""
 					return
 				end
-				if Key.trigger?(71)
+				if Key.trigger?(71) or Key.repeat?(71)
 					@text.push("|")
 					@char = "|"
 					return
 				end
 				
 			else
-				if Key.trigger?(KEY_0) or Key.trigger?(50)
-					@text.push("0")
-					@char = "0"
-					return
+				for i in KEY_0..KEY_9					
+					if Key.trigger?(i) or Key.trigger?(50 + i - KEY_0) or Key.repeat?(i) or Key.repeat?(50 + i - KEY_0)
+						@text.push((i - KEY_0).to_s)
+						@char = (i - KEY_0).to_s
+						return
+					end
 				end
-				if Key.trigger?(KEY_1) or Key.trigger?(51)
-					@text.push("1")
-					@char = "1"
-					return
-				end
-				if Key.trigger?(KEY_2) or Key.trigger?(52)
-					@text.push("2")
-					@char = "2"
-					return
-				end
-				if Key.trigger?(KEY_3) or Key.trigger?(53)
-					@text.push("3")
-					@char = "3"
-					return
-				end
-				if Key.trigger?(KEY_4) or Key.trigger?(54)
-					@text.push("4")
-					@char = "4"
-					return
-				end
-				if Key.trigger?(KEY_5) or Key.trigger?(55)
-					@text.push("5")
-					@char = "5"
-					return
-				end
-				if Key.trigger?(KEY_6) or Key.trigger?(56)
-					@text.push("6")
-					@char = "6"
-					return
-				end
-				if Key.trigger?(KEY_7) or Key.trigger?(57)
-					@text.push("7")
-					@char = "7"
-					return
-				end
-				if Key.trigger?(KEY_8) or Key.trigger?(58)
-					@text.push("8")
-					@char = "8"
-					return
-				end
-				if Key.trigger?(KEY_9) or Key.trigger?(59)
-					@text.push("9")
-					@char = "9"
-					return
-				end
-				if Key.trigger?(60)
+				
+				if Key.trigger?(60) or Key.repeat?(60)
 					@text.push(",")
 					@char = ","
 					return
 				end
-				if Key.trigger?(61)
+				if Key.trigger?(61) or Key.repeat?(61)
 					@text.push(".")
 					@char = "."
 					return
 				end
-				if Key.trigger?(62)
+				if Key.trigger?(62) or Key.repeat?(62)
 					@text.push("\/")
 					@char = "\/"
 					return
 				end
-				if Key.trigger?(65)
+				if Key.trigger?(65) or Key.repeat?(65)
 					@text.push(";")
 					@char = ";"
 					return
 				end
-				if Key.trigger?(66)
+				if Key.trigger?(66) or Key.repeat?(66)
 					@text.push("]")
 					@char = "]"
 					return
 				end
-				if Key.trigger?(67)
+				if Key.trigger?(67) or Key.repeat?(67)
 					@text.push("`")
 					@char = "`"
 					return
 				end
-				if Key.trigger?(68)
+				if Key.trigger?(68) or Key.repeat?(68)
 					@text.push("[")
 					@char = "["
 					return
 				end
-				if Key.trigger?(69)
+				if Key.trigger?(69) or Key.repeat?(69)
 					@text.push("-")
 					@char = "-"
 					return
 				end
-				if Key.trigger?(70)
+				if Key.trigger?(70) or Key.repeat?(70)
 					@text.push("'")
 					@char = "'"
 					return
 				end
-				if Key.trigger?(71)
+				if Key.trigger?(71) or Key.repeat?(71)
 					@text.push("\\")
 					@char = "\\"
 					return
 				end
 			end
+			
 			if @input_hangul
-				if Key.trigger?(KEY_A)
+				if Key.trigger?(KEY_A) or Key.repeat?(KEY_A)
 					@text.push("ㅁ")
 					@char = "ㅁ"
 					return
 				end
-				if Key.trigger?(KEY_B)
+				if Key.trigger?(KEY_B) or Key.repeat?(KEY_B)
 					@text.push("ㅠ")
 					@char = "ㅠ"
 					return
 				end
-				if Key.trigger?(KEY_C)
+				if Key.trigger?(KEY_C) or Key.repeat?(KEY_C)
 					@text.push("ㅊ")
 					@char = "ㅊ"
 					return
 				end
-				if Key.trigger?(KEY_D)
+				if Key.trigger?(KEY_D) or Key.repeat?(KEY_D)
 					@text.push("ㅇ")
 					@char = "ㅇ"
 					return
 				end
-				if Key.trigger?(KEY_E)
+				if Key.trigger?(KEY_E) or Key.repeat?(KEY_E)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㄸ")
 						@char = "ㄸ"
@@ -1368,52 +1278,52 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_F)
+				if Key.trigger?(KEY_F) or Key.repeat?(KEY_F)
 					@text.push("ㄹ")
 					@char = "ㄹ"
 					return
 				end
-				if Key.trigger?(KEY_G)
+				if Key.trigger?(KEY_G) or Key.repeat?(KEY_G)
 					@text.push("ㅎ")
 					@char = "ㅎ"
 					return
 				end
-				if Key.trigger?(KEY_H)
+				if Key.trigger?(KEY_H) or Key.repeat?(KEY_H)
 					@text.push("ㅗ")
 					@char = "ㅗ"
 					return
 				end
-				if Key.trigger?(KEY_I)
+				if Key.trigger?(KEY_I) or Key.repeat?(KEY_I)
 					@text.push("ㅑ")
 					@char = "ㅑ"
 					return
 				end
-				if Key.trigger?(KEY_J)
+				if Key.trigger?(KEY_J) or Key.repeat?(KEY_J)
 					@text.push("ㅓ")
 					@char = "ㅓ"
 					return
 				end
-				if Key.trigger?(KEY_K)
+				if Key.trigger?(KEY_K) or Key.repeat?(KEY_K)
 					@text.push("ㅏ")
 					@char = "ㅏ"
 					return
 				end
-				if Key.trigger?(KEY_L)
+				if Key.trigger?(KEY_L) or Key.repeat?(KEY_L)
 					@text.push("ㅣ")
 					@char = "ㅣ"
 					return
 				end
-				if Key.trigger?(KEY_M)
+				if Key.trigger?(KEY_M) or Key.repeat?(KEY_M)
 					@text.push("ㅡ")
 					@char = "ㅡ"
 					return
 				end
-				if Key.trigger?(KEY_N)
+				if Key.trigger?(KEY_N) or Key.repeat?(KEY_N)
 					@text.push("ㅜ")
 					@char = "ㅜ"
 					return
 				end
-				if Key.trigger?(KEY_O)
+				if Key.trigger?(KEY_O) or Key.repeat?(KEY_O)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㅒ")
 						@char = "ㅒ"
@@ -1423,7 +1333,7 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_P)
+				if Key.trigger?(KEY_P) or Key.repeat?(KEY_P)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㅖ")
 						@char = "ㅖ"
@@ -1433,7 +1343,7 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_Q)
+				if Key.trigger?(KEY_Q) or Key.repeat?(KEY_Q)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㅃ")
 						@char = "ㅃ"
@@ -1443,7 +1353,7 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_R)
+				if Key.trigger?(KEY_R) or Key.repeat?(KEY_R)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㄲ")
 						@char = "ㄲ"
@@ -1453,12 +1363,12 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_S)
+				if Key.trigger?(KEY_S) or Key.repeat?(KEY_S)
 					@text.push("ㄴ")
 					@char = "ㄴ"
 					return
 				end
-				if Key.trigger?(KEY_T)
+				if Key.trigger?(KEY_T) or Key.repeat?(KEY_T)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㅆ")
 						@char = "ㅆ"
@@ -1468,17 +1378,17 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_U)
+				if Key.trigger?(KEY_U) or Key.repeat?(KEY_U)
 					@text.push("ㅕ")
 					@char = "ㅕ"
 					return
 				end
-				if Key.trigger?(KEY_V)
+				if Key.trigger?(KEY_V) or Key.repeat?(KEY_V)
 					@text.push("ㅍ")
 					@char = "ㅍ"
 					return
 				end
-				if Key.trigger?(KEY_W)
+				if Key.trigger?(KEY_W) or Key.repeat?(KEY_W)
 					if Key.press?(KEY_SHIFT)
 						@text.push("ㅉ")
 						@char = "ㅉ"
@@ -1488,286 +1398,29 @@ module J
 					end
 					return
 				end
-				if Key.trigger?(KEY_X)
+				if Key.trigger?(KEY_X) or Key.repeat?(KEY_X)
 					@text.push("ㅌ")
 					@char = "ㅌ"
 					return
 				end
-				if Key.trigger?(KEY_Y)
+				if Key.trigger?(KEY_Y) or Key.repeat?(KEY_Y)
 					@text.push("ㅛ")
 					@char = "ㅛ"
 					return
 				end
-				if Key.trigger?(KEY_Z)
-					@text.push("ㅋ")
-					@char = "ㅋ"
-					return
-				elsif Key.repeat?(KEY_Z)
+				if Key.trigger?(KEY_Z) or Key.repeat?(KEY_Z)
 					@text.push("ㅋ")
 					@char = "ㅋ"
 					return
 				end
 			else
-				if Key.press?(KEY_SHIFT)
-					if Key.trigger?(KEY_A)
-						@text.push("A")
-						@char = "A"
-						return
-					end
-					if Key.trigger?(KEY_B)
-						@text.push("B")
-						@char = "B"
-						return
-					end
-					if Key.trigger?(KEY_C)
-						@text.push("C")
-						@char = "C"
-						return
-					end
-					if Key.trigger?(KEY_D)
-						@text.push("D")
-						@char = "D"
-						return
-					end
-					if Key.trigger?(KEY_E)
-						@text.push("E")
-						@char = "E"
-						return
-					end
-					if Key.trigger?(KEY_F)
-						@text.push("F")
-						@char = "F"
-						return
-					end
-					if Key.trigger?(KEY_G)
-						@text.push("G")
-						@char = "G"
-						return
-					end
-					if Key.trigger?(KEY_H)
-						@text.push("H")
-						@char = "H"
-						return
-					end
-					if Key.trigger?(KEY_I)
-						@text.push("I")
-						@char = "I"
-						return
-					end
-					if Key.trigger?(KEY_J)
-						@text.push("J")
-						@char = "J"
-						return
-					end
-					if Key.trigger?(KEY_K)
-						@text.push("K")
-						@char = "K"
-						return
-					end
-					if Key.trigger?(KEY_L)
-						@text.push("L")
-						@char = "L"
-						return
-					end
-					if Key.trigger?(KEY_M)
-						@text.push("M")
-						@char = "M"
-						return
-					end
-					if Key.trigger?(KEY_N)
-						@text.push("N")
-						@char = "N"
-						return
-					end
-					if Key.trigger?(KEY_O)
-						@text.push("O")
-						@char = "O"
-						return
-					end
-					if Key.trigger?(KEY_P)
-						@text.push("P")
-						@char = "P"
-						return
-					end
-					if Key.trigger?(KEY_Q)
-						@text.push("Q")
-						@char = "Q"
-						return
-					end
-					if Key.trigger?(KEY_R)
-						@text.push("R")
-						@char = "R"
-						return
-					end
-					if Key.trigger?(KEY_S)
-						@text.push("S")
-						@char = "S"
-						return
-					end
-					if Key.trigger?(KEY_T)
-						@text.push("T")
-						@char = "T"
-						return
-					end
-					if Key.trigger?(KEY_U)
-						@text.push("U")
-						@char = "U"
-						return
-					end
-					if Key.trigger?(KEY_V)
-						@text.push("V")
-						@char = "V"
-						return
-					end
-					if Key.trigger?(KEY_W)
-						@text.push("W")
-						@char = "W"
-						return
-					end
-					if Key.trigger?(KEY_X)
-						@text.push("X")
-						@char = "X"
-						return
-					end
-					if Key.trigger?(KEY_Y)
-						@text.push("Y")
-						@char = "Y"
-						return
-					end
-					if Key.trigger?(KEY_Z)
-						@text.push("Z")
-						@char = "Z"
-						return
-					end
-				else
-					if Key.trigger?(KEY_A)
-						@text.push("a")
-						@char = "a"
-						return
-					end
-					if Key.trigger?(KEY_B)
-						@text.push("b")
-						@char = "b"
-						return
-					end
-					if Key.trigger?(KEY_C)
-						@text.push("c")
-						@char = "c"
-						return
-					end
-					if Key.trigger?(KEY_D)
-						@text.push("d")
-						@char = "d"
-						return
-					end
-					if Key.trigger?(KEY_E)
-						@text.push("e")
-						@char = "e"
-						return
-					end
-					if Key.trigger?(KEY_F)
-						@text.push("f")
-						@char = "f"
-						return
-					end
-					if Key.trigger?(KEY_G)
-						@text.push("g")
-						@char = "g"
-						return
-					end
-					if Key.trigger?(KEY_H)
-						@text.push("h")
-						@char = "h"
-						return
-					end
-					if Key.trigger?(KEY_I)
-						@text.push("i")
-						@char = "i"
-						return
-					end
-					if Key.trigger?(KEY_J)
-						@text.push("j")
-						@char = "j"
-						return
-					end
-					if Key.trigger?(KEY_K)
-						@text.push("k")
-						@char = "k"
-						return
-					end
-					if Key.trigger?(KEY_L)
-						@text.push("l")
-						@char = "l"
-						return
-					end
-					if Key.trigger?(KEY_M)
-						@text.push("m")
-						@char = "m"
-						return
-					end
-					if Key.trigger?(KEY_N)
-						@text.push("n")
-						@char = "n"
-						return
-					end
-					if Key.trigger?(KEY_O)
-						@text.push("o")
-						@char = "o"
-						return
-					end
-					if Key.trigger?(KEY_P)
-						@text.push("p")
-						@char = "p"
-						return
-					end
-					if Key.trigger?(KEY_Q)
-						@text.push("q")
-						@char = "q"
-						return
-					end
-					if Key.trigger?(KEY_R)
-						@text.push("r")
-						@char = "r"
-						return
-					end
-					if Key.trigger?(KEY_S)
-						@text.push("s")
-						@char = "s"
-						return
-					end
-					if Key.trigger?(KEY_T)
-						@text.push("t")
-						@char = "t"
-						return
-					end
-					if Key.trigger?(KEY_U)
-						@text.push("u")
-						@char = "u"
-						return
-					end
-					if Key.trigger?(KEY_V)
-						@text.push("v")
-						@char = "v"
-						return
-					end
-					if Key.trigger?(KEY_W)
-						@text.push("w")
-						@char = "w"
-						return
-					end
-					if Key.trigger?(KEY_X)
-						@text.push("x")
-						@char = "x"
-						return
-					end
-					if Key.trigger?(KEY_Y)
-						@text.push("y")
-						@char = "y"
-						return
-					end
-					if Key.trigger?(KEY_Z)
-						@text.push("z")
-						@char = "z"
+				
+				for i in KEY_A..KEY_Z
+					if Key.trigger?(i) or Key.repeat?(i)
+						n = 97
+						n = 65	if Key.press?(KEY_SHIFT)
+						@text.push((n + (i - KEY_A)).chr)
+						@char = (n + (i - KEY_A)).chr
 						return
 					end
 				end

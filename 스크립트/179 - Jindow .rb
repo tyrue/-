@@ -25,6 +25,7 @@ class Jindow < Viewport
 		end
 		@back = Viewport.new(0, 0, 1, 1)
 		super(x, y, width, height)
+		
 		Hwnd.push self
 		@id = Hwnd.index self
 		self.z = @id + 10000
@@ -466,7 +467,7 @@ class Jindow < Viewport
 		else
 			@hudle ? 0 : (@hudle = true)
 		end
-		if Hwnd.highlight? == self and @close and Key.trigger?(6)
+		if Hwnd.highlight? == self and @close and Key.trigger?(6) # esc
 			$game_system.se_play($data_system.cancel_se)
 			Hwnd.dispose(self)
 			return

@@ -72,8 +72,9 @@ module J
 			when 2
 				@item = $data_armors[id]
 			end
+			return if @item == nil 
 			@num = self.num
-			#@num == 0 ? (return nil) : 0
+			@num == 0 ? (return nil) : 0
 			if @fill
 				self.bitmap = Bitmap.new(@route2 + "item_win")
 				itemwin_mid = Sprite.new
@@ -122,6 +123,7 @@ module J
 		end
 		
 		def update
+			return if(self.num == 0)
 			super
 			self.refresh? ? 0 : return
 			@click ? (@click = false) : 0
@@ -166,7 +168,7 @@ module J
 					@double_wait = 0
 				end
 			end
-			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4)
+			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4) # 엔터키가 눌렸나?
 				@click = true
 			end
 			cnum = num

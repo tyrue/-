@@ -28,6 +28,8 @@ STR_LIMIT   = 2000      	#STR 한계 치
 DEX_LIMIT   = 2000      	#DEX 한계 치
 AGI_LIMIT   = 2000      	#AGI 한계 치
 INT_LIMIT   = 2000      	#INT 한계 치
+BONUS_LIMIT = 400					#아이템 착용시 더 추가 할수 있는 능력치
+
 MAX_EXP			= 4200000000  #만렙시 경험치 
 
 class Game_Actor < Game_Battler
@@ -107,7 +109,7 @@ class Game_Actor < Game_Battler
 		n += armor2 != nil ? armor2.str_plus : 0
 		n += armor3 != nil ? armor3.str_plus : 0
 		n += armor4 != nil ? armor4.str_plus : 0
-		return [[n, 1].max, STR_LIMIT].min
+		return [[n, 1].max, STR_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● 기본 손재주가 사노 취득
@@ -125,7 +127,7 @@ class Game_Actor < Game_Battler
 		n += armor2 != nil ? armor2.dex_plus : 0
 		n += armor3 != nil ? armor3.dex_plus : 0
 		n += armor4 != nil ? armor4.dex_plus : 0
-		return [[n, 1].max, DEX_LIMIT].min
+		return [[n, 1].max, DEX_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● 기본 신속함의 취득
@@ -143,7 +145,7 @@ class Game_Actor < Game_Battler
 		n += armor2 != nil ? armor2.agi_plus : 0
 		n += armor3 != nil ? armor3.agi_plus : 0
 		n += armor4 != nil ? armor4.agi_plus : 0
-		return [[n, 1].max, AGI_LIMIT].min
+		return [[n, 1].max, AGI_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● 기본 마력의 취득
@@ -161,7 +163,7 @@ class Game_Actor < Game_Battler
 		n += armor2 != nil ? armor2.int_plus : 0
 		n += armor3 != nil ? armor3.int_plus : 0
 		n += armor4 != nil ? armor4.int_plus : 0
-		return [[n, 1].max, INT_LIMIT].min
+		return [[n, 1].max, INT_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● EXP 의(것) 변경

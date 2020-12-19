@@ -14,8 +14,7 @@ class Chat
 		@chat_sprites = []
 		@back_sprite = Sprite.new(@viewport)
 	end
-	def write(text, color = Color.new(255, 255, 255, 255),
-			back_color = Color.new(0, 0, 0, 0))
+	def write(text, color = COLOR_NORMAL, back_color = Color.new(0, 0, 0, 0))
 		scroll
 		sprite = Sprite_Chat.new(@viewport)
 		sprite.text = text

@@ -8,7 +8,7 @@ $trade_num = 1
 class Jindow_Inventory < Jindow
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 220, 150)
+		super(0, 0, 220, 200)
 		self.name = "아이템"
 		@head = true
 		@mark = true
@@ -17,10 +17,12 @@ class Jindow_Inventory < Jindow
 		self.refresh("Inventory")
 		self.x = 360
 		self.y = 95
+		@old_item_size = -1
 		sort
 	end
 	
 	def sort
+		#return if @old_item_size == @item.size 
 		@item.clear
 		
 		for i in 1..$data_items.size
@@ -30,6 +32,7 @@ class Jindow_Inventory < Jindow
 				end
 			end
 		end
+		
 		for i in 1..$data_weapons.size
 			if $game_party.weapon_number(i) > 0
 				if i != nil
@@ -44,10 +47,12 @@ class Jindow_Inventory < Jindow
 				end
 			end
 		end
+		
 		for i in @item
 			i.x = (i.id % 6) * 36
 			i.y = (i.id / 6) * 36 + 18
 		end
+		@old_item_size = @item.size 
 	end	
 	
 	def update
@@ -63,7 +68,7 @@ class Jindow_Inventory < Jindow
 					$game_system.se_play(i.item.menu_se)
 					if i.item.consumable
 						$game_party.lose_item(i.item.id, 1)
-						if  i.item.common_event_id > 0
+						if i.item.common_event_id > 0
 							# Command event call reservation
 							$game_temp.common_event_id = i.item.common_event_id
 							# Play item use SE

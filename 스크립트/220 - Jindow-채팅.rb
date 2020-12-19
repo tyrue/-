@@ -1,6 +1,15 @@
 #----------------------------------------------------------------------------------
-# *진도우 스킬창
+# *진도우 채팅창
 #----------------------------------------------------------------------------------
+COLOR_HELP = Color.new(65, 105, 0)
+COLOR_NORMAL = Color.new(255, 255, 255)
+COLOR_WORLD = Color.new(255, 255, 102)
+COLOR_EVENT = Color.new(255, 120, 0)
+COLOR_BIGSAY = Color.new(65, 105, 255)
+COLOR_WHISPER = Color.new(136, 255, 50)
+COLOR_PARTY = Color.new(255, 51, 255)
+
+
 class Jindow_Chat_Input < Jindow
 	attr_reader :active
 	
@@ -12,9 +21,10 @@ class Jindow_Chat_Input < Jindow
 		self.opacity = 0
 		@active = false
 		@chat_type = "전체"
-		@type = J::Type.new(self).refresh(64, 2, self.width - 98, 12)
+		@type = J::Type.new(self).refresh(64, 2, self.width - 98, 16)
 		@type.set "(대화하려면 Enter 키를 누르세요)"
 		@type.view
+		
 		@a = J::Button.new(self).refresh(40, @chat_type)
 		@a.x = 2
 		@b = J::Button.new(self).refresh(20, "▶")
@@ -32,9 +42,9 @@ class Jindow_Chat_Input < Jindow
 		case text
 			
 		when /\/도움말/
-			$chat.write ("아이탬창:i, 정보창:c, 시스템창:~, 공격:s, 파티:p, 길드:G, 전체화면:alt+enter", Color.new(65, 105, 0))    
-			$chat.write ("현재접속자:L, 상태창/맵이름 숨기기:E, 채팅창 숨기기:F, 딜레이 창 숨기기:R", Color.new(65, 105, 0)) 
-			$chat.write ("스킬창:K, 아이템 먹기:스페이스바/del, 미니맵 표시:m, 단축키 확인:J", Color.new(65, 105, 0)) 
+			$chat.write ("아이탬창:i, 정보창:c, 시스템창:~, 공격:s, 파티:p, 길드:G, 전체화면:alt+enter", COLOR_HELP)    
+			$chat.write ("현재접속자:L, 상태창/맵이름 숨기기:E, 채팅창 숨기기:F, 딜레이 창 숨기기:R", COLOR_HELP) 
+			$chat.write ("스킬창:K, 아이템 먹기:스페이스바/del, 미니맵 표시:m, 단축키 확인:J", COLOR_HELP) 
 			
 		when /\/귓 (.*)/  # 귓속말 상대를 변경
 			@whispers = $1.to_s
@@ -55,12 +65,12 @@ class Jindow_Chat_Input < Jindow
 		when /\/세계후 (.*)/
 			if  $game_party.item_number(91) > 0
 				간단메세지("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}")
-				$chat.write("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}", Color.new(65, 105, 255))
+				$chat.write("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}", COLOR_BIGSAY)
 				Network::Main.socket.send("<bigsay>#{$game_party.actors[0].name},#{$1.to_s}</bigsay>\n")
 				$game_party.lose_item(91, 1)
-				$chat.write ("세계후두루마리 남은 보유량: #{$game_party.item_number(91)}", Color.new(65, 105, 0))  
+				$chat.write ("세계후두루마리 남은 보유량: #{$game_party.item_number(91)}", COLOR_BIGSAY)  
 			else
-				$chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", Color.new(65, 105, 0))        
+				$chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", COLOR_BIGSAY)        
 			end
 			
 			
@@ -168,7 +178,7 @@ class Jindow_Chat_Input < Jindow
 						$console.write_line("자기 자신에게는 귓속말을 할 수 없습니다.")
 					else
 						name = $game_party.actors[0].name 
-						$chat.write("(귓속말) #{@whispers} <<< #{text}", Color.new(136, 255, 50))
+						$chat.write("(귓속말) #{@whispers} <<< #{text}", COLOR_WHISPER)
 						Network::Main.socket.send "<whispers>#{@whispers},#{name},#{text}</whispers>\n"
 					end
 				else
@@ -178,7 +188,7 @@ class Jindow_Chat_Input < Jindow
 				
 			when "전체"
 				name = $game_party.actors[0].name
-				$chat.write("(#{@chat_type}) #{name} : #{text}", Color.new(105, 105, 105))
+				$chat.write("(#{@chat_type}) #{name} : #{text}", COLOR_NORMAL)
 				$chat_b.input(name + ": " + text, 1, 4, $game_player)
 				Network::Main.socket.send "<chat1>(전체) #{name} : #{text}</chat1>\n" 
 				Network::Main.socket.send "<map_chat>#{name}&#{text}&#{1}</map_chat>\n"
@@ -187,7 +197,7 @@ class Jindow_Chat_Input < Jindow
 				if not $netparty == []
 					name = $game_party.actors[0].name 
 					name2 = $game_party.actors[0].class_name
-					$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", Color.new(205, 133, 63))
+					$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", COLOR_PARTY)
 					$chat_b.input(name + ": " + text, 2, 4, $game_player)
 					Network::Main.socket.send "<partymessage>#{name},#{name2},#{text},#{$npt}</partymessage>\n"  
 					Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"  
@@ -198,33 +208,6 @@ class Jindow_Chat_Input < Jindow
 			end
 		end
 	end
-	
-	# 말풍선 코드
-=begin
-	def chat_balloon(msg, color, sec = 4)
-		$m_s = Sprite.new(Viewport.new(0, 0, 640, 480))
-		bitmap = Bitmap.new(500, 16)
-		bitmap.font.name = "맑은 고딕"
-		bitmap.font.size = 16
-		bitmap.font.color = color
-		rect = bitmap.text_size(msg)
-		bitmap.fill_rect(0, 0, rect.width, rect.height, Color.new(0, 0, 0, 125)) # 꽉찬 네모
-		bitmap.draw_text(0, 0, 500, 16, msg)
-		
-		$m_s.bitmap = bitmap
-		$m_s.x = ($game_player.x - $game_map.display_x / 128) * 32 - (rect.width / 2)
-		$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
-		
-		$m_s.z = 3000
-		$m_s.visible = true
-		@sec = sec * 60
-		
-		@ox = $game_player.x
-		@oy = $game_player.y
-		
-		Network::Main.socket.send "<map_chat>#{$game_party.actors[0].name}</map_chat>\n"
-	end
-=end
 	
 	def update
 		super
@@ -279,7 +262,6 @@ class Jindow_Chat_Input < Jindow
 			@active = true
 			
 		elsif Key.trigger?(KEY_ENTER) # 채팅 메세지를 전송
-			
 			if not @type.result == ""
 				if @active == true
 					send_chat

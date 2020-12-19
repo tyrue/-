@@ -43,8 +43,10 @@ class Game_Party
 		# 해시의 개수 데이터를 갱신 
 		if weapon_id > 0 
 			@weapons[weapon_id] = [[weapon_number(weapon_id) + n, 0].max, $item_maximum].min 
-			$console.write_line("#{$data_weapons[item_id].name}을(를) #{n}개 획득. 현재 #{$game_party.weapon_number(item_id)}개") if $global_x >= 30 and n > 0
-			$console.write_line("#{$data_weapons[item_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.weapon_number(item_id)}개") if $global_x >= 30 and n < 0
+			if $global_x >= 30 and n > 0
+				$console.write_line("#{$data_weapons[weapon_id].name}을(를) #{n}개 획득. 현재 #{$game_party.weapon_number(weapon_id)}개") 
+			end
+			$console.write_line("#{$data_weapons[weapon_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.weapon_number(weapon_id)}개") if $global_x >= 30 and n < 0
 		end 
 	end 
 	#-------------------------------------------------------------------------- 
@@ -56,8 +58,10 @@ class Game_Party
 		# 해시의 개수 데이터를 갱신 
 		if armor_id > 0 
 			@armors[armor_id] = [[armor_number(armor_id) + n, 0].max, $item_maximum].min 
-			$console.write_line("#{$data_armors[item_id].name}을(를) #{n}개 획득. 현재 #{$game_party.armor_number(item_id)}개") if $global_x >= 30 and n > 0
-			$console.write_line("#{$data_armors[item_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.armor_number(item_id)}개") if $global_x >= 30 and n < 0
+			if $global_x >= 30 and n > 0
+				$console.write_line("#{$data_armors[armor_id].name}을(를) #{n}개 획득. 현재 #{$game_party.armor_number(armor_id)}개") 
+			end
+			$console.write_line("#{$data_armors[armor_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.armor_number(armor_id)}개") if $global_x >= 30 and n < 0
 		end 
 	end
 end 

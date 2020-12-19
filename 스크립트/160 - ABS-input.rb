@@ -22,7 +22,7 @@ if SDK.state('Input')
 		Mouse_Left = 1
 		Mouse_Right = 2
 		Mouse_Middle = 4
-		Back= 8
+		Back = 8
 		Tab = 9
 		Enter = 13
 		Shift = 16

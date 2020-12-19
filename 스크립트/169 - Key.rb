@@ -12,6 +12,7 @@ KEY_CTRL = 10  # [CTRL]
 KEY_ALT = 11  # [ALT]
 KEY_TAB = 12  # [TAB]
 KEY_CAPSLOCK = 13  # [CAPSLOCK]
+
 KEY_0 = 14  # [0]
 KEY_1 = 15  # [1]
 KEY_2 = 16  # [2]
@@ -22,6 +23,7 @@ KEY_6 = 20  # [6]
 KEY_7 = 21  # [7]
 KEY_8 = 22  # [8]
 KEY_9 = 23  # [9]
+
 KEY_A = 24  # [A]
 KEY_B = 25  # [B]
 KEY_C = 26  # [C]
@@ -48,6 +50,7 @@ KEY_W = 46  # [W]
 KEY_X = 47  # [X]
 KEY_Y = 48  # [Y]
 KEY_Z = 49  # [Z]
+
 KEY_ADMIN = 66 # [']']
 CHANGE = 21 # 한/영키
 
@@ -232,7 +235,7 @@ module Key
 		if @keystatus[id][0] <= 0
 			return false
 		else
-			if @keystatus[id][0] > 20 and @keystatus[id][0] % 5 == 1
+			if @keystatus[id][0] > 20 and @keystatus[id][0] % 2 == 1
 				return true
 			else
 				return false

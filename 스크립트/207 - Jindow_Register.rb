@@ -13,16 +13,19 @@ class Jindow_Register < Jindow
 		self.refresh "Register"
 		self.x = 640 / 2 - self.max_width / 2
 		self.y = 480 / 2 - self.max_height / 2
+		
 		@username_s = Sprite.new(self)
 		@username_s.y = 0
 		@username_s.bitmap = Bitmap.new(40, 32)
 		@username_s.bitmap.font.color.set(0, 0, 0, 255)
 		@username_s.bitmap.draw_text(0, 0, 40, 32, "아이디")
+		
 		@password_s = Sprite.new(self)
 		@password_s.y = 20
 		@password_s.bitmap = Bitmap.new(40, 32)
 		@password_s.bitmap.font.color.set(0, 0, 0, 255)
 		@password_s.bitmap.draw_text(0, 0, 40, 32, "비번")
+		
 		@nickname = Sprite.new(self)
 		@nickname.y = 40
 		@nickname.bitmap = Bitmap.new(40, 32)
@@ -57,6 +60,7 @@ class Jindow_Register < Jindow
 		@type_password = J::Type.new(self).refresh(40, 30, self.width - 40, 18)
 		@type_password.hide = true
 		@type_nickname = J::Type.new(self).refresh(40, 48, self.width - 40, 18)
+		
 		@a = J::Button.new(self).refresh(60, "가입")
 		@b = J::Button.new(self).refresh(60, "취소")
 		@a.y = 70
@@ -69,21 +73,22 @@ class Jindow_Register < Jindow
 	def update
 		super
 		if @a.click  # 확인
-			if @type_username.result.include?("a") or @type_username.result.include?("b") or @type_username.result.include?("c") or @type_username.result.include?("d") or @type_username.result.include?("e") or @type_username.result.include?("f") or @type_username.result.include?("g") or @type_username.result.include?("h") or @type_username.result.include?("i") or @type_username.result.include?("j") or @type_username.result.include?("k") or @type_username.result.include?("l") or @type_username.result.include?("m") or @type_username.result.include?("n") or @type_username.result.include?("o") or @type_username.result.include?("p") or @type_username.result.include?("q") or @type_username.result.include?("r") or @type_username.result.include?("s") or @type_username.result.include?("t") or @type_username.result.include?("u") or @type_username.result.include?("v") or @type_username.result.include?("w") or @type_username.result.include?("x") or @type_username.result.include?("y") or @type_username.result.include?("z") or @type_username.result.include?("1") or @type_username.result.include?("2") or @type_username.result.include?("3") or @type_username.result.include?("4") or @type_username.result.include?("5") or @type_username.result.include?("6") or @type_username.result.include?("7") or @type_username.result.include?("8") or @type_username.result.include?("9") or @type_username.result.include?("0")
+			size = @type_username.result.scan(/[A-z]/).size
+			if @type_username.result.size != size
+				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
+					["아이디/비밀번호에 한글 사용 불가"],
+					["확인"], ["Hwnd.dispose(self); $now_dialog = false"], "오류")
+				sw = true
+			else
 				$game_system.se_play($data_system.decision_se)
 				@type_username.bluck = false
 				@type_password.bluck = false
 				Network::Main.send_regist(@type_nickname.result.to_s,@type_username.result,@type_password.result)
 				$nickname = @type_nickname.result.to_s
-				Hwnd.dispose(self)
-				
-			else # 아이디에 영어를 사용하지 않는 경우
-				
-				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
-					["아이디/비밀번호에 한글 사용 불가"],
-					["확인"], ["Hwnd.dispose(self); $now_dialog = false"], "오류")
+				Hwnd.dispose(self)	
 			end
 		end
+		
 		if @b.click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)

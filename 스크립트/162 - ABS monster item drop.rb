@@ -50,7 +50,7 @@ class MrMo_ABS
 		Audio.se_play("Audio/SE/장", $game_variables[13])
 		Network::Main.ani(Network::Main.id, 198)
 		
-		Network::Main.socket.send "<drop_del>#{$game_map.map_id} #{eid} #{ex} #{ey}</drop_del>\n"
+		Network::Main.socket.send "<drop_del>#{$game_map.map_id},#{eid},#{ex},#{ey}</drop_del>\n"
 		Network::Main.socket.send "<del_item>#{$game_map.map_id},#{eid},#{ex},#{ey}</del_item>\n"
 	end
 	

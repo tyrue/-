@@ -102,25 +102,18 @@ end
 #--------------------------------------------------------------------------  
 def update_mouse
 	if Input.triggerd?(Input::Mouse_Left)
-		if $game_player.mouse_passable?($game_player.x, $game_player.y, Mouse.map_x, Mouse.map_y)
-			#$game_player.find_path(Mouse.map_x, Mouse.map_y)
-		else
-			for player in Network::Main.mapplayers.values
-				next if player == nil
-				next if player.x != Mouse.map_x or player.y != Mouse.map_y
-				if not Hwnd.include?("P_Status")
-					Jindow_P_Status.new(player.name, player.level, player.hp, player.maxhp, player.sp, player.maxsp, player.pci, player.netid)
-				end
+		for player in Network::Main.mapplayers.values
+			next if player == nil
+			next if player.x != Mouse.map_x or player.y != Mouse.map_y
+			if not Hwnd.include?("P_Status")
+				Jindow_P_Status.new(player.name, player.level, player.hp, player.maxhp, player.sp, player.maxsp, player.pci, player.netid)
 			end
 		end
 	end
+	
 	if Input.triggerd?(Input::Mouse_Right)
 		if Hwnd.include?("Item_Info")
-			if Hwnd.include?("P_Status")
-				Hwnd.dispose("Item_Info")
-			else
-				Hwnd.dispose("Item_Info")
-			end
+			Hwnd.dispose("Item_Info")
 		elsif Hwnd.include?("P_Status")
 			Hwnd.dispose("P_Status")
 		end

@@ -30,8 +30,7 @@ class Jindow_Server < Jindow
 		for i in 0...@buttons.size
 			if @buttons[i].click
 				Network::Main.initialize
-				Network::Main.start_connection(User_Edit::SERVERS[i][0],User_Edit::SERVERS[i][1])
-				Network::Main.retrieve_mod
+				Network::Main.start_connection(User_Edit::SERVERS[i][0], User_Edit::SERVERS[i][1])
 				Network::Main.amnet_auth
 				$scene = Scene_Login.new
 			end

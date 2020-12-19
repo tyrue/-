@@ -13,7 +13,7 @@ class Sprite_Chat < Sprite
 		super(viewport)
 		self.bitmap = Bitmap.new(640, 16)
 		self.bitmap.font.name = "맑은 고딕"
-		self.bitmap.font.size = 13
+		self.bitmap.font.size = 16
 		self.x = 3   #채팅 글자의 표시
 		self.y = 82
 		self.z = 500
@@ -45,11 +45,11 @@ class Sprite_Chat < Sprite
 	#--------------------------------------------------------------------------
 	def update
 		super
-		if @original_text != @text or @original_color != @color or
-			@original_back_color != @back_color
+		if @original_text != @text or @original_color != @color or @original_back_color != @back_color
 			@original_text = @text
 			@original_color = @color
 			@original_back_color = @back_color
+			
 			self.bitmap.fill_rect(self.bitmap.rect, @back_color)
 			self.bitmap.font.color = @color
 			self.bitmap.draw_text(1, 0, self.bitmap.width, self.bitmap.height, @text)
@@ -60,7 +60,7 @@ class Sprite_Chat < Sprite
 			self.bitmap.draw_text(1, -1, self.bitmap.width, self.bitmap.height, @text)
 			self.bitmap.draw_text(-1, -1, self.bitmap.width, self.bitmap.height, @text)
 			self.bitmap.draw_text(-1, 1, self.bitmap.width, self.bitmap.height, @text)
-			self.bitmap.font.color.set(255, 255, 255)
+			self.bitmap.font.color.set(0, 0, 0)
 			self.bitmap.draw_text(0, 0, self.bitmap.width, self.bitmap.height, @text)
 		end
 	end

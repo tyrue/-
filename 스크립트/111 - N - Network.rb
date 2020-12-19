@@ -805,6 +805,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.update_outgame(line)
 				case line
+					# 제한 처리
+				when /<user_limit>(.*)<\/user_limit>/
+					p $1
+					return
+					
+					
 					# 인증
 				when /<0 (.*)>(.*) n=(.*)<\/0>/ 
 					a = self.authenficate($1,$2)
@@ -1430,7 +1436,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 						exit
 					else
-						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", Color.new(105, 105, 105))        
+						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 						
 						$cbig = 0
@@ -1501,11 +1507,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<exp_event>(.*)<\/exp_event>/
 					n = $1.to_i
 					if n > 0
-						$chat.write ("                                     <현재 경험치 #{n}배 이벤트가 진행중 입니다.>", Color.new(255, 120, 0)) 
+						$chat.write ("                                     <현재 경험치 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
 						$game_switches[1500] = true
 						$exp_event = n
 					else
-						$chat.write ("                                     <현재 경험치 이벤트가 종료되었습니다.>", Color.new(255, 120, 0)) 
+						$chat.write ("                                     <현재 경험치 이벤트가 종료되었습니다.>", COLOR_EVENT) 
 						$game_switches[1500] = false
 						$exp_event = 0
 					end
@@ -1513,15 +1519,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
-						$chat.write($1.to_s, Color.new(105, 105, 0))
+						$chat.write($1.to_s, COLOR_WORLD)
 						$game_temp.chat_log.push($1.to_s)
 						$game_temp.chat_refresh = true						
 					end
 					return true
 					
+					# 일반
 				when /<chat1>(.*)<\/chat1>/
 					if $scene.is_a?(Scene_Map)
-						$chat.write($1.to_s, Color.new(105, 105, 105))
+						$chat.write($1.to_s, COLOR_NORMAL)
 						$game_temp.chat_log.push($1.to_s)
 						$game_temp.chat_refresh = true
 					end	
@@ -1655,7 +1662,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<bigsay>(.*),(.*)<\/bigsay>/
 					간단메세지("[세계후] #{$1.to_s} : #{$2.to_s}")
-					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", Color.new(65, 105, 255))
+					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", COLOR_BIGSAY)
 					
 					
 				when /<respawn>(.*)<\/respawn>/		
@@ -1851,17 +1858,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<whispers>(.*),(.*),(.*)<\/whispers>/ 
 					if $1.to_s == $game_party.actors[0].name
-						$chat.write("(귓속말) #{$2.to_s} : #{$3.to_s}", Color.new(136, 255, 50))
+						$chat.write("(귓속말) #{$2.to_s} : #{$3.to_s}", COLOR_WHISPER)
 					elsif $2.to_s == $game_party.actors[0].name
-						$chat.write("(귓속말) #{$1.to_s} <<< #{$3.to_s}", Color.new(136, 255, 50))
+						$chat.write("(귓속말) #{$1.to_s} <<< #{$3.to_s}", COLOR_WHISPER)
 					end
 					
 				when /<partymessage>(.*),(.*),(.*),(.*)<\/partymessage>/ 
 					if $npt == $4.to_s
-						$chat.write("(파티말) #{$1.to_s}(#{$2.to_s}) : #{$3.to_s}", Color.new(205, 133, 63))
-						
+						$chat.write("(파티말) #{$1.to_s}(#{$2.to_s}) : #{$3.to_s}", COLOR_PARTY)
 					end
-					
 					
 				when /<event_animation>(.*),(.*),(.*)<\/event_animation>/
 					if $3.to_i == $game_map.map_id
@@ -2068,16 +2073,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 					
-				when /<drop_del>(.*) (.*) (.*) (.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
-					if $1.to_i == $game_map.map_id 
-						if $game_map.events[$2.to_i] != nil
-							$game_map.events[$2.to_i].erase
-						else
-							for e in $game_map.events.values
-								if e.x == $3.to_i and e.y == $4.to_i
-									e.erase
-									return
-								end
+				when /<drop_del>(.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
+					data = $1.split(",")
+					if data[0].to_i == $game_map.map_id
+						for e in $game_map.events.values
+							if e.x == data[2].to_i and e.y == data[3].to_i
+								e.erase
 							end
 						end
 					end

@@ -73,40 +73,36 @@ module J
 				@item = $data_armors[id]
 			end
 			return if @item == nil 
-			@num = self.num
-			@num == 0 ? (return nil) : 0
+			
+			# 아이템 창 배경 비트맵
+			self.bitmap = Bitmap.new(@route2 + "item_win")
+			itemwin_mid = Sprite.new
+			itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
+			item_bitmap = Sprite.new
+			if @item.icon_name == "" or @item.icon_name == nil
+				@item.icon_name = "null"	
+			end
+			item_bitmap.bitmap = Bitmap.new(@route + @item.icon_name)
+			self.bitmap.blt(1, 1, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
+			self.bitmap.blt(1, 1, item_bitmap.bitmap, item_bitmap.bitmap.rect)
+			itemwin_mid.dispose
+			item_bitmap.dispose
+			@memory = JS.get_bitmap(self)
+			
 			if @fill
-				self.bitmap = Bitmap.new(@route2 + "item_win")
-				itemwin_mid = Sprite.new
-				item_bitmap = Sprite.new
-				itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
 				
-				if @item.icon_name == "" or @item.icon_name == nil
-					@item.icon_name = "null"	
-				end
-				item_bitmap.bitmap = Bitmap.new(@route + @item.icon_name)
-				self.bitmap.blt(1, 1, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
-				self.bitmap.blt(1, 1, item_bitmap.bitmap, item_bitmap.bitmap.rect)
-				itemwin_mid.dispose
-				item_bitmap.dispose
-				@memory = JS.get_bitmap(self)
 			else
-				self.bitmap = Bitmap.new(@route2 + "item_win")
-				itemwin_mid = Sprite.new
-				item_bitmap = Sprite.new
-				itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
-				item_bitmap.bitmap = Bitmap.new(@route + @item.icon_name)
-				self.bitmap.blt(1, 1, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
-				self.bitmap.blt(1, 1, item_bitmap.bitmap, item_bitmap.bitmap.rect)
-				itemwin_mid.dispose
-				item_bitmap.dispose
-				@memory = JS.get_bitmap(self)
+
 			end
 			
-			@num > 1 ? 0 : (return self)
 			@viewport.hwnd == "Status" ? (return self) : 0
 			@viewport.hwnd == "Trade" ? (return self) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return self) : 0
+			
+			@num = self.num
+			@num == 0 ? (return nil) : 0
+			@num > 1 ? 0 : (return self)
+			
 			self.bitmap.font = @font
 			self.bitmap.font.alpha = @font.alpha
 			self.bitmap.font.beta = @font.beta
@@ -123,11 +119,11 @@ module J
 		end
 		
 		def update
-			return if(self.num == 0)
 			super
 			self.refresh? ? 0 : return
 			@click ? (@click = false) : 0
 			@double_click ? (@double_click = false) : 0
+			
 			if not @viewport.hudle
 				if Input.mouse_lbutton
 					if not @push and not @viewport.push? and Mouse.arrive_sprite_rect?(self) and @viewport.base?
@@ -140,25 +136,18 @@ module J
 					end
 					@push ? (@push = false) : 0
 				end
+				
 				if Mouse.arrive_sprite_rect?(self) and Input.mouse_rbutton
 					jindow = Hwnd.include?("Item_Info")
 					jindow ? Hwnd.dispose("Item_Info") : 0
 					jindow = Jindow_Item_Info.new(@item.id, @type)
-					jindow.x = Mouse.x + jindow.side_width + 5
-					jindow.y = Mouse.y + jindow.side_height + 5
-					if jindow.x + jindow.max_width > 640
-						jindow.x = 640 - jindow.max_width
-					elsif jindow.x < 0
-						jindow.x = jindow.side_width
-					end
-					if jindow.y + jindow.max_height > 480
-						jindow.y = 480 - jindow.max_height
-					elsif jindow.y < 0
-						jindow.y = jindow.side_height
-					end
+					jindow.x = Mouse.x - jindow.max_width / 2
+					jindow.y = Mouse.y - jindow.max_height / 2
 				end
 			else
+				
 			end
+			
 			if @click and @double_wait == 0
 				@double_wait = 10
 			elsif @double_wait > 0
@@ -168,10 +157,15 @@ module J
 					@double_wait = 0
 				end
 			end
+			
 			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4) # 엔터키가 눌렸나?
 				@click = true
 			end
-			cnum = num
+			
+			@viewport.hwnd == "Status" ? (return) : 0
+			@viewport.hwnd == "NetPlayer_Info" ? (return) : 0
+			
+			cnum = self.num
 			if @num != cnum
 				@num = cnum
 				self.bitmap.clear
@@ -180,7 +174,8 @@ module J
 						self.bitmap.set_pixel(x, y, @memory.color[x][y])
 					end
 				end
-				if @num > 1 and (@viewport.hwnd != "Status")
+				
+				if @num > 1 and (@viewport.hwnd == "Inventory")
 					self.bitmap.font = @font
 					self.bitmap.font.alpha = @font.alpha
 					self.bitmap.font.beta = @font.beta
@@ -190,6 +185,7 @@ module J
 					self.bitmap.draw_text(0, self.height - rect.height, self.width, rect.height, @num.to_s, 2)
 				end
 			end
+			
 			if self.num == 0 and (@viewport.hwnd != "NetPlayer_Info" and @viewport.hwnd != "Trade")
 				self.dispose
 			end

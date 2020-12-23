@@ -64,6 +64,7 @@ class Game_Party
 			$console.write_line("#{$data_armors[armor_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.armor_number(armor_id)}개") if $global_x >= 30 and n < 0
 		end 
 	end
+	
 end 
 
 #------------------------------------------------------------------------------- 

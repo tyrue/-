@@ -40,6 +40,10 @@ class MrMo_ABS
 			
 			$game_party.gain_armor(item.id, num)
 			n = $game_party.armor_number(item.id)
+			
+		when 3 # 돈
+			$game_party.gain_gold(num.to_i)
+			$console.write_line("#{num.to_i}전 획득 ")
 		end
 		$state_trans = false # 투명 풀림
 		

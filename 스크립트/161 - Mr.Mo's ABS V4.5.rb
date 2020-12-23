@@ -500,7 +500,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#--------------------------------------------------------------------------
 	# 보스몹 체력 설정
 	BOSS_ENEMY_HP = {}
-	BOSS_ENEMY_HP[37] = 1000000000000 # 무적토끼
+	BOSS_ENEMY_HP[37] = 2000000000 # 무적토끼
 	BOSS_ENEMY_HP[102] = 10000000 # 반고
 	BOSS_ENEMY_HP[159] = 3000000 # 거북장군
 	BOSS_ENEMY_HP[193] = 2000000 # 파괴왕
@@ -1948,13 +1948,16 @@ if SDK.state("Mr.Mo's ABS") == true
 			when 2
 				event.fade = true if FADE_DEAD
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
-				if enemy.trigger[2] == 0
-					$game_variables[enemy.trigger[1]] += 1
-					$game_map.need_refresh = true
-				else
-					$game_variables[enemy.trigger[1]] = enemy.trigger[2]
-					$game_map.need_refresh = true
-				end
+				$game_variables[enemy.trigger[1]] += 1
+				$game_map.need_refresh = true
+				
+				#~ if enemy.trigger[2] == 0
+					#~ $game_variables[enemy.trigger[1]] += 1
+					#~ $game_map.need_refresh = true
+				#~ else
+					#~ $game_variables[enemy.trigger[1]] = enemy.trigger[2]
+					#~ $game_map.need_refresh = true
+				#~ end
 			when 3 
 				event.fade = true if FADE_DEAD
 				value = "A" if enemy.trigger[1] == 1
@@ -3807,7 +3810,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					power = skill.power + user.atk / 2 
 				end				
-				power = (power * (1.0 + user.atk / 150.0))
+				power = (power * (1.0 + user.atk / 120.0))
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
 					power -= self.mdef * skill.mdef_f / 100
@@ -3887,7 +3890,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				return $ABS.player_dead?(self, user) if self.is_a?(Game_Actor)
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
-				if !self.is_a?(Game_Actor)
+				if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
 				end

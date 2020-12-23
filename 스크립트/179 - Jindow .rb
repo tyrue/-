@@ -53,6 +53,9 @@ class Jindow < Viewport
 		@base_color = Color.new(255, 255, 255, 255)
 		@hudle = true
 		@start = false
+		
+		@old_x = x
+		@old_y = y
 		return self
 	end
 	
@@ -264,6 +267,7 @@ class Jindow < Viewport
 	end
 	
 	def scroll
+		return if !self.scroll?
 		ow, oh = self.scroll?
 		if ow != @wsv and ow > 0
 			@wsv = ow
@@ -339,6 +343,7 @@ class Jindow < Viewport
 	end
 	
 	def scroll?
+		return false if (Mouse.ox == Mouse.x and Mouse.oy == Mouse.y)
 		ow = self.width
 		oh = self.height
 		for i in @item
@@ -354,11 +359,13 @@ class Jindow < Viewport
 	end
 	
 	def width_scroll_move?
+		return false if (Mouse.ox == Mouse.x and Mouse.oy == Mouse.y)
 		self.push? ? (return false) : 0
 		return (Mouse.arrive_sprite?(@scroll1bar_left) or Mouse.arrive_sprite?(@scroll1bar_mid) or Mouse.arrive_sprite?(@scroll1bar_right))
 	end
 	
 	def height_scroll_move?
+		return false if (Mouse.ox == Mouse.x and Mouse.oy == Mouse.y)
 		self.push? ? (return false) : 0
 		return (Mouse.arrive_sprite?(@scroll0bar_up) or Mouse.arrive_sprite?(@scroll0bar_mid) or Mouse.arrive_sprite?(@scroll0bar_down))
 	end
@@ -413,6 +420,7 @@ class Jindow < Viewport
 		refresh? ? 0 : return
 		self.scroll
 		self.bluck_update
+		
 		if not Hwnd.hudle(self)
 			@hudle ? (@hudle = false) : 0
 			if Input.mouse_lbutton
@@ -420,6 +428,7 @@ class Jindow < Viewport
 					@close_yn = true
 					@close_s.tone.set(-10, -10, 0)
 				end
+				
 				if drag? and (@close ? (not Mouse.arrive_sprite?(@close_s)) : true)
 					cx = Mouse.x - Mouse.ox
 					cy = Mouse.y - Mouse.oy
@@ -428,36 +437,41 @@ class Jindow < Viewport
 					Mouse.x -= cx
 					Mouse.y -= cy
 				end
-				if (@height_scroll or @width_scroll)
+				
+				if @width_scroll and self.width_scroll_move?
 					cx = Mouse.x - Mouse.ox
 					cy = Mouse.y - Mouse.oy
-					if @width_scroll and self.width_scroll_move?
-						num = @scroll1bar_mid.x + @scroll1bar_mid.bitmap.width - cx
-						if @scroll1bar_mid.x - cx >= @scroll1left.x + @scroll1left.bitmap.width and num <= @scroll1right.x
-							for i in [@scroll1bar_left, @scroll1bar_mid, @scroll1bar_right]
-								i.x -= cx
-							end
-						end
-					end
-					if @height_scroll and self.height_scroll_move?
-						num = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height - cy
-						if @scroll0bar_mid.y - cy >= @scroll0up.y + @scroll0up.bitmap.height and num <= @scroll0down.y
-							for i in [@scroll0bar_up, @scroll0bar_mid, @scroll0bar_down]
-								i.y -= cy
-							end
+					num = @scroll1bar_mid.x + @scroll1bar_mid.bitmap.width - cx
+					if @scroll1bar_mid.x - cx >= @scroll1left.x + @scroll1left.bitmap.width and num <= @scroll1right.x
+						for i in [@scroll1bar_left, @scroll1bar_mid, @scroll1bar_right]
+							i.x -= cx
 						end
 					end
 					self.scroll_update
 					Mouse.x -= cx
 					Mouse.y -= cy
 				end
+				
+				if @height_scroll and self.height_scroll_move?
+					cx = Mouse.x - Mouse.ox
+					cy = Mouse.y - Mouse.oy
+					num = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height - cy
+					if @scroll0bar_mid.y - cy >= @scroll0up.y + @scroll0up.bitmap.height and num <= @scroll0down.y
+						for i in [@scroll0bar_up, @scroll0bar_mid, @scroll0bar_down]
+							i.y -= cy
+						end
+					end
+					self.scroll_update
+					Mouse.x -= cx
+					Mouse.y -= cy
+				end
+				
 			else
 				if @head and @close and @close_yn and Mouse.arrive_sprite?(@close_s)
 					$game_system.se_play($data_system.cancel_se)
 					Hwnd.dispose(self)
 					return
-				elsif @head and @close and not @close_yn and
-					Mouse.arrive_sprite?(@close_s)  # 로울버 효과
+				elsif @head and @close and not @close_yn and Mouse.arrive_sprite?(@close_s)  # 로울버 효과
 					@close_s.tone.set(10, 10, 20)
 				elsif @head and @close and not @close_yn and not Mouse.arrive_sprite?(@close_s)
 					@close_s.tone.set(0, 0, 0)
@@ -467,14 +481,18 @@ class Jindow < Viewport
 		else
 			@hudle ? 0 : (@hudle = true)
 		end
+		
 		if Hwnd.highlight? == self and @close and Key.trigger?(6) # esc
 			$game_system.se_play($data_system.cancel_se)
 			Hwnd.dispose(self)
 			return
 		end
-		for i in @item
-			i == nil ? next : 0
-			i.update
+		
+		if !drag?
+			for i in @item
+				i == nil ? next : 0
+				i.update
+			end
 		end
 	end
 	

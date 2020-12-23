@@ -11,21 +11,9 @@ class Jindow_NetPlayer_Info < Jindow
 		@netPlayer = Network::Main.players[myid]
 		actor = @netPlayer
 		self.refresh("NetPlayer_Info")
-		self.x = 41
-		self.y = 105
-		self.x = Mouse.x + self.side_width + 5
-		self.y = Mouse.y + self.side_height + 5
-		if self.x + self.max_width > 640
-			self.x = 640 - self.max_width
-		elsif self.x < 0
-			self.x = self.side_width
-		end
-		if self.y + self.max_height > 480
-			self.y = 480 - self.max_height
-		elsif self.y < 0
-			self.y = self.side_height
-		end
-		
+		self.x = Mouse.x - self.max_width / 2
+		self.y = Mouse.y - self.max_height / 2
+				
 		# 장비 비트맵
 		@equip = []
 		@armor_id = [

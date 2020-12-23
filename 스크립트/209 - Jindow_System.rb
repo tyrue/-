@@ -15,7 +15,6 @@ class Jindow_System < Jindow
 		@menu_t = [
 			"음량조절",
 			"카페주소",
-			"캐시샵",
 			"로그아웃",
 			"종료하기"
 		]
@@ -42,12 +41,8 @@ class Jindow_System < Jindow
 		elsif @menu[2].click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
-			Jindow_cashshop.new
-		elsif @menu[3].click
-			$game_system.se_play($data_system.decision_se)
-			Hwnd.dispose(self)
 			JS.game_title
-		elsif @menu[4].click
+		elsif @menu[3].click
 			$game_system.se_play($data_system.decision_se)
 			Hwnd.dispose(self)
 			JS.game_end

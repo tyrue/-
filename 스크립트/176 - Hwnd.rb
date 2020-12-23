@@ -82,6 +82,7 @@ module Hwnd
 		end
 	end
 	
+	# 해당 진도우가 살아 있으면 false 없으면 true
 	def hudle(jindow)
 		i = @data.size - 1
 		while i >= 0
@@ -104,6 +105,7 @@ module Hwnd
 			end
 			i -= 1
 		end
+		
 		highlight ? 0 : return
 		highlight == @data[@data.size - 1] ? return : 0
 		@data.delete(highlight)

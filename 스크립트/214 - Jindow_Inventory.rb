@@ -22,7 +22,6 @@ class Jindow_Inventory < Jindow
 	end
 	
 	def sort
-		#return if @old_item_size == @item.size 
 		@item.clear
 		
 		for i in 1..$data_items.size
@@ -40,6 +39,7 @@ class Jindow_Inventory < Jindow
 				end
 			end
 		end
+		
 		for i in 1..$data_armors.size
 			if $game_party.armor_number(i) > 0
 				if i != nil
@@ -74,11 +74,6 @@ class Jindow_Inventory < Jindow
 							# Play item use SE
 							$game_system.se_play(i.item.menu_se)
 						end
-						if i.num <= 0
-							id = i.id
-							@item[id] = nil
-							i.dispose
-						end
 					elsif i.item.common_event_id > 0
 						# Command event call reservation
 						$game_temp.common_event_id = i.item.common_event_id
@@ -99,8 +94,12 @@ class Jindow_Inventory < Jindow
 						
 					end
 				end
-				sort
+				if i.num <= 0
+					
+					sort
+				end
 			end
+			
 		else
 			for i in @item
 				i.item? ? 0 : next
@@ -108,7 +107,6 @@ class Jindow_Inventory < Jindow
 				check(i)
 			end
 		end
-		# sort
 		super
 	end	
 	

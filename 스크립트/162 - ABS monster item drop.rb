@@ -470,10 +470,6 @@ class MrMo_ABS
 			elsif r <= 70 
 				i_id = 79 # 건괘
 			end
-		when 120 # 용왕용마
-			if r <= 40 
-				i_id = 40 # 진호박
-			end
 		when 121 # 새끼용
 			if r <= 2
 				i_id = 104 # 은나무가지

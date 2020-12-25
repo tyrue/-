@@ -145,8 +145,8 @@ class Jindow_Chat_Input < Jindow
 			
 		when /\/이벤트 고래/ 
 			if Network::Main.group == 'admin'
-				Network::Main.socket.send("<switches>1001,1</switches>\n")
-				$game_switches[5] = true
+				Network::Main.socket.send("<switches>1002,1</switches>\n")
+				$game_switches[1002] = true
 				$console.write_line("고래를 소환합니다.")
 			end	
 				

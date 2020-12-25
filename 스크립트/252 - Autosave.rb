@@ -1,6 +1,6 @@
 
 def 자동저장
-	if not $game_party.actors[0].name == "평민"
+	if not $game_party.actors[0].name == "/no"
 		
 		@skilllist = ""
 		@itemlist = ""

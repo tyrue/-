@@ -168,7 +168,6 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		#-------------------------------------------------------------------------
 		def start(id)
 			return if id.to_i == Network::Main.id
-			#Network::Main.send_start_request(id)
 		end
 		#-------------------------------------------------------------------------
 		# * Map (dummy)

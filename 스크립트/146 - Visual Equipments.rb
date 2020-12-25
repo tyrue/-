@@ -105,8 +105,12 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 		#--------------------------------------------------------------------------
 		alias geso_visual_equip_sprite_char_init initialize
 		def initialize(viewport, character = nil)
+			@equips_id = [0, 0, 0, 0, 0]
 			if character.is_a?(Game_Player)
 				@actor = $game_party.actors[0]
+				for i in 0..4
+					@equips_id[i] = actor_equip_id(i, @actor)
+				end
 			elsif SDK.state('SBABS') == true and character.is_a?(Game_Ally)
 				@actor = $game_party.actors[character.actor_id]
 			elsif SDK.state('Caterpillar') == true and character.is_a?(Game_Party_Actor)
@@ -114,9 +118,10 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			else
 				@actor = nil
 			end
-			@equips_id = [0, 0, 0, 0, 0]
+			
 			geso_visual_equip_sprite_char_init(viewport, character)
 		end
+		
 		#--------------------------------------------------------------------------
 		def equip_changed?
 			if SDK.state('Caterpillar') == true

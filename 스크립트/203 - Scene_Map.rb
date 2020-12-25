@@ -121,10 +121,6 @@ class Scene_Map
 						end
 					end	
 					
-					if Key.trigger?(36) # m
-						# 나중에 지도 열기 메뉴로 쓸 예정
-					end 
-					
 					if Key.trigger?(11)  #아이템, 돈 줍기
 						for event in $game_map.events.values
 							if $game_player.x == event.x and $game_player.y == event.y
@@ -149,6 +145,7 @@ class Scene_Map
 							end
 						end
 					end	
+					
 				end
 			end
 		end

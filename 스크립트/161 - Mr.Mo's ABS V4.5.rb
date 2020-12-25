@@ -641,7 +641,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies.delete(event.id)
 			#Skip the event if its invisible or doesn't contain a list
 			# 캐릭터 파일 이름이 없거나, 이벤트가 없다면 무시
-			return if character_name == "" or list == nil
+			return if event.character_name == "" or list == nil
 			#Get the parameters 속성 받아오기, 주석처리한걸
 			parameters = SDK.event_comment_input(event, 11, "ABS")
 			#Skip if the paramete is NIL 속성이 없다면 무시
@@ -783,58 +783,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
-		#--------------------------------------------------------------------------
-		# * Revive Actor 캐릭터 부활!
-		#--------------------------------------------------------------------------
-		def revive_actor
-			
-			items = []
-			# Get the item that revives
-			for i in $game_party.items.keys
-				# 지금 템이 없다면 무시
-				next if $game_party.items[i] == 0 or $game_party.items[i] == nil
-				item = $data_items[i]
-				next if !item.minus_state_set.include?(DEATH_STATE_ID) or item.scope < 3
-				items.push(i) # 템창에 옮기기
-			end
-			# If list is empty
-			if items == [] or items == nil or !REVIVE
-				$game_temp.gameover = @game_over
-			else
-				i = rand(items.size)
-				item = $data_items[items[i]]   
-				# If effect scope is an ally
-				if item.scope >= 3
-					# Apply item use effects to target actor
-					target = @actor
-					used = target.item_effect(item)
-					# If an item was used
-					if used
-						#Show animation on player
-						$game_player.animation_id = item.animation1_id 
-						# Play item use SE
-						$game_system.se_play(item.menu_se)
-						# If consumable; Decrease used items by 1
-						$game_party.lose_item(item.id, 1) if item.consumable
-						# If all party members are dead; Switch to game over screen
-						#613, 1003
-						# If common event ID is valid; Common event call reservation
-						return $game_temp.common_event_id = item.common_event_id if item.common_event_id > 0
-						# If effect scope is other than an ally
-					end
-				else
-					# If command event ID is valid
-					if item.common_event_id > 0
-						# Command event call reservation
-						$game_temp.common_event_id = item.common_event_id
-						# Play item use SE
-						$game_system.se_play(item.menu_se)
-						# If consumable; Decrease used items by 1
-						$game_party.lose_item(item.id, 1) if item.consumable
-					end
-				end
-			end
-		end
+		
 		#--------------------------------------------------------------------------
 		# * Update States(Frame) 1프레임마다 실행되는 함수 update함수 안에서 실행 됨
 		#--------------------------------------------------------------------------
@@ -855,19 +804,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				update_states_effects(id)
 			end
-			#~ # 독뎀 구현 움직일 때마다 독 뎀
-			#~ if actor.hp > 0 and actor.slip_damage? and Graphics.frame_count % (40) == 0 and !$game_player.moving?
-			#~ actor.hp -= [actor.maxhp / 100, 1].max
-			#~ if actor.hp == 0
-			#~ $game_system.se_play($data_system.actor_collapse_se)
-			#~ if NEXT_LEADER and !$game_party.all_dead?
-			#~ move_forward
-			#~ else
-			#~ revive_actor
-			#~ end
-			#~ end
-			#~ $game_screen.start_flash(Color.new(255,0,0,128), 4)
-			#~ end
 		end
 		#--------------------------------------------------------------------------
 		# * Add State Effect(State, ID)
@@ -933,26 +869,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$game_player.move_speed = @old_speed
 			end
 		end
-		#--------------------------------------------------------------------------
-		# * Update Respawn(enemy) 몬스터의 부활
-		#--------------------------------------------------------------------------
-		def update_respawn(enemy)
-			event = enemy.event
-			
-			# respawn은 젠 딜레이
-			return if enemy.respawn == 0 or event.erased == false
-			enemy.respawn -= 1
-			if enemy.respawn == 0
-				# 해당 몹 젠 됐다고 서버에 알림
-				# 해당 맵의 몹의 id 체력을 풀로 채움
-				event.erased = false
-				event.refresh
-				
-				Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{enemy.hp},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")	
-				Network::Main.socket.send("<respawn>#{$game_map.map_id},#{event.id},#{event.x},#{event.y},#{event.direction}</respawn>\n")	
-				$game_map.refresh
-			end
-		end
+		
 		#--------------------------------------------------------------------------
 		# * Update Enemy AI(Frame)
 		#--------------------------------------------------------------------------
@@ -962,8 +879,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Skip NIL values
 				next if enemy == nil
 				if enemy.dead?
-					#update_respawn(enemy)
 					next
+				else # 죽지도 않았는데 캐릭터가 없다? 그러면 죽어
+					if enemy.event.character_name == ""
+						@enemies.delete(enemy.event.id)
+						next 
+					end
 				end
 				#Update Enemy State
 				update_enemy_state(enemy)

@@ -49,6 +49,7 @@ class Chat
 		end
 		@chat_sprites.clear
 	end
+	
 	def scale
 		@viewport.rect.y -= 32
 		@viewport.rect.height += 32
@@ -65,6 +66,7 @@ class Chat
 			@scale_count = 0
 		end
 	end
+	
 	def update
 		if @back_sprite.bitmap != nil
 			@back_sprite.bitmap.dispose

@@ -21,7 +21,7 @@ class Scene_Map
 			end
 		end
 		Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
-		Network::Main.send_map
+		Network::Main.send_start
 		
 		$nowtrade = 0
 		$magic1 = 0 # 석화기탄 초기화
@@ -29,7 +29,7 @@ class Scene_Map
 		if SKILL_BUFF_TIME[136][1] > 0 # 파무쾌보
 			$game_player.move_speed = 3.5
 		end
-		자동저장 
+		자동저장 if $game_map.map_id != 3
 		
 		# 현재 맵의 몬스터 정보를 요청
 		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
@@ -49,7 +49,6 @@ class Scene_Map
 	def transfer_player
 		pldlltransfer_player
 		Network::Main.mapplayers_delete
-		Network::Main.send_start
 		# Freeze Graphics
 		Graphics.freeze
 		$scene = Scene_Reinit.new

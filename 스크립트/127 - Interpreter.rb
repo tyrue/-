@@ -128,8 +128,10 @@ class Interpreter
 				# If child interpreter still exists
 				return if @child_interpreter != nil
 			end
+			
 			# If waiting for message to end
 			return if @message_waiting
+			
 			# If waiting for move to end
 			if @move_route_waiting
 				# If player is forcing move route

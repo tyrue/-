@@ -1813,8 +1813,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-					
-					
 					#----------------------------길드---------------------------------
 					return true
 				when /<Guild_Create>(.*),(.*)<\/Guild_Create>/ 
@@ -1912,10 +1910,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<trade_invite>(.*),(.*)<\/trade_invite>/
 					if $1.to_s == $game_party.actors[0].name
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 250,
+						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 350,
 							["'#{$2.to_s}'님께서 교환 신청을 하셨습니다.수락 하시겠습니까?"], ["예", "아니오"],
 							["$trade_player = '#{$2.to_s}'; Network::Main.trade_system('#{$1.to_s}', '#{$2.to_s}'); Jindow_Trade.new; $chat.write '#{$2.to_s}님의 교환 신청을 수락 하셨습니다.'; Hwnd.dispose(self)" ,
-								"$chat.write '#{$2.to_s}님의 교환 신청을 거절 하셨습니다.'; Hwnd.dispose(self)"], "교환 신청")
+								"Network::Main.socket.send \"<trade_fail>#{$2.to_s}</trade_fail>\n\"; $chat.write '#{$2.to_s}님의 교환 신청을 거절 하셨습니다.'; Hwnd.dispose(self)"], "교환 신청")
 					end
 					return true
 				when /<trade_system>(.*),(.*)<\/trade_system>/
@@ -1951,14 +1949,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 				when /<trade_fail>(.*)<\/trade_fail>/
 					if $1.to_s == $game_party.actors[0].name
-						$console.write_line("교환이 취소 되었습니다.")
-						Hwnd.dispose("Trade")
-						$item_number.clear
-						$nowtrade = 0
-						$trade2_ok = 0
-						$trade1_ok = 0
-						$trade_player_money = 0
-						$trade_player = ""
+						Jindow_Trade.trade_fail
+						#~ $console.write_line("교환이 취소 되었습니다.")
+						#~ Hwnd.dispose("Trade")
+						#~ $item_number.clear
+						#~ $nowtrade = 0
+						#~ $trade2_ok = 0
+						#~ $trade1_ok = 0
+						#~ $trade_player_money = 0
+						#~ $trade_player = ""
 					end
 					return true  
 					

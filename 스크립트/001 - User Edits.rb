@@ -102,9 +102,8 @@ module User_Edit
 	CONNFAILTRY       = 3
 	SERVERREFRESH     = 300
 	# IP              # Port   # Display
-	SERVERS           = [["27.119.108.46", 52001 , "흑부엉 서버"]] # 외부 아이피
+	SERVERS           = [["27.119.108.46", 52000 , "흑부엉 서버"]] # 외부 아이피
 	#SERVERS           = [["127.0.0.1" ,52000 , "흑부엉 서버"]] # 테스트용 내부 아이피
-	
 	
 	#Avialbe Chat Systems;
 	#Chat[0]          => No Chat

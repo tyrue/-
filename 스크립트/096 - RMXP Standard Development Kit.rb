@@ -853,8 +853,7 @@ class Game_Player < Game_Character
 		last_moving = moving?
 		# If moving, event running, move route forcing, and message window
 		# display are all not occurring
-		unless moving? or $game_system.map_interpreter.running? or
-			@move_route_forcing or $game_temp.message_window_showing
+		unless moving? or @move_route_forcing or $game_temp.message_window_showing# or $game_system.map_interpreter.running?
 			update_player_movement
 		end
 		# Remember coordinates in local variables
@@ -1589,6 +1588,7 @@ class Scene_Map
 			# Abort loop if transition processing
 			break if $game_temp.transition_processing
 		end
+		
 		update_graphics
 		return if update_game_over? == true
 		return if update_to_title? == true
@@ -1600,8 +1600,7 @@ class Scene_Map
 			if $game_temp.transition_name == ""
 				Graphics.transition(20)
 			else
-				Graphics.transition(40, "Graphics/Transitions/" +
-					$game_temp.transition_name)
+				Graphics.transition(40, "Graphics/Transitions/" + $game_temp.transition_name)
 			end
 		end
 		# If showing message window

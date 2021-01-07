@@ -33,12 +33,6 @@ class Window_MenuStatus < Window_Selectable
 			draw_actor_exp(actor, x, y + 64)
 			draw_actor_hp(actor, x + 236, y + 32)
 			draw_actor_sp(actor, x + 236, y + 64)
-			self.contents.draw_text(180, 115, 320, 32, "생산")
-			self.contents.draw_text(70, 147, 320, 32, "채광 레벨: " + $game_variables[29].to_s)
-			self.contents.draw_text(230, 147, 320, 32, "가공 레벨: " + $game_variables[14].to_s)
-			self.contents.draw_text(70, 169, 320, 32, "농업 레벨: " + $game_variables[15].to_s)
-			self.contents.draw_text(70, 191, 320, 32, "낚시 레벨: " + $game_variables[21].to_s)
-			self.contents.draw_text(230, 169, 320, 32, "직조 레벨: " + $game_variables[42].to_s)
 		end
 	end
 	#--------------------------------------------------------------------------

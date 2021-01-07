@@ -134,7 +134,6 @@ if SDK.state('Socket') == true
 		def self.gethostbyname(name)
 			raise SocketError::ENOASSOCHOST if (ptr = Winsock.gethostbyname(name)) == 0
 			host = ptr.copymem(16).unpack("iissi")
-      
 			[host[0].copymem(64).split("\0")[0], [], host[2], host[4].copymem(4).unpack("l")[0].copymem(4)]
 		end
 		

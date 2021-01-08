@@ -57,7 +57,6 @@ class Jindow < Viewport
 		@old_x = x
 		@old_y = y
 		
-		Hwnd.highlight = self
 		return self
 	end
 	

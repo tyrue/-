@@ -10,7 +10,6 @@ module Input
 	@@swapped = gsm.call(SM_SWAPBUTTON) != 0
 	@@key_state = Win32API.new 'user32', 'GetAsyncKeyState', 'i', 'i'
 	@@cursor_pos = Win32API.new 'user32', 'GetCursorPos', 'p', 'i'
-	@@getkeystate = Win32API.new("user32", "GetKeyState", "i", "i")
 	
 	module_function
 	def mouse_global_pos

@@ -101,24 +101,27 @@ module Hwnd
 		while i >= 0
 			if @data[i].arrive?
 				@highlight = @data[i]
-				return
+				break
 			end
 			i -= 1
 		end
-		return 
 		
 		@highlight ? 0 : return
 		@highlight == @data[@data.size - 1] ? return : 0
-		@data.delete(highlight)
-		@data.push highlight
+		@data.delete(@highlight)
+		@data.push @highlight
 		for i in @data
 			i.highlight
 		end
 	end
 	
 	def highlight?
-		return @highlight
 		return @data[@data.size - 1]
+	end
+	
+	def dis_highlight(item)
+		@data.delete(item)
+		@data.unshift(item)
 	end
 	
 	def highlight=(item)

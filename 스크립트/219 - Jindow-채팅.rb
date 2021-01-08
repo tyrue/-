@@ -262,7 +262,10 @@ class Jindow_Chat_Input < Jindow
 			@active = true
 			
 		elsif Key.trigger?(KEY_ENTER) # 채팅 메세지를 전송
-			Hwnd.highlight = self if Hwnd.highlight? != self
+			if Hwnd.highlight? != self
+				Hwnd.highlight = self 
+			end
+			
 			if not @type.result == ""
 				if @active == true
 					send_chat
@@ -270,6 +273,7 @@ class Jindow_Chat_Input < Jindow
 					@type.view
 					@type.bluck = false
 					@active = false
+					Hwnd.dis_highlight(self)
 				else
 					@type.set ""
 					@type.view

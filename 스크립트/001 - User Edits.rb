@@ -6,7 +6,7 @@ module User_Edit
 	#────────────디버그──────────────────────
 	PRINTLINES        = false
 	#────────────클라이언트 버전─────────────
-	VERSION           = "0.5.6"
+	VERSION           = "qsc"
 	#────────────────────────────────────────────────────────────────
 	MUPLEVDIFF        = 1   # How many LOWER may thew other's level be?
 	MDOWNLEVDIFF      = 1   # How many HIGHER may the other's Level be?
@@ -84,7 +84,7 @@ module User_Edit
 	#---------------------------------------------------------------
 	# Only if CONNTYPE is 0, if set to tru, tests servers
 	TESTSERVER        = true
-	#---------------------------------------------------------------
+	#--------------------------------------------------------------
 	# Only if CONNTYPE is 1.
 	# INPUT 0         = Only IP, DEFAULTPORT is used as port
 	# INPUT 1         = Port and IP
@@ -102,7 +102,7 @@ module User_Edit
 	CONNFAILTRY       = 3
 	SERVERREFRESH     = 300
 	# IP              # Port   # Display
-	SERVERS           = [["27.119.108.46", 52000, "흑부엉 서버"]] # 외부 아이피
+	SERVERS           = [["121.137.158.60", 52001, "흑부엉 서버"]] # 외부 아이피
 	#SERVERS           = [["127.0.0.1" ,52000 , "흑부엉 서버"]] # 테스트용 내부 아이피
 	
 	#Avialbe Chat Systems;

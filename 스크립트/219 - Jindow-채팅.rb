@@ -140,7 +140,7 @@ class Jindow_Chat_Input < Jindow
 		when /\/캐시 (.*) (.*)/ 
 			if Network::Main.group == 'admin'
 				Network::Main.socket.send "<cashgive>#{$1.to_s},#{$2.to_s}</cashgive>\n"
-				$console.write_line("#{$2.to_s}캐시를 유저에게 지급하였습니다.")
+				$console.write_line("#{$2.to_s}마일리지를 유저에게 지급하였습니다.")
 			end
 			
 		when /\/이벤트 고래/ 

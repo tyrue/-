@@ -209,7 +209,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Asks for Network Version Number 버전 요청
 			#-------------------------------------------------------------------------- 
 			def self.retrieve_version
-				@socket.send("<versione>'request'</versione>\n")
+				@socket.send("<versione>#{User_Edit::VERSION}</versione>\n")
 			end
 			#--------------------------------------------------------------------------
 			# * Asks for Message of the day 날짜 요청
@@ -679,7 +679,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_temp.spriteset_refresh = true
 					return
 				end
-			
+				
 				if @players[id] != nil
 					if @mapplayers[id] == nil
 						@mapplayers[id] = @players[id] 
@@ -809,6 +809,23 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				case line
 					# Admin Command Recieval
 					# (모두 또는 아이디, 메시지, 이름)
+				when /<over>(.*)<\/over>/
+					p $1.to_s
+					self.over
+					
+				when /<timer_v>(.*)<\/timer_v>/
+					t_dir = Dir.entries("./")
+					for s in t_dir
+						if(s.include?(".rxproj"))
+							Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
+							p "버전이 다릅니다."
+							exit!
+							break
+						end
+					end
+					@socket.send("<timer_v>ok</timer_v>\n")
+					
+					
 				when /<ki>(.*),(.*),(.*)<\/ki>/
 					# Kick All Command
 					if $1.to_s == "모두"
@@ -836,12 +853,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# 서버에서 보낸 메시지 받는 처리
 			#-------------------------------------------------------------------------- 
 			def self.update_outgame(line)
+				 
 				case line
 					# 제한 처리
-				when /<user_limit>(.*)<\/user_limit>/
+				when /<sever_msg>(.*)<\/sever_msg>/
 					p $1
-					return
-					
+					return true
 					
 					# 인증
 				when /<0 (.*)>(.*) n=(.*)<\/0>/ 
@@ -931,11 +948,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				case line
 					# Version 확인
 				when /<versione>(.*)<\/versione>/ 
-					@version = $1.to_s if $1.to_s != nil 
-					if $game_temp.versione != @version
+					if $1.to_s != User_Edit::VERSION
 						print ("현재 클라이언트의 버전이 낮습니다.\n새로운 클라이언트를 다운 받아주십시오.")
-						@socket.send("<9>#{self.id}</9>\n")
-						@socket.close
 						@socket = nil
 						$scene = nil
 					end
@@ -985,7 +999,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					#-----------하우징 시스템 -----------------
 					
-				
+					
 					
 					#---------------엔피씨 배치 시스템----------------       	
 				when /<npc_batch>(.*)<\/npc_batch>/ 
@@ -1546,7 +1560,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_switches[1500] = false
 						$exp_event = 0
 					end
-						
+					
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
@@ -2194,12 +2208,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when 57 # 청웅객
 					if r <= 60 and $game_switches[141] == true # 승급 퀘스트
 						# 청웅의 환
-						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 52 #{e.event.x} #{e.event.y}</drop_create>\n"
+						Network::Main.socket.send "<drop_create>#{$game_map.map_id},52,#{e.event.x},#{e.event.y}</drop_create>\n"
 					end
 				when 157 # 해파리수하
 					if r <= 10 and $game_switches[378] == true # 용궁 전략문서 얻기
 						# 전략문서
-						Network::Main.socket.send "<drop_create>#{$game_map.map_id} 98 #{e.event.x} #{e.event.y}</drop_create>\n"
+						Network::Main.socket.send "<drop_create>#{$game_map.map_id},98,#{e.event.x},#{e.event.y}</drop_create>\n"
 					end
 				end
 			end

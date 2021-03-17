@@ -759,6 +759,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.update_buff
 		end
 		
+		def active_ok
+			return false if Hwnd.include?("NetPartyInv")
+			return false if Hwnd.include?("Trade")
+			return false if Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+			return false if Hwnd.include?("Npc_dialog")
+			return false if $map_chat_input.active # 채팅이 활성화 된게 아니라면
+			return true
+		end
+		
 		#--------------------------------------------------------------------------
 		# * 로그아웃 등 스킬 버프, 딜레이 초기화
 		#--------------------------------------------------------------------------
@@ -1142,79 +1151,74 @@ if SDK.state("Mr.Mo's ABS") == true
 			@button_mash -= 1 if @button_mash > 0
 			return if @button_mash > 0
 			
-			if !Hwnd.include?("NetPartyInv") and 
-				!Hwnd.include?("Trade") and 
-				!Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+			if active_ok
+				#Keep the current party leader updated
+				@actor = $game_party.actors[0]
 				
-				if not $map_chat_input.active # 채팅이 활성화 된게 아니라면
-					#Keep the current party leader updated
-					@actor = $game_party.actors[0]
-					
-					# 공격키가 눌렸니?
-					if Input.trigger?(@attack_key)
-						#Check State Effect
-						if STATE_EFFECTS
-							for id in $game_party.actors[0].states
-								# 만약 죽은 상태면 공격 못함
-								return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
-							end
-						end
-						return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
-						return player_melee
-					end
-					
-					# 아이템 단축키 눌렸니?
-					check_item
-					
-					# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
-					# 스킬 단축키가 눌렸니?
-					for key in @skill_keys.keys
-						next if @skill_keys[key] == nil or @skill_keys[key] == 0
-						next if !Input.trigger?(key)
-						
-						if $game_switches[352] == true
-							$console.write_line("스킬 사용 불가 지역입니다.")
-							return
-						end
-						
-						if STATE_EFFECTS
-							for i in $game_party.actors[0].states
-								# 상태 이상이면 사용 못함
-								return if STUN_EFFECT.include?(i) or PARALAYZE_EFFECT.include?(i) or MUTE_EFFECT.include?(i)
-							end
-						end
-						# 스킬 아이디 가져옴
-						id = @skill_keys[key]
-						
-						# 아직 스킬 딜레이가 남아있다면 무시
-						skill_mash = SKILL_MASH_TIME[id]
-						if skill_mash != nil and skill_mash[1]/60.0 > 0
-							$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
-							return
-						end
-						
-						# 아직 버프가 지속중이면 무시
-						skill_mash = SKILL_BUFF_TIME[id]
-						if skill_mash != nil and skill_mash[1]/60.0 > 0
-							$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
-							return
-						end
-						
-						if RANGE_EXPLODE.has_key?(id)
-							return player_explode(id)
-						else
-							return player_skill(id)
+				# 공격키가 눌렸니?
+				if Input.trigger?(@attack_key)
+					#Check State Effect
+					if STATE_EFFECTS
+						for id in $game_party.actors[0].states
+							# 만약 죽은 상태면 공격 못함
+							return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
 						end
 					end
-					
+					return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
+					return player_melee
 				end
+				
+				# 아이템 단축키 눌렸니?
+				check_item
+				
+				# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
+				# 스킬 단축키가 눌렸니?
+				for key in @skill_keys.keys
+					next if @skill_keys[key] == nil or @skill_keys[key] == 0
+					next if !Input.trigger?(key)
+					
+					if $game_switches[352] == true
+						$console.write_line("스킬 사용 불가 지역입니다.")
+						return
+					end
+					
+					if STATE_EFFECTS
+						for i in $game_party.actors[0].states
+							# 상태 이상이면 사용 못함
+							return if STUN_EFFECT.include?(i) or PARALAYZE_EFFECT.include?(i) or MUTE_EFFECT.include?(i)
+						end
+					end
+					# 스킬 아이디 가져옴
+					id = @skill_keys[key]
+					
+					# 아직 스킬 딜레이가 남아있다면 무시
+					skill_mash = SKILL_MASH_TIME[id]
+					if skill_mash != nil and skill_mash[1]/60.0 > 0
+						$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
+						return
+					end
+					
+					# 아직 버프가 지속중이면 무시
+					skill_mash = SKILL_BUFF_TIME[id]
+					if skill_mash != nil and skill_mash[1]/60.0 > 0
+						$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
+						return
+					end
+					
+					if RANGE_EXPLODE.has_key?(id)
+						return player_explode(id)
+					else
+						return player_skill(id)
+					end
+				end
+				
 			end
 		end
 		#--------------------------------------------------------------------------
 		# * Check Item  아이탬 단축키를 이용해서 사용할 경우
 		#--------------------------------------------------------------------------
 		def check_item
-			if !Hwnd.include?("NetPartyInv") and !Hwnd.include?("Keyset_menu") and !Hwnd.include?("Trade")
+			if active_ok
 				if not $map_chat_input.active
 					#Check for item usage
 					for key in @item_keys.keys
@@ -1874,11 +1878,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				$game_map.need_refresh = true
 				
 				#~ if enemy.trigger[2] == 0
-					#~ $game_variables[enemy.trigger[1]] += 1
-					#~ $game_map.need_refresh = true
+				#~ $game_variables[enemy.trigger[1]] += 1
+				#~ $game_map.need_refresh = true
 				#~ else
-					#~ $game_variables[enemy.trigger[1]] = enemy.trigger[2]
-					#~ $game_map.need_refresh = true
+				#~ $game_variables[enemy.trigger[1]] = enemy.trigger[2]
+				#~ $game_map.need_refresh = true
 				#~ end
 			when 3 
 				event.fade = true if FADE_DEAD
@@ -1899,7 +1903,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def player_dead?(a,e)
 			return false if $game_party.actors[0].hp > 0
-				
+			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			if !e.is_a?(Game_NetPlayer)
 				e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
@@ -3101,7 +3105,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if @_animation != nil and (Graphics.frame_count % 10 == 0)
 					@_animation_duration += 1
 				end
-
+				
 				#Update Duration
 				if @_collapse_erase_duration > 0
 					@_collapse_erase_duration -= 1

@@ -94,7 +94,15 @@ end
 # * Updates Input
 #--------------------------------------------------------------------------
 def update_input
-	
+	t_dir = Dir.entries("./")
+	for s in t_dir
+		if(s.include?(".rxproj"))
+			Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
+			p "버전이 다릅니다."
+			exit!
+			break
+		end
+	end
 end
 #--------------------------------------------------------------------------
 # * Updates Mouse

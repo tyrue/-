@@ -131,7 +131,7 @@ class MrMo_ABS
 				i_id = 19 # 웅담
 			end
 		when 14 # 진웅
-			if r <= 10 
+			if r <= 5 
 				i_id = 20 # 지력의 투구 1
 			end
 		when 15 # 호랑이

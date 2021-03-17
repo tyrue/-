@@ -8,7 +8,7 @@ class Jindow_cashshop < Jindow
 	def initialize
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 400)
-		self.name = "캐시샵"
+		self.name = "마일리지 샾"
 		@head = true
 		@drag = true
 		@close = true
@@ -32,13 +32,13 @@ class Jindow_cashshop < Jindow
 		end
 		text.bitmap = Bitmap.new(self.width, 500)
 		cash = $game_variables[213]
-		text.bitmap.draw_text(3, 10, self.width, 32, "내 캐시 잔액 :" + "#{cash}")
+		text.bitmap.draw_text(3, 10, self.width, 32, "내 마일리지 잔액 :" + "#{cash}")
 		
 		# 세계후두루마리 
 		text.bitmap.font.color.set(0, 0, 0, 255)
 		text.bitmap.draw_text(0, 35, self.width, 32, "*세계후두루마리(소모성 아이탬)")
 		text.bitmap.font.color.set(0, 0, 0, 255)
-		text.bitmap.draw_text(240, 35, self.width, 32, "*가격 : 50 Cash")
+		text.bitmap.draw_text(240, 35, self.width, 32, "*가격 : 50마일리지")
 		text.bitmap.font.color.set(0, 0, 0, 255)
 		text.bitmap.draw_text(43, 57, self.width, 32, "설명 : 접속중인 사람들에게 모두 들리게 해주는 아이탬이다.")
 		
@@ -46,7 +46,7 @@ class Jindow_cashshop < Jindow
 		text.bitmap.font.color.set(0, 0, 0, 255)
 		text.bitmap.draw_text(0, 118, self.width, 32, "*최고급보물상자(소모성 아이탬)")
 		
-		text.bitmap.draw_text(240, 118, self.width, 32, "*가격 : 300 Cash")   
+		text.bitmap.draw_text(240, 118, self.width, 32, "*가격 : 300마일리지")   
 		
 		text.bitmap.draw_text(43, 142, self.width, 32, "설명 : 무엇이 나올지 모르는 보물상자이다")
 		
@@ -55,7 +55,7 @@ class Jindow_cashshop < Jindow
 		text.bitmap.font.color.set(0, 0, 0, 255)
 		text.bitmap.draw_text(0, 211, self.width, 32, "*삿갓머리화서(소모성 아이탬)")
 		
-		text.bitmap.draw_text(240, 211, self.width, 32, "*가격 : 2000 Cash")     
+		text.bitmap.draw_text(240, 211, self.width, 32, "*가격 : 2000마일리지")     
 		
 		text.bitmap.draw_text(43, 235, self.width, 32, "설명 : 머리를 삿갓을 쓴 상태로 변경시켜주는 화서이다")
 		

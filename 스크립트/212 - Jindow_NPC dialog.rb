@@ -7,6 +7,7 @@ class Jindow_N < Jindow
 	def initialize(text = "", name = "", select_num = 0, type = 0) # 텍스트, 선택지가 있는가, npc 이름, 메뉴들, 타입
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 105)
+		name = "" if name.include?("EV")
 		name.delete!("[id")
 		name.delete!("[Id")
 		name.delete!("[iD")
@@ -31,7 +32,7 @@ class Jindow_N < Jindow
 		@b.x = @a.x + @a.width
 		
 		case @type
-		when 0
+		when 0 # 일반 대화
 			# npc 대화 추가
 			@text = Sprite.new(self)
 			@text.bitmap = Bitmap.new(self.width, (@texts.size - select_num + 1) * 18)
@@ -74,15 +75,16 @@ class Jindow_N < Jindow
 				
 				@input_res = 0
 			end
-		when 1
+		when 1 # 버튼만 있는 경우
 			if select_num > 0
 				for i in 0...select_num
 					@menu.push(J::Button.new(self).refresh(self.width / 2, @texts[i]))
+					@menu[i].x = (self.width - self.width / 2) / 2 
 					@menu[i].y = i * @menu[i].height + 10
 				end	
 			end
 			@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
-		when 2
+		when 2 # 입력만 있는 경우
 			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)	
 			
 			@input_button = J::Button.new(self).refresh(40, "입력")
@@ -152,6 +154,8 @@ class Jindow_N < Jindow
 						$game_map.need_refresh = true
 						$game_system.se_play($data_system.decision_se)
 						$game_temp.message_proc.call
+						$game_temp.num_input_variable_id = 0
+						$game_temp.num_input_digits_max = 0
 						Hwnd.dispose(self)
 					else
 						$console.write_line("1 이상의 수를 입력하세요.")
@@ -179,6 +183,8 @@ class Jindow_N < Jindow
 					$game_map.need_refresh = true
 					$game_system.se_play($data_system.decision_se)
 					$game_temp.message_proc.call
+					$game_temp.num_input_variable_id = 0
+					$game_temp.num_input_digits_max = 0
 					Hwnd.dispose(self)
 				else
 					$console.write_line("1 이상의 수를 입력하세요.")

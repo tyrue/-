@@ -74,7 +74,7 @@ class Scene_Map
 		# Update Mouse
 		update_mouse if SDK.state("Path Finding") == true
 		# Update Input
-		update_input
+		update_input if User_Edit::SERVERS[0][0] != "127.0.0.1"
 		# Update old systems
 		netplay2_update_systems
 		# Update Netplayers

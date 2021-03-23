@@ -229,6 +229,7 @@ class Game_Character
 	#     y : y-coordinate
 	#--------------------------------------------------------------------------
 	def moveto(x, y)
+		return if x == nil or y == nil
 		@x = x % $game_map.width
 		@y = y % $game_map.height
 		@real_x = @x * 128

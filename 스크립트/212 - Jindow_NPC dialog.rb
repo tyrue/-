@@ -4,7 +4,7 @@
 #   NPC 대화
 #------------------------------------------------------------------------------
 class Jindow_N < Jindow
-	def initialize(text = "", name = "", select_num = 0, type = 0) # 텍스트, 선택지가 있는가, npc 이름, 메뉴들, 타입
+	def initialize(text = "", name = "", select_num = 0, type = 0) # 텍스트, npc 이름, 메뉴들, 타입
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 105)
 		name = "" if name.include?("EV")
@@ -261,7 +261,7 @@ class Interpreter
 						# Advance index
 						@index += 1
 						# Choices setup
-						$game_temp.choice_start = line_count
+						$game_temp.choice_start = line_count + 1
 						setup_choices(@list[@index].parameters)
 					end
 					
@@ -279,6 +279,7 @@ class Interpreter
 				end
 				# Continue
 				if $game_map.events[@event_id] != nil
+					# npc대화창 생성
 					Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, 4 - $game_temp.choice_start, 0)
 					$game_temp.message_text = nil
 				end

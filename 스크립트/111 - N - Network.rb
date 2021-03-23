@@ -761,6 +761,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				end
 			end
 			
+			#------------------
+			# 스위치 및 변수 공유 시스템
+			#------------------
+			def self.party_switch(id, state, map_id = 0)
+				@socket.send("<party_switch>#{id},#{state},#{map_id}</party_switch>\n")
+			end
+			
+			#------------------
+			# 해당 몬스터 젠 딜레이 리셋
+			#------------------
+			def self.monster_cooltime_reset(map_id, mon_id = 0)
+				@socket.send("<monster_cooltime_reset>#{map_id},#{mon_id}</monster_cooltime_reset>\n")
+			end
+			
 			
 			#--------------------------------------------------------------------------
 			# * 길드 시스템
@@ -816,6 +830,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<timer_v>(.*)<\/timer_v>/
 					t_dir = Dir.entries("./")
 					for s in t_dir
+						break if User_Edit::SERVERS[0][0] == "127.0.0.1"
 						if(s.include?(".rxproj"))
 							Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
 							p "버전이 다릅니다."
@@ -1534,7 +1549,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						$game_map.need_refresh = true
 					end
-					
+						
 					# id를 600번 변수에 저장 왜?
 				when /<idsave>(.*)<\/idsave>/
 					$game_variables[600] = $1.to_s

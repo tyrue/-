@@ -350,7 +350,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 전사
 	SKILL_MASH_TIME[65] = [10 * sec, 0] # 뢰마도
 	SKILL_MASH_TIME[67] = [5 * sec, 0] # 건곤대나이
-	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
+	SKILL_MASH_TIME[73] = [8 * sec, 0] # 광량돌격
 	SKILL_MASH_TIME[75] = [7 * sec, 0] # 뢰마도 1성
 	SKILL_MASH_TIME[77] = [5 * sec, 0] # 유비후타
 	SKILL_MASH_TIME[79] = [60 * sec, 0] # 동귀어진
@@ -1108,14 +1108,14 @@ if SDK.state("Mr.Mo's ABS") == true
 						return		
 						
 					when 3..4, 7 # User   
-						return if Graphics.frame_count % (e.aggressiveness * 100.0).to_i != 0
-						next if e.hp > skill.power.abs
+						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
+						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						Network::Main.ani(e.event.id, skill.animation1_id, 1)
 						e.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
-						e.event.animation_id = skill.animation2_id
 						return
 					end
 					return
@@ -1876,14 +1876,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 				$game_variables[enemy.trigger[1]] += 1
 				$game_map.need_refresh = true
-				
-				#~ if enemy.trigger[2] == 0
-				#~ $game_variables[enemy.trigger[1]] += 1
-				#~ $game_map.need_refresh = true
-				#~ else
-				#~ $game_variables[enemy.trigger[1]] = enemy.trigger[2]
-				#~ $game_map.need_refresh = true
-				#~ end
 			when 3 
 				event.fade = true if FADE_DEAD
 				value = "A" if enemy.trigger[1] == 1
@@ -3560,8 +3552,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if !self.hate_group.include?(0)
 			end
 			if self.is_a?(ABS_Enemy) and user.is_a?(ABS_Enemy)
-				return if !self.hate_group.include?(user.id)
+				return if self.id != user.id and !self.hate_group.include?(user.id)
 			end
+			
 			# Clear critical flag
 			self.critical = false
 			# If skill scope is for ally with 1 or more HP, and your own HP = 0,
@@ -3571,6 +3564,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# End Method
 				return false
 			end
+			
 			# Clear effective flag
 			effective = false
 			# Set effective flag if common ID is effective
@@ -3731,8 +3725,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					power += user.maxsp / 100
 					if $e_v == $alive_size
 						user.sp -= user.maxsp / 10
-						
-					end		
+					end	
+					
+					# 적 유닛 스킬
+				when 157
+					user.hp += user.maxhp / 10
+					user.damage = user.maxhp / 10
+					user.critical = "heal"
+					return
 				else
 					power = skill.power + user.atk / 2 
 				end				

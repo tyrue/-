@@ -35,8 +35,8 @@ class Bitmap
 				# 引?を?理用のロ?カル??へコピ? 
 				x, y, width, height = args 
 				string = args[4] 
-				align = args[5] == nil ? 0 : args[5] 
-				frame_color = args[6] == nil ? Color.new(0, 0, 0) : args[6] 
+				align = args[5] == nil ? 0 : args[5]
+				frame_color = !args[6].is_a?(Color) ? Color.new(0, 0, 0) : args[6] 
 			else 
 				# 引?が不正ならエラ?を吐く 
 				raise(ArgumentError, "wrong number of arguments(#{args.size} of #{args.size < 5 ? 5 : 7})") 

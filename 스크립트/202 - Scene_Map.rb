@@ -121,6 +121,14 @@ class Scene_Map
 						end
 					end	
 					
+					if Input.trigger?(Input::Fkeys[1]) # f1
+						if not Hwnd.include?("help")
+							Jindow_help.new
+						else
+							Hwnd.dispose("help")
+						end
+					end	
+					
 					if Key.trigger?(11)  #아이템, 돈 줍기
 						for event in $game_map.events.values
 							if $game_player.x == event.x and $game_player.y == event.y

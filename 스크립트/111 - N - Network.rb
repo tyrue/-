@@ -1269,12 +1269,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# Attacked!
 				when /<skill_effect>(.*)<\/skill_effect>/
-					return if !$game_switches[302] # pk off
 					data = $1.split(",")
 					return if data[0] != @id
+					return if @players[data[1]] == nil
 					
-					$game_party.actors[0].effect_skill(@players[data[1]], $data_skills[data[2].to_i]) if @players[data[1]] != nil
+					actor = $game_party.actors[0]
+					actor.effect_skill(@players[data[1]], $data_skills[data[2].to_i]) if $game_switches[302]
+					range_skill = $ABS.RANGE_SKILLS[data[2].to_i]
 					
+					$ABS.jump($game_player, @players[data[1]], range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and range_skill[4] != 0
 				when /<result_effect>(.*)<\/result_effect>/ 
 					$ABS.netplayer_killed
 					return true

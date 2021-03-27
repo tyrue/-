@@ -260,7 +260,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
-	RANGE_SKILLS[77] = [1, 5, "공격스킬2", 4, 7] #유비후타
+	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
 	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
@@ -269,6 +269,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[102] = [1, 6, "공격스킬2", 4, 0] #백리건곤 1성
 	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
+	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3] #초혼비무
 	#도사 스킬
 	# 부활 스킬을 넣어볼까 생각
 	
@@ -358,6 +359,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[103] = [20 * sec, 0] # 어검술
 	SKILL_MASH_TIME[104] = [80 * sec, 0] # 포효검황
 	SKILL_MASH_TIME[105] = [140 * sec, 0] # 혈겁만파
+	SKILL_MASH_TIME[106] = [60 * sec, 0] # 초혼비무
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
@@ -2706,7 +2708,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			#Jump
-			$ABS.jump($game_player, self, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] > 0
+			$ABS.jump($game_player, self, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2740,7 +2742,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 				
 				#Jump
-				$ABS.jump(@enani, $game_player, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] > 0
+				$ABS.jump(@enani, $game_player, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] != 0
 				
 				return if $ABS.enemy_dead?(actor, enemy)
 				return if !actor.hate_group.include?(0)
@@ -3685,6 +3687,11 @@ if SDK.state("Mr.Mo's ABS") == true
 						user.hp -= user.hp / 2
 						user.hp = 1 if user.hp <= 0
 					end		
+				when 106 # 초혼비무
+					power += user.hp * 1.2
+					user.hp -= user.maxhp / 4
+					user.hp = 1 if user.hp <= 0
+					
 					
 					# 도적 스킬
 				when 133 # 필살검무
@@ -3881,7 +3888,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus).round
 				# Set jump count
 				@jump_peak = 10 + distance - @move_speed
-				@jump_count = @jump_peak * 2
+				@jump_count = @jump_peak * 1
 				# Clear stop count
 				@stop_count = 0
 			end

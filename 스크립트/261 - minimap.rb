@@ -135,7 +135,8 @@ class Window_Map < Window_Base
 		y = PLAN_Map_Window::WIN_Y 
 		w = PLAN_Map_Window::WIN_WIDTH 
 		h = PLAN_Map_Window::WIN_HEIGHT 
-		super(x, y, w, h) 
+		super(x, y, w, h) # 해당 좌표에 창을 띄움
+		
 		unless PLAN_Map_Window::WINDOWSKIN.empty? 
 			self.windowskin = RPG::Cache.windowskin(PLAN_Map_Window::WINDOWSKIN) 
 		end 
@@ -144,7 +145,8 @@ class Window_Map < Window_Base
 		self.opacity = PLAN_Map_Window::OPACITY 
 		self.contents_opacity = PLAN_Map_Window::C_OPACITY 
 		@map_data = $game_map.data 
-		# ??C????b?v?????? 
+		
+		# 현재 맵의 타일 데이터 가져옴 
 		@tileset = RPG::Cache.tileset($game_map.tileset_name) if $game_map.tileset_name != nil
 		@autotiles = [] 
 		for i in 0..6 
@@ -153,16 +155,17 @@ class Window_Map < Window_Base
 				@autotiles[i] = RPG::Cache.autotile(autotile_name) 
 			end
 		end 
-		# ???????v???C??????u???m?? 
+		# 플레이어 위치 저장
 		@old_real_x = $game_player.real_x 
 		@old_real_y = $game_player.real_y 
-		# ??b?v???S????????? 
+		# 맵 그래픽 구현 
 		@all_map = make_all_map 
-		# ????E??????????? 
+		
+		# 창 표시
 		self.visible = PLAN_Map_Window::VISIBLE 
-		# ??? 
 		refresh 
 	end 
+	
 	#-------------------------------------------------------------------------- 
 	# ?? ??b?v???S??????????i?k???????t???j 
 	#-------------------------------------------------------------------------- 
@@ -192,7 +195,7 @@ class Window_Map < Window_Base
 		end 
 		# 맵의 크기에 맞게 축소해보자
 		v_max = [$game_map.width, $game_map.height].max
-		$zoom = (v_max * (32.0) / PLAN_Map_Window::WIN_WIDTH)
+		$zoom = ((v_max + 8) * (32.0) / PLAN_Map_Window::WIN_WIDTH)
 		
 		w = ($game_map.width / $zoom) * 32 
 		h = ($game_map.height / $zoom) * 32 
@@ -261,6 +264,7 @@ class Window_Map < Window_Base
 		
 		src_rect = Rect.new(x, y, self.contents.width, self.contents.height) 
 		self.contents.blt(0, 0, @all_map, src_rect) 
+		
 		# 윈도우의 이동 처리 
 		if PLAN_Map_Window::WINDOW_MOVE == true 
 			# 윈도우의 범위를 취득(범위 오브젝트) 
@@ -282,14 +286,34 @@ class Window_Map < Window_Base
 				end 
 			end 
 		end 
+		
+		
+		for event in $game_map.events.values
+			next if event.list == nil
+			if event.list[0].code != 108
+				size = 8
+				bitmap = Bitmap.new(size, size)
+				if event.list[0].code == 201
+					bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
+				else
+					bitmap.fill_rect(bitmap.rect, Color.new(0, 255, 0)) # 꽉찬 네모  
+				end
+				w = bitmap.width 
+				h = bitmap.height
+				
+				src_rect = Rect.new(0, 0, w, h) 
+				
+				x = (event.x ) * one_tile_size + (self.contents.width - @all_map.width) / 2
+				y = (event.y ) * one_tile_size + (self.contents.height - @all_map.height) / 2
+				
+				dest_rect = Rect.new(x, y, w, h) 
+				self.contents.stretch_blt(dest_rect, bitmap, src_rect) 
+			end
+		end
+		
+		
 		# 액터가 있는 경우는 최초의 액터를 맵에 표시 
 		if $game_party.actors.size > 0 
-			# priority 체크 숨는다면 액터비표시 
-			#~ for i in [2, 1, 0] 
-			#~ tile = @map_data[$game_player.x, $game_player.y, i] 
-			#~ next if tile == 0 or tile == nil
-			#~ return if $game_map.priorities[tile] > 0 
-			#~ end 
 			actor = $game_party.actors[0] 
 			size = 40
 			bitmap = Bitmap.new(size, size)

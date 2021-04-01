@@ -256,13 +256,15 @@ class Interpreter
 				# If event command is not on the second line or after
 			else
 				# 선택지가 있는 명령어거나 명령어 끝
+				@m_count = 0
 				if @list[@index + 1].code == 102
 					# 만약 선택지를 한번에 넣을 수 있으면 넣음
 					if @list[@index + 1].parameters[0].size <= 4 - line_count
+						@m_count = @list[@index + 1].parameters[0].size
 						# Advance index
 						@index += 1
 						# Choices setup
-						$game_temp.choice_start = line_count + 1
+						$game_temp.choice_start = line_count
 						setup_choices(@list[@index].parameters)
 					end
 					
@@ -281,7 +283,7 @@ class Interpreter
 				# Continue
 				if $game_map.events[@event_id] != nil
 					# npc대화창 생성
-					Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, 4 - $game_temp.choice_start, 0)
+					Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, @m_count, 0)
 					$game_temp.message_text = nil
 				end
 				return true

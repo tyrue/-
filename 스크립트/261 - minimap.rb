@@ -160,11 +160,47 @@ class Window_Map < Window_Base
 		@old_real_y = $game_player.real_y 
 		# 맵 그래픽 구현 
 		@all_map = make_all_map 
+		@all_event = make_all_event
 		
 		# 창 표시
 		self.visible = PLAN_Map_Window::VISIBLE 
 		refresh 
 	end 
+	
+	
+	def make_all_event
+		test_bitmap = Bitmap.new(self.contents.width, self.contents.height)
+		for event in $game_map.events.values
+			next if event.list == nil
+			if event.list[0].code != 108
+				size = 8
+				bitmap = Bitmap.new(size, size)
+				if event.list[0].code == 201
+					bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
+				else
+					bitmap.fill_rect(bitmap.rect, Color.new(0, 255, 0)) # 꽉찬 네모  
+				end
+				w = bitmap.width 
+				h = bitmap.height
+				
+				src_rect = Rect.new(0, 0, w, h) 
+				
+				one_tile_size = 32 / $zoom
+				
+				x = (event.x ) * one_tile_size + (self.contents.width - @all_map.width) / 2
+				y = (event.y ) * one_tile_size + (self.contents.height - @all_map.height) / 2
+				
+				dest_rect = Rect.new(x, y, w, h) 
+				test_bitmap.stretch_blt(dest_rect, bitmap, src_rect) 
+			end
+		end
+		
+		ret_bitmap = Bitmap.new(self.contents.width, self.contents.height)
+		src_rect = Rect.new(0, 0, test_bitmap.width, test_bitmap.height) 
+		dest_rect = Rect.new(0, 0, ret_bitmap.width, ret_bitmap.height) 
+		ret_bitmap.stretch_blt(dest_rect, test_bitmap, src_rect) 
+		return ret_bitmap
+	end
 	
 	#-------------------------------------------------------------------------- 
 	# ?? ??b?v???S??????????i?k???????t???j 
@@ -262,8 +298,10 @@ class Window_Map < Window_Base
 			y += rev_y 
 		end 
 		
-		src_rect = Rect.new(x, y, self.contents.width, self.contents.height) 
+		src_rect = Rect.new(x, y, self.contents.width, self.contents.height)
+		src_rect2 = Rect.new(0, 0, self.contents.width, self.contents.height)
 		self.contents.blt(0, 0, @all_map, src_rect) 
+		self.contents.blt(0, 0, @all_event, src_rect2) 
 		
 		# 윈도우의 이동 처리 
 		if PLAN_Map_Window::WINDOW_MOVE == true 
@@ -286,32 +324,7 @@ class Window_Map < Window_Base
 				end 
 			end 
 		end 
-		
-		
-		for event in $game_map.events.values
-			next if event.list == nil
-			if event.list[0].code != 108
-				size = 8
-				bitmap = Bitmap.new(size, size)
-				if event.list[0].code == 201
-					bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
-				else
-					bitmap.fill_rect(bitmap.rect, Color.new(0, 255, 0)) # 꽉찬 네모  
-				end
-				w = bitmap.width 
-				h = bitmap.height
 				
-				src_rect = Rect.new(0, 0, w, h) 
-				
-				x = (event.x ) * one_tile_size + (self.contents.width - @all_map.width) / 2
-				y = (event.y ) * one_tile_size + (self.contents.height - @all_map.height) / 2
-				
-				dest_rect = Rect.new(x, y, w, h) 
-				self.contents.stretch_blt(dest_rect, bitmap, src_rect) 
-			end
-		end
-		
-		
 		# 액터가 있는 경우는 최초의 액터를 맵에 표시 
 		if $game_party.actors.size > 0 
 			actor = $game_party.actors[0] 

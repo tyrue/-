@@ -29,6 +29,9 @@ if SDK.state("Mr.Mo's ABS")
 			@old_x = 0
 			@old_y = 0
 			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
+			@temp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
+			@ch = @temp.height / 4
+			@cw = 15
 			update    
 		end
 		#--------------------------------------------------------------------------
@@ -36,8 +39,8 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def refresh
 			#First move it
-			@old_x = @enemy.event.screen_x-10
-			@old_y = @enemy.event.screen_y
+			@old_x = @enemy.event.screen_x - @cw
+			@old_y = @enemy.event.screen_y - @ch
 			self.x = @old_x
 			self.y = @old_y
 			#HP Bar Check
@@ -53,8 +56,8 @@ if SDK.state("Mr.Mo's ABS")
 		def something_changed?
 			return dispose if @enemy.dead? or $ABS.enemies[@enemy.event_id] == nil
 			return true if @old_hp != @enemy.hp
-			return true if @old_x != @enemy.event.screen_x-10
-			return true if @old_y != @enemy.event.screen_y
+			return true if @old_x != @enemy.event.screen_x - @cw
+			return true if @old_y != @enemy.event.screen_y - @ch
 			return false
 		end
 		#--------------------------------------------------------------------------
@@ -79,9 +82,9 @@ if SDK.state("Mr.Mo's ABS")
 			
 			percent = min / max.to_f if max != 0
 			percent = 0 if max == 0
-			back_dest_rect = Rect.new(x,y,zoom_x,zoom_y)
-			back2_dest_rect = Rect.new(x+dx,y+dy,zoom_x -dx*2,zoom_y-dy*2)
-			bar_dest_rect = Rect.new(x+cx,y+cy,zoom_x * percent-cx*2,zoom_y-cy*2)
+			back_dest_rect = Rect.new(x, y, zoom_x, zoom_y)
+			back2_dest_rect = Rect.new(x + dx, y + dy, zoom_x - dx * 2, zoom_y - dy * 2)
+			bar_dest_rect = Rect.new(x + cx, y + cy, zoom_x * percent - cx * 2, zoom_y - cy * 2)
 			back_source_rect = Rect.new(0,0,back.width,back.height)
 			back2_source_rect = Rect.new(0,0,back2.width,back2.height)
 			bar_source_rect = Rect.new(0,0,bar.width* percent,bar.height)
@@ -111,6 +114,10 @@ if SDK.state("Mr.Mo's ABS")
 			@old_x = 0
 			@old_y = 0
 			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
+			#~ @temp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
+			#~ @ch = @temp.height / 4 + 20
+			#~ @cw = 15
+			@ch = 0
 			update    
 		end
 		#--------------------------------------------------------------------------
@@ -118,8 +125,8 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def refresh
 			#First move it
-			@old_x = @netPlayer.screen_x-15
-			@old_y = @netPlayer.screen_y
+			@old_x = @netPlayer.screen_x - 15
+			@old_y = @netPlayer.screen_y - @ch
 			self.x = @old_x
 			self.y = @old_y
 			#HP Bar Check
@@ -139,8 +146,8 @@ if SDK.state("Mr.Mo's ABS")
 			
 			self.visible = !@netPlayer.is_transparency
 			return true if @old_hp != @netPlayer.hp
-			return true if @old_x != @netPlayer.event.screen_x-10
-			return true if @old_y != @netPlayer.event.screen_y
+			return true if @old_x != @netPlayer.event.screen_x - 15
+			return true if @old_y != @netPlayer.event.screen_y - @ch
 			return false
 		end
 		#--------------------------------------------------------------------------

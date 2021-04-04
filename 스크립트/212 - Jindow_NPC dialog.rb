@@ -16,7 +16,7 @@ class Jindow_N < Jindow
 		self.name = name
 		@head = true
 		@drag = true
-		#@close = true
+		@close = true
 		@type = type
 		self.x = (640 - self.width) / 2
 		self.y = 255 - self.height
@@ -28,9 +28,10 @@ class Jindow_N < Jindow
 		@texts = text.split("\n")
 		@a = J::Button.new(self).refresh(45, "다음")
 		@b = J::Button.new(self).refresh(45, "닫기")
-		@a.x = (self.width - @a.width) / 2
+		@a.x = self.width - @a.width * 2
 		@b.x = @a.x + @a.width
 		
+		@close_ok = false
 		case @type
 		when 0 # 일반 대화
 			# npc 대화 추가
@@ -44,14 +45,12 @@ class Jindow_N < Jindow
 			end
 			
 			if select_num > 0
+				@close_ok = true
 				for i in 0...select_num
 					@menu.push(J::Button.new(self).refresh(self.width / 2, @texts[text_size + i]))
+					@menu[i].x = (self.width - self.width / 2) / 2 
+					@menu[i].y = @text.height + i * @menu[i].height
 				end	
-			end
-			
-			for i in 0...@menu.size
-				@menu[i].x = (self.width - self.width / 2) / 2 
-				@menu[i].y = @text.height + i * @menu[i].height
 			end
 			
 			if @menu.size > 0
@@ -61,22 +60,14 @@ class Jindow_N < Jindow
 			end
 			
 			if $game_temp.num_input_start > 0
+				@close_ok = true
 				@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, @text.height + 10, self.width / 2, 18)	
-				
-				@input_button = J::Button.new(self).refresh(40, "입력")
-				@input_button.x = @input_num.x + @input_num.width + 5
-				@input_button.y = @input_num.y
-				
-				@input_result = Sprite.new(self)
-				@input_result.bitmap = Bitmap.new(self.width, self.height)
-				@input_result.bitmap.font.color.set(0, 0, 0, 255)
-				@input_result.bitmap.draw_text(0, @input_num.y + @input_num.height, self.width, 20, "입력 값 : ")
 				@a.y = @input_num.y + @input_num.height + 20
-				
 				@input_res = 0
 			end
 		when 1 # 버튼만 있는 경우
 			if select_num > 0
+				@close_ok = true
 				for i in 0...select_num
 					@menu.push(J::Button.new(self).refresh(self.width / 2, @texts[i]))
 					@menu[i].x = (self.width - self.width / 2) / 2 
@@ -85,22 +76,16 @@ class Jindow_N < Jindow
 			end
 			@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
 		when 2 # 입력만 있는 경우
-			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)	
-			
-			@input_button = J::Button.new(self).refresh(40, "입력")
-			@input_button.x = @input_num.x + @input_num.width + 5
-			@input_button.y = @input_num.y
-			
-			@input_result = Sprite.new(self)
-			@input_result.bitmap = Bitmap.new(self.width, self.height)
-			@input_result.bitmap.font.color.set(0, 0, 0, 255)
-			@input_result.bitmap.draw_text(0, @input_num.y + @input_num.height, self.width, 20, "입력 값 : ")
+			@close_ok = true
+			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)				
 			@a.y = @input_num.y + @input_num.height + 20
-			
 			@input_res = 0
 		end
 		@b.y = @a.y
-		@b.dispose
+		if !@close_ok
+			@close = false
+			@b.dispose 
+		end
 		
 		self.height = @a.y + @a.height + 30
 		self.refresh("Npc_dialog")
@@ -142,16 +127,31 @@ class Jindow_N < Jindow
 	
 	def update
 		super
-		if Key.trigger?(6) or Key.trigger?(5) 
+		if @menu.size > 0
+			for i in 0...@menu.size
+				if @menu[i].click			
+					$game_system.se_play($data_system.decision_se)
+					Hwnd.dispose(self)
+					$game_temp.message_proc.call
+					$game_temp.choice_proc.call(i)
+				end
+			end
+		end
+		
+		if Key.trigger?(KEY_SPACE) #space
 			@a.click = true if Hwnd.highlight? == self
+		end
+		
+		if Key.trigger?(KEY_ESC) #esc
+			@b.click = true if Hwnd.highlight? == self and !@b.disposed?
 		end
 		
 		case @type
 		when 0
 			if @a.click # 다음 버튼 클릭
-				if @input_num != nil
-					if @input_res > 0
-						$game_variables[$game_temp.num_input_variable_id] = @input_res
+				if @input_num != nil				
+					if @input_num.result.to_i > 0
+						$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
 						$game_map.need_refresh = true
 						$game_system.se_play($data_system.decision_se)
 						$game_temp.message_proc.call
@@ -179,8 +179,8 @@ class Jindow_N < Jindow
 			end
 		when 2
 			if @a.click # 다음 버튼 클릭
-				if @input_res > 0
-					$game_variables[$game_temp.num_input_variable_id] = @input_res
+				if @input_num.result.to_i > 0
+					$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
 					$game_map.need_refresh = true
 					$game_system.se_play($data_system.decision_se)
 					$game_temp.message_proc.call
@@ -195,31 +195,6 @@ class Jindow_N < Jindow
 			end
 		end
 		
-		if @menu.size > 0
-			for i in 0...@menu.size
-				if @menu[i].click			
-					$game_system.se_play($data_system.decision_se)
-					Hwnd.dispose(self)
-					$game_temp.message_proc.call
-					$game_temp.choice_proc.call(i)
-				end
-			end
-		end
-		
-		if @input_num != nil
-			if @input_button.click
-				if @input_num.result.to_i > 0
-					@input_result.dispose
-					@input_result = Sprite.new(self)
-					@input_result.bitmap = Bitmap.new(self.width, self.height)
-					@input_result.bitmap.font.color.set(0, 0, 0, 255)
-					@input_result.bitmap.draw_text(0, @input_num.y + @input_num.height, self.width, 20, "입력 값 : #{@input_num.result}")
-					@input_res = @input_num.result.to_i
-				else
-					$console.write_line("1 이상의 수를 입력하세요.")
-				end
-			end
-		end
 	end
 end
 

@@ -904,7 +904,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				next if !in_screen?(enemy.event)
 				#Make Hate Points
 				make_hate_points(enemy) if @get_hate
-				next if !enemy.in_battle and !update_enemy_ai(enemy)
+				
+				if !enemy.in_battle and !update_enemy_ai(enemy)
+					next 
+				end
 				update_enemy_battle(enemy) if enemy.in_battle and enemy.behavior != 0
 			end
 			@get_hate = false
@@ -967,7 +970,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update_enemy_ai(enemy)
 			#Get the enemy behavior
-			b =  enemy.behavior
+			b = enemy.behavior
 			return true if b == 0 # Dummy
 			#Next enemy if this enemy can't see the player
 			return true if b == 1 and !can_enemy_see(enemy)
@@ -1391,7 +1394,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			if dmg != 0
-				e.damage = dmg
+				if !(e.damage.is_a? String)
+					e.damage += dmg  
+				else 
+					e.damage = dmg
+				end
 				e.hp -= dmg
 			end
 			if ani != 0
@@ -2078,7 +2085,15 @@ if SDK.state("Mr.Mo's ABS") == true
 		def can_enemy_see(e)
 			#Get all enemies of the enemy
 			enemies = []
-			enemies.push($game_player) if e.hate_group.include?(0) and in_range?(e.event, $game_player, e.see_range) or in_direction?(e.event, $game_player)
+			if e.hate_group.include?(0) and in_range?(e.event, $game_player, e.see_range) or in_direction?(e.event, $game_player)
+				if $game_party.actors[0].hp <= 0
+					e.in_battle = false
+					#restore_movement(e)
+					return false 
+				end
+				enemies.push($game_player) 
+			end		
+			
 			if e.hate_group.size > 1 or (e.hate_group.size == 1 and !e.hate_group.include?(0))
 				#Get the hate enemies
 				for enemy in @enemies.values
@@ -2174,7 +2189,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Enemy Ally in_battle?(Enemy)
 		#--------------------------------------------------------------------------
-		def enemy_ally_in_battle?(enemy)
+		def enemy_ally_in_battle?(enemy) # 동료가 전투중인가?
 			#Start list
 			allies = []
 			#Get all allies
@@ -3149,13 +3164,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					damage_string = value.to_s
 				end
-				bitmap = Bitmap.new(160, 100)
+				bitmap = Bitmap.new(self.width, self.height)
 				bitmap.font.name = $ABS.DAMAGE_FONT_NAME
 				bitmap.font.size = $ABS.DAMAGE_FONT_SIZE
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
 				# draw_text(x, y, width, height, string, align)
 				
-				y = self.height / 20
+				
+				y = self.height / 4 / 2
 				# 데미지 그림자
 				bitmap.draw_text(-1, y-1, 160, 36, damage_string, 1)
 				bitmap.draw_text(+1, y-1, 160, 36, damage_string, 1)
@@ -3173,6 +3189,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
 				
 				bitmap.draw_text(0, y, 160, 36, damage_string, 1)	
+				
 				@_damage_sprite = ::Sprite.new(self.viewport)
 				@_damage_sprite.bitmap = bitmap
 				@_damage_sprite.ox = 80

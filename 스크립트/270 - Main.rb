@@ -10,12 +10,13 @@ def traceback_report
 end
 
 def raise_traceback_error
-	if $!.message.size >= 900
-		File.open('traceback.log', 'w') { |f| f.write($!) }
-		raise 'Traceback is too big. Output in traceback.log'
-	else
-		raise
-	end
+	raise
+	#~ if $!.message.size >= 900
+		#~ File.open('traceback.log', 'w') { |f| f.write($!) }
+		#~ raise 'Traceback is too big. Output in traceback.log'
+	#~ else
+		
+	#~ end
 end
 
 begin

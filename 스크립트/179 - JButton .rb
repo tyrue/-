@@ -136,7 +136,7 @@ module J
 				end
 			end
 			if Hwnd.highlight? == @viewport and self.bluck?
-				if Key.trigger?(5)
+				if Key.trigger?(KEY_SPACE)
 					@click = true
 				end
 			end

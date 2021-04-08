@@ -1047,6 +1047,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						if RANGE_SKILLS.has_key?(skill.id)
 							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e는a의 적(플레이어 또는 또 다른 적)여기서 알아서 데미지 계산
+							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+							
 							e.sp -= skill.sp_cost
 							return
 						end
@@ -1674,6 +1676,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					#Add to range
 					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
+					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 					#Take off SP
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
@@ -2403,6 +2406,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			d = @move_direction
 			new_x = @x + (d == 6 ? 1 : d == 4 ? -1 : 0)
 			new_y = @y + (d == 2 ? 1 : d == 8 ? -1 : 0)
+			
 			return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
 			m = @move_direction
 			move_down if m == 2
@@ -2445,7 +2449,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
-		def initialize(parent, actor, skill)
+		def initialize(parent, actor, skill, dummy = false)
 			super(parent,actor,skill)
 			@range_skill = $ABS.RANGE_EXPLODE[skill.id]
 			@range = @range_skill[0]
@@ -2569,6 +2573,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Hit Player
 		#--------------------------------------------------------------------------
 		def hit_player
+			return if @dummy
 			@stop = true
 			#Get Actor
 			actor = $game_party.actors[0]
@@ -2648,7 +2653,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
-		def initialize(parent, actor, skill)
+		def initialize(parent, actor, skill, dummy = false) # 만약 더미라면 그냥 스킬 효과 안나고 통과하도록 하게 해보자
 			super(parent,actor,skill)
 			@range_skill = $ABS.RANGE_SKILLS[skill.id]
 			@range = @range_skill[0]
@@ -2656,12 +2661,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			@move_speed = @range_skill[1]
 			@character_name = @range_skill[2]
 			@skill = skill
+			@dummy = dummy
 		end
 		#--------------------------------------------------------------------------
 		# * Check Event Trigger Touch(x,y)
 		#--------------------------------------------------------------------------
 		def check_event_trigger_touch(x, y)
 			return if @stop
+			return if @dummy
 			hit_player if x == $game_player.x and y == $game_player.y
 			
 			# 여기서 넷 플레이어인지 확인해야함
@@ -3250,7 +3257,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			#Skip if no demage or dead;
 			if !@character.is_a?(Game_Player) and $ABS.enemies[@character.id] != nil
-				#Show State Animation
+				#Show State Animation 상태 애니메이션
 				id = @character.id
 				if $ABS.enemies[id].damage == nil and $ABS.enemies[id].state_animation_id != @state_animation_id
 					@state_animation_id = $ABS.enemies[id].state_animation_id

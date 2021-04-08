@@ -1213,6 +1213,40 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					return true
+					
+					# 같은 맵의 유저 또는 몬스터가 보내는 값
+				when /<show_range_skill>(.*)<\/show_range_skill>/	
+					return true if !$scene.is_a?(Scene_Map)
+					data = $1.split(',')
+					# 스킬을 사용하는 타입 (0은 몬스터, 1은 사람), 사용자 id, 스킬 id, 스킬 타입(0은 range, 1은 explode)
+					type = data[0].to_i
+					id = data[1].to_i
+					skill = $data_skills[data[2].to_i]
+					skill_type = data[3].to_i
+					
+					case type
+					when 0
+						e = $ABS.enemies[id]
+						return if e == nil
+						case skill_type
+						when 0
+							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill, true))
+						when 1
+							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill, true))
+						end
+						
+					when 1
+						return if @id == id
+						netplayer = @mapplayers[id.to_s]						
+						return if netplayer == nil
+						case skill_type
+						when 0
+							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, true))
+						when 1
+							$ABS.range.push(Game_Ranged_Explode.new(netplayer, netplayer, skill, true))
+						end
+					end
+					
 				end
 				
 				return false

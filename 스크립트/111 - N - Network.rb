@@ -1230,9 +1230,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						return if e == nil
 						case skill_type
 						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill, true))
+							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill))
 						when 1
-							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill, true))
+							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill))
 						end
 						
 					when 1

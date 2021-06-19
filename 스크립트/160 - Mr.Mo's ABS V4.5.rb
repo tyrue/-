@@ -1225,57 +1225,41 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Check Item  아이탬 단축키를 이용해서 사용할 경우
 		#--------------------------------------------------------------------------
 		def check_item
-			if active_ok
-				if not $map_chat_input.active
-					#Check for item usage
-					for key in @item_keys.keys
-						# 해당 키에 등록된 아이템이 없으면 무시
-						next if @item_keys[key] == nil or @item_keys[key] == 0
-						next if !Input.trigger?(key)
-						# 죽으면 당연히 못씀
-						if STATE_EFFECTS
-							for i in $game_party.actors[0].states
-								return if STUN_EFFECT.include?(i)
-							end
-						end
-						# 아이템데이터 가져옴
-						item = $data_items[@item_keys[key]]
-						# 사용 못하는 아이템이면 못쓴다고 효과음 내고 무시
-						return $game_system.se_play($data_system.buzzer_se) if !$game_party.item_can_use?(item.id)
-						# 아이템이 없으면 무시
-						return $game_system.se_play($data_system.buzzer_se) if $game_party.item_number(item.id) == 0
-						# If effect scope is an ally
-						if item.scope >= 3
-							# Apply item use effects to target actor
-							target = $game_party.actors[0]
-							used = target.item_effect(item)
-							# If an item was used
-							if used
-								#Show animation on player
-								$game_player.animation_id = item.animation1_id 
-								# Play item use SE
-								$game_system.se_play(item.menu_se)
-								# If consumable; Decrease used items by 1
-								$game_party.lose_item(item.id, 1) if item.consumable
-								# If all party members are dead; Switch to game over screen
-								# If common event ID is valid; Common event call reservation
-								return $game_temp.common_event_id = item.common_event_id if item.common_event_id > 0
-								# If effect scope is other than an ally
-							end
-						else
-							# 아이템이 1개 이상 있으면 사용
-							# If command event ID is valid
-							if item.common_event_id > 0
-								# Command event call reservation
-								$game_temp.common_event_id = item.common_event_id
-								# Play item use SE
-								$game_system.se_play(item.menu_se)
-								# If consumable; Decrease used items by 1
-								$game_party.lose_item(item.id, 1) if item.consumable
-							end
-						end
+			#Check for item usage
+			for key in @item_keys.keys
+				# 해당 키에 등록된 아이템이 없으면 무시
+				next if @item_keys[key] == nil or @item_keys[key] == 0
+				next if !Input.trigger?(key)
+				
+				# 죽으면 당연히 못씀
+				if STATE_EFFECTS
+					for i in $game_party.actors[0].states
+						return if STUN_EFFECT.include?(i)
 					end
 				end
+				
+				# 아이템데이터 가져옴
+				item = $data_items[@item_keys[key]]
+				# 사용 못하는 아이템이면 못쓴다고 효과음 내고 무시
+				return $game_system.se_play($data_system.buzzer_se) if !$game_party.item_can_use?(item.id)
+				# 아이템이 없으면 무시
+				return $game_system.se_play($data_system.buzzer_se) if $game_party.item_number(item.id) == 0
+				
+				# Apply item use effects to target actor
+				target = $game_party.actors[0]
+				
+				target.item_effect(item)
+				# If an item was used
+				#Show animation on player
+				$game_player.animation_id = item.animation1_id 
+				# Play item use SE
+				$game_system.se_play(item.menu_se)
+				# If consumable; Decrease used items by 1
+				$game_party.lose_item(item.id, 1) if item.consumable
+				# If all party members are dead; Switch to game over screen
+				# If common event ID is valid; Common event call reservation
+				return $game_temp.common_event_id = item.common_event_id if item.common_event_id > 0
+				# If effect scope is other than an ally
 			end
 		end
 		#--------------------------------------------------------------------------

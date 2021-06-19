@@ -7,7 +7,7 @@ class Jindow_N < Jindow
 	def initialize(text = "", name = "", select_num = 0, type = 0) # 텍스트, npc 이름, 메뉴들, 타입
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 105)
-		name = "" if name.include?("EV")
+		name = "" if name.include?("EV")		
 		name.delete!("[id")
 		name.delete!("[Id")
 		name.delete!("[iD")
@@ -44,6 +44,7 @@ class Jindow_N < Jindow
 				@text.bitmap.draw_text(0, i * 18, self.width, 32, @texts[i])
 			end
 			
+			#@close_ok = true
 			if select_num > 0
 				@close_ok = true
 				for i in 0...select_num
@@ -65,6 +66,7 @@ class Jindow_N < Jindow
 				@a.y = @input_num.y + @input_num.height + 20
 				@input_res = 0
 			end
+			
 		when 1 # 버튼만 있는 경우
 			if select_num > 0
 				@close_ok = true
@@ -75,12 +77,14 @@ class Jindow_N < Jindow
 				end	
 			end
 			@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
+			
 		when 2 # 입력만 있는 경우
 			@close_ok = true
 			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)				
 			@a.y = @input_num.y + @input_num.height + 20
 			@input_res = 0
 		end
+		
 		@b.y = @a.y
 		if !@close_ok
 			@close = false
@@ -222,6 +226,8 @@ class Interpreter
 		# Loop
 		$game_temp.choice_start = 4
 		$game_temp.num_input_start = 0
+		
+		
 		loop do
 			# 만약 다음 이벤트 명령어가 텍스트라면 추가
 			if @list[@index + 1].code == 401
@@ -232,6 +238,7 @@ class Interpreter
 			else
 				# 선택지가 있는 명령어거나 명령어 끝
 				@m_count = 0
+				
 				if @list[@index + 1].code == 102
 					# 만약 선택지를 한번에 넣을 수 있으면 넣음
 					if @list[@index + 1].parameters[0].size <= 4 - line_count
@@ -255,6 +262,7 @@ class Interpreter
 						$game_temp.num_input_digits_max = @list[@index].parameters[1]
 					end
 				end
+				
 				# Continue
 				if $game_map.events[@event_id] != nil
 					# npc대화창 생성
@@ -263,6 +271,7 @@ class Interpreter
 				end
 				return true
 			end
+			
 			# Advance index
 			@index += 1
 		end

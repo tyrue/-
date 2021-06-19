@@ -30,7 +30,7 @@ if SDK.state("Mr.Mo's ABS")
 			@old_y = 0
 			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
 			@temp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
-			@ch = @temp.height / 4
+			@ch = 0#@temp.height / 4
 			@cw = 15
 			update    
 		end

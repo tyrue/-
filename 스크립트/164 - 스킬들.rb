@@ -232,6 +232,7 @@ class Rpg_skill
 			$game_party.actors[0].critical = "heal"
 			$game_party.actors[0].damage = heal_v.to_s
 			$game_party.actors[0].hp += heal_v
+			return heal_v
 		end
 	end
 	

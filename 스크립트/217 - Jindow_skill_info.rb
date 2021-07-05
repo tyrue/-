@@ -44,6 +44,7 @@ class Jindow_Skill_Info < Jindow
 		end
 		
 		height = @s_info2[@s_info2.size - 1].y + @s_info2[@s_info2.size - 1].height + 10
+		skill_description_add(@data) # 스킬 설명 추가
 		
 		if @data.description != ""
 			@description = Sprite.new(self)
@@ -75,6 +76,11 @@ class Jindow_Skill_Info < Jindow
 		self.height = height
 		self.refresh("Skill_Info")
 	end
+	
+	def skill_description_add(skill_data)
+		#skill_data.description += "ok"
+	end
+	
 	
 	def update
 		super

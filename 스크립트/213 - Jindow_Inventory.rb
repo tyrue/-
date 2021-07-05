@@ -25,6 +25,10 @@ class Jindow_Inventory < Jindow
 	end
 	
 	def sort
+		
+		for i in @item
+			i.dispose if !i.disposed?
+		end
 		@item.clear
 		
 		for i in 1..$data_items.size
@@ -59,12 +63,11 @@ class Jindow_Inventory < Jindow
 	end	
 	
 	def update
-		self.x != 205
-		self.y != 162
 		if not Hwnd.include?('Trade')
 			for i in @item
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
+				
 				case i.type
 				when 0 # 아이템
 					$game_party.actors[0].item_effect(i.item)
@@ -77,6 +80,7 @@ class Jindow_Inventory < Jindow
 							# Play item use SE
 							$game_system.se_play(i.item.menu_se)
 						end
+						
 					elsif i.item.common_event_id > 0
 						# Command event call reservation
 						$game_temp.common_event_id = i.item.common_event_id
@@ -97,11 +101,13 @@ class Jindow_Inventory < Jindow
 						
 					end
 				end
+				
 				if i.num <= 0
 					sort
 				end
 			end	
-		else
+			
+		else # 교환창이 열린 상태인가?
 			for i in @item
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
@@ -114,7 +120,11 @@ class Jindow_Inventory < Jindow
 	
 	def check(i)
 		if $trade_num <= $MAX_TRADE
-			Jindow_Trade2.new(i.item.id, i.type, $trade_num)
+			if $Abs_item_data.is_trade_ok(i.item.id)
+				Jindow_Trade2.new(i.item.id, i.type, $trade_num) 
+			else
+				$console.write_line("[교환]: 교환 불가 아이템입니다.")
+			end
 		else
 			Hwnd.dispose("Trade2")
 			$console.write_line("[교환]:더이상 아이템을 올릴수 없습니다.")

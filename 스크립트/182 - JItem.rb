@@ -158,11 +158,6 @@ module J
 				end
 			end
 			
-			if Hwnd.highlight? == @viewport and self.bluck?
-				if Key.trigger?(5) # 스페이스바가 눌렸나?
-					@double_click = true
-				end
-			end
 			
 			@viewport.hwnd == "Status" ? (return) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return) : 0

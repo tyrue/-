@@ -47,6 +47,8 @@ rescue
   $!.message.sub!($!.message, traceback_report)
   raise_traceback_error
 rescue Errno::ENOENT
+	$!.message.sub!($!.message, traceback_report)
+	raise_traceback_error
 	Network::Main.close_socket 
 	# Supplement Errno::ENOENT exception
 	# If unable to open file, display message and end

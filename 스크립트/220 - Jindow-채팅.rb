@@ -286,6 +286,13 @@ class Jindow_Chat_Input < Jindow
 				@type.bluck = false
 				@active = false
 			end
+			
+		elsif Key.trigger?(KEY_ESC) # 채팅 취소
+			@type.set "(대화하려면 Enter 키를 누르세요)"
+			@type.view
+			@type.bluck = false
+			@active = false
+			Hwnd.dis_highlight(self)
 		end
 	end
 end

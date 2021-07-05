@@ -1,91 +1,9 @@
-#~ #==============================================================================
-#~ # ** Sprite_Cursor
-#~ #------------------------------------------------------------------------------
-#~ #  This sprite displays the cursor. It's used in the Spriteset_Map class.
-#~ #==============================================================================
-
-#~ class Sprite_Cursor < Sprite
-	#~ attr_accessor   :x
-	#~ attr_accessor   :y
-	#~ attr_accessor   :icon
-	#~ attr_accessor   :lock
-	#~ #--------------------------------------------------------------------------
-	#~ # * Object Initialization
-	#~ #     viewport : viewport
-	#~ #     picture  : picture (Game_Picture)
-	#~ #--------------------------------------------------------------------------
-	#~ def initialize(viewport)
-		#~ super(viewport)
-		#~ update
-		#~ @icon = $game_system.cursor
-		#~ @old_icon = $game_system.cursor
-		#~ @lock = false
-	#~ end
-	#~ #--------------------------------------------------------------------------
-	#~ # * Dispose
-	#~ #--------------------------------------------------------------------------
-	#~ def dispose
-		#~ if self.bitmap != nil
-			#~ self.bitmap.dispose
-		#~ end
-		#~ super
-	#~ end
-	#~ #--------------------------------------------------------------------------
-	#~ # * Dispose
-	#~ #--------------------------------------------------------------------------
-	#~ def set_icon(new)
-		#~ if not @lock
-			#~ @icon = new
-		#~ end
-	#~ end
-	#~ #--------------------------------------------------------------------------
-	#~ # * Frame Update
-	#~ #--------------------------------------------------------------------------
-	#~ def update
-		#~ super
-		#~ # If picture file name is different from current one
-		#~ if self.bitmap == nil
-			#~ self.bitmap = RPG::Cache.picture($game_system.cursor)
-		#~ end
-		
-		#~ if @icon != @old_icon
-			#~ if @icon == nil
-				#~ self.bitmap = RPG::Cache.picture($game_system.cursor)
-				#~ @old_icon = nil
-			#~ else
-				#~ self.bitmap = RPG::Cache.picture(@icon)
-				#~ @old_icon = @icon
-			#~ end
-		#~ end
-		#~ # If file name is empty
-		#~ # Set sprite to visible
-		#~ self.visible = true
-		#~ # Set transfer starting point
-		#~ # Set sprite coordinates
-		#~ pos = Input.mouse_pos
-		#~ if pos == nil
-			#~ if self.x == nil
-				#~ self.x = 0
-			#~ end
-			#~ if self.y == nil
-				#~ self.y = 0
-			#~ end
-		#~ else
-			#~ self.x = 0
-			#~ self.ox = pos[0] * -1 + (self.bitmap.width / 2)
-			#~ self.y = 0
-			#~ self.oy = pos[1] * -1 + (self.bitmap.height / 2)
-		#~ end
-	#~ end
-#~ end
-
 #==============================================================================
 # ** Scene_ActionMap
 #------------------------------------------------------------------------------
 #  This class performs map screen processing and allows the use of the 
 # mouse to make activations of events.
 #==============================================================================
-
 class Scene_Map
 	#--------------------------------------------------------------------------
 	# * Main Processing
@@ -102,8 +20,6 @@ class Scene_Map
 	def update
 		# Run old map update
 		event_system_update
-		#Update the mouse
-		mouse_interface_update
 		# Left Click Actions
 		
 		if Key.trigger?(KEY_MOUSE_LEFT) and @update_interface <= 0
@@ -116,11 +32,13 @@ class Scene_Map
 	# * Do actions that are related to the left click
 	#--------------------------------------------------------------------------
 	def mouse_left_click
+		return if Hwnd.mouse_in_window
 		# If Mouse POS not nil
 		pos = Input.mouse_pos
 		if pos != nil and not $game_temp.message_window_showing
 			x = pos[0]
 			y = pos[1]
+			
 			# Set the X and Y to the correct X/Y coordinates
 			x2 = x / 32
 			y2 = y / 32
@@ -133,7 +51,7 @@ class Scene_Map
 			event_run = false
 			
 			# 이벤트 실행
-			active_event = @spriteset.get_affected_event(@x_mouse, @y_mouse)
+			active_event = @spriteset.get_affected_event(x, y)
 			
 			if active_event > 0
 				event = $game_map.events[active_event]
@@ -175,59 +93,8 @@ class Scene_Map
 			end #End if/else
 		end # End POS != nil statement
 	end
-	#--------------------------------------------------------------------------
-	# * Update Mouse position and cursor
-	#--------------------------------------------------------------------------
-	def mouse_interface_update
-		pos = Input.mouse_pos
-		if pos != nil and (pos[0] != @x_mouse or pos[1] != @y_mouse)
-			@x_mouse = pos[0]
-			@y_mouse = pos[1]
-			# Get the event that is under the mouse (most front one)
-			hover = @spriteset.get_affected_event(@x_mouse, @y_mouse)
-			if hover > 0
-				event = $game_map.events[hover]
-				# Run it if it is
-				if event.list != nil
-					for item in event.list
-						if item.code == 108 and item.parameters[0].include?("CURSOR=")
-							id = item.parameters[0].split('=')
-							@spriteset.cursor.set_icon(id[1])
-							set_icon = true
-						end
-					end
-				end
-			else
-				x = pos[0] / 32
-				y = pos[1] / 32
-				if $game_map.display_x != 0
-					x += ($game_map.display_x / 4) / 32
-				end
-				if $game_map.display_y != 0
-					y += ($game_map.display_y / 4) / 32
-				end
-				set_icon = false
-				for event in $game_map.events.values
-					if event.x == x and event.y == y and event.character_name == ""
-						if event.list != nil
-							for item in event.list
-								if item.code == 108 and item.parameters[0].include?("CURSOR=")
-									id = item.parameters[0].split('=')
-									@spriteset.cursor.set_icon(id[1])
-									set_icon = true
-								end
-							end
-						end
-					end
-				end
-				if @spriteset != nil
-					if not set_icon and @spriteset.cursor != nil and @spriteset.cursor.icon != nil
-						@spriteset.cursor.set_icon(nil)
-					end
-				end
-			end
-		end
-	end
+	
+	
 	#--------------------------------------------------------------------------
 	# * Get Range from Point1 to Point2
 	#--------------------------------------------------------------------------
@@ -263,55 +130,6 @@ class Scene_Map
 end
 #End Scene_Map
 
-#==============================================================================
-# ** Game_Player
-#------------------------------------------------------------------------------
-#  This class handles the player. Its functions include event starting
-#  determinants and map scrolling. Refer to "$game_player" for the one
-#  instance of this class.
-#==============================================================================
-
-class Game_Player < Game_Character
-	#--------------------------------------------------------------------------
-	# * Invariables
-	#--------------------------------------------------------------------------
-	#--------------------------------------------------------------------------
-	# * Move toward Player
-	#--------------------------------------------------------------------------
-	def move_toward_point(x, y)
-		# Get difference in player coordinates
-		sx = @x - x
-		sy = @y - y
-		# If coordinates are equal
-		if sx == 0 and sy == 0
-			return
-		end
-		# Get absolute value of difference
-		abs_sx = sx.abs
-		abs_sy = sy.abs
-		# If horizontal and vertical distances are equal
-		if abs_sx == abs_sy
-			# Increase one of them randomly by 1
-			rand(2) == 0 ? abs_sx += 1 : abs_sy += 1
-		end
-		# If horizontal distance is longer
-		if abs_sx > abs_sy
-			# Move towards point, prioritize left and right directions
-			sx > 0 ? move_left : move_right
-			if not moving? and sy != 0
-				sy > 0 ? move_up : move_down
-			end
-			# If vertical distance is longer
-		else
-			# Move towards point, prioritize up and down directions
-			sy > 0 ? move_up : move_down
-			if not moving? and sx != 0
-				sx > 0 ? move_left : move_right
-			end
-		end
-	end
-	
-end #End Game_Player
 
 #==============================================================================
 # ** Spriteset_Map
@@ -323,36 +141,7 @@ end #End Game_Player
 class Spriteset_Map
 	attr_accessor   :cursor
 	attr_reader     :character_sprites
-	#--------------------------------------------------------------------------
-	# * Object Initialization
-	#--------------------------------------------------------------------------
-	alias :event_system_normal_init :initialize
-	def initialize
-		event_system_normal_init
-		if $scene.is_a?(Scene_Map)
-			@cursor = Sprite_Cursor.new(@viewport3)
-		end
-	end
-	#--------------------------------------------------------------------------
-	# * Dispose
-	#--------------------------------------------------------------------------
-	alias :event_system_normal_dispose :dispose
-	def dispose
-		if @cursor != nil
-			@cursor.dispose
-		end
-		event_system_normal_dispose
-	end
-	#--------------------------------------------------------------------------
-	# * Frame Update
-	#--------------------------------------------------------------------------
-	alias :event_system_normal_update :update
-	def update
-		event_system_normal_update
-		if @cursor != nil
-			@cursor.update
-		end
-	end
+	
 	#--------------------------------------------------------------------------
 	# * Get Event under a Click Point
 	#--------------------------------------------------------------------------

@@ -86,7 +86,7 @@ module J
 		def bluck=(val)
 			if val and not @bluck
 				@bluck = true
-				self.tone.set(0, 0, 64)
+				self.tone.set(0, 0, 128)
 				for i in self.viewport.item
 					i == self ? next : 0
 					i.JS? ? 0 : next
@@ -120,7 +120,7 @@ module J
 					elsif Mouse.arrive_sprite?(self) and @viewport.base?  # 로울버 효과
 						self.tone.set(10, 10, 10)
 					elsif not Mouse.arrive_sprite?(self) and @viewport.base?
-						self.tone.set(0, 0, 0)
+						#self.tone.set(0, 0, 0)
 					end
 					@push ? (@push = false) : 0
 				end

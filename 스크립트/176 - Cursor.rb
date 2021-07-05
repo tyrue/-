@@ -9,7 +9,7 @@ class Cursor < Sprite
 		self.bitmap = Bitmap.new(@route + User_Edit::CURSOR_ICON)
 		self.x = @x
 		self.y = @y
-		self.z = 1
+		self.z = 999
 	end
 	
 	def update

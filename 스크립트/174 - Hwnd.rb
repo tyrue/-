@@ -94,6 +94,14 @@ module Hwnd
 		return true
 	end
 	
+	def mouse_in_window
+		for d in @data
+			return true if d.arrive?
+		end
+		return false
+	end
+	
+	
 	def highlight
 		Input.mouse_lbutton ? 0 : return
 		i = @data.size - 1

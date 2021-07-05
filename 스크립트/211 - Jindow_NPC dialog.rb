@@ -20,7 +20,7 @@ class Jindow_N < Jindow
 		@type = type
 		self.x = (640 - self.width) / 2
 		self.y = 255 - self.height
-		self.refresh("Npc_dialog")
+		
 		
 		@menu = []
 		
@@ -93,6 +93,7 @@ class Jindow_N < Jindow
 		
 		self.height = @a.y + @a.height + 30
 		self.refresh("Npc_dialog")
+		
 	end
 	
 	def change_txt(text)

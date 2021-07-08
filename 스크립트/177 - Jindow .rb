@@ -218,6 +218,26 @@ class Jindow < Viewport
 		@dm.opacity = opacity if @dm != nil
 		@dr.opacity = opacity if @dr != nil
 		@base_s.opacity = opacity if @base_s != nil
+		
+		@mark_s.opacity = opacity if @mark_s != nil
+		@name_s.opacity = opacity if @name_s != nil
+		@close_s.opacity = opacity if @close_s != nil
+		
+		@scroll1mid.opacity = opacity if @scroll1mid != nil
+		@scroll1left.opacity = opacity if @scroll1left != nil
+		@scroll1right.opacity = opacity if @scroll1right != nil
+		
+		@scroll1bar_mid.opacity = opacity if @scroll1bar_mid != nil
+		@scroll1bar_left.opacity = opacity if @scroll1bar_left != nil
+		@scroll1bar_right.opacity = opacity if @scroll1bar_right != nil
+		
+		@scroll0mid.opacity = opacity if @scroll0mid != nil
+		@scroll0up.opacity = opacity if @scroll0up != nil
+		@scroll0down.opacity = opacity if @scroll0down != nil
+		
+		@scroll0bar_mid.opacity = opacity if @scroll0bar_mid != nil
+		@scroll0bar_up.opacity = opacity if @scroll0bar_up != nil
+		@scroll0bar_down.opacity = opacity if @scroll0bar_down != nil
 	end
 	
 	def arrive?
@@ -265,6 +285,15 @@ class Jindow < Viewport
 	
 	def refresh?
 		return @start
+	end
+	
+	def hide # 창 숨기기
+		self.opacity = 0
+		
+	end
+	
+	def show(val = 255) # 창 보이기
+		self.opacity = val
 	end
 	
 	def scroll
@@ -344,13 +373,13 @@ class Jindow < Viewport
 	end
 	
 	def scroll?
-		return false if (Mouse.ox == Mouse.x and Mouse.oy == Mouse.y)
 		ow = self.width
 		oh = self.height
 		for i in @item
 			i == nil ? next : 0
 			tw = (i.x + i.width)
 			tw > ow ? (ow = tw) : 0
+			
 			th = (i.y + i.height)
 			th > oh ? (oh = th) : 0
 		end

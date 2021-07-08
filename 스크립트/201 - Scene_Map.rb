@@ -3,11 +3,15 @@ class Scene_Map
 	
 	alias scene_map_main main
 	def main
-		$map_chat_input = Jindow_Chat_Input.new # 채팅입력창
+		$map_chat_input = Jindow_Chat_Input.new if $map_chat_input == nil  # 채팅입력창
+		#$jin_console = Jindow_Console.new # 콘솔창
+		$console = Jindow_Console.new if $console == nil
+		#$jin_chat = Jindow_Chat_Window.new if $jin_chat == nil # 채팅창
+		
 		$game_system.menu_disabled = true
 		scene_map_main
 		$cbig = 0
-		JS.dispose
+		#JS.dispose
 	end
 	
 	alias scene_map_update update
@@ -16,10 +20,10 @@ class Scene_Map
 		JS.update
 			
 		# 콘솔 초기화
-		if Graphics.frame_count % (Graphics.frame_rate * 8) == 0 and $console.console_log.size > 0
-			$console.console_log.delete_at(0)
-			$console.refresh
-		end
+		#~ if Graphics.frame_count % (Graphics.frame_rate * 8) == 0 and $console.console_log.size > 0
+			#~ #$console.console_log.delete_at(0)
+			#~ #$console.refresh			
+		#~ end
 		
 		if $game_party.actors[0].hp == 0
 			Hwnd.dispose("Inventory") if Hwnd.include?("Inventory")
@@ -67,6 +71,7 @@ class Scene_Map
 					
 					if Key.trigger?(KEY_F) # f
 						$chat.toggle # 채팅창 닫고 키기
+						#$jin_chat.toggle
 					end	
 					
 					if Key.trigger?(KEY_R) # r
@@ -112,6 +117,10 @@ class Scene_Map
 						$game_temp.common_event_id = 9
 					end	
 					
+					if Key.trigger?(KEY_V) # v
+						$console.toggle
+						#$jin_console.toggle
+					end	
 					
 					if Key.trigger?(35) # l
 						if not Hwnd.include?("NetPlayer")

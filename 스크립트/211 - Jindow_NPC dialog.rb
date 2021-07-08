@@ -26,10 +26,7 @@ class Jindow_N < Jindow
 		
 		text = change_txt(text)
 		@texts = text.split("\n")
-		@a = J::Button.new(self).refresh(45, "다음")
-		@b = J::Button.new(self).refresh(45, "닫기")
-		@a.x = self.width - @a.width * 2
-		@b.x = @a.x + @a.width
+		
 		
 		@close_ok = false
 		case @type
@@ -54,16 +51,9 @@ class Jindow_N < Jindow
 				end	
 			end
 			
-			if @menu.size > 0
-				@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
-			else
-				@a.y = @text.y + @text.height + 5
-			end
-			
 			if $game_temp.num_input_start > 0
 				@close_ok = true
 				@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, @text.height + 10, self.width / 2, 18)	
-				@a.y = @input_num.y + @input_num.height + 20
 				@input_res = 0
 			end
 			
@@ -76,13 +66,27 @@ class Jindow_N < Jindow
 					@menu[i].y = i * @menu[i].height + 10
 				end	
 			end
-			@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
 			
 		when 2 # 입력만 있는 경우
 			@close_ok = true
 			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)				
-			@a.y = @input_num.y + @input_num.height + 20
+			
 			@input_res = 0
+		end
+		
+		@a = J::Button.new(self).refresh(45, "다음")
+		@b = J::Button.new(self).refresh(45, "닫기")
+		@a.x = self.width - @a.width * 2
+		@b.x = @a.x + @a.width
+		
+		if @input_num != nil
+			@a.y = @input_num.y + @input_num.height + 20
+		else
+			if @menu.size > 0
+				@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
+			else
+				@a.y = @text.y + @text.height + 5
+			end
 		end
 		
 		@b.y = @a.y

@@ -14,6 +14,7 @@ class Console < Sprite
 	#     max_line : 최대 줄 수
 	#--------------------------------------------------------------------------
 	attr_accessor :console_log
+	attr_accessor :tog
 	def initialize(x, y, width, height, max_line = 8)
 		@console_viewport = Viewport.new(x, y, width, height)
 		@console_viewport.z = 999
@@ -24,7 +25,9 @@ class Console < Sprite
 		@console_max_line = max_line
 		@console_log = []
 		
+		
 		@back_sprite = Sprite.new(@console_viewport)
+		@tog = true
 	end
 	#--------------------------------------------------------------------------
 	# ● 리프레쉬
@@ -41,7 +44,7 @@ class Console < Sprite
 		self.bitmap.font.color.set(255, 255, 255, 255)
 		for i in 0...@console_log.size
 			# x, y, width, height, string
-			self.bitmap.draw_text(0, (5 - i) * 16, @console_width, 32, @console_log[@console_log.size - i - 1])
+			self.bitmap.draw_text(0, (@console_max_line - i - 1) * 16, @console_width, 32, @console_log[@console_log.size - i - 1])
 		end
 	end
 	#--------------------------------------------------------------------------
@@ -58,12 +61,26 @@ class Console < Sprite
 	#--------------------------------------------------------------------------
 	def show
 		self.opacity = 255
+		@back_sprite.visible = true
 	end
+	
+	def toggle
+		if @tog 
+			self.hide
+			@tog = false
+		elsif
+			self.show
+			@tog = true
+		end
+	end
+	
+	
 	#--------------------------------------------------------------------------
 	# ● 숨긴다
 	#--------------------------------------------------------------------------
 	def hide
 		self.opacity = 0
+		@back_sprite.visible = false
 	end
 	#--------------------------------------------------------------------------
 	# ● 클리어

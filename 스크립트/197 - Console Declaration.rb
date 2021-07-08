@@ -1,3 +1,3 @@
-$console = Console.new(400, 236, 280, 110, 6)
-$console.show
+#$console = Console.new(400, 200, 280, 146, 8)
+#$console.show
 

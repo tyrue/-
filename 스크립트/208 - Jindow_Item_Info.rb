@@ -38,7 +38,7 @@ class Jindow_Item_Info < Jindow
 		height += @item_win.height
 		
 		@item_name = Sprite.new(self)
-		@item_name.bitmap = Bitmap.new(100, 15)
+		@item_name.bitmap = Bitmap.new(160, 15)
 		@item_name.x = @item_win.x + @item_win.width + 5
 		@item_name.y = 5
 		@item_name.bitmap.font.size = 14

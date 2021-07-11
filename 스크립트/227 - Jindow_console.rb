@@ -16,6 +16,7 @@ class Jindow_Console < Jindow
 		@old_size = 0
 		@max_size = 40
 		@font_size = 14
+		@check = false
 	end	
 	
 	def toggle
@@ -35,7 +36,7 @@ class Jindow_Console < Jindow
 	end
 	
 	def scroll_end
-		cy = self.height - @scroll0bar_mid.height - @scroll0bar_mid.y + @scroll0bar_down.height
+		cy = @scroll0down.y - @scroll0bar_down.y
 		
 		for i in [@scroll0bar_up, @scroll0bar_mid, @scroll0bar_down]
 			i.y += cy
@@ -65,13 +66,15 @@ class Jindow_Console < Jindow
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
 		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width, @font_size, text, 0)
 		
-		if @height_scroll
-			scroll_end
-		end
+		@check = true
 	end
 	
 	def update
 		super
+		if @check
+			@check = false
+			scroll_end if @height_scroll
+		end
 	end
 end
 

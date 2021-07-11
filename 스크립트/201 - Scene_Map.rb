@@ -4,8 +4,8 @@ class Scene_Map
 	alias scene_map_main main
 	def main
 		$map_chat_input = Jindow_Chat_Input.new if $map_chat_input == nil  # 채팅입력창
-		#$jin_console = Jindow_Console.new # 콘솔창
-		$console = Jindow_Console.new if $console == nil
+		$console = Jindow_Console.new if $console == nil # 콘솔창
+		$chat = Jindow_Chat_Window.new if $chat == nil # 채팅창
 		#$jin_chat = Jindow_Chat_Window.new if $jin_chat == nil # 채팅창
 		
 		$game_system.menu_disabled = true
@@ -119,7 +119,6 @@ class Scene_Map
 					
 					if Key.trigger?(KEY_V) # v
 						$console.toggle
-						#$jin_console.toggle
 					end	
 					
 					if Key.trigger?(35) # l

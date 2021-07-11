@@ -21,7 +21,6 @@ def raise_traceback_error
 end
 
 begin
-	$chat = Chat.new
 	Graphics.freeze
 	Graphics.frame_rate = 60
 	$global_x = 0  

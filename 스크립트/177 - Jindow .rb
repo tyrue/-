@@ -56,7 +56,6 @@ class Jindow < Viewport
 		
 		@old_x = x
 		@old_y = y
-		
 		return self
 	end
 	

@@ -15,13 +15,13 @@ class Jindow_Chat_Input < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 530, 20)
+		super(0, 0, 510, 20)
 		self.refresh "Chat_Input"
 		self.y = 460
-		self.opacity = 0
+		self.opacity = 255
 		@active = false
 		@chat_type = "전체"
-		@type = J::Type.new(self).refresh(64, 2, self.width - 98, 16)
+		@type = J::Type.new(self).refresh(64, 2, self.width - 70, 16)
 		@type.set "(대화하려면 Enter 키를 누르세요)"
 		@type.view
 		
@@ -273,7 +273,6 @@ class Jindow_Chat_Input < Jindow
 					@type.view
 					@type.bluck = false
 					@active = false
-					Hwnd.dis_highlight(self)
 				else
 					@type.set ""
 					@type.view

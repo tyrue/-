@@ -79,6 +79,7 @@ if SDK.state("Mr.Mo's ABS")
 			@pos.visible = self.visible
 			@pos.x = 520
 			@pos.y = 330
+			@pos.z = 99999
 			@pos.bitmap.font.color = normal_color
 			@pos.bitmap.font.size = 12
 			@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표: [#{'%03d' % ($game_player.x + 1)}] [#{'%03d' % ($game_player.y + 1)}]")
@@ -118,15 +119,15 @@ if SDK.state("Mr.Mo's ABS")
 			bitmap = RPG::Cache.picture("HUD Graphic")
 			self.contents.blt(0, 0, bitmap, Rect.new(0, 0, 900, 900))
 			#Show the HP Symbol
-			self.contents.draw_frame_text(520, 410, 640, 32, "체력")
+			self.contents.draw_frame_text(HP_X - 40, HP_Y - 15, 640, 32, "체력")
 			#Draw the HP BAR
 			draw_gradient_bar(HP_X, HP_Y, @actor.hp, @actor.maxhp, HP_BAR, HP_WIDTH, HP_HEIGHT)
 			#Show the SP Symbol
-			self.contents.draw_frame_text(520, 430, 640, 32, "마력")
+			self.contents.draw_frame_text(SP_X - 40, SP_Y - 15, 640, 32, "마력")
 			#Draw the SP Bar
 			draw_gradient_bar(SP_X, SP_Y, @actor.sp, @actor.maxsp, SP_BAR, SP_WIDTH, SP_HEIGHT)
 			#Show the EXP Symbol
-			self.contents.draw_frame_text(520, 450, 640, 32, "경험치")
+			self.contents.draw_frame_text(EXP_X - 40, EXP_Y - 15, 640, 32, "경험치")
 			#Draw the EXP Bar
 			min = @actor.level == 99 ? @actor.exp : @actor.now_exp
 			max = @actor.level == 99 ? MAX_EXP : @actor.next_exp
@@ -135,15 +136,20 @@ if SDK.state("Mr.Mo's ABS")
 				max = 1
 			end
 			draw_gradient_bar(EXP_X, EXP_Y, min, max, EXP_BAR, EXP_WIDTH, EXP_HEIGHT)
+			
+			#한글 좌표 위치
+			ui_x = 520
+			
+			
 			#Show Hero Icon
-			self.contents.draw_frame_text(520, 350, 640, 32, "이름:")
-			self.contents.draw_frame_text(550, 350, 640, 32, @actor.name.to_s)
+			self.contents.draw_frame_text(ui_x, 350, 640, 32, "이름:")
+			self.contents.draw_frame_text(ui_x + 30, 350, 640, 32, @actor.name.to_s)
 			#Show Level Icon
-			self.contents.draw_frame_text(520, 370, 640, 32, "레벨:")
-			self.contents.draw_frame_text(550, 370, 640, 32, @actor.level.to_s)
+			self.contents.draw_frame_text(ui_x, 370, 640, 32, "레벨:")
+			self.contents.draw_frame_text(ui_x + 30, 370, 640, 32, @actor.level.to_s)
 			#Show Gold Icon
-			self.contents.draw_frame_text(520, 390, 640, 32, "금전:")
-			self.contents.draw_frame_text(550, 390, 640, 32, $game_party.gold.to_s)
+			self.contents.draw_frame_text(ui_x, 390, 640, 32, "금전:")
+			self.contents.draw_frame_text(ui_x + 30, 390, 640, 32, $game_party.gold.to_s)
 			
 			#맵이름의 표시
 			map_infos = load_data("Data/MapInfos.rxdata")
@@ -227,6 +233,7 @@ if SDK.state("Mr.Mo's ABS")
 				@pos.visible = self.visible
 				@pos.x = 410
 				@pos.y = 338
+				@pos.z = 99999
 				@pos.bitmap.font.color = normal_color
 				@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표: [#{'%03d' % ($game_player.x + 1)}] [#{'%03d' % ($game_player.y + 1)}]")
 				@old_x = $game_player.x

@@ -56,10 +56,15 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)다문창'] 			if id == 131  #다문창
 			return ['(착용)영혼죽장'] 		if id == 132  #인어장군지팡이
 			return ['(착용)해골죽장'] 		if id == 133  #해골죽장
+			
+			
+			return ['(착용)영혼죽장']		if id == 137  #영혼죽장
+			
+			# 일본무기
 			return ['(착용)일화접선'] 		if id == 134  #일화접선
 			return ['(착용)진일신검'] 		if id == 135  #진일신검
+			return ['(착용)청일기창'] 		if id == 138  #청일기창
 			return ['(착용)이가닌자의검'] 	if id == 136  #이가닌자의 검
-			return ['(착용)영혼죽장']		if id == 137  #영혼죽장
 			
 			# 용무기
 			return ['(착용)용마제일검'] 	if id == 141  #용마제일검

@@ -17,29 +17,36 @@ class Jindow_Chat_Window < Jindow
 		@max_size = 40
 		@font_size = 14
 		
-		@check = false
-		
+		@check = false	
 	end	
+	
+	def hide
+		super
+		@tog = false
+		for log in @chat_log
+			log.visible = @tog
+		end
+	end
+	
+	def show(val = 255)
+		super
+		@tog = true
+		for log in @chat_log
+			log.visible = @tog
+		end
+	end
 	
 	def toggle
 		if @tog
-			@tog = false
 			hide
-			for log in @chat_log
-				log.opacity = 0
-			end
 		else
-			@tog = true
 			show(@opacity)
-			for log in @chat_log
-				log.opacity = 255
-			end
 		end
 	end
 	
 	def scroll_end		
 		cy = @scroll0down.y - @scroll0bar_down.y
-			
+		
 		for i in [@scroll0bar_up, @scroll0bar_mid, @scroll0bar_down]
 			i.y += cy
 		end
@@ -67,7 +74,7 @@ class Jindow_Chat_Window < Jindow
 		@chat_log[@chat_log.size - 1].bitmap.font.size = @font_size
 		@chat_log[@chat_log.size - 1].bitmap.font.color = color
 		@chat_log[@chat_log.size - 1].bitmap.draw_frame_text(0, 0, self.width, @font_size, text, 0) 
-		
+		@chat_log[@chat_log.size - 1].visible = @tog
 		@check = true
 	end
 	

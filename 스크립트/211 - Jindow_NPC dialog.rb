@@ -172,7 +172,7 @@ class Jindow_N < Jindow
 					end
 				else
 					$game_system.se_play($data_system.decision_se)
-					$game_temp.message_proc.call
+					$game_temp.message_proc.call if $game_temp.message_proc != nil
 					Hwnd.dispose(self)
 				end
 			elsif @b.click # 닫기 버튼 클릭
@@ -181,7 +181,7 @@ class Jindow_N < Jindow
 		when 1
 			if @a.click # 다음 버튼 클릭
 				$game_system.se_play($data_system.decision_se)
-				$game_temp.message_proc.call
+				$game_temp.message_proc.call if $game_temp.message_proc != nil
 				Hwnd.dispose(self)
 			elsif @b.click # 닫기 버튼 클릭
 				dispose2

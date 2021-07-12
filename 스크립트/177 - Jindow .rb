@@ -15,7 +15,6 @@ class Jindow < Viewport
 	attr_accessor :close
 	attr_accessor :base_type
 	attr_accessor :base_color
-	
 	def initialize(x, y, width, height)
 		if x.rect?
 			y = x.y
@@ -288,11 +287,16 @@ class Jindow < Viewport
 	
 	def hide # 창 숨기기
 		self.opacity = 0
-		
+		for i in item
+			i.visible = false
+		end
 	end
 	
 	def show(val = 255) # 창 보이기
 		self.opacity = val
+		for i in item
+			i.visible = true
+		end
 	end
 	
 	def scroll

@@ -24,4 +24,8 @@ def 유저접속
 	$game_player.move_speed = 3
 	$scene = Scene_Reinit.new
 	$Abs_item_data = Item_data.new
+	
+	$console = nil
+	$chat = nil
+	$map_chat_input = nil
 end

@@ -10,7 +10,6 @@ def traceback_report
 end
 
 def raise_traceback_error
-	p 1
 	raise
 	#~ if $!.message.size >= 900
 		#~ File.open('traceback.log', 'w') { |f| f.write($!) }
@@ -59,6 +58,6 @@ rescue Errno::ENOENT
 	File.open("ErrorLog.rxdata","a+"){ |fh| fh.puts("On <<#{time}>> the file <<#{filename}>> was missing." )}
 ensure
 	$!.message.sub!($!.message, traceback_report)
-	게임종료 if $scene.is_a?(Scene_Map)
-	Network::Main.close_socket if Network::Main.socket != nil
+	게임종료 #if $scene.is_a?(Scene_Map)
+	raise_traceback_error
 end

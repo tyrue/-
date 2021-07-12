@@ -16,7 +16,7 @@ $exp_event = 0
 # Give Credit to Near Fantastica as well, those methods saved me time and helped.
 #
 #============================================================================
-# Intoduction
+# Intoduction
 #============================================================================
 # I wasnt happy with the current version of Near's ABS, and he wasn't going to
 # update it anymore. So instead I made an ABS.

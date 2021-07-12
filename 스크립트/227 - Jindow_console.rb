@@ -1,5 +1,4 @@
 class Jindow_Console < Jindow
-	
 	def initialize
 		super(400, 200, 230, 130)
 		@head = true
@@ -19,19 +18,27 @@ class Jindow_Console < Jindow
 		@check = false
 	end	
 	
+	def hide
+		super
+		@tog = false
+		for con in @console_log
+			con.visible = @tog
+		end
+	end
+	
+	def show(val = 255)
+		super
+		@tog = true
+		for con in @console_log
+			con.visible = @tog
+		end
+	end
+	
 	def toggle
 		if @tog
-			@tog = false
 			hide
-			for con in @console_log
-				con.opacity = 0
-			end
 		else
-			@tog = true
 			show(@opacity)
-			for con in @console_log
-				con.opacity = 255
-			end
 		end
 	end
 	
@@ -65,7 +72,7 @@ class Jindow_Console < Jindow
 		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width, @font_size)
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
 		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width, @font_size, text, 0)
-		
+		@console_log[@console_log.size - 1].visible = @tog
 		@check = true
 	end
 	

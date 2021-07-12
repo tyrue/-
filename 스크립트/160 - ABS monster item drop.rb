@@ -635,7 +635,7 @@ class MrMo_ABS
 				i_id = 112 # 희귀진호박
 			end
 		when 190 # 망령
-			if r <= 10 
+			if r <= 5 
 				i_id = 110 # 도깨비가죽
 			end
 		when 191 # 유성지

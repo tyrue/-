@@ -1521,6 +1521,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_party.actors[0].equip(2, $armedarmor2.to_i)
 					$game_party.actors[0].equip(3, $armedarmor3.to_i)
 					$game_party.actors[0].equip(4, $armedarmor4.to_i)
+					
 					$game_party.lose_weapon(1,1)
 					$game_party.actors[0].str = $str
 					$game_party.actors[0].dex = $dex

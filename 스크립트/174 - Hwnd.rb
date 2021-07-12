@@ -63,6 +63,40 @@ module Hwnd
 		end
 	end
 	
+	def hide(val = false)
+		if val.jindow?
+			val.hide
+		elsif val.string?
+			for i in @data
+				if i.hwnd == val
+					i.hide
+				end
+			end
+		else
+			for i in @data
+				i.hide
+			end
+		end
+	end
+	
+	def show(val = false)
+		if val.jindow?
+			val.show if !val.disposed?
+		elsif val.string?
+			for i in @data
+				if i.hwnd == val
+					i.show
+				end
+			end
+		else
+			for i in @data
+				i.show if i != nil
+			end
+		end
+	end
+	
+	
+	
 	def dispose(val = false)
 		if val.jindow?
 			val.dispose
@@ -96,7 +130,9 @@ module Hwnd
 	
 	def mouse_in_window
 		for d in @data
-			return true if d.arrive?
+			if d.arrive? 
+				return true 
+			end
 		end
 		return false
 	end

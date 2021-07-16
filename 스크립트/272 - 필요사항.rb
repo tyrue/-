@@ -11,7 +11,12 @@ def 맵이동
 	end
 end
 
-def 게임종료
+def 로그아웃
+	$game_system.se_play($data_system.decision_se)
+	JS.dispose 
+	Audio.bgm_fade(800)
+	Audio.bgs_fade(800)
+	Audio.me_fade(800)
 	if Network::Main.socket != nil
 		자동저장 if $game_party.actors[0].name != "\no"
 		$ABS.close_buff if $ABS != nil
@@ -23,8 +28,29 @@ def 게임종료
 		
 		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
 		$global_x = 0
-		
-		p "게임을 종료합니다"
-		#Network::Main.close_socket if Network::Main.socket != nil
+		p "로그아웃 합니다"
 	end
+	$scene = Scene_Connect.new
+end
+
+def 게임종료
+	$game_system.se_play($data_system.decision_se)
+	JS.dispose 
+	Audio.bgm_fade(800)
+	Audio.bgs_fade(800)
+	Audio.me_fade(800)
+	if Network::Main.socket != nil
+		자동저장 if $game_party.actors[0].name != "\no"
+		$ABS.close_buff if $ABS != nil
+		#거래를 종료한다
+		Network::Main.socket.send "<trade_fail>#{$trade_player},#{$game_party.actors[0].name}</trade_fail>\n"
+		
+		#파티를 탈퇴한다
+		Network::Main.socket.send("<nptout>#{$game_party.actors[0].name} #{$npt}</nptout>\n")
+		
+		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
+		$global_x = 0
+		p "게임을 종료합니다"
+	end
+	$scene = nil
 end

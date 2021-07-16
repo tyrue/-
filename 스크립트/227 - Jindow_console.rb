@@ -62,11 +62,10 @@ class Jindow_Console < Jindow
 		@console_log.push(Sprite.new(self))
 		if @console_log.size == @max_size
 			@console_log[0].bitmap.clear
+			@console_log[0].dispose
 			@console_log.shift 
-			@console_txt.shift
 			clear_and_write
 		end
-		@console_txt.push(text)
 		@console_log[@console_log.size - 1].x = 0
 		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * @font_size
 		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width, @font_size)

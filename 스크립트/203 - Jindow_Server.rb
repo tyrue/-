@@ -11,7 +11,7 @@ class Jindow_Server < Jindow
 		self.name = "서버 선택"
 		@head = true
 		@mark = true
-		@drag = true
+		
 		self.refresh "Server"
 		self.x = 640 / 2 - self.max_width / 2
 		self.y = 480 / 2 - self.max_height / 2

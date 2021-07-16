@@ -21,7 +21,6 @@ class Jindow_N < Jindow
 		self.x = (640 - self.width) / 2
 		self.y = 255 - self.height
 		
-		
 		@menu = []
 		
 		text = change_txt(text)
@@ -55,6 +54,13 @@ class Jindow_N < Jindow
 				@close_ok = true
 				@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, @text.height + 10, self.width / 2, 18)	
 				@input_res = 0
+				@input_num.bluck = true
+				
+				@input_help_txt = Sprite.new(self)
+				@input_help_txt.x = @input_num.x + @input_num.width
+				@input_help_txt.y = @input_num.y
+				@input_help_txt.bitmap = Bitmap.new(self.width, 18)
+				@input_help_txt.bitmap.draw_text(0, 0, self.width, 18, "enter키로 입력")
 			end
 			
 		when 1 # 버튼만 있는 경우
@@ -70,8 +76,14 @@ class Jindow_N < Jindow
 		when 2 # 입력만 있는 경우
 			@close_ok = true
 			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)				
-			
 			@input_res = 0
+			@input_num.bluck = true
+			
+			@input_help_txt = Sprite.new(self)
+			@input_help_txt.x = @input_num.x + @input_num.width
+			@input_help_txt.y = @input_num.y
+			@input_help_txt.bitmap = Bitmap.new(self.width, 18)
+			@input_help_txt.bitmap.draw_text(0, 0, self.width, 18, "enter키로 입력")
 		end
 		
 		@a = J::Button.new(self).refresh(45, "다음")
@@ -90,14 +102,15 @@ class Jindow_N < Jindow
 		end
 		
 		@b.y = @a.y
+		self.height = @b.y + @b.height + 30
 		if !@close_ok
 			@close = false
-			@b.dispose 
+			@b.dispose
+		else
+			@a.dispose 
 		end
 		
-		self.height = @a.y + @a.height + 30
 		self.refresh("Npc_dialog")
-		
 	end
 	
 	def change_txt(text)
@@ -147,63 +160,38 @@ class Jindow_N < Jindow
 			end
 		end
 		
+		if Key.trigger?(KEY_ENTER) #space
+			return if @input_num == nil
+			if @input_num.result.to_i > 0
+				$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
+				$game_map.need_refresh = true
+				$game_system.se_play($data_system.decision_se)
+				$game_temp.message_proc.call
+				$game_temp.num_input_variable_id = 0
+				$game_temp.num_input_digits_max = 0
+				Hwnd.dispose(self)
+			else
+				$console.write_line("1 이상의 수를 입력하세요.")
+			end
+		end
+		
 		if Key.trigger?(KEY_SPACE) #space
-			@a.click = true if Hwnd.highlight? == self
+			@a.click = true if Hwnd.highlight? == self and !@a.disposed?
 		end
 		
 		if Key.trigger?(KEY_ESC) #esc
 			@b.click = true if Hwnd.highlight? == self and !@b.disposed?
 		end
 		
-		case @type
-		when 0
-			if @a.click # 다음 버튼 클릭
-				if @input_num != nil				
-					if @input_num.result.to_i > 0
-						$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
-						$game_map.need_refresh = true
-						$game_system.se_play($data_system.decision_se)
-						$game_temp.message_proc.call
-						$game_temp.num_input_variable_id = 0
-						$game_temp.num_input_digits_max = 0
-						Hwnd.dispose(self)
-					else
-						$console.write_line("1 이상의 수를 입력하세요.")
-					end
-				else
-					$game_system.se_play($data_system.decision_se)
-					$game_temp.message_proc.call if $game_temp.message_proc != nil
-					Hwnd.dispose(self)
-				end
-			elsif @b.click # 닫기 버튼 클릭
-				dispose2
-			end
-		when 1
-			if @a.click # 다음 버튼 클릭
-				$game_system.se_play($data_system.decision_se)
-				$game_temp.message_proc.call if $game_temp.message_proc != nil
-				Hwnd.dispose(self)
-			elsif @b.click # 닫기 버튼 클릭
-				dispose2
-			end
-		when 2
-			if @a.click # 다음 버튼 클릭
-				if @input_num.result.to_i > 0
-					$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
-					$game_map.need_refresh = true
-					$game_system.se_play($data_system.decision_se)
-					$game_temp.message_proc.call
-					$game_temp.num_input_variable_id = 0
-					$game_temp.num_input_digits_max = 0
-					Hwnd.dispose(self)
-				else
-					$console.write_line("1 이상의 수를 입력하세요.")
-				end
-			elsif @b.click # 닫기 버튼 클릭
-				dispose2
-			end
+		if @a.click # 다음 버튼 클릭
+			$game_system.se_play($data_system.decision_se)
+			$game_temp.message_proc.call if $game_temp.message_proc != nil
+			Hwnd.dispose(self)
 		end
 		
+		if @b.click # 닫기 버튼 클릭
+			dispose2
+		end
 	end
 end
 

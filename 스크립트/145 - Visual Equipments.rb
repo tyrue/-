@@ -275,7 +275,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			self.blend_type = @character.blend_type
 			self.bush_depth = @character.bush_depth
 			# Animation
-			if @character.animation_id != 0
+			if @character.animation_id != 0 and @character.animation_id != nil
 				animation = $data_animations[@character.animation_id]
 				animation(animation, true)
 				@character.animation_id = 0

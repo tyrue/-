@@ -25,7 +25,6 @@ class Jindow_Inventory < Jindow
 	end
 	
 	def sort
-		
 		for i in @item
 			i.dispose if !i.disposed?
 		end
@@ -74,35 +73,27 @@ class Jindow_Inventory < Jindow
 					$game_system.se_play(i.item.menu_se)
 					if i.item.consumable
 						$game_party.lose_item(i.item.id, 1)
-						if i.item.common_event_id > 0
-							# Command event call reservation
-							$game_temp.common_event_id = i.item.common_event_id
-							# Play item use SE
-							$game_system.se_play(i.item.menu_se)
-						end
-						
-					elsif i.item.common_event_id > 0
+					end
+					
+					if i.item.common_event_id > 0
 						# Command event call reservation
 						$game_temp.common_event_id = i.item.common_event_id
 						# Play item use SE
 						$game_system.se_play(i.item.menu_se)
-					end
+					end	
+					sort if i.num == 0
 					
 				when 1 # 무기
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(0, i.item.id)
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
-						
 					end
+					sort
 				when 2 # 방어구
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(i.item.kind + 1, i.item.id)
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
-						
 					end
-				end
-				
-				if i.num <= 0
 					sort
 				end
 			end	

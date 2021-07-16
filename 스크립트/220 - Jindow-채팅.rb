@@ -47,6 +47,7 @@ class Jindow_Chat_Input < Jindow
 			$chat.write ("스킬창:K, 아이템 먹기:스페이스바/del, 미니맵 표시:m, 단축키 확인:J", COLOR_HELP) 
 			
 		when /\/귓 (.*)/  # 귓속말 상대를 변경
+			# 여기서 상대가 있는지 확인하는 로직 필요
 			@whispers = $1.to_s
 			$console.write_line("(귓속말 상대 변경):#{$1.to_s}")
 			
@@ -149,7 +150,7 @@ class Jindow_Chat_Input < Jindow
 				$game_switches[1002] = true
 				$console.write_line("고래를 소환합니다.")
 			end	
-				
+			
 		when /\/테스트/
 			if Network::Main.group == 'admin'		
 				$game_temp.player_transferring = true # 이동 가능
@@ -205,6 +206,17 @@ class Jindow_Chat_Input < Jindow
 					$console.write_line("가입된 파티가 없습니다.")   
 				end
 				
+			when "길드"
+				if not $guild != nil
+					name = $game_party.actors[0].name 
+					name2 = $game_party.actors[0].class_name
+					$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", COLOR_PARTY)
+					$chat_b.input(name + ": " + text, 2, 4, $game_player)
+					Network::Main.socket.send "<Guild_Message>#{name},#{name2},#{text},#{$npt}</Guild_Message>\n"  
+					Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"  
+				else
+					$console.write_line("가입된 길드가 없습니다.")   
+				end
 			end
 		end
 	end
@@ -293,5 +305,15 @@ class Jindow_Chat_Input < Jindow
 			@active = false
 			Hwnd.dis_highlight(self)
 		end
+	end
+end
+
+
+class Game_Event < Game_Character
+	alias jindow_chat_over_trigger over_trigger?
+	
+	def over_trigger?
+		return true if $map_chat_input.active # 채팅이 활성화 되면 결정키로 시작 못함
+		jindow_chat_over_trigger
 	end
 end

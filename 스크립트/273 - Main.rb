@@ -22,6 +22,9 @@ end
 begin
 	Graphics.freeze
 	Graphics.frame_rate = 60
+	
+
+	
 	$global_x = 0  
 	#하우징
 	$global_house1 = 0

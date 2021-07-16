@@ -64,6 +64,7 @@ class Jindow_Chat_Window < Jindow
 		@chat_log.push(Sprite.new(self))
 		if @chat_log.size == @max_size
 			@chat_log[0].bitmap.clear
+			@chat_log[0].dispose
 			@chat_log.shift 
 			re_write
 		end

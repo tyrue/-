@@ -12,10 +12,10 @@ class Jindow_help < Jindow
 		@head = true
 		@drag = true
 		@close = true
-		self.refresh "help"
+		#self.refresh "help"
 		
-		self.x = 640 / 2 - self.max_width / 2
-		self.y = 480 / 2 - self.max_height / 2
+		self.x = 640 / 2 - self.width / 2
+		self.y = 480 / 2 - self.height / 2
 		
 		@text_size = 17 # 폰트 사이즈
 		@text_size2 = 13 # 폰트 사이즈

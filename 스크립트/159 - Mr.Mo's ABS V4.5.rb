@@ -1287,7 +1287,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def player_melee(sw = false) # 왠지 여기서 때리는 모션 만들 수 있을 듯?
 			# 무기를 안꼈으면 공격 못함
-			return if $data_weapons[@actor.weapon_id] == nil
+			#return if $data_weapons[@actor.weapon_id] == nil
 			#Get all enemies
 			# m은 무기 각 공격 딜레이를 말함, 만약 없으면 기본 공격속도
 			m = MELEE_CUSTOM[@actor.weapon_id]
@@ -1312,8 +1312,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 때릴 수 없거나 아군이면 공격 못함
 				next if !CAN_HURT_ALLY and e.hate_group.include?(0)
 				# Show Weapon Aniamtion
-				$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id
-				a = $data_weapons[@actor.weapon_id].animation2_id
+				$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id if $data_weapons[@actor.weapon_id] != nil
+				
+				if $data_weapons[@actor.weapon_id] != nil
+					a = $data_weapons[@actor.weapon_id].animation2_id 
+				else
+					a = 109 # 기본 이펙트
+				end
+				
 				e.event.animation_id = a
 				Network::Main.ani(e.event.id, a, 1)
 				#Add mash time
@@ -3432,7 +3438,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			# Clear critical flag
 			self.critical = false
 			# First hit detection
-			
 			
 			# If hit occurs
 			hit_result = true

@@ -6,7 +6,6 @@ class Jindow_Login < Jindow
 		self.name = "로그인"
 		@head = true
 		@mark = true
-		@drag = true
 		self.refresh "Login"
 		self.x = 640 / 2 - self.max_width / 2
 		self.y = 480 / 2 - self.max_height / 2 + 180
@@ -15,11 +14,13 @@ class Jindow_Login < Jindow
 		@username_s.bitmap = Bitmap.new(40, 32)
 		@username_s.bitmap.font.color.set(0, 0, 0, 255)
 		@username_s.bitmap.draw_text(0, 0, 40, 32, "아이디")
+		
 		@password_s = Sprite.new(self)
 		@password_s.y = 23
 		@password_s.bitmap = Bitmap.new(40, 32)
 		@password_s.bitmap.font.color.set(0, 0, 0, 255)
 		@password_s.bitmap.draw_text(0, 0, 40, 32, "비밀번호")
+		
 		@type_username = J::Type.new(self).refresh(40, 12, self.width - 40, 18,false)
 		@type_password = J::Type.new(self).refresh(40, 30, self.width - 40, 18,false)
 		@type_password.hide = true
@@ -41,7 +42,19 @@ class Jindow_Login < Jindow
 	
 	def update
 		super
-		if @a.click  # 확인
+		if @a.click or Key.trigger?(KEY_ENTER)  # 확인
+			if @type_username.result.to_s == "" 
+				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+					["아이디를 잘못 입력하셨습니다."],
+					["확인"], ["Hwnd.dispose(self)"], "오류")
+				return
+			elsif @type_password.result.to_s == ""
+				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+					["비밀번호를 잘못 입력하셨습니다."],
+					["확인"], ["Hwnd.dispose(self)"], "오류")
+				return
+			end
+			
 			@type_username.bluck = false
 			@type_password.bluck = false
 			

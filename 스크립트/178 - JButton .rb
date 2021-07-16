@@ -118,14 +118,16 @@ module J
 					if @push and Mouse.arrive_sprite?(self) and @viewport.base?
 						@click = true
 					elsif Mouse.arrive_sprite?(self) and @viewport.base?  # 로울버 효과
-						self.tone.set(10, 10, 10)
+						self.bluck = true
 					elsif not Mouse.arrive_sprite?(self) and @viewport.base?
 						#self.tone.set(0, 0, 0)
 					end
 					@push ? (@push = false) : 0
 				end
 			else
+				
 			end
+			
 			if @click and @double_wait == 0
 				@double_wait = 7
 			elsif @double_wait > 0

@@ -923,13 +923,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							return true
 						elsif $1 == "wu" and not @user_test
 							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-								["아이디를 잘못 치셨습니다."],
+								["아이디를 잘못 입력하셨습니다."],
 								["확인"], ["Hwnd.dispose(self)"], "오류")
 							$scene.set_status(@status) if $scene.is_a?(Jindow_Login)
 							return true
 						elsif $1 == "wp" and not @user_test
 							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-								["비밀번호를 잘못 치셨습니다."],
+								["비밀번호를 잘못 입력하셨습니다."],
 								["확인"], ["Hwnd.dispose(self)"], "오류")
 							$scene.set_status(@status) if $scene.is_a?(Jindow_Login)
 						elsif $1 == "al" and not @user_test == true

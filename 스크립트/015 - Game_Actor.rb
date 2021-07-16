@@ -271,7 +271,7 @@ class Game_Actor < Game_Battler
 	#--------------------------------------------------------------------------
 	def base_atk
 		weapon = $data_weapons[@weapon_id]
-		return weapon != nil ? weapon.atk : 0
+		return weapon != nil ? weapon.atk : 1
 	end
 	#--------------------------------------------------------------------------
 	# * Get Basic Physical Defense

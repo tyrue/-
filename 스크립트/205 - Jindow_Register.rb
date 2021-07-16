@@ -8,7 +8,7 @@ class Jindow_Register < Jindow
 		self.name = "회원가입"
 		@head = true
 		@mark = true
-		@drag = true
+		
 		@close = true
 		self.refresh "Register"
 		self.x = 640 / 2 - self.max_width / 2
@@ -69,10 +69,20 @@ class Jindow_Register < Jindow
 	end
 	
 	
-	
 	def update
 		super
 		if @a.click  # 확인
+			id = @type_username.result.gsub(/\s+/, "")
+			pw = @type_password.result
+			nick = @type_nickname.result.gsub(/\s+/, "")
+			
+			if id == "" or nick == ""
+				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
+					["빈 문자열 사용 불가"],
+					["확인"], ["Hwnd.dispose(self); $now_dialog = false"], "오류")
+				return
+			end
+			
 			size = @type_username.result.scan(/[A-z]/).size
 			if @type_username.result.size != size
 				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
@@ -83,7 +93,7 @@ class Jindow_Register < Jindow
 				$game_system.se_play($data_system.decision_se)
 				@type_username.bluck = false
 				@type_password.bluck = false
-				Network::Main.send_regist(@type_nickname.result.to_s,@type_username.result,@type_password.result)
+				Network::Main.send_regist(@type_nickname.result.to_s, @type_username.result, @type_password.result)
 				$nickname = @type_nickname.result.to_s
 				Hwnd.dispose(self)	
 			end

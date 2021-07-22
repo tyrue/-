@@ -208,6 +208,12 @@ class MrMo_ABS
 			elsif r <= 80
 				i_id = 45 # 불의 결정
 			end
+			
+		when 36 # 처녀귀신(보스)
+			if r < 20
+				i_id = 87 # 황금호박
+			end	
+			
 		when 38 # 짚단
 			if r <= 60 
 				i_id = 48 # 짚단
@@ -777,3 +783,18 @@ class MrMo_ABS
 		end
 	end
 end
+
+
+#~ class Monster_item_drop
+	#~ attr_accessor :item_id
+	#~ def initialize
+		#~ item_id = []
+	#~ end
+	
+	#~ def add_item_drop(id, rate, i_id)
+		#~ r = rand(100)
+		#~ if r < rate
+			#~ item_id.push(i_id)
+		#~ end
+	#~ end
+#~ end

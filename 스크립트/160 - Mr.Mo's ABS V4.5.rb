@@ -1,5 +1,5 @@
-$exp_limit = 8
-$exp_event = 0
+$exp_limit = 8 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_event = 0 # 경험치 이벤트
 #============================================================================
 # *  Mr.Mo's ABS
 #============================================================================
@@ -1761,6 +1761,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Attack enemy
 					e.effect_skill(@actor, skill)
 					#Show Animetion on enemy
+					weapon_skill(@actor.weapon_id, e) # 격 있는 무기면 격 추가
+					
 					hit_enemy(e, @actor, 0) if e.damage != "Miss" and e.damage != 0
 					#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 					#Skip this enemy if its dead
@@ -3742,7 +3744,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도사스킬
 				when 96 # 지진
 					$e_v += 1
-					power += user.maxsp / 100
+					power += user.maxsp / 80
 					if $e_v == $alive_size
 						user.sp -= user.maxsp / 10
 					end	

@@ -45,18 +45,19 @@ module Mouse
 		if Input.mouse_lbutton
 			@ox = x; @oy = y
 		else
+			@ox = x; @oy = y
 			@x = x; @y = y
 		end
 	end
 	
-	def arrive_rect?(x = 0, y = 0, width = 1, height = 1)
+	def arrive_rect?(x = 0, y = 0, width = 1, height = 1, size = 0)
 		if x.rect?
 			y = x.y
 			width = x.width
 			height = x.height
 			x = x.x
 		end
-		return (@x > x and @x < x + width and @y > y and @y < y + height)
+		return (@x > x - size and @x < x + width + size and @y > y - size and @y < y + height + size)
 	end
 	
 	def arrive_sprite_rect?(sprite)
@@ -65,10 +66,12 @@ module Mouse
 		return self.arrive_rect?(x, y, sprite.bitmap.width, sprite.bitmap.height)
 	end
 	
-	def arrive_sprite?(sprite)
+	def arrive_sprite?(sprite, size = 0)
 		x = sprite.viewport.x + sprite.x - sprite.viewport.ox
 		y = sprite.viewport.y + sprite.y - sprite.viewport.oy
-		self.arrive_rect?(x, y, sprite.bitmap.width, sprite.bitmap.height) ? 0 : return
+		return self.arrive_rect?(x, y, sprite.bitmap.width, sprite.bitmap.height, size)
+		
+		self.arrive_rect?(x, y, sprite.bitmap.width, sprite.bitmap.height, size) ? 0 : return
 		color = sprite.bitmap.get_pixel(@x - x, @y - y)
 		return ((color.red != 0 and color.green != 0 and color.blue != 0 and color.alpha != 0) ? true : false)
 	end

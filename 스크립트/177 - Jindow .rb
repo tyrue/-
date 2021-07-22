@@ -239,6 +239,9 @@ class Jindow < Viewport
 	end
 	
 	def arrive?
+		if @tog != nil
+			return false if @tog == false
+		end
 		return Mouse.arrive_rect?(@back.rect)
 	end
 	
@@ -300,7 +303,6 @@ class Jindow < Viewport
 	end
 	
 	def scroll
-		return if !self.scroll?
 		ow, oh = self.scroll?
 		if ow != @wsv and ow > 0
 			@wsv = ow
@@ -347,11 +349,12 @@ class Jindow < Viewport
 			ch = self.height - @scroll0up.bitmap.height - @scroll0down.bitmap.height
 			@scroll0mid.bitmap = Bitmap.new(@scroll0up.bitmap.width, ch, @route + "scroll0mid", 1)
 			cch = ch / ((self.height + oh) * 1.0)
-			@scroll0bar_mid.bitmap = Bitmap.new(@scroll0up.bitmap.width + 10, (cch * self.height).round, @route + "scroll0bar_mid", 1)
+			
+			@scroll0bar_mid.bitmap = Bitmap.new(@scroll0up.bitmap.width + h_x, (cch * self.height).round, @route + "scroll0bar_mid", 1)
 			@scroll0up.x = @mr.x; @scroll0up.y = @mr.y
 			@scroll0down.x = @mr.x; @scroll0down.y = @dr.y - @scroll0down.bitmap.height
 			@scroll0mid.x = @mr.x; @scroll0mid.y = @scroll0up.y + @scroll0up.bitmap.height
-			@scroll0bar_mid.x = @scroll0mid.x - 10; @scroll0bar_mid.y = @scroll0mid.y
+			@scroll0bar_mid.x = @scroll0mid.x - h_x; @scroll0bar_mid.y = @scroll0mid.y
 			@scroll0bar_up.x = @scroll0mid.x; @scroll0bar_up.y = @scroll0bar_mid.y - @scroll0bar_up.bitmap.height
 			@scroll0bar_down.x = @scroll0mid.x; @scroll0bar_down.y = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height
 		end
@@ -400,7 +403,8 @@ class Jindow < Viewport
 	def height_scroll_move?
 		return false if (Mouse.ox == Mouse.x and Mouse.oy == Mouse.y)
 		self.push? ? (return false) : 0
-		return (Mouse.arrive_sprite?(@scroll0bar_up) or Mouse.arrive_sprite?(@scroll0bar_mid) or Mouse.arrive_sprite?(@scroll0bar_down))
+		size = 20
+		return (Mouse.arrive_sprite?(@scroll0bar_up, size) or Mouse.arrive_sprite?(@scroll0bar_mid, size) or Mouse.arrive_sprite?(@scroll0bar_down, size))
 	end
 	
 	def scroll_update
@@ -488,6 +492,7 @@ class Jindow < Viewport
 				if @height_scroll and self.height_scroll_move?
 					cx = Mouse.x - Mouse.ox
 					cy = Mouse.y - Mouse.oy
+					
 					num = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height - cy
 					if @scroll0bar_mid.y - cy >= @scroll0up.y + @scroll0up.bitmap.height and num <= @scroll0down.y
 						for i in [@scroll0bar_up, @scroll0bar_mid, @scroll0bar_down]

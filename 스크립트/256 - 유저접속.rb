@@ -28,4 +28,5 @@ def 유저접속
 	$console = nil
 	$chat = nil
 	$map_chat_input = nil
+	$rpg_skill = Rpg_skill.new # 스킬 사용에 대한 클래스
 end

@@ -126,7 +126,7 @@ module J
 			
 			if not @viewport.hudle
 				if Input.mouse_lbutton
-					if not @push and not @viewport.push? and Mouse.arrive_sprite_rect?(self) and @viewport.base?
+					if not @push and Mouse.arrive_sprite_rect?(self) and @viewport.base? 
 						@push = true
 						self.bluck = true
 					end

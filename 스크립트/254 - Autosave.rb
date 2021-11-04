@@ -86,29 +86,9 @@ def 자동저장
 			end
 		end
 		
-		base_hp = $game_party.actors[0].maxhp
-		base_sp = $game_party.actors[0].maxsp
-		
-		id = $game_party.actors[0].weapon_id
-		base_hp -= $data_weapons[id].hp_plus if id != 0 and $data_weapons[id].hp_plus != nil
-		base_sp -= $data_weapons[id].sp_plus if id != 0 and $data_weapons[id].sp_plus != nil
-		
-		id = $game_party.actors[0].armor1_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		id = $game_party.actors[0].armor2_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		id = $game_party.actors[0].armor3_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		id = $game_party.actors[0].armor4_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
+		base_hp = $game_party.actors[0].take_base_maxhp
+		base_sp = $game_party.actors[0].take_base_maxsp
+	
 		Network::Main.socket.send("<userdata>흑부엉 서버|#{$game_party.actors[0].name}|#{$game_party.actors[0].class_id}|#{$game_party.actors[0].level}|#{$game_party.actors[0].exp}|#{$game_party.actors[0].str}|#{$game_party.actors[0].dex}|#{$game_party.actors[0].agi}|#{$game_party.actors[0].int}|#{base_hp}|#{base_sp}|#{$game_map.map_id}|#{$game_player.x}|#{$game_player.y}|#{$game_player.direction}|#{$game_party.actors[0].character_name}|#{$game_party.actors[0].weapon_id}|#{$game_party.actors[0].armor1_id}|#{$game_party.actors[0].armor2_id}|#{$game_party.actors[0].armor3_id}|#{$game_party.actors[0].armor4_id}|#{@itemlist}|#{@weaponlist}|#{@armorlist}|#{@skilllist}|#{$game_party.gold}|#{$game_party.actors[0].hp}|#{$game_party.actors[0].sp}|#{@swlist}|#{@valist}|#{@hotkeylist}|#{@itemKeyList}|#{$game_party.actors[0].pdef}|#{$game_party.actors[0].mdef}|#{@skill_mash_list}|#{@buff_mash_list}|#{$cha_name}</userdata>\n")
 	end
 end

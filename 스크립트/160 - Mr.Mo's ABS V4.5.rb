@@ -1,128 +1,6 @@
 $exp_limit = 8 # 한번에 최대 얻을 수 있는 경험치 퍼센트
 $exp_event = 0 # 경험치 이벤트
-#============================================================================
-# *  Mr.Mo's ABS
-#============================================================================
-# Mr.Mo "Muhammet Sivri"
-# Version 4.5
-# 01/04/06
-# Thanks to Near Fantastica's methods;
-# - In Range?, Get Range, In Direction?, enemy_dead?, treasure
-# - Class Game_Range(highly modified for convinience)
-# - Scene_Skill(main, update_shk) 
-# Most were modified by me to my style and to increase performance and 
-# cleaner code.
-#
-# Give Credit to Near Fantastica as well, those methods saved me time and helped.
-#
-#============================================================================
-# Intoduction
-#============================================================================
-# I wasnt happy with the current version of Near's ABS, and he wasn't going to
-# update it anymore. So instead I made an ABS.
-# Detailed Tutorial on the ABS and HUD modification tutorials added.
-#============================================================================
-# Explanation
-#============================================================================
-#--Skill Casting :
-# If the skill is not ranged and its suppose to attack one enemy, it will attack
-# the closest enemy.
-# If the skill scope is more then 1 enemy, it can be ranged. It will just attack
-# the enemies in that range.
-# The skill animations can be assigned in the Constants section
-# The default skill animation suffix is _cast. If you want a skill to have the 
-# default animation(_casT) just don't do anything for it :)
-#--Enemy AI :
-# 0 = Dummy             - Will not attack but can be attacked
-# 1 = See Range         - Will attack only if it can see an enemy
-# 2 = Hear Range        - WIll attack only if it can hear an enemy
-# 3 = Hear or See Range - Will attack if it can see or hear enemy
-# 4 = Ally Under Attack - Will attack if its ally is under attack and if it can
-#                         see or hear the enemy
-#
-#--Enemy Explanation :
-# Hate Points   - The enemy will randomly give out hate points to all of it's enemies.
-#                 Later, it's enemies will be ordered from most to least hate points.
-#
-# Hate Groups   - The enemy will attack hate groups, meaning other enemies.
-#                 The hate group enemies aren't considered allies. 
-#                 The player's hate id is 0.
-#                 Do not use the event ID, use the Monster ID, you can find it
-#                 in the Database, Enemies Tab.
-#
-# Closest Enemy - The enemy will attack the closest enemy, if met the right AI
-#                 conditions. Hate points are no longer needed, if this BOOLEAN
-#                 is true.
-#
-# 
-#--Comment List :
-# To add a comment, click on the event command list, in the first tab, you should
-# see the [ Comment... ] button. It should look similar to this.
-#
-# V = value
-#
-# Comment: ABS                 - Required for recognizing enemies.
-# Comment: ID V                - Enemy ID from the database.
-# Comment: Behavior V          - Refer to Enemy AI.
-# Comment: Sight V             - See range the enemy can hear.
-# Comment: Sound V             - Sound range the enemy can hear.
-# Comment: ClosestEnemy V      - Refer to Enemy explantion
-# Comment: HateGroup [V]       - Refer to Enemy explantion
-# Comment: Aggressiveness V    - How fast will the enemy attack.
-# Comment: Speed V             - How fast will the enemy move when in battle
-# Comment: Frequency V         - What rate will the enemy move when in battle
-# Comment: Trigger V           - Refer to Triggers.
-# Comment: Respawn V           - Respawn Time. If 0, then don't respawn
-#
-# Example:
-#
-# Comment: ABS
-# Comment: ID 1
-# Comment: Behavior 1
-# Comment: Sight 5
-# Comment: Sound 5
-# Comment: ClosestEnemy true
-# Comment: HateGroup [0]
-# Comment: Aggressiveness 1 
-# Comment: Speed 4
-# Comment: Frequency 4
-# Comment: Trigger 0
-# Comment: Respawn 0
-#
-#--Triggers :
-# Trigger 0     - Will erase the event. 이벤트 없음 
-# Trigger 1 2   - Will turn on a switch with the ID of 2. 2번 스위치를 킴
-# Trigger 2 5 9 - Will change the Varaible's value with the ID of 5 to 9. If 9 is 5번 변수는 1증가, 9가 
-#                 set to 0, the the Variable 5 will be added 1.
-# Trigger 3 1   - Will change the local switch of the enemy to 1("A"). 셀프 스위치 A 킴
-#                   1 = A
-#                   2 = B
-#                   3 = C
-#                   4 = D
-#
-#--Startegy Usage :
-# The ABS can be used to setup wars and make fights between NPCs. Imagination is
-# the limit. 
-# The events do not need to attack the player. Just remove the 0 from the hate
-# group list.
-#
-# You can make an event a dummy, it can still be attacked, but it won't retaliate.
-# This is usefull for practices, or teacing the player how to fight. It can also
-# be used for NPC's.
-#
-# Make allias for the player. Remove the 0 from the hate group list and add all
-# the monsters(their enemy IDs, database) on the map. The allias won't follow the player or anything
-# but they would attack other monsters giving the effect of allince.
-#
-# Monster Pit Fights can also be made.
-#
-#--Default Animations
-# charactername_melee  - melee attacks
-# charactername_cast  - skills
-#============================================================================
-#--------------------------------------------------------------------------
-# * SDK Log Script
-#--------------------------------------------------------------------------
+
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")
 #--------------------------------------------------------------------------
 # * Begin SDK Enable Test
@@ -409,6 +287,45 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
 	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
 	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
+	
+	
+	
+	# 무기 격 스킬 : 데미지, 애니메이션 id, 확률
+	WEAPON_SKILL = {}
+	# 4차 무기
+	WEAPON_SKILL[6] = [1500, 164, 20]   		# 현자금봉
+	WEAPON_SKILL[7] = [1500, 164, 20]   		# 검성기검
+	WEAPON_SKILL[8] = [1500, 164, 20]   		# 진선역봉
+	WEAPON_SKILL[9] = [1500, 164, 20]   		# 태성태도
+	
+	# 중국무기
+	WEAPON_SKILL[11] = [150000, 115, 10]   		# 대모홍접선
+	WEAPON_SKILL[12] = [150000, 117, 10]   		# 구곡검
+	WEAPON_SKILL[13] = [150000, 166, 10]   		# 영후단봉
+	WEAPON_SKILL[14] = [150000, 125, 10]   		# 협가검
+	WEAPON_SKILL[17] = [5000, 196, 10]   		# 음양도
+	
+	
+	WEAPON_SKILL[114] = [1500, 153, 40]   		# 주작의검
+	WEAPON_SKILL[115] = [100000, 194, 10] 		# 심판의 낫
+	WEAPON_SKILL[126] = [5000, 154, 40]   		# 참마도
+	WEAPON_SKILL[127] = [7000, 184, 40]   		# 청룡신검
+	
+	# 일본
+	WEAPON_SKILL[134] = [70000, 170, 20]   		# 일화접선
+	WEAPON_SKILL[135] = [70000, 171, 20]   		# 진일신검
+	WEAPON_SKILL[138] = [70000, 164, 20]   		# 청일기창
+	
+	# 용무기
+	WEAPON_SKILL[142] = [2000, 123, 10]   		# 용마제사검
+	WEAPON_SKILL[143] = [5000, 123, 10]   		# 용마제칠검
+	WEAPON_SKILL[144] = [40000, 123, 10]   		# 용마제팔검
+	WEAPON_SKILL[145] = [200000, 196, 5]   		# 용마제구검
+	
+	WEAPON_SKILL[147] = [2000, 141, 10]   		# 용랑제사봉
+	WEAPON_SKILL[148] = [5000, 141, 10]   		# 용랑제칠봉
+	WEAPON_SKILL[149] = [40000, 141, 10]   		# 용랑제팔봉
+	WEAPON_SKILL[150] = [200000, 176, 5]   		# 용랑제구봉
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -1372,20 +1289,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			r = rand(100)
 			ani = 0
 			dmg = 0
-			case id
-			when 115 # 심판의낫
-				if r < 10
-					dmg = 100000
-					ani = 194
-				end
-			when 114 # 주작의 검
-				if r < 40
-					dmg = 1500
-					ani = 153
-				end
+			ra = WEAPON_SKILL[id][2]
+			
+			if r < ra
+				dmg = WEAPON_SKILL[id][0]
+				ani = WEAPON_SKILL[id][1]
 			end
 			
-			if dmg != 0
+			if dmg != 0 and dmg != nil
 				if !(e.damage.is_a? String)
 					e.damage += dmg  
 				else 
@@ -1393,7 +1304,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				e.hp -= dmg
 			end
-			if ani != 0
+			
+			if ani != 0 and ani != nil
 				e.event.animation_id = ani
 				Network::Main.ani(e.event.id, ani, 1)
 			end
@@ -2432,6 +2344,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				next if o == nil
 				return false if o.x == new_x and o.y == new_y
 			end
+			
+			# 여기서 넷 플레이어인지 확인해야함
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				if player.x == new_x and player.y == new_y
+					return false
+				end
+			end
+			
 			#Return False if no one was found
 			return true
 		end
@@ -2474,18 +2395,18 @@ if SDK.state("Mr.Mo's ABS") == true
 			d = @move_direction
 			new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
 			new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
-			return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
-			#Stop if can't move
-			return blow if !passable?(@x, @y, @move_direction)
+			
+			return blow if @step >= @range
+			#Increase step
+			@step += 1
+			return force_movement if no_one?
+			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
 			m = @move_direction
 			move_down if m == 2
 			move_left if m == 4
 			move_right if m == 6
 			move_up if m == 8
-			#Stop if it came to range
-			return blow if @step >= @range
-			#Increase step
-			@step += 1
+			
 		end
 		#--------------------------------------------------------------------------
 		# * In Range?(Element, Object, Range) - Near Fantastica

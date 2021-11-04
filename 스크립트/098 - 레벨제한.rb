@@ -28,7 +28,7 @@ STR_LIMIT   = 2000      	#STR 한계 치
 DEX_LIMIT   = 2000      	#DEX 한계 치
 AGI_LIMIT   = 2000      	#AGI 한계 치
 INT_LIMIT   = 2000      	#INT 한계 치
-BONUS_LIMIT = 400					#아이템 착용시 더 추가 할수 있는 능력치
+BONUS_LIMIT = 1000					#아이템 착용시 더 추가 할수 있는 능력치
 
 MAX_EXP			= 4200000000  #만렙시 경험치 
 
@@ -188,10 +188,10 @@ class Game_Actor < Game_Battler
 			
 			if(actor.class_id == 7) # 전사 99때 체력 4500
 				actor.maxhp += 16
-				actor.str += 2
+				actor.str += 3
 			elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
 				actor.maxsp += 5
-				actor.int += 2
+				actor.int += 3
 			elsif(actor.class_id == 17) # 도적
 				actor.maxhp += 8
 				actor.dex += 2 # 손재주(명중률)

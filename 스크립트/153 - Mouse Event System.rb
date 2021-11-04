@@ -56,7 +56,6 @@ class Scene_Map
 			if active_event > 0
 				event = $game_map.events[active_event]
 				range = get_object_range($game_player, event)
-				run_it = part_of_event_system(event)
 				# Check to see if it's a run event or not
 				run_it = part_of_event_system(event)
 				
@@ -120,7 +119,7 @@ class Scene_Map
 						id = item.parameters[0].split('=')
 						return (id[1].to_i)
 					else
-						return 20
+						return 40
 					end
 				end
 			end

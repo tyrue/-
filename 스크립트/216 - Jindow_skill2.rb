@@ -13,6 +13,8 @@ class Jindow_Skill < Jindow
 		@close = true
 		self.refresh "Skill"
 		
+		$rpg_skill.refresh
+		
 		@actor = $game_party.actors[0]
 		@data = []
 		

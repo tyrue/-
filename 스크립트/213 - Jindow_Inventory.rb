@@ -21,6 +21,7 @@ class Jindow_Inventory < Jindow
 		@inventory_size = 100
 		@margin = 10
 		
+		@data = []
 		sort
 	end
 	
@@ -62,6 +63,29 @@ class Jindow_Inventory < Jindow
 	end	
 	
 	def update
+		data = []
+		# Add item
+		for i in 1...$data_items.size
+			if $game_party.item_number(i) > 0
+				data.push($data_items[i])
+			end
+		end
+		for i in 1...$data_weapons.size
+			if $game_party.weapon_number(i) > 0
+				data.push($data_weapons[i])
+			end
+		end
+		for i in 1...$data_armors.size
+			if $game_party.armor_number(i) > 0
+				data.push($data_armors[i])
+			end
+		end
+		
+		if @data != data
+			@data = data 
+			sort
+		end
+		
 		if not Hwnd.include?('Trade')
 			for i in @item
 				i.item? ? 0 : next
@@ -111,14 +135,14 @@ class Jindow_Inventory < Jindow
 	
 	def check(i)
 		if $trade_num <= $MAX_TRADE
-			if $Abs_item_data.is_trade_ok(i.item.id)
+			if $Abs_item_data.is_trade_ok(i.item.id, i.type)
 				Jindow_Trade2.new(i.item.id, i.type, $trade_num) 
 			else
 				$console.write_line("[교환]: 교환 불가 아이템입니다.")
 			end
 		else
 			Hwnd.dispose("Trade2")
-			$console.write_line("[교환]:더이상 아이템을 올릴수 없습니다.")
+			$console.write_line("[교환]: 더이상 아이템을 올릴수 없습니다.")
 		end
 	end
 end

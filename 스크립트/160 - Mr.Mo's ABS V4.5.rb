@@ -1374,7 +1374,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			dmg = 0
 			case id
 			when 115 # 심판의낫
-				if r < 20
+				if r < 10
 					dmg = 100000
 					ani = 194
 				end
@@ -2340,6 +2340,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * End of class
 		#--------------------------------------------------------------------------
 	end
+	
 	#============================================================================
 	# *  Range Base
 	#============================================================================
@@ -2399,16 +2400,17 @@ if SDK.state("Mr.Mo's ABS") == true
 			new_x = @x + (d == 6 ? 1 : d == 4 ? -1 : 0)
 			new_y = @y + (d == 2 ? 1 : d == 8 ? -1 : 0)
 			
-			return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
+			return @stop = true if @step >= @range
+			#Increase step
+			@step += 1
+			return force_movement if no_one?
+			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
 			m = @move_direction
 			move_down if m == 2
 			move_left if m == 4
 			move_right if m == 6
 			move_up if m == 8
 			#Stop if it came to range
-			return @stop = true if @step >= @range
-			#Increase step
-			@step += 1
 		end
 		#--------------------------------------------------------------------------
 		# * No One
@@ -2638,6 +2640,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$ABS.setup_movement(actor)
 		end
 	end
+	
 	#============================================================================
 	# * Game Ranged Skill
 	#============================================================================
@@ -2754,6 +2757,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				@enani = actor.event
 				@enani.animation_id = @skill.animation2_id
 				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
+				
+				$ABS.weapon_skill(enemy.weapon_id, actor) # 특정 무기를 착용하면 추가 격 데미지가 있음
 				
 				#Jump
 				$ABS.jump(@enani, $game_player, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] != 0
@@ -3610,7 +3615,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					power += user.sp * 1.5
 					user.sp = 0
 				when 49 # 성려멸주
-					power += user.maxsp / 8 + 80
+					power += user.maxsp / 8 + 90
 					user.sp -= user.maxsp / 10
 				when 52 # 성려멸주 1성
 					power += user.maxsp / 7 + 100

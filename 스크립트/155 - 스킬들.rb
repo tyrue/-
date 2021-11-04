@@ -181,7 +181,7 @@ class Rpg_skill
 		elsif skill_id == 120 # 부활
 			$game_temp.common_event_id = 24
 		else
-			heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 300000.0))).to_i
+			heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
 		end
 		
 		ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id

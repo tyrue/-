@@ -66,4 +66,12 @@ class Rpg_skill
 	def initialize
 		rpg_skills_2_initialize
 	end
+	
+	def refresh
+		refresh_description
+	end
+	
+	def refresh_description
+		#$data_skills[5].description = $game_party.actors[0].maxsp.to_s
+	end
 end

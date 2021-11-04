@@ -13,7 +13,7 @@ class Game_Actor < Game_Battler
 	attr_reader   :character_name           # character file name
 	attr_reader   :character_hue            # character hue
 	attr_reader   :class_id                 # class ID
-	attr_accessor   :weapon_id                # weapon ID
+	attr_accessor  :weapon_id                # weapon ID
 	attr_reader   :armor1_id                # shield ID
 	attr_reader   :armor2_id                # helmet ID
 	attr_reader   :armor3_id                # body armor ID

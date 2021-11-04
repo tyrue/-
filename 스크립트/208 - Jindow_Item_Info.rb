@@ -55,7 +55,7 @@ class Jindow_Item_Info < Jindow
 		@equip.x = @item_name.x
 		@equip.y = @item_name.y
 		
-		if $Abs_item_data.is_trade_ok(@item_id)
+		if $Abs_item_data.is_trade_ok(@item_id, @type)
 			@equip.bitmap.font.color.set(0, 128, 0, 255)
 			@equip.bitmap.draw_text(0, 0, @equip.width, @equip.height, "[교환 가능]", 0)
 		else
@@ -141,6 +141,8 @@ class Jindow_Item_Info < Jindow
 			item.dex_plus != 0 ? (h += bitmap.text_size(item.dex_plus.to_s).height) : 0
 			item.agi_plus != 0 ? (h += bitmap.text_size(item.agi_plus.to_s).height) : 0
 			item.int_plus != 0 ? (h += bitmap.text_size(item.int_plus.to_s).height) : 0
+			item.hp_plus != 0 ? (h += bitmap.text_size(item.hp_plus.to_s).height) : 0
+			item.sp_plus != 0 ? (h += bitmap.text_size(item.sp_plus.to_s).height) : 0
 		when 2
 			item.pdef != 0 ? (h += bitmap.text_size(item.pdef.to_s).height) : 0
 			item.mdef != 0 ? (h += bitmap.text_size(item.mdef.to_s).height) : 0
@@ -149,6 +151,8 @@ class Jindow_Item_Info < Jindow
 			item.dex_plus != 0 ? (h += bitmap.text_size(item.dex_plus.to_s).height) : 0
 			item.agi_plus != 0 ? (h += bitmap.text_size(item.agi_plus.to_s).height) : 0
 			item.int_plus != 0 ? (h += bitmap.text_size(item.int_plus.to_s).height) : 0
+			item.hp_plus != 0 ? (h += bitmap.text_size(item.hp_plus.to_s).height) : 0
+			item.sp_plus != 0 ? (h += bitmap.text_size(item.sp_plus.to_s).height) : 0
 		end
 		
 		@detail.bitmap = Bitmap.new(self.width, (h == 0 ? 1 : h))
@@ -219,6 +223,18 @@ class Jindow_Item_Info < Jindow
 				h += rect.height
 			end
 			
+			if item.hp_plus != 0 and item.hp_plus != nil
+				rect = @detail.bitmap.text_size(item.hp_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 + " + item.hp_plus.to_s)
+				h += rect.height
+			end
+			
+			if item.sp_plus != 0 and item.sp_plus != nil
+				rect = @detail.bitmap.text_size(item.sp_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 + " + item.sp_plus.to_s)
+				h += rect.height
+			end
+			
 		when 2 # 방어구
 			if item.pdef != 0
 				rect = @detail.bitmap.text_size(item.pdef.to_s)
@@ -253,6 +269,18 @@ class Jindow_Item_Info < Jindow
 			if item.int_plus != 0
 				rect = @detail.bitmap.text_size(item.int_plus.to_s)
 				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지력 + " + item.int_plus.to_s)
+				h += rect.height
+			end
+			
+			if item.hp_plus != 0 and item.hp_plus != nil
+				rect = @detail.bitmap.text_size(item.hp_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 + " + item.hp_plus.to_s)
+				h += rect.height
+			end
+			
+			if item.sp_plus != 0 and item.sp_plus != nil
+				rect = @detail.bitmap.text_size(item.sp_plus.to_s)
+				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 + " + item.sp_plus.to_s)
 				h += rect.height
 			end
 		end

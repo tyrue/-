@@ -29,4 +29,7 @@ def 유저접속
 	$chat = nil
 	$map_chat_input = nil
 	$rpg_skill = Rpg_skill.new # 스킬 사용에 대한 클래스
+	
+	Set_Weapon_plus.new
+	Set_Armor_plus.new
 end

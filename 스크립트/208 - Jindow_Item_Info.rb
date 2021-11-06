@@ -47,7 +47,7 @@ class Jindow_Item_Info < Jindow
 		@item_name.bitmap.font.color.set(255, 255, 255, 255) 
 		@item_name.bitmap.font.gamma.set(0, 0, 0, 255) 
 		@item_name.bitmap.draw_text(0, 0, @item_name.width, @item_name.height, item.name)
-					
+		
 		@equip = Sprite.new(self)
 		@equip.bitmap = Bitmap.new(80, 50)
 		@equip.bitmap.font.size = 14
@@ -287,10 +287,54 @@ class Jindow_Item_Info < Jindow
 		
 		self.height = height + 22
 		self.refresh("Item_Info")
+		
+		@drop_button = J::Button.new(self).refresh(60, "버리기")
+		@drop_button.x = self.width - @drop_button.width - 10
+		@drop_button.y = 0
 	end
 	
 	def update
 		super
+		if @drop_button != nil and @drop_button.click
+			if !$Abs_item_data.is_trade_ok(@item_id, @type)
+				$console.write_line("버릴 수 없는 물건입니다.")
+				return
+			end
+			
+			x = $game_player.x
+			y = $game_player.y
+			
+			if @type == 0
+				if $game_party.item_number(@item_id) == 1
+					$game_party.lose_item(@item_id, 1)
+					$console.write_line("#{$data_items[@item_id].name}를 버렸습니다.")
+					create_drops(@type, @item_id, x, y, 1)
+					return
+				end
+			elsif @type == 1
+				if $game_party.weapon_number(@item_id) == 1
+					$game_party.lose_weapon(@item_id, 1)
+					$console.write_line("#{$data_weapons[@item_id].name}를 버렸습니다.")
+					create_drops(@type, @item_id, x, y, 1)
+					return
+				end
+			else
+				if $game_party.armor_number(@item_id) == 1
+					$game_party.lose_armor(@item_id, 1)
+					$console.write_line("#{$data_armors[@item_id].name}를 버렸습니다.")
+					create_drops(@type, @item_id, x, y, 1)
+					return
+				end
+			end
+			
+			if not Hwnd.include?("Item_Drop")
+				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
+			else
+				Hwnd.dispose("Item_Drop")
+				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
+			end
+		end
+		
 		if @button_key != nil and @button_key.click
 			if not Hwnd.include?("Keyset_menu")
 				Jindow_Keyset_menu.new(@item_id, @type)

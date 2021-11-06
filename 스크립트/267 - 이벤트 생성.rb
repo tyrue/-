@@ -2,9 +2,6 @@
 # 제작자 : 이실로드
 # 간단한 이벤트 생성
 #----------------------------------------------------
-# 사용법 :       
-#Network::Main.socket.send "<Drop>#{@item_index.to_s},#{@item_type.to_s},1,#{$game_map.map_id},#{$game_player.x},#{$game_player.y},#{@item_id.to_i}</Drop>\n"
-#                                      아이템 번호        아이템 타입   방향         맵 아이디         x좌표               y좌표           아이템 이름
 
 class Game_Event
 	attr_accessor :id

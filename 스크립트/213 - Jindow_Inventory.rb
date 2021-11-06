@@ -23,11 +23,16 @@ class Jindow_Inventory < Jindow
 		
 		@data = []
 		sort
+		
+		@gold_drop_button = J::Button.new(self).refresh(60, "금전 버리기")
+		@gold_drop_button.x = self.width - @gold_drop_button.width - 10
+		@gold_drop_button.y = 0
 	end
 	
 	def sort
 		for i in @item
-			i.dispose if !i.disposed?
+			next if i == @gold_drop_button
+			i.dispose if i != nil and !i.disposed?
 		end
 		@item.clear
 		
@@ -60,9 +65,19 @@ class Jindow_Inventory < Jindow
 			i.y = (i.id / 6) * 36 + 18
 		end
 		@old_item_size = @item.size 
+		@item.push(@gold_drop_button)
 	end	
 	
 	def update
+		if @gold_drop_button.click
+			if not Hwnd.include?("Item_Drop")
+				Jindow_Drop.new(0, 0, 0) # 돈을 버림
+			else
+				Hwnd.dispose("Item_Drop")
+				Jindow_Drop.new(0, 0, 0) # 돈을 버림
+			end
+		end
+		
 		data = []
 		# Add item
 		for i in 1...$data_items.size

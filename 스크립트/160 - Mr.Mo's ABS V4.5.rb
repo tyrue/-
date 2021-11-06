@@ -683,6 +683,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if Hwnd.include?("Trade")
 			return false if Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
 			return false if Hwnd.include?("Npc_dialog")
+			return false if Hwnd.include?("Item_Drop")
 			return false if $map_chat_input.active # 채팅이 활성화 된게 아니라면
 			return true
 		end

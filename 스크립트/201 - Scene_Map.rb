@@ -140,31 +140,7 @@ class Scene_Map
 						end
 					end	
 					
-					if Key.trigger?(11)  #아이템, 돈 줍기
-						for event in $game_map.events.values
-							if $game_player.x == event.x and $game_player.y == event.y
-								item_index = event.id
-								if $Drop[item_index] != nil
-									if $Drop[item_index].type2 == 1
-										if $Drop[item_index].type == 0
-											$game_party.gain_item($Drop[item_index].id, 1)
-										elsif $Drop[item_index].type == 1
-											$game_party.gain_weapon($Drop[item_index].id, 1)
-										elsif $Drop[item_index].type == 2
-											$game_party.gain_armor($Drop[item_index].id, 1)
-										end
-										Network::Main.socket.send "<Drop_Get>#{event.id},#{$game_map.map_id}</Drop_Get>\n"
-									elsif $Drop[item_index].type2 == 0
-										$game_party.gain_gold($Drop[item_index].amount)
-										Network::Main.socket.send "<Drop_Get>#{event.id},#{$game_map.map_id}</Drop_Get>\n"
-									end
-								else
-									delete_events(event.id)
-								end
-							end
-						end
-					end	
-					
+										
 				end
 			end
 		end

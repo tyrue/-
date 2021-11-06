@@ -1845,28 +1845,36 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					
 					# 템 드랍 
+					#drop 번호, 아이템 타입1, 아이템 타입2, 아이템 id, 맵 아이디, x좌표, y좌표, 개수
 				when /<Drop>(.*)<\/Drop>/
 					data = $1.split(',')
 					index = data[0].to_i
-					if data[3].to_i == $game_map.map_id
+					map_id = data[4].to_i
+					
+					if map_id == $game_map.map_id
 						$Drop[index] = Drop.new
-						$Drop[index].id = data[6].to_i
-						$Drop[index].type = data[1].to_i
-						$Drop[index].type2 = data[2].to_i
-						if $Drop[index].type2 == 0
-							$Drop[index].amount = data[6].to_i
-						end
-						if $Drop[index].type2 == 1
-							if data[1].to_i == 0
+						$Drop[index].id = data[3].to_i
+						$Drop[index].type = data[2].to_i
+						$Drop[index].type2 = data[1].to_i
+						$Drop[index].amount = data[7].to_i #아이템 개수
+						x = data[5].to_i
+						y = data[6].to_i
+						
+						if $Drop[index].type2 == 1 # 일반 아이템
+							name = ""
+							if $Drop[index].type == 0
 								image = $data_items[$Drop[index].id].icon_name
-							elsif data[1].to_i == 1
+								name = $data_items[$Drop[index].id].name
+							elsif $Drop[index].type == 1
 								image = $data_weapons[$Drop[index].id].icon_name
-							elsif data[1].to_i == 2
+								name = $data_weapons[$Drop[index].id].name
+							elsif $Drop[index].type == 2
 								image = $data_armors[$Drop[index].id].icon_name
+								name = $data_armors[$Drop[index].id].name
 							end
-							create_drops(data[0].to_i, 8, data[3].to_i, 2, data[4].to_i, data[5].to_i, image)
-						elsif $Drop[index].type2 == 0
-							create_moneys(data[0].to_i, 8, data[3].to_i, 2, data[4].to_i, data[5].to_i)
+							create_drops2(index, 138, map_id, x, y, image, name)
+						elsif $Drop[index].type2 == 0 # 돈
+							create_moneys2(index, 138, map_id, x, y, $Drop[index].amount)
 						end
 					end
 					

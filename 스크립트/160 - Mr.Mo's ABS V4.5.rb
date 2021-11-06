@@ -1289,6 +1289,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			r = rand(100)
 			ani = 0
 			dmg = 0
+			return if WEAPON_SKILL[id] == nil
 			ra = WEAPON_SKILL[id][2]
 			
 			if r < ra

@@ -36,12 +36,11 @@ def 보관이벤트_a(dst, id)
 	$game_map.events[dst].instance_eval do
 		@id = dst
 	end
-	#$game_map.events[dst].moveto(rand($game_map.width), rand($game_map.height))
 	create_sprite $game_map.events[dst]
 	return $game_map.events[dst]
 end
 
-def create_sprite(c)
+def create_sprite(c, sw = false)
 	if $scene.is_a?(Scene_Map)
 		$scene.instance_eval do
 			@spriteset.instance_eval do
@@ -50,7 +49,7 @@ def create_sprite(c)
 						return v
 					end
 				end
-				sprite = Sprite_Character.new(@viewport1, c)
+				sprite = Sprite_Character.new(@viewport1, c, sw)
 				@character_sprites.push(sprite)
 			end
 		end
@@ -82,6 +81,41 @@ class Game_Character
 	attr_accessor :item_sprite_id 
 	attr_accessor :color
 end 
+
+class Sprite_Character
+	attr_accessor :is_item
+	
+	alias sprite_item_initialize initialize
+	def initialize(viewport, character = nil, is_item = false)
+		sprite_item_initialize(viewport, character)
+		@is_item = is_item
+	end
+	
+	alias sprite_item_update update
+	def update
+		sprite_item_update
+		# If tile ID, file name, or hue are different from current ones
+		if @is_item
+			# If graphic is character
+			if @tile_id == 0
+				@cw = bitmap.width
+				@ch = bitmap.height
+				self.ox = @cw / 2
+				self.oy = @ch
+				
+				# Set rectangular transfer
+				sx = bitmap.width
+				sy = bitmap.height
+				self.src_rect.set(0, 0, sx, sy)
+			end
+			# Set sprite coordinates
+			self.x = @character.screen_x
+			self.y = @character.screen_y
+			self.z = @character.screen_z(@ch)
+		end
+	end
+end
+
 
 class Sprite_Character
 	alias id_item update

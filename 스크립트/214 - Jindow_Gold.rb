@@ -41,7 +41,8 @@ class Jindow_Gold < Jindow
 					end
 				end
 				$game_party.lose_gold(gold.to_i)
-				Network::Main.socket.send "<Drop>#{gold_index},0,0,#{$game_map.map_id},#{$game_player.x},#{$game_player.y},#{gold}</Drop>\n"
+				#아이템 번호, 아이템 타입, 맵 아이디, x좌표, y좌표, 아이템 이름
+				Network::Main.socket.send "<Drop>#{gold_index},0,#{$game_map.map_id},#{$game_player.x},#{$game_player.y},#{gold}</Drop>\n"
 				Hwnd.dispose(self)
 			else
 				$console.write_line("금전이 부족합니다")

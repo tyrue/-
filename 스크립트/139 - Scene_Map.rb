@@ -31,6 +31,7 @@ class Scene_Map
 		end
 		자동저장 if $game_map.map_id != 3
 		
+		$Drop = [] # 드랍 아이템 내용 초기화
 		# 현재 맵의 몬스터 정보를 요청
 		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
@@ -39,6 +40,7 @@ class Scene_Map
 		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 		$game_temp.spriteset_refresh == true
 		$chat_b.refresh
+		
 		맵이동
 	end
 	

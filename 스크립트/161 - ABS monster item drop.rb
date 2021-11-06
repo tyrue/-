@@ -2,6 +2,59 @@ class MrMo_ABS
 	#--------------------------------------------------------------------------
 	# * 아이템의 처리
 	#--------------------------------------------------------------------------
+	def take_item2(item_index)
+		if $game_switches[296] # 죽었으면 못 먹음
+			$console.write_line("귀신은 할 수 없습니다.") 
+			return
+		end
+		
+		$state_trans = false # 투명 풀림
+		Audio.se_play("Audio/SE/장", $game_variables[13])
+		Network::Main.ani(Network::Main.id, 198)
+		
+		if $Drop[item_index] != nil
+			id = $Drop[item_index].id
+			type = $Drop[item_index].type
+			type2 = $Drop[item_index].type2
+			num = $Drop[item_index].amount
+			
+			if type2 == 1 # 일반 아이템
+				if type == 0 # 아이템
+					n = $game_party.item_number(id)
+					if n >= $item_maximum
+						$console.write_line("더 이상 가질 수 없습니다.")
+						return
+					end
+					
+					$game_party.gain_item(id, num)
+				elsif type == 1 # 무기
+					n = $game_party.weapon_number(id)
+					if n >= $item_maximum
+						$console.write_line("더 이상 가질 수 없습니다.")
+						return
+					end
+					
+					$game_party.gain_weapon(id, num)
+				elsif type == 2 # 장비
+					n = $game_party.armor_number(id)
+					if n >= $item_maximum
+						$console.write_line("더 이상 가질 수 없습니다.")
+						return
+					end
+					
+					$game_party.gain_armor(id, num)
+				end
+				
+			elsif type2 == 0 # 돈
+				$game_party.gain_gold($Drop[item_index].amount)
+				$console.write_line("#{$Drop[item_index].amount}전 획득 ")
+			end
+			Network::Main.socket.send "<Drop_Get>#{item_index},#{$game_map.map_id}</Drop_Get>\n"
+		end
+		$Drop[item_index] = nil
+	end
+	
+	
 	def take_item(type, id, num) # 아이템의 종류(무기, 방어구, 아이템), id, 개수
 		if $game_switches[296] # 죽었으면 못 먹음
 			$console.write_line("귀신은 할 수 없습니다.") 
@@ -58,184 +111,128 @@ class MrMo_ABS
 		Network::Main.socket.send "<del_item>#{$game_map.map_id},#{eid},#{ex},#{ey}</del_item>\n"
 	end
 	
-	
-	
+		
 	#--------------------------------------------------------------------------
 	# * 몬스터마다의 템 줄 확률 설정
 	#--------------------------------------------------------------------------
 	def drop_enemy(e)
-		#Get Enemy
-		#enemy = $data_enemies[id[1].to_i]
-		#p "e : #{e.id.to_i} mapid : #{$game_map.map_id} x : #{e.event.x} y : #{e.event.y}"
+		id = e.id.to_i
+		
+		if ITEM_DROP_DATA[id] != nil
+			r = rand(100)
+			i_id = []
+			temp = []
+			num = ITEM_DROP_DATA[id][0][0]
+			
+			# 확률에 맞는 아이템 id를 넣는다.
+			for d in ITEM_DROP_DATA[id]
+				next if d.size == 1
+				type = d[0]
+				id = d[1]
+				take_num = rand(d[2]) + 1
+				chance = d[3]
+				sw = d[4]
+				
+				if r <= chance
+					if sw != nil and $game_switches[sw] == true
+						temp.push([type, id, take_num]) 
+					elsif sw == nil
+						temp.push([type, id, take_num]) 
+					end
+				end
+			end
+			
+			# 최대 드랍될 아이템 종류 개수
+			if num == -1 or temp.size <= num
+				i_id = temp
+			else
+				# 랜덤으로 temp에 있는 것 중에 num개를 추출한다.
+				for i in 0...num
+					r = rand(temp.size)
+					i_id.push(temp[r])
+					temp.delete_at(r)
+				end
+			end
+			
+			for item in i_id
+				if item[0] == 3 # 돈 드랍
+					create_moneys(item[1], e.event.x, e.event.y)
+				else
+					create_drops(item[0], item[1], e.event.x, e.event.y, item[2])
+				end
+			end
+		end
+	end
+	
+	# 아이템 드랍 데이터
+	# [몬스터 아이디] = [[최대 드랍될 아이템 개수], [타입(아이템 0, 무기 1, 장비 2, 돈 3), 아이템 id or money, 최대 나올 개수, 드랍 확률, (조건스위치)], ...] 
+	ITEM_DROP_DATA = {}
+	# 초보사냥터
+	ITEM_DROP_DATA[1] = [[-1], [0, 74, 1, 80], [2, 10, 1, 10]] # 토끼 : 토끼고기, 토끼화서
+	ITEM_DROP_DATA[2] = [[-1], [0, 3, 50, 80], [2, 9, 1, 10]] # 다람쥐 : 도토리, 다람쥐화서
+	ITEM_DROP_DATA[3] = [[-1], [0, 5, 1, 70]] # 암사슴 : 사슴고기
+	ITEM_DROP_DATA[4] = [[-1], [0, 6, 1, 50]] # 숫사슴 : 녹용
+	ITEM_DROP_DATA[5] = [[-1], [3, 100, 1, 40]] # 늑대 : 100전
+	ITEM_DROP_DATA[6] = [[-1], [0, 7, 1, 60]] # 소 : 쇠고기
+	ITEM_DROP_DATA[7] = [[-1], [0, 8, 1, 70]] # 돼지 : 돼지고기
+	
+	# 쥐굴
+	ITEM_DROP_DATA[8] = [[-1], [0, 9, 1, 70]] # 쥐 : 쥐고기
+	ITEM_DROP_DATA[9] = [[-1], [0, 9, 1, 70], [3, 100, 1, 20]] # 병든쥐 : 쥐고기, 100전
+	ITEM_DROP_DATA[10] = [[-1], [3, 100, 1, 30]] # 시궁창쥐 : 100전
+	ITEM_DROP_DATA[11] = [[-1], [0, 10, 1, 80]] # 박쥐 : 박쥐고기
+	ITEM_DROP_DATA[12] = [[-1], [0, 10, 1, 80], [3, 100, 1, 10]] # 보라박쥐 : 박쥐고기, 100전
+	ITEM_DROP_DATA[40] = [[-1], [3, 200, 1, 60]] # 자생원 : 200전
+	
+	# 곰굴
+	ITEM_DROP_DATA[13] = [[-1], [0, 11, 1, 70]] # 평웅 : 웅담
+	ITEM_DROP_DATA[14] = [[-1], [2, 2, 1, 5]] # 진웅 : 지력의투구1
+	ITEM_DROP_DATA[15] = [[-1], [0, 12, 1, 50]] # 호랑이 : 호랑이고기
+	ITEM_DROP_DATA[16] = [[-1], [0, 12, 1, 70]] # 평호 : 호랑이고기
+	ITEM_DROP_DATA[17] = [[-1], [0, 12, 1, 40], [2, 2, 1, 50]] # 진호 : 호랑이고기, 지력의투구1
+	
+	# 돼지굴
+	ITEM_DROP_DATA[21] = [[-1], [0, 19, 1, 60], [0, 28, 1, 10]] # 산돼지 : 산돼지고기, 돼지의뿔
+	ITEM_DROP_DATA[22] = [[-1], [0, 20, 1, 60], [0, 28, 1, 10]] # 숲돼지 : 숲돼지고기, 돼지의뿔
+	
+	# 사슴굴
+	ITEM_DROP_DATA[23] = [[-1], [0, 5, 1, 80]] # 주홍사슴 : 사슴고기
+	ITEM_DROP_DATA[25] = [[-1], [0, 6, 1, 80], [1, 22, 1, 5]] # 흑/백순록 : 녹용, 비철단도
+	
+	# 자호굴
+	ITEM_DROP_DATA[26] = [[-1], [0, 22, 1, 60]] # 자호 : 짙은호랑이고기
+	ITEM_DROP_DATA[27] = [[-1], [0, 22, 1, 60], [3, 100, 1, 20]] # 천자호 : 짙은호랑이고기, 100전
+	ITEM_DROP_DATA[28] = [[-1], [0, 22, 1, 60], [3, 100, 1, 30]] # 구자호 : 짙은호랑이고기, 100전
+	ITEM_DROP_DATA[29] = [[-1], [0, 22, 1, 30], [3, 100, 1, 20], [1, 23, 1, 30]] # 적호 : 짙은호랑이고기, 100전, 철도
+	
+	# 해골굴
+	ITEM_DROP_DATA[30] = [[-1], [0, 29, 1, 60]] # 해골 : 호박
+	ITEM_DROP_DATA[31] = [[-1], [0, 29, 1, 60]] # 날쌘해골 : 호박
+	ITEM_DROP_DATA[32] = [[1], [0, 29, 1, 60], [0, 30, 1, 10]] # 자해골 : 호박, 진호박
+	ITEM_DROP_DATA[33] = [[-1], [0, 30, 1, 50]] # 흑해골 : 진호박
+	
+	# 흉가
+	ITEM_DROP_DATA[34] = [[-1], [0, 29, 1, 30], [0, 30, 1, 70]] # 달걀귀신 : 호박, 진호박
+	ITEM_DROP_DATA[35] = [[-1], [0, 29, 1, 30], [0, 30, 1, 70]] # 몽달귀신 : 호박, 진호박
+	ITEM_DROP_DATA[39] = [[-1], [0, 30, 1, 40], [0, 31, 1, 30], [0, 37, 1, 10]] # 불귀신 : 진호박, 불의혼, 불의결정
+	ITEM_DROP_DATA[36] = [[-1], [0, 116, 1, 20]] # 처녀귀신 : 황금호박
+	
+	# 기타 
+	ITEM_DROP_DATA[36] = [[-1], [0, 41, 1, 40]] # 짚단 : 짚단
+	ITEM_DROP_DATA[41] = [[1], [0, 38, 1, 5], [0, 39, 1, 4], [0, 92, 1, 1]] # 청자다람쥐 : 작은상자, 고급상자, 최고급상자
+	ITEM_DROP_DATA[49] = [[1], [0, 38, 1, 90], [0, 39, 1, 40], [0, 92, 1, 5]] # 고래 :  작은상자, 고급상자, 최고급상자
+	
+	# 도깨비굴
+	ITEM_DROP_DATA[47] = [[-1], [0, 29, 1, 40], [0, 30, 1, 20]] # 도깨비 : 호박, 진호박
+	ITEM_DROP_DATA[48] = [[-1], [0, 29, 1, 40], [0, 30, 1, 20]] # 도깨비불 : 호박, 진호박
+	
+	
+	def drop_enemy2(e)
 		r = rand(100)
 		i_id = 0
 		case e.id.to_i
-		when 1 # 토끼
-			if r <= 80 
-				i_id = 13 # 토끼 고기
-			elsif r <= 90
-				i_id = 36 # 토끼 화서
-			end	
-		when 2 # 다람쥐
-			if r <= 80 
-				i_id = 12 # 도토리
-			elsif r <= 90
-				i_id = 35 # 다람쥐 화서
-			end
-		when 3 # 암사슴
-			if r <= 70 
-				i_id = 14 # 사슴고기
-			end
-		when 4 # 숫사슴
-			if r <= 50 
-				i_id = 15 # 녹용
-			end
-		when 5 # 늑대
-			if r <= 40 
-				i_id = 38 # 100전
-			end
-		when 6 # 소
-			if r <= 60 
-				i_id = 17 # 쇠고기
-			end
-		when 7 # 돼지
-			if r <= 70 
-				i_id = 16 # 돼지고기
-			end
-		when 8 # 쥐
-			if r <= 70 
-				i_id = 41 # 쥐고기
-			end
-		when 9 # 병든쥐
-			if r <= 70 
-				i_id = 41 # 쥐고기
-			elsif r <= 90
-				i_id = 38 # 100전
-			end
-		when 10 # 시궁창쥐
-			if r <= 30 
-				i_id = 38 # 100전 
-			end
-		when 11 # 박쥐
-			if r <= 80 
-				i_id = 42 # 박쥐고기
-			end
-		when 12 # 보라박쥐
-			if r <= 80 
-				i_id = 42 # 박쥐고기
-			elsif r <= 90 
-				i_id = 38 # 100전 
-			end
-		when 13 # 평웅
-			if r <= 70 
-				i_id = 19 # 웅담
-			end
-		when 14 # 진웅
-			if r <= 5 
-				i_id = 20 # 지력의 투구 1
-			end
-		when 15 # 호랑이
-			if r <= 50
-				i_id = 18 # 호랑이고기
-			end
-		when 16 # 평호
-			if r <= 70 
-				i_id = 18 # 호랑이고기
-			end
-		when 17 # 진호
-			if r <= 40 
-				i_id = 18 # 호랑이고기
-			elsif r <= 90
-				i_id = 20 # 지력의투구1
-			end
-		when 21 # 산돼지
-			if r <= 60 
-				i_id = 21 # 산돼지고기
-			elsif r <= 70
-				i_id = 23 # 돼지의 뿔
-			end
-		when 22 # 숲돼지
-			if r <= 60
-				i_id = 22 # 숲돼지고기
-			elsif r <= 70
-				i_id = 23 # 돼지의 뿔
-			end
-		when 23 # 주홍사슴
-			if r <= 80 
-				i_id = 14 # 사슴고기
-			end
-		when 25 # 흑/백순록
-			if r <= 80 
-				i_id = 15 # 녹용
-			elsif r <= 85
-				i_id = 47 # 비철단도
-			end
-		when 26 # 자호
-			if r <= 60 
-				i_id = 37 # 짙은호랑이고기
-			end
-		when 27, 28 # 천자호, 구자호
-			if r <= 60 
-				i_id = 37 # 짙은호랑이고기
-			elsif r <= 80
-				i_id = 38 # 100전
-			end
-		when 29 # 적호
-			if r <= 30 
-				i_id = 37 # 짙은호랑이고기
-			elsif r <= 40
-				i_id = 38 # 100전
-			elsif r <= 70
-				i_id = 63 # 철도
-			end
-		when 30, 31 # 해골, 날쌘해골
-			if r <= 60 
-				i_id = 39 # 호박
-			end
-		when 32, 33 # 자해골, 흑해골
-			if r <= 50 
-				i_id = 40 # 진호박
-			end
-		when 34, 35 # 달걀귀신, 몽달귀신
-			if r <= 70 
-				i_id = 40 # 진호박
-			end
-		when 39 # 불귀신
-			if r <= 40 
-				i_id = 40 # 진호박
-			elsif r <= 70
-				i_id = 44 # 불의 혼
-			elsif r <= 80
-				i_id = 45 # 불의 결정
-			end
 			
-		when 36 # 처녀귀신(보스)
-			if r < 20
-				i_id = 87 # 황금호박
-			end	
-			
-		when 38 # 짚단
-			if r <= 60 
-				i_id = 48 # 짚단
-			end
-		when 40 # 자생원
-			if r <= 60 
-				i_id = 49 # 200전
-			end
-		when 41 # 청자다람쥐
-			if r <= 5 
-				i_id = 56 # 작은보물상자
-			elsif r <= 9
-				i_id = 57 # 고급보물상자
-			elsif r <= 10
-				i_id = 121 # 최고급보물상자
-			end
-		when 47, 48 # 도깨비, 불도깨비
-			if r <= 40 
-				i_id = 39 # 호박
-			elsif r <= 60
-				i_id = 40 # 진호박
-			end
+		
 		when 49 # 고래
 			if r <= 30 
 				i_id = 56 # 작은보물상자
@@ -395,7 +392,7 @@ class MrMo_ABS
 			elsif r <= 70
 				i_id = 87 # 황금호박
 			end	
-		
+			
 		when 106 # 뱀
 			if r <= 70 
 				i_id = 72 # 뱀고기
@@ -783,18 +780,3 @@ class MrMo_ABS
 		end
 	end
 end
-
-
-#~ class Monster_item_drop
-	#~ attr_accessor :item_id
-	#~ def initialize
-		#~ item_id = []
-	#~ end
-	
-	#~ def add_item_drop(id, rate, i_id)
-		#~ r = rand(100)
-		#~ if r < rate
-			#~ item_id.push(i_id)
-		#~ end
-	#~ end
-#~ end

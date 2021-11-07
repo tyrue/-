@@ -722,7 +722,6 @@ class Game_Actor < Game_Battler
 	alias rpg_skill_learn learn_skill
 	def learn_skill(skill_id)
 		rpg_skill_learn(skill_id) # 이전 함수 코드 실행
-		
 		$console.write_line("마법 #{$data_skills[skill_id].name}을(를) 배웠다!") if $global_x >= 26
 		
 		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움

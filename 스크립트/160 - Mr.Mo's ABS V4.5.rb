@@ -136,7 +136,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
-	RANGE_SKILLS[74] = [0, 5, "", 4, 0] #십리건곤
+	RANGE_SKILLS[74] = [0, 5, "공격스킬2", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
@@ -2314,7 +2314,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			new_x = @x + (d == 6 ? 1 : d == 4 ? -1 : 0)
 			new_y = @y + (d == 2 ? 1 : d == 8 ? -1 : 0)
 			
-			return @stop = true if @step >= @range
+			return @stop = true if @step > @range
 			#Increase step
 			@step += 1
 			return force_movement if no_one?

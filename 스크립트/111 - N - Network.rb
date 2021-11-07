@@ -830,7 +830,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<timer_v>(.*)<\/timer_v>/
 					t_dir = Dir.entries("./")
 					for s in t_dir
-						break if User_Edit::SERVERS[0][0] == "127.0.0.1"
+						break if User_Edit::SERVERS[0][0] == "127.0.0.1" or User_Edit::TEST
 						if(s.include?(".rxproj"))
 							Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
 							p "버전이 다릅니다."

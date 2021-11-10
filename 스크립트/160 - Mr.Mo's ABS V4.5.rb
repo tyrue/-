@@ -237,7 +237,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[103] = [20 * sec, 0] # 어검술
 	SKILL_MASH_TIME[104] = [80 * sec, 0] # 포효검황
 	SKILL_MASH_TIME[105] = [140 * sec, 0] # 혈겁만파
-	SKILL_MASH_TIME[106] = [60 * sec, 0] # 초혼비무
+	SKILL_MASH_TIME[106] = [20 * sec, 0] # 초혼비무
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [3 * sec, 0] # 필살검무
@@ -258,7 +258,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
 	SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
 	SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
-	SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
+	SKILL_BUFF_TIME[42] = [5 * sec, 0] # 주술마도
 	SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
 	
 	
@@ -268,7 +268,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
 	SKILL_BUFF_TIME[66] = [20 * sec, 0] # 신수둔각도
 	SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
-	SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
+	SKILL_BUFF_TIME[76] = [5 * sec, 0] # 팔량분법
 	SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
 	
 	
@@ -1067,7 +1067,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					skill_mash[1][1] -= 1 
 					if skill_mash[1][1] == 0
 						$console.write_line("#{$data_skills[skill_mash[0]].name} 끝")
-						$rpg_skill.buff_del(skill_mash[0])
+						$rpg_skill.buff_del(skill_mash[0]) # 버프 끝 표시
 					end
 				end
 			end
@@ -1128,12 +1128,12 @@ if SDK.state("Mr.Mo's ABS") == true
 						return
 					end
 					
-					# 아직 버프가 지속중이면 무시
-					skill_mash = SKILL_BUFF_TIME[id]
-					if skill_mash != nil and skill_mash[1]/60.0 > 0
-						$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
-						return
-					end
+					#~ # 아직 버프가 지속중이면 무시
+					#~ skill_mash = SKILL_BUFF_TIME[id]
+					#~ if skill_mash != nil and skill_mash[1]/60.0 > 0
+						#~ $console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
+						#~ return
+					#~ end
 					
 					if RANGE_EXPLODE.has_key?(id)
 						return player_explode(id)
@@ -1334,7 +1334,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			
 			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil and skill_mash_time[1] <= 0
+			if skill_mash_time != nil
 				skill_mash_time[1] = skill_mash_time[0]
 				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
@@ -1544,14 +1544,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 			
-			# 아직 버프가 지속중이면 무시
-			skill_mash = SKILL_BUFF_TIME[id]
-			if skill_mash != nil and skill_mash[1]/60.0 > 0
-				$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
-				return
-			end
-			
-			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]
@@ -1559,9 +1551,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
-			# 스킬 아이디
-			skill_console(id)
-			#Activate Common Event
+			
+			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
+			$rpg_skill.party_heal(id) # 이게 파티 회복 스킬인지 확인
+			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
+			$rpg_skill.party_buff(id) # 파티 버프 스킬인지 확인
+			skill_console(id)   # 스킬 딜레이 표시
+			
+			# 커먼 이벤트 실행
 			if skill.common_event_id > 0
 				# Common event call reservation
 				$game_temp.common_event_id = skill.common_event_id
@@ -1571,19 +1568,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			$game_player.animation_id = skill.animation1_id
 			Network::Main.ani(Network::Main.id, skill.animation1_id)
 			
-			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
-			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
-			
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope
 			when 0
 				@actor.sp -= skill.sp_cost
-				@button_mash = MASH_TIME*3
+				@button_mash = MASH_TIME * 2
 			when 1 #Enemy 적
-				#If the skill is ranged
+				# 원거리 스킬인가?
 				if RANGE_SKILLS.has_key?(skill.id)
-					
 					#Add to range
 					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
 					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
@@ -1731,14 +1724,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
 				return
 			end
-			
-			# 아직 버프가 지속중이면 무시
-			skill_mash = SKILL_BUFF_TIME[id]
-			if skill_mash != nil and skill_mash[1]/60.0 > 0
-				$console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
-				return
-			end
-			
+						
 			$e_v = 0 # enemy_value, 맞출 적의 수
 			w = RANGE_EXPLODE[skill.id]
 			# Show Animation
@@ -3590,26 +3576,26 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= user.hp / 2
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
-					power += user.maxhp / 8 + 10
-					user.hp -= user.maxhp / 10
+					power += user.maxhp / 12 + 20
+					user.hp -= user.maxhp / 20
 					user.hp = 1 if user.hp <= 0
 				when 78 # 십리건곤 1성
-					power += user.maxhp / 7 + 15
-					user.hp -= user.maxhp / 9
+					power += user.maxhp / 10 + 30
+					user.hp -= user.maxhp / 18
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
 					power += user.hp * 6
 					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
-					power += user.maxhp / 6 + 20
-					user.hp -= user.maxhp / 8
+					power += user.maxhp / 8 + 40
+					user.hp -= user.maxhp / 15
 					user.hp = 1 if user.hp <= 0
 				when 101 # 백호참
 					power += user.hp * 3
 					user.hp -= user.hp / 2
 				when 102 # 백리건곤 1성
-					power += user.maxhp / 6 + 30
-					user.hp -= user.maxhp / 7
+					power += user.maxhp / 7 + 50
+					user.hp -= user.maxhp / 12
 					user.hp = 1 if user.hp <= 0
 				when 103 # 어검술
 					power += user.hp
@@ -3645,14 +3631,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도적 스킬
 				when 133 # 필살검무
 					power += (user.hp * 1 + user.sp * 0.5).to_i
-					user.hp -= (user.hp / 2) 
+					user.hp -= (user.hp / 3) 
 					user.sp = 0
 				when 135 # 백호검무
 					power += (user.hp * 0.35 + user.sp * 0.2).to_i
 					$e_v += 1
 					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
 					if $e_v == $alive_size
-						user.hp -= (user.hp / 3)
+						user.hp -= (user.hp / 5)
 					end
 					
 				when 137 # 이기어검
@@ -3678,7 +3664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도사스킬
 				when 96 # 지진
 					$e_v += 1
-					power += user.maxsp / 80 + 20
+					power += user.maxsp / 70 + 20
 					if $e_v == $alive_size
 						user.sp -= user.maxsp / 20
 					end	

@@ -329,9 +329,11 @@ class Jindow_Item_Info < Jindow
 			
 			if not Hwnd.include?("Item_Drop")
 				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
+				Hwnd.dispose(self)
 			else
 				Hwnd.dispose("Item_Drop")
 				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
+				Hwnd.dispose(self)
 			end
 		end
 		

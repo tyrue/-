@@ -27,14 +27,25 @@ class Jindow_Drop < Jindow
 		
 		if type1 == 0 # 돈
 			@text.bitmap.draw_text(0, 0, 40, 32, "액수 : ")
+			self.name = "금전 버리기"
 		else
 			@text.bitmap.draw_text(0, 0, 40, 32, "개수 : ")
+			temp = ""
+			if @type2 == 0 # 일반 아이템
+				temp = $data_items[@item_id].name
+			elsif @type2 == 1 # 무기
+				temp = $data_weapons[@item_id].name
+			else # 장비
+				temp = $data_armors[@item_id].name
+			end
+			self.name = "#{temp} 버리기"
 		end
 		
 		@input = J::Type.new(self).refresh(40, 7, self.width - 40, 16)
 		@a = J::Button.new(self).refresh(45, "확인")
 		@a.x = self.width - 92
 		@a.y = 25
+		self.refresh "Item_Drop"
 	end
 	
 	def update

@@ -130,8 +130,7 @@ class Skill_Delay_Console < Sprite
 				@console_log[id] = [sprite, SKILL_BUFF_TIME[id][1]]
 			end
 		end
-		#@console_log.delete_at(0) while @console_log.size > @console_max_line
-		#refresh
+		
 	end
 	#--------------------------------------------------------------------------
 	# ● 보인다

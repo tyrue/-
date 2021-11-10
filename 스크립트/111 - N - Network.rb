@@ -868,7 +868,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# 서버에서 보낸 메시지 받는 처리
 			#-------------------------------------------------------------------------- 
 			def self.update_outgame(line)
-				 
+				
 				case line
 					# 제한 처리
 				when /<sever_msg>(.*)<\/sever_msg>/
@@ -1588,7 +1588,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						$game_map.need_refresh = true
 					end
-						
+					
 					# id를 600번 변수에 저장 왜?
 				when /<idsave>(.*)<\/idsave>/
 					$game_variables[600] = $1.to_s
@@ -2128,39 +2128,37 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					return true
 					#-----------------------------------------------------------------------      
-				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # $1.to_s : 시전자이름  $2.to._s : 마법번호 $3.to._s : 파티크기 $4.to._s : 맵번호 $5.to_s : 체력/마력
+				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # 시전자이름, 마법번호, 파티크기, 맵번호, 체력/마력(0이면 버프라고 생각)
 					if $npt == $3.to_s
-						if "#{$game_map.map_id}" == $4.to_s
+						map_id = $4.to_i
+						if $game_map.map_id == map_id
 							if $netparty.size > 1 # 파티에 가입된 경우에만
 								ani_id = $data_skills[$2.to_i].animation1_id # 스킬 사용 측 애니메이션 id
-								if not $game_party.actors[0].hp == 0
+								name = $1.to_s
+								skill_id = $2.to_i
+								heal_v = $5.to_i
+								if not $game_party.actors[0].hp == 0 # 회복 스킬
 									$game_player.animation_id = ani_id
-									case $2.to_i
-									when 50 # 야수수금술
-										$ABS.skill_console(50)
-										$game_temp.common_event_id = 40
-									when 88 # 분량력법
-										$ABS.skill_console(88)
-										$game_party.actors[0].str += 15
-									when 90 # 분량방법
-										$ABS.skill_console(90)
-										$game_party.actors[0].agi += 50
+									$rpg_skill.buff(skill_id)
+									$ABS.skill_console(skill_id) # 스킬 표시
+									
+									case skill_id
 									when 92 # 공력주입
-										$game_party.actors[0].sp += $5.to_i
+										$game_party.actors[0].sp += heal_v
 									else
-										$game_party.actors[0].hp += $5.to_i
+										$game_party.actors[0].hp += heal_v
 										$game_party.actors[0].critical = "heal"
-										$game_party.actors[0].damage = $5.to_s
+										$game_party.actors[0].damage = heal_v
 									end								
 									self.ani(@id, ani_id)
-									$console.write_line("#{$1.to_s}님의 #{$data_skills[$2.to_i].name}")	
+									$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")	
 								else
-									case $2.to_i
+									case skill_id
 									when 120 # 부활
 										$game_player.animation_id = ani_id
 										$game_temp.common_event_id = 24
 										self.ani(@id, ani_id)	
-										$console.write_line("#{$1.to_s}님의 #{$data_skills[$2.to_i].name}")
+										$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")	
 									end	
 								end
 							end

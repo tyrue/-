@@ -18,7 +18,6 @@ UPGRADE_SKILL_ID[4]	= [74, 78, 80, 102] # 십리건곤
 UPGRADE_SKILL_ID[5] = [131, 141, 142] # 투명
 UPGRADE_SKILL_ID[6] = [49, 52, 56] # 성려멸주
 
-
 # 0~15 : 도토리, 토끼고기, 사슴고기, 녹용
 # 15~25 : 쥐고기, 박쥐고기, 뱀고기
 # 25~35 : 웅담, 호랑이고기
@@ -138,6 +137,72 @@ REQ_SKILL_DATA[4] =
 	[99, 5, 3, 134, 31, 37],	# 분신
 ]
 
+# 치유 마법 (기원류)
+HEAL_SKILL = {}
+HEAL_SKILL[5] = [75]  		# 누리의기원
+HEAL_SKILL[21] = [100]		# 바다의기원
+HEAL_SKILL[27] = [170]			# 동해의기원
+HEAL_SKILL[29] = [300]			# 천공의기원
+HEAL_SKILL[36] = [500]			# 구름의기원
+HEAL_SKILL[48] = [1000]			# 태양의기원
+HEAL_SKILL[54] = [2000]			# 태양의기원 1성
+HEAL_SKILL[55] = [5000]			# 현인의기원
+
+# 치유마법 (희원류)
+PARTY_HEAL_SKILL = {}
+PARTY_HEAL_SKILL[81] = [170]  # 동해의희원
+PARTY_HEAL_SKILL[83] = [200]  # 천공의희원
+PARTY_HEAL_SKILL[86] = [75]  # 바다의희원
+PARTY_HEAL_SKILL[87] = [200]  # 천공의희원
+PARTY_HEAL_SKILL[89] = [500]  # 구름의희원
+PARTY_HEAL_SKILL[93] = [1000]  # 태양의희원
+PARTY_HEAL_SKILL[92] = [1]  # 공력주입
+PARTY_HEAL_SKILL[95] = [3000]  # 생명의희원
+PARTY_HEAL_SKILL[117] = [1]  # 백호의희원
+PARTY_HEAL_SKILL[118] = [7000]  # 신령의희원
+PARTY_HEAL_SKILL[119] = [15000]  # 봉황의희원
+PARTY_HEAL_SKILL[120] = [1]  # 부활
+
+# 파티 버프 스킬 아이디 저장
+PARTY_BUFF_SKILL = {}
+PARTY_BUFF_SKILL[50] = [] # 야수수금술
+PARTY_BUFF_SKILL[88] = [] # 분량력법
+PARTY_BUFF_SKILL[90] = [] # 분량방법
+PARTY_BUFF_SKILL[46] = [] # 무장
+PARTY_BUFF_SKILL[47] = [] # 보호
+
+# 버프 스킬 값 저장
+BUFF_SKILL = {} # 스텟(int, dex, str, agi등), 값 
+BUFF_SKILL[26] = [["str", 20]] # 누리의힘
+BUFF_SKILL[28] = [["com", 40]] # 야수
+BUFF_SKILL[35] = [["com", 42]] # 비호
+BUFF_SKILL[42] = [["per_int", 1.2]] # 주술마도
+
+BUFF_SKILL[50] = [["com", 40]] # 야수수금술
+BUFF_SKILL[88] = [["str", 15]] # 분량력법
+BUFF_SKILL[90] = [["agi", 50]] # 분량방법
+BUFF_SKILL[46] = [["mdef", 7], ["pdef", 7]] # 무장
+BUFF_SKILL[47] = [["mdef", 10], ["pdef", 10]] # 보호
+
+BUFF_SKILL[62] = [["dex", 30]] # 수심각도
+BUFF_SKILL[63] = [["agi", 30]] # 반영대도
+BUFF_SKILL[64] = [["per_str", 1.1]] # 십량분법
+BUFF_SKILL[66] = [["custom", 1]] # 신수둔각도
+BUFF_SKILL[71] = [["per_str", 1.2]] # 구량분법
+BUFF_SKILL[72] = [["str", 100]] # 혼신의힘
+BUFF_SKILL[76] = [["per_str", 1.3]] # 팔량분법
+
+BUFF_SKILL[91] = [["com", 129]] # 석화기탄
+BUFF_SKILL[94] = [["mdef", 999], ["pdef", 999]] # 금강불체
+BUFF_SKILL[130] = [["dex", 30], ["agi", 30]] # 무영보법
+BUFF_SKILL[131] = [["custom", 1]] # 투명
+BUFF_SKILL[141] = [["custom", 1]] # 투명 1성
+BUFF_SKILL[142] = [["custom", 1]] # 투명 2성
+BUFF_SKILL[134] = [["custom", 1]] # 분신
+BUFF_SKILL[136] = [["custom", 1]] # 운상미보
+BUFF_SKILL[140] = [["custom", 1]] # 운기
+
+
 class Rpg_skill
 	def update_buff
 		if SKILL_BUFF_TIME[140][1] > 0 # 운기 중
@@ -148,87 +213,88 @@ class Rpg_skill
 					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 				end
 			else
-				SKILL_BUFF_TIME[140][1] = 1
+				SKILL_BUFF_TIME[140][1] = 1 # 운기 취소
 			end
 		end
 		
-		if SKILL_BUFF_TIME[131][1] > 0 # 투명 중
-			SKILL_BUFF_TIME[131][1] = 1 if !$state_trans
-		end
-		if SKILL_BUFF_TIME[141][1] > 0 # 투명 중
-			SKILL_BUFF_TIME[141][1] = 1 if !$state_trans
-		end
-		if SKILL_BUFF_TIME[142][1] > 0 # 투명 중
-			SKILL_BUFF_TIME[142][1] = 1 if !$state_trans
+		if !$state_trans # 투명 풀기
+			SKILL_BUFF_TIME[131][1] = 1 if SKILL_BUFF_TIME[131][1] > 0
+			SKILL_BUFF_TIME[141][1] = 1 if SKILL_BUFF_TIME[141][1] > 0
+			SKILL_BUFF_TIME[142][1] = 1 if SKILL_BUFF_TIME[142][1] > 0
 		end
 	end
 	
-	def party_heal(skill_id, heal_v = 1)
-		if skill_id == 50 # 야수수금술
-			$game_temp.common_event_id = 40
-		elsif skill_id == 88 # 분량력법
-			$game_party.actors[0].str += 15
-		elsif skill_id == 90 # 분량방법
-			$game_party.actors[0].agi += 50
-		elsif skill_id == 92 # 공력주입
+	# 파티 힐
+	def party_heal(id)
+		is_heal = false
+		heal_v = 1
+		if PARTY_HEAL_SKILL[id] != nil
+			heal_v = PARTY_HEAL_SKILL[id][0].to_i 
+			heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
+			is_heal = true
+		end
+		
+		# 커스텀
+		case id
+		when 92 # 공력주입
 			heal_v = $game_party.actors[0].sp
 			$game_party.actors[0].sp = 0
-			
-		elsif skill_id == 117 # 백호의희원
+			is_heal = true
+		when 117 # 백호의희원
 			heal_v = $game_party.actors[0].sp * 2
 			$game_party.actors[0].sp = 0
-			
-		elsif skill_id == 120 # 부활
+			is_heal = true
+		when 120 # 부활
 			$game_temp.common_event_id = 24
-		else
-			heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
+			is_heal = true
 		end
 		
-		ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
-		
-		if $netparty.size > 1
-			name = $game_party.actors[0].name
-			Network::Main.socket.send("<partyhill>#{name} #{skill_id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")
-		else
+		if is_heal
+			$game_party.actors[0].damage = heal_v.to_s
+			$game_party.actors[0].critical = "heal"
+			$game_party.actors[0].hp += heal_v
+			
+			ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 			$game_player.animation_id = ani_id
 			Network::Main.ani(Network::Main.id, ani_id)
+			
+			if $netparty.size >= 2 # 파티가 2인 이상이라면
+				name = $game_party.actors[0].name
+				Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
+			end
 		end
-		$game_party.actors[0].damage = heal_v.to_s
-		$game_party.actors[0].critical = "heal"
-		$game_party.actors[0].hp += heal_v
+	end
+	
+	# 파티 버프
+	def party_buff(id)
+		is_party_buff = false
+		is_party_buff = true if PARTY_BUFF_SKILL[id] != nil
+		
+		if is_party_buff
+			ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
+			$game_player.animation_id = ani_id
+			Network::Main.ani(Network::Main.id, ani_id)
+			
+			if $netparty.size >= 2 # 파티가 2인 이상이라면
+				name = $game_party.actors[0].name
+				Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{0}</partyhill>\n")	
+			end
+		end
 	end
 	
 	def heal(id)
 		is_heal = false
 		heal_v = 0
+		if HEAL_SKILL[id] != nil
+			heal_v = HEAL_SKILL[id][0].to_i 
+			is_heal = true
+		end
+		
+		# 커스텀
 		case id
-		when 5 # 누리의기원
-			heal_v = 75
-			is_heal = true
-		when 21 # 바다의기원
-			heal_v = 100
-			is_heal = true
-		when 27 # 동해의기원
-			heal_v = 170
-			is_heal = true
-		when 29 # 천공의기원
-			heal_v = 300
-			is_heal = true
-		when 36 # 구름의기원
-			heal_v = 500
-			is_heal = true
 		when 43 # 위태응기
 			heal_v = $game_party.actors[0].sp * 2
 			$game_party.actors[0].sp = 0
-			is_heal = true
-		when 48 # 태양의기원
-			heal_v = 1000
-			is_heal = true
-		when 54 # 태양의기원 1성
-			heal_v = 2000
-			is_heal = true
-		when 55 # 현인의기원
-			heal_v = 5000
 			is_heal = true
 		end
 		
@@ -241,227 +307,174 @@ class Rpg_skill
 	end
 	
 	def buff(id)
-		case id 
-			# 주술사
-		when 26 # 누리의힘
-			$game_party.actors[0].str += 20
-			
-		when 28 # 야수
-			$game_temp.common_event_id = 40
-			
-		when 35 # 비호
-			$game_temp.common_event_id = 42
-			
-		when 42 # 주술마도
-			@a = $game_party.actors[0].int / 10
-			$game_party.actors[0].int += @a
-			
-		when 46 # 무장
-			$game_party.actors[0].mdef += 7
-			$game_party.actors[0].pdef += 7
-		when 47 # 보호
-			$game_party.actors[0].mdef += 10
-			$game_party.actors[0].pdef += 10
-			
-			# 전사
-		when 62  # 수심각도
-			$game_party.actors[0].dex += 30
-			
-		when 63  # 반영대도
-			$game_party.actors[0].agi += 30
-			
-		when 64  # 십량분법
-			@b = $game_party.actors[0].str / 10
-			$game_party.actors[0].str += @b
-			
-		when 66  # 신수둔각도
-			if $game_switches[1] == true # 청룡
-				$game_party.gain_weapon(4, 1)
-				$game_party.actors[0].equip(0, 4)
+		# 아직 버프가 지속중이면 무시
+		skill_mash = SKILL_BUFF_TIME[id]
+		return if skill_mash != nil and skill_mash[1] / 60.0 > 0
+		
+		if BUFF_SKILL[id] != nil
+			for data in BUFF_SKILL[id]
+				case data[0].to_s
+				when "str" # 힘
+					$game_party.actors[0].str += data[1].to_i
+				when "dex" # 손재주
+					$game_party.actors[0].dex += data[1].to_i
+				when "int" # 지력
+					$game_party.actors[0].int += data[1].to_i
+				when "agi" # 민첩
+					$game_party.actors[0].agi += data[1].to_i
+				when "mdef" # 마법 방어
+					$game_party.actors[0].mdef += data[1].to_i
+				when "pdef" # 물리 방어
+					$game_party.actors[0].pdef += data[1].to_i
+					
+				# 퍼센트
+				when "per_str" # 힘
+					base = $game_party.actors[0].take_base_str
+					n = base * data[1].to_f - base
+					$game_party.actors[0].str += n
+				when "per_dex" # 손재주
+					base = $game_party.actors[0].take_base_dex
+					n = base * data[1].to_f - base
+					$game_party.actors[0].dex += n
+				when "per_int" # 지력
+					base = $game_party.actors[0].take_base_int
+					n = base * data[1].to_f - base
+					$game_party.actors[0].int += n
+				when "per_agi" # 민첩
+					base = $game_party.actors[0].take_base_agi
+					n = base * data[1].to_f - base
+					$game_party.actors[0].agi += n
+				when "per_mdef" # 마법 방어
+					$game_party.actors[0].mdef *= data[1].to_f
+				when "per_pdef" # 물리 방어
+					$game_party.actors[0].pdef *= data[1].to_f
 				
-			elsif $game_switches[2] == true # 백호
-				$game_party.gain_weapon(2, 1)
-				$game_party.actors[0].equip(0, 2)
-				
-			elsif $game_switches[3] == true # 주작
-				$game_party.gain_weapon(1, 1)
-				$game_party.actors[0].equip(0, 1)
-				
-			elsif $game_switches[4] == true # 현무
-				$game_party.gain_weapon(3, 1)
-				$game_party.actors[0].equip(0, 3)
+				when "com" # 커먼 이벤트
+					$game_temp.common_event_id = data[1].to_i
+				when "custom" # 자체 수정
+					case id
+					when 66  # 신수둔각도
+						if $game_switches[1] == true # 청룡
+							$game_party.gain_weapon(4, 1)
+							$game_party.actors[0].equip(0, 4)
+							
+						elsif $game_switches[2] == true # 백호
+							$game_party.gain_weapon(2, 1)
+							$game_party.actors[0].equip(0, 2)
+							
+						elsif $game_switches[3] == true # 주작
+							$game_party.gain_weapon(1, 1)
+							$game_party.actors[0].equip(0, 1)
+							
+						elsif $game_switches[4] == true # 현무
+							$game_party.gain_weapon(3, 1)
+							$game_party.actors[0].equip(0, 3)
+						end
+							
+					when 131, 141, 142 # 투명
+						self.투명
+						
+					when 134 # 분신
+						$console.write_line("분신을 생성합니다.")
+						
+					when 136 # 운상미보
+						$game_player.move_speed = 3.5
+						Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+						
+					when 140 # 운기
+						$console.write_line("마력을 회복합니다.")
+					else
+						
+					end
+				end
 			end
-			
-		when 71  # 구량분법
-			@b = $game_party.actors[0].str / 9
-			$game_party.actors[0].str += @b
-			
-		when 72  # 혼신의힘
-			$game_party.actors[0].str += 100
-			
-		when 76  # 팔량분법
-			@b = $game_party.actors[0].str / 8
-			$game_party.actors[0].str += @b
-			
-			# 도사
-		when 50 # 야수금술
-			self.party_heal(id)
-			
-		when 88 # 분량력법
-			self.party_heal(id)
-			
-		when 90 # 분량방법
-			self.party_heal(id)
-			
-		when 91 # 석화기탄
-			$game_temp.common_event_id = 129
-			
-		when 94 # 금강불체
-			$game_party.actors[0].mdef += 999
-			$game_party.actors[0].pdef += 999
-			
-			# 도적
-		when 130 # 무영보법
-			$game_party.actors[0].dex += 30
-			$game_party.actors[0].agi += 30
-			
-		when 131, 141, 142 # 투명
-			self.투명
-			
-		when 134 # 분신
-			$console.write_line("분신을 생성합니다.")
-			
-		when 136 # 운상미보
-			$game_player.move_speed = 3.5
-			Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-			
-		when 140 # 운기
-			$console.write_line("마력을 회복합니다.")
-			
-			# 도사 희원류
-		when 81 # 동해의희원
-			self.party_heal(id, 170)
-			
-		when 83	# 천공의희원
-			self.party_heal(id, 200)
-			
-		when 86	# 바다의희원	
-			self.party_heal(id, 75)
-			
-		when 87	# 천공의희원	
-			self.party_heal(id, 200)
-			
-		when 89	# 구름의희원	
-			self.party_heal(id, 500)
-			
-		when 93	# 태양의희원
-			self.party_heal(id, 1000)
-			
-		when 92 # 공력주입	
-			self.party_heal(id)
-			
-		when 95	# 생명의희원
-			self.party_heal(id, 3000)
-			
-		when 117 # 백호의희원
-			self.party_heal(id)
-			
-		when 118 # 신령의희원
-			self.party_heal(id, 7000)
-			
-		when 119 # 봉황의희원
-			self.party_heal(id, 15000)
-			
-		when 120 # 부활
-			self.party_heal(id)
-			
 		end
 	end
 	
+	
 	def buff_del(id)
-		@a = $game_party.actors[0].int / 10 if @a == nil
-		@b = $game_party.actors[0].str / 10 if @b == nil
-		case id 
-			# 주술사
-		when 26 # 누리의힘
-			$game_party.actors[0].str -= 20
-			
-		when 28 # 야수
-			$game_temp.common_event_id = 41
-			
-		when 35 # 비호
-			$game_temp.common_event_id = 41
-			
-		when 42 # 주술마도
-			$game_party.actors[0].int -= @a
-			
-		when 46 # 무장
-			$game_party.actors[0].mdef -= 7
-			$game_party.actors[0].pdef -= 7
-		when 47 # 보호
-			$game_party.actors[0].mdef -= 10
-			$game_party.actors[0].pdef -= 10
-			
-			# 전사
-		when 62  # 수심각도
-			$game_party.actors[0].dex -= 30
-			
-		when 63  # 반영대도
-			$game_party.actors[0].agi -= 30
-			
-		when 64  # 십량분법
-			$game_party.actors[0].str -= @b
-			
-		when 66  # 신수둔각도
-			$game_party.actors[0].equip(0, 0)
-			$game_party.lose_weapon(1, 99)
-			$game_party.lose_weapon(2, 99)
-			$game_party.lose_weapon(3, 99)
-			$game_party.lose_weapon(4, 99)
-			
-		when 71  # 구량분법
-			$game_party.actors[0].str -= @b
-			
-		when 72  # 혼신의힘
-			$game_party.actors[0].str -= 100
-			
-		when 76  # 팔량분법
-			$game_party.actors[0].str -= @b
-			
-			# 도사
-		when 50 # 야수금술
-			$game_temp.common_event_id = 41
-			
-		when 88 # 분량력법
-			$game_party.actors[0].str -= 15
-			
-		when 90 # 분량방법
-			$game_party.actors[0].agi -= 50	
-			
-		when 94 # 금강불체
-			$game_party.actors[0].mdef -= 999
-			$game_party.actors[0].pdef -= 999
-			
-			# 도적
-		when 130 # 무영보법
-			$game_party.actors[0].dex -= 30
-			$game_party.actors[0].agi -= 30
-			
-		when 131, 141, 142 # 투명, 1, 2성
-			$game_variables[9] = 1
-			Network::Main.send_trans(false)
-			$state_trans = false
-			
-		when 134 # 분신
-			$console.write_line("분신이 사라집니다.")
-			
-		when 136 # 운상미보
-			$game_player.move_speed = 3
-			Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-			
-		when 140 # 운기
-			$console.write_line("운기가 종료 됩니다.")
-			
+		if BUFF_SKILL[id] != nil
+			for data in BUFF_SKILL[id]
+				case data[0].to_s
+				when "str" # 힘
+					$game_party.actors[0].str -= data[1].to_i
+				when "dex" # 손재주
+					$game_party.actors[0].dex -= data[1].to_i
+				when "int" # 지력
+					$game_party.actors[0].int -= data[1].to_i
+				when "agi" # 민첩
+					$game_party.actors[0].agi -= data[1].to_i
+				when "mdef" # 마법 방어
+					$game_party.actors[0].mdef -= data[1].to_i
+				when "pdef" # 물리 방어
+					$game_party.actors[0].pdef -= data[1].to_i
+					
+				# 퍼센트
+				when "per_str" # 힘
+					base = $game_party.actors[0].take_base_str
+					n = base - base / data[1].to_f
+					$game_party.actors[0].str -= n
+				when "per_dex" # 손재주
+					base = $game_party.actors[0].take_base_dex
+					n = base - base / data[1].to_f
+					$game_party.actors[0].dex -= n
+				when "per_int" # 지력
+					base = $game_party.actors[0].take_base_int
+					n = base - base / data[1].to_f
+					$game_party.actors[0].int -= n 
+				when "per_agi" # 민첩
+					base = $game_party.actors[0].take_base_agi
+					n = base - base / data[1].to_f
+					$game_party.actors[0].int -= n
+				when "per_mdef" # 마법 방어
+					$game_party.actors[0].mdef /= data[1].to_f
+				when "per_pdef" # 물리 방어
+					$game_party.actors[0].pdef /= data[1].to_f	
+					
+				else
+					case id
+					when 28 # 야수
+						$game_temp.common_event_id = 41
+					when 35 # 비호
+						$game_temp.common_event_id = 41
+					when 50 # 야수금술
+						$game_temp.common_event_id = 41
+					when 42 # 주술마도
+						p data[1]
+						$game_party.actors[0].int -= data[1]
+					when 64  # 십량분법
+						$game_party.actors[0].str -= data[1]
+					when 66  # 신수둔각도
+						$game_party.actors[0].equip(0, 0)
+						$game_party.lose_weapon(1, 99)
+						$game_party.lose_weapon(2, 99)
+						$game_party.lose_weapon(3, 99)
+						$game_party.lose_weapon(4, 99)
+						
+					when 71  # 구량분법
+						$game_party.actors[0].str -= data[1]
+						
+					when 76  # 팔량분법
+						$game_party.actors[0].str -= data[1]
+						
+						
+					when 131, 141, 142 # 투명, 1, 2성
+						$game_variables[9] = 1
+						Network::Main.send_trans(false)
+						$state_trans = false
+						
+					when 134 # 분신
+						$console.write_line("분신이 사라집니다.")
+						
+					when 136 # 운상미보
+						$game_player.move_speed = 3
+						Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+						
+					when 140 # 운기
+						$console.write_line("운기가 종료 됩니다.")	
+					end
+				end
+			end
 		end
 	end
 	

@@ -60,10 +60,10 @@ class Jindow_P_Status < Jindow
 				Network::Main.socket.send("<nptreq>#{@usrname} #{party_mem} #{$game_party.actors[0].name} #{$npt}</nptreq>\n")
 				$console.write_line("[파티]: '#{@usrname}' 님을 파티에 초대했습니다.")
 				if Hwnd.include?("NetParty")
-					Hwnd.dispose("P_Status")
 					Hwnd.dispose("NetParty")
 					Jindow_NetParty.new
 				end
+				Hwnd.dispose(self)
 			else
 				$console.write_line("[파티]:파티는 최대 #{$MAX_PARTY}인까지 가능합니다.")
 			end
@@ -74,7 +74,7 @@ class Jindow_P_Status < Jindow
 			if $guild_group == "문파장" or $guild_group == "부문파장"
 				$console.write_line("#{@usrname}님에게 문파 초대를 하셨습니다.")
 				Network::Main.socket.send "<Guild_Invite>#{guild},#{$guild},#{$guild_master}</Guild_Invite>\n"
-				Hwnd.dispose("P_Status")
+				Hwnd.dispose(self)
 			else
 				$console.write_line("문파장 혹은 부문파장만 쓸 수 있는 기능 입니다.")
 			end
@@ -86,7 +86,7 @@ class Jindow_P_Status < Jindow
 				$nowtrade = 1
 				Network::Main.socket.send("<trade_invite>#{@usrname},#{$game_party.actors[0].name}</trade_invite>\n")
 				$console.write_line("[교환]:'#{@usrname}'님에게 교환을 요청했습니다.")
-				Hwnd.dispose("P_Status")
+				Hwnd.dispose(self)
 			else
 				$console.write_line("[교환]:이미 요청중입니다.")
 			end
@@ -95,7 +95,7 @@ class Jindow_P_Status < Jindow
 		
 		if @d.click # 정보
 			Jindow_NetPlayer_Info.new(@netPlayer.netid, @netPlayer.username)
-			Hwnd.dispose("P_Status")
+			Hwnd.dispose(self)
 		end
 	end
 end

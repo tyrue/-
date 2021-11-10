@@ -245,6 +245,71 @@ class Game_Actor
 		end
 	end
 	
+	def take_base_str
+		n = str
+		weapon = $data_weapons[@weapon_id]
+		armor1 = $data_armors[@armor1_id]
+		armor2 = $data_armors[@armor2_id]
+		armor3 = $data_armors[@armor3_id]
+		armor4 = $data_armors[@armor4_id]
+		n -= weapon != nil ? weapon.str_plus : 0
+		n -= armor1 != nil ? armor1.str_plus : 0
+		n -= armor2 != nil ? armor2.str_plus : 0
+		n -= armor3 != nil ? armor3.str_plus : 0
+		n -= armor4 != nil ? armor4.str_plus : 0
+		return n
+	end
+	
+	def take_base_dex
+		n = dex
+		weapon = $data_weapons[@weapon_id]
+		armor1 = $data_armors[@armor1_id]
+		armor2 = $data_armors[@armor2_id]
+		armor3 = $data_armors[@armor3_id]
+		armor4 = $data_armors[@armor4_id]
+		n += weapon != nil ? weapon.dex_plus : 0
+		n += armor1 != nil ? armor1.dex_plus : 0
+		n += armor2 != nil ? armor2.dex_plus : 0
+		n += armor3 != nil ? armor3.dex_plus : 0
+		n += armor4 != nil ? armor4.dex_plus : 0
+		return n
+	end
+	#--------------------------------------------------------------------------
+	# ● 기본 신속함의 취득
+	#--------------------------------------------------------------------------
+	def take_base_agi
+		n = agi
+		weapon = $data_weapons[@weapon_id]
+		armor1 = $data_armors[@armor1_id]
+		armor2 = $data_armors[@armor2_id]
+		armor3 = $data_armors[@armor3_id]
+		armor4 = $data_armors[@armor4_id]
+		n += weapon != nil ? weapon.agi_plus : 0
+		n += armor1 != nil ? armor1.agi_plus : 0
+		n += armor2 != nil ? armor2.agi_plus : 0
+		n += armor3 != nil ? armor3.agi_plus : 0
+		n += armor4 != nil ? armor4.agi_plus : 0
+		return n
+	end
+	#--------------------------------------------------------------------------
+	# ● 기본 마력의 취득
+	#--------------------------------------------------------------------------
+	def take_base_int
+		n = int
+		weapon = $data_weapons[@weapon_id]
+		armor1 = $data_armors[@armor1_id]
+		armor2 = $data_armors[@armor2_id]
+		armor3 = $data_armors[@armor3_id]
+		armor4 = $data_armors[@armor4_id]
+		n += weapon != nil ? weapon.int_plus : 0
+		n += armor1 != nil ? armor1.int_plus : 0
+		n += armor2 != nil ? armor2.int_plus : 0
+		n += armor3 != nil ? armor3.int_plus : 0
+		n += armor4 != nil ? armor4.int_plus : 0
+		return n
+	end
+	
+	
 	def take_base_maxhp
 		base_hp = maxhp
 		

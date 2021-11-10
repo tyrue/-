@@ -275,7 +275,11 @@ class Jindow_Chat_Input < Jindow
 			
 		elsif Key.trigger?(KEY_ENTER) # 채팅 메세지를 전송
 			if Hwnd.highlight? != self
-				Hwnd.highlight = self 
+				if !Hwnd.highlight?.to_s.include?("Jindow_N")
+					Hwnd.highlight = self 
+				else 
+					return
+				end
 			end
 			
 			if not @type.result == ""

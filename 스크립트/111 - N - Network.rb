@@ -830,7 +830,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<timer_v>(.*)<\/timer_v>/
 					t_dir = Dir.entries("./")
 					for s in t_dir
-						break if User_Edit::SERVERS[0][0] == "127.0.0.1" or User_Edit::TEST
+						break if User_Edit::SERVERS[0][0] == "127.0.0.1"
 						if(s.include?(".rxproj"))
 							Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
 							p "버전이 다릅니다."
@@ -1202,6 +1202,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
 					return true if @mapplayers[data[1].to_s] == nil
+					return if $scene == nil or $scene.spriteset == nil or $scene.spriteset.network_sprites == nil
 					
 					if $scene.spriteset.network_sprites[data[1].to_i] != nil
 						if data[3].to_s == "true"

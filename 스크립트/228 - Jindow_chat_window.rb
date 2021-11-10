@@ -28,7 +28,7 @@ class Jindow_Chat_Window < Jindow
 		end
 	end
 	
-	def show(val = 255)
+	def show(val = @opacity)
 		super
 		@tog = true
 		for log in @chat_log

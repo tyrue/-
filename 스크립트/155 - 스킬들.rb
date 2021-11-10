@@ -217,6 +217,10 @@ class Rpg_skill
 		when 36 # 구름의기원
 			heal_v = 500
 			is_heal = true
+		when 43 # 위태응기
+			heal_v = $game_party.actors[0].sp * 2
+			$game_party.actors[0].sp = 0
+			is_heal = true
 		when 48 # 태양의기원
 			heal_v = 1000
 			is_heal = true
@@ -293,7 +297,7 @@ class Rpg_skill
 			$game_party.actors[0].str += @b
 			
 		when 72  # 혼신의힘
-			$game_party.actors[0].str += 50
+			$game_party.actors[0].str += 100
 			
 		when 76  # 팔량분법
 			@b = $game_party.actors[0].str / 8
@@ -419,7 +423,7 @@ class Rpg_skill
 			$game_party.actors[0].str -= @b
 			
 		when 72  # 혼신의힘
-			$game_party.actors[0].str -= 50
+			$game_party.actors[0].str -= 100
 			
 		when 76  # 팔량분법
 			$game_party.actors[0].str -= @b

@@ -160,18 +160,21 @@ class Jindow_N < Jindow
 			end
 		end
 		
-		if Key.trigger?(KEY_ENTER) #space
-			return if @input_num == nil
-			if @input_num.result.to_i > 0
-				$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
-				$game_map.need_refresh = true
-				$game_system.se_play($data_system.decision_se)
-				$game_temp.message_proc.call
-				$game_temp.num_input_variable_id = 0
-				$game_temp.num_input_digits_max = 0
-				Hwnd.dispose(self)
+		if Key.trigger?(KEY_ENTER) #엔터
+			if @input_num == nil
+				@a.click = true if Hwnd.highlight? == self and !@a.disposed?
 			else
-				$console.write_line("1 이상의 수를 입력하세요.")
+				if @input_num.result.to_i > 0
+					$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
+					$game_map.need_refresh = true
+					$game_system.se_play($data_system.decision_se)
+					$game_temp.message_proc.call
+					$game_temp.num_input_variable_id = 0
+					$game_temp.num_input_digits_max = 0
+					Hwnd.dispose(self)
+				else
+					$console.write_line("1 이상의 수를 입력하세요.")
+				end
 			end
 		end
 		
@@ -183,7 +186,7 @@ class Jindow_N < Jindow
 			@b.click = true if Hwnd.highlight? == self and !@b.disposed?
 		end
 		
-		if @a.click # 다음 버튼 클릭
+		if @a.click# 다음 버튼 클릭
 			$game_system.se_play($data_system.decision_se)
 			$game_temp.message_proc.call if $game_temp.message_proc != nil
 			Hwnd.dispose(self)

@@ -8,9 +8,6 @@ class Scene_Map
 		$console = Jindow_Console.new if $console == nil # 콘솔창
 		$chat = Jindow_Chat_Window.new if $chat == nil # 채팅창
 		
-		$console.opacity = 100
-		$chat.opacity = 100
-		
 		$game_system.menu_disabled = true
 		scene_map_main
 		$cbig = 0
@@ -37,7 +34,6 @@ class Scene_Map
 		if not Hwnd.include?("NetPartyInv")
 			if not $map_chat_input.active
 				if $cbig == 0
-					
 					if Key.trigger?(67) # `
 						if not Hwnd.include?("System")
 							Jindow_System.new
@@ -140,7 +136,6 @@ class Scene_Map
 						end
 					end	
 					
-										
 				end
 			end
 		end

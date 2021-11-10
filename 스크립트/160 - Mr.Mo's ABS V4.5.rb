@@ -136,15 +136,15 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
-	RANGE_SKILLS[74] = [0, 5, "공격스킬2", 4, 0] #십리건곤
+	RANGE_SKILLS[74] = [1, 5, "공격스킬2", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
-	RANGE_SKILLS[78] = [0, 5, "", 4, 0] #십리건곤 1성
+	RANGE_SKILLS[78] = [1, 5, "공격스킬2", 4, 0] #십리건곤 1성
 	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
-	RANGE_SKILLS[80] = [0, 5, "", 4, 0] #십리건곤 2성
+	RANGE_SKILLS[80] = [1, 5, "공격스킬2", 4, 0] #십리건곤 2성
 	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
-	RANGE_SKILLS[101] = [0, 5, "", 4, 0] #백호참
-	RANGE_SKILLS[102] = [1, 6, "공격스킬2", 4, 0] #백리건곤 1성
+	RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0] #백호참
+	RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
 	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
 	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3] #초혼비무
@@ -228,20 +228,20 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 전사
 	SKILL_MASH_TIME[65] = [10 * sec, 0] # 뢰마도
-	SKILL_MASH_TIME[67] = [5 * sec, 0] # 건곤대나이
-	SKILL_MASH_TIME[73] = [8 * sec, 0] # 광량돌격
+	SKILL_MASH_TIME[67] = [4 * sec, 0] # 건곤대나이
+	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
 	SKILL_MASH_TIME[75] = [7 * sec, 0] # 뢰마도 1성
 	SKILL_MASH_TIME[77] = [5 * sec, 0] # 유비후타
-	SKILL_MASH_TIME[79] = [60 * sec, 0] # 동귀어진
-	SKILL_MASH_TIME[101] = [4 * sec, 0] # 백호참
+	SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
+	SKILL_MASH_TIME[101] = [3 * sec, 0] # 백호참
 	SKILL_MASH_TIME[103] = [20 * sec, 0] # 어검술
 	SKILL_MASH_TIME[104] = [80 * sec, 0] # 포효검황
 	SKILL_MASH_TIME[105] = [140 * sec, 0] # 혈겁만파
 	SKILL_MASH_TIME[106] = [60 * sec, 0] # 초혼비무
 	
 	# 도적
-	SKILL_MASH_TIME[133] = [4 * sec, 0] # 필살검무
-	SKILL_MASH_TIME[135] = [4 * sec, 0] # 백호검무
+	SKILL_MASH_TIME[133] = [3 * sec, 0] # 필살검무
+	SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	SKILL_MASH_TIME[138] = [5 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [140 * sec, 0] # 분혼경천
@@ -1082,13 +1082,18 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 공격키가 눌렸니?
 				if Input.trigger?(@attack_key)
-					#Check State Effect
-					if STATE_EFFECTS
-						for id in $game_party.actors[0].states
-							# 만약 죽은 상태면 공격 못함
-							return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
-						end
+					# 만약 죽은 상태면 공격 못함
+					if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
+						$console.write_line("귀신을 할 수 없습니다.")
+						return 
 					end
+					
+					# 상태에 따라 공격 다르게 하기 (미정ㅋ)
+					#~ if STATE_EFFECTS
+						#~ for id in $game_party.actors[0].states
+							#~ return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
+						#~ end
+					#~ end
 					return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
 					return player_melee
 				end
@@ -1291,6 +1296,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			ani = 0
 			dmg = 0
 			return if WEAPON_SKILL[id] == nil
+			return if e == nil or e.damage == nil
 			ra = WEAPON_SKILL[id][2]
 			
 			if r < ra
@@ -2528,9 +2534,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					actor.event.animation_id = @skill.animation2_id 
 					Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
 				end
-				
-				e = actor
-				
+				$ABS.weapon_skill(enemy.weapon_id, actor) # 특정 무기를 착용하면 추가 격 데미지가 있음
 				
 				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
@@ -2787,6 +2791,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				actor.attack_effect(enemy)
 				#Show animation on event
 				actor.event.animation_id = @range_weapon[2] if actor.damage != "Miss" and actor.damage != 0
+				
+				$ABS.weapon_skill(enemy.weapon_id, actor) # 특정 무기를 착용하면 추가 격 데미지가 있음
 				#jump
 				#$ABS.jump(actor.event, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
@@ -3577,11 +3583,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					# 전사스킬
 				when 67 # 건곤대나이
-					power += user.hp * 2 
+					power += user.hp * 2.5 
 					user.hp -= (user.hp / 3) * 2
 				when 73 # 광량돌격
-					power += user.maxhp * 1.5 
-					user.hp -= user.maxhp / 6
+					power += user.hp * 1.2 
+					user.hp -= user.hp / 2
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
 					power += user.maxhp / 8 + 10
@@ -3592,14 +3598,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= user.maxhp / 9
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
-					power += user.hp * 5
+					power += user.hp * 6
 					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
 					power += user.maxhp / 6 + 20
 					user.hp -= user.maxhp / 8
 					user.hp = 1 if user.hp <= 0
 				when 101 # 백호참
-					power += user.hp * 2.5
+					power += user.hp * 3
 					user.hp -= user.hp / 2
 				when 102 # 백리건곤 1성
 					power += user.maxhp / 6 + 30
@@ -3672,9 +3678,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도사스킬
 				when 96 # 지진
 					$e_v += 1
-					power += user.maxsp / 80
+					power += user.maxsp / 80 + 20
 					if $e_v == $alive_size
-						user.sp -= user.maxsp / 10
+						user.sp -= user.maxsp / 20
 					end	
 					
 					# 적 유닛 스킬

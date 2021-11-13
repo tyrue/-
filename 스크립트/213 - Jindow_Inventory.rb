@@ -108,7 +108,13 @@ class Jindow_Inventory < Jindow
 				
 				case i.type
 				when 0 # 아이템
-					$game_party.actors[0].item_effect(i.item)
+					if (i.item.recover_hp > 0 or i.item.recover_hp_rate > 0) and ($game_party.actors[0].hp == $game_party.actors[0].maxhp)
+						$console.write_line("이미 완전 회복된 상태 입니다.")
+						next
+					else
+						$game_party.actors[0].item_effect(i.item)
+					end
+					
 					$game_system.se_play(i.item.menu_se)
 					if i.item.consumable
 						$game_party.lose_item(i.item.id, 1)

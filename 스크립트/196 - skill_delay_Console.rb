@@ -26,7 +26,7 @@ class Skill_Delay_Console < Sprite
 		@console_max_line = max_line
 		@console_log = {}
 		@tog = true
-		# 스킬 딜레이 갱신
+		# 스킬 딜레이 갱신 id, 배열값
 		for skill_mash in SKILL_MASH_TIME
 			if skill_mash[1][1] > 0
 				sprite = Sprite_Chat.new(@console_viewport)
@@ -117,6 +117,7 @@ class Skill_Delay_Console < Sprite
 	#     text : 출력하는 문자열
 	#--------------------------------------------------------------------------
 	def write_line(id)
+		@console_log[id][0].dispose if @console_log[id] != nil and !@console_log[id][0].disposed?
 		sprite = Sprite_Chat.new(@console_viewport)
 		
 		if SKILL_MASH_TIME[id] != nil

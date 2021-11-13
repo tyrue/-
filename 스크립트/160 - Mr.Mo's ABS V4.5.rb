@@ -93,7 +93,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#Ranged Skills
 	RANGE_SKILLS = {}
 	# RANGE_SKILLS[Skill_ID] = [Range, Move Speed, Character Set Name, Mash Time(in seconds), Kick Back(in tiles)]
-	# 범위, 이동속도, 캐릭터이름, 지속시간, 넉백 범위
+	# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위
 	# 데이터베이스 보고 범위 스킬 id넣으면 됨
 	# 주술사 스킬
 	RANGE_SKILLS[1] = [10, 10, "공격스킬2", 4, 0] 	#뢰진주
@@ -135,7 +135,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
 	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
-	RANGE_SKILLS[73] = [4, 6, "공격스킬2", 4, 0] #광량돌격
+	RANGE_SKILLS[73] = [0, 6, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [1, 5, "공격스킬2", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
@@ -244,7 +244,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	SKILL_MASH_TIME[138] = [5 * sec, 0] # 무형검
-	SKILL_MASH_TIME[139] = [140 * sec, 0] # 분혼경천
+	SKILL_MASH_TIME[139] = [120 * sec, 0] # 분혼경천
 	# 도사
 	
 	
@@ -258,7 +258,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
 	SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
 	SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
-	SKILL_BUFF_TIME[42] = [5 * sec, 0] # 주술마도
+	SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
 	SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
 	
 	
@@ -268,8 +268,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
 	SKILL_BUFF_TIME[66] = [20 * sec, 0] # 신수둔각도
 	SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
-	SKILL_BUFF_TIME[76] = [5 * sec, 0] # 팔량분법
-	SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
+	SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
+	SKILL_BUFF_TIME[71] = [30 * sec, 0] # 혼신의힘
 	
 	
 	# 도사
@@ -283,7 +283,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
 	SKILL_BUFF_TIME[131] = [60 * sec, 0] # 투명
 	SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
-	SKILL_BUFF_TIME[136] = [10 * sec, 0] # 운상미보
+	SKILL_BUFF_TIME[136] = [60 * sec, 0] # 운상미보
 	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
 	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
 	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
@@ -1084,15 +1084,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				if Input.trigger?(@attack_key)
 					# 만약 죽은 상태면 공격 못함
 					if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
-						$console.write_line("귀신을 할 수 없습니다.")
+						$console.write_line("귀신은 할 수 없습니다.")
 						return 
 					end
 					
 					# 상태에 따라 공격 다르게 하기 (미정ㅋ)
 					#~ if STATE_EFFECTS
-						#~ for id in $game_party.actors[0].states
-							#~ return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
-						#~ end
+					#~ for id in $game_party.actors[0].states
+					#~ return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
+					#~ end
 					#~ end
 					return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
 					return player_melee
@@ -1131,8 +1131,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					#~ # 아직 버프가 지속중이면 무시
 					#~ skill_mash = SKILL_BUFF_TIME[id]
 					#~ if skill_mash != nil and skill_mash[1]/60.0 > 0
-						#~ $console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
-						#~ return
+					#~ $console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
+					#~ return
 					#~ end
 					
 					if RANGE_EXPLODE.has_key?(id)
@@ -1160,6 +1160,11 @@ if SDK.state("Mr.Mo's ABS") == true
 						return if STUN_EFFECT.include?(i)
 					end
 				end
+				if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
+					$console.write_line("귀신은 할 수 없습니다.")
+					return 
+				end
+				
 				
 				# 아이템데이터 가져옴
 				item = $data_items[@item_keys[key]]
@@ -1170,6 +1175,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# Apply item use effects to target actor
 				target = $game_party.actors[0]
+				
+				if (item.recover_hp > 0 or item.recover_hp_rate > 0) and (target.hp == target.maxhp)
+					$console.write_line("이미 완전 회복된 상태 입니다.")
+					return
+				end
 				
 				target.item_effect(item)
 				# If an item was used
@@ -1275,7 +1285,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				# next if not $game_switches[302] == false
 				# 만약 pvp 스위치 켜져 있으면  싸움 가능
 				# 해당 대상 애니메이션 재생하도록 보냄
-				ani_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id
+				ani_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id if $data_weapons[$game_party.actors[0].weapon_id] != nil
+				ani_id = 109 if ani_id == nil
 				$ani_character[player.netid.to_i].animation_id = ani_id if $ani_character[player.netid.to_i] != nil
 				Network::Main.ani(player.netid, ani_id)
 				
@@ -1528,7 +1539,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 			# 엑터가 사용할 수 없는 상황이면 무시
-			return if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
+			if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
+				$console.write_line("스킬을 사용 할 수 없습니다.")
+				return 
+			end
+			
 			# 스킬 사용 불가 지역
 			if $game_switches[25]
 				$console.write_line("스킬 사용 불가 지역입니다.")
@@ -1556,6 +1571,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.party_heal(id) # 이게 파티 회복 스킬인지 확인
 			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.party_buff(id) # 파티 버프 스킬인지 확인
+			$rpg_skill.active_skill(id) # 액티브 스킬 행동 커스텀 확인
 			skill_console(id)   # 스킬 딜레이 표시
 			
 			# 커먼 이벤트 실행
@@ -1571,20 +1587,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get the skill scope
 			# 스킬 맞는 쪽
 			case skill.scope
-			when 0
+			when 0 # 자기 자신
 				@actor.sp -= skill.sp_cost
 				@button_mash = MASH_TIME * 2
 			when 1 #Enemy 적
 				# 원거리 스킬인가?
 				if RANGE_SKILLS.has_key?(skill.id)
-					#Add to range
+					# 원거리 스킬 캐릭터 생성
 					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
 					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 					#Take off SP
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
-					#Add mash time
-					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10)
+					# 스킬 사용 후 딜레이
+					@button_mash = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10)
 					return
 				end
 				
@@ -1724,7 +1740,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
 				return
 			end
-						
+			
 			$e_v = 0 # enemy_value, 맞출 적의 수
 			w = RANGE_EXPLODE[skill.id]
 			# Show Animation
@@ -1820,6 +1836,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			#If the player is dead;
+			Audio.se_play("Audio/SE/죽음")
+			Network::Main.ani(Network::Main.id, 199)
 			
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			$cha_name = $game_party.actors[0].character_name
@@ -3368,16 +3386,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Calculate basic damage
 				
 				if self.is_a?(Game_Actor)
-					atk = [(attacker.atk + attacker.str / 100.0)- (self.base_pdef * 2 / 5), (attacker.atk / 20.0)].max
+					atk = [(attacker.atk + attacker.str / 100.0) - (self.base_pdef * 2 / 5), (attacker.atk / 20.0)].max
 				else
-					atk = [(attacker.atk + attacker.str / 100.0)- (self.pdef * 2 / 5), (attacker.atk / 20.0)].max
+					atk = [(attacker.atk + attacker.str / 100.0) - (self.pdef * 2 / 5), (attacker.atk / 20.0)].max
 				end
-				
-				
 				self.damage = (atk * (20 + attacker.str) / 20.0)
+				
+				#self.damage = [((self.damage) * (1.0 - ([self.base_pdef, limit_v].min) / limit_v)).to_i, (self.damage * 0.1).to_i].max
 				# Element correction
 				if !attacker.is_a?(Game_NetPlayer)
-					self.damage *= elements_correct(attacker.element_set) 
+					self.damage *= elements_correct(attacker.element_set)  # 기본 반환값이 100임
 					self.damage /= 100 
 				end
 				
@@ -3409,7 +3427,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				#eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
 				eva = [(8 * self.agi / a_dex), 100].min
 				
-				hit = self.damage < 0 ? 100 : [100 - eva, 25].max
+				hit = self.damage < 0 ? 100 : [100 - eva, 10].max
 				hit = self.cant_evade? ? 100 : hit # 피할 수 없는 경우?
 				
 				hit_result = (rand(100) < hit)
@@ -3444,7 +3462,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				r = rand(100)
-				if r <= (self.damage * 100 / self.maxhp) or r <= 30
+				if r <= (self.damage * 100 / self.maxhp) or r <= 40
 					if !self.is_a?(Game_Actor)
 						
 						$ABS.enemies[self.event.id].aggro = true
@@ -3710,10 +3728,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				if self.damage > 0
+					limit = 300.0
 					if self.is_a?(Game_Actor)
-						self.damage = (self.damage/4) + ((self.damage * 3) / ([self.base_pdef / 10, 3].max + [self.base_mdef / 5, 1].max))
+						self.damage = [((self.damage) * (1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.01).to_i].max
 					else
-						self.damage = (self.damage/4) + ((self.damage * 3) / ([self.pdef / 30, 3].max + [self.mdef / 15, 1].max))
+						self.damage = [((self.damage) * (1.0 - ([self.pdef + self.mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.01).to_i].max
 					end
 				end
 				
@@ -3880,16 +3899,18 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     turn_enabled : a flag permits direction change on that spot
 		#--------------------------------------------------------------------------
 		def move_down(turn_enabled = true, is_ok = false) # is_ok : 이동 가능
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
-				# 내 어그로가 아닌데 움직여도 되는가? 
-				return if !is_ok
+			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
+				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
 			end
 			# Turn down
 			if turn_enabled
-				turn_down
+				if @direction != 2
+					turn_down
+				end
 			end
 			# If passable
 			if passable?(@x, @y, 2)
+				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 				# Turn down
 				turn_down
 				# Update coordinates
@@ -3899,9 +3920,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				# If impassable
 				# 이때 계속 몹 정보 보내주면?
 				
-				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},1,#{self.x},#{self.y}</mon_move>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 				end
 			else
 				# Determine if touch event is triggered
@@ -3912,27 +3933,32 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Move Left
 		#     turn_enabled : a flag permits direction change on that spot
 		#--------------------------------------------------------------------------
-		def move_left(turn_enabled = true, is_ok = false)		
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
-				return if !is_ok
-			end	
+		def move_left(turn_enabled = true, is_ok = false) # is_ok는 외부요인으로 옮기는거		
+			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
+				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
+			end
+			
 			# Turn left
 			if turn_enabled
-				turn_left
+				if @direction != 4
+					turn_left
+				end
 			end
+			
 			# If passable
 			if passable?(@x, @y, 4)
 				# Turn left
 				turn_left
+				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 				# Update coordinates
 				@x -= 1
 				# Increase steps
 				increase_steps
 				# If impassable
 				# 이때 계속 몹 정보 보내주면?
-				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},2,#{self.x},#{self.y}</mon_move>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 				end
 			else
 				# Determine if touch event is triggered
@@ -3944,26 +3970,31 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     turn_enabled : a flag permits direction change on that spot
 		#--------------------------------------------------------------------------
 		def move_right(turn_enabled = true, is_ok = false)
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
-				return if !is_ok
+			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
+				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
 			end
-			# Turn right
+			
+			# Turn left
 			if turn_enabled
-				turn_right
+				if @direction != 6
+					turn_right
+				end
 			end
+			
 			# If passable
 			if passable?(@x, @y, 6)
 				# Turn right
 				turn_right
+				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 				# Update coordinates
 				@x += 1
 				# Increase steps
 				increase_steps
 				# If impassable
 				# 이때 계속 몹 정보 보내주면?
-				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},3,#{self.x},#{self.y}</mon_move>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 				end
 			else
 				# Determine if touch event is triggered
@@ -3975,26 +4006,31 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     turn_enabled : a flag permits direction change on that spot
 		#--------------------------------------------------------------------------
 		def move_up(turn_enabled = true, is_ok = false)
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
-				return if !is_ok
+			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
+				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
 			end
+			
 			# Turn up
 			if turn_enabled
-				turn_up
+				if @direction != 8
+					turn_up
+				end
 			end
+			
 			# If passable
 			if passable?(@x, @y, 8)
 				# Turn up
 				turn_up
+				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 				# Update coordinates
 				@y -= 1
 				# Increase steps
 				increase_steps
 				# If impassable
 				# 이때 계속 몹 정보 보내주면?
-				if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},4,#{self.x},#{self.y}</mon_move>\n")
+					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 				end
 			else
 				# Determine if touch event is triggered

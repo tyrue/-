@@ -13,8 +13,8 @@ class Jindow_Drop < Jindow
 		@drag = true
 		@close = true
 		self.refresh "Item_Drop"
-		self.x = 640 / 2 - self.max_width / 2
-		self.y = 480 / 2 - self.max_height / 2
+		self.x = 640 / 3 - self.max_width / 3
+		self.y = 480 / 3 - self.max_height / 3
 		
 		@type1 = type1
 		@type2 = type2
@@ -67,6 +67,7 @@ class Jindow_Drop < Jindow
 					$game_party.lose_gold(num)
 					create_moneys(num, x, y)
 					$console.write_line("금전 #{num}전을 버렸습니다.")
+					Hwnd.dispose(self)
 				else
 					$console.write_line("금전이 부족합니다")
 				end
@@ -81,6 +82,7 @@ class Jindow_Drop < Jindow
 						$game_party.lose_item(@item_id, num)
 						$console.write_line("#{$data_items[@item_id].name} #{num}개를 버렸습니다.")
 						create_drops(@type2, @item_id, x, y, num)
+						Hwnd.dispose(self)
 					else
 						$console.write_line("개수가 부족합니다")
 						return
@@ -90,6 +92,7 @@ class Jindow_Drop < Jindow
 						$game_party.lose_weapon(@item_id, num)
 						$console.write_line("#{$data_weapons[@item_id].name} #{num}개를 버렸습니다.")
 						create_drops(@type2, @item_id, x, y, num)
+						Hwnd.dispose(self)
 					else
 						$console.write_line("개수가 부족합니다")
 						return
@@ -99,6 +102,7 @@ class Jindow_Drop < Jindow
 						$game_party.lose_armor(@item_id, num)
 						$console.write_line("#{$data_armors[@item_id].name} #{num}개를 버렸습니다.")
 						create_drops(@type2, @item_id, x, y, num)
+						Hwnd.dispose(self)
 					else
 						$console.write_line("개수가 부족합니다")
 						return

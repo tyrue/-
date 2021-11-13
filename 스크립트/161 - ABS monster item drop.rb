@@ -72,7 +72,7 @@ class MrMo_ABS
 				type = d[0]
 				id = d[1]
 				take_num = rand(d[2]) + 1
-				chance = d[3]
+				chance = d[3] * DROP_EVENT
 				sw = d[4]
 				
 				if r <= chance
@@ -105,6 +105,9 @@ class MrMo_ABS
 			end
 		end
 	end
+	
+	# 드랍율 이벤트
+	DROP_EVENT = 1
 	
 	# 아이템 드랍 데이터
 	# [몬스터 아이디] = [[최대 드랍될 아이템 개수], [타입(아이템 0, 무기 1, 장비 2, 돈 3), 아이템 id or money, 최대 나올 개수, 드랍 확률, (조건스위치)], ...] 

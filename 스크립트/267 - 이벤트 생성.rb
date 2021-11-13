@@ -28,6 +28,7 @@ def create_events(no, mob_id, map_id, direction, x, y)
 	event.refresh
 end
 
+
 #drop 번호, 아이템 타입1, 아이템 타입2, 아이템 id, 맵 아이디, x좌표, y좌표
 def create_drops(type, id, x, y, num = 1)
 	d_id = check_drop_id

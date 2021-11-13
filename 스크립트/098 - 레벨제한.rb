@@ -24,11 +24,11 @@
 BASE_FINAL_LEVEL = 100   #상한 레벨（level）(그다지 큰 값을 설정한다면 항 합니다)
 MAXHP_LIMIT = 20000000    #HP 한계 치
 MAXSP_LIMIT = 20000000    #SP 한계 치
-STR_LIMIT   = 2000      	#STR 한계 치
-DEX_LIMIT   = 2000      	#DEX 한계 치
-AGI_LIMIT   = 2000      	#AGI 한계 치
-INT_LIMIT   = 2000      	#INT 한계 치
-BONUS_LIMIT = 1000					#아이템 착용시 더 추가 할수 있는 능력치
+STR_LIMIT   = 4000      	#STR 한계 치
+DEX_LIMIT   = 4000      	#DEX 한계 치
+AGI_LIMIT   = 4000      	#AGI 한계 치
+INT_LIMIT   = 4000      	#INT 한계 치
+BONUS_LIMIT = 5000					#아이템 착용시 더 추가 할수 있는 능력치
 
 MAX_EXP			= 4200000000  #만렙시 경험치 
 
@@ -269,7 +269,7 @@ class Game_Battler
 		for i in @states
 			n *= $data_states[i].str_rate / 100.0
 		end
-		n = [[Integer(n), 1].max, STR_LIMIT].min
+		n = [[Integer(n), 1].max, STR_LIMIT + BONUS_LIMIT].min
 		return n
 	end
 	#--------------------------------------------------------------------------
@@ -280,7 +280,7 @@ class Game_Battler
 		for i in @states
 			n *= $data_states[i].dex_rate / 100.0
 		end
-		n = [[Integer(n), 1].max, DEX_LIMIT].min
+		n = [[Integer(n), 1].max, DEX_LIMIT + BONUS_LIMIT].min
 		return n
 	end
 	#--------------------------------------------------------------------------
@@ -291,7 +291,7 @@ class Game_Battler
 		for i in @states
 			n *= $data_states[i].agi_rate / 100.0
 		end
-		n = [[Integer(n), 1].max, AGI_LIMIT].min
+		n = [[Integer(n), 1].max, AGI_LIMIT + BONUS_LIMIT].min
 		return n
 	end
 	#--------------------------------------------------------------------------
@@ -302,7 +302,7 @@ class Game_Battler
 		for i in @states
 			n *= $data_states[i].int_rate / 100.0
 		end
-		n = [[Integer(n), 1].max, INT_LIMIT].min
+		n = [[Integer(n), 1].max, INT_LIMIT + BONUS_LIMIT].min
 		return n
 	end
 	#--------------------------------------------------------------------------
@@ -329,7 +329,7 @@ class Game_Battler
 	#--------------------------------------------------------------------------
 	def str=(str)
 		@str_plus += str - self.str
-		@str_plus = [[@str_plus, -STR_LIMIT].max, STR_LIMIT].min
+		@str_plus = [[@str_plus, -STR_LIMIT].max, STR_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● 손재주가 사노 설정
@@ -337,7 +337,7 @@ class Game_Battler
 	#--------------------------------------------------------------------------
 	def dex=(dex)
 		@dex_plus += dex - self.dex
-		@dex_plus = [[@dex_plus, -DEX_LIMIT].max, DEX_LIMIT].min
+		@dex_plus = [[@dex_plus, -DEX_LIMIT].max, DEX_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● 신속함의 설정
@@ -345,7 +345,7 @@ class Game_Battler
 	#--------------------------------------------------------------------------
 	def agi=(agi)
 		@agi_plus += agi - self.agi
-		@agi_plus = [[@agi_plus, -AGI_LIMIT].max, AGI_LIMIT].min
+		@agi_plus = [[@agi_plus, -AGI_LIMIT].max, AGI_LIMIT + BONUS_LIMIT].min
 	end
 	#--------------------------------------------------------------------------
 	# ● 마력의 설정
@@ -353,6 +353,6 @@ class Game_Battler
 	#--------------------------------------------------------------------------
 	def int=(int)
 		@int_plus += int - self.int
-		@int_plus = [[@int_plus, -INT_LIMIT].max, INT_LIMIT].min
+		@int_plus = [[@int_plus, -INT_LIMIT].max, INT_LIMIT + BONUS_LIMIT].min
 	end
 end

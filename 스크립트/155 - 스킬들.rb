@@ -132,6 +132,7 @@ REQ_SKILL_DATA[4] =
 	[70, 5, 5, 34, 29, 30], 		# 귀환
 	[75, 15, 20, 141, 29, 30], 	# 투명 1성
 	[80, 10, 10, 28, 29, 30], 	# 야수
+	[81, 10, 25, 43, 29, 30], 		# 위태응기
 	[88, 20, 3, 142, 30, 31], 	# 투명 2성
 	[92, 5, 3, 140, 31, 37], 	# 운기
 	[99, 5, 3, 134, 31, 37],	# 분신
@@ -170,31 +171,32 @@ PARTY_BUFF_SKILL[88] = [] # 분량력법
 PARTY_BUFF_SKILL[90] = [] # 분량방법
 PARTY_BUFF_SKILL[46] = [] # 무장
 PARTY_BUFF_SKILL[47] = [] # 보호
+PARTY_BUFF_SKILL[136] = [] # 운상미보
 
 # 버프 스킬 값 저장
 BUFF_SKILL = {} # 스텟(int, dex, str, agi등), 값 
 BUFF_SKILL[26] = [["str", 20]] # 누리의힘
 BUFF_SKILL[28] = [["com", 40]] # 야수
 BUFF_SKILL[35] = [["com", 42]] # 비호
-BUFF_SKILL[42] = [["per_int", 1.2]] # 주술마도
+BUFF_SKILL[42] = [["per_int", 1.5, 0]] # 주술마도
 
 BUFF_SKILL[50] = [["com", 40]] # 야수수금술
-BUFF_SKILL[88] = [["str", 15]] # 분량력법
-BUFF_SKILL[90] = [["agi", 50]] # 분량방법
-BUFF_SKILL[46] = [["mdef", 7], ["pdef", 7]] # 무장
-BUFF_SKILL[47] = [["mdef", 10], ["pdef", 10]] # 보호
+BUFF_SKILL[88] = [["per_str", 1.5, 0]] # 분량력법
+BUFF_SKILL[90] = [["per_agi", 1.5, 0]] # 분량방법
+BUFF_SKILL[46] = [["mdef", 10], ["pdef", 10]] # 무장
+BUFF_SKILL[47] = [["mdef", 15], ["pdef", 15]] # 보호
 
-BUFF_SKILL[62] = [["dex", 30]] # 수심각도
-BUFF_SKILL[63] = [["agi", 30]] # 반영대도
-BUFF_SKILL[64] = [["per_str", 1.1]] # 십량분법
+BUFF_SKILL[62] = [["dex", 50]] # 수심각도
+BUFF_SKILL[63] = [["agi", 50]] # 반영대도
+BUFF_SKILL[64] = [["per_str", 1.2, 0]] # 십량분법
 BUFF_SKILL[66] = [["custom", 1]] # 신수둔각도
-BUFF_SKILL[71] = [["per_str", 1.2]] # 구량분법
-BUFF_SKILL[72] = [["str", 100]] # 혼신의힘
-BUFF_SKILL[76] = [["per_str", 1.3]] # 팔량분법
+BUFF_SKILL[71] = [["per_str", 1.3, 0]] # 구량분법
+BUFF_SKILL[72] = [["per_str", 2, 0]] # 혼신의힘
+BUFF_SKILL[76] = [["per_str", 1.4, 0]] # 팔량분법
 
 BUFF_SKILL[91] = [["com", 129]] # 석화기탄
 BUFF_SKILL[94] = [["mdef", 999], ["pdef", 999]] # 금강불체
-BUFF_SKILL[130] = [["dex", 30], ["agi", 30]] # 무영보법
+BUFF_SKILL[130] = [["dex", 50], ["agi", 50]] # 무영보법
 BUFF_SKILL[131] = [["custom", 1]] # 투명
 BUFF_SKILL[141] = [["custom", 1]] # 투명 1성
 BUFF_SKILL[142] = [["custom", 1]] # 투명 2성
@@ -202,6 +204,10 @@ BUFF_SKILL[134] = [["custom", 1]] # 분신
 BUFF_SKILL[136] = [["custom", 1]] # 운상미보
 BUFF_SKILL[140] = [["custom", 1]] # 운기
 
+# 액티브 스킬 행동 커스텀
+ACTIVE_SKILL = {}
+ACTIVE_SKILL[73] = [] # 광량돌격
+ACTIVE_SKILL[132] = [] # 비영승보
 
 class Rpg_skill
 	def update_buff
@@ -230,6 +236,7 @@ class Rpg_skill
 		heal_v = 1
 		if PARTY_HEAL_SKILL[id] != nil
 			heal_v = PARTY_HEAL_SKILL[id][0].to_i 
+			heal_v += ($game_party.actors[0].maxsp * 0.001).to_i
 			heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
 			is_heal = true
 		end
@@ -299,6 +306,7 @@ class Rpg_skill
 		end
 		
 		if is_heal
+			heal_v += ($game_party.actors[0].maxhp * 0.001).to_i
 			$game_party.actors[0].critical = "heal"
 			$game_party.actors[0].damage = heal_v.to_s
 			$game_party.actors[0].hp += heal_v
@@ -327,28 +335,32 @@ class Rpg_skill
 				when "pdef" # 물리 방어
 					$game_party.actors[0].pdef += data[1].to_i
 					
-				# 퍼센트
+					# 퍼센트
 				when "per_str" # 힘
 					base = $game_party.actors[0].take_base_str
-					n = base * data[1].to_f - base
+					n = (base * (data[1].to_f - 1.0)).to_i
+					data[2] = n
 					$game_party.actors[0].str += n
 				when "per_dex" # 손재주
 					base = $game_party.actors[0].take_base_dex
-					n = base * data[1].to_f - base
+					n = (base * (data[1].to_f - 1.0)).to_i
+					data[2] = n
 					$game_party.actors[0].dex += n
 				when "per_int" # 지력
 					base = $game_party.actors[0].take_base_int
-					n = base * data[1].to_f - base
+					n = (base * (data[1].to_f - 1.0)).to_i
+					data[2] = n
 					$game_party.actors[0].int += n
 				when "per_agi" # 민첩
 					base = $game_party.actors[0].take_base_agi
-					n = base * data[1].to_f - base
+					n = (base * (data[1].to_f - 1.0)).to_i
+					data[2] = n
 					$game_party.actors[0].agi += n
 				when "per_mdef" # 마법 방어
 					$game_party.actors[0].mdef *= data[1].to_f
 				when "per_pdef" # 물리 방어
 					$game_party.actors[0].pdef *= data[1].to_f
-				
+					
 				when "com" # 커먼 이벤트
 					$game_temp.common_event_id = data[1].to_i
 				when "custom" # 자체 수정
@@ -370,7 +382,7 @@ class Rpg_skill
 							$game_party.gain_weapon(3, 1)
 							$game_party.actors[0].equip(0, 3)
 						end
-							
+						
 					when 131, 141, 142 # 투명
 						self.투명
 						
@@ -409,23 +421,43 @@ class Rpg_skill
 				when "pdef" # 물리 방어
 					$game_party.actors[0].pdef -= data[1].to_i
 					
-				# 퍼센트
+					# 퍼센트
 				when "per_str" # 힘
-					base = $game_party.actors[0].take_base_str
-					n = base - base / data[1].to_f
+					n = 0
+					if(data[2] != nil and data[2] != 0)
+						n = data[2]
+					else
+						base = $game_party.actors[0].take_base_str
+						n = base * (1 - 1.0 / data[1].to_f)
+					end
 					$game_party.actors[0].str -= n
 				when "per_dex" # 손재주
-					base = $game_party.actors[0].take_base_dex
-					n = base - base / data[1].to_f
+					n = 0
+					if(data[2] != nil and data[2] != 0)
+						n = data[2]
+					else
+						base = $game_party.actors[0].take_base_dex
+						n = base * (1 - 1.0 / data[1].to_f)
+					end
 					$game_party.actors[0].dex -= n
 				when "per_int" # 지력
-					base = $game_party.actors[0].take_base_int
-					n = base - base / data[1].to_f
+					n = 0
+					if(data[2] != nil and data[2] != 0)
+						n = data[2]
+					else
+						base = $game_party.actors[0].take_base_int
+						n = base * (1 - 1.0 / data[1].to_f)
+					end
 					$game_party.actors[0].int -= n 
 				when "per_agi" # 민첩
-					base = $game_party.actors[0].take_base_agi
-					n = base - base / data[1].to_f
-					$game_party.actors[0].int -= n
+					n = 0
+					if(data[2] != nil and data[2] != 0)
+						n = data[2]
+					else
+						base = $game_party.actors[0].take_base_agi
+						n = base * (1 - 1.0 / data[1].to_f)
+					end
+					$game_party.actors[0].agi -= n
 				when "per_mdef" # 마법 방어
 					$game_party.actors[0].mdef /= data[1].to_f
 				when "per_pdef" # 물리 방어
@@ -439,24 +471,12 @@ class Rpg_skill
 						$game_temp.common_event_id = 41
 					when 50 # 야수금술
 						$game_temp.common_event_id = 41
-					when 42 # 주술마도
-						p data[1]
-						$game_party.actors[0].int -= data[1]
-					when 64  # 십량분법
-						$game_party.actors[0].str -= data[1]
 					when 66  # 신수둔각도
 						$game_party.actors[0].equip(0, 0)
 						$game_party.lose_weapon(1, 99)
 						$game_party.lose_weapon(2, 99)
 						$game_party.lose_weapon(3, 99)
 						$game_party.lose_weapon(4, 99)
-						
-					when 71  # 구량분법
-						$game_party.actors[0].str -= data[1]
-						
-					when 76  # 팔량분법
-						$game_party.actors[0].str -= data[1]
-						
 						
 					when 131, 141, 142 # 투명, 1, 2성
 						$game_variables[9] = 1
@@ -478,6 +498,18 @@ class Rpg_skill
 		end
 	end
 	
+	# 액티브 스킬 커스텀
+	def active_skill(id)
+		if ACTIVE_SKILL[id] != nil
+			case id
+			when 73 # 광량돌격
+				광량돌격
+			when 132
+				비영승보
+			end
+		end
+	end
+	
 	def 투명
 		u_hp = $game_party.actors[0].hp
 		u_hp -= u_hp / (20 - $game_variables[10])
@@ -487,6 +519,30 @@ class Rpg_skill
 		$game_variables[9] = 1
 		$state_trans = true # 현재 자신이 투명상태인걸 뜻함
 		Network::Main.send_trans(true)
+	end
+	
+	def 광량돌격(d = $game_player.direction)
+		move_num = 7 # 스킬 범위만큼
+		x = $game_player.x
+		y = $game_player.y
+		
+		for i in 0...move_num
+			if $game_player.passable?(x, y, $game_player.direction)
+				case $game_player.direction
+				when 2 # 아래
+					y += 1
+				when 4 # 왼쪽
+					x -= 1
+				when 6 # 오른쪽
+					x += 1
+				when 8 # 위
+					y -= 1
+				end
+			else
+				break
+			end
+		end
+		$game_player.moveto(x, y)
 	end
 	
 	def 비영승보(x = $game_player.x, y = $game_player.y, d = $game_player.direction)

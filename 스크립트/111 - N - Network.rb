@@ -1162,13 +1162,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						# 몹 이동
 						case data[2].to_i
-						when 1
-							$ABS.enemies[data[1].to_i].event.move_down(true, true)
 						when 2
-							$ABS.enemies[data[1].to_i].event.move_left(true, true)
-						when 3
-							$ABS.enemies[data[1].to_i].event.move_right(true, true)
+							$ABS.enemies[data[1].to_i].event.move_down(true, true)
 						when 4
+							$ABS.enemies[data[1].to_i].event.move_left(true, true)
+						when 6
+							$ABS.enemies[data[1].to_i].event.move_right(true, true)
+						when 8
 							$ABS.enemies[data[1].to_i].event.move_up(true, true)
 						end
 						if $ABS.enemies[data[1].to_i].event.x != x or $ABS.enemies[data[1].to_i].event.y != y
@@ -1885,7 +1885,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if data[1].to_i == $game_map.map_id
 						if $Drop[id] != nil
 							$Drop[id] = nil
-							delete_events(id)
+							$game_map.events[id].erase
 						end
 					end
 					

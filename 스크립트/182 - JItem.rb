@@ -78,6 +78,7 @@ module J
 			self.bitmap = Bitmap.new(@route2 + "item_win")
 			itemwin_mid = Sprite.new
 			itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
+			
 			item_bitmap = Sprite.new
 			if @item.icon_name == "" or @item.icon_name == nil
 				@item.icon_name = "null"	
@@ -124,7 +125,7 @@ module J
 			@click ? (@click = false) : 0
 			@double_click ? (@double_click = false) : 0
 			
-			if not @viewport.hudle
+			if not @viewport.hudle # 현재 진도우가 활성화 된 상태라면
 				if Input.mouse_lbutton
 					if not @push and Mouse.arrive_sprite_rect?(self) and @viewport.base? 
 						@push = true

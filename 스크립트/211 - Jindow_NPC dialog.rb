@@ -142,8 +142,8 @@ class Jindow_N < Jindow
 	end
 	
 	def dispose2
-		$game_temp.message_proc.call
-		$end_proc.call
+		$game_temp.message_proc.call if $game_temp.message_proc != nil
+		$end_proc.call if $end_proc != nil
 		super
 	end
 	

@@ -305,27 +305,27 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[14] = [150000, 125, 10]   		# 협가검
 	WEAPON_SKILL[17] = [5000, 196, 10]   		# 음양도
 	
-	
+	# 기타 검
 	WEAPON_SKILL[114] = [1500, 153, 40]   		# 주작의검
 	WEAPON_SKILL[115] = [100000, 194, 10] 		# 심판의 낫
 	WEAPON_SKILL[126] = [5000, 154, 40]   		# 참마도
-	WEAPON_SKILL[127] = [7000, 184, 40]   		# 청룡신검
+	WEAPON_SKILL[127] = [10000, 184, 40]   		# 청룡신검
 	
 	# 일본
-	WEAPON_SKILL[134] = [70000, 170, 20]   		# 일화접선
-	WEAPON_SKILL[135] = [70000, 171, 20]   		# 진일신검
-	WEAPON_SKILL[138] = [70000, 164, 20]   		# 청일기창
+	WEAPON_SKILL[134] = [50000, 170, 40]   		# 일화접선
+	WEAPON_SKILL[135] = [50000, 171, 40]   		# 진일신검
+	WEAPON_SKILL[138] = [50000, 164, 40]   		# 청일기창
 	
 	# 용무기
 	WEAPON_SKILL[142] = [2000, 123, 10]   		# 용마제사검
 	WEAPON_SKILL[143] = [5000, 123, 10]   		# 용마제칠검
 	WEAPON_SKILL[144] = [40000, 123, 10]   		# 용마제팔검
-	WEAPON_SKILL[145] = [200000, 196, 5]   		# 용마제구검
+	WEAPON_SKILL[145] = [400000, 196, 5]   		# 용마제구검
 	
 	WEAPON_SKILL[147] = [2000, 141, 10]   		# 용랑제사봉
 	WEAPON_SKILL[148] = [5000, 141, 10]   		# 용랑제칠봉
 	WEAPON_SKILL[149] = [40000, 141, 10]   		# 용랑제팔봉
-	WEAPON_SKILL[150] = [200000, 176, 5]   		# 용랑제구봉
+	WEAPON_SKILL[150] = [400000, 176, 5]   		# 용랑제구봉
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -577,8 +577,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get Event 
 			event.name = "[id#{@enemies[event.id].name}]" if @enemies[event.id].name != ""
 			@enemies[event.id].event = event
-			n = id[1].to_i
 			
+			n = id[1].to_i
 			if $enemy_spec.spec(n) != nil #
 				spec = $enemy_spec.spec(n)
 				
@@ -641,6 +641,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			@enemies[event.id].aggro = $is_map_first
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -678,6 +679,31 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.update_buff
 		end
 		
+		#--------------------------------------------------------------------------
+		# * 몬스터가 리스폰 될떄 현재 맵에서 랜덤으로 스폰 될 수 있도록
+		#--------------------------------------------------------------------------
+		def rand_spawn(e) # 몬스터 데이터를 받음
+			x = e.x
+			y = e.y
+			d = e.direction
+			
+			h = $game_map.height
+			w = $game_map.width
+			
+			while true
+				x = rand(w)
+				y = rand(h)
+				if $game_map.passable?(x, y, d)
+					e.moveto(x, y)
+					return
+				end
+			end
+		end
+		
+		
+		#--------------------------------------------------------------------------
+		# * ABS 비활성화 여부 확인
+		#--------------------------------------------------------------------------
 		def active_ok
 			return false if Hwnd.include?("NetPartyInv")
 			return false if Hwnd.include?("Trade")
@@ -3465,7 +3491,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= (self.damage * 100 / self.maxhp) or r <= 40
 					if !self.is_a?(Game_Actor)
 						
-						$ABS.enemies[self.event.id].aggro = true
+						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
 						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
 					end
 				end
@@ -3728,11 +3754,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				if self.damage > 0
-					limit = 300.0
+					limit = 400.0
 					if self.is_a?(Game_Actor)
-						self.damage = [((self.damage) * (1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.01).to_i].max
+						self.damage = [((self.damage) * (1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.1).to_i].max
 					else
-						self.damage = [((self.damage) * (1.0 - ([self.pdef + self.mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.01).to_i].max
+						self.damage = [((self.damage) * (1.0 - ([self.pdef + self.mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.1).to_i].max
 					end
 				end
 				

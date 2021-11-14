@@ -265,7 +265,7 @@ class Game_Battler
 	# ● 완력의 취득
 	#--------------------------------------------------------------------------
 	def str
-		n = [[base_str + @str_plus, 1].max, STR_LIMIT].min
+		n = [[base_str + @str_plus, 1].max, STR_LIMIT + BONUS_LIMIT].min
 		for i in @states
 			n *= $data_states[i].str_rate / 100.0
 		end
@@ -276,7 +276,7 @@ class Game_Battler
 	# ● 손재주가 사노 취득
 	#--------------------------------------------------------------------------
 	def dex
-		n = [[base_dex + @dex_plus, 1].max, DEX_LIMIT].min
+		n = [[base_dex + @dex_plus, 1].max, DEX_LIMIT + BONUS_LIMIT].min
 		for i in @states
 			n *= $data_states[i].dex_rate / 100.0
 		end
@@ -287,7 +287,7 @@ class Game_Battler
 	# ● 신속함의 취득
 	#--------------------------------------------------------------------------
 	def agi
-		n = [[base_agi + @agi_plus, 1].max, AGI_LIMIT].min
+		n = [[base_agi + @agi_plus, 1].max, AGI_LIMIT + BONUS_LIMIT].min
 		for i in @states
 			n *= $data_states[i].agi_rate / 100.0
 		end
@@ -298,7 +298,7 @@ class Game_Battler
 	# ● 마력의 취득
 	#--------------------------------------------------------------------------
 	def int
-		n = [[base_int + @int_plus, 1].max, INT_LIMIT].min
+		n = [[base_int + @int_plus, 1].max, INT_LIMIT + BONUS_LIMIT].min
 		for i in @states
 			n *= $data_states[i].int_rate / 100.0
 		end

@@ -1016,13 +1016,22 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					
 					
-					#---------------엔피씨 배치 시스템----------------       	
+					#---------------엔피씨 배치 시스템----------------     
+					# (no, mob_id, map_id, direction, x, y)  	
 				when /<npc_batch>(.*)<\/npc_batch>/ 
 					data = $1.split('.')
 					for npc_data in data
 						npc_data2 = npc_data.split(',')
-						if npc_data2[0].to_i != 0
-							create_events(npc_data2[0].to_i, npc_data2[1].to_i, npc_data2[2].to_i, npc_data2[3].to_i, npc_data2[4].to_i , npc_data2[5].to_i)
+						# 데이터 분해
+						no = npc_data2[0].to_i
+						mob_id = npc_data2[1].to_i
+						map_id = $game_map.map_id
+						direction = npc_data2[3].to_i
+						x = npc_data2[4].to_i
+						y = npc_data2[5].to_i
+						
+						if no != 0
+							create_events(no, mob_id, map_id, direction, x, y)
 						end
 					end
 					#return true
@@ -1773,14 +1782,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $ABS.enemies[data[1].to_i] != nil
 						# p "#{$ABS.enemies[data[1].to_i]}, #{data[1].to_i}"
 						# 몹 죽었을때 리스폰 시간 적용
-						$ABS.enemies[data[1].to_i].event.erased = false
 						event = $ABS.enemies[data[1].to_i].event
-						if $ABS.enemies[data[1].to_i].event != nil
-							$ABS.enemies[data[1].to_i].event.moveto(data[2].to_i, data[3].to_i)
-							$ABS.enemies[data[1].to_i].event.direction = data[4].to_i
+						if event != nil
+							event.erased = false
+							event.moveto(data[2].to_i, data[3].to_i)
+							event.direction = data[4].to_i
+							$ABS.rand_spawn(event) # 랜덤 위치 스폰
+							event.refresh
+							$game_map.refresh
 						end
-						event.refresh
-						$game_map.refresh
 					end
 					
 				when /<enemy_dead>(.*),(.*),(.*),(.*)<\/enemy_dead>/	

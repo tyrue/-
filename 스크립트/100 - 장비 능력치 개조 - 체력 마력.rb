@@ -131,7 +131,7 @@ class Set_Armor_plus
 		@data[30] = [5000, 3000]	# 가릉빈가의 날개옷
 		@data[32] = [300, 1000]		# 현인의영혼
 		@data[41] = [1500, 300]		# 검황의영혼
-		@data[42] = [1500, 1000]	# 황혼의갑주
+		@data[42] = [2000, 2000]	# 황혼의갑주
 		@data[43] = [1200, 1200]	# 산신의정화
 		@data[44] = [375, 275]		# 황혼의활복
 		@data[52] = [300, 1000]		# 진인의영혼
@@ -267,11 +267,11 @@ class Game_Actor
 		armor2 = $data_armors[@armor2_id]
 		armor3 = $data_armors[@armor3_id]
 		armor4 = $data_armors[@armor4_id]
-		n += weapon != nil ? weapon.dex_plus : 0
-		n += armor1 != nil ? armor1.dex_plus : 0
-		n += armor2 != nil ? armor2.dex_plus : 0
-		n += armor3 != nil ? armor3.dex_plus : 0
-		n += armor4 != nil ? armor4.dex_plus : 0
+		n -= weapon != nil ? weapon.dex_plus : 0
+		n -= armor1 != nil ? armor1.dex_plus : 0
+		n -= armor2 != nil ? armor2.dex_plus : 0
+		n -= armor3 != nil ? armor3.dex_plus : 0
+		n -= armor4 != nil ? armor4.dex_plus : 0
 		return n
 	end
 	#--------------------------------------------------------------------------
@@ -284,11 +284,11 @@ class Game_Actor
 		armor2 = $data_armors[@armor2_id]
 		armor3 = $data_armors[@armor3_id]
 		armor4 = $data_armors[@armor4_id]
-		n += weapon != nil ? weapon.agi_plus : 0
-		n += armor1 != nil ? armor1.agi_plus : 0
-		n += armor2 != nil ? armor2.agi_plus : 0
-		n += armor3 != nil ? armor3.agi_plus : 0
-		n += armor4 != nil ? armor4.agi_plus : 0
+		n -= weapon != nil ? weapon.agi_plus : 0
+		n -= armor1 != nil ? armor1.agi_plus : 0
+		n -= armor2 != nil ? armor2.agi_plus : 0
+		n -= armor3 != nil ? armor3.agi_plus : 0
+		n -= armor4 != nil ? armor4.agi_plus : 0
 		return n
 	end
 	#--------------------------------------------------------------------------
@@ -301,11 +301,11 @@ class Game_Actor
 		armor2 = $data_armors[@armor2_id]
 		armor3 = $data_armors[@armor3_id]
 		armor4 = $data_armors[@armor4_id]
-		n += weapon != nil ? weapon.int_plus : 0
-		n += armor1 != nil ? armor1.int_plus : 0
-		n += armor2 != nil ? armor2.int_plus : 0
-		n += armor3 != nil ? armor3.int_plus : 0
-		n += armor4 != nil ? armor4.int_plus : 0
+		n -= weapon != nil ? weapon.int_plus : 0
+		n -= armor1 != nil ? armor1.int_plus : 0
+		n -= armor2 != nil ? armor2.int_plus : 0
+		n -= armor3 != nil ? armor3.int_plus : 0
+		n -= armor4 != nil ? armor4.int_plus : 0
 		return n
 	end
 	

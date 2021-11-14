@@ -18,13 +18,16 @@ end
 
 
 def create_events(no, mob_id, map_id, direction, x, y)
-	$game_map.events[no] = Game_Event.new(map_id ,load_data("Data/Map022.rxdata").events[mob_id])
+	temp = load_data("Data/Map022.rxdata").events[mob_id]
+	temp.id = no
+	
+	$game_map.events[no] = Game_Event.new(map_id, temp)
 	event = $game_map.events[no]
 	return if not event
 	event.id = no
 	event.moveto(x, y)
 	event.direction = direction
-	create_sprite event
+	create_sprite(event) 
 	event.refresh
 end
 
@@ -68,7 +71,7 @@ def create_moneys2(no, mob_id, map_id, x, y, money)
 		event.es_set_graphic("../Icons/100전", 255, 0)
 	elsif 500 <= money and money < 1000
 		event.es_set_graphic("../Icons/500전", 255, 0)
-	elsif 1000 <= money and money < 2000
+	elsif 1000 <= money and money < 5000
 		event.es_set_graphic("../Icons/1000전", 255, 0)
 	else
 		event.es_set_graphic("../Icons/10000전", 255, 0)

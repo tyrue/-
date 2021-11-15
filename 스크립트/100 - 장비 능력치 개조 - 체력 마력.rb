@@ -1,26 +1,26 @@
 module RPG
-  class Weapon
+	class Weapon
 		attr_accessor :hp_plus
-    attr_accessor :sp_plus
+		attr_accessor :sp_plus
 		
 		alias initialize_plus initialize
-    def initialize
+		def initialize
 			@hp_plus = 0
 			@sp_plus = 0
 			initialize_plus
-    end
-  end
+		end
+	end
 	
 	class Armor
 		attr_accessor :hp_plus
-    attr_accessor :sp_plus
+		attr_accessor :sp_plus
 		
 		alias initialize_plus initialize
-    def initialize
+		def initialize
 			@hp_plus = 0
 			@sp_plus = 0
 			initialize_plus
-    end
+		end
 	end
 end
 
@@ -182,7 +182,7 @@ class Game_Actor
 			
 			temp_hp += $data_weapons[change_equip].hp_plus if $data_weapons[change_equip] != nil and $data_weapons[change_equip].hp_plus != nil
 			temp_sp += $data_weapons[change_equip].sp_plus if $data_weapons[change_equip] != nil and $data_weapons[change_equip].sp_plus != nil
-				
+			
 			self.maxhp = temp_hp
 			self.maxsp = temp_sp
 		else
@@ -350,5 +350,37 @@ class Game_Actor
 		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
 		
 		return base_sp
+	end
+	
+	# 기본 물리방어력
+	def take_base_pdef
+		n = @pdef
+		weapon = $data_weapons[@weapon_id]
+		armor1 = $data_armors[@armor1_id]
+		armor2 = $data_armors[@armor2_id]
+		armor3 = $data_armors[@armor3_id]
+		armor4 = $data_armors[@armor4_id]
+		n -= weapon != nil ? weapon.pdef : 0
+		n -= armor1 != nil ? armor1.pdef : 0
+		n -= armor2 != nil ? armor2.pdef : 0
+		n -= armor3 != nil ? armor3.pdef : 0
+		n -= armor4 != nil ? armor4.pdef : 0
+		return n
+	end
+	
+	# 기본 마법방어력
+	def take_base_mdef
+		n = @mdef
+		weapon = $data_weapons[@weapon_id]
+		armor1 = $data_armors[@armor1_id]
+		armor2 = $data_armors[@armor2_id]
+		armor3 = $data_armors[@armor3_id]
+		armor4 = $data_armors[@armor4_id]
+		n -= weapon != nil ? weapon.mdef : 0
+		n -= armor1 != nil ? armor1.mdef : 0
+		n -= armor2 != nil ? armor2.mdef : 0
+		n -= armor3 != nil ? armor3.mdef : 0
+		n -= armor4 != nil ? armor4.mdef : 0
+		return n
 	end
 end

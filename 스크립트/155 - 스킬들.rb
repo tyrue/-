@@ -211,7 +211,7 @@ ACTIVE_SKILL[132] = [] # 비영승보
 
 class Rpg_skill
 	def update_buff
-		if SKILL_BUFF_TIME[140][1] > 0 # 운기 중
+		if check_buff(140) # 운기 중
 			if !$game_player.moving?
 				if (Graphics.frame_count % (Graphics.frame_rate) == 0)
 					$game_party.actors[0].sp += $game_party.actors[0].maxsp / 10
@@ -224,9 +224,9 @@ class Rpg_skill
 		end
 		
 		if !$state_trans # 투명 풀기
-			SKILL_BUFF_TIME[131][1] = 1 if SKILL_BUFF_TIME[131][1] > 0
-			SKILL_BUFF_TIME[141][1] = 1 if SKILL_BUFF_TIME[141][1] > 0
-			SKILL_BUFF_TIME[142][1] = 1 if SKILL_BUFF_TIME[142][1] > 0
+			SKILL_BUFF_TIME[131][1] = 1 if check_buff(131)
+			SKILL_BUFF_TIME[141][1] = 1 if check_buff(141)
+			SKILL_BUFF_TIME[142][1] = 1 if check_buff(142)
 		end
 	end
 	
@@ -311,6 +311,24 @@ class Rpg_skill
 			$game_party.actors[0].damage = heal_v.to_s
 			$game_party.actors[0].hp += heal_v
 			return heal_v
+		end
+	end
+	
+	# 이미 버프가 걸려있는지 확인
+	def check_buff(id)
+		# 아직 버프가 지속중이면 무시
+		skill_mash = SKILL_BUFF_TIME[id]
+		return (skill_mash != nil and skill_mash[1] / 60.0 > 0)
+	end
+	
+	# 버프 사용
+	def buff_active(id)
+		buff(id) # 이게 버프 스킬인지 확인
+		$ABS.skill_console(id)   # 스킬 딜레이 표시
+		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
+		if ani_id != nil
+			$game_player.animation_id = ani_id
+			Network::Main.ani(Network::Main.id, ani_id)
 		end
 	end
 	

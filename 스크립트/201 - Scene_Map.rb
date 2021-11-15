@@ -128,7 +128,7 @@ class Scene_Map
 						end
 					end	
 					
-					if Input.trigger?(Input::Fkeys[1]) # f1
+					if Input.trigger?(Input::Fkeys[2]) # f1
 						if not Hwnd.include?("help")
 							Jindow_help.new
 						else

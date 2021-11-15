@@ -2143,10 +2143,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						map_id = $4.to_i
 						if $game_map.map_id == map_id
 							if $netparty.size > 1 # 파티에 가입된 경우에만
-								ani_id = $data_skills[$2.to_i].animation1_id # 스킬 사용 측 애니메이션 id
 								name = $1.to_s
 								skill_id = $2.to_i
 								heal_v = $5.to_i
+								ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
 								if not $game_party.actors[0].hp == 0 # 회복 스킬
 									$game_player.animation_id = ani_id
 									$rpg_skill.buff(skill_id)

@@ -327,6 +327,16 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[149] = [40000, 141, 10]   		# 용랑제팔봉
 	WEAPON_SKILL[150] = [400000, 176, 5]   		# 용랑제구봉
 	
+	# 특정 장비 착용시 효과 : 장비타입(1 무기, 2 장비), [[효과 주기, 효과, 값(%)], [...], ..]
+	EQUIP_EFFECTS = {} 
+	
+	# 방어구
+	EQUIP_EFFECTS[25] = [2, [[10 * sec, "hp", 3]]] # 강건부
+	EQUIP_EFFECTS[28] = [2, [[1 * sec, "buff", 46], [1 * sec, "buff", 47]]] # 보무의목걸이
+	EQUIP_EFFECTS[29] = [2, [[1 * sec, "buff", 131]]] # 투명구두
+	EQUIP_EFFECTS[33] = [2, [[10 * sec, "hp", 3], [10 * sec, "sp", 3]]] # 도깨비부적
+	EQUIP_EFFECTS[36] = [2, [[10 * sec, "sp", 3]]] # 기원부
+	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -677,6 +687,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				range.update
 			end
 			$rpg_skill.update_buff
+			update_equip_effects
 		end
 		
 		#--------------------------------------------------------------------------
@@ -791,6 +802,61 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 		end
+		
+		#--------------------------------------------------------------------------
+		# 특정 장비를 착용할 때 효과 
+		#--------------------------------------------------------------------------
+		def update_equip_effects
+			equip = []
+			equip.push($game_party.actors[0].weapon_id)
+			equip.push($game_party.actors[0].armor1_id)
+			equip.push($game_party.actors[0].armor2_id)
+			equip.push($game_party.actors[0].armor3_id)
+			equip.push($game_party.actors[0].armor4_id)
+			
+			# EQUIP_EFFECTS[33] = [2, [[10 * sec, "hp", 1], [10 * sec, "sp", 1]]] # 도깨비부적
+			i = 0
+			for id in equip
+				if EQUIP_EFFECTS[id] != nil
+					if (i == 0 and EQUIP_EFFECTS[id][0] == 1) or (i >= 1)
+						data = EQUIP_EFFECTS[id][1]
+						for d in data
+							if (Graphics.frame_count % d[0] == 0)
+								type = d[1]
+								val = d[2]
+								case type
+								when "hp"
+									$game_party.actors[0].hp += ($game_party.actors[0].maxhp * val / 100) 
+								when "sp"
+									$game_party.actors[0].sp += ($game_party.actors[0].maxsp * val / 100)
+								when "com"
+									$game_temp.common_event_id = val
+								when "buff"
+									$rpg_skill.buff_active(val) if(!$rpg_skill.check_buff(val)) # 이게 버프 스킬인지 확인
+								when "custom"	
+									if i == 0 # 무기일 떄
+										case id
+										when 1
+											
+										end
+									else # 방어구 일 떄
+										case id
+										when 28 # 보무의 목걸이
+											$rpg_skill.buff_active(46) if(!$rpg_skill.check_buff(46)) # 무장
+											$rpg_skill.buff_active(47) if(!$rpg_skill.check_buff(47)) # 보호
+										when 29 # 투명구두
+											$rpg_skill.buff_active(131) if(!$rpg_skill.check_buff(131)) # 이게 버프 스킬인지 확인
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+				i += 1
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Update State Effect(State, ID)
 		#--------------------------------------------------------------------------
@@ -3689,8 +3755,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					power += (user.hp * 2 + user.sp * 0.5).to_i
 					user.hp -= (user.hp / 6) 
 					user.sp -= user.sp / 2
-					self.pdef -= 5
-					self.mdef -= 5
+					self.pdef -= 5 if self.is_a?(ABS_Enemy)
+					self.mdef -= 5 if self.is_a?(ABS_Enemy)
 				when 138 # 무형검
 					power += (user.hp * 1 + user.sp * 0.2).to_i
 					user.hp -= (user.hp / 2) 	

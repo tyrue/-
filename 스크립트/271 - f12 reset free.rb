@@ -54,7 +54,7 @@ end
 
 module CskDisable
  # Whether to disable F1. 0 = enable, 1 = disable.
- DISABLE_F1 = 1
+ DISABLE_F1 = 0
  
  # Whether to disable F12. 0 = enable, 1 = disable.
  DISABLE_F12 = 1

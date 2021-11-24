@@ -16,6 +16,7 @@ class Jindow_Post< Jindow
 		@dialog.bitmap = Bitmap.new(280,110)
 		@dialog.bitmap.font.color.set(0, 0, 0, 255)
 		@dialog.bitmap.draw_text(0, 10, 200, 30, "보낼 사람 캐릭터명 :")
+		
 		@username = J::Type.new(self).refresh(85, 15, 90, 18)
 		@dialog.bitmap.draw_text(0, 30, 200, 30, "아이템 종류 :")
 		@item_group = J::Type.new(self).refresh(85, 35, 90, 18)

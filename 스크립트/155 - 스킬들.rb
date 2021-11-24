@@ -169,6 +169,7 @@ PARTY_BUFF_SKILL = {}
 PARTY_BUFF_SKILL[50] = [] # 야수수금술
 PARTY_BUFF_SKILL[88] = [] # 분량력법
 PARTY_BUFF_SKILL[90] = [] # 분량방법
+PARTY_BUFF_SKILL[42] = [] # 주술마도
 PARTY_BUFF_SKILL[46] = [] # 무장
 PARTY_BUFF_SKILL[47] = [] # 보호
 PARTY_BUFF_SKILL[136] = [] # 운상미보
@@ -306,7 +307,7 @@ class Rpg_skill
 		end
 		
 		if is_heal
-			heal_v += ($game_party.actors[0].maxhp * 0.001).to_i
+			heal_v += ($game_party.actors[0].maxhp * 0.01).to_i
 			$game_party.actors[0].critical = "heal"
 			$game_party.actors[0].damage = heal_v.to_s
 			$game_party.actors[0].hp += heal_v

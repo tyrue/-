@@ -694,6 +694,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * 몬스터가 리스폰 될떄 현재 맵에서 랜덤으로 스폰 될 수 있도록
 		#--------------------------------------------------------------------------
 		def rand_spawn(e) # 몬스터 데이터를 받음
+			# 제자리 스폰할 애들은 냅두기
+			return if e.name.include?("무적토끼")
+			
 			x = e.x
 			y = e.y
 			d = e.direction
@@ -841,11 +844,7 @@ if SDK.state("Mr.Mo's ABS") == true
 										end
 									else # 방어구 일 떄
 										case id
-										when 28 # 보무의 목걸이
-											$rpg_skill.buff_active(46) if(!$rpg_skill.check_buff(46)) # 무장
-											$rpg_skill.buff_active(47) if(!$rpg_skill.check_buff(47)) # 보호
-										when 29 # 투명구두
-											$rpg_skill.buff_active(131) if(!$rpg_skill.check_buff(131)) # 이게 버프 스킬인지 확인
+										when 1
 										end
 									end
 								end

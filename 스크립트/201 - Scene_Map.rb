@@ -18,12 +18,6 @@ class Scene_Map
 	def update
 		scene_map_update
 		JS.update
-			
-		# 콘솔 초기화
-		#~ if Graphics.frame_count % (Graphics.frame_rate * 8) == 0 and $console.console_log.size > 0
-			#~ #$console.console_log.delete_at(0)
-			#~ #$console.refresh			
-		#~ end
 		
 		if $game_party.actors[0].hp == 0
 			Hwnd.dispose("Inventory") if Hwnd.include?("Inventory")
@@ -51,12 +45,20 @@ class Scene_Map
 					end	
 					
 					if $game_party.actors[0].hp > 0  
-						if Key.trigger?(32) # i
+						if Key.trigger?(KEY_I) # i
 							if not Hwnd.include?("Inventory")
 								Jindow_Inventory.new
 							else
 								Hwnd.dispose("Inventory")
 							end
+							#~ if Key.press?(KEY_SHIFT)# 조합창
+								#~ if not Hwnd.include?("craft")
+									#~ Jindow_craft.new
+								#~ else
+									#~ Hwnd.dispose("craft")
+								#~ end
+							#~ else # 인벤토리
+							#~ end
 						end
 					end	 
 					
@@ -105,11 +107,11 @@ class Scene_Map
 					end	
 					
 					#~ if Key.trigger?(KEY_T) and Network::Main.group == 'admin' # t
-						#~ if not Hwnd.include?("Post")
-							#~ Jindow_Post.new
-						#~ else
-							#~ Hwnd.dispose("Post")
-						#~ end
+					#~ if not Hwnd.include?("Post")
+					#~ Jindow_Post.new
+					#~ else
+					#~ Hwnd.dispose("Post")
+					#~ end
 					#~ end
 					
 					if Key.trigger?(65) # ; 감정표현
@@ -128,13 +130,15 @@ class Scene_Map
 						end
 					end	
 					
-					if Input.trigger?(Input::Fkeys[2]) # f1
+					if Input.trigger?(Input::Fkeys[1]) # f1
 						if not Hwnd.include?("help")
 							Jindow_help.new
 						else
 							Hwnd.dispose("help")
 						end
 					end	
+					
+					
 					
 				end
 			end

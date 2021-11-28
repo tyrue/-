@@ -434,6 +434,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP[159] = 3000000 # 거북장군
 	BOSS_ENEMY_HP[193] = 2000000 # 파괴왕
 	BOSS_ENEMY_HP[231] = 3000000 # 천구왕
+	BOSS_ENEMY_HP[246] = 4000000 # 선장망령
 	
 	class MrMo_ABS
 		#--------------------------------------------------------------------------
@@ -1486,8 +1487,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=====비영사천문 - 크랩훕흐===========#
 		#=============================#
 		def skill_byung(d) # d : 방향, 0 : 동, 1 : 서, 2 : 남, 3: 북
-			r = 4
-			case $game_variables[8]
+			r = 3
+			case $game_variables[8] # 맵 번호
 			when 0 # 부여성
 				id = 1
 				case d
@@ -1605,6 +1606,20 @@ if SDK.state("Mr.Mo's ABS") == true
 					map_m(id, 61 + rand(r), 10 + rand(r))
 				end
 				
+				# 동서남북
+			when 9 # 가릉도
+				id = 374
+				case d
+				when 0
+					map_m(id, 58 + rand(r), 20 + rand(r))
+				when 1
+					map_m(id, 12 + rand(r), 17 + rand(r))
+				when 2
+					map_m(id, 28 + rand(r), 33 + rand(r))
+				when 3
+					map_m(id, 27 + rand(r), 9 + rand(r))
+				end
+					
 			when -1
 				
 			end

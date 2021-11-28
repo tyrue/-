@@ -42,6 +42,9 @@ class Jindow_Drop < Jindow
 		end
 		
 		@input = J::Type.new(self).refresh(40, 7, self.width - 40, 16)
+		@input.set("1")
+		@input.view
+		@input.bluck = false
 		@a = J::Button.new(self).refresh(45, "확인")
 		@a.x = self.width - 92
 		@a.y = 25

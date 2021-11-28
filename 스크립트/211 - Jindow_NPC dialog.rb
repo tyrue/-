@@ -118,15 +118,32 @@ class Jindow_N < Jindow
 		begin
 			last_text = text.clone
 			
+			# 변수
 			text.gsub!(/\\[Vv]\[([0-9]+)\]/) { $game_variables[$1.to_i] }
+			# 스킬이름
 			text.gsub!(/\\[Ss]\[([0-9]+)\]/) do 
 				$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].name : ""
 			end
+			# 스킬 설명
 			text.gsub!(/\\[Dd]\[([0-9]+)\]/) do 
 				$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].description : ""
 			end
+			# 아이템 이름
 			text.gsub!(/\\[Ii]\[([0-9]+)\]/) do
 				$data_items[$1.to_i] != nil ? $data_items[$1.to_i].name : ""
+			end
+			# 변수 처리
+			text.gsub!(/\#{([\w!@#\$+-\/\*]*)}/) do
+				txt = $1.to_s
+				txt
+				begin # try
+					txt = eval(txt)
+					txt 
+				rescue # 예외
+					txt = $1.to_s
+				ensure # 
+					txt
+				end	
 			end
 		end until text == last_text
 		text.gsub!(/\\[Nn]\[([0-9]+)\]/) do

@@ -2126,11 +2126,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						exp = (exp * 1.5).to_i / in_map_player
 						gold = (gold * 1.5).to_i / in_map_player
 						
-						# 경험치 이벤트!
-						if $game_switches[1500] == true  
-							exp *= $exp_event
-						end
-						
 						actor.exp += exp
 						$game_party.gain_gold(gold)
 						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")

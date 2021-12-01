@@ -432,9 +432,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP[37] = 2000000000 # 무적토끼
 	BOSS_ENEMY_HP[102] = 10000000 # 반고
 	BOSS_ENEMY_HP[159] = 3000000 # 거북장군
-	BOSS_ENEMY_HP[193] = 2000000 # 파괴왕
+	BOSS_ENEMY_HP[193] = 4000000 # 파괴왕
 	BOSS_ENEMY_HP[231] = 3000000 # 천구왕
-	BOSS_ENEMY_HP[246] = 4000000 # 선장망령
+	BOSS_ENEMY_HP[246] = 2000000 # 선장망령
 	
 	class MrMo_ABS
 		#--------------------------------------------------------------------------
@@ -474,8 +474,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			@skill_keys = SKILL_KEYS
 			#Item Keys
 			@item_keys = ITEM_KEYS
-			#Button Mash
+			#Button Mash (스킬 후딜레이)
 			@button_mash = 0
+			# 아이템 후딜레이
+			@item_mash = 0
 			#Ranged Skills and Weapons
 			@range = []
 			#Display Demage true:false
@@ -908,13 +910,14 @@ if SDK.state("Mr.Mo's ABS") == true
 						next 
 					end
 				end
-				#Update Enemy State
+				# 적 캐릭터의 상태 업데이트
 				update_enemy_state(enemy)
-				#Skip if not on screen
+				# 화면에 없는 적 캐릭터는 무시
 				next if !in_screen?(enemy.event)
-				#Make Hate Points
+				# 적 캐릭터의 적대 관계 형성
 				make_hate_points(enemy) if @get_hate
 				
+				# 전투중이아니고 공격성 ai가 false면 무시
 				if !enemy.in_battle and !update_enemy_ai(enemy)
 					next 
 				end
@@ -922,61 +925,38 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			@get_hate = false
 		end
+		
 		#--------------------------------------------------------------------------
-		# * Update Enemy State(Enemy)
+		# * 적 캐릭터의 상태 업데이트 : 버프, 디버프등 상태 
 		#--------------------------------------------------------------------------
 		def update_enemy_state(enemy)
-			for id in enemy.states
-				next if !STATES.has_key?(id)
-				state = STATES[id] # 해당 상태의 지속 시간
-				next if state == 0
-				enemy.state_time += 1
-				if enemy.state_time >= state
-					enemy.remove_state(id)
-					enemy.state_time = 0
-					return
-				end
-			end
-			# 적 독뎀?
-			if enemy.hp > 0 and enemy.slip_damage? and Graphics.frame_count % (40) == 0 
-				enemy.hp -= [enemy.maxhp / 100, 1].max
-				if enemy.hp <= 0
-					enemy_dead?(enemy,nil)
-				end
-			end
-			
-			# 움직일 수 없다면?
-			if !enemy.movable?
-				
-			end
 			
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Update Enemy Battle(Enemy)
 		#--------------------------------------------------------------------------
 		def update_enemy_battle(enemy)
-			# If the enemy can't see it's enemy, skip the enemy
-			if (!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and
-					!in_range?(enemy.event, enemy.attacking.event, enemy.hear_range)) or
-				(enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id)) or
-				!enemy.aggro
-				# Restore movement
+			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
+			if (!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and !in_range?(enemy.event, enemy.attacking.event, enemy.hear_range)) or
+				(enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id)) or !enemy.aggro
 				# 원래 움직임으로 돌아옴
 				restore_movement(enemy)
-				# Take it out off battle
+				# 적대모드 풀림
 				enemy.in_battle = false
 				enemy.attacking = nil
 				return
 			end      
-			# Update the enemy attack or follow
+			# 공격주기마다 행동 시작
 			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
 			# Skip this if the attack killed the enemy
 			return if enemy == nil or enemy.attacking == nil or enemy.event.moving?
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
 			enemy.event.turn_to(enemy.attacking.event) if !in_direction?(enemy.event, enemy.attacking.event) and in_range?(enemy.event, enemy.attacking.event, 1)
 		end
+		
 		#--------------------------------------------------------------------------
-		# * Update Enemy AI(Enemy)
+		# * 적 캐릭터의 공격성
 		#--------------------------------------------------------------------------
 		def update_enemy_ai(enemy)
 			#Get the enemy behavior
@@ -995,29 +975,30 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Return false
 			return false
 		end
+		
 		#--------------------------------------------------------------------------
-		# * Update Enemy Attack(Enemy) 적 캐릭터의 행동, 공격 또는 스킬
+		# * 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
 		def update_enemy_attack(e, actor)
-			#Return if the enemy can't attack
+			# 만약 행동 리스트가 없으면 무시함
 			return if e.actions == nil or e.actions == [] or e == nil
-			#Get all actions
+			# 행동 리스트 얻음
 			for action in e.actions
-				#Next if enemy can't attack
+				# 공격 행동이 아니면 무시
 				next if enemy_pre_attack(e, action)
-				#Get the current action kind
+				# 행동의 타입
 				case action.kind
-				when 0 # Basic
+				when 0 # 기본공격
 					#Get the action 기본 액션 가져옴
 					case action.basic
 					when 0 #Attack
 						next if !in_range?(e.event, actor.event, 1) or !in_direction?(e.event, actor.event)
-						#Attack it's enemy
+						# 공격 당할 대상 정하기
 						a = actor if actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하면 적
 						a = $game_party.actors[0] if !actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하지 않으면 플레이어
-						# 몬스터가 플레이어, 또는 다른 적을 공격함 e가 a를 공격함
+						# 기본 공격 데미지 계산
 						a.attack_effect(e)
-						#Animate the enemy
+						# 애니메이션 실행
 						e.event.animation_id = e.animation1_id
 						Network::Main.ani(e.event.id, e.animation1_id, 1)
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
@@ -1025,11 +1006,11 @@ if SDK.state("Mr.Mo's ABS") == true
 						#Show Animation
 						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
 						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
-						return if enemy_dead?(a,e)
+						return if enemy_dead?(a, e)
 						#Make enemy
 						return if !a.is_a?(ABS_Enemy) # a가 플레이어면 무시
 						return if a.attacking == e and a.in_battle # a가 적 캐릭이면 e를 쫒아감
-						#Set the new target for the enemy
+						# a가 적캐릭터일 경우 e를 적대하게 됨
 						a.attacking = e
 						#The enemy is now in battle
 						a.in_battle = true
@@ -1044,41 +1025,45 @@ if SDK.state("Mr.Mo's ABS") == true
 					skill = $data_skills[action.skill_id]
 					#Return if the skill is NIL
 					return if skill == nil
-					#Get the skill scope
+					# 스킬을 받는 타입
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
 						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
-						next if !in_direction?(e.event, actor.event)
+						next if !in_direction?(e.event, actor.event) # 적캐릭터가 목표를 바라보고 있어야함
 						next if !e.can_use_skill?(skill)
-						#Animate the enemy
+						
+						# Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
 						
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
-						if RANGE_SKILLS.has_key?(skill.id)
-							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e는a의 적(플레이어 또는 또 다른 적)여기서 알아서 데미지 계산
+						if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
+							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e가 날리는 스킬을 구현해줌
 							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							
 							e.sp -= skill.sp_cost
 							return
 						end
-						#If the skill is not ranged
+						
+						# 원거리 스킬이 아니라면?
 						enemies = []
-						#Get all enemies    
+						# 적대 관계의 적들을 배열에 넣음
 						for enemy in @enemies.values
 							next if enemy == nil or enemy == e
 							next if !e.hate_group.include?(enemy.enemy_id)
 							enemies.push(enemy)
 						end
 						enemies.push($game_player) if e.hate_group.include?(0)
-						#Order them from closest to the farthest
+						
+						# 가장 가까운 적을 우선함
 						enemies.sort! {|a,b|
 							get_range(e.event, a.event) - get_range(e.event, b.event)}
-						#Attack the closest one
+						
+						# 스킬 사용
 						enemies[0].actor.effect_skill(e, skill)
-						#Take off SP
 						e.sp -= skill.sp_cost
-						#Show Animetion on enemy
+						
+						# 애니메이션 실행
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
 						#Return if enemy is dead 
 						return if enemy_dead?(enemies[0].actor, e)
@@ -1101,6 +1086,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						
+						# 스킬 범위내 있는 모든 적 추가
 						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
 						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
 						
@@ -1124,7 +1110,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						end
 						return		
 						
-					when 3..4, 7 # User   
+					when 3..4, 7 # 자기 자신에게 사용하는 스킬
 						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
@@ -1139,6 +1125,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Update Player  실시간 반영 되는 함수
 		#--------------------------------------------------------------------------
@@ -1164,12 +1151,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			
-			#Update click time
+			# 후 딜레이 처리
+			@item_mash -= 1 if @item_mash > 0
+			check_item if active_ok and @item_mash == 0 # 아이템 단축키 눌렸니?
+			
 			@button_mash -= 1 if @button_mash > 0
 			return if @button_mash > 0
 			
 			if active_ok
-				#Keep the current party leader updated
 				@actor = $game_party.actors[0]
 				
 				# 공격키가 눌렸니?
@@ -1179,19 +1168,9 @@ if SDK.state("Mr.Mo's ABS") == true
 						$console.write_line("귀신은 할 수 없습니다.")
 						return 
 					end
-					
-					# 상태에 따라 공격 다르게 하기 (미정ㅋ)
-					#~ if STATE_EFFECTS
-					#~ for id in $game_party.actors[0].states
-					#~ return if STUN_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id)
-					#~ end
-					#~ end
 					return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
 					return player_melee
 				end
-				
-				# 아이템 단축키 눌렸니?
-				check_item
 				
 				# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
 				# 스킬 단축키가 눌렸니?
@@ -1199,17 +1178,16 @@ if SDK.state("Mr.Mo's ABS") == true
 					next if @skill_keys[key] == nil or @skill_keys[key] == 0
 					next if !Input.trigger?(key)
 					
-					if $game_switches[352] == true
+					if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
+						$console.write_line("귀신은 할 수 없습니다.")
+						return 
+					end
+					
+					if $game_switches[352] or $game_switches[25]
 						$console.write_line("스킬 사용 불가 지역입니다.")
 						return
 					end
 					
-					if STATE_EFFECTS
-						for i in $game_party.actors[0].states
-							# 상태 이상이면 사용 못함
-							return if STUN_EFFECT.include?(i) or PARALAYZE_EFFECT.include?(i) or MUTE_EFFECT.include?(i)
-						end
-					end
 					# 스킬 아이디 가져옴
 					id = @skill_keys[key]
 					
@@ -1220,22 +1198,15 @@ if SDK.state("Mr.Mo's ABS") == true
 						return
 					end
 					
-					#~ # 아직 버프가 지속중이면 무시
-					#~ skill_mash = SKILL_BUFF_TIME[id]
-					#~ if skill_mash != nil and skill_mash[1]/60.0 > 0
-					#~ $console.write_line("이미 걸려있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초 남음")
-					#~ return
-					#~ end
-					
 					if RANGE_EXPLODE.has_key?(id)
 						return player_explode(id)
 					else
 						return player_skill(id)
 					end
 				end
-				
 			end
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Check Item  아이탬 단축키를 이용해서 사용할 경우
 		#--------------------------------------------------------------------------
@@ -1245,18 +1216,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 해당 키에 등록된 아이템이 없으면 무시
 				next if @item_keys[key] == nil or @item_keys[key] == 0
 				next if !Input.trigger?(key)
-				
-				# 죽으면 당연히 못씀
-				if STATE_EFFECTS
-					for i in $game_party.actors[0].states
-						return if STUN_EFFECT.include?(i)
-					end
-				end
-				if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
+				# 유저 죽음 스위치가 켜져있다면 패스
+				if $game_switches[296]
 					$console.write_line("귀신은 할 수 없습니다.")
 					return 
 				end
-				
 				
 				# 아이템데이터 가져옴
 				item = $data_items[@item_keys[key]]
@@ -1265,28 +1229,21 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 아이템이 없으면 무시
 				return $game_system.se_play($data_system.buzzer_se) if $game_party.item_number(item.id) == 0
 				
-				# Apply item use effects to target actor
 				target = $game_party.actors[0]
-				
 				if (item.recover_hp > 0 or item.recover_hp_rate > 0) and (target.hp == target.maxhp)
 					$console.write_line("이미 완전 회복된 상태 입니다.")
 					return
 				end
 				
 				target.item_effect(item)
-				# If an item was used
-				#Show animation on player
 				$game_player.animation_id = item.animation1_id 
-				# Play item use SE
 				$game_system.se_play(item.menu_se)
-				# If consumable; Decrease used items by 1
 				$game_party.lose_item(item.id, 1) if item.consumable
-				# If all party members are dead; Switch to game over screen
-				# If common event ID is valid; Common event call reservation
+				@item_mash = 3
 				return $game_temp.common_event_id = item.common_event_id if item.common_event_id > 0
-				# If effect scope is other than an ally
 			end
 		end
+		
 		#--------------------------------------------------------------------------
 		# * 캐릭터의 범위 무기
 		#--------------------------------------------------------------------------
@@ -1307,23 +1264,22 @@ if SDK.state("Mr.Mo's ABS") == true
 			animate($game_player, $game_player.character_name+w[7].to_s) if @player_ani
 			return
 		end
+		
 		#--------------------------------------------------------------------------
-		# * 캐릭터의 밀리 공격(때리는거)
+		# * 플레이어의 기본공격
 		#--------------------------------------------------------------------------
 		def player_melee(sw = false) # 왠지 여기서 때리는 모션 만들 수 있을 듯?
-			# 무기를 안꼈으면 공격 못함
-			#return if $data_weapons[@actor.weapon_id] == nil
-			#Get all enemies
 			# m은 무기 각 공격 딜레이를 말함, 만약 없으면 기본 공격속도
 			m = MELEE_CUSTOM[@actor.weapon_id]
 			if m != nil and m[0] != nil
-				@button_mash = m[0]*10
+				@button_mash = m[0] * 10
 			else
-				@button_mash = MASH_TIME*10
+				@button_mash = MASH_TIME * 10
 			end
 			
+			# 만약 스킬로 인한 공격이라면..?
 			if sw
-				@button_mash = MASH_TIME*6 
+				@button_mash = MASH_TIME * 6 
 			end
 			
 			Audio.se_play("Audio/SE/무기001-검", $game_variables[13])
@@ -1347,35 +1303,25 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				e.event.animation_id = a
 				Network::Main.ani(e.event.id, a, 1)
-				#Add mash time
-				#Attack the enemy 적 공격
 				e.attack_effect(@actor)
-				#Get Animation 무기 공격 애니메이션
-				
-				#Hit enemy if the attack succeeds  몬스터에게 밀리 이미지
+				# 몬스터타격 데미지 계산
 				if e.damage != "Miss" and e.damage != 0
 					Audio.se_play("Audio/SE/타격", $game_variables[13])					
 				end
+				
 				#Return if the enemy is dead
-				weapon_skill(@actor.weapon_id, e)
+				weapon_skill(@actor.weapon_id, e) # 무기 격
 				return if enemy_dead?(e,@actor)
 				return if !e.hate_group.include?(0)
-				
-				# 여기서 무기 격 넣기
-				
-				#~ #Set the new target for the enemy
 				e.attacking = $game_player
-				#~ #The enemy is now in battle
 				e.in_battle = true
-				#~ #Setup movement
 				setup_movement(e)
 			end
 			
+			# 다른 플레이어 공격 처리
 			for player in Network::Main.mapplayers.values
 				next if player == nil
 				next if !in_direction?($game_player, player) or !in_range?($game_player, player, 1)
-				# next if not $game_switches[302] == false
-				# 만약 pvp 스위치 켜져 있으면  싸움 가능
 				# 해당 대상 애니메이션 재생하도록 보냄
 				ani_id = $data_weapons[$game_party.actors[0].weapon_id].animation2_id if $data_weapons[$game_party.actors[0].weapon_id] != nil
 				ani_id = 109 if ani_id == nil
@@ -1383,7 +1329,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				Network::Main.ani(player.netid, ani_id)
 				
 				# 상대방 아이디, 자신의 아이디
-				Network::Main.socket.send("<attack_effect>#{player.netid},#{Network::Main.id}</attack_effect>\n")	# if $game_switches[302] # pk on
+				Network::Main.socket.send("<attack_effect>#{player.netid},#{Network::Main.id}</attack_effect>\n")
 				
 				$state_trans = false
 				$game_variables[9] = 1
@@ -1400,7 +1346,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			dmg = 0
 			return if WEAPON_SKILL[id] == nil
 			return if e == nil or e.damage == nil
-			ra = WEAPON_SKILL[id][2]
+			ra = WEAPON_SKILL[id][2] # 발동 확률
 			
 			if r < ra
 				dmg = WEAPON_SKILL[id][0]
@@ -1426,25 +1372,24 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=====스킬 딜레이 알려줌 - 크랩훕흐======#
 		#=============================#
 		def skill_console(id)
-			
+			# 스킬 딜레이 표시
 			skill_mash_time = SKILL_MASH_TIME[id]
 			if skill_mash_time != nil and skill_mash_time[1] <= 0
 				skill_mash_time[1] = skill_mash_time[0]
-				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 딜레이 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 				$skill_Delay_Console.write_line(id)
 			end
 			
-			
+			# 버프의 지속시간 표시
 			skill_mash_time = SKILL_BUFF_TIME[id]
 			if skill_mash_time != nil
 				skill_mash_time[1] = skill_mash_time[0]
-				# 스킬 딜레이 시작 메시지 표시
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 				$skill_Delay_Console.write_line(id)
 			end
 		end
 		
+		# 맵을 이동하기위한 함수
 		def map_m(id, x, y)
 			if $game_map.map_id != id
 				$game_temp.player_transferring = true # 이동 가능
@@ -1477,13 +1422,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				map_m(326, 11, 8)
 			when 8 # 장안성
 				map_m(369, 11, 8)
+			when 9 # 가릉도
+				map_m(384, 11, 8)
 			else # 딱히 안정했다면 부여성으로..
 				map_m(17, 11, 8)
 			end
 		end
 		
 		
-		#==============================#
+		#=============================#
 		#=====비영사천문 - 크랩훕흐===========#
 		#=============================#
 		def skill_byung(d) # d : 방향, 0 : 동, 1 : 서, 2 : 남, 3: 북
@@ -1619,7 +1566,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				when 3
 					map_m(id, 27 + rand(r), 9 + rand(r))
 				end
-					
+				
 			when -1
 				
 			end
@@ -1651,7 +1598,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			# 스킬 사용 불가 지역
-			if $game_switches[25]
+			if $game_switches[352] or $game_switches[25]
 				$console.write_line("스킬 사용 불가 지역입니다.")
 				return
 			end
@@ -1702,7 +1649,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 원거리 스킬 캐릭터 생성
 					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
 					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-					#Take off SP
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
 					# 스킬 사용 후 딜레이
@@ -1826,8 +1772,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 		end
+		
 		#--------------------------------------------------------------------------
-		# * Player Explode Attack  플레이어의 범위 공격
+		# * 플레이어의 범위 공격 스킬
 		#--------------------------------------------------------------------------
 		def player_explode(id)
 			return if !RANGE_EXPLODE.has_key?(id)
@@ -1871,9 +1818,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		#--------------------------------------------------------------------------
-		# * 적이 죽었니? (몹 또는 유저)
+		# * 적이 죽었니? (몹 또는 유저), e가 a에 의해 죽었음
 		#--------------------------------------------------------------------------
-		def enemy_dead?(e,a)
+		def enemy_dead?(e, a)
 			# e가 유저라면 유저 죽을 때 함수 반환
 			return player_dead?(e,a) if e.is_a?(Game_Actor)
 			#Return false if enemy dead
@@ -1881,8 +1828,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy = e
 			treasure(enemy) if a != nil and a.is_a?(Game_Actor)
 			# 적 유닛이 적을 죽이면 평상시로 돌아옴
-			a.attacking = nil if a != nil and !a.is_a?(Game_Actor)
-			a.in_battle = false if a != nil and !a.is_a?(Game_Actor)
+			if a != nil and !a.is_a?(Game_Actor)
+				a.attacking = nil 
+				a.in_battle = false
+				restore_movement(a)
+			end
+			
 			id = enemy.event_id
 			#Remove from list 리스폰이 없으면 아예 지워버림
 			@enemies.delete(id) if (@enemies[id] != nil and (@enemies[id].respawn == 0 or @enemies[id].respawn == nil))
@@ -1892,7 +1843,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
 			case enemy.trigger[0]
 			when 0
-				
 				event.fade = true if FADE_DEAD
 				if !FADE_DEAD
 					event.character_name = ""
@@ -1922,17 +1872,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Return true if the e is dead
 			return true
 		end
+		
 		#--------------------------------------------------------------------------
-		# * Player Dead(Player,Enemy)
+		# * Player Dead(Player,Enemy) a가 e에 의해 죽음
 		#--------------------------------------------------------------------------
-		def player_dead?(a,e)
+		def player_dead?(a, e)
 			return false if $game_party.actors[0].hp > 0
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			if !e.is_a?(Game_NetPlayer)
 				e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
+				restore_movement(e) if e != nil and !e.is_a?(Game_Actor)
 			end
+			
 			return true if $game_switches[296] # 죽음 표시 스위치
 			#Check State Effect
 			if STATE_EFFECTS
@@ -1942,7 +1895,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			#If the player is dead;
-			Audio.se_play("Audio/SE/죽음")
+			Audio.se_play("Audio/SE/죽음", $game_variables[13])
 			Network::Main.ani(Network::Main.id, 199)
 			
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
@@ -1972,92 +1925,59 @@ if SDK.state("Mr.Mo's ABS") == true
 		def treasure(enemy)
 			exp = 0
 			gold = 0
-			treasures = []
 			unless enemy.hidden
 				exp = enemy.exp
 				gold += enemy.gold
-				if rand(100) < enemy.treasure_prob
-					if enemy.item_id > 0
-						treasures.push($data_items[enemy.item_id])
-					end
-					if enemy.weapon_id > 0
-						treasures.push($data_weapons[enemy.weapon_id])
-					end
-					if enemy.armor_id > 0
-						treasures.push($data_armors[enemy.armor_id])
-					end
-				end
 			end
-			treasures = treasures[0..5]
 			
-			for i in 0...$game_party.actors.size
-				actor = $game_party.actors[i]
-				if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
-					last_level = actor.level
-					in_map_player = 1
-					
-					if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
-						# 여기서 파티원이 맵에 있는지 확인			
-						for player in Network::Main.mapplayers.values
-							next if player == nil
-							if $netparty.include? player.name and player.name != $game_party.actors[0].name
-								in_map_player = in_map_player + 1
-							end
-						end
-					end
-					
-					if in_map_player > 1
-						Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
-						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
-							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
-						end
-						exp = (exp * 1.5).to_i / in_map_player
-						gold = (gold * 1.5).to_i / in_map_player
-						
-						# 경험치 이벤트!
-						if $game_switches[1500] == true  
-							exp *= $exp_event
-						end
-						
-						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
-						actor.exp += exp
-						$game_party.gain_gold(gold)
-					else
-						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
-							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
-						end
-						
-						# 경험치 이벤트!
-						if $game_switches[1500] == true  
-							exp *= $exp_event
-						end
-						
-						$console.write_line("경험치:#{exp} 금전:#{gold} 획득. (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
-						actor.exp += exp    #골드를 습득하는 경우 (파티 아닐때)
-						$game_party.gain_gold(gold)
-					end
-					drop_enemy(enemy) # ABS monster item drop 파일 참조
-				end
+			# 경험치 이벤트!
+			if $game_switches[1500] == true  
+				exp *= $exp_event
 			end
-			for item in treasures      #아이템 드롭
-				case item
-				when RPG::Item
-					$game_party.gain_item(item.id, 1)
-					$game_player.show_demage("습득 : #{item.name}",false)
-				when RPG::Weapon
-					$game_party.gain_weapon(item.id, 1)
-					$game_player.show_demage("습득 :  #{item.name}",false)
-				when RPG::Armor
-					$game_party.gain_armor(item.id, 1)
-					$game_player.show_demage("습득 :  #{item.name}",false)
+			
+			actor = $game_party.actors[0]
+			if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
+				last_level = actor.level
+				in_map_player = 1
+				
+				if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
+					# 여기서 파티원이 맵에 있는지 확인			
+					for player in Network::Main.mapplayers.values
+						next if player == nil
+						if $netparty.include? player.name and player.name != $game_party.actors[0].name
+							in_map_player = in_map_player + 1 # 같은 맵에 파티원이 있으면 추가
+						end
+					end
 				end
+				
+				if in_map_player >= 2
+					Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
+					if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
+						exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
+					end
+					exp = (exp * 1.5).to_i / in_map_player
+					gold = (gold * 1.5).to_i / in_map_player
+					
+					$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
+					actor.exp += exp
+					$game_party.gain_gold(gold)
+				else
+					if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
+						exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
+					end
+					
+					$console.write_line("경험치:#{exp} 금전:#{gold} 획득. (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
+					actor.exp += exp    
+					$game_party.gain_gold(gold)
+				end
+				drop_enemy(enemy) # ABS monster item drop 파일 참조
 			end
 		end
 		
 		#--------------------------------------------------------------------------
-		# * Hit Enemy(Enemy) or (Player) 몬스터가 공격할 경우
+		# * Hit Enemy(Enemy) or (Player) 몬스터가 공격할 경우, e가 a에게 공격당함
 		#--------------------------------------------------------------------------
-		def hit_enemy(e,a,animation=nil)
+		def hit_enemy(e, a, animation=nil)
 			return if animation == 0
 			# 나한테 적이 아니면 공격 안하게 함
 			if a.is_a?(ABS_Enemy) and e.is_a?(Game_Actor)
@@ -2066,7 +1986,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if a.is_a?(ABS_Enemy) and e.is_a?(ABS_Enemy)
 				return if !a.hate_group.include?(e.id)
 			end
-			# Animate player
+			
 			# hit 애니메이션 재생
 			animate(e,e.character_name+"_hit") if e.is_a?(Game_Player) and @player_ani
 			# Animate Enemy
@@ -2083,13 +2003,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def jump(object,attacker,plus)
 			return if plus == nil
-			n_plus = plus-(plus*2)
+			n_plus = plus - (plus * 2)
 			d = attacker.direction
 			# Calculate new pos
 			new_x = (d == 6 ? plus : d == 4 ? n_plus : 0)
 			new_y = (d == 2 ? plus : d == 8 ? n_plus : 0)
 			# Jump
-			object.jump_nt(new_x,new_y)
+			object.jump_nt(new_x, new_y)
 		end
 		#--------------------------------------------------------------------------
 		# * Enemy Pre-Attack(Enemy,Actions) - Checks action conditions to see if the 
@@ -2113,7 +2033,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if e.hate_group.include?(0) and in_range?(e.event, $game_player, e.see_range) or in_direction?(e.event, $game_player)
 				if $game_party.actors[0].hp <= 0
 					e.in_battle = false
-					#restore_movement(e)
+					restore_movement(e)
 					return false 
 				end
 				enemies.push($game_player) 

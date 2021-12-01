@@ -290,6 +290,7 @@ class Rpg_skill
 		end
 	end
 	
+	# 자기 힐
 	def heal(id)
 		is_heal = false
 		heal_v = 0

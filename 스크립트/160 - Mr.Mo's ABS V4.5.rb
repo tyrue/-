@@ -327,15 +327,15 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[149] = [40000, 141, 10]   		# 용랑제팔봉
 	WEAPON_SKILL[150] = [400000, 176, 5]   		# 용랑제구봉
 	
-	# 특정 장비 착용시 효과 : 장비타입(1 무기, 2 장비), [[효과 주기, 효과, 값(%)], [...], ..]
+	# 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
 	EQUIP_EFFECTS = {} 
 	
 	# 방어구
-	EQUIP_EFFECTS[25] = [2, [[10 * sec, "hp", 3]]] # 강건부
-	EQUIP_EFFECTS[28] = [2, [[1 * sec, "buff", 46], [1 * sec, "buff", 47]]] # 보무의목걸이
-	EQUIP_EFFECTS[29] = [2, [[1 * sec, "buff", 131]]] # 투명구두
-	EQUIP_EFFECTS[33] = [2, [[10 * sec, "hp", 3], [10 * sec, "sp", 3]]] # 도깨비부적
-	EQUIP_EFFECTS[36] = [2, [[10 * sec, "sp", 3]]] # 기원부
+	EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
+	EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
+	EQUIP_EFFECTS[29] = [[1 * sec, "buff", 131]] # 투명구두
+	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
+	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -435,6 +435,18 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP[193] = 4000000 # 파괴왕
 	BOSS_ENEMY_HP[231] = 3000000 # 천구왕
 	BOSS_ENEMY_HP[246] = 2000000 # 선장망령
+	
+	# 몬스터 경험치 설정
+	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
+	# 파티 퀘스트
+	ENEMY_EXP[45] = [1500, 10, 10] # 산속군사
+	ENEMY_EXP[91] = [70000, 10, 10] # 비류성창병
+	ENEMY_EXP[96] = [90000, 20, 20] # 비류성자객
+	ENEMY_EXP[97] = [90000, 20, 20] # 입구지키미
+	ENEMY_EXP[98] = [850000, 100, 100] # 비류장군
+	
+	# 보스몹
+	ENEMY_EXP[252] = [20000000] # 마려
 	
 	class MrMo_ABS
 		#--------------------------------------------------------------------------
@@ -820,42 +832,32 @@ if SDK.state("Mr.Mo's ABS") == true
 			equip.push($game_party.actors[0].armor3_id)
 			equip.push($game_party.actors[0].armor4_id)
 			
-			# EQUIP_EFFECTS[33] = [2, [[10 * sec, "hp", 1], [10 * sec, "sp", 1]]] # 도깨비부적
-			i = 0
+			# EQUIP_EFFECTS[33] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 도깨비부적
+			
 			for id in equip
 				if EQUIP_EFFECTS[id] != nil
-					if (i == 0 and EQUIP_EFFECTS[id][0] == 1) or (i >= 1)
-						data = EQUIP_EFFECTS[id][1]
-						for d in data
-							if (Graphics.frame_count % d[0] == 0)
-								type = d[1]
-								val = d[2]
-								case type
-								when "hp"
-									$game_party.actors[0].hp += ($game_party.actors[0].maxhp * val / 100) 
-								when "sp"
-									$game_party.actors[0].sp += ($game_party.actors[0].maxsp * val / 100)
-								when "com"
-									$game_temp.common_event_id = val
-								when "buff"
-									$rpg_skill.buff_active(val) if(!$rpg_skill.check_buff(val)) # 이게 버프 스킬인지 확인
-								when "custom"	
-									if i == 0 # 무기일 떄
-										case id
-										when 1
-											
-										end
-									else # 방어구 일 떄
-										case id
-										when 1
-										end
-									end
+					data = EQUIP_EFFECTS[id]
+					for d in data
+						if (Graphics.frame_count % d[0] == 0)
+							type = d[1]
+							val = d[2]
+							case type
+							when "hp"
+								$game_party.actors[0].hp += ($game_party.actors[0].maxhp * val / 100) 
+							when "sp"
+								$game_party.actors[0].sp += ($game_party.actors[0].maxsp * val / 100)
+							when "com"
+								$game_temp.common_event_id = val
+							when "buff"
+								$rpg_skill.buff_active(val) if(!$rpg_skill.check_buff(val)) # 이게 버프 스킬인지 확인
+							when "custom"	
+								case id
+								when 1
 								end
 							end
 						end
 					end
 				end
-				i += 1
 			end
 		end
 		
@@ -1405,28 +1407,32 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=====성황당 - 크랩훕흐===========#
 		#=============================#
 		def skill_sung
+			x = 11
+			y = 8
+			m_id = 17
 			case $game_variables[8]
 			when 0 # 부여성
-				map_m(17, 11, 8)
+				m_id = 17
 			when 1, 2 # 국내성
-				map_m(135, 11, 7)				
+				m_id = 135
 			when 3 # 용궁
-				map_m(204, 11, 8)
+				m_id = 204
 			when 4 # 고균도
-				map_m(85, 11, 8)
+				m_id = 85
 			when 5 # 일본
-				map_m(234, 11, 8)
+				m_id = 234
 			when 6 # 대방성
-				map_m(298, 11, 8)
+				m_id = 298
 			when 7 # 현도성
-				map_m(326, 11, 8)
+				m_id = 326
 			when 8 # 장안성
-				map_m(369, 11, 8)
+				m_id = 369
 			when 9 # 가릉도
-				map_m(384, 11, 8)
-			else # 딱히 안정했다면 부여성으로..
-				map_m(17, 11, 8)
+				m_id = 384
+			when 10 # 폭염도
+				m_id = 392
 			end
+			map_m(m_id, x, y)
 		end
 		
 		
@@ -1565,6 +1571,19 @@ if SDK.state("Mr.Mo's ABS") == true
 					map_m(id, 28 + rand(r), 33 + rand(r))
 				when 3
 					map_m(id, 27 + rand(r), 9 + rand(r))
+				end
+				
+			when 10 # 폭염도
+				id = 391
+				case d
+				when 0
+					map_m(id, 43 + rand(r), 29 + rand(r))
+				when 1
+					map_m(id, 7 + rand(r), 25 + rand(r))
+				when 2
+					map_m(id, 24 + rand(r), 37 + rand(r))
+				when 3
+					map_m(id, 26 + rand(r), 9 + rand(r))
 				end
 				
 			when -1
@@ -1925,8 +1944,17 @@ if SDK.state("Mr.Mo's ABS") == true
 		def treasure(enemy)
 			exp = 0
 			gold = 0
+			actor = $game_party.actors[0]
 			unless enemy.hidden
-				exp = enemy.exp
+				if ENEMY_EXP[enemy.id] != nil 
+					exp = ENEMY_EXP[enemy.id][0]
+					if ENEMY_EXP[enemy.id].size > 1
+						exp += (actor.maxhp * ENEMY_EXP[enemy.id][1] + actor.maxsp * ENEMY_EXP[enemy.id][2]).to_i
+					end
+				else
+					exp = enemy.exp
+				end
+				
 				gold += enemy.gold
 			end
 			
@@ -1935,7 +1963,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				exp *= $exp_event
 			end
 			
-			actor = $game_party.actors[0]
 			if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
 				last_level = actor.level
 				in_map_player = 1

@@ -775,33 +775,31 @@ class Rpg_skill
 		when 2, 3, 5, 6, 14 
 			$game_switches[6] = true
 			# 전사
-		when 7, 8, 9, 10, 15
+		when 7..10, 15
 			$game_switches[156] = true
 			# 도사
-		when 4, 11, 12, 13, 16
+		when 4, 11..13, 16
 			$game_switches[144] = true
 			# 도적
 		when 17..21
 			$game_switches[426] = true
 		end
+		degree_arr = [0, 143, 150, 155, 358]
 		
 		# 승급 차수 확인
-		$game_switches[143] = true # 1차
-		$game_switches[150] = true # 2차
-		$game_switches[155] = true # 3차
-		$game_switches[358] = true # 4차
+		$game_switches[143] = false # 1차
+		$game_switches[150] = false # 2차
+		$game_switches[155] = false # 3차
+		$game_switches[358] = false # 4차
 		
-		if !(n == 14 or n == 15 or n == 16 or n == 21)
-			$game_switches[358] = false
-			if !(n == 6 or n == 10 or n == 13 or n == 20)
-				$game_switches[155] = false 
-				if !(n == 5 or n == 9 or n == 12 or n == 19)
-					$game_switches[150] = false 
-					if !(n == 3 or n == 8 or n == 11 or n == 18)
-						$game_switches[143] = false 
-					end
-				end
-			end
+		$job_degree = 0
+		$job_degree = 1 if (n == 3 or n == 8 or n == 11 or n == 18)
+		$job_degree = 2 if (n == 5 or n == 9 or n == 12 or n == 19)		
+		$job_degree = 3	if (n == 6 or n == 10 or n == 13 or n == 20)
+		$job_degree = 4 if (n == 14 or n == 15 or n == 16 or n == 21)
+		
+		for i in 1..$job_degree
+			$game_switches[degree_arr[i]] = true
 		end
 	end
 end	

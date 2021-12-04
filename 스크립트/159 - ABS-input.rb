@@ -231,7 +231,7 @@ if SDK.state('Input')
 				keys.push(Input::LT)
 			when Input::RIGHT
 				keys.push(Input::RT)
-			when Input::C
+			when Input::C # 결정 키 설정
 				keys.push(Input::Space, Input::Letters["Z"], Input::N_Dot)
 			when Input::B
 				keys.push(Input::Esc)

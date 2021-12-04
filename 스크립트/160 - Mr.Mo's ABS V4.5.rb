@@ -1180,11 +1180,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					next if @skill_keys[key] == nil or @skill_keys[key] == 0
 					next if !Input.trigger?(key)
 					
-					if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
-						$console.write_line("귀신은 할 수 없습니다.")
-						return 
-					end
-					
 					if $game_switches[352] or $game_switches[25]
 						$console.write_line("스킬 사용 불가 지역입니다.")
 						return
@@ -1612,7 +1607,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			# 엑터가 사용할 수 없는 상황이면 무시
 			if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
-				$console.write_line("스킬을 사용 할 수 없습니다.")
+				$console.write_line("귀신은 할 수 없습니다.")
 				return 
 			end
 			

@@ -1624,6 +1624,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$exp_event = 0
 					end
 					
+					# 드롭율 이벤트 확인
+				when /<drop_event>(.*)<\/drop_event>/
+					n = $1.to_f
+					if n > 1.0
+						$chat.write ("                                     <현재 드롭율 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
+						$drop_event = n
+					else
+						$chat.write ("                                     <현재 드롭율 이벤트가 종료되었습니다.>", COLOR_EVENT) 
+						$drop_event = 1
+					end
+					
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)

@@ -280,8 +280,10 @@ class Interpreter
 				if $game_map.events[@event_id] != nil
 					# npc대화창 생성
 					Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, @m_count, 0)
-					$game_temp.message_text = nil
+				else
+					Jindow_N.new($game_temp.message_text, "", @m_count, 0)
 				end
+				$game_temp.message_text = nil
 				return true
 			end
 			
@@ -310,9 +312,10 @@ class Interpreter
 		# Continue
 		if $game_map.events[@event_id] != nil
 			Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, @parameters[0].size, 1)
-			$game_temp.message_text = nil
-			# Continue
+		else
+			Jindow_N.new($game_temp.message_text, "", @parameters[0].size, 1)
 		end
+		$game_temp.message_text = nil
 		return true
 	end
 	
@@ -353,9 +356,10 @@ class Interpreter
 		# Continue
 		if $game_map.events[@event_id] != nil
 			Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, 0, 2)
-			$game_temp.message_text = nil
-			# Continue
+		else	
+			Jindow_N.new($game_temp.message_text, "", 0, 2)
 		end
+		$game_temp.message_text = nil
 		# Continue
 		return true
 	end

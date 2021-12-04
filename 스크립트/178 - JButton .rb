@@ -138,7 +138,7 @@ module J
 				end
 			end
 			if Hwnd.highlight? == @viewport and self.bluck?
-				if Key.trigger?(KEY_SPACE)
+				if Key.trigger?(KEY_SPACE) or Key.trigger?(KEY_ENTER) or Key.trigger?(92) # 키패드 del키
 					@click = true
 				end
 			end

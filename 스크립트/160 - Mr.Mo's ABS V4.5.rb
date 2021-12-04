@@ -664,9 +664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					@enemies[event.id].respawn = respawn[1].to_i * 6
 				end
 			end
-			
 			@enemies[event.id].aggro = $is_map_first
-			
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -923,7 +921,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				if !enemy.in_battle and !update_enemy_ai(enemy)
 					next 
 				end
-				update_enemy_battle(enemy) if enemy.in_battle and enemy.behavior != 0
+				
+				if enemy.in_battle and enemy.behavior != 0
+					update_enemy_battle(enemy) 
+				end
 			end
 			@get_hate = false
 		end
@@ -940,8 +941,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update_enemy_battle(enemy)
 			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
-			if (!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and !in_range?(enemy.event, enemy.attacking.event, enemy.hear_range)) or
-				(enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id)) or !enemy.aggro
+			if enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id) or
+				(!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and !in_range?(enemy.event, enemy.attacking.event, enemy.hear_range))
 				# 원래 움직임으로 돌아옴
 				restore_movement(enemy)
 				# 적대모드 풀림
@@ -949,8 +950,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemy.attacking = nil
 				return
 			end      
+			
 			# 공격주기마다 행동 시작
-			update_enemy_attack(enemy,enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
+			update_enemy_attack(enemy, enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
 			# Skip this if the attack killed the enemy
 			return if enemy == nil or enemy.attacking == nil or enemy.event.moving?
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
@@ -1584,6 +1586,16 @@ if SDK.state("Mr.Mo's ABS") == true
 			when -1
 				
 			end
+			case d
+				when 0
+					$console.write_line("동쪽에 이르렀으니... ")
+				when 1
+					$console.write_line("서쪽에 이르렀으니... ")
+				when 2
+					$console.write_line("남쪽에 이르렀으니... ")
+				when 3
+					$console.write_line("북쪽에 이르렀으니... ")
+				end
 			Network::Main.ani(Network::Main.id, 129)
 		end
 		
@@ -1844,8 +1856,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 적 유닛이 적을 죽이면 평상시로 돌아옴
 			if a != nil and !a.is_a?(Game_Actor)
 				a.attacking = nil 
-				a.in_battle = false
-				restore_movement(a)
+				#a.in_battle = false
+				#restore_movement(a)
 			end
 			
 			id = enemy.event_id
@@ -1895,9 +1907,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			if !e.is_a?(Game_NetPlayer)
-				e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
+				p e
+				#e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
-				restore_movement(e) if e != nil and !e.is_a?(Game_Actor)
+				#restore_movement(e) if e != nil and !e.is_a?(Game_Actor)
 			end
 			
 			return true if $game_switches[296] # 죽음 표시 스위치
@@ -2055,7 +2068,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			if e.hate_group.include?(0) and in_range?(e.event, $game_player, e.see_range) or in_direction?(e.event, $game_player)
 				if $game_party.actors[0].hp <= 0
 					e.in_battle = false
-					restore_movement(e)
 					return false 
 				end
 				enemies.push($game_player) 
@@ -2065,13 +2077,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get the hate enemies
 				for enemy in @enemies.values
 					next if enemy == nil or enemy == e or !e.hate_group.include?(enemy.enemy_id) or
-					!in_range?(e.event, enemy.event, e.see_range) or !in_direction?(e.event, enemy.event)
+					!in_range?(e.event, enemy.event, e.see_range) or enemy.dead? #or !in_direction?(e.event, enemy.event)
 					#Insert in to the list if the enemy is in hate group
 					enemies.push(enemy)
 				end
 			end
 			#Return false if the list is nil or empty
-			return false if enemies == nil or enemies == []    
+			if enemies == nil or enemies == []
+				return false 
+			end
+			
 			#Order the enemies
 			if !e.closest_enemy
 				#Order from hate points
@@ -2128,13 +2143,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get the hate enemies
 				for enemy in @enemies.values
 					next if enemy == nil or enemy == e or !e.hate_group.include?(enemy.enemy_id) or
-					!in_range?(e.event, enemy.event, e.hear_range+d)
+					!in_range?(e.event, enemy.event, e.hear_range+d) or enemy.dead?
 					#Insert in to the list if the enemy is in hate group
 					enemies.push(enemy)
 				end
 			end
 			#Return False
-			return false if enemies == nil or enemies == []
+			if enemies == nil or enemies == []
+				return false 
+			end
+			
 			#Order the enemies
 			if !e.closest_enemy
 				#Order from hate points
@@ -4090,7 +4108,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Move at Random
 		#--------------------------------------------------------------------------
 		def move_random()
-			if !self.is_a?(Game_Ranged_Skill) and !self.is_a?(Game_Ranged_Explode) and $ABS.enemies[self.event.id] != nil and !$ABS.enemies[self.event.id].aggro
+			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
 				return true if !$is_map_first
 			end
 			case rand(4)

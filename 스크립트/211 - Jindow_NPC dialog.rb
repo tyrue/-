@@ -93,6 +93,8 @@ class Jindow_N < Jindow
 		
 		if @input_num != nil
 			@a.y = @input_num.y + @input_num.height + 20
+			@input_num.set ""
+			@input_clear = false
 		else
 			if @menu.size > 0
 				@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
@@ -166,6 +168,14 @@ class Jindow_N < Jindow
 	
 	def update
 		super
+		if @input_num != nil
+			if !@input_clear
+				@input_num.set ""
+				@input_clear = true
+				return
+			end
+		end
+		
 		if @menu.size > 0
 			for i in 0...@menu.size
 				if @menu[i].click			

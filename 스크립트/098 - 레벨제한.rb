@@ -30,7 +30,7 @@ AGI_LIMIT   = 4000      	#AGI 한계 치
 INT_LIMIT   = 4000      	#INT 한계 치
 BONUS_LIMIT = 5000					#아이템 착용시 더 추가 할수 있는 능력치
 
-MAX_EXP			= 4200000000  #만렙시 경험치 
+MAX_EXP			= 42000000000  #만렙시 경험치 
 
 class Game_Actor < Game_Battler
 	attr_accessor :exp_list

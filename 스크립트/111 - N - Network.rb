@@ -764,8 +764,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#------------------
 			# 스위치 및 변수 공유 시스템
 			#------------------
-			def self.party_switch(id, state, map_id = 0)
+			def self.party_switch(id, state, map_id = $game_map.map_id)
 				@socket.send("<party_switch>#{id},#{state},#{map_id}</party_switch>\n")
+			end
+			
+			def self.party_quest_check(id)
+				@socket.send("<party_quest_check>#{id}</party_quest_check>\n")
 			end
 			
 			#------------------
@@ -1910,6 +1914,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
+					# 파티퀘스트 입장 여부 확인 : 스위치 번호, 1/0
+				when /<party_quest_check>(.*)<\/party_quest_check>/
+					data = $1.split(',')
+					id = data[0].to_i
+					sw = data[1].to_i
+					sw == 1 ? $game_switches[id] = true : $game_switches[id] = false
+					
 					#----------------------------길드---------------------------------
 					return true
 				when /<Guild_Create>(.*),(.*)<\/Guild_Create>/ 
@@ -1988,7 +1999,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					elsif $2.to_s == $game_party.actors[0].name
 						$chat.write("(귓속말) #{$1.to_s} <<< #{$3.to_s}", COLOR_WHISPER)
 					end
-					
+						
 				when /<partymessage>(.*),(.*),(.*),(.*)<\/partymessage>/ 
 					if $npt == $4.to_s
 						$chat.write("(파티말) #{$1.to_s}(#{$2.to_s}) : #{$3.to_s}", COLOR_PARTY)
@@ -2047,14 +2058,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<trade_fail>(.*)<\/trade_fail>/
 					if $1.to_s == $game_party.actors[0].name
 						Jindow_Trade.trade_fail
-						#~ $console.write_line("교환이 취소 되었습니다.")
-						#~ Hwnd.dispose("Trade")
-						#~ $item_number.clear
-						#~ $nowtrade = 0
-						#~ $trade2_ok = 0
-						#~ $trade1_ok = 0
-						#~ $trade_player_money = 0
-						#~ $trade_player = ""
 					end
 					return true  
 					

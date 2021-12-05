@@ -186,6 +186,7 @@ class Jindow_Trade < Jindow
 			$trade_player = ""
 			$trade_player_money = 0
 			$item_number.clear
+			$nowtrade = 0
 			Hwnd.dispose("Trade")
 		end
 		

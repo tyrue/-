@@ -169,6 +169,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[154] = [5, 4, "공격스킬", 4, 0] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 0] # 암흑진파
 	RANGE_SKILLS[156] = [5, 2, "공격스킬", 4, 0] # 흑룡광포
+	RANGE_SKILLS[158] = [10, 2, "공격스킬", 4, 0] # 지옥겁화
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
 	# 폭발 범위
@@ -429,21 +430,31 @@ if SDK.state("Mr.Mo's ABS") == true
 	#--------------------------------------------------------------------------
 	# 보스몹 체력 설정
 	BOSS_ENEMY_HP = {}
-	BOSS_ENEMY_HP[37] = 2000000000 # 무적토끼
+	BOSS_ENEMY_HP[37]  = 2000000000 # 무적토끼
 	BOSS_ENEMY_HP[102] = 10000000 # 반고
 	BOSS_ENEMY_HP[159] = 3000000 # 거북장군
 	BOSS_ENEMY_HP[193] = 4000000 # 파괴왕
 	BOSS_ENEMY_HP[231] = 3000000 # 천구왕
 	BOSS_ENEMY_HP[246] = 2000000 # 선장망령
+	BOSS_ENEMY_HP[252] = 20000000 # 마려
+	BOSS_ENEMY_HP[253] = 5000000 # 현무
+	BOSS_ENEMY_HP[257] = 2000000 # 태산
+	BOSS_ENEMY_HP[258] = 30000000 # 길림장군
 	
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [1500, 10, 10] # 산속군사
-	ENEMY_EXP[91] = [70000, 10, 10] # 비류성창병
-	ENEMY_EXP[96] = [90000, 20, 20] # 비류성자객
-	ENEMY_EXP[97] = [90000, 20, 20] # 입구지키미
-	ENEMY_EXP[98] = [850000, 100, 100] # 비류장군
+	ENEMY_EXP[45] = [1500, 0.2, 0.2] # 산속군사
+	ENEMY_EXP[91] = [70000, 1, 1] # 비류성창병
+	ENEMY_EXP[96] = [90000, 2, 2] # 비류성자객
+	ENEMY_EXP[97] = [90000, 2, 2] # 입구지키미
+	ENEMY_EXP[98] = [850000, 10, 10] # 비류장군
+	
+	ENEMY_EXP[254] = [500000, 1, 1] # 뇌랑
+	ENEMY_EXP[255] = [500000, 1, 1] # 왕가
+	ENEMY_EXP[256] = [850000, 1, 1] # 조왕
+	ENEMY_EXP[257] = [3500000, 5, 5] # 태산
+	ENEMY_EXP[258] = [10000000, 30, 30] # 길림장군
 	
 	# 보스몹
 	ENEMY_EXP[252] = [20000000] # 마려
@@ -913,7 +924,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 적 캐릭터의 상태 업데이트
 				update_enemy_state(enemy)
 				# 화면에 없는 적 캐릭터는 무시
-				next if !in_screen?(enemy.event)
+				#next if !in_screen?(enemy.event)
 				# 적 캐릭터의 적대 관계 형성
 				make_hate_points(enemy) if @get_hate
 				
@@ -1024,17 +1035,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					when 1..3 #Nothing
 						return
 					end
+					
 				when 1..2 #Skill 적 캐릭의 스킬 사용
 					#Get the skill
 					skill = $data_skills[action.skill_id]
 					#Return if the skill is NIL
 					return if skill == nil
+					return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
+					next if !e.can_use_skill?(skill)
 					# 스킬을 받는 타입
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
-						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
 						next if !in_direction?(e.event, actor.event) # 적캐릭터가 목표를 바라보고 있어야함
-						next if !e.can_use_skill?(skill)
 						
 						# Animate the enemy
 						e.event.animation_id = skill.animation1_id
@@ -1082,9 +1094,6 @@ if SDK.state("Mr.Mo's ABS") == true
 						return
 						
 					when 2 #All Emenies 적 전체
-						# 해당 스킬 범위에 적이 있으면 그 적들에게 스킬을 발사
-						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
-						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
@@ -1099,6 +1108,8 @@ if SDK.state("Mr.Mo's ABS") == true
 							next if !e.hate_group.include?(enemy.id)
 							#Skip NIL values
 							next if enemy == nil
+							next if !enemy.is_a?(Game_Player) and enemy.dead? 
+							
 							enemy.actor.effect_skill(e, skill)
 							hit_enemy(enemy, e, skill.animation2_id) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
 							next if enemy_dead?(enemy.actor, e)
@@ -1437,6 +1448,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		#=====비영사천문 - 크랩훕흐===========#
 		#=============================#
 		def skill_byung(d) # d : 방향, 0 : 동, 1 : 서, 2 : 남, 3: 북
+			if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
+				$console.write_line("귀신은 할 수 없습니다.")
+				return 
+			end
 			r = 3
 			case $game_variables[8] # 맵 번호
 			when 0 # 부여성
@@ -1587,15 +1602,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 			end
 			case d
-				when 0
-					$console.write_line("동쪽에 이르렀으니... ")
-				when 1
-					$console.write_line("서쪽에 이르렀으니... ")
-				when 2
-					$console.write_line("남쪽에 이르렀으니... ")
-				when 3
-					$console.write_line("북쪽에 이르렀으니... ")
-				end
+			when 0
+				$console.write_line("동쪽에 이르렀으니... ")
+			when 1
+				$console.write_line("서쪽에 이르렀으니... ")
+			when 2
+				$console.write_line("남쪽에 이르렀으니... ")
+			when 3
+				$console.write_line("북쪽에 이르렀으니... ")
+			end
 			Network::Main.ani(Network::Main.id, 129)
 		end
 		
@@ -1907,7 +1922,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			if !e.is_a?(Game_NetPlayer)
-				p e
 				#e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
 				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
 				#restore_movement(e) if e != nil and !e.is_a?(Game_Actor)
@@ -2007,6 +2021,29 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				drop_enemy(enemy) # ABS monster item drop 파일 참조
 			end
+		end
+		
+		# 간단하게 경험치 바로 얻을 수 있는 함수
+		def simple_exp(id, val = 0)
+			return if $data_enemies[id] == nil
+			enemy = $data_enemies[id]
+			actor = $game_party.actors[0]
+			exp = val
+			
+			if ENEMY_EXP[id] != nil 
+				exp = ENEMY_EXP[id][0]
+				if ENEMY_EXP[id].size > 1 
+					exp += (actor.maxhp * ENEMY_EXP[id][1] + actor.maxsp * ENEMY_EXP[id][2]).to_i
+				end
+			else
+				exp = enemy.exp
+			end
+			# 경험치 이벤트!
+			if $game_switches[1500] == true  
+				exp *= $exp_event
+			end
+			actor.exp += exp
+			$console.write_line("경험치:#{exp} 획득")
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3794,10 +3831,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				if self.damage > 0
-					limit = 400.0
 					if self.is_a?(Game_Actor)
+						limit = 400.0
 						self.damage = [((self.damage) * (1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.1).to_i].max
 					else
+						limit = 2000.0
 						self.damage = [((self.damage) * (1.0 - ([self.pdef + self.mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.1).to_i].max
 					end
 				end
@@ -3975,8 +4013,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			# If passable
+			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			if passable?(@x, @y, 2)
-				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 				# Turn down
 				turn_down
 				# Update coordinates
@@ -4010,12 +4048,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					turn_left
 				end
 			end
-			
+			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			# If passable
 			if passable?(@x, @y, 4)
 				# Turn left
 				turn_left
-				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 				# Update coordinates
 				@x -= 1
 				# Increase steps
@@ -4047,11 +4084,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			
+			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			# If passable
 			if passable?(@x, @y, 6)
 				# Turn right
 				turn_right
-				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
+				
 				# Update coordinates
 				@x += 1
 				# Increase steps
@@ -4083,11 +4121,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			
+			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			# If passable
 			if passable?(@x, @y, 8)
 				# Turn up
 				turn_up
-				return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
+				
 				# Update coordinates
 				@y -= 1
 				# Increase steps

@@ -4,6 +4,11 @@
 # Author    Me™ and Mr.Mo
 # Version   1.0
 #==============================================================================
+PARTY_MAP = {}
+PARTY_MAP[51] = 1
+PARTY_MAP[113] = 1
+PARTY_MAP[404] = 1
+
 class Scene_Map
 	attr_accessor :spriteset
 	#--------------------------------------------------------------------------
@@ -23,7 +28,7 @@ class Scene_Map
 		Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
 		Network::Main.send_start
 		
-		$nowtrade = 0
+		$nowtrade = 0 # 교환 상태 초기화
 		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = 3
 		if SKILL_BUFF_TIME[136][1] > 0 # 파무쾌보
@@ -33,11 +38,11 @@ class Scene_Map
 		
 		$Drop = [] # 드랍 아이템 내용 초기화
 		# 현재 맵의 몬스터 정보를 요청
-		if $game_map.map_id != 51 and $game_map.map_id != 113# 파티퀘 맵 제외
+		if PARTY_MAP[$game_map.map_id] == nil # 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
+			# 현재 맵의 아이템을 요청
+			Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 		end
-		# 현재 맵의 아이템을 요청
-		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 		$game_temp.spriteset_refresh == true
 		$chat_b.refresh
 		

@@ -443,7 +443,7 @@ module J
 			@edit = true
 			@bluck = false
 			@start = false
-			@input_hangul = true
+			@input_hangul = false
 			@char = nil
 			@text = []
 			@o_text = ""
@@ -452,6 +452,7 @@ module J
 			@piece[1] = nil
 			@piece[2] = nil
 			@piece[3] = nil
+			
 			return self
 		end
 		
@@ -499,6 +500,12 @@ module J
 					command = "*" * command.scan(/./).size
 				end
 				self.bitmap.draw_text(self.bitmap.rect, command + "|", 0)
+				
+				if @input_hangul
+					self.bitmap.draw_text(self.bitmap.rect, "한", 2)
+				else
+					self.bitmap.draw_text(self.bitmap.rect, "영", 2)
+				end
 			end
 		end
 		
@@ -529,7 +536,7 @@ module J
 			end
 		end
 		
-		def refresh(x, y, width, height, hangul=true)
+		def refresh(x, y, width, height, hangul = true)
 			@start = true
 			@input_hangul = hangul
 			if x.rect?
@@ -580,6 +587,7 @@ module J
 			dl.dispose
 			dm.dispose
 			dr.dispose
+			
 			self.view
 			return self
 		end
@@ -600,9 +608,10 @@ module J
 					@push ? (@push = false) : 0
 				end
 			else
+				
 			end
 			
-			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4)
+			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4) # 엔터
 				@click = true
 			end
 			self.bluck? ? 0 : return
@@ -1124,6 +1133,11 @@ module J
 			
 			if Key.trigger?(98) or Key.trigger?(KEY_ALT)  # 한 / 영 전환
 				@input_hangul = !@input_hangul
+				if @input_hangul
+					self.bitmap.draw_text(self.bitmap.rect, "한", 2)
+				else
+					self.bitmap.draw_text(self.bitmap.rect, "영", 2)
+				end
 				return
 			end
 			

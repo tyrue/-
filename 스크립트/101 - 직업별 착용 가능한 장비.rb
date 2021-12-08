@@ -183,7 +183,6 @@ class Game_Actor < Game_Battler
 		$job_degree = 3	if (n == 6 or n == 10 or n == 13 or n == 20)
 		$job_degree = 4 if (n == 14 or n == 15 or n == 16 or n == 21)
 		
-		
 		if $game_switches[6] # 주술사
 			job_type = 1
 			if item.is_a?(RPG::Weapon)
@@ -241,6 +240,19 @@ class Game_Actor < Game_Battler
 				return false if check2 == nil
 				return false if check2[1] > $job_degree
 				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
+				return true
+			end
+		else # 평민
+			if item.is_a?(RPG::Weapon)
+				return false if check == nil
+				return false if check[1] > $job_degree
+				return false if !check[0].include?(0)
+				return true
+			end
+			if item.is_a?(RPG::Armor)
+				return false if check2 == nil
+				return false if check2[1] > $job_degree
+				return false if !check2[0].include?(0)
 				return true
 			end
 		end

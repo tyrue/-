@@ -154,7 +154,7 @@ if SDK.state("Mr.Mo's ABS")
 			#맵이름의 표시
 			map_infos = load_data("Data/MapInfos.rxdata")
 			mapname = map_infos[$game_map.map_id].name.to_s
-			self.contents.draw_frame_text(320 - mapname.size, 0, 400, 12, mapname)
+			self.contents.draw_frame_text(15, 0, 640, 12, mapname, 1)
 			
 			# 좌표의 표시
 			@old_x = $game_player.x

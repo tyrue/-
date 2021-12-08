@@ -1619,11 +1619,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<exp_event>(.*)<\/exp_event>/
 					n = $1.to_i
 					if n > 0
-						$chat.write ("                                     <현재 경험치 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
+						$chat.write ("<현재 경험치 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
 						$game_switches[1500] = true
 						$exp_event = n
 					else
-						$chat.write ("                                     <현재 경험치 이벤트가 종료되었습니다.>", COLOR_EVENT) 
+						$chat.write ("<현재 경험치 이벤트가 종료되었습니다.>", COLOR_EVENT) 
 						$game_switches[1500] = false
 						$exp_event = 0
 					end
@@ -1632,10 +1632,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<drop_event>(.*)<\/drop_event>/
 					n = $1.to_f
 					if n > 1.0
-						$chat.write ("                                     <현재 드롭율 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
+						$chat.write ("<현재 드랍율 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
 						$drop_event = n
 					else
-						$chat.write ("                                     <현재 드롭율 이벤트가 종료되었습니다.>", COLOR_EVENT) 
+						$chat.write ("<현재 드랍율 이벤트가 종료되었습니다.>", COLOR_EVENT) 
 						$drop_event = 1
 					end
 					

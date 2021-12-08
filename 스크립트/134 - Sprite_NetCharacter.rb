@@ -58,6 +58,7 @@ class Sprite_NetCharacter < RPG::Sprite
 		bitmap.font.name = "굴림"
 		bitmap.font.size = 12
 		bitmap.draw_frame_text(0, 0, 160, 47, @character.name.to_s, 1)
+		
 		# Creates Display Text Sprite
 		self.visible = true #true
 		
@@ -126,6 +127,7 @@ class Sprite_NetCharacter < RPG::Sprite
 			damage(@character.damage_show, @character.show_critical)
 			@character.show_demage(nil, false)
 		end
+		
 		# Name Sprite
 		@_text_display.x = self.x
 		@_text_display.y = self.y - self.oy / 2 - 24

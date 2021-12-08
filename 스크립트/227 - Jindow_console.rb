@@ -1,6 +1,6 @@
 class Jindow_Console < Jindow
 	def initialize
-		super(430, 230, 200, 100)
+		super(450, 250, 180, 80)
 		@head = true
 		@name = "콘솔 창"
 		
@@ -14,7 +14,7 @@ class Jindow_Console < Jindow
 		
 		@old_size = 0
 		@max_size = 40
-		@font_size = 14
+		@font_size = 12
 		@check = false
 	end	
 	
@@ -68,9 +68,9 @@ class Jindow_Console < Jindow
 		end
 		@console_log[@console_log.size - 1].x = 0
 		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * @font_size
-		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width + 10, @font_size)
+		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width + 5, @font_size)
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
-		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width + 10, @font_size, text, 0)
+		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width + 5, @font_size, text, 0)
 		@console_log[@console_log.size - 1].visible = @tog
 		@check = true
 	end

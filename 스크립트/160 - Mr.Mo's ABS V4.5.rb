@@ -1130,10 +1130,13 @@ if SDK.state("Mr.Mo's ABS") == true
 						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
+						
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
+						
 						e.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
+						
 						return
 					end
 					return
@@ -3325,13 +3328,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					if $ABS.enemies[id].damage != nil
 						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
 						
-						id2 = 0
-						for i in $game_map.events.keys.sort
-							break if i == id
-							id2 += 1
-						end
+						#~ id2 = 0
+						#~ for i in $game_map.events.keys.sort
+							#~ break if i == id
+							#~ id2 += 1
+						#~ end
 						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id2},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	
+						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id - 1},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	
 					end
 					#Make Damage nil
 					$ABS.enemies[id].damage = nil
@@ -3791,7 +3794,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end	
 					
 					# 적 유닛 스킬
-				when 157
+				when 157 # 10퍼 회복
 					user.hp += user.maxhp / 10
 					user.damage = user.maxhp / 10
 					user.critical = "heal"

@@ -4,20 +4,14 @@
 #  - 유저를 클릭하면 해당 유저의 상세 정보를 표시합니다.
 #==============================================================================
 class Jindow_P_Status < Jindow
-	def initialize(usrname, lev, hp, mhp, sp, msp, pci, netid)
+	def initialize(usrname, netid)
 		super(0, 0, 70, 110)
 		self.name = usrname
 		@usrname = usrname
-		@pci = pci
-		@lev = lev
 		@head = true
 		@mark = true
 		@drag = true
 		@close = true
-		@hp = hp
-		@mhp = mhp
-		@sp = sp
-		@msp = msp
 		@netid = netid
 		@netPlayer = Network::Main.players[@netid]
 		self.refresh("P_Status")
@@ -94,7 +88,7 @@ class Jindow_P_Status < Jindow
 		
 		
 		if @d.click # 정보
-			Jindow_NetPlayer_Info.new(@netPlayer.netid, @netPlayer.username)
+			Jindow_NetPlayer_Info.new(@netPlayer.netid, @netPlayer.name)
 			Hwnd.dispose(self)
 		end
 	end

@@ -70,6 +70,9 @@ class Jindow_Drop < Jindow
 					$game_party.lose_gold(num)
 					create_moneys(num, x, y)
 					$console.write_line("금전 #{num}전을 버렸습니다.")
+					
+					Audio.se_play("Audio/SE/줍기", $game_variables[13])
+					Network::Main.ani(Network::Main.id, 198)
 					Hwnd.dispose(self)
 				else
 					$console.write_line("금전이 부족합니다")
@@ -85,6 +88,9 @@ class Jindow_Drop < Jindow
 						$game_party.lose_item(@item_id, num)
 						$console.write_line("#{$data_items[@item_id].name} #{num}개를 버렸습니다.")
 						create_drops(@type2, @item_id, x, y, num)
+						
+						Audio.se_play("Audio/SE/줍기", $game_variables[13])
+						Network::Main.ani(Network::Main.id, 198)
 						Hwnd.dispose(self)
 					else
 						$console.write_line("개수가 부족합니다")
@@ -95,6 +101,9 @@ class Jindow_Drop < Jindow
 						$game_party.lose_weapon(@item_id, num)
 						$console.write_line("#{$data_weapons[@item_id].name} #{num}개를 버렸습니다.")
 						create_drops(@type2, @item_id, x, y, num)
+						
+						Audio.se_play("Audio/SE/줍기", $game_variables[13])
+						Network::Main.ani(Network::Main.id, 198)
 						Hwnd.dispose(self)
 					else
 						$console.write_line("개수가 부족합니다")
@@ -105,6 +114,9 @@ class Jindow_Drop < Jindow
 						$game_party.lose_armor(@item_id, num)
 						$console.write_line("#{$data_armors[@item_id].name} #{num}개를 버렸습니다.")
 						create_drops(@type2, @item_id, x, y, num)
+						
+						Audio.se_play("Audio/SE/줍기", $game_variables[13])
+						Network::Main.ani(Network::Main.id, 198)
 						Hwnd.dispose(self)
 					else
 						$console.write_line("개수가 부족합니다")

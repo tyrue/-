@@ -33,6 +33,18 @@ class Sprite_NetCharacter < RPG::Sprite
 		$ani_character[@netid.to_i] = @character
 		@test = false
 		
+		# Creates Display Text Sprite
+		self.visible = true #true
+		self.opacity = 255
+		@_text_display = Sprite.new(self.viewport)
+		display_level
+		update
+	end
+	
+	def display_level
+		@level = @character.level
+		
+		@_text_display.dispose
 		# Creates Display Bitmap
 		bitmap = Bitmap.new(160, 100)
 		# Draws Text Shadow
@@ -59,9 +71,6 @@ class Sprite_NetCharacter < RPG::Sprite
 		bitmap.font.size = 12
 		bitmap.draw_frame_text(0, 0, 160, 47, @character.name.to_s, 1)
 		
-		# Creates Display Text Sprite
-		self.visible = true #true
-		
 		@_text_display = Sprite.new(self.viewport)
 		@_text_display.bitmap = bitmap
 		@_text_display.ox = 80
@@ -70,9 +79,8 @@ class Sprite_NetCharacter < RPG::Sprite
 		@_text_display.y = self.y - self.oy / 2 - 24
 		@_text_display.z = 30000
 		@_text_display.visible = self.visible
-		self.opacity = 255
-		update
 	end
+	
 	#--------------------------------------------------------------------------
 	# * Disposes Text
 	#--------------------------------------------------------------------------
@@ -89,9 +97,12 @@ class Sprite_NetCharacter < RPG::Sprite
 		if @tile_id != @character.tile_id or
 			@character_name != @character.character_name or
 			@character_hue != @character.character_hue or
-			@character.equip_change
+			@character.equip_change or 
+			@level != @character.level
+			
 			#Updates tile info
 			update_tile
+			display_level
 			@character.equip_change = false
 		end
 		# update_tile
@@ -140,6 +151,7 @@ class Sprite_NetCharacter < RPG::Sprite
 		@tile_id = @character.tile_id
 		@character_name = @character.character_name
 		@character_hue = @character.character_hue
+		
 		# If tile ID value is valid
 		if @tile_id >= 384
 			self.bitmap = RPG::Cache.tile($game_map.tileset_name,

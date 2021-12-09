@@ -309,6 +309,9 @@ class Jindow_Item_Info < Jindow
 					$game_party.lose_item(@item_id, 1)
 					$console.write_line("#{$data_items[@item_id].name}를 버렸습니다.")
 					create_drops(@type, @item_id, x, y, 1)
+					
+					Audio.se_play("Audio/SE/줍기", $game_variables[13])
+					Network::Main.ani(Network::Main.id, 198)
 					Hwnd.dispose(self)
 					return
 				end
@@ -317,6 +320,9 @@ class Jindow_Item_Info < Jindow
 					$game_party.lose_weapon(@item_id, 1)
 					$console.write_line("#{$data_weapons[@item_id].name}를 버렸습니다.")
 					create_drops(@type, @item_id, x, y, 1)
+					
+					Audio.se_play("Audio/SE/줍기", $game_variables[13])
+					Network::Main.ani(Network::Main.id, 198)
 					Hwnd.dispose(self)
 					return
 				end
@@ -325,6 +331,9 @@ class Jindow_Item_Info < Jindow
 					$game_party.lose_armor(@item_id, 1)
 					$console.write_line("#{$data_armors[@item_id].name}를 버렸습니다.")
 					create_drops(@type, @item_id, x, y, 1)
+					
+					Audio.se_play("Audio/SE/줍기", $game_variables[13])
+					Network::Main.ani(Network::Main.id, 198)
 					Hwnd.dispose(self)
 					return
 				end

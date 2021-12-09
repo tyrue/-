@@ -166,9 +166,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			
 			if a
 				# 장비 갈아입는 소리 보내주고 내 상태 보냄
+				$game_temp.common_event_id = 2
 				Network::Main.ani(Network::Main.id, 189)
 				Network::Main.send_map
-				$game_temp.common_event_id = 2
 				return true
 			else
 				return true if $game_variables[9] == 1
@@ -189,6 +189,9 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@character_name != @character.character_name or
 				@character_hue != @character.character_hue or
 				equip_changed?
+				
+				Network::Main.ani(Network::Main.id, 189)
+				Network::Main.send_map
 				
 				is_trans = 255
 				is_trans = 125 if $state_trans 

@@ -444,17 +444,17 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [1500, 0.2, 0.2] # 산속군사
-	ENEMY_EXP[91] = [70000, 1, 1] # 비류성창병
-	ENEMY_EXP[96] = [90000, 2, 2] # 비류성자객
-	ENEMY_EXP[97] = [90000, 2, 2] # 입구지키미
-	ENEMY_EXP[98] = [850000, 10, 10] # 비류장군
+	ENEMY_EXP[45] = [15000, 0.02, 0.02] # 산속군사
+	ENEMY_EXP[91] = [70000, 0.1, 0.1] # 비류성창병
+	ENEMY_EXP[96] = [90000, 0.1, 0.1] # 비류성자객
+	ENEMY_EXP[97] = [90000, 0.1, 0.1] # 입구지키미
+	ENEMY_EXP[98] = [850000, 1, 1] # 비류장군
 	
-	ENEMY_EXP[254] = [500000, 1, 1] # 뇌랑
-	ENEMY_EXP[255] = [500000, 1, 1] # 왕가
-	ENEMY_EXP[256] = [850000, 1, 1] # 조왕
-	ENEMY_EXP[257] = [3500000, 5, 5] # 태산
-	ENEMY_EXP[258] = [10000000, 30, 30] # 길림장군
+	ENEMY_EXP[254] = [500000, 0.05, 0.08] # 뇌랑
+	ENEMY_EXP[255] = [500000, 0.08, 0.08] # 왕가
+	ENEMY_EXP[256] = [850000, 0.8, 0.8] # 조왕
+	ENEMY_EXP[257] = [3500000, 1, 1] # 태산
+	ENEMY_EXP[258] = [10000000, 3, 3] # 길림장군
 	
 	# 보스몹
 	ENEMY_EXP[252] = [20000000] # 마려
@@ -1229,14 +1229,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 해당 키에 등록된 아이템이 없으면 무시
 				next if @item_keys[key] == nil or @item_keys[key] == 0
 				next if !Input.trigger?(key)
+				item = $data_items[@item_keys[key]] # 아이템데이터 가져옴
+				
 				# 유저 죽음 스위치가 켜져있다면 패스
 				if $game_switches[296]
-					$console.write_line("귀신은 할 수 없습니다.")
-					return 
+					if item.id != 63 # 부활시약
+						$console.write_line("귀신은 할 수 없습니다.")
+						return 
+					end
 				end
 				
-				# 아이템데이터 가져옴
-				item = $data_items[@item_keys[key]]
 				# 사용 못하는 아이템이면 못쓴다고 효과음 내고 무시
 				return $game_system.se_play($data_system.buzzer_se) if !$game_party.item_can_use?(item.id)
 				# 아이템이 없으면 무시
@@ -1404,6 +1406,15 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		# 맵을 이동하기위한 함수
 		def map_m(id, x, y)
+			#~ while true
+				#~ x = rand(w)
+				#~ y = rand(h)
+				#~ if $game_map.passable?(x, y, d)
+					#~ e.moveto(x, y)
+					#~ return
+				#~ end
+			#~ end
+			
 			if $game_map.map_id != id
 				$game_temp.player_transferring = true # 이동 가능
 				$game_temp.player_new_map_id = id
@@ -1455,6 +1466,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("귀신은 할 수 없습니다.")
 				return 
 			end
+			
 			r = 3
 			case $game_variables[8] # 맵 번호
 			when 0 # 부여성
@@ -3330,8 +3342,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 						#~ id2 = 0
 						#~ for i in $game_map.events.keys.sort
-							#~ break if i == id
-							#~ id2 += 1
+						#~ break if i == id
+						#~ id2 += 1
 						#~ end
 						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
 						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id - 1},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	
@@ -3794,9 +3806,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					end	
 					
 					# 적 유닛 스킬
-				when 157 # 10퍼 회복
-					user.hp += user.maxhp / 10
-					user.damage = user.maxhp / 10
+				when 157 # n퍼 회복
+					user.hp += user.maxhp / 5
+					user.damage = user.maxhp / 5
 					user.critical = "heal"
 					return
 				else
@@ -3826,13 +3838,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# If damage value is strictly positive
 				if self.damage > 0
-					
 					# Guard correction
 					if self.guarding?
 						self.damage /= 2
 					end
 				end
 				
+				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
+				
+				# 방어력에 따른 데미지 감소
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
 						limit = 400.0
@@ -3868,19 +3882,19 @@ if SDK.state("Mr.Mo's ABS") == true
 					effective = true
 				end
 				
+				
+				# Substract damage from HP
+				last_hp = self.hp
+				self.hp -= self.damage
+				
 				r = rand(100)
-				if r <= (self.damage * 100 / self.maxhp) or r <= 30
-					if !self.is_a?(Game_Actor)
+				if r <= [(self.damage * 100 / self.maxhp), 30].max
+					if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
 						
 						self.aggro = true
 						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
 					end
 				end
-				
-				
-				# Substract damage from HP
-				last_hp = self.hp
-				self.hp -= self.damage
 				
 				return $ABS.player_dead?(self, user) if self.is_a?(Game_Actor)
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간

@@ -120,7 +120,7 @@ module J
 					elsif Mouse.arrive_sprite?(self) and @viewport.base?  # 로울버 효과
 						self.bluck = true
 					elsif not Mouse.arrive_sprite?(self) and @viewport.base?
-						#self.tone.set(0, 0, 0)
+						self.bluck = false
 					end
 					@push ? (@push = false) : 0
 				end

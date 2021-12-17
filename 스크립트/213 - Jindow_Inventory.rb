@@ -7,6 +7,7 @@ $trade_num = 1
 
 class Jindow_Inventory < Jindow
 	def initialize
+		자동저장
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 220, 200)
 		self.name = "아이템"
@@ -30,6 +31,7 @@ class Jindow_Inventory < Jindow
 	end
 	
 	def sort
+		자동저장
 		for i in @item
 			next if i == @gold_drop_button
 			i.dispose if i != nil and !i.disposed?

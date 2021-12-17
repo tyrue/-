@@ -233,43 +233,39 @@ class Rpg_skill
 	
 	# 파티 힐
 	def party_heal(id)
-		is_heal = false
+		return if PARTY_HEAL_SKILL[id] == nil
 		heal_v = 1
-		if PARTY_HEAL_SKILL[id] != nil
-			heal_v = PARTY_HEAL_SKILL[id][0].to_i 
-			heal_v += ($game_party.actors[0].maxsp * 0.001).to_i
-			heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
-			is_heal = true
-		end
+		heal_v = PARTY_HEAL_SKILL[id][0].to_i 
+		heal_v += ($game_party.actors[0].maxsp * 0.001).to_i
+		heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
 		
 		# 커스텀
 		case id
 		when 92 # 공력주입
 			heal_v = $game_party.actors[0].sp
 			$game_party.actors[0].sp = 0
-			is_heal = true
 		when 117 # 백호의희원
 			heal_v = $game_party.actors[0].sp * 2
 			$game_party.actors[0].sp = 0
-			is_heal = true
+		when 118 # 신령의희원
+			$game_party.actors[0].sp -= $game_party.actors[0].sp / 50
+		when 119 # 봉황의희원
+			$game_party.actors[0].sp -= $game_party.actors[0].sp / 50
 		when 120 # 부활
 			$game_temp.common_event_id = 24
-			is_heal = true
 		end
 		
-		if is_heal
-			$game_party.actors[0].damage = heal_v.to_s
-			$game_party.actors[0].critical = "heal"
-			$game_party.actors[0].hp += heal_v
-			
-			ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
-			$game_player.animation_id = ani_id
-			Network::Main.ani(Network::Main.id, ani_id)
-			
-			if $netparty.size >= 2 # 파티가 2인 이상이라면
-				name = $game_party.actors[0].name
-				Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
-			end
+		$game_party.actors[0].damage = heal_v.to_s
+		$game_party.actors[0].critical = "heal"
+		$game_party.actors[0].hp += heal_v
+		
+		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
+		$game_player.animation_id = ani_id
+		Network::Main.ani(Network::Main.id, ani_id)
+		
+		if $netparty.size >= 2 # 파티가 2인 이상이라면
+			name = $game_party.actors[0].name
+			Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
 		end
 	end
 	
@@ -305,6 +301,7 @@ class Rpg_skill
 			heal_v = $game_party.actors[0].sp * 2
 			$game_party.actors[0].sp = 0
 			is_heal = true
+			
 		end
 		
 		if is_heal
@@ -410,7 +407,7 @@ class Rpg_skill
 						$console.write_line("분신을 생성합니다.")
 						
 					when 136 # 운상미보
-						$game_player.move_speed = 3.5
+						$game_player.move_speed += 0.5
 						Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
 						
 					when 140 # 운기
@@ -507,7 +504,7 @@ class Rpg_skill
 						$console.write_line("분신이 사라집니다.")
 						
 					when 136 # 운상미보
-						$game_player.move_speed = 3
+						$game_player.move_speed -= 0.5
 						Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
 						
 					when 140 # 운기

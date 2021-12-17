@@ -6,6 +6,7 @@
 class Jindow_Drop < Jindow
 	def initialize(type1, type2, id) # 돈/아이템, 타입, 아이디
 		$game_system.se_play($data_system.decision_se)
+		자동저장
 		super(0, 0, 150, 50)
 		self.name = "버리기"
 		@head = true

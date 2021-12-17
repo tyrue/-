@@ -45,7 +45,8 @@ class Item_data
 		@Trade_ban_item.push(53) # 화룡의 비늘
 		@Trade_ban_item.push(114) # 팔괘
 		@Trade_ban_item.push(119) # 반고의 심장
-		
+		@Trade_ban_item.push(163) # 일본주막비서
+		@Trade_ban_item.push(217) # 고균도주막비서
 		
 		# 교환 불가 무기 추가
 		

@@ -14,7 +14,7 @@ class Jindow_Chat_Window < Jindow
 		@chat_log = []
 		
 		@old_size = 0
-		@max_size = 40
+		@max_size = 60
 		@font_size = 14
 		
 		@check = false	

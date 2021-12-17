@@ -30,22 +30,24 @@ class Jindow_System < Jindow
 	
 	def update
 		super
-		if @menu[0].click
-			$game_system.se_play($data_system.decision_se)
-			Hwnd.dispose(self)
-			Jindow_volume.new
-		elsif @menu[1].click
-			$game_system.se_play($data_system.decision_se)
-			$chat.write ("카페주소: http://cafe.naver.com/blackowlsbaram", COLOR_HELP)
-			Hwnd.dispose(self)
-		elsif @menu[2].click
-			$game_system.se_play($data_system.decision_se)
-			Hwnd.dispose(self)
-			JS.game_title
-		elsif @menu[3].click
-			$game_system.se_play($data_system.decision_se)
-			Hwnd.dispose(self)
-			JS.game_end
+		for menu in @menu
+			if menu.click
+				$game_system.se_play($data_system.decision_se)
+				case menu.command
+				when "음량조절"
+					Jindow_volume.new
+					Hwnd.dispose(self)
+				when "카페주소"
+					$chat.write ("카페주소: http://cafe.naver.com/blackowlsbaram", COLOR_HELP)
+					Hwnd.dispose(self)
+				when "로그아웃"
+					JS.game_title
+					Hwnd.dispose(self)
+				when "종료하기"
+					JS.game_end
+					Hwnd.dispose(self)
+				end
+			end
 		end
 	end
 end

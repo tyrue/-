@@ -156,6 +156,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				return false
 			end
 			
+			# 여기까지 왔으면 플레이어라고 생각하고 수행
 			a = false
 			for i in 0..4
 				if @equips_id[i] != actor_equip_id(i, @actor)
@@ -166,13 +167,14 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			
 			if a
 				# 장비 갈아입는 소리 보내주고 내 상태 보냄
-				$game_temp.common_event_id = 2
-				Network::Main.ani(Network::Main.id, 189)
-				Network::Main.send_map
+				$game_temp.common_event_id = 2 # 둔갑 커맨드 이벤트 처리
 				return true
 			else
-				return true if $game_variables[9] == 1
-				return false
+				# 투명이라면
+				if $game_variables[9] == 1
+					a = true
+				end
+				return a
 			end
 		end
 		#--------------------------------------------------------------------------
@@ -189,9 +191,6 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@character_name != @character.character_name or
 				@character_hue != @character.character_hue or
 				equip_changed?
-				
-				Network::Main.ani(Network::Main.id, 189)
-				Network::Main.send_map
 				
 				is_trans = 255
 				is_trans = 125 if $state_trans 

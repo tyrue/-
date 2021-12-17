@@ -138,8 +138,9 @@ class Scene_Map
 						end
 					end	
 					
-					
-					
+					if Key.trigger?(KEY_N)
+						@spriteset.toggle_id
+					end
 				end
 			end
 		end

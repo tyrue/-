@@ -44,7 +44,8 @@ def create_moneys(money, x, y)
 end
 
 
-def create_drops2(no, mob_id, map_id, x, y, image, name = "")
+def create_drops2(no, mob_id, map_id, x, y, image, name = "", num = 0)
+	return if num == 0
 	$game_map.events[no] = Game_Event.new(map_id ,load_data("Data/Map022.rxdata").events[mob_id])
 	event = $game_map.events[no]
 	return if not event
@@ -53,7 +54,12 @@ def create_drops2(no, mob_id, map_id, x, y, image, name = "")
 	event.es_set_graphic("../Icons/" + image, 255, 0)
 	create_sprite(event, true)
 	
-	event.name = "[id#{name}]"
+	if num <= 1
+		event.name = "[id#{name}]"
+	else
+		event.name = "[id#{name} #{num}개]"
+	end
+	
 	event.refresh
 end
 

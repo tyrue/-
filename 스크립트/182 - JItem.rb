@@ -93,7 +93,7 @@ module J
 			if @fill
 				
 			else
-
+				
 			end
 			
 			@viewport.hwnd == "Status" ? (return self) : 0
@@ -144,6 +144,24 @@ module J
 					jindow = Jindow_Item_Info.new(@item.id, @type)
 					jindow.x = Mouse.x - jindow.max_width / 2
 					jindow.y = Mouse.y - jindow.max_height / 2
+				end
+				
+				if Mouse.arrive_sprite_rect?(self)
+					if @item_name == nil
+						@item_name = Sprite.new(@viewport)
+						@item_name.x = self.x
+						@item_name.y = self.y
+						@item_name.z = 999999
+						@item_name.bitmap = Bitmap.new(200, 14)
+						@item_name.bitmap.font.size = 14
+						@item_name.bitmap.draw_frame_text(0, 0, @item_name.width, @item_name.height, @item.name, 0)
+					end
+				else
+					if @item_name != nil and !@item_name.disposed?
+						@item_name.visible = false
+						@item_name.dispose 
+						@item_name = nil
+					end
 				end
 			else
 				

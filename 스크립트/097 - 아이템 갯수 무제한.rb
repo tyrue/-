@@ -30,6 +30,7 @@ class Game_Party
 		@gold = [[@gold + n, 0].max, 999999999999].min
 		$console.write_line("금전 #{-n}전 감소. 현재 #{@gold}전") if $global_x >= 30 and n < 0
 		$console.write_line("금전 #{n}전 증가. 현재 #{@gold}전") if $global_x >= 30 and n > 0
+		자동저장
 	end 
 	#-------------------------------------------------------------------------- 
 	# ● 아이템의 증가 (감소) 
@@ -42,6 +43,7 @@ class Game_Party
 			@items[item_id] = [[item_number(item_id) + n, 0].max, $item_maximum].min
 			$console.write_line("#{$data_items[item_id].name}을(를) #{n}개 획득. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_items[item_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n < 0
+			자동저장
 		end 
 	end 
 	#-------------------------------------------------------------------------- 
@@ -55,6 +57,7 @@ class Game_Party
 			@weapons[weapon_id] = [[weapon_number(weapon_id) + n, 0].max, $item_maximum].min 
 			$console.write_line("#{$data_weapons[weapon_id].name}을(를) #{n}개 획득. 현재 #{$game_party.weapon_number(weapon_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_weapons[weapon_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.weapon_number(weapon_id)}개") if $global_x >= 30 and n < 0
+			자동저장
 		end 
 	end 
 	#-------------------------------------------------------------------------- 
@@ -68,6 +71,7 @@ class Game_Party
 			@armors[armor_id] = [[armor_number(armor_id) + n, 0].max, $item_maximum].min 
 			$console.write_line("#{$data_armors[armor_id].name}을(를) #{n}개 획득. 현재 #{$game_party.armor_number(armor_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_armors[armor_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.armor_number(armor_id)}개") if $global_x >= 30 and n < 0
+			자동저장
 		end 
 	end
 	

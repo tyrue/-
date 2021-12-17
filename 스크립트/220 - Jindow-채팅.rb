@@ -39,12 +39,10 @@ class Jindow_Chat_Input < Jindow
 		text = @type.result
 		
 		# 명령어를 식별
-		case text
-			
+		case text	
 		when /\/도움말/
-			$chat.write ("아이탬창:i, 정보창:c, 시스템창:~, 공격:s, 파티:p, 길드:G, 전체화면:alt+enter", COLOR_HELP)    
-			$chat.write ("현재접속자:L, 상태창/맵이름 숨기기:E, 채팅창 숨기기:F, 딜레이 창 숨기기:R", COLOR_HELP) 
-			$chat.write ("스킬창:K, 아이템 먹기:스페이스바/del, 미니맵 표시:m, 단축키 확인:J", COLOR_HELP) 
+			$chat.write ("/귓 (귓속말 상대), /교환 (교환 상대)", COLOR_HELP)    
+			$chat.write ("단축키 설명은 f1키를 누르세요!", COLOR_HELP) 
 			
 		when /\/귓 (.*)/  # 귓속말 상대를 변경
 			# 여기서 상대가 있는지 확인하는 로직 필요
@@ -73,7 +71,6 @@ class Jindow_Chat_Input < Jindow
 			else
 				$chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", COLOR_BIGSAY)        
 			end
-			
 			
 			# 운영자 전용 명령어 
 			
@@ -168,7 +165,7 @@ class Jindow_Chat_Input < Jindow
 			
 		when /\/운영자모드/
 			$console.write_line("비밀 번호를 입력하세요")	
-			
+				
 		else # 명령어가 아닌 그냥 일반 채팅일때
 			
 			case @chat_type

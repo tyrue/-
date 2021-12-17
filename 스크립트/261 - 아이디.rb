@@ -41,35 +41,61 @@ class Sprite_Character < Sprite_Character
 		@_id_sprite.x = self.x 
 		@_id_sprite.y = self.y - self.oy / 2 
 		@_id_sprite.z = 3000 
-		@_id_sprite_visible = true 
+		if $game_variables[11] == 0
+			@_id_sprite.visible = false 
+		else
+			@_id_sprite.visible = true
+		end
 	end 
 	
 	def dispose_id_sprite 
+		@_id_sprite.visible = false 
 		@_id_sprite.dispose 
-		@_id_sprite_visible = false 
+		@_id_sprite = nil
 	end 
-	
-	def _id_sprite_visible=(_id_sprite_visible)
-		@_id_sprite_visible = _id_sprite_visible
-	end
 	
 	def update_id_sprite 
 		if @character.sprite_id != nil
-			if not @_id_sprite_visible
+			if @_id_sprite == nil
 				create_id_sprite(@character.sprite_id)
 			end
-			
-			@_id_sprite.x = self.x 
-			@_id_sprite.y = self.y - self.oy 
+			if !@_id_sprite.disposed?
+				@_id_sprite.x = self.x 
+				@_id_sprite.y = self.y - self.oy 
+			end
 		else 
-			if @_id_sprite_visible 
+			if @_id_sprite != nil and !@_id_sprite.disposed?
 				dispose_id_sprite 
 			end 
 		end 
 	end 
+	
+	def toggle_id
+		return if @_id_sprite == nil or @_id_sprite.disposed?
+		if $game_variables[11] == 0
+			@_id_sprite.visible = false 
+		else
+			@_id_sprite.visible = true
+		end
+	end
 	
 	def update 
 		super 
 		update_id_sprite 
 	end 
 end 
+
+
+class Spriteset_Map
+	def toggle_id
+		if $game_variables[11] == 0
+			$game_variables[11] = 1
+		else
+			$game_variables[11] = 0
+		end
+		
+		for sprite in @character_sprites
+			sprite.toggle_id
+		end
+	end
+end

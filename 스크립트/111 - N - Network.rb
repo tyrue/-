@@ -1141,9 +1141,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						# 몹 체력 적용
 						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
 							$ABS.enemies[data[1].to_i].hp = data[2].to_i
-							if $ABS.enemies[data[1].to_i].hp <= 0 # 체력이 0이면 죽은거지
-								$ABS.enemies[data[1].to_i].event.erase
-							end
 						end
 					end
 					return true
@@ -1197,7 +1194,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
 					return true if $ABS.enemies[data[1].to_i] == nil
-					
+					return true if $scene.spriteset == nil
+					return true if $scene.spriteset.character_sprites[data[1].to_i] == nil
 					
 					if data[3].to_s == "true"
 						$scene.spriteset.character_sprites[data[1].to_i].damage(data[2], true)
@@ -1816,57 +1814,33 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					if $game_map.map_id == map_id
 						if $ABS.enemies[id] != nil and (npt.to_i != $npt.to_i or $netparty.size < 2)
-							
 							$game_map.events[event_id].fade = true
 							$ABS.enemies[id].hp = 0
-						elsif $ABS.enemies[id] != nil and npt.to_i == $npt.to_i
-							
+						elsif $ABS.enemies[id] != nil and npt.to_i == $npt.to_i # 같은 파티라면
 							enemy = $ABS.enemies[id]
 							event = enemy.event
+							$game_map.events[event_id].fade = true
+							$ABS.enemies[id].hp = 0
 							
-							self.drop_enemy(enemy)
 							case enemy.trigger[0]
-							when 0
-								# 여기서 랜덤하게 움직이는걸 해야함
-								$game_map.events[event_id].fade = true
-								$ABS.enemies[id].hp = 0
-								if !FADE_DEAD
-									event.character_name = ""
-									event.erase
-								end
-							when 1
-								$game_map.events[event_id].fade = true
-								$ABS.enemies[id].hp = 0
-								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
+							when 1 # 스위치
 								$game_switches[enemy.trigger[1]] = true
-								$game_map.need_refresh = true
-							when 2
-								$game_map.events[event_id].fade = true
-								$ABS.enemies[id].hp = 0
-								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
+							when 2 # 변수 조작
 								if enemy.trigger[2] == 0
 									$game_variables[enemy.trigger[1]] += 1
-									$game_map.need_refresh = true
 								else
 									$game_variables[enemy.trigger[1]] = enemy.trigger[2]
-									$game_map.need_refresh = true
 								end
-							when 3 
-								$game_map.events[event_id].fade = true
-								$ABS.enemies[id].hp = 0
+							when 3  # 셀프 스위치
 								value = "A" if enemy.trigger[1] == 1
 								value = "B" if enemy.trigger[1] == 2
 								value = "C" if enemy.trigger[1] == 3
 								value = "D" if enemy.trigger[1] == 4
-								print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
 								key = [$game_map.map_id, event.id, value]
-								
 								$game_self_switches[key] = true
-								$game_map.need_refresh = true
-								
 							end						
+							$game_map.refresh	
 						end
-						$game_map.refresh	
 					end
 					
 					
@@ -1898,7 +1872,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								image = $data_armors[$Drop[index].id].icon_name
 								name = $data_armors[$Drop[index].id].name
 							end
-							create_drops2(index, 138, map_id, x, y, image, name)
+							create_drops2(index, 138, map_id, x, y, image, name, $Drop[index].amount)
 						elsif $Drop[index].type2 == 0 # 돈
 							create_moneys2(index, 138, map_id, x, y, $Drop[index].amount)
 						end
@@ -1999,7 +1973,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					elsif $2.to_s == $game_party.actors[0].name
 						$chat.write("(귓속말) #{$1.to_s} <<< #{$3.to_s}", COLOR_WHISPER)
 					end
-						
+					
 				when /<partymessage>(.*),(.*),(.*),(.*)<\/partymessage>/ 
 					if $npt == $4.to_s
 						$chat.write("(파티말) #{$1.to_s}(#{$2.to_s}) : #{$3.to_s}", COLOR_PARTY)
@@ -2280,22 +2254,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				return true
 			end
 			
-			# 파티 사냥했을 때, 퀘스트 아이템 떨어지도록
-			def self.drop_enemy(e)
-				r = rand(100)
-				case e.id.to_i
-				when 57 # 청웅객
-					if r <= 60 and $game_switches[141] == true # 승급 퀘스트
-						# 청웅의 환
-						Network::Main.socket.send "<drop_create>#{$game_map.map_id},52,#{e.event.x},#{e.event.y}</drop_create>\n"
-					end
-				when 157 # 해파리수하
-					if r <= 10 and $game_switches[378] == true # 용궁 전략문서 얻기
-						# 전략문서
-						Network::Main.socket.send "<drop_create>#{$game_map.map_id},98,#{e.event.x},#{e.event.y}</drop_create>\n"
-					end
-				end
-			end
 		end
 		
 		#-------------------------------------------------------------------------------

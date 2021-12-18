@@ -44,6 +44,7 @@ def create_sprite(c, sw = false)
 	if $scene.is_a?(Scene_Map)
 		$scene.instance_eval do
 			@spriteset.instance_eval do
+				return if @character_sprites == nil
 				@character_sprites.each do |v|
 					if v.character == c
 						return v

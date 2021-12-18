@@ -728,13 +728,13 @@ class Rpg_skill
 	# 해당 스킬을 배우는데 필요한 재료
 	def req_skill_item(type, num, s_num) # 직업, 몇 번째 스킬
 		# type : 1 전사, 2 주술사, 3 도사, 4 도적
-		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디		
 		temp = 0
 		temp = 0 if $game_switches[1] # 청룡
 		temp = 1 if $game_switches[2] # 백호
 		temp = 2 if $game_switches[3] # 주작
 		temp = 3 if $game_switches[4] # 현무
 		
+		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 		data = REQ_SKILL_DATA[type][num]
 		if data != nil
 			$game_variables[26] = data[0]
@@ -745,8 +745,8 @@ class Rpg_skill
 			$game_variables[34] = data[4]
 			$game_variables[35] = data[5]
 			
-			$game_variables[103] = $game_party.items[data[4]]
-			$game_variables[104] = $game_party.items[data[5]]
+			$game_variables[103] = $game_party.item_number(data[4])
+			$game_variables[104] = $game_party.item_number(data[5])
 		else
 			$game_variables[26] = 0
 			$game_variables[28] = 0

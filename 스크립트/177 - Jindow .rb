@@ -440,6 +440,7 @@ class Jindow < Viewport
 			end
 		end
 		alpha > 0 ? 0 : return
+		
 		if Key.trigger?(12) # tab
 			test = self.bluck?.id + 1
 			unless bluck?

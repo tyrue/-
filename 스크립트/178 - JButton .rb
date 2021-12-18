@@ -119,8 +119,10 @@ module J
 						@click = true
 					elsif Mouse.arrive_sprite?(self) and @viewport.base?  # 로울버 효과
 						self.bluck = true
-					elsif not Mouse.arrive_sprite?(self) and @viewport.base?
+						@bluck_sw = true
+					elsif not Mouse.arrive_sprite?(self) and self.bluck and @bluck_sw
 						self.bluck = false
+						@bluck_sw = false
 					end
 					@push ? (@push = false) : 0
 				end

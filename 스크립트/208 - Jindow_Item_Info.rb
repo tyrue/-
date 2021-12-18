@@ -18,6 +18,7 @@ class Jindow_Item_Info < Jindow
 		@type = type
 		@item_num = 0
 		@item_data = nil
+		check = nil
 		case type
 		when 0
 			@item_data = $data_items[item_id]
@@ -25,9 +26,11 @@ class Jindow_Item_Info < Jindow
 		when 1
 			@item_data = $data_weapons[item_id]
 			@item_num = $game_party.weapon_number(@item_id)
+			check = Equip_Job_Type::EQUIP_JOB_WEAPON[@item_data.id]
 		when 2
 			@item_data = $data_armors[item_id]
 			@item_num = $game_party.armor_number(@item_id)
+			check = Equip_Job_Type::EQUIP_JOB_ARMOR[@item_data.id]
 		end
 		
 		# 아이템 아이콘 위치
@@ -70,12 +73,25 @@ class Jindow_Item_Info < Jindow
 		end
 		
 		if type != 0			
-			if $game_party.actors[0].equippable?(@item)
+			if $game_party.actors[0].equippable?(@item_data)
 				@equip.bitmap.font.color.set(0, 128, 0, 255)
 				@equip.bitmap.draw_text(0, 15, @equip.width, @equip.height, "[착용 가능]", 0)
 			else
 				@equip.bitmap.font.color.set(128, 0, 0, 255)
 				@equip.bitmap.draw_text(0, 15, @equip.width, @equip.height, "[착용 불가]", 0)
+			end
+		end
+		
+		if check != nil
+			if check[1] >= 1
+				@txt_degree = Sprite.new(self)
+				@txt_degree.x = @equip.x
+				@txt_degree.y = @equip.y
+				@txt_degree.bitmap = Bitmap.new(80, 14)
+				@txt_degree.bitmap.font.size = 14
+				@txt_degree.bitmap.font.alpha = 1
+				@txt_degree.bitmap.font.color.set(0, 0, 0, 255)
+				@txt_degree.bitmap.draw_text(0, 0, @txt_degree.width, @txt_degree.height, "#{check[1]}차 승급 이상", 0)
 			end
 		end
 		

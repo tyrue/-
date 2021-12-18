@@ -110,9 +110,9 @@ if SDK.state("Mr.Mo's ABS")
 		def initialize(netPlayer, v)
 			super(v)
 			@netPlayer = netPlayer
-			@old_hp = 0
-			@old_x = 0
-			@old_y = 0
+			@old_hp = -1
+			@old_x = -1
+			@old_y = -1
 			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
 			#~ @temp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
 			#~ @ch = @temp.height / 4 + 20
@@ -141,10 +141,17 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def something_changed?
 			return dispose if @netPlayer.hp <= 0
-			return dispose if @netPlayer.map_id != $game_map.map_id
-			return dispose if Network::Main.mapplayers[@netPlayer.netid] == nil
+			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
+				@netPlayer.bar_showing = false
+				return dispose 
+			end
 			
-			self.visible = !@netPlayer.is_transparency
+			if (!@netPlayer.is_transparency) or ($netparty.include?(@netPlayer.name.to_s))
+				self.visible = true 
+			else
+				self.visible = false
+			end
+			
 			return true if @old_hp != @netPlayer.hp
 			return true if @old_x != @netPlayer.event.screen_x - 15
 			return true if @old_y != @netPlayer.event.screen_y - @ch
@@ -214,9 +221,9 @@ if SDK.state("Mr.Mo's ABS")
 			for e in $ABS.enemies.values
 				next if e == nil
 				#if in screen
-				if $ABS.in_range?($game_player, e.event, 8)
+				if $ABS.in_range?($game_player, e.event, 14)
 					next if e.bar_showing
-					@enemys_hp[e.event.id] = Enemy_Bars.new(e,@spriteset.viewport3)
+					@enemys_hp[e.event.id] = Enemy_Bars.new(e, @spriteset.viewport3)
 					e.bar_showing = true
 				elsif e.bar_showing and @enemys_hp[e.event.id] != nil
 					@enemys_hp[e.event.id].dispose if !@enemys_hp[e.event.id].disposed?
@@ -242,7 +249,7 @@ if SDK.state("Mr.Mo's ABS")
 				end
 				
 				#if in screen
-				if player.in_range?(10)
+				if player.in_range?(14)
 					next if player.bar_showing and @netPlayers_hp[player.netid] != nil
 					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
 					player.bar_showing = true
@@ -253,6 +260,7 @@ if SDK.state("Mr.Mo's ABS")
 					@netPlayers_hp[player.netid] = nil
 				end
 			end
+			
 			#Update HP BARS
 			for bars in @netPlayers_hp.values
 				next if bars == nil or bars.disposed?

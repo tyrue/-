@@ -180,7 +180,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_EXPLODE[69] = [7, 6, "공격스킬2", 2, 4, 0] # 삼매진화 2성
 	
 	# 전사스킬
-	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 2, 4, 0] # 어검술
+	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0] # 어검술
 	
 	# 도적 스킬
 	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
@@ -229,19 +229,19 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 전사
 	SKILL_MASH_TIME[65] = [10 * sec, 0] # 뢰마도
-	SKILL_MASH_TIME[67] = [4 * sec, 0] # 건곤대나이
+	SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
 	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
 	SKILL_MASH_TIME[75] = [7 * sec, 0] # 뢰마도 1성
 	SKILL_MASH_TIME[77] = [5 * sec, 0] # 유비후타
 	SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
-	SKILL_MASH_TIME[101] = [3 * sec, 0] # 백호참
-	SKILL_MASH_TIME[103] = [20 * sec, 0] # 어검술
+	SKILL_MASH_TIME[101] = [1 * sec, 0] # 백호참
+	SKILL_MASH_TIME[103] = [10 * sec, 0] # 어검술
 	SKILL_MASH_TIME[104] = [80 * sec, 0] # 포효검황
 	SKILL_MASH_TIME[105] = [140 * sec, 0] # 혈겁만파
 	SKILL_MASH_TIME[106] = [20 * sec, 0] # 초혼비무
 	
 	# 도적
-	SKILL_MASH_TIME[133] = [3 * sec, 0] # 필살검무
+	SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
 	SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	SKILL_MASH_TIME[138] = [5 * sec, 0] # 무형검
@@ -267,10 +267,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[62] = [180 * sec, 0] # 수심각도
 	SKILL_BUFF_TIME[63] = [180 * sec, 0] # 반영대도
 	SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
-	SKILL_BUFF_TIME[66] = [20 * sec, 0] # 신수둔각도
+	SKILL_BUFF_TIME[66] = [60 * sec, 0] # 신수둔각도
 	SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
 	SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
-	SKILL_BUFF_TIME[71] = [30 * sec, 0] # 혼신의힘
+	SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
 	
 	
 	# 도사
@@ -293,41 +293,48 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 무기 격 스킬 : 데미지, 애니메이션 id, 확률
 	WEAPON_SKILL = {}
+	# 신수둔각도
+	WEAPON_SKILL[1] = [1000, 154, 3]   		# 주작의검
+	WEAPON_SKILL[2] = [1000, 154, 3]   		# 백호의검
+	WEAPON_SKILL[3] = [1000, 154, 3]   		# 현무의검
+	WEAPON_SKILL[4] = [1000, 154, 3]   		# 청룡의검
+	
 	# 4차 무기
-	WEAPON_SKILL[6] = [1500, 164, 20]   		# 현자금봉
-	WEAPON_SKILL[7] = [1500, 164, 20]   		# 검성기검
-	WEAPON_SKILL[8] = [1500, 164, 20]   		# 진선역봉
-	WEAPON_SKILL[9] = [1500, 164, 20]   		# 태성태도
+	WEAPON_SKILL[6] = [5000, 164, 20]   		# 현자금봉
+	WEAPON_SKILL[7] = [5000, 164, 20]   		# 검성기검
+	WEAPON_SKILL[8] = [5000, 164, 20]   		# 진선역봉
+	WEAPON_SKILL[9] = [5000, 164, 20]   		# 태성태도
 	
 	# 중국무기
-	WEAPON_SKILL[11] = [150000, 115, 10]   		# 대모홍접선
-	WEAPON_SKILL[12] = [150000, 117, 10]   		# 구곡검
-	WEAPON_SKILL[13] = [150000, 166, 10]   		# 영후단봉
-	WEAPON_SKILL[14] = [150000, 125, 10]   		# 협가검
-	WEAPON_SKILL[17] = [5000, 196, 10]   		# 음양도
+	WEAPON_SKILL[11] = [200000, 115, 10]   		# 대모홍접선
+	WEAPON_SKILL[12] = [200000, 117, 10]   		# 구곡검
+	WEAPON_SKILL[13] = [200000, 166, 10]   		# 영후단봉
+	WEAPON_SKILL[14] = [200000, 125, 10]   		# 협가검
+	WEAPON_SKILL[17] = [50000, 196, 70]   		# 음양도
 	
 	# 기타 검
 	WEAPON_SKILL[114] = [1500, 153, 40]   		# 주작의검
 	WEAPON_SKILL[115] = [100000, 194, 10] 		# 심판의 낫
 	WEAPON_SKILL[126] = [5000, 154, 40]   		# 참마도
 	WEAPON_SKILL[127] = [10000, 184, 40]   		# 청룡신검
+	WEAPON_SKILL[123] = [30000, 192, 40]   		# 현무염도
 	
 	# 일본
-	WEAPON_SKILL[134] = [50000, 170, 40]   		# 일화접선
-	WEAPON_SKILL[135] = [50000, 171, 40]   		# 진일신검
-	WEAPON_SKILL[138] = [50000, 164, 40]   		# 청일기창
+	WEAPON_SKILL[134] = [100000, 170, 30]   		# 일화접선
+	WEAPON_SKILL[135] = [100000, 171, 30]   		# 진일신검
+	WEAPON_SKILL[138] = [100000, 164, 30]   		# 청일기창
 	
 	# 용무기
 	WEAPON_SKILL[142] = [2000, 123, 10]   		# 용마제사검
 	WEAPON_SKILL[143] = [5000, 123, 10]   		# 용마제칠검
 	WEAPON_SKILL[144] = [40000, 123, 10]   		# 용마제팔검
-	WEAPON_SKILL[145] = [400000, 196, 5]   		# 용마제구검
+	WEAPON_SKILL[145] = [600000, 174, 5]   		# 용마제구검
 	
 	WEAPON_SKILL[147] = [2000, 141, 10]   		# 용랑제사봉
 	WEAPON_SKILL[148] = [5000, 141, 10]   		# 용랑제칠봉
 	WEAPON_SKILL[149] = [40000, 141, 10]   		# 용랑제팔봉
-	WEAPON_SKILL[150] = [400000, 176, 5]   		# 용랑제구봉
-	
+	WEAPON_SKILL[150] = [600000, 176, 5]   		# 용랑제구봉
+
 	# 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
 	EQUIP_EFFECTS = {} 
 	
@@ -337,6 +344,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	EQUIP_EFFECTS[29] = [[1 * sec, "buff", 131]] # 투명구두
 	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
 	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
+	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -3550,6 +3558,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				hit_result = (rand(100) < hit)
 			end
+			
 			# If hit occurs
 			if hit_result == true
 				# State Removed by Shock
@@ -3708,7 +3717,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					power += user.hp * 2.5 
 					user.hp -= (user.hp / 3) * 2
 				when 73 # 광량돌격
-					power += user.hp * 1.2 
+					power += user.hp * 0.5 
 					user.hp -= user.hp / 2
 					user.hp = 1 if user.hp <= 0 
 				when 74 # 십리건곤
@@ -3759,7 +3768,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						user.hp = 1 if user.hp <= 0
 					end		
 				when 106 # 초혼비무
-					power += user.hp * 1.2
+					power += user.hp * 1.8
 					user.hp -= user.maxhp / 4
 					user.hp = 1 if user.hp <= 0
 					
@@ -3800,7 +3809,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도사스킬
 				when 96 # 지진
 					$e_v += 1
-					power += user.maxsp / 70 + 20
+					power += user.maxsp / 70 + 35
 					if $e_v == $alive_size
 						user.sp -= user.maxsp / 20
 					end	
@@ -3814,6 +3823,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					power = skill.power + user.atk / 2 
 				end				
+				
 				power = (power * (1.0 + user.atk / 120.0))
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
@@ -3821,10 +3831,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					power = [power, 1].max
 				end
 				
-				
 				# Calculate rate
 				rate = 20
-				
 				rate += (user.str * skill.str_f / 100.0)
 				rate += (user.dex * skill.dex_f / 100.0)
 				rate += (user.agi * skill.agi_f / 100.0)
@@ -3882,7 +3890,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					effective = true
 				end
 				
-				
 				# Substract damage from HP
 				last_hp = self.hp
 				self.hp -= self.damage
@@ -3908,24 +3915,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				effective |= states_plus(skill.plus_state_set)
 				effective |= states_minus(skill.minus_state_set)
 				
-				# If power is 0
 				if skill.power == 0
-					# Set damage to an empty string
 					self.damage = 1
-					# If state is unchanged
 					unless @state_changed
-						# Set damage to "Miss"
-						
 						self.damage = "Miss"
 					end
 				end
-				# If miss occurs
 			else
-				# Set damage to "Miss"
-				
 				self.damage = "Miss"
 			end
-			# End Method
 			return effective
 		end
 	end

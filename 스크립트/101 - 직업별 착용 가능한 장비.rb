@@ -8,7 +8,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	#----------
 	# 무기
 	EQUIP_JOB_WEAPON[6] = [[1], 4] # 현자금봉
-	EQUIP_JOB_WEAPON[13] = [[1], 0] # 영후단봉
+	EQUIP_JOB_WEAPON[13] = [[1], 2] # 영후단봉
 	EQUIP_JOB_WEAPON[105] = [[1], 0] # 영혼마령봉
 	EQUIP_JOB_WEAPON[107] = [[1], 0] # 불의영혼봉
 	
@@ -25,7 +25,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[3] = [[2], 0] # 현무의검 신수
 	EQUIP_JOB_WEAPON[4] = [[2], 0] # 청룡의검 신수
 	EQUIP_JOB_WEAPON[7] = [[2], 4] # 검성기검
-	EQUIP_JOB_WEAPON[12] = [[2], 0] # 구곡검
+	EQUIP_JOB_WEAPON[12] = [[2], 2] # 구곡검
 	EQUIP_JOB_WEAPON[106] = [[2], 0] # 현철중검
 	EQUIP_JOB_WEAPON[120] = [[2], 0] # 흑철중검
 	
@@ -38,7 +38,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	#----------
 	# 무기
 	EQUIP_JOB_WEAPON[8] = [[3], 4] # 진선역봉
-	EQUIP_JOB_WEAPON[11] = [[3], 0] # 대모홍접선
+	EQUIP_JOB_WEAPON[11] = [[3], 2] # 대모홍접선
 	EQUIP_JOB_WEAPON[133] = [[3], 0] # 해골죽장
 	EQUIP_JOB_WEAPON[137] = [[3], 0] # 영혼죽장
 	
@@ -51,7 +51,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	#----------
 	# 무기
 	EQUIP_JOB_WEAPON[9] = [[4], 4] # 태성태도
-	EQUIP_JOB_WEAPON[14] = [[4], 0] # 협가검
+	EQUIP_JOB_WEAPON[14] = [[4], 2] # 협가검
 	EQUIP_JOB_WEAPON[24] = [[4], 0] # 야월도
 	EQUIP_JOB_WEAPON[25] = [[4], 0] # 흑월도
 	
@@ -96,21 +96,21 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[130] = [[0], 0] # 산적왕의칼
 	EQUIP_JOB_WEAPON[131] = [[0], 0] # 다문창
 	EQUIP_JOB_WEAPON[132] = [[0], 0] # 인어장군지팡이
-	EQUIP_JOB_WEAPON[134] = [[0], 0] # 일화접선
-	EQUIP_JOB_WEAPON[135] = [[0], 0] # 진일신검
+	EQUIP_JOB_WEAPON[134] = [[0], 2] # 일화접선
+	EQUIP_JOB_WEAPON[135] = [[0], 2] # 진일신검
 	EQUIP_JOB_WEAPON[136] = [[0], 0] # 이가닌자의검
-	EQUIP_JOB_WEAPON[138] = [[0], 0] # 청일기창
+	EQUIP_JOB_WEAPON[138] = [[0], 2] # 청일기창
 	
 	EQUIP_JOB_WEAPON[141] = [[0], 0] # 용마제일검
 	EQUIP_JOB_WEAPON[142] = [[0], 0] # 용마제사검
 	EQUIP_JOB_WEAPON[143] = [[0], 0] # 용마제칠검
-	EQUIP_JOB_WEAPON[144] = [[0], 0] # 용마제팔검
-	EQUIP_JOB_WEAPON[145] = [[0], 0] # 용마제구검
+	EQUIP_JOB_WEAPON[144] = [[0], 3] # 용마제팔검
+	EQUIP_JOB_WEAPON[145] = [[0], 4] # 용마제구검
 	EQUIP_JOB_WEAPON[146] = [[0], 0] # 용랑제일봉
 	EQUIP_JOB_WEAPON[147] = [[0], 0] # 용랑제사봉
 	EQUIP_JOB_WEAPON[148] = [[0], 0] # 용랑제칠봉
-	EQUIP_JOB_WEAPON[149] = [[0], 0] # 용랑제팔봉
-	EQUIP_JOB_WEAPON[150] = [[0], 0] # 용랑제구봉
+	EQUIP_JOB_WEAPON[149] = [[0], 3] # 용랑제팔봉
+	EQUIP_JOB_WEAPON[150] = [[0], 4] # 용랑제구봉
 	
 	# 방어구
 	EQUIP_JOB_ARMOR[1] = [[0], 0] # 초심자의갑주
@@ -167,7 +167,10 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[64] = [[0], 0] # 수정의목걸이
 	EQUIP_JOB_ARMOR[70] = [[0], 0] # 주술투구
 	EQUIP_JOB_ARMOR[71] = [[0], 0] # 주술팔찌
-	
+	EQUIP_JOB_ARMOR[72] = [[0], 0] # 해골목걸이
+	EQUIP_JOB_ARMOR[73] = [[0], 4] # 가릉빈가의날개옷'진
+	EQUIP_JOB_ARMOR[74] = [[0], 0] # 황금투구
+	EQUIP_JOB_ARMOR[75] = [[0], 0] # 황금팔찌
 end
 
 class Game_Actor < Game_Battler

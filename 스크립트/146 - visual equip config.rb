@@ -91,8 +91,6 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 		else
 			# 방어구
 			return ['(착용)연두갑주'] 			if id == 1  	#초심자의갑주
-			#return ['(착용)다람쥐화서']			if id == 9  	#다람쥐화서
-			#return ['(착용)토끼화서'] 			if id == 10 	#토끼화서
 			return ['(착용)죄수복'] 				if id == 11 	#죄수복
 			return ['(착용)주술갑옷'] 			if id == 12 	#주술갑옷
 			return ['(착용)남자타라의옷'] 		if id == 13 	#남자타라의옷
@@ -115,6 +113,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)현인의영혼'] 		if id == 52  	#진인의영혼
 			return ['(착용)검황의영혼'] 		if id == 54  	#귀검의영혼
 			return ['(착용)초록장삼'] 			if id == 59  	#초록장삼
+			return ['(착용)가릉빈가의날개옷\'진'] 	if id == 73 	#가릉빈가의날개옷'진
 		end
 		
 		return false

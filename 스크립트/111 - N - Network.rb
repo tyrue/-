@@ -1190,39 +1190,46 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
 				when /<mon_damage>(.*)<\/mon_damage>/
 					# 같은 맵이 아니면 무시
-					return true if !$scene.is_a?(Scene_Map)
 					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
-					return true if $ABS.enemies[data[1].to_i] == nil
+					map_id = data[0].to_i
+					id = data[1].to_i
+					dmg = data[2]
+					cri = data[3].to_s
+					return true if !$scene.is_a?(Scene_Map)
+					return true if $game_map.map_id != map_id
+					return true if $ABS.enemies[id] == nil
 					return true if $scene.spriteset == nil
-					return true if $scene.spriteset.character_sprites[data[1].to_i] == nil
 					
-					if data[3].to_s == "true"
-						$scene.spriteset.character_sprites[data[1].to_i].damage(data[2], true)
-					elsif data[3].to_s == "false"
-						$scene.spriteset.character_sprites[data[1].to_i].damage(data[2], false)
+					$ABS.enemies[id].send_damage = false
+					$ABS.enemies[id].damage = dmg
+					if cri == "true"
+						$ABS.enemies[id].critical = true
+					elsif cri == "false"
+						$ABS.enemies[id].critical = false
 					else
-						$scene.spriteset.character_sprites[data[1].to_i].damage(data[2], data[3])
+						$ABS.enemies[id].critical = cri
 					end
 					return true
 					
 					# 플레이어 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
 				when /<player_damage>(.*)<\/player_damage>/
-					return true if !$scene.is_a?(Scene_Map)
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
-					return true if @mapplayers[data[1].to_s] == nil
-					return if $scene == nil or $scene.spriteset == nil or $scene.spriteset.network_sprites == nil
+					map_id = data[0].to_i
+					id = data[1]
+					dmg = data[2]
+					cri = data[3].to_s
 					
-					if $scene.spriteset.network_sprites[data[1].to_i] != nil
-						if data[3].to_s == "true"
-							$scene.spriteset.network_sprites[data[1].to_i].damage(data[2], true)
-						elsif data[3].to_s == "false"
-							$scene.spriteset.network_sprites[data[1].to_i].damage(data[2], false)
-						else
-							$scene.spriteset.network_sprites[data[1].to_i].damage(data[2], data[3])
-						end
+					return true if !$scene.is_a?(Scene_Map)
+					return true if $game_map.map_id != map_id
+					return true if @mapplayers[id] == nil
+					
+					if cri == "true"
+						@mapplayers[id].show_demage(dmg, true)
+					elsif cri == "false"
+						@mapplayers[id].show_demage(dmg, false)
+					else
+						@mapplayers[id].show_demage(dmg, cri)
 					end
 					return true
 					
@@ -1655,11 +1662,22 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end	
 					
 				when /<map_chat>(.*)&(.*)&(.*)<\/map_chat>/
+					name = $1.to_s
+					msg = $2.to_s
+					type = $3.to_i
 					if $scene.is_a?(Scene_Map)
 						for player in @mapplayers.values
 							next if player == nil
-							if $1.to_s == player.name
-								$chat_b.input(player.name + ": " + $2.to_s, $3.to_i, 4, player)
+							if name == player.name
+								msg = name + ": " + msg
+								case type
+								when 1 # 전체
+									$chat_b.input(msg, type, 4, player)
+								when 2 # 파티
+									if $netparty.include?(player.name) 
+										$chat_b.input(msg, type, 4, player)
+									end
+								end
 							end
 						end
 					end		

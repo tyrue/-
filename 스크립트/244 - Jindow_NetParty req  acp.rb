@@ -14,7 +14,7 @@ def nptreq(name, party_mem)
 end
 
 def nptyes(name)
-	$netparty.push(name)
+	$netparty.push(name) if !$netparty.include?(name)
 	Hwnd.dispose("NetParty")
 	Jindow_NetParty.new
 end

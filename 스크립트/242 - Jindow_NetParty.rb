@@ -18,27 +18,29 @@ class Jindow_NetParty < Jindow
 		self.x = 75
 		self.y = 75
 		
-		@buttons = {}
+		@buttons = []
 		
 		i = 0
 		for netparty in $netparty
 			@buttons[i] = J::Button.new(self).refresh(120, netparty.to_s)
 			@buttons[i].y = i * 30 + 12
-			
 			i += 1
 		end
 		
 		@a = J::Button.new(self).refresh(50, "탈퇴")
 		@a.x = self.width - 50
-		@a.y = 130
+		@a.y = @buttons.last != nil ? @buttons.last.y : 0
+		@a.y = [self.height - 30, @a.y].max
 		
 		@b = J::Button.new(self).refresh(50, "생성")
 		@b.x = self.width - 120
-		@b.y = 130
+		@b.y = @a.y
 		
 		@c = J::Button.new(self).refresh(50, "초대")
-		@c.x = self.width - 50
-		@c.y = 155
+		@c.x = @b.x
+		@c.y = @b.y + @b.height
+		self.height = @c.y + @c.height + 10
+		self.refresh("NetParty")
 	end
 	
 	def update

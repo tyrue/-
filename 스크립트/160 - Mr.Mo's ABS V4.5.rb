@@ -160,14 +160,14 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [5, 4, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 4, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[85] = [8, 5, "공격스킬2", 4, 2] # 필살검무
-	RANGE_SKILLS[151] = [10, 6, "청룡", 4, 1] # 청룡의 포효
-	RANGE_SKILLS[152] = [10, 6, "현무", 4, 1] # 현무의 포효
-	RANGE_SKILLS[153] = [10, 6, "공격스킬2", 4, 3] # 백호검무
-	RANGE_SKILLS[154] = [10, 6, "용", 4, 4] # 청룡마령참
-	RANGE_SKILLS[155] = [10, 6, "공격스킬", 4, 1] # 암흑진파
-	RANGE_SKILLS[156] = [10, 6, "공격스킬", 4, 1] # 흑룡광포
-	RANGE_SKILLS[158] = [10, 6, "공격스킬", 4, 1] # 지옥겁화
+	RANGE_SKILLS[85] = [8, 4, "공격스킬2", 4, 2] # 필살검무
+	RANGE_SKILLS[151] = [10, 4, "청룡", 4, 1] # 청룡의 포효
+	RANGE_SKILLS[152] = [10, 4, "현무", 4, 1] # 현무의 포효
+	RANGE_SKILLS[153] = [10, 4, "공격스킬2", 4, 3] # 백호검무
+	RANGE_SKILLS[154] = [10, 4, "용", 4, 4] # 청룡마령참
+	RANGE_SKILLS[155] = [10, 4, "공격스킬", 4, 1] # 암흑진파
+	RANGE_SKILLS[156] = [10, 4, "공격스킬", 4, 1] # 흑룡광포
+	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
 	
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
@@ -441,7 +441,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP = {}
 	BOSS_ENEMY_HP[37]  = 2000000000 # 무적토끼
 	BOSS_ENEMY_HP[102] = 10000000 # 반고
-	BOSS_ENEMY_HP[159] = 3000000 # 거북장군
+	BOSS_ENEMY_HP[112] = 2000000 # 청룡
+	BOSS_ENEMY_HP[113] = 2000000 # 현무
+	BOSS_ENEMY_HP[159] = 5000000 # 거북장군
 	BOSS_ENEMY_HP[193] = 4000000 # 파괴왕
 	BOSS_ENEMY_HP[231] = 3000000 # 천구왕
 	BOSS_ENEMY_HP[246] = 2000000 # 선장망령
@@ -1055,8 +1057,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 스킬을 받는 타입
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
-						next if !in_direction?(e.event, actor.event) # 적캐릭터가 목표를 바라보고 있어야함
-						
 						# Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
@@ -1067,6 +1067,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							
 							e.sp -= skill.sp_cost
+							msg_enemy_balloon(skill, e.event)
 							return
 						end
 						
@@ -1132,6 +1133,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							#Setup movement
 							setup_movement(e)
 						end
+						msg_enemy_balloon(skill, e.event)
 						return		
 						
 					when 3..4, 7 # 자기 자신에게 사용하는 스킬
@@ -1145,13 +1147,43 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 						e.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
-						
+						msg_enemy_balloon(skill, e.event)
 						return
 					end
 					return
 				end
 			end
 		end
+		
+		#--------------------------------------------------------------------------
+		# * 적이 어떤 스킬을 쓰냐에 따라 말하는 메시지를 넣자
+		#--------------------------------------------------------------------------
+		def msg_enemy_balloon(skill, event)
+			msg = nil
+			type = 3
+			sec = 4
+			id = skill.id
+			name = skill.name
+			case id
+			when 151 # 청룡 포효
+				msg = "크롸롸롸롸!"
+			when 152 # 현무 포효
+				msg = "크롸롸롸롸!"
+			when 154 # 청룡마령참
+				msg = "#{name}!!"
+			when 155 # 암흑진파
+				msg = "#{name}!!"
+			when 156 # 흑룡광포
+				msg = "#{name}!!"
+			when 157 # 회복
+				msg = "가소롭다!!"
+			when 158 # 지옥겁화
+				msg = "#{name}!!"
+			end
+			
+			$chat_b.input(msg, type, sec, event) if msg != nil
+		end
+		
 		
 		#--------------------------------------------------------------------------
 		# * Update Player  실시간 반영 되는 함수
@@ -2017,7 +2049,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 여기서 파티원이 맵에 있는지 확인			
 					for player in Network::Main.mapplayers.values
 						next if player == nil
-						if $netparty.include? player.name and player.name != $game_party.actors[0].name
+						if $netparty.include?(player.name) and player.name != $game_party.actors[0].name
 							in_map_player = in_map_player + 1 # 같은 맵에 파티원이 있으면 추가
 						end
 					end
@@ -2897,7 +2929,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.attack_effect(enemy)
 			# 여기다가 플레이어 데미지 보여주기 하면 될듯?
 			damage(actor.damage, actor.critical) if actor.damage != 0
-			$game_player.show_demage(actor.damage, false)
+			
 			#Show animation on player
 			$game_player.animation_id = @range_weapon[2] if actor.damage != "Miss" and actor.damage != 0
 			#jump
@@ -3354,17 +3386,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Display damage  #몬스터한태 데미지 표시        
 					if $ABS.enemies[id].damage != nil
 						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
-						
-						#~ id2 = 0
-						#~ for i in $game_map.events.keys.sort
-						#~ break if i == id
-						#~ id2 += 1
-						#~ end
 						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id - 1},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	
+						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage
 					end
 					#Make Damage nil
 					$ABS.enemies[id].damage = nil
+					$ABS.enemies[id].send_damage = true
 				elsif @character.is_a?(Game_Player)					
 					a = $game_party.actors[0]
 					#Display damage
@@ -3437,10 +3464,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					range.character.character_name = ""
 				end
 			end
+			
 			# Draw Sprite
 			for range in $ABS.range
 				#Skip NIL Values
-				next if range == nil and !range.draw
+				next if range == nil or !range.draw
 				
 				#If its draw
 				sprite = Sprite_Character.new(@viewport1, range)
@@ -4322,6 +4350,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :actor
 		attr_accessor :respawn
 		attr_accessor :aggro
+		attr_accessor :send_damage
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
@@ -4349,6 +4378,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@actor = self
 			@respawn = 0
 			@aggro = $is_map_first
+			@send_damage = true
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

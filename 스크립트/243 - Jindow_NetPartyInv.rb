@@ -36,7 +36,7 @@ class Jindow_NetPartyInv < Jindow
 				else
 					if $netparty.size < $MAX_PARTY
 						party_mem = $netparty[0]
-						for i in 1..$netparty.size - 1
+						for i in 1...$netparty.size
 							party_mem = party_mem.to_s + ",#{$netparty[i]}"
 						end
 						

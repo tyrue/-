@@ -124,6 +124,10 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 		
 		#--------------------------------------------------------------------------
 		def equip_changed?
+			if @character.is_a?(Game_Ranged_Skill)
+				#return false
+			end
+			
 			if SDK.state('Caterpillar') == true
 				if @character.is_a?(Game_Party_Actor)
 					if @character.actor != @actor
@@ -155,6 +159,8 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			if @actor == nil
 				return false
 			end
+			
+			
 			
 			# 여기까지 왔으면 플레이어라고 생각하고 수행
 			a = false
@@ -191,6 +197,10 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@character_name != @character.character_name or
 				@character_hue != @character.character_hue or
 				equip_changed?
+				
+				if @character.is_a?(Game_Ranged_Skill)
+					#p "#{@tile_id} : #{@character.tile_id} #{@character_name} : #{@character.character_name} #{@character_hue} : #{@character.character_hue} #{equip_changed?}"
+				end
 				
 				is_trans = 255
 				is_trans = 125 if $state_trans 

@@ -141,7 +141,7 @@ module J
 				if Mouse.arrive_sprite_rect?(self) and Input.mouse_rbutton
 					jindow = Hwnd.include?("Item_Info")
 					jindow ? Hwnd.dispose("Item_Info") : 0
-					jindow = Jindow_Item_Info.new(@item.id, @type)
+					jindow = Jindow_Item_Info.new(@item.id, @type, @viewport.hwnd)
 					jindow.x = Mouse.x - jindow.max_width / 2
 					jindow.y = Mouse.y - jindow.max_height / 2
 				end
@@ -176,7 +176,6 @@ module J
 					@double_wait = 0
 				end
 			end
-			
 			
 			@viewport.hwnd == "Status" ? (return) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return) : 0

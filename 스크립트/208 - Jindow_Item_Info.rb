@@ -4,7 +4,7 @@
 #   아이템 정보
 #------------------------------------------------------------------------------
 class Jindow_Item_Info < Jindow
-	def initialize(item_id, type)
+	def initialize(item_id, type, item_hwnd = nil)
 		super(0, 0, 200, 480)
 		self.name = "아이템 정보"
 		@head = true
@@ -18,6 +18,7 @@ class Jindow_Item_Info < Jindow
 		@type = type
 		@item_num = 0
 		@item_data = nil
+		@item_hwnd = item_hwnd
 		check = nil
 		case type
 		when 0
@@ -102,16 +103,17 @@ class Jindow_Item_Info < Jindow
 			@button_key.y = @equip.y
 		end
 		
-		# 버리기 버튼 표시
-		@drop_button = J::Button.new(self).refresh(60, "버리기")
-		@drop_button.x = @equip.x + @equip.width
-		@drop_button.y = @equip.y
-		
-		# 여러개 버리기 버튼 표시
-		@drop_button2 = J::Button.new(self).refresh(60, "여러개 버리기")
-		@drop_button2.x = @drop_button.x
-		@drop_button2.y = @drop_button.y + @drop_button.height
-		
+		if @item_hwnd == "Inventory" 
+			# 버리기 버튼 표시
+			@drop_button = J::Button.new(self).refresh(60, "버리기")
+			@drop_button.x = @equip.x + @equip.width
+			@drop_button.y = @equip.y
+			
+			# 여러개 버리기 버튼 표시
+			@drop_button2 = J::Button.new(self).refresh(60, "여러개 버리기")
+			@drop_button2.x = @drop_button.x
+			@drop_button2.y = @drop_button.y + @drop_button.height
+		end
 		
 		@description = Sprite.new(self)
 		@description.y = @equip.y + @equip.height
@@ -330,6 +332,16 @@ class Jindow_Item_Info < Jindow
 				return
 			end
 			
+			case @type
+			when 0
+				@item_num = $game_party.item_number(@item_id)
+			when 1
+				@item_num = $game_party.weapon_number(@item_id)
+			when 2
+				@item_num = $game_party.armor_number(@item_id)
+			end
+			Hwnd.dispose(self) if @item_num <= 0
+			
 			x = $game_player.x
 			y = $game_player.y
 			if @type == 0
@@ -353,7 +365,6 @@ class Jindow_Item_Info < Jindow
 			when 2
 				@item_num = $game_party.armor_number(@item_id)
 			end
-			
 			Hwnd.dispose(self) if @item_num <= 0
 			return
 		end
@@ -372,6 +383,7 @@ class Jindow_Item_Info < Jindow
 			when 2
 				@item_num = $game_party.armor_number(@item_id)
 			end
+			Hwnd.dispose(self) if @item_num <= 0
 			
 			x = $game_player.x
 			y = $game_player.y

@@ -124,9 +124,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[44] = [10, 10, "공격스킬2", 4, 0] #헬파이어
 	RANGE_SKILLS[49] = [10, 10, "공격스킬2", 4, 0] #성려멸주
 	RANGE_SKILLS[52] = [10, 10, "공격스킬2", 4, 0] #성려멸주 1성
-	RANGE_SKILLS[53] = [10, 10, "공격스킬2", 4, 0] #삼매진화
 	RANGE_SKILLS[56] = [10, 10, "공격스킬2", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[57] = [10, 10, "공격스킬2", 4, 0] #삼매진화 1성
 	RANGE_SKILLS[58] = [10, 6, "공격스킬2", 4, 0] #지폭지술
 	RANGE_SKILLS[68] = [10, 6, "공격스킬2", 4, 0] #폭류유성
 	
@@ -157,27 +155,30 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0] #무형검
 	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
 	
-	
+	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위
 	# 적 캐릭터 스킬
 	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [5, 4, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 4, "공격스킬", 4, 0] #백호의 건곤대나이
 	RANGE_SKILLS[85] = [8, 5, "공격스킬2", 4, 2] # 필살검무
-	RANGE_SKILLS[151] = [4, 2, "공격스킬2", 4, 0] # 청룡의 포효
-	RANGE_SKILLS[152] = [4, 2, "공격스킬2", 4, 0] # 현무의 포효
-	RANGE_SKILLS[153] = [4, 6, "공격스킬2", 4, 2] # 백호검무
-	RANGE_SKILLS[154] = [5, 4, "공격스킬", 4, 0] # 청룡마령참
-	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 0] # 암흑진파
-	RANGE_SKILLS[156] = [5, 2, "공격스킬", 4, 0] # 흑룡광포
-	RANGE_SKILLS[158] = [10, 2, "공격스킬", 4, 0] # 지옥겁화
+	RANGE_SKILLS[151] = [10, 6, "청룡", 4, 1] # 청룡의 포효
+	RANGE_SKILLS[152] = [10, 6, "현무", 4, 1] # 현무의 포효
+	RANGE_SKILLS[153] = [10, 6, "공격스킬2", 4, 3] # 백호검무
+	RANGE_SKILLS[154] = [10, 6, "용", 4, 4] # 청룡마령참
+	RANGE_SKILLS[155] = [10, 6, "공격스킬", 4, 1] # 암흑진파
+	RANGE_SKILLS[156] = [10, 6, "공격스킬", 4, 1] # 흑룡광포
+	RANGE_SKILLS[158] = [10, 6, "공격스킬", 4, 1] # 지옥겁화
+	
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
 	# 폭발 범위
 	RANGE_EXPLODE = {}
 	# RANGE_EXPLODE[Skill_ID] = [Range, Move Speed, Character Set Name, Explosive Range, Mash Time(in seconds), Kick Back(in tiles)]
-	# 폭발 스킬 = 범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백
+	# 폭발 스킬 = 					범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백
 	# 주술사 스킬
-	RANGE_EXPLODE[69] = [7, 6, "공격스킬2", 2, 4, 0] # 삼매진화 2성
+	RANGE_EXPLODE[53] = [7, 10, "공격스킬2", 2, 4, 0] #삼매진화
+	RANGE_EXPLODE[57] = [7, 10, "공격스킬2", 2, 4, 0] #삼매진화 1성
+	RANGE_EXPLODE[69] = [7, 10, "공격스킬2", 3, 4, 0] # 삼매진화 2성
 	
 	# 전사스킬
 	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0] # 어검술
@@ -3121,6 +3122,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@force_opacity = false
 				@stop_animation = true
 			end
+			
 			def update_animation
 				if @_animation_duration > 0
 					frame_index = @_animation.frame_max - @_animation_duration
@@ -3137,6 +3139,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					dispose_animation
 				end
 			end
+			
 			def animation(animation, hit)
 				@stop_animation = false
 				dispose_animation
@@ -3166,6 +3169,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				update_animation
 			end
+			
 			def stop_animation?
 				return @stop_animation 
 			end
@@ -3327,6 +3331,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					loop_animation($data_animations[@state_animation_id])
 				end
 			end
+			
 			#Check fade
 			if @character.fade
 				if @character.is_a?(Game_Event) and @character.page != @page
@@ -3336,9 +3341,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				@character.fade = false
 			end
+			
 			if @character.is_a?(Game_Event) and @character.page != @page
 				@page = @character.page
 			end
+			
 			id = @character.id
 			#if demage not displayed
 			if $ABS.damage_display
@@ -3370,6 +3377,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					a.damage = nil
 				end
 			end
+			
+			
 		end
 	end
 	#==============================================================================
@@ -3432,6 +3441,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			for range in $ABS.range
 				#Skip NIL Values
 				next if range == nil and !range.draw
+				
 				#If its draw
 				sprite = Sprite_Character.new(@viewport1, range)
 				@ranged_sprites.push(sprite)
@@ -3682,13 +3692,21 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.sp -= user.maxsp / 9
 				when 53 # 삼매진화 
 					power += user.sp * 2
-					user.sp = 0
+					$e_v += 1
+					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
+					if $e_v == $alive_size
+						user.sp = 0
+					end
 				when 56 # 성려멸주 2성
 					power += user.maxsp / 6 + 120
 					user.sp -= user.maxsp / 8
 				when 57 # 삼매진화 1성
 					power += user.sp * 2.5
-					user.sp = 0
+					$e_v += 1
+					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
+					if $e_v == $alive_size
+						user.sp = 0
+					end
 				when 58 # 지폭지술
 					$e_v += 1
 					power += user.sp * 2

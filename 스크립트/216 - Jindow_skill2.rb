@@ -126,14 +126,17 @@ class Jindow_Skill < Jindow
 			next if @page[i] == nil
 			next if @page[i].disposed?
 			
-			if @page[i].click  
-				$ABS.player_skill(@data[(@now_page - 1) * @page_n + i].id)
-				$ABS.player_explode(@data[(@now_page - 1) * @page_n + i].id)
+			if @page[i].click 
+				if RANGE_EXPLODE.has_key?(id) 
+					$ABS.player_explode(@data[(@now_page - 1) * @page_n + i].id)
+				else
+					$ABS.player_skill(@data[(@now_page - 1) * @page_n + i].id)
+				end
+				
 			elsif @page[i].r_click
 				Hwnd.dispose("Skill_Info")
 				Jindow_Skill_Info.new(@data[(@now_page - 1) * @page_n + i])
 			end
 		end
 	end
-	
 end

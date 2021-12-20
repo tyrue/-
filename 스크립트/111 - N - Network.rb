@@ -1828,27 +1828,23 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					id = $1.to_i # 적 id
 					event_id = $2.to_i # 이벤트 id
 					map_id = $3.to_i
-					npt = $4.to_i
+					npt = $4.to_s
 					
 					if $game_map.map_id == map_id
-						if $ABS.enemies[id] != nil and (npt.to_i != $npt.to_i or $netparty.size < 2)
-							$game_map.events[event_id].fade = true
-							$ABS.enemies[id].hp = 0
-						elsif $ABS.enemies[id] != nil and npt.to_i == $npt.to_i # 같은 파티라면
-							enemy = $ABS.enemies[id]
-							event = enemy.event
-							$game_map.events[event_id].fade = true
-							$ABS.enemies[id].hp = 0
-							
+						return if $ABS.enemies[id] == nil
+						return if $ABS.enemies[id].event == nil
+						
+						enemy = $ABS.enemies[id]
+						event = enemy.event
+						
+						event.fade = true
+						enemy.hp = 0
+						if npt == $npt # 같은 파티라면
 							case enemy.trigger[0]
 							when 1 # 스위치
 								$game_switches[enemy.trigger[1]] = true
 							when 2 # 변수 조작
-								if enemy.trigger[2] == 0
-									$game_variables[enemy.trigger[1]] += 1
-								else
-									$game_variables[enemy.trigger[1]] = enemy.trigger[2]
-								end
+								$game_variables[enemy.trigger[1]] += 1
 							when 3  # 셀프 스위치
 								value = "A" if enemy.trigger[1] == 1
 								value = "B" if enemy.trigger[1] == 2

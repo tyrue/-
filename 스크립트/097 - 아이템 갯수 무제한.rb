@@ -13,6 +13,11 @@ $item_maximum = 800
 #소지수의 자리수 
 $item_maximum_place = 3 
 
+# 특정 아이템 개수 제한
+ITEM_LIMIT_NUM = {}
+ITEM_LIMIT_NUM[163] = 5 # 일본주막비서
+ITEM_LIMIT_NUM[217] = 5 # 고균도주막비서
+
 #============================================================================== 
 # ■ Game_Party 
 #------------------------------------------------------------------------------ 
@@ -39,8 +44,10 @@ class Game_Party
 	#-------------------------------------------------------------------------- 
 	def gain_item(item_id, n) 
 		# 해시의 개수 데이터를 갱신 
+		limit_num = ITEM_LIMIT_NUM[item_id] != nil ? ITEM_LIMIT_NUM[item_id] : $item_maximum
+		
 		if item_id > 0 
-			@items[item_id] = [[item_number(item_id) + n, 0].max, $item_maximum].min
+			@items[item_id] = [[item_number(item_id) + n, 0].max, limit_num].min
 			$console.write_line("#{$data_items[item_id].name}을(를) #{n}개 획득. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_items[item_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n < 0
 			자동저장
@@ -100,11 +107,13 @@ class Window_Item < Window_Selectable
 		when RPG::Armor 
 			number = $game_party.armor_number(item.id) 
 		end 
+		
 		if item.is_a?(RPG::Item) and $game_party.item_can_use?(item.id) 
 			self.contents.font.color = normal_color 
 		else 
 			self.contents.font.color = disabled_color 
 		end 
+		
 		x = 4 + index % 2 * (288 + 32) 
 		y = index / 2 * 32 
 		rect = Rect.new(x, y, self.width / @column_max - 32, 32) 
@@ -138,9 +147,11 @@ class Window_ShopNumber < Window_Base
 		self.contents.font.color = normal_color 
 		width = 24 + ($item_maximum_place - 2) * 12 
 		widths = 32 + ($item_maximum_place - 2) * 12 
+		
 		self.contents.draw_text(272 - width + 24, 96, 32, 32, "×") 
 		self.contents.draw_text(308 - width + 24, 96, width, 32, @number.to_s, 2) 
 		self.cursor_rect.set(304 - width + 24, 96, widths, 32) 
+		
 		# self.cursor_rect.set(304, 96, 32, 32) 
 		# 합계 가격과 통화단위를 묘화 
 		domination = $data_system.words.gold 
@@ -151,6 +162,7 @@ class Window_ShopNumber < Window_Base
 		self.contents.font.color = system_color 
 		self.contents.draw_text(332-cx, 160, cx, 32, domination, 2) 
 	end 
+	
 	#-------------------------------------------------------------------------- 
 	# ● 프레임 갱신 
 	#-------------------------------------------------------------------------- 
@@ -271,8 +283,7 @@ class Window_ShopStatus < Window_Base
 					change = pdef2 - pdef1 + mdef2 - mdef1 
 				end 
 				# 파라미터의 변화치를 묘화 
-				self.contents.draw_text(124, 64 + 64 * i, 112, 32, 
-					sprintf("%+d", change), 2) 
+				self.contents.draw_text(124, 64 + 64 * i, 112, 32, sprintf("%+d", change), 2) 
 			end 
 			# 아이템을 묘화 
 			if item1 != nil 
@@ -350,13 +361,15 @@ class Window_ShopBuy < Window_Selectable
 		when RPG::Armor
 			number = $game_party.armor_number(item.id)
 		end
-		# If price is less than money in possession, and amount in possession is
-		# not 99, then set to normal text color. Otherwise set to disabled color
-		if item.price <= $game_party.gold and number < $item_maximum
+		
+		limit_num = ITEM_LIMIT_NUM[item.id] != nil ? ITEM_LIMIT_NUM[item.id] : $item_maximum
+		
+		if item.price <= $game_party.gold and number < limit_num
 			self.contents.font.color = normal_color
 		else
 			self.contents.font.color = disabled_color
 		end
+		
 		x = 4
 		y = index * 32
 		rect = Rect.new(x, y, self.width - 32, 32)
@@ -418,17 +431,20 @@ class Scene_Shop
 			when RPG::Armor 
 				number = $game_party.armor_number(@item.id) 
 			end 
+			
+			limit_num = ITEM_LIMIT_NUM[@item.id] != nil ? ITEM_LIMIT_NUM[@item.id] : $item_maximum
 			# 벌써 99 개소 지키고 있는 경우 
-			if number == $item_maximum 
+			if number == limit_num
 				# 버저 SE 를 연주 
 				$game_system.se_play($data_system.buzzer_se) 
 				return 
 			end 
+			
 			# 결정 SE 을 연주 
 			$game_system.se_play($data_system.decision_se) 
 			# 최대 구입 가능 개수를 계산 
-			max = @item.price == 0 ? $item_maximum : $game_party.gold / @item.price 
-			max = [max, $item_maximum - number].min 
+			max = @item.price == 0 ? limit_num : $game_party.gold / @item.price 
+			max = [max, limit_num - number].min 
 			# 윈도우 상태를 개수 입력 모드에 
 			@buy_window.active = false 
 			@buy_window.visible = false 

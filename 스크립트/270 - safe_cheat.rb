@@ -1,7 +1,6 @@
 $safe_cheat_num = 2567
 # 메모리상에는 실제 값 + num 으로 저장 되고 게임에서 볼때는 -num에서 보여주기
 
-
 class Game_Party 
 	#-------------------------------------------------------------------------- 
 	# ● 아이템의 소지수취득 
@@ -51,6 +50,8 @@ class Game_Party
 	def gain_item(item_id, n) 
 		# 해시의 개수 데이터를 갱신 
 		if item_id > 0 
+			limit_num = ITEM_LIMIT_NUM[item_id] != nil ? ITEM_LIMIT_NUM[item_id] : $item_maximum
+			
 			@items[item_id] = [[item_number(item_id) + n, 0].max, $item_maximum].min + $safe_cheat_num
 			$console.write_line("#{$data_items[item_id].name}을(를) #{n}개 획득. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_items[item_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n < 0

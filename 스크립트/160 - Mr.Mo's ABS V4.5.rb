@@ -1722,6 +1722,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.party_buff(id) # 파티 버프 스킬인지 확인
 			$rpg_skill.active_skill(id) # 액티브 스킬 행동 커스텀 확인
+			$rpg_skill.skill_chat(skill) # 스킬 사용시 말하는 것
 			skill_console(id)   # 스킬 딜레이 표시
 			
 			# 커먼 이벤트 실행
@@ -3714,10 +3715,10 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.sp = 0
 				when 49 # 성려멸주
 					power += user.maxsp / 8 + 90
-					user.sp -= user.maxsp / 10
+					user.sp -= user.maxsp / 15
 				when 52 # 성려멸주 1성
 					power += user.maxsp / 7 + 100
-					user.sp -= user.maxsp / 9
+					user.sp -= user.maxsp / 13
 				when 53 # 삼매진화 
 					power += user.sp * 2
 					$e_v += 1
@@ -3727,7 +3728,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				when 56 # 성려멸주 2성
 					power += user.maxsp / 6 + 120
-					user.sp -= user.maxsp / 8
+					user.sp -= user.maxsp / 11
 				when 57 # 삼매진화 1성
 					power += user.sp * 2.5
 					$e_v += 1
@@ -3760,7 +3761,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					# 전사스킬
 				when 67 # 건곤대나이
-					power += user.hp * 2.5 
+					power += user.hp * 2 + 30
 					user.hp -= (user.hp / 3) * 2
 				when 73 # 광량돌격
 					power += user.hp * 0.5 
@@ -3775,14 +3776,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					user.hp -= user.maxhp / 18
 					user.hp = 1 if user.hp <= 0
 				when 79 # 동귀어진
-					power += user.hp * 6
+					power += user.hp * 7 + 100
 					user.hp -= user.hp - 10
 				when 80 # 십리건곤 2성
 					power += user.maxhp / 8 + 40
 					user.hp -= user.maxhp / 15
 					user.hp = 1 if user.hp <= 0
 				when 101 # 백호참
-					power += user.hp * 3
+					power += user.hp * 3 + 60
 					user.hp -= user.hp / 2
 				when 102 # 백리건곤 1성
 					power += user.maxhp / 7 + 50

@@ -1677,6 +1677,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 									if $netparty.include?(player.name) 
 										$chat_b.input(msg, type, 4, player)
 									end
+								when 3 # 스킬
+									$chat_b.input(msg, type, 4, player)
 								end
 							end
 						end

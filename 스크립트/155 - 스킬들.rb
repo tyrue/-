@@ -515,6 +515,51 @@ class Rpg_skill
 		end
 	end
 	
+	def skill_chat(skill)
+		id = skill.id
+		name = $game_party.actors[0].name
+		msg = nil
+		type = 3
+		sec = 4
+		case id
+		when 44 # 헬파이어
+			msg = "#{skill.name}!!"
+		when 53, 57, 69 # 삼매진화
+			msg = "삼매진화!!"
+		when 58 # 지폭지술
+			msg = "!!#{skill.name}!!"
+		when 67 # 건곤대나이
+			msg = "#{skill.name}!!"
+		when 68 # 폭류유성
+			msg = "!!#{skill.name}!!"
+		when 79 # 동귀어진
+			msg = "!!#{skill.name}!!"
+		when 101 # 백호참
+			msg = "#{skill.name}!!"
+		when 103 # 어검술
+			msg = "#{skill.name}!!"
+		when 104 # 포효검황
+			msg = "!!#{skill.name}!!"
+		when 105 # 혈겁만파
+			msg = "!!#{skill.name}!!"
+		when 133 # 필살검무
+			msg = "#{skill.name}!!"
+		when 135 # 백호검무
+			msg = "#{skill.name}!!"
+		when 137 # 이기어검
+			msg = "#{skill.name}!!"
+		when 138 # 무형검
+			msg = "#{skill.name}!!"
+		when 139 # 분혼경천
+			msg = "#{skill.name}!!"
+		end
+		
+		if msg != nil
+			$chat_b.input(msg, type, sec, $game_player)
+			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
+		end
+	end
+	
 	# 액티브 스킬 커스텀
 	def active_skill(id)
 		if ACTIVE_SKILL[id] != nil
@@ -539,7 +584,7 @@ class Rpg_skill
 	end
 	
 	def 광량돌격(d = $game_player.direction)
-		move_num = 7 # 스킬 범위만큼
+		move_num = 10 # 스킬 범위만큼
 		x = $game_player.x
 		y = $game_player.y
 		

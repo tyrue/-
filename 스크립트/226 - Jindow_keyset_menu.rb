@@ -16,7 +16,7 @@ class Jindow_Keyset_menu < Jindow
 		self.y = 480 / 2 - self.max_height / 2
 		
 		@select_k = nil
-		@id = id
+		@check_id = id
 		@type = type
 		@id_value = nil
 		case @type
@@ -101,10 +101,10 @@ class Jindow_Keyset_menu < Jindow
 			if @select_k != nil
 				case @type
 				when 0..2
-					$ABS.item_keys[@select_k] = @id
+					$ABS.item_keys[@select_k] = @check_id
 					$ABS.skill_keys[@select_k] = 0
 				when 3
-					$ABS.skill_keys[@select_k] = @id
+					$ABS.skill_keys[@select_k] = @check_id
 					$ABS.item_keys[@select_k] = 0
 				end
 			end

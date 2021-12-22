@@ -172,6 +172,8 @@ PARTY_BUFF_SKILL[90] = [] # 분량방법
 PARTY_BUFF_SKILL[42] = [] # 주술마도
 PARTY_BUFF_SKILL[46] = [] # 무장
 PARTY_BUFF_SKILL[47] = [] # 보호
+PARTY_BUFF_SKILL[121] = [] # 신령지익진
+PARTY_BUFF_SKILL[122] = [] # 파력무참진
 PARTY_BUFF_SKILL[136] = [] # 운상미보
 
 # 버프 스킬 값 저장
@@ -212,15 +214,30 @@ ACTIVE_SKILL[132] = [] # 비영승보
 
 class Rpg_skill
 	def update_buff
+		sec = Graphics.frame_rate
 		if check_buff(140) # 운기 중
 			if !$game_player.moving?
-				if (Graphics.frame_count % (Graphics.frame_rate) == 0)
+				if (Graphics.frame_count % (sec) == 0)
 					$game_party.actors[0].sp += $game_party.actors[0].maxsp / 10
 					$game_player.animation_id = 4
 					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 				end
 			else
 				SKILL_BUFF_TIME[140][1] = 1 # 운기 취소
+			end
+		end
+		
+		if check_buff(121) # 신령지익진
+			if (Graphics.frame_count % (sec * 2) == 0)
+				$game_player.animation_id = 7
+				Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
+			end
+		end	
+		
+		if check_buff(122) # 신령지익진
+			if (Graphics.frame_count % (sec * 2) == 0)
+				$game_player.animation_id = 8
+				Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 			end
 		end
 		
@@ -314,10 +331,13 @@ class Rpg_skill
 	end
 	
 	# 이미 버프가 걸려있는지 확인
-	def check_buff(id)
-		# 아직 버프가 지속중이면 무시
-		skill_mash = SKILL_BUFF_TIME[id]
-		return (skill_mash != nil and skill_mash[1] / 60.0 > 0)
+	def check_buff(id, actor = $game_party.actors[0])
+		if actor == $game_party.actors[0]
+			skill_mash = SKILL_BUFF_TIME[id]
+			return (skill_mash != nil and skill_mash[1] / 60.0 > 0)
+		else # 몬스터의 버프 확인
+			return nil
+		end
 	end
 	
 	# 버프 사용
@@ -521,6 +541,7 @@ class Rpg_skill
 		msg = nil
 		type = 3
 		sec = 4
+		
 		case id
 		when 44 # 헬파이어
 			msg = "#{skill.name}!!"
@@ -843,6 +864,56 @@ class Rpg_skill
 		for i in 1..$job_degree
 			$game_switches[degree_arr[i]] = true
 		end
+	end
+	
+	# 평타 공격시 버프, 디버프에 대한 데미지 계산
+	def damage_calculation_attack(damage, actor, attacker)
+		# 가해자 입장
+		if attacker.is_a?(Game_Actor) # 플레이어
+			damage *= 1.2 if self.check_buff(71) # 혼신의힘
+			damage *= 1.2 if self.check_buff(88) # 분량력법
+			damage *= 2 if self.check_buff(134) # 분신
+			damage *= 1.5 if self.check_buff(122) # 파력무참진
+			if $state_trans # 투명
+				damage *= (5 + $game_variables[10]) # 투명 숙련도
+				$state_trans = false
+				$game_variables[9] = 1
+			end
+		elsif attacker.is_a?(ABS_Enemy) # 몬스터
+			
+		end
+		
+		# 피해자 입장
+		if actor.is_a?(Game_Actor)
+			damage -= damage * 0.2 if self.check_buff(47) # 보호	
+			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
+			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
+		elsif actor.is_a?(ABS_Enemy)
+			damage = 1 if actor.id == 41 # 청자다람쥐
+		end
+		return damage.to_i
+	end
+	
+	# 스킬 공격시 버프, 디버프에 대한 데미지 계산
+	def damage_calculation_skill(damage, actor, attacker)
+		# 가해자 입장
+		if attacker.is_a?(Game_Actor)
+			damage *= 1.2 if self.check_buff(71) # 혼신의힘
+			damage *= 1.2 if self.check_buff(88) # 분량력법
+			damage *= 1.5 if self.check_buff(122) # 파력무참진
+		elsif attacker.is_a?(ABS_Enemy)
+			
+		end
+		
+		# 피해자 입장
+		if actor.is_a?(Game_Actor)
+			damage -= damage * 0.2 if self.check_buff(47) # 보호	
+			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
+			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
+		elsif actor.is_a?(ABS_Enemy)
+			damage = 1 if actor.id == 41 # 청자다람쥐
+		end
+		return damage.to_i
 	end
 end	
 

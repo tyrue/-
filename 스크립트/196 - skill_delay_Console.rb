@@ -24,13 +24,16 @@ class Skill_Delay_Console < Sprite
 		@console_width = width
 		@console_height = height
 		@console_max_line = max_line
-		@console_log = {}
+		
+		@console_log = {}  # 딜레이 기간
+		@console_log2 = {} # 버프 기간
+		
 		@tog = true
 		# 스킬 딜레이 갱신 id, 배열값
 		for skill_mash in SKILL_MASH_TIME
 			if skill_mash[1][1] > 0
 				sprite = Sprite_Chat.new(@console_viewport)
-				@console_log[skill_mash[0]] = [sprite, SKILL_MASH_TIME[skill_mash[0]][1]]
+				@console_log[skill_mash[0]] = [sprite]
 			end
 		end
 		
@@ -38,7 +41,7 @@ class Skill_Delay_Console < Sprite
 		for skill_mash in SKILL_BUFF_TIME
 			if skill_mash[1][1] > 0
 				sprite = Sprite_Chat.new(@console_viewport)
-				@console_log[skill_mash[0]] = [sprite, SKILL_BUFF_TIME[skill_mash[0]][1]]
+				@console_log2[skill_mash[0]] = [sprite]
 			end
 		end
 		
@@ -53,7 +56,7 @@ class Skill_Delay_Console < Sprite
 	# ● 리프레쉬
 	#--------------------------------------------------------------------------
 	def refresh
-		if @console_log.size <= 0
+		if @console_log.size <= 0 and @console_log2.size <= 0
 			@back_sprite.visible = false
 			return 
 		end
@@ -61,54 +64,48 @@ class Skill_Delay_Console < Sprite
 		@back_sprite.visible = true
 		
 		i = 0
-		for log in @console_log
-			if SKILL_MASH_TIME[log[0]] != nil
-				if SKILL_MASH_TIME[log[0]][1].to_i == 0 
-					@console_log[log[0]][0].dispose
-					@console_log.delete(log[0])
+		for log in @console_log2
+			id = log[0]
+			sprite = log[1][0]
+			
+			if SKILL_BUFF_TIME[id] != nil
+				if SKILL_BUFF_TIME[id][1].to_i == 0 
+					sprite.dispose if !sprite.disposed?
+					@console_log2.delete(id)
 					next
 				end
 				
-				if ('%.1f' % (SKILL_MASH_TIME[log[0]][1] / 60.0)) != ('%.1f' % (log[1][1].to_i / 60.0))
-					@console_log[log[0]][1] = SKILL_MASH_TIME[log[0]][1]
-					
-					@console_log[log[0]][0].dispose
-					sprite = Sprite_Chat.new(@console_viewport)
-					sprite.bitmap = Bitmap.new(width, 32)
-					sprite.bitmap.font.size = 12
-					sprite.bitmap.font.color.set(255, 204, 0, 255)
-					sprite.x = 0
-					sprite.y = (i) * 16
-					@console_log[log[0]][0] = sprite
-					@console_log[log[0]][0].bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[log[0]].name} : #{'%.1f' % (@console_log[log[0]][1]/60.0)}초") 
-					# x, y, width, height, string
-					
-				end
+				sprite.bitmap.clear
+				sprite.bitmap = Bitmap.new(width, 32)
+				sprite.bitmap.font.size = 12
+				sprite.bitmap.font.color.set(0, 255, 0, 255)
+				sprite.x = 0
+				sprite.y = (i) * 16
+				sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_BUFF_TIME[id][1] / 60.0)}초")
+				i += 1
 			end
+		end
+		
+		for log in @console_log
+			id = log[0]
+			sprite = log[1][0]
 			
-			if SKILL_BUFF_TIME[log[0]] != nil
-				if SKILL_BUFF_TIME[log[0]][1].to_i == 0 
-					@console_log[log[0]][0].dispose
-					@console_log.delete(log[0])
+			if SKILL_MASH_TIME[id] != nil
+				if SKILL_MASH_TIME[id][1].to_i == 0 
+					sprite.dispose if !sprite.disposed?
+					@console_log.delete(id)
 					next
 				end
-				if ('%.1f' % (SKILL_BUFF_TIME[log[0]][1] / 60.0)) != ('%.1f' % (log[1][1].to_i / 60.0))
-					@console_log[log[0]][1] = SKILL_BUFF_TIME[log[0]][1] 
-					
-					@console_log[log[0]][0].dispose
-					sprite = Sprite_Chat.new(@console_viewport)
-					sprite.bitmap = Bitmap.new(width, 32)
-					sprite.bitmap.font.size = 12
-					sprite.bitmap.font.color.set(0, 255, 0, 255)
-					sprite.x = 0
-					sprite.y = (i) * 16
-					@console_log[log[0]][0] = sprite
-					@console_log[log[0]][0].bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[log[0]].name} : #{'%.1f' % (@console_log[log[0]][1]/60.0)}초")
-					# x, y, width, height, string
-					
-				end
+				
+				sprite.bitmap.clear
+				sprite.bitmap = Bitmap.new(width, 32)
+				sprite.bitmap.font.size = 12
+				sprite.bitmap.font.color.set(255, 204, 0, 255)
+				sprite.x = 0
+				sprite.y = (i) * 16
+				sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_MASH_TIME[id][1] / 60.0)}초") 	
+				i += 1
 			end
-			i += 1
 		end
 	end
 	
@@ -118,20 +115,21 @@ class Skill_Delay_Console < Sprite
 	#--------------------------------------------------------------------------
 	def write_line(id)
 		@console_log[id][0].dispose if @console_log[id] != nil and !@console_log[id][0].disposed?
-		sprite = Sprite_Chat.new(@console_viewport)
+		@console_log2[id][0].dispose if @console_log2[id] != nil and !@console_log2[id][0].disposed?
 		
 		if SKILL_MASH_TIME[id] != nil
 			if SKILL_MASH_TIME[id][1] > 0
-				@console_log[id] = [sprite, SKILL_MASH_TIME[id][1]]
+				sprite = Sprite_Chat.new(@console_viewport)
+				@console_log[id] = [sprite]
 			end
 		end
 		
 		if SKILL_BUFF_TIME[id] != nil
 			if SKILL_BUFF_TIME[id][1] > 0
-				@console_log[id] = [sprite, SKILL_BUFF_TIME[id][1]]
+				sprite = Sprite_Chat.new(@console_viewport)
+				@console_log2[id] = [sprite]
 			end
 		end
-		
 	end
 	#--------------------------------------------------------------------------
 	# ● 보인다

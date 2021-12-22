@@ -247,8 +247,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	SKILL_MASH_TIME[138] = [5 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [120 * sec, 0] # 분혼경천
-	# 도사
 	
+	# 도사
+	SKILL_MASH_TIME[121] = [5 * sec, 0] # 신령지익진
+	SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
 	SKILL_BUFF_TIME = {}
@@ -280,6 +282,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
 	SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
 	SKILL_BUFF_TIME[94] = [6 * sec, 0] # 금강불체
+	SKILL_BUFF_TIME[121] = [10 * sec, 0] # 신령지익진
+	SKILL_BUFF_TIME[122] = [10 * sec, 0] # 파력무참진
 	
 	# 도적
 	SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
@@ -307,10 +311,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[9] = [5000, 164, 20]   		# 태성태도
 	
 	# 중국무기
-	WEAPON_SKILL[11] = [200000, 115, 10]   		# 대모홍접선
-	WEAPON_SKILL[12] = [200000, 117, 10]   		# 구곡검
-	WEAPON_SKILL[13] = [200000, 166, 10]   		# 영후단봉
-	WEAPON_SKILL[14] = [200000, 125, 10]   		# 협가검
+	WEAPON_SKILL[11] = [200000, 115, 15]   		# 대모홍접선
+	WEAPON_SKILL[12] = [200000, 117, 15]   		# 구곡검
+	WEAPON_SKILL[13] = [200000, 166, 15]   		# 영후단봉
+	WEAPON_SKILL[14] = [200000, 125, 15]   		# 협가검
 	WEAPON_SKILL[17] = [50000, 196, 70]   		# 음양도
 	
 	# 기타 검
@@ -781,6 +785,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					$rpg_skill.buff_del(skill_mash[0])
 				end
 			end
+			
 			if $skill_Delay_Console != nil
 				$skill_Delay_Console.refresh
 				$skill_Delay_Console.refresh
@@ -1236,21 +1241,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				for key in @skill_keys.keys
 					next if @skill_keys[key] == nil or @skill_keys[key] == 0
 					next if !Input.trigger?(key)
-					
-					if $game_switches[352] or $game_switches[25]
-						$console.write_line("스킬 사용 불가 지역입니다.")
-						return
-					end
-					
+										
 					# 스킬 아이디 가져옴
 					id = @skill_keys[key]
-					
-					# 아직 스킬 딜레이가 남아있다면 무시
-					skill_mash = SKILL_MASH_TIME[id]
-					if skill_mash != nil and skill_mash[1]/60.0 > 0
-						$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
-						return
-					end
 					
 					if RANGE_EXPLODE.has_key?(id)
 						return player_explode(id)
@@ -1674,8 +1667,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		# *  플레이어의 스킬 공격
 		#--------------------------------------------------------------------------
 		def player_skill(id)
-			$e_v = 0 # enemy_value, 맞출 적의 수
-			
 			@actor = $game_party.actors[0]
 			#Get Skill
 			skill = $data_skills[id]
@@ -1796,11 +1787,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 				
 			when 2 #All Emenies 적 전체
+				$e_v = 0 # enemy_value, 맞출 적의 수
 				#Play the animation on player
 				$game_player.animation_id = skill.animation2_id
 				#Take off SP
 				@actor.sp -= skill.sp_cost
 				id = skill.id
+				
 				#If the skill is ranged
 				if RANGE_SKILLS.has_key?(skill.id)
 					enemies = get_all_range($game_player, RANGE_SKILLS[skill.id][0])
@@ -1817,35 +1810,28 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				$alive_size = 0
-				for e in enemies#.values
+				target_enemies = []
+				for e in enemies
 					#Skip NIL values
 					next if e == nil
 					#Skip 이미 적이 죽은거면 넘어가
 					next if e.dead?
 					# Skip if the enemy is an ally and can't hurt allies.
 					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
-					$alive_size += 1
+					target_enemies.push(e)
 				end
-				
+				$alive_size = target_enemies.size
 				
 				#Get all enemies
-				for e in enemies#.values
-					#Skip NIL values
-					next if e == nil
-					#Skip 이미 적이 죽은거면 넘어가
-					next if e.dead?
-					# Skip if the enemy is an ally and can't hurt allies.
-					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
-					
+				for e in target_enemies
 					#Attack enemy
 					e.effect_skill(@actor, skill)
 					#Show Animetion on enemy
 					weapon_skill(@actor.weapon_id, e) # 격 있는 무기면 격 추가
-					
 					hit_enemy(e, @actor, 0) if e.damage != "Miss" and e.damage != 0
 					#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 					#Skip this enemy if its dead
-					next if enemy_dead?(e,@actor)
+					next if enemy_dead?(e, @actor)
 					next if !e.hate_group.include?(0)
 					#If its alive, put it in battle
 					e.in_battle = true
@@ -1855,6 +1841,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					setup_movement(e)
 				end
 				return
+				
 			when 3..4, 7 #User
 				if SKILL_CUSTOM[id] != nil
 					@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
@@ -1882,8 +1869,24 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if skill == nil
 			#Return if the actor doesn't have the skill
 			return if !@actor.skills.include?(skill.id)
-			#Return if the actor can't use the skill
-			return if !@actor.can_use_skill?(skill)
+			
+			# 마력이 부족하면 무시
+			if @actor.sp < skill.sp_cost
+				$console.write_line("마력이 부족합니다.")
+				return
+			end
+			
+			# 엑터가 사용할 수 없는 상황이면 무시
+			if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
+				$console.write_line("귀신은 할 수 없습니다.")
+				return 
+			end
+			
+			# 스킬 사용 불가 지역
+			if $game_switches[352] or $game_switches[25]
+				$console.write_line("스킬 사용 불가 지역입니다.")
+				return
+			end
 			
 			# 아직 스킬 딜레이가 남아있다면 무시
 			skill_mash = SKILL_MASH_TIME[id]
@@ -1900,6 +1903,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@button_mash = (w[4] == nil ? MASH_TIME*10 : w[4]*10)
 			
 			skill_console(id)
+			$rpg_skill.skill_chat(skill) # 스킬 사용시 말하는 것
 			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
@@ -3614,23 +3618,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
-				
-				# 여기다가 사용자의 버프 상태에 따라 평타 공격력 증가 할 수 있음
-				if attacker.is_a?(Game_Actor)
-					if $state_trans # 투명
-						self.damage *= (5 + $game_variables[10]) # 투명 숙련도
-						$state_trans = false
-						$game_variables[9] = 1
-					end
-					if SKILL_BUFF_TIME[134][1] > 0 # 분신
-						self.damage *= 2 
-					end	
-				end
+				# 최종 데미지 계산
+				self.damage = $rpg_skill.damage_calculation_attack(self.damage, self, attacker)
 				
 				r = rand(100)
 				if r <= (self.damage * 100 / self.maxhp) or r <= 40
 					if !self.is_a?(Game_Actor)
-						
 						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
 						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
 					end
@@ -3695,7 +3688,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			if skill.atk_f > 0
 				hit *= user.hit / 100 if !user.is_a?(Game_NetPlayer)
 			end
-			
 			
 			# 스킬 명중률
 			hit_result = (rand(10) < hit)
@@ -3899,8 +3891,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
-				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
-				
 				# 방어력에 따른 데미지 감소
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
@@ -3917,6 +3907,9 @@ if SDK.state("Mr.Mo's ABS") == true
 					amp = [self.damage.abs * skill.variance / 100, 1].max
 					self.damage += rand(amp+1) + rand(amp+1) - amp
 				end
+				
+				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
+				self.damage = $rpg_skill.damage_calculation_skill(self.damage, self, user)
 				
 				# Second hit detection
 				eva = [(8 * self.agi / user.dex + self.eva), 100].min

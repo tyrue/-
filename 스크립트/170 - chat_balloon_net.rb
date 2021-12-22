@@ -47,7 +47,10 @@ class Chat_balloon_net
 			@chat_b[id].oy = cy
 			@chat_b[id].txt = txt
 			
-			$chat_s[id].dispose if $chat_s[ch.name] != nil and not $chat_s[ch.name].disposed?
+			if $chat_s[id] != nil and not $chat_s[id].disposed?
+				$chat_s[id].bitmap.clear
+				$chat_s[id].dispose 
+			end
 			
 			$chat_s[id] = Sprite.new
 			$chat_s[id].bitmap = bitmap

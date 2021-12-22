@@ -145,10 +145,16 @@ class Skill_Delay_Console < Sprite
 			for sprite in @console_log
 				sprite[1][0].visible = false
 			end
+			for sprite in @console_log2
+				sprite[1][0].visible = false
+			end
 		elsif
 			@back_sprite.visible = true
 			@tog = true
 			for sprite in @console_log
+				sprite[1][0].visible = true
+			end
+			for sprite in @console_log2
 				sprite[1][0].visible = true
 			end
 		end

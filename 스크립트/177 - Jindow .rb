@@ -38,6 +38,7 @@ class Jindow < Viewport
 		@route = "Graphics/Jindow/" + @skin + "/Window/"
 		@name = ""
 		@head = false
+		@bottom = true
 		@mark = false
 		@drag = false
 		@nodrag = false
@@ -89,10 +90,11 @@ class Jindow < Viewport
 		end
 		@base_s = Sprite.new(@back)
 		# 비트 맵 선언 (틀 잡기)
-		@ul.bitmap = Bitmap.new(@route + (@head ? "hl" : "ul"))
-		@ur.bitmap = Bitmap.new(@route + (@head ? "hr" : "ur"))
-		@dl.bitmap = Bitmap.new(@route + "dl")
-		@dr.bitmap = Bitmap.new(@route + "dr")
+		@ul.bitmap = Bitmap.new(@route + (@head ? "hl" : "ml"))
+		@ur.bitmap = Bitmap.new(@route + (@head ? "hr" : "mr"))
+		@dl.bitmap = Bitmap.new(@route + (@bottom ? "dl" : "ml"))
+		@dr.bitmap = Bitmap.new(@route + (@bottom ? "dr" : "mr"))
+		
 		# 뷰포트 재설정
 		@back.x = x - @ul.bitmap.width
 		@back.y = y - @ul.bitmap.height
@@ -104,7 +106,7 @@ class Jindow < Viewport
 		@um.bitmap = Bitmap.new(cw, @ul.bitmap.height, @route + (@head ? "hm" : "um"), 1)
 		@ml.bitmap = Bitmap.new(@ul.bitmap.width, ch, @route + "ml", 1)
 		@mr.bitmap = Bitmap.new(@ur.bitmap.width, ch, @route + "mr", 1)
-		@dm.bitmap = Bitmap.new(cw, @dl.bitmap.height, @route + "dm", 1)
+		@dm.bitmap = Bitmap.new(cw, @dl.bitmap.height, @route + (@bottom ? "dm" : "um"), 1)
 		if @head
 			@mark ? (@mark_s.bitmap = Bitmap.new(@route + "mark")) : 0
 			@head ? (@name_s.bitmap = Bitmap.new(self.width, @um.bitmap.height)) : 0

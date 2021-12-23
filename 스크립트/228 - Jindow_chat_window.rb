@@ -1,11 +1,11 @@
 class Jindow_Chat_Window < Jindow
 	
 	def initialize
-		super(0, 360, 500, 90)
-		@head = true
+		super(0, 362, 500, 98)
+		#@head = true
 		@name = "대화창"
-		
-		@opacity = 100
+		@bottom = false
+		@opacity = 150
 		
 		self.refresh "Chat_Window"
 		self.opacity = @opacity
@@ -73,8 +73,8 @@ class Jindow_Chat_Window < Jindow
 		@chat_log[@chat_log.size - 1].y = (@chat_log.size - 1) * @font_size
 		@chat_log[@chat_log.size - 1].bitmap = Bitmap.new(self.width, @font_size)
 		@chat_log[@chat_log.size - 1].bitmap.font.size = @font_size
-		@chat_log[@chat_log.size - 1].bitmap.font.color = color
-		@chat_log[@chat_log.size - 1].bitmap.draw_frame_text(0, 0, self.width, @font_size, text, 0) 
+		@chat_log[@chat_log.size - 1].bitmap.font.color = Color.new(0, 0, 0)
+		@chat_log[@chat_log.size - 1].bitmap.draw_frame_text(0, 0, self.width, @font_size, text, 0, color) 
 		@chat_log[@chat_log.size - 1].visible = @tog
 		@check = true
 	end

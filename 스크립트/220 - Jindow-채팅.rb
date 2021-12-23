@@ -15,7 +15,7 @@ class Jindow_Chat_Input < Jindow
 	
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 510, 20)
+		super(0, 0, 500, 20)
 		self.refresh "Chat_Input"
 		self.y = 460
 		self.opacity = 255

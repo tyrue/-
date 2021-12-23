@@ -1,10 +1,9 @@
 class Jindow_Console < Jindow
 	def initialize
-		super(450, 250, 180, 80)
-		@head = true
+		super(450, 255, 180, 85)
 		@name = "콘솔 창"
-		
-		@opacity = 100
+		@bottom = false
+		@opacity = 150
 		
 		self.refresh "Console"
 		self.opacity = @opacity
@@ -70,7 +69,8 @@ class Jindow_Console < Jindow
 		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * @font_size
 		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width + 5, @font_size)
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
-		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width + 5, @font_size, text, 0)
+		#@console_log[@console_log.size - 1].bitmap.font.color = Color.new(0, 0, 0)
+		@console_log[@console_log.size - 1].bitmap.draw_frame_text(0, 0, self.width + 5, @font_size, text, 0)
 		@console_log[@console_log.size - 1].visible = @tog
 		@check = true
 	end

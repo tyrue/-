@@ -8,7 +8,7 @@ class Game_Event
 end
 
 def check_drop_id
-	for i in 30001..30500
+	for i in 30001..31000
 		if $Drop[i] == nil
 			$Drop[i] = Drop.new
 			return i

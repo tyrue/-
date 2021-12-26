@@ -51,7 +51,10 @@ class MrMo_ABS
 				$console.write_line("#{$Drop[item_index].amount}전 획득 ")
 			end
 			
-			$game_map.events[item_index].erase # 이벤트 삭제
+			event = $game_map.events[item_index]
+			event.erase # 이벤트 삭제
+			event = nil
+			$game_map.events.delete(event)
 			Network::Main.socket.send "<Drop_Get>#{item_index},#{$game_map.map_id}</Drop_Get>\n"
 			자동저장
 			$Drop[item_index] = nil
@@ -361,5 +364,5 @@ class MrMo_ABS
 	# 폭염도 화산굴
 	ITEM_DROP_DATA[250] = [[1], [0, 162, 1, 5], [0, 215, 1, 5]] # 철보장 : 희귀진호박, 금조각
 	ITEM_DROP_DATA[251] = [[1], [0, 162, 1, 5], [0, 216, 1, 5]] # 철거인 : 희귀진호박, 반짝이는돌
-	ITEM_DROP_DATA[252] = [[1], [0, 201, 1, 10], [0, 202, 1, 10], [0, 203, 1, 10], [0, 204, 1, 60], [0, 206, 1, 10], [0, 207, 1, 10]] # 마려 : 대지의토템, 바람의토템, 번개의토템, 화염의토템, 자연의인'상, 자연의인'하
+	ITEM_DROP_DATA[252] = [[2], [0, 201, 1, 10], [0, 202, 1, 10], [0, 203, 1, 10], [0, 204, 1, 60], [0, 206, 1, 10], [0, 207, 1, 10]] # 마려 : 대지의토템, 바람의토템, 번개의토템, 화염의토템, 자연의인'상, 자연의인'하
 end

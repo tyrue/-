@@ -339,7 +339,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[148] = [5000, 141, 10]   		# 용랑제칠봉
 	WEAPON_SKILL[149] = [40000, 141, 10]   		# 용랑제팔봉
 	WEAPON_SKILL[150] = [600000, 176, 5]   		# 용랑제구봉
-
+	
 	# 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
 	EQUIP_EFFECTS = {} 
 	
@@ -969,7 +969,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_enemy_battle(enemy)
 			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
 			if enemy.attacking == nil or enemy.attacking.actor.dead? or !enemy.hate_group.include?(enemy.attacking.enemy_id) or
-				(!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and !in_range?(enemy.event, enemy.attacking.event, enemy.hear_range))
+				(!in_range?(enemy.event, enemy.attacking.event, enemy.see_range) and !in_range?(enemy.event, enemy.attacking.event, enemy.hear_range)) or !enemy.aggro
+				
 				# 원래 움직임으로 돌아옴
 				restore_movement(enemy)
 				# 적대모드 풀림
@@ -1072,6 +1073,8 @@ if SDK.state("Mr.Mo's ABS") == true
 							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							
 							e.sp -= skill.sp_cost
+							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
+							Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
 							msg_enemy_balloon(skill, e.event)
 							return
 						end
@@ -1093,6 +1096,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						# 스킬 사용
 						enemies[0].actor.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
+						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
 						
 						# 애니메이션 실행
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
@@ -1153,6 +1157,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						e.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
 						msg_enemy_balloon(skill, e.event)
+						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
+						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
 						return
 					end
 					return
@@ -1186,7 +1192,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				msg = "#{name}!!"
 			end
 			
-			$chat_b.input(msg, type, sec, event) if msg != nil
+			if msg != nil
+				$chat_b.input(msg, type, sec, event) 
+				Network::Main.socket.send "<monster_chat>#{event.id}&#{msg}&#{type}</monster_chat>\n"  
+			end
 		end
 		
 		
@@ -1241,7 +1250,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				for key in @skill_keys.keys
 					next if @skill_keys[key] == nil or @skill_keys[key] == 0
 					next if !Input.trigger?(key)
-										
+					
 					# 스킬 아이디 가져옴
 					id = @skill_keys[key]
 					
@@ -1440,15 +1449,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		# 맵을 이동하기위한 함수
 		def map_m(id, x, y)
-			#~ while true
-				#~ x = rand(w)
-				#~ y = rand(h)
-				#~ if $game_map.passable?(x, y, d)
-					#~ e.moveto(x, y)
-					#~ return
-				#~ end
-			#~ end
-			
 			if $game_map.map_id != id
 				$game_temp.player_transferring = true # 이동 가능
 				$game_temp.player_new_map_id = id
@@ -3848,7 +3848,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					# 도사스킬
 				when 96 # 지진
 					$e_v += 1
-					power += user.maxsp / 70 + 35
+					power += user.maxsp / 70 + 50
 					if $e_v == $alive_size
 						user.sp -= user.maxsp / 20
 					end	

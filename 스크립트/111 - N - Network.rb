@@ -1102,6 +1102,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							else
 								$ABS.enemies[data[1].to_i].event.erased = false
 								event = $ABS.enemies[data[1].to_i].event
+								$ABS.rand_spawn(event) # 랜덤 위치 스폰
 								event.refresh
 								return
 							end
@@ -1144,6 +1145,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					return true
+					
+				when /<monster_sp>(.*)<\/monster_sp>/ # 몬스터 마력 공유
+					# 같은 맵이 아니면 무시
+					data = $1.split(',')
+					e_id = data[0].to_i
+					val = data[1].to_i
+					if $ABS.enemies[e_id] != nil
+						# 몹 마력 적용
+						if $ABS.enemies[e_id].sp != val
+							$ABS.enemies[e_id].sp = val
+						end
+					end
+					return true	
 					
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					# 같은 맵이 아니면 무시
@@ -1684,6 +1698,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end		
 					
+				when /<monster_chat>(.*)&(.*)&(.*)<\/monster_chat>/
+					id = $1.to_i
+					msg = $2.to_s
+					type = $3.to_i
+					
+					if $scene.is_a?(Scene_Map)
+						return if $ABS.enemies[id] == nil
+						$chat_b.input(msg, type, 4, $ABS.enemies[id].event)
+					end			
+					
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
 					if $1.to_i == 1
@@ -1900,7 +1924,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if data[1].to_i == $game_map.map_id
 						if $Drop[id] != nil
 							$Drop[id] = nil
-							$game_map.events[id].erase
+							event = $game_map.events[id]
+							event.erase
+							event = nil
+							$game_map.events.delete(event)
 						end
 					end
 					
@@ -1983,12 +2010,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$chat.write (data[1], Color.new(65,105, 0))
 					end
 					
-				when /<whispers>(.*),(.*),(.*)<\/whispers>/ 
-					if $1.to_s == $game_party.actors[0].name
-						$chat.write("(귓속말) #{$2.to_s} : #{$3.to_s}", COLOR_WHISPER)
-					elsif $2.to_s == $game_party.actors[0].name
-						$chat.write("(귓속말) #{$1.to_s} <<< #{$3.to_s}", COLOR_WHISPER)
-					end
+				when /<whispers>(.*)<\/whispers>/ 
+					$chat.write("#{$1.to_s}", COLOR_WHISPER)
 					
 				when /<partymessage>(.*),(.*),(.*),(.*)<\/partymessage>/ 
 					if $npt == $4.to_s
@@ -2149,7 +2172,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 								if not $game_party.actors[0].hp == 0 # 회복 스킬
 									$game_player.animation_id = ani_id
 									$rpg_skill.buff(skill_id)
-									$ABS.skill_console(skill_id) # 스킬 표시
 									
 									case skill_id
 									when 92 # 공력주입

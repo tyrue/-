@@ -343,7 +343,6 @@ class Rpg_skill
 	# 버프 사용
 	def buff_active(id)
 		buff(id) # 이게 버프 스킬인지 확인
-		$ABS.skill_console(id)   # 스킬 딜레이 표시
 		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 		if ani_id != nil
 			$game_player.animation_id = ani_id
@@ -354,7 +353,10 @@ class Rpg_skill
 	def buff(id)
 		# 아직 버프가 지속중이면 무시
 		skill_mash = SKILL_BUFF_TIME[id]
-		return if skill_mash != nil and skill_mash[1] / 60.0 > 0
+		return if skill_mash == nil
+		time_now = skill_mash[1]
+		$ABS.skill_console(id) # 스킬 표시
+		return if time_now > 0
 		
 		if BUFF_SKILL[id] != nil
 			for data in BUFF_SKILL[id]

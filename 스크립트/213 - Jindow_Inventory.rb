@@ -117,19 +117,11 @@ class Jindow_Inventory < Jindow
 						$game_party.actors[0].item_effect(i.item)
 					end
 					
+					$game_player.animation_id = i.item.animation1_id 
+					$game_party.lose_item(i.item.id, 1) if i.item.consumable
 					$game_system.se_play(i.item.menu_se)
-					if i.item.consumable
-						$game_party.lose_item(i.item.id, 1)
-					end
-					
-					if i.item.common_event_id > 0
-						# Command event call reservation
-						$game_temp.common_event_id = i.item.common_event_id
-						# Play item use SE
-						$game_system.se_play(i.item.menu_se)
-					end	
+					$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0
 					sort if i.num == 0
-					
 				when 1 # 무기
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(0, i.item.id)

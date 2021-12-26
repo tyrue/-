@@ -7,8 +7,7 @@ COLOR_WORLD = Color.new(255, 255, 102)
 COLOR_EVENT = Color.new(255, 120, 0)
 COLOR_BIGSAY = Color.new(65, 105, 255)
 COLOR_WHISPER = Color.new(136, 255, 50)
-COLOR_PARTY = Color.new(255, 51, 255)
-
+COLOR_PARTY = Color.new(255, 151, 255)
 
 class Jindow_Chat_Input < Jindow
 	attr_reader :active
@@ -177,7 +176,7 @@ class Jindow_Chat_Input < Jindow
 					else
 						name = $game_party.actors[0].name 
 						$chat.write("(귓속말) #{@whispers} <<< #{text}", COLOR_WHISPER)
-						Network::Main.socket.send "<whispers>#{@whispers},#{name},#{text}</whispers>\n"
+						Network::Main.socket.send "<whispers>#{@whispers},#{text}</whispers>\n"
 					end
 				else
 					$console.write_line("귓속말 할 상대가 없습니다.")

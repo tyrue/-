@@ -140,7 +140,7 @@ if SDK.state("Mr.Mo's ABS")
 		# * Something Changed?
 		#--------------------------------------------------------------------------
 		def something_changed?
-			return dispose if @netPlayer.hp <= 0
+			return dispose if @netPlayer.hp.to_i <= 0
 			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
 				@netPlayer.bar_showing = false
 				return dispose 
@@ -152,7 +152,7 @@ if SDK.state("Mr.Mo's ABS")
 				self.visible = false
 			end
 			
-			return true if @old_hp != @netPlayer.hp
+			return true if @old_hp != @netPlayer.hp.to_i
 			return true if @old_x != @netPlayer.event.screen_x - 15
 			return true if @old_y != @netPlayer.event.screen_y - @ch
 			return false

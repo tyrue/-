@@ -772,6 +772,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@socket.send("<party_quest_check>#{id}</party_quest_check>\n")
 			end
 			
+			def self.ship_time_check()
+				@socket.send("<ship_time_check></ship_time_check>\n")
+			end
+			
 			#------------------
 			# 해당 몬스터 젠 딜레이 리셋
 			#------------------
@@ -1662,19 +1666,21 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<chat>(.*)<\/chat>/
 					if $scene.is_a?(Scene_Map)
 						$chat.write($1.to_s, COLOR_WORLD)
-						$game_temp.chat_log.push($1.to_s)
-						$game_temp.chat_refresh = true						
 					end
-					return true
 					
 					# 일반
 				when /<chat1>(.*)<\/chat1>/
 					if $scene.is_a?(Scene_Map)
 						$chat.write($1.to_s, COLOR_NORMAL)
-						$game_temp.chat_log.push($1.to_s)
-						$game_temp.chat_refresh = true
 					end	
 					
+					# 도움말
+				when /<chat2>(.*)<\/chat2>/
+					if $scene.is_a?(Scene_Map)
+						$chat.write($1.to_s, COLOR_HELP)
+					end		
+					
+					# 말풍선
 				when /<map_chat>(.*)&(.*)&(.*)<\/map_chat>/
 					name = $1.to_s
 					msg = $2.to_s
@@ -1938,6 +1944,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					sw = data[1].to_i
 					sw == 1 ? $game_switches[id] = true : $game_switches[id] = false
 					
+				when /<ship_time_check>(.*)<\/ship_time_check>/
+					val = $1.to_i
+					$game_switches[33] = false # 고균도
+					$game_switches[34] = false # 일본 
+					
+					case val
+					when 0
+						$game_switches[34] = true # 일본 
+					when 1
+						$game_switches[33] = true # 일본 
+					end
+					
 					#----------------------------길드---------------------------------
 					return true
 				when /<Guild_Create>(.*),(.*)<\/Guild_Create>/ 
@@ -2011,7 +2029,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 				when /<whispers>(.*)<\/whispers>/ 
-					$chat.write("#{$1.to_s}", COLOR_WHISPER)
+					$chat.write("(귓속말) #{$1.to_s}", COLOR_WHISPER)
 					
 				when /<partymessage>(.*),(.*),(.*),(.*)<\/partymessage>/ 
 					if $npt == $4.to_s

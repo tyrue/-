@@ -1330,25 +1330,49 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<state>(.*)<\/state>/
 					$game_party.actors[0].refresh_states($1)
 					
-					# Attacked!
+					# 다른 유저에 의한 평타 데미지 계산
 				when /<attack_effect>(.*)<\/attack_effect>/
 					return if !$game_switches[302] # pk off
 					data = $1.split(",")
-					return if data[0] != @id
-					
-					$game_party.actors[0].attack_effect(@players[data[1]]) if @players[data[1]] != nil
-					
-					# Attacked!
+					player = @players[data[0]]
+					return if player == nil
+					$game_party.actors[0].attack_effect(player)
+						
+					# 다른 유저에 의한 스킬 데미지 계산
 				when /<skill_effect>(.*)<\/skill_effect>/
 					data = $1.split(",")
-					return if data[0] != @id
-					return if @players[data[1]] == nil
+					player = @players[data[0]]
+					skill = $data_skills[data[1].to_i]
+					
+					return if player == nil
+					return if skill == nil
 					
 					actor = $game_party.actors[0]
-					actor.effect_skill(@players[data[1]], $data_skills[data[2].to_i]) if $game_switches[302]
-					range_skill = $ABS.RANGE_SKILLS[data[2].to_i]
+					actor.effect_skill(player, skill) if $game_switches[302]
+					range_skill = $ABS.RANGE_SKILLS[data[1].to_i]
 					
-					$ABS.jump($game_player, @players[data[1]], range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and range_skill != nil and range_skill[4] != 0
+					$ABS.jump($game_player, player, range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and range_skill != nil and range_skill[4] != 0
+					
+					# 몬스터의 전체 공격에 의한 데미지 계산
+				when /<e_skill_effect>(.*)<\/e_skill_effect>/
+					data = $1.split(",")
+					enemy = $ABS.enemies[data[0].to_i]
+					skill = $data_skills[data[1].to_i]
+					
+					return if enemy == nil
+					return if skill == nil
+					
+					actor = $game_party.actors[0]
+					actor.effect_skill(enemy, skill)
+					range_skill = $ABS.RANGE_SKILLS[data[1].to_i]
+					
+					if actor.damage != "Miss" and actor.damage != 0
+						$ABS.jump($game_player, enemy, range_skill[4]) if range_skill != nil and range_skill[4] != 0
+						ani_id = skill.animation2_id # 스킬 사용 측 애니메이션 id	
+						$game_player.animation_id = ani_id
+						self.ani(@id, ani_id)
+					end
+					
 				when /<result_effect>(.*)<\/result_effect>/ 
 					$ABS.netplayer_killed
 					return true

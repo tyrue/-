@@ -162,7 +162,7 @@ module RPG
         sprite.zoom_y = cell_data[i, 3] / 100.0
         sprite.angle = cell_data[i, 4]
         sprite.mirror = (cell_data[i, 5] == 1)
-        sprite.opacity = cell_data[i, 6] * self.opacity / 255.0
+        sprite.opacity = 255#cell_data[i, 6] * self.opacity / 255.0
         sprite.blend_type = cell_data[i, 7]
       }
     end

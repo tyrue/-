@@ -94,7 +94,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS = {}
 	# RANGE_SKILLS[Skill_ID] = [Range, Move Speed, Character Set Name, Mash Time(in seconds), Kick Back(in tiles)]
 	# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위
-	# 데이터베이스 보고 범위 스킬 id넣으면 됨
 	# 주술사 스킬
 	RANGE_SKILLS[1] = [10, 10, "공격스킬2", 4, 0] 	#뢰진주
 	RANGE_SKILLS[2] = [10, 10, "공격스킬2", 4, 0] 	#백열주
@@ -175,10 +174,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_EXPLODE = {}
 	# RANGE_EXPLODE[Skill_ID] = [Range, Move Speed, Character Set Name, Explosive Range, Mash Time(in seconds), Kick Back(in tiles)]
 	# 폭발 스킬 = 					범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백
+	RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
+	
 	# 주술사 스킬
-	RANGE_EXPLODE[53] = [7, 10, "공격스킬2", 2, 4, 0] #삼매진화
-	RANGE_EXPLODE[57] = [7, 10, "공격스킬2", 2, 4, 0] #삼매진화 1성
-	RANGE_EXPLODE[69] = [7, 10, "공격스킬2", 3, 4, 0] # 삼매진화 2성
+	RANGE_EXPLODE[53] = [10, 10, "공격스킬2", 2, 4, 0] #삼매진화
+	RANGE_EXPLODE[57] = [10, 10, "공격스킬2", 2, 4, 0] #삼매진화 1성
+	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 3, 4, 0] # 삼매진화 2성
 	
 	# 전사스킬
 	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0] # 어검술
@@ -187,7 +188,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
 	
 	# 도사 스킬
-	RANGE_EXPLODE[96] = [7, 6, "공격스킬2", 2, 4, 0] # 지진
+	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0] # 지진
 	
 	#--------------------------------------------------------------------------
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
@@ -220,6 +221,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	sec = 60 # 1초
 	# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
 	SKILL_MASH_TIME = {}
+	SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
+	
 	# 주술사
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
@@ -1121,6 +1124,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						# 스킬 범위내 있는 모든 적 추가
 						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
 						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
+						enemies_net = get_all_range_net(e.event, RANGE_SKILLS[skill.id][0]) if e.hate_group.include?(0)
 						
 						for enemy in enemies
 							# 나한테 적이 아니면 공격 안하게 함
@@ -1142,6 +1146,16 @@ if SDK.state("Mr.Mo's ABS") == true
 							#Setup movement
 							setup_movement(e)
 						end
+						
+						if enemies_net != nil
+							for player in enemies_net
+								Network::Main.socket.send("<e_skill_effect>#{player.name},#{e.event.id},#{skill.id}</e_skill_effect>\n")	# 몬스터 마력 공유
+							end
+						end
+						
+						e.sp -= skill.sp_cost
+						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
+						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
 						msg_enemy_balloon(skill, e.event)
 						return		
 						
@@ -1386,8 +1400,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				$ani_character[player.netid.to_i].animation_id = ani_id if $ani_character[player.netid.to_i] != nil
 				Network::Main.ani(player.netid, ani_id)
 				
-				# 상대방 아이디, 자신의 아이디
-				Network::Main.socket.send("<attack_effect>#{player.netid},#{Network::Main.id}</attack_effect>\n")
+				# 상대방 이름
+				Network::Main.socket.send("<attack_effect>#{player.name}</attack_effect>\n")
 				
 				$state_trans = false
 				$game_variables[9] = 1
@@ -1700,6 +1714,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 			
+			return if !$rpg_skill.check_need_skill_item(skill.id) # 스킬 사용 재료가 부족하면 취소
+			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]
@@ -1894,6 +1910,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
 				return
 			end
+			
+			return if !$rpg_skill.check_need_skill_item(skill.id) # 스킬 사용 재료가 부족하면 취소
 			
 			$e_v = 0 # enemy_value, 맞출 적의 수
 			w = RANGE_EXPLODE[skill.id]
@@ -2407,6 +2425,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			return objects
 		end
+		
+		#--------------------------------------------------------------------------
+		# * 범위 안에 다른 유저를 포함한다. (Element, Range)
+		#--------------------------------------------------------------------------
+		def get_all_range_net(element, range)
+			# 여기서 넷 플레이어인지 확인해야함
+			objects = []
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				objects.push(player) if in_range?(element, player, range)
+			end
+			return objects
+		end
+		
 		#--------------------------------------------------------------------------
 		# * In Direction?(Element, Object) - Near Fantastica
 		#--------------------------------------------------------------------------
@@ -2656,7 +2688,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			# 해당 대상 애니메이션 재생하도록 보냄
 			Network::Main.ani(actor.netid, @skill.animation2_id)
-			Network::Main.socket.send("<skill_effect>#{actor.netid},#{Network::Main.id},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
+			Network::Main.socket.send("<skill_effect>#{actor.name},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
 		end 
 		
 		
@@ -2793,7 +2825,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 해당 대상 애니메이션 재생하도록 보냄
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			Network::Main.ani(actor.netid, @skill.animation2_id) #유저 애니매이션 공유
-			Network::Main.socket.send("<skill_effect>#{actor.netid},#{Network::Main.id},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
+			Network::Main.socket.send("<skill_effect>#{actor.name},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
 		end 
 		
 		
@@ -3910,6 +3942,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
 				self.damage = $rpg_skill.damage_calculation_skill(self.damage, self, user)
+				self.damage = $rpg_skill.damage_by_skill(damage, skill.id)
 				
 				# Second hit detection
 				eva = [(8 * self.agi / user.dex + self.eva), 100].min

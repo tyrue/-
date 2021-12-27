@@ -212,6 +212,11 @@ ACTIVE_SKILL = {}
 ACTIVE_SKILL[73] = [] # 광량돌격
 ACTIVE_SKILL[132] = [] # 비영승보
 
+# 스킬 사용하기 위한 재료
+NEED_SKILL_ACTIVE_ITEM = {}
+# 												[아이템 타입, 아이템 id, 개수], []....
+NEED_SKILL_ACTIVE_ITEM[6] = [[0, 3, 10]] # 도토리 던지기, 도토리 1개
+
 class Rpg_skill
 	def update_buff
 		sec = Graphics.frame_rate
@@ -916,6 +921,61 @@ class Rpg_skill
 			damage = 1 if actor.id == 41 # 청자다람쥐
 		end
 		return damage.to_i
+	end
+	
+	# 고정 데미지 스킬
+	def damage_by_skill(damage, id)
+		case id
+		when 6 # 도토리 던지기
+			damage = 1
+		end
+		return damage
+	end
+	
+	# 스킬을 사용하기 위한 재료가 준비 됐는지 확인
+	def check_need_skill_item(id)
+		return true if NEED_SKILL_ACTIVE_ITEM[id] == nil
+		for data in NEED_SKILL_ACTIVE_ITEM[id]
+			type = data[0]
+			item_id = data[1]
+			num = data[2]
+			
+			my_num = 0
+			item_name = ""
+			case type
+			when 0 # 아이템
+				my_num = $game_party.item_number(item_id)
+				item_name = $data_items[item_id].name
+			when 1 # 무기
+				my_num = $game_party.weapon_number(item_id)
+				item_name = $data_weapons[item_id].name
+			when 2 # 방어구
+				my_num = $game_party.armor_number(item_id)
+				item_name = $data_armors[item_id].name
+			end
+			
+			if my_num < num
+				$console.write_line("#{item_name}(이)가 #{num - my_num}개 부족합니다.")
+				return false 
+			end
+		end
+		
+		# 재료 아이템 소모
+		for data in NEED_SKILL_ACTIVE_ITEM[id]
+			type = data[0]
+			item_id = data[1]
+			num = data[2]
+			
+			case type
+			when 0 # 아이템
+				$game_party.lose_item(item_id, num)
+			when 1 # 무기
+				$game_party.lose_weapon(item_id, num)
+			when 2 # 방어구
+				$game_party.lose_armor(item_id, num)
+			end
+		end
+		return true
 	end
 end	
 

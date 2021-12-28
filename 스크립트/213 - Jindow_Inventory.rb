@@ -18,7 +18,6 @@ class Jindow_Inventory < Jindow
 		self.refresh("Inventory")
 		self.x = 360
 		self.y = 95
-		@old_item_size = -1
 		@inventory_size = 100
 		@margin = 10
 		
@@ -34,7 +33,10 @@ class Jindow_Inventory < Jindow
 		자동저장
 		for i in @item
 			next if i == @gold_drop_button
-			i.dispose if i != nil and !i.disposed?
+			if i != nil and !i.disposed?
+				i.visible = false
+				i.dispose 
+			end
 		end
 		@item.clear
 		
@@ -66,12 +68,16 @@ class Jindow_Inventory < Jindow
 			i.x = (i.id % 6) * 36
 			i.y = (i.id / 6) * 36 + 18
 		end
-		@old_item_size = @item.size 
 		@item.push(@gold_drop_button)
 	end	
 	
 	def update
 		if @gold_drop_button.click
+			@gold_drop_button.click = false
+			if $game_switches[296]
+				$console.write_line("귀신은 할 수 없습니다.")
+				return
+			end
 			if not Hwnd.include?("Item_Drop")
 				Jindow_Drop.new(0, 0, 0) # 돈을 버림
 			else
@@ -98,7 +104,7 @@ class Jindow_Inventory < Jindow
 			end
 		end
 		
-		if @data != data
+		if @data.size != data.size
 			@data = data 
 			sort
 		end
@@ -107,9 +113,18 @@ class Jindow_Inventory < Jindow
 			for i in @item
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
-				
+				i.double_click = false
+				# 아이템 더블클릭시 이벤트 실행
 				case i.type
 				when 0 # 아이템
+					# 유저 죽음 스위치가 켜져있다면 패스
+					if $game_switches[296]
+						if i.item.id != 63 # 부활시약
+							$console.write_line("귀신은 할 수 없습니다.")
+							return 
+						end
+					end
+					
 					if (i.item.recover_hp > 0 or i.item.recover_hp_rate > 0) and ($game_party.actors[0].hp == $game_party.actors[0].maxhp)
 						$console.write_line("이미 완전 회복된 상태 입니다.")
 						next
@@ -121,14 +136,23 @@ class Jindow_Inventory < Jindow
 					$game_party.lose_item(i.item.id, 1) if i.item.consumable
 					$game_system.se_play(i.item.menu_se)
 					$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0
-					sort if i.num == 0
 				when 1 # 무기
+					if $game_switches[296]
+						$console.write_line("귀신은 할 수 없습니다.")
+						return
+					end
+					
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(0, i.item.id)
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
 					end
 					sort
 				when 2 # 방어구
+					if $game_switches[296]
+						$console.write_line("귀신은 할 수 없습니다.")
+						return
+					end
+					
 					if $game_party.actors[0].equippable?(i.item)
 						$game_party.actors[0].equip(i.item.kind + 1, i.item.id)
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
@@ -144,7 +168,6 @@ class Jindow_Inventory < Jindow
 				check(i)
 			end
 		end
-		
 		super
 	end	
 	

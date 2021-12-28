@@ -157,6 +157,7 @@ module J
 						@item_name.bitmap.draw_frame_text(0, 0, @item_name.width, @item_name.height, @item.name, 0)
 					end
 				else
+					# 아이템 이름 감추기
 					if @item_name != nil and !@item_name.disposed?
 						@item_name.visible = false
 						@item_name.dispose 
@@ -206,6 +207,15 @@ module J
 			end
 		end
 		
+		def dispose
+			if @item_name != nil and !@item_name.disposed?
+				@item_name.visible = false
+				@item_name.dispose 
+				@item_name = nil
+			end
+			super
+		end
+		
 		def num
 			number = 0
 			case @type
@@ -232,6 +242,11 @@ module J
 		
 		def click=(value)
 			@click = value
+			self.bluck = value
+		end
+		
+		def double_click=(value)
+			@double_click = value
 			self.bluck = value
 		end
 	end

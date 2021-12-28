@@ -20,9 +20,9 @@ class Scene_Map
 		JS.update
 		
 		if $game_party.actors[0].hp == 0
-			Hwnd.dispose("Inventory") if Hwnd.include?("Inventory")
+			#Hwnd.dispose("Inventory") if Hwnd.include?("Inventory")
 			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
-			$game_switches[296] = true if $game_switches[296] != true# 유저 죽음 스위치 온
+			$game_switches[296] = true if $game_switches[296] != true # 유저 죽음 스위치 온
 		end
 		
 		if not Hwnd.include?("NetPartyInv")
@@ -45,22 +45,24 @@ class Scene_Map
 					end	
 					
 					if $game_party.actors[0].hp > 0  
-						if Key.trigger?(KEY_I) # i
-							if not Hwnd.include?("Inventory")
-								Jindow_Inventory.new
-							else
-								Hwnd.dispose("Inventory")
-							end
-							#~ if Key.press?(KEY_SHIFT)# 조합창
-								#~ if not Hwnd.include?("craft")
-									#~ Jindow_craft.new
-								#~ else
-									#~ Hwnd.dispose("craft")
-								#~ end
-							#~ else # 인벤토리
-							#~ end
-						end
+						
 					end	 
+					
+					if Key.trigger?(KEY_I) # i
+						if not Hwnd.include?("Inventory")
+							Jindow_Inventory.new
+						else
+							Hwnd.dispose("Inventory")
+						end
+						#~ if Key.press?(KEY_SHIFT)# 조합창
+						#~ if not Hwnd.include?("craft")
+						#~ Jindow_craft.new
+						#~ else
+						#~ Hwnd.dispose("craft")
+						#~ end
+						#~ else # 인벤토리
+						#~ end
+					end
 					
 					if Key.trigger?(26) # c
 						if not Hwnd.include?("Status")

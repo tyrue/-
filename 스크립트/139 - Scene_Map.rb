@@ -34,7 +34,7 @@ class Scene_Map
 		if SKILL_BUFF_TIME[136][1] > 0 # 파무쾌보
 			$game_player.move_speed = 3.5
 		end
-		자동저장 if $game_map.map_id != 3
+		자동저장 
 		
 		$Drop = [] # 드랍 아이템 내용 초기화
 		# 현재 맵의 몬스터 정보를 요청

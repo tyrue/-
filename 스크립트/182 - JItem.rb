@@ -154,6 +154,11 @@ module J
 						@item_name.z = 999999
 						@item_name.bitmap = Bitmap.new(200, 14)
 						@item_name.bitmap.font.size = 14
+						rect = @item_name.bitmap.text_size(@item.name)
+						if (@item_name.x + rect.width) > @viewport.width
+							@item_name.x -= (@item_name.x + rect.width - @viewport.width)
+						end
+						@item_name.bitmap.fill_rect(rect, Color.new(0, 0, 0, 50))
 						@item_name.bitmap.draw_frame_text(0, 0, @item_name.width, @item_name.height, @item.name, 0)
 					end
 				else

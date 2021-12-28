@@ -26,7 +26,7 @@ module PLAN_Map_Window
 	OVER_X = 632 - WIN_WIDTH # 이동 후의 X 좌표(초기 위치와 왕복합니다) 
 	OVER_Y = 8 # 이동 후의 Y 좌표(초기 위치와 왕복합니다) 
 	
-	OPACITY = 124 # 윈도우의 투명도
+	OPACITY = 255 # 윈도우의 투명도
 	C_OPACITY = 255 # 맵의 투명도 
 	VISIBLE = false # 최초, 표시할까 하지 않는가(true:하는, false:하지 않는다) 
 end 
@@ -134,9 +134,11 @@ class Window_Map < Window_Base
 	def initialize 
 		x = PLAN_Map_Window::WIN_X 
 		y = PLAN_Map_Window::WIN_Y 
+		
 		w = PLAN_Map_Window::WIN_WIDTH 
 		h = PLAN_Map_Window::WIN_HEIGHT 
 		super(x, y, w, h) # 해당 좌표에 창을 띄움
+		self.z = 999999
 		
 		unless PLAN_Map_Window::WINDOWSKIN.empty? 
 			self.windowskin = RPG::Cache.windowskin(PLAN_Map_Window::WINDOWSKIN) 
@@ -159,15 +161,17 @@ class Window_Map < Window_Base
 		# 플레이어 위치 저장
 		@old_real_x = $game_player.real_x 
 		@old_real_y = $game_player.real_y 
+		
 		# 맵 그래픽 구현 
 		@all_map = make_all_map 
 		@all_event = make_all_event
+		
+	
 		
 		# 창 표시
 		self.visible = PLAN_Map_Window::VISIBLE 
 		refresh 
 	end 
-	
 	
 	def make_all_event
 		test_bitmap = Bitmap.new(self.contents.width, self.contents.height)
@@ -246,110 +250,44 @@ class Window_Map < Window_Base
 	#-------------------------------------------------------------------------- 
 	# ● 리프레쉬 
 	#-------------------------------------------------------------------------- 
-	def refresh 
-		self.contents.clear 
-		# 축소 맵 표시 
-		one_tile_size = 32 / $zoom 
-		x = $game_player.real_x - 128 * (self.contents.width / one_tile_size) / 2 
-		y = $game_player.real_y - 128 * (self.contents.height / one_tile_size) / 2 
-		x = x * one_tile_size / 128 
-		y = y * one_tile_size / 128 
+	def refresh  
+		self.contents.clear
+		x = (self.contents.width - @all_map.width) / 2
+		y = (self.contents.height - @all_map.height) / 2
 		
-		# 스크롤 스톱 처리(옆) 
-		# 캐릭터의 위치(contents 의 중앙) 
-		half_width = self.contents.width * 128 / 2 
-		# 캐릭터의 위치(실위치)~맵의 구석까지의 나머지폭 
-		rest_width = ($game_map.width * 128 - $game_player.real_x) * one_tile_size 
-		# 윈도우보다 맵의 폭이 작으면 
-		rev_x = 0 
-		# 맵이 윈도우보다 작은 경우는 중앙 표시 
-		if @all_map.width < self.contents.width 
-			rev_x = (half_width - $game_player.real_x * one_tile_size) / 128 
-			rev_x -= (self.contents.width - @all_map.width) / 2 
-			x += rev_x 
-			# ??????b?v????????????? 
-		elsif half_width > $game_player.real_x * one_tile_size 
-			rev_x = (half_width - $game_player.real_x * one_tile_size) / 128 
-			x += rev_x 
-			# 오른쪽이 맵의 구석을 넘으면 
-		elsif half_width > rest_width 
-			rev_x = -((half_width - rest_width) / 128) 
-			x += rev_x 
-		end 
-		
-		# 스크롤 스톱 처리(세로) 
-		# 캐릭터의 정도 치(contents 의 중앙) 
-		half_height = self.contents.height * 128 / 2 
-		# 캐릭터의 위치(실위치)~맵의 구석까지의 나머지 높이 
-		rest_height = ($game_map.height * 128 - $game_player.real_y) * one_tile_size 
-		# 윈도우보다 맵의 폭이 작으면 
-		rev_y = 0 
-		# 맵이 윈도우보다 작은 경우는 중앙 표시 
-		if @all_map.height < self.contents.height 
-			rev_y = (half_height - $game_player.real_y * one_tile_size) / 128 
-			rev_y -= (self.contents.height - @all_map.height) / 2 
-			y += rev_y 
-			# 오른쪽이 맵의 구석을 넘으면 
-		elsif half_height > $game_player.real_y * one_tile_size 
-			rev_y = (half_height - $game_player.real_y * one_tile_size) / 128 
-			y += rev_y 
-			# ?E????b?v????????????? 
-		elsif half_height > rest_height 
-			rev_y = -((half_height - rest_height) / 128) 
-			y += rev_y 
-		end 
-		
-		src_rect = Rect.new(x, y, self.contents.width, self.contents.height)
+		src_rect = Rect.new(0, 0, self.contents.width, self.contents.height)
 		src_rect2 = Rect.new(0, 0, self.contents.width, self.contents.height)
-		self.contents.blt(0, 0, @all_map, src_rect) 
-		self.contents.blt(0, 0, @all_event, src_rect2) 
+		self.contents.blt(x, y, @all_map, src_rect) 
+		self.contents.blt(0, 0, @all_event, src_rect2)
 		
-		# 윈도우의 이동 처리 
-		if PLAN_Map_Window::WINDOW_MOVE == true 
-			# 윈도우의 범위를 취득(범위 오브젝트) 
-			w = self.x..self.x + self.width 
-			h = self.y..self.y + self.height 
-			# 플레이어가 윈도우의 범위내에 들어갔을 경우 
-			if w === $game_player.screen_x and h === $game_player.screen_y 
-				# 이동 장소 판정 
-				# 초기 위치라면 
-				if self.x == PLAN_Map_Window::WIN_X and self.y == PLAN_Map_Window::WIN_Y 
-					# 이동 후의 좌표에 이동 
-					self.x = PLAN_Map_Window::OVER_X 
-					self.y = PLAN_Map_Window::OVER_Y 
-					# 초기 위치가 아닌 경우 
-				else 
-					# 초기 위치에 이동 
-					self.x = PLAN_Map_Window::WIN_X 
-					self.y = PLAN_Map_Window::WIN_Y 
-				end 
-			end 
-		end 
-				
 		# 액터가 있는 경우는 최초의 액터를 맵에 표시 
 		if $game_party.actors.size > 0 
+			one_tile_size = 32 / $zoom
 			actor = $game_party.actors[0] 
 			size = 40
 			bitmap = Bitmap.new(size, size)
 			bitmap.fill_rect(bitmap.rect, Color.new(255, 255, 0)) # 꽉찬 네모 
-			#bitmap = RPG::Cache.character(actor.character_name, actor.character_hue) 
+			#bitmap = RPG::Cache.character(actor.character_name, actor.character_hue) # 만약 이미지를 넣고 싶다면
 			width = bitmap.width / 4 
 			height = bitmap.height / 4 
 			src_rect = Rect.new(0, 0, width, height) 
 			# 액터를 중앙에 표시 
-			w = width #/ $zoom 
-			h = height #/ $zoom
+			w = width 
+			h = height 
+			
 			# 타일의 폭만 짝수이므로 반타일분 늦춘다 
-			x = self.contents.width / 2 - w / 2 + one_tile_size / 2 - rev_x 
-			y = self.contents.height / 2 - h / 2 - rev_y 
-			dest_rect = Rect.new(x, y, w, h) 
-			self.contents.stretch_blt(dest_rect, bitmap, src_rect) 
+			x = ($game_player.x ) * one_tile_size + (self.contents.width - @all_map.width) / 2
+			y = ($game_player.y ) * one_tile_size + (self.contents.height - @all_map.height) / 2
+			
+			self.contents.blt(x, y, bitmap, src_rect) 
+			#self.contents.stretch_blt(dest_rect, bitmap, src_rect) 
 		end 
 	end 
 	#-------------------------------------------------------------------------- 
 	# ● 프레임 갱신 
 	#-------------------------------------------------------------------------- 
 	def update 
+		return if !self.visible
 		super 
 		if @old_real_x != $game_player.real_x or @old_real_y != $game_player.real_y 
 			@old_real_x = $game_player.real_x 

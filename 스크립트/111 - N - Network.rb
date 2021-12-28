@@ -1367,7 +1367,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					range_skill = $ABS.RANGE_SKILLS[data[1].to_i]
 					
 					if actor.damage != "Miss" and actor.damage != 0
-						$ABS.jump($game_player, enemy, range_skill[4]) if range_skill != nil and range_skill[4] != 0
+						$ABS.jump($game_player, enemy.event, range_skill[4]) if range_skill != nil and range_skill[4] != 0
 						ani_id = skill.animation2_id # 스킬 사용 측 애니메이션 id	
 						$game_player.animation_id = ani_id
 						self.ani(@id, ani_id)

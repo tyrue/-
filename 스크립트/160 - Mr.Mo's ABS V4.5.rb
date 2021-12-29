@@ -164,8 +164,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[152] = [10, 4, "현무", 4, 1] # 현무의 포효
 	RANGE_SKILLS[153] = [10, 4, "공격스킬2", 4, 3] # 백호검무
 	RANGE_SKILLS[154] = [10, 4, "용", 4, 4] # 청룡마령참
-	RANGE_SKILLS[155] = [10, 4, "공격스킬", 4, 1] # 암흑진파
-	RANGE_SKILLS[156] = [10, 4, "공격스킬", 4, 1] # 흑룡광포
+	RANGE_SKILLS[155] = [5, 4, "공격스킬", 4, 1] # 암흑진파
+	RANGE_SKILLS[156] = [7, 4, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
 	
 	#--------------------------------------------------------------------------
@@ -1076,8 +1076,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							
 							e.sp -= skill.sp_cost
-							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
-							Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
+							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
 							msg_enemy_balloon(skill, e.event)
 							return
 						end
@@ -1099,7 +1098,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						# 스킬 사용
 						enemies[0].actor.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
-						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
+						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n") if skill.sp_cost != 0	# 몬스터 마력 공유
 						
 						# 애니메이션 실행
 						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
@@ -1126,6 +1125,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
 						enemies_net = get_all_range_net(e.event, RANGE_SKILLS[skill.id][0]) if e.hate_group.include?(0)
 						
+						old_hp = e.hp
 						for enemy in enemies
 							# 나한테 적이 아니면 공격 안하게 함
 							next if !e.hate_group.include?(enemy.id)
@@ -1154,8 +1154,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						end
 						
 						e.sp -= skill.sp_cost
-						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
-						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
+						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0# 몬스터 마력 공유
+						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n") if old_hp != e.hp
 						msg_enemy_balloon(skill, e.event)
 						return		
 						
@@ -1168,11 +1168,12 @@ if SDK.state("Mr.Mo's ABS") == true
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
 						
+						old_hp = e.hp
 						e.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
 						msg_enemy_balloon(skill, e.event)
-						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	# 몬스터 마력 공유
-						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
+						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	 if skill.sp_cost != 0# 몬스터 마력 공유
+						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n") if old_hp != e.hp
 						return
 					end
 					return
@@ -1309,6 +1310,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				target.item_effect(item)
 				$game_player.animation_id = item.animation1_id 
+				Network::Main.ani(Network::Main.id, item.animation1_id)
 				$game_system.se_play(item.menu_se)
 				$game_party.lose_item(item.id, 1) if item.consumable
 				@item_mash = 3
@@ -1834,6 +1836,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					next if e.dead?
 					# Skip if the enemy is an ally and can't hurt allies.
 					next if !CAN_HURT_ALLY and e.hate_group.include?(0)
+					next if !e.hate_group.include?(0) # 내 적이 아니면 패스
 					target_enemies.push(e)
 				end
 				$alive_size = target_enemies.size
@@ -2634,13 +2637,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			objects = []
 			for e in $ABS.enemies.values
 				#Skip NIL values
-				next if e== nil
+				next if e == nil
 				#Skip 이미 적이 죽은거면 넘어가
 				next if e.dead?
 				# Skip if the enemy is an ally and can't hurt allies.
 				next if !CAN_HURT_ALLY and e.hate_group.include?(0)
+				next if !e.hate_group.include?(0) # 내 적이 아니면 패스
 				if in_range?(element, e.event, range)
-					$alive_size += 1				
 					objects.push(e) 
 				end
 			end

@@ -132,7 +132,8 @@ class Jindow_Inventory < Jindow
 						$game_party.actors[0].item_effect(i.item)
 					end
 					
-					$game_player.animation_id = i.item.animation1_id 
+					$game_player.animation_id = i.item.animation1_id
+					Network::Main.ani(Network::Main.id, i.item.animation1_id) 
 					$game_party.lose_item(i.item.id, 1) if i.item.consumable
 					$game_system.se_play(i.item.menu_se)
 					$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0

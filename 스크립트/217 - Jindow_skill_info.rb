@@ -21,18 +21,78 @@ class Jindow_Skill_Info < Jindow
 		@button_key.x = 0
 		@button_key.y = 0
 		
+		@skill_power_data = SKILL_POWER_CUSTOM[@data.id]
+		@skill_cost_data = SKILL_COST_CUSTOM[@data.id]
+		@txt_power = @data.power
+		@txt_name = ""
+		
 		# 스킬명, 스킬 내용, 마나 소모량
-		@s_info = [
-			"이름 : #{@data.name}",
-			"마력 #{@data.sp_cost}소모"
-		]
+		@s_info = []
+		@txt_name = "[원거리]" if RANGE_SKILLS[@data.id] != nil and @data.scope == 1
+		@txt_name = "[전체]" if RANGE_SKILLS[@data.id] != nil and @data.scope == 2
+		@txt_name = "[범위]" if RANGE_EXPLODE[@data.id] != nil
+		@txt_name = "[회복]" if HEAL_SKILL[@data.id] != nil
+		@txt_name = "[파티 회복]" if PARTY_HEAL_SKILL[@data.id] != nil
+		@txt_name = "[버프]" if BUFF_SKILL[@data.id] != nil
+		@txt_name = "[파티 버프]" if PARTY_BUFF_SKILL[@data.id] != nil
+		
+		@s_info.push("#{@txt_name}")	if @txt_name != ""
+			
+		if @skill_cost_data != nil
+			data = @skill_cost_data[0]
+			type = data[0]
+			p_hp = (data[1] * 100).to_i
+			p_sp = (data[2] * 100).to_i
+			
+			txt = "소모 : "
+			case type
+			when 0
+				txt += "현재 "
+			when 1
+				txt += "전체 "
+			end
+			txt += "체력 #{p_hp}% " if p_hp > 0
+			txt += "마력 #{p_sp}%" if p_sp > 0
+			
+			@s_info.push(txt)
+		end
+		@s_info.push("기본 소모 : 마력 #{@data.sp_cost}") if @data.sp_cost > 0
+		@s_info.push("")
+		
+		if @skill_power_data != nil
+			data = @skill_power_data[0]
+			type = data[0]
+			p_hp = (data[1] * 100).to_i
+			p_sp = (data[2] * 100).to_i
+			val = data[3] 
+			
+			txt = "공격력 : "
+			case type
+			when 0
+				txt += "현재 "
+			when 1
+				txt += "전체 "
+			end
+			txt += "체력 #{p_hp}% " if p_hp > 0
+			txt += "마력 #{p_sp}%" if p_sp > 0
+			@txt_power += val
+			@s_info.push(txt)
+		end
+		@s_info.push("기본 공격력 : #{@txt_power}") if @txt_power > 0
+		
+		@heal_txt = HEAL_SKILL[@data.id][0] if HEAL_SKILL[@data.id] != nil
+		@heal_txt = PARTY_HEAL_SKILL[@data.id][0] if @heal_txt == nil and PARTY_HEAL_SKILL[@data.id] != nil
+		if @heal_txt != nil
+			@s_info.push("기본 회복량 : #{@heal_txt}")
+		end
+		
 		@s_info2 = []
 		
 		@d_x = 0
 		@d_y = @button_key.y + @button_key.height
 		for i in 0...@s_info.size
 			@s_info2[i] = Sprite.new(self)
-			@s_info2[i].bitmap = Bitmap.new(400, 20)
+			@s_info2[i].bitmap = Bitmap.new(self.width, 20)
 			@s_info2[i].bitmap.font.size = 13
 			@s_info2[i].x = @d_x
 			@s_info2[i].y = @d_y + (@s_info2[i].bitmap.font.size + 4) * i

@@ -142,29 +142,29 @@ REQ_SKILL_DATA[4] =
 HEAL_SKILL = {}
 HEAL_SKILL[5] = [75]  		# 누리의기원
 HEAL_SKILL[21] = [100]		# 바다의기원
-HEAL_SKILL[27] = [170]			# 동해의기원
-HEAL_SKILL[29] = [300]			# 천공의기원
-HEAL_SKILL[36] = [500]			# 구름의기원
-HEAL_SKILL[48] = [1000]			# 태양의기원
-HEAL_SKILL[54] = [2000]			# 태양의기원 1성
-HEAL_SKILL[55] = [5000]			# 현인의기원
-HEAL_SKILL[55] = [5000]			# 현인의기원
-HEAL_SKILL[157] = [5000]			# 적 회복 스킬
+HEAL_SKILL[27] = [170]		# 동해의기원
+HEAL_SKILL[29] = [300]		# 천공의기원
+HEAL_SKILL[36] = [500]		# 구름의기원
+HEAL_SKILL[48] = [1000]		# 태양의기원
+HEAL_SKILL[54] = [2000]		# 태양의기원 1성
+HEAL_SKILL[55] = [5000]		# 현인의기원
+HEAL_SKILL[157] = [5000]	# 적 회복 스킬
+HEAL_SKILL[43] = [1]			# 위태응기
 
 # 치유마법 (희원류)
 PARTY_HEAL_SKILL = {}
-PARTY_HEAL_SKILL[81] = [170]  # 동해의희원
-PARTY_HEAL_SKILL[83] = [200]  # 천공의희원
-PARTY_HEAL_SKILL[86] = [75]  # 바다의희원
-PARTY_HEAL_SKILL[87] = [200]  # 천공의희원
-PARTY_HEAL_SKILL[89] = [500]  # 구름의희원
-PARTY_HEAL_SKILL[93] = [1000]  # 태양의희원
-PARTY_HEAL_SKILL[92] = [1]  # 공력주입
-PARTY_HEAL_SKILL[95] = [3000]  # 생명의희원
-PARTY_HEAL_SKILL[117] = [1]  # 백호의희원
+PARTY_HEAL_SKILL[81] = [170]  	# 동해의희원
+PARTY_HEAL_SKILL[83] = [200]  	# 천공의희원
+PARTY_HEAL_SKILL[86] = [75] 	 	# 바다의희원
+PARTY_HEAL_SKILL[87] = [200]  	# 천공의희원
+PARTY_HEAL_SKILL[89] = [500]  	# 구름의희원
+PARTY_HEAL_SKILL[93] = [1000] 	# 태양의희원
+PARTY_HEAL_SKILL[92] = [1]  		# 공력주입
+PARTY_HEAL_SKILL[95] = [3000]  	# 생명의희원
+PARTY_HEAL_SKILL[117] = [1]  		# 백호의희원
 PARTY_HEAL_SKILL[118] = [7000]  # 신령의희원
-PARTY_HEAL_SKILL[119] = [15000]  # 봉황의희원
-PARTY_HEAL_SKILL[120] = [1]  # 부활
+PARTY_HEAL_SKILL[119] = [15000] # 봉황의희원
+PARTY_HEAL_SKILL[120] = [1]  		# 부활
 
 # 파티 버프 스킬 아이디 저장
 PARTY_BUFF_SKILL = {}
@@ -291,7 +291,7 @@ SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
 # ---------------- #
 SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
 SKILL_COST_CUSTOM[135] = [[0, 0.2, 0.1]] # 백호검무
-SKILL_COST_CUSTOM[135] = [[0, 1.0 / 6.0, 0.5]] # 이기어검
+SKILL_COST_CUSTOM[137] = [[0, 1.0 / 6.0, 0.5]] # 이기어검
 SKILL_COST_CUSTOM[138] = [[0, 0.5, 0.5]] # 무형검
 SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 
@@ -299,7 +299,16 @@ SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 70.0, 50]] # 지진
 
 # ---------------- #
+SKILL_COST_CUSTOM[92] = [[0, 0, 1.0]] # 공력주입
+SKILL_COST_CUSTOM[117] = [[0, 0, 1.0]] # 백호의희원
+SKILL_COST_CUSTOM[118] = [[1, 0, 0.02]] # 신령의희원
+SKILL_COST_CUSTOM[119] = [[1, 0, 0.02]] # 봉황의희원
+SKILL_COST_CUSTOM[43] = [[0, 0, 1.0]] # 위태응기
+
 SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
+
+
+
 # $game_variables[19] 플레이어 힘
 # $game_variables[20] 플레이어 민첩
 # $game_variables[21] 플레이어 지력
@@ -353,39 +362,34 @@ class Rpg_skill
 	end
 	
 	# 파티 힐
-	def party_heal(id)
+	def party_heal(id, user = $game_party.actors[0])
 		return if PARTY_HEAL_SKILL[id] == nil
 		heal_v = 1
 		heal_v = PARTY_HEAL_SKILL[id][0].to_i 
-		heal_v += ($game_party.actors[0].maxsp * 0.001).to_i
-		heal_v = ((heal_v) * (1 + ($game_party.actors[0].int / 1000.0) + ($game_party.actors[0].maxsp / 100000.0))).to_i
+		heal_v += (user.maxsp * 0.001).to_i
+		heal_v = ((heal_v) * (1 + (user.int / 1000.0) + (user.maxsp / 100000.0))).to_i
 		
 		# 커스텀
 		case id
 		when 92 # 공력주입
-			heal_v = $game_party.actors[0].sp
-			$game_party.actors[0].sp = 0
+			heal_v = user.sp
 		when 117 # 백호의희원
-			heal_v = $game_party.actors[0].sp * 2
-			$game_party.actors[0].sp = 0
-		when 118 # 신령의희원
-			$game_party.actors[0].sp -= $game_party.actors[0].sp / 50
-		when 119 # 봉황의희원
-			$game_party.actors[0].sp -= $game_party.actors[0].sp / 50
+			heal_v = user.sp * 2
 		when 120 # 부활
 			$game_temp.common_event_id = 24
 		end
+		skill_cost_custom(user, id)
 		
-		$game_party.actors[0].damage = heal_v.to_s
-		$game_party.actors[0].critical = "heal"
-		$game_party.actors[0].hp += heal_v
+		user.damage = heal_v.to_s
+		user.critical = "heal"
+		user.hp += heal_v
 		
 		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 		$game_player.animation_id = ani_id
 		Network::Main.ani(Network::Main.id, ani_id)
 		
 		if $netparty.size >= 2 # 파티가 2인 이상이라면
-			name = $game_party.actors[0].name
+			name = user.name
 			Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
 		end
 	end
@@ -409,18 +413,14 @@ class Rpg_skill
 	
 	# 자기 힐
 	def heal(id, user = $game_party.actors[0])
-		is_heal = false
-		heal_v = 0
-		if HEAL_SKILL[id] != nil
-			heal_v = HEAL_SKILL[id][0].to_i 
-			is_heal = true
-		end
+		return if HEAL_SKILL[id] == nil
+		heal_v = HEAL_SKILL[id][0].to_i 
+		is_heal = true
 		
 		# 커스텀
 		case id
 		when 43 # 위태응기
 			heal_v = user.sp * 2
-			user.sp = 0
 			is_heal = true
 			
 			# 적 유닛 스킬
@@ -429,13 +429,12 @@ class Rpg_skill
 			is_heal = true
 		end
 		
-		if is_heal
-			heal_v += (user.maxhp * 0.01).to_i
-			user.critical = "heal"
-			user.damage = heal_v.to_s
-			user.hp += heal_v
-			return heal_v
-		end
+		skill_cost_custom(user, id)
+		heal_v += (user.maxhp * 0.01).to_i
+		user.critical = "heal"
+		user.damage = heal_v.to_s
+		user.hp += heal_v
+		return heal_v
 	end
 	
 	# 이미 버프가 걸려있는지 확인

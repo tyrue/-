@@ -148,6 +148,8 @@ HEAL_SKILL[36] = [500]			# 구름의기원
 HEAL_SKILL[48] = [1000]			# 태양의기원
 HEAL_SKILL[54] = [2000]			# 태양의기원 1성
 HEAL_SKILL[55] = [5000]			# 현인의기원
+HEAL_SKILL[55] = [5000]			# 현인의기원
+HEAL_SKILL[157] = [5000]			# 적 회복 스킬
 
 # 치유마법 (희원류)
 PARTY_HEAL_SKILL = {}
@@ -217,7 +219,104 @@ NEED_SKILL_ACTIVE_ITEM = {}
 # 												[아이템 타입, 아이템 id, 개수], []....
 NEED_SKILL_ACTIVE_ITEM[6] = [[0, 3, 10]] # 도토리 던지기, 도토리 1개
 
+
+SKILL_POWER_CUSTOM = {}
+# 											 [[타입(현재(0), 전체(1)), 체력, 마력, 기본값]]
+SKILL_COST_CUSTOM = {}
+# 											 [[타입(현재(0), 전체(1)), 체력, 마력]]
+
+# 주술사
+SKILL_POWER_CUSTOM[44] = [[0, 0, 1.5, 10]] # 헬파이어
+SKILL_POWER_CUSTOM[53] = [[0, 0, 2.0, 10]] # 삼매진화
+SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
+SKILL_POWER_CUSTOM[69] = [[0, 0, 2.5, 10]] # 삼매진화 2성
+
+SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 8.0, 90]] # 성려멸주
+SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 7.0, 100]] # 성려멸주 1성
+SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 6.0, 120]] # 성려멸주 2성
+
+SKILL_POWER_CUSTOM[58] = [[0, 0, 2.0, 10]] # 지폭지술
+SKILL_POWER_CUSTOM[68] = [[0, 1.0, 2.0, 10]] # 폭류유성
+
+# ---------------- #
+SKILL_COST_CUSTOM[44] = [[0, 0, 1.0]] # 헬파이어
+SKILL_COST_CUSTOM[53] = [[0, 0, 1.0]] # 삼매진화
+SKILL_COST_CUSTOM[57] = [[0, 0, 1.0]] # 삼매진화 1성
+SKILL_COST_CUSTOM[69] = [[0, 0, 1.0]] # 삼매진화 2성
+
+SKILL_COST_CUSTOM[49] = [[1, 0, 1.0 / 15.0]] # 성려멸주
+SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 13.0]] # 성려멸주 1성
+SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 11.0]] # 성려멸주 2성
+
+SKILL_COST_CUSTOM[58] = [[0, 0, 1.0]] # 지폭지술
+SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
+
+# 전사
+SKILL_POWER_CUSTOM[67] = [[0, 2.0, 0, 30]] # 건곤대나이
+SKILL_POWER_CUSTOM[73] = [[0, 0.5, 0, 30]] # 광량돌격
+SKILL_POWER_CUSTOM[79] = [[0, 7, 0, 100]] # 동귀어진
+SKILL_POWER_CUSTOM[101] = [[0, 3, 0.1, 60]] # 백호참
+SKILL_POWER_CUSTOM[103] = [[0, 1.0, 0.5, 20]] # 어검술
+SKILL_POWER_CUSTOM[104] = [[0, 1.0, 1.0, 20]] # 포효검황
+SKILL_POWER_CUSTOM[105] = [[0, 1.2, 1.5, 100]] # 혈겁만파
+SKILL_POWER_CUSTOM[106] = [[0, 0.5, 1.5, 100]] # 초혼비무
+
+SKILL_POWER_CUSTOM[74] = [[1, 1.0 / 12.0, 0, 20]] # 십리건곤
+SKILL_POWER_CUSTOM[78] = [[1, 1.0 / 10.0, 0, 30]] # 십리건곤 1성
+SKILL_POWER_CUSTOM[80] = [[1, 1.0 / 8.0, 0, 40]] # 십리건곤 2성
+SKILL_POWER_CUSTOM[102] = [[1, 1.0 / 7.0, 0.01, 50]] # 백리건곤 1성
+
+# ---------------- #
+SKILL_COST_CUSTOM[67] = [[0, 2.0 / 3.0, 0]] # 건곤대나이
+SKILL_COST_CUSTOM[73] = [[0, 0.5, 0]] # 광량돌격
+SKILL_COST_CUSTOM[79] = [[0, 1.0, 0]] # 동귀어진
+SKILL_COST_CUSTOM[101] = [[0, 0.5, 0]] # 백호참
+SKILL_COST_CUSTOM[103] = [[0, 0.5, 0.2]] # 어검술
+SKILL_COST_CUSTOM[104] = [[0, 0.4, 0.3]] # 포효검황
+SKILL_COST_CUSTOM[105] = [[0, 0.5, 1.0]] # 혈겁만파
+SKILL_COST_CUSTOM[106] = [[0, 0.2, 0.5]] # 초혼비무
+
+SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
+SKILL_COST_CUSTOM[78] = [[1, 1.0 / 18.0, 0]] # 십리건곤 1성
+SKILL_COST_CUSTOM[80] = [[1, 1.0 / 15.0, 0]] # 십리건곤 2성
+SKILL_COST_CUSTOM[102] = [[1, 1.0 / 12.0, 0.01]] # 백리건곤 1성
+
+# 도적
+SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
+SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
+SKILL_POWER_CUSTOM[137] = [[0, 2.0, 0.5, 20]] # 이기어검
+SKILL_POWER_CUSTOM[138] = [[0, 1.0, 0.2, 20]] # 무형검
+SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
+
+# ---------------- #
+SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
+SKILL_COST_CUSTOM[135] = [[0, 0.2, 0.1]] # 백호검무
+SKILL_COST_CUSTOM[135] = [[0, 1.0 / 6.0, 0.5]] # 이기어검
+SKILL_COST_CUSTOM[138] = [[0, 0.5, 0.5]] # 무형검
+SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
+
+# 도사
+SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 70.0, 50]] # 지진
+
+# ---------------- #
+SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
+# $game_variables[19] 플레이어 힘
+# $game_variables[20] 플레이어 민첩
+# $game_variables[21] 플레이어 지력
+# $game_variables[22] 플레이어 손재주
 class Rpg_skill
+	attr_accessor :base_str
+	attr_accessor :base_int
+	attr_accessor :base_agi
+	attr_accessor :base_dex
+	
+	def initialize
+		@base_str = 0
+		@base_agi = 0
+		@base_int = 0
+		@base_dex = 0
+	end
+	
 	def update_buff
 		sec = Graphics.frame_rate
 		if check_buff(140) # 운기 중
@@ -309,7 +408,7 @@ class Rpg_skill
 	end
 	
 	# 자기 힐
-	def heal(id)
+	def heal(id, user = $game_party.actors[0])
 		is_heal = false
 		heal_v = 0
 		if HEAL_SKILL[id] != nil
@@ -320,17 +419,21 @@ class Rpg_skill
 		# 커스텀
 		case id
 		when 43 # 위태응기
-			heal_v = $game_party.actors[0].sp * 2
-			$game_party.actors[0].sp = 0
+			heal_v = user.sp * 2
+			user.sp = 0
 			is_heal = true
 			
+			# 적 유닛 스킬
+		when 157 # n퍼 회복
+			heal_v = user.maxhp / 5
+			is_heal = true
 		end
 		
 		if is_heal
-			heal_v += ($game_party.actors[0].maxhp * 0.01).to_i
-			$game_party.actors[0].critical = "heal"
-			$game_party.actors[0].damage = heal_v.to_s
-			$game_party.actors[0].hp += heal_v
+			heal_v += (user.maxhp * 0.01).to_i
+			user.critical = "heal"
+			user.damage = heal_v.to_s
+			user.hp += heal_v
 			return heal_v
 		end
 	end
@@ -339,7 +442,7 @@ class Rpg_skill
 	def check_buff(id, actor = $game_party.actors[0])
 		if actor == $game_party.actors[0]
 			skill_mash = SKILL_BUFF_TIME[id]
-			return (skill_mash != nil and skill_mash[1] / 60.0 > 0)
+			return (skill_mash != nil and skill_mash[1] > 0)
 		else # 몬스터의 버프 확인
 			return nil
 		end
@@ -368,12 +471,16 @@ class Rpg_skill
 				case data[0].to_s
 				when "str" # 힘
 					$game_party.actors[0].str += data[1].to_i
+					@base_str += data[1].to_i
 				when "dex" # 손재주
 					$game_party.actors[0].dex += data[1].to_i
+					@base_dex += data[1].to_i
 				when "int" # 지력
+					@base_int += data[1].to_i
 					$game_party.actors[0].int += data[1].to_i
 				when "agi" # 민첩
 					$game_party.actors[0].agi += data[1].to_i
+					@base_agi += data[1].to_i
 				when "mdef" # 마법 방어
 					$game_party.actors[0].mdef += data[1].to_i
 				when "pdef" # 물리 방어
@@ -385,21 +492,25 @@ class Rpg_skill
 					n = (base * (data[1].to_f - 1.0)).to_i
 					data[2] = n
 					$game_party.actors[0].str += n
+					@base_str += n
 				when "per_dex" # 손재주
 					base = $game_party.actors[0].take_base_dex
 					n = (base * (data[1].to_f - 1.0)).to_i
 					data[2] = n
 					$game_party.actors[0].dex += n
+					@base_dex += n
 				when "per_int" # 지력
 					base = $game_party.actors[0].take_base_int
 					n = (base * (data[1].to_f - 1.0)).to_i
 					data[2] = n
 					$game_party.actors[0].int += n
+					@base_int += n
 				when "per_agi" # 민첩
 					base = $game_party.actors[0].take_base_agi
 					n = (base * (data[1].to_f - 1.0)).to_i
 					data[2] = n
 					$game_party.actors[0].agi += n
+					@base_agi += n
 				when "per_mdef" # 마법 방어
 					$game_party.actors[0].mdef *= data[1].to_f
 				when "per_pdef" # 물리 방어
@@ -451,19 +562,24 @@ class Rpg_skill
 	def buff_del(id)
 		if BUFF_SKILL[id] != nil
 			for data in BUFF_SKILL[id]
+				n = data[1].to_i
 				case data[0].to_s
 				when "str" # 힘
-					$game_party.actors[0].str -= data[1].to_i
+					$game_party.actors[0].str -= n
+					@base_str = [0, @base_str - n].max
 				when "dex" # 손재주
-					$game_party.actors[0].dex -= data[1].to_i
+					$game_party.actors[0].dex -= n
+					@base_dex = [0, @base_dex - n].max
 				when "int" # 지력
-					$game_party.actors[0].int -= data[1].to_i
+					$game_party.actors[0].int -= n
+					@base_int = [0, @base_int - n].max
 				when "agi" # 민첩
-					$game_party.actors[0].agi -= data[1].to_i
+					$game_party.actors[0].agi -= n
+					@base_agi = [0, @base_agi - n].max
 				when "mdef" # 마법 방어
-					$game_party.actors[0].mdef -= data[1].to_i
+					$game_party.actors[0].mdef -= n
 				when "pdef" # 물리 방어
-					$game_party.actors[0].pdef -= data[1].to_i
+					$game_party.actors[0].pdef -= n
 					
 					# 퍼센트
 				when "per_str" # 힘
@@ -475,6 +591,7 @@ class Rpg_skill
 						n = base * (1 - 1.0 / data[1].to_f)
 					end
 					$game_party.actors[0].str -= n
+					@base_str = [0, @base_str - n].max
 				when "per_dex" # 손재주
 					n = 0
 					if(data[2] != nil and data[2] != 0)
@@ -484,6 +601,8 @@ class Rpg_skill
 						n = base * (1 - 1.0 / data[1].to_f)
 					end
 					$game_party.actors[0].dex -= n
+					@base_dex = [0, @base_dex - n].max
+					
 				when "per_int" # 지력
 					n = 0
 					if(data[2] != nil and data[2] != 0)
@@ -493,6 +612,8 @@ class Rpg_skill
 						n = base * (1 - 1.0 / data[1].to_f)
 					end
 					$game_party.actors[0].int -= n 
+					@base_int = [0, @base_int - n].max
+					
 				when "per_agi" # 민첩
 					n = 0
 					if(data[2] != nil and data[2] != 0)
@@ -502,6 +623,8 @@ class Rpg_skill
 						n = base * (1 - 1.0 / data[1].to_f)
 					end
 					$game_party.actors[0].agi -= n
+					@base_agi = [0, @base_agi - n].max
+					
 				when "per_mdef" # 마법 방어
 					$game_party.actors[0].mdef /= data[1].to_f
 				when "per_pdef" # 물리 방어
@@ -517,10 +640,10 @@ class Rpg_skill
 						$game_temp.common_event_id = 41
 					when 66  # 신수둔각도
 						$game_party.actors[0].equip(0, 0)
-						$game_party.lose_weapon(1, 99)
-						$game_party.lose_weapon(2, 99)
-						$game_party.lose_weapon(3, 99)
-						$game_party.lose_weapon(4, 99)
+						$game_party.lose_weapon(1, 999)
+						$game_party.lose_weapon(2, 999)
+						$game_party.lose_weapon(3, 999)
+						$game_party.lose_weapon(4, 999)
 						
 					when 131, 141, 142 # 투명, 1, 2성
 						$game_variables[9] = 1
@@ -586,6 +709,46 @@ class Rpg_skill
 			$chat_b.input(msg, type, sec, $game_player)
 			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
 		end
+	end
+	
+	#[(파워 계산량)[타입(현재(0), 전체(1)), 체력, 마력, 기본값], (자원 소모량)[타입(현재(0), 전체(1)), 체력, 마력]]
+	def skill_power_custom(user, id, power)
+		return power if SKILL_POWER_CUSTOM[id] == nil
+		data = SKILL_POWER_CUSTOM[id][0]
+		
+		type = data[0] != nil ? data[0] : -1
+		p_hp = data[1] != nil ? data[1].to_f : 0
+		p_sp = data[2] != nil ? data[2].to_f : 0
+		val = data[3] != nil ? data[3].to_f : 0
+		
+		power = power.to_f
+		case type
+		when 0 # 현재 
+			power += (user.hp * p_hp) + (user.sp * p_sp)
+		when 1 # 전체
+			power += (user.maxhp * p_hp) + (user.maxsp * p_sp)
+		end
+		power += val
+		return power.to_i
+	end
+	
+	def skill_cost_custom(user, id)
+		return if SKILL_COST_CUSTOM[id] == nil
+		data = SKILL_COST_CUSTOM[id][0]
+		type = data[0] != nil ? data[0] : -1
+		c_hp = data[1] != nil ? data[1] : 0
+		c_sp = data[2] != nil ? data[2] : 0
+		
+		case type
+		when 0 # 현재 
+			user.hp -= user.hp * c_hp
+			user.sp -= user.sp * c_sp
+		when 1 # 전체
+			user.hp -= user.maxhp * c_hp
+			user.sp -= user.maxsp * c_sp
+		end
+		user.hp = [user.hp.to_i, 1].max
+		user.sp = user.sp.to_i
 	end
 	
 	# 액티브 스킬 커스텀

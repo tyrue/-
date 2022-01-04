@@ -345,14 +345,18 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
 	EQUIP_EFFECTS = {} 
-	
-	# 방어구
+	# 장신구
 	EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
 	EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
 	EQUIP_EFFECTS[29] = [[1 * sec, "buff", 131]] # 투명구두
 	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
 	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
+	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
+	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
+	
+	# 방어구
 	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
+	
 	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -871,9 +875,9 @@ if SDK.state("Mr.Mo's ABS") == true
 							val = d[2]
 							case type
 							when "hp"
-								$game_party.actors[0].hp += ($game_party.actors[0].maxhp * val / 100) 
+								$game_party.actors[0].hp += ($game_party.actors[0].maxhp * val / 100.0).to_i 
 							when "sp"
-								$game_party.actors[0].sp += ($game_party.actors[0].maxsp * val / 100)
+								$game_party.actors[0].sp += ($game_party.actors[0].maxsp * val / 100.0).to_i
 							when "com"
 								$game_temp.common_event_id = val
 							when "buff"
@@ -1169,9 +1173,11 @@ if SDK.state("Mr.Mo's ABS") == true
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
 						
 						old_hp = e.hp
-						e.effect_skill(e, skill)
+						$rpg_skill.heal(skill.id, e) # 이게 회복 스킬인지 확인
+						#e.effect_skill(e, skill)
 						e.sp -= skill.sp_cost
 						msg_enemy_balloon(skill, e.event)
+						
 						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	 if skill.sp_cost != 0# 몬스터 마력 공유
 						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n") if old_hp != e.hp
 						return
@@ -1456,7 +1462,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 버프의 지속시간 표시
 			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil
+			if skill_mash_time != nil and skill_mash_time[1] != skill_mash_time[0]
 				skill_mash_time[1] = skill_mash_time[0]
 				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
 				$skill_Delay_Console.write_line(id)
@@ -1788,6 +1794,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemies[0].effect_skill(@actor, skill)
 				#Take off SP
 				@actor.sp -= skill.sp_cost
+				
 				#Show Animetion on enemy
 				hit_enemy(enemies[0], @actor, skill.animation2_id) if enemies[0].damage != "Miss" and enemies[0].damage != 0
 				e = enemies[0]
@@ -1805,7 +1812,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 				
 			when 2 #All Emenies 적 전체
-				$e_v = 0 # enemy_value, 맞출 적의 수
 				#Play the animation on player
 				$game_player.animation_id = skill.animation2_id
 				#Take off SP
@@ -1817,7 +1823,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					enemies = get_all_range($game_player, RANGE_SKILLS[skill.id][0])
 					w = RANGE_SKILLS[id]
 					#Add mash time
-					@button_mash = (w[3] == nil ? MASH_TIME*10 : w[3]*10) 
+					@button_mash = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10) 
 				else
 					if SKILL_CUSTOM[id] != nil
 						@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
@@ -1827,7 +1833,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					enemies = @enemies
 				end
 				
-				$alive_size = 0
 				target_enemies = []
 				for e in enemies
 					#Skip NIL values
@@ -1839,7 +1844,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					next if !e.hate_group.include?(0) # 내 적이 아니면 패스
 					target_enemies.push(e)
 				end
-				$alive_size = target_enemies.size
 				
 				#Get all enemies
 				for e in target_enemies
@@ -1851,7 +1855,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 					#Skip this enemy if its dead
 					next if enemy_dead?(e, @actor)
-					next if !e.hate_group.include?(0)
 					#If its alive, put it in battle
 					e.in_battle = true
 					#Make it attack the player
@@ -1859,6 +1862,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Setup movement
 					setup_movement(e)
 				end
+				$rpg_skill.skill_cost_custom(@actor, skill.id) if target_enemies.size > 0
 				return
 				
 			when 3..4, 7 #User
@@ -1916,7 +1920,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			return if !$rpg_skill.check_need_skill_item(skill.id) # 스킬 사용 재료가 부족하면 취소
 			
-			$e_v = 0 # enemy_value, 맞출 적의 수
 			w = RANGE_EXPLODE[skill.id]
 			# Show Animation
 			$game_player.animation_id = skill.animation1_id
@@ -1935,6 +1938,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			#Add to range
 			@range.push(Game_Ranged_Explode.new($game_player, @actor, skill))
+			Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{1}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 			#Take off SP
 			@actor.sp -= skill.sp_cost
 			return
@@ -2003,10 +2007,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if $game_party.actors[0].hp > 0
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
-			if !e.is_a?(Game_NetPlayer)
-				#e.in_battle = false if e != nil and !e.is_a?(Game_Actor)
+			if e != nil and !e.is_a?(Game_NetPlayer)
 				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
-				#restore_movement(e) if e != nil and !e.is_a?(Game_Actor)
 			end
 			
 			return true if $game_switches[296] # 죽음 표시 스위치
@@ -2584,6 +2586,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@character_name = @range_skill[2]
 			@skill = skill
 			@explosive = true
+			@net_players = []
+			@dummy = dummy
 		end
 		#--------------------------------------------------------------------------
 		# * Check Event Trigger Touch(x,y)
@@ -2633,7 +2637,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Get ALL Range(Element, Range)
 		#--------------------------------------------------------------------------
 		def get_all_range(element, range)
-			$alive_size = 0
 			objects = []
 			for e in $ABS.enemies.values
 				#Skip NIL values
@@ -2642,7 +2645,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				next if e.dead?
 				# Skip if the enemy is an ally and can't hurt allies.
 				next if !CAN_HURT_ALLY and e.hate_group.include?(0)
-				next if !e.hate_group.include?(0) # 내 적이 아니면 패스
+				next if !e.hate_group.include?(0) and @parent.is_a?(Game_Player) # 나에게 적이 아닌 몬스터는 포함x
 				if in_range?(element, e.event, range)
 					objects.push(e) 
 				end
@@ -2651,13 +2654,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			# 여기서 넷 플레이어인지 확인해야함
 			for player in Network::Main.mapplayers.values
 				next if player == nil
-				if in_range?(element, player, range)
-					hit_net_player(player)
-				end
+				@net_players.push(player) if in_range?(element, player, range)
 			end
+			
 			# 여기다가 개수 추가
-			$alive_size = objects.size
-			#~ objects.push($game_player) if in_range?(element, $game_player, range)
+			objects.push($game_player) if in_range?(element, $game_player, range)
 			return objects
 		end
 		#--------------------------------------------------------------------------
@@ -2666,19 +2667,33 @@ if SDK.state("Mr.Mo's ABS") == true
 		def blow
 			#Stop
 			@stop = true
+			return if @dummy
 			#Play Animation
 			#Show animation on event
 			self.animation_id = @skill.animation2_id
 			@showing_ani = true
 			#Get Everyone in Range of the Explosive Skill
 			objects = get_all_range(self, @range_skill[3])
-			#Hit Everyone
-			hit_player if objects.include?($game_player)
+			
+			if objects.include?($game_player)
+				hit_player 
+				objects.delete($game_player)
+			end
+			
 			#Hit Enemies
 			for e in objects
-				next if e == nil or e == $game_player
+				next if e == nil
 				#Hit
 				hit_event(e.event_id)
+			end
+			
+			for p in @net_players
+				next if p == nil
+				hit_net_player(p)
+			end
+			
+			if objects.size > 0 or @net_players.size > 0
+				$rpg_skill.skill_cost_custom(@actor, @skill.id) # 스킬 코스트
 			end
 		end
 		
@@ -2700,6 +2715,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def hit_player
 			return if @dummy
+			return if @parent.is_a?(Game_Player) and @actor == $game_party.actors[0]
 			@stop = true
 			#Get Actor
 			actor = $game_party.actors[0]
@@ -2707,11 +2723,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy = @actor
 			#Attack Actor
 			actor.effect_skill(enemy, @skill) if enemy != nil 
+			$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
 			
 			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
 			Network::Main.ani(Network::Main.id, @skill.animation2_id)
 			#Jump
-			#$ABS.jump($game_player,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
+			$ABS.jump($game_player,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2761,7 +2778,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			#Jump
 			e=actor
-			#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
+			$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 			#return if enemy is dead
 			return if $ABS.enemy_dead?(actor, enemy)
 			return if !actor.hate_group.include?(enemy.enemy_id)
@@ -2829,6 +2846,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$ani_character[actor.netid.to_i].animation_id = @skill.animation2_id
 			Network::Main.ani(actor.netid, @skill.animation2_id) #유저 애니매이션 공유
 			Network::Main.socket.send("<skill_effect>#{actor.name},#{@skill.id}</skill_effect>\n")	# if $game_switches[302] # pk on
+			$rpg_skill.skill_cost_custom(@actor, @skill.id) # 스킬 자원 소모
 		end 
 		
 		
@@ -2848,6 +2866,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if !enemy.hate_group.include?(0)
 			end
 			actor.effect_skill(enemy, @skill)
+			$rpg_skill.skill_cost_custom(enemy, @skill.id)
 			#Show animation on player
 			if actor.damage != "Miss" and actor.damage != 0
 				$game_player.animation_id = @skill.animation2_id 
@@ -2878,6 +2897,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				#Attack It's enemy
 				actor.effect_skill(enemy, @skill)
+				$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
 				
 				if @skill.id == 138
 					$rpg_skill.비영승보(x, y, @move_direction)
@@ -2901,6 +2921,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$ABS.setup_movement(actor)				
 				return
 			end
+			
 			#Get enemy
 			enemy = $ABS.enemies[@parent.id]
 			return if enemy == nil
@@ -2908,8 +2929,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			if enemy.is_a?(ABS_Enemy) and actor.is_a?(ABS_Enemy)
 				return if !actor.hate_group.include?(enemy.id)
 			end
+			
 			#Attack It's enemy
 			actor.effect_skill(enemy, @skill)
+			$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
+			
 			#Show animation on event
 			@enani = actor.event
 			if actor.damage != "Miss" and actor.damage != 0
@@ -3732,171 +3756,17 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If hit occurs
 			if hit_result == true
 				# Calculate power
-				power = 0
-				
+				power = skill.power + user.atk / 2
+				power = $rpg_skill.skill_power_custom(user, skill.id, power)
 				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
-				case skill.id
-					# 주술사 스킬
-				when 44 # 헬파이어
-					power += user.sp * 1.5
-					user.sp = 0
-				when 49 # 성려멸주
-					power += user.maxsp / 8 + 90
-					user.sp -= user.maxsp / 15
-				when 52 # 성려멸주 1성
-					power += user.maxsp / 7 + 100
-					user.sp -= user.maxsp / 13
-				when 53 # 삼매진화 
-					power += user.sp * 2
-					$e_v += 1
-					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
-					if $e_v == $alive_size
-						user.sp = 0
-					end
-				when 56 # 성려멸주 2성
-					power += user.maxsp / 6 + 120
-					user.sp -= user.maxsp / 11
-				when 57 # 삼매진화 1성
-					power += user.sp * 2.5
-					$e_v += 1
-					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
-					if $e_v == $alive_size
-						user.sp = 0
-					end
-				when 58 # 지폭지술
-					$e_v += 1
-					power += user.sp * 2
-					# 적들이 다 맞을때 마나를 0으로 만듦
-					if $e_v == $alive_size
-						user.sp = 0
-					end
-				when 68 # 폭류유성
-					$e_v += 1
-					power += (user.sp * 2) + (user.hp * 1) 
-					# 적들이 다 맞을때 마나를 0으로 만듦
-					if $e_v == $alive_size
-						user.sp -= user.sp / 2
-						user.hp -= user.hp / 2
-					end	
-				when 69 # 삼매진화 2성
-					power += user.sp * 2.5
-					$e_v += 1
-					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
-					if $e_v == $alive_size
-						user.sp = 0
-					end
-					
-					# 전사스킬
-				when 67 # 건곤대나이
-					power += user.hp * 2 + 30
-					user.hp -= (user.hp / 3) * 2
-				when 73 # 광량돌격
-					power += user.hp * 0.5 
-					user.hp -= user.hp / 2
-					user.hp = 1 if user.hp <= 0 
-				when 74 # 십리건곤
-					power += user.maxhp / 12 + 20
-					user.hp -= user.maxhp / 20
-					user.hp = 1 if user.hp <= 0
-				when 78 # 십리건곤 1성
-					power += user.maxhp / 10 + 30
-					user.hp -= user.maxhp / 18
-					user.hp = 1 if user.hp <= 0
-				when 79 # 동귀어진
-					power += user.hp * 7 + 100
-					user.hp -= user.hp - 10
-				when 80 # 십리건곤 2성
-					power += user.maxhp / 8 + 40
-					user.hp -= user.maxhp / 15
-					user.hp = 1 if user.hp <= 0
-				when 101 # 백호참
-					power += user.hp * 3 + 60
-					user.hp -= user.hp / 2
-				when 102 # 백리건곤 1성
-					power += user.maxhp / 7 + 50
-					user.hp -= user.maxhp / 12
-					user.hp = 1 if user.hp <= 0
-				when 103 # 어검술
-					power += user.hp
-					$e_v += 1
-					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
-					if $e_v == $alive_size
-						user.hp -= user.hp / 2
-					end
-					
-				when 104 # 포효검황
-					power += user.hp * 1.2
-					$e_v += 1
-					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
-					if $e_v == $alive_size
-						user.hp -= user.hp / 3
-						user.hp = 1 if user.hp <= 0
-					end
-				when 105 # 혈겁만파
-					$e_v += 1
-					power += (user.sp) + (user.hp * 2) + 100
-					# 적들이 다 맞을때 마나를 0으로 만듦
-					if $e_v == $alive_size
-						user.sp = 0
-						user.hp -= user.hp / 2
-						user.hp = 1 if user.hp <= 0
-					end		
-				when 106 # 초혼비무
-					power += user.hp * 1.8
-					user.hp -= user.maxhp / 4
-					user.hp = 1 if user.hp <= 0
-					
-					
-					# 도적 스킬
-				when 133 # 필살검무
-					power += (user.hp * 1 + user.sp * 0.5).to_i
-					user.hp -= (user.hp / 3) 
-					user.sp = 0
-				when 135 # 백호검무
-					power += (user.hp * 0.35 + user.sp * 0.2).to_i
-					$e_v += 1
-					# 한 맵에 적들이 다 없을 때 체력을 0으로 만듦
-					if $e_v == $alive_size
-						user.hp -= (user.hp / 5)
-					end
-					
-				when 137 # 이기어검
-					power += (user.hp * 2 + user.sp * 0.5).to_i
-					user.hp -= (user.hp / 6) 
-					user.sp -= user.sp / 2
-					self.pdef -= 5 if self.is_a?(ABS_Enemy)
-					self.mdef -= 5 if self.is_a?(ABS_Enemy)
-				when 138 # 무형검
-					power += (user.hp * 1 + user.sp * 0.2).to_i
-					user.hp -= (user.hp / 2) 	
-					user.sp -= user.sp / 2
-				when 139 # 분혼경천
-					$e_v += 1
-					power += (user.sp) + (user.hp * 2) + 100
-					# 적들이 다 맞을때 마나를 0으로 만듦
-					if $e_v == $alive_size
-						user.sp = 0
-						user.hp -= user.hp / 2
-						user.hp = 1 if user.hp <= 0
-					end		
-					
-					# 도사스킬
-				when 96 # 지진
-					$e_v += 1
-					power += user.maxsp / 70 + 50
-					if $e_v == $alive_size
-						user.sp -= user.maxsp / 20
-					end	
-					
-					# 적 유닛 스킬
-				when 157 # n퍼 회복
-					user.hp += user.maxhp / 5
-					user.damage = user.maxhp / 5
-					user.critical = "heal"
-					return
-				else
-					power = skill.power + user.atk / 2 
-				end				
+				#~ case skill.id
+				#~ # 적 유닛 스킬
+				#~ when 157 # n퍼 회복
+				#~ user.hp += user.maxhp / 5
+				#~ user.damage = user.maxhp / 5
+				#~ user.critical = "heal"
+				#~ return
+				#~ end				
 				
 				power = (power * (1.0 + user.atk / 120.0))
 				if power > 0

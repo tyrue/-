@@ -2,11 +2,15 @@ module RPG
 	class Weapon
 		attr_accessor :hp_plus
 		attr_accessor :sp_plus
+		attr_accessor :hp_plus_per
+		attr_accessor :sp_plus_per
 		
 		alias initialize_plus initialize
 		def initialize
 			@hp_plus = 0
 			@sp_plus = 0
+			@hp_plus_per = 0.0
+			@sp_plus_per = 0.0
 			initialize_plus
 		end
 	end
@@ -14,11 +18,15 @@ module RPG
 	class Armor
 		attr_accessor :hp_plus
 		attr_accessor :sp_plus
+		attr_accessor :hp_plus_per
+		attr_accessor :sp_plus_per
 		
 		alias initialize_plus initialize
 		def initialize
 			@hp_plus = 0
 			@sp_plus = 0
+			@hp_plus_per = 0.0
+			@sp_plus_per = 0.0
 			initialize_plus
 		end
 	end
@@ -118,14 +126,15 @@ class Set_Armor_plus
 		@data[15] = [100, 100]		# 수선도사 머리띠
 		@data[18] = [200, 150]		# 용왕의투구 모조
 		@data[19] = [200, 150]		# 청선투구
-		@data[22] = [300, 200]		# 황금투구
+		@data[22] = [300, 200]		# 황금투구(모조)
 		@data[53] = [60, 0]				# 힘의투구1
 		@data[61] = [300, 1000]		# 연청투구
 		@data[62] = [1500, 100]		# 연홍투구
 		@data[70] = [500, 300]		# 주술투구
+		@data[74] = [5000, 3000]		# 황금투구
 		
 		# 갑옷
-		@data[1] 	= [1, 1]				# 초심자의갑주
+		@data[1] 	= [1, 1, 100, 100]				# 초심자의갑주
 		@data[12] = [500, 300] 		# 주술갑옷
 		@data[13] = [100, 100]    # 남자타라의옷
 		@data[14] = [700, 1000]		# 해골갑옷
@@ -152,20 +161,26 @@ class Set_Armor_plus
 		@data[51] = [500, 300]		# 용왕의투구'진
 		@data[63] = [100, 2000]		# 비취의목걸이
 		@data[64] = [2000, 0]			# 수정의목걸이
-		@data[71] = [500, 300]			# 주술팔찌
+		@data[71] = [500, 300]		# 주술팔찌
+		@data[72] = [500, 300]		# 해골목걸이
+		@data[75] = [5000, 3000]	# 황금팔찌
 		
 		# 방패
 		@data[39] = [300, 200]		# 정화의방패
-		@data[40] = [300, 200]		# 여신의방패
+		@data[40] = [500, 400]		# 여신의방패
 		
 		
 		for d in @data
 			id = d[0]
 			hp = d[1][0]
 			sp = d[1][1]
+			hp_per = d[1][2]
+			sp_per = d[1][3]
 			
 			$data_armors[id].hp_plus = hp if hp != nil 
 			$data_armors[id].sp_plus = sp if sp != nil
+			$data_armors[id].hp_plus_per = hp_per if hp_per != nil 
+			$data_armors[id].sp_plus_per = sp_per if sp_per != nil
 		end
 	end
 end
@@ -260,7 +275,8 @@ class Game_Actor
 		n -= armor2 != nil ? armor2.str_plus : 0
 		n -= armor3 != nil ? armor3.str_plus : 0
 		n -= armor4 != nil ? armor4.str_plus : 0
-		return n
+		n -= $rpg_skill.base_str
+		return n.to_i
 	end
 	
 	def take_base_dex
@@ -275,7 +291,8 @@ class Game_Actor
 		n -= armor2 != nil ? armor2.dex_plus : 0
 		n -= armor3 != nil ? armor3.dex_plus : 0
 		n -= armor4 != nil ? armor4.dex_plus : 0
-		return n
+		n -= $rpg_skill.base_dex
+		return n.to_i
 	end
 	#--------------------------------------------------------------------------
 	# ● 기본 신속함의 취득
@@ -292,7 +309,8 @@ class Game_Actor
 		n -= armor2 != nil ? armor2.agi_plus : 0
 		n -= armor3 != nil ? armor3.agi_plus : 0
 		n -= armor4 != nil ? armor4.agi_plus : 0
-		return n
+		n -= $rpg_skill.base_agi
+		return n.to_i
 	end
 	#--------------------------------------------------------------------------
 	# ● 기본 마력의 취득
@@ -309,7 +327,8 @@ class Game_Actor
 		n -= armor2 != nil ? armor2.int_plus : 0
 		n -= armor3 != nil ? armor3.int_plus : 0
 		n -= armor4 != nil ? armor4.int_plus : 0
-		return n
+		n -= $rpg_skill.base_int
+		return n.to_i
 	end
 	
 	

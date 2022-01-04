@@ -26,7 +26,6 @@ class Jindow_N < Jindow
 		text = change_txt(text)
 		@texts = text.split("\n")
 		
-		
 		@close_ok = false
 		case @type
 		when 0 # 일반 대화
@@ -181,8 +180,8 @@ class Jindow_N < Jindow
 				if @menu[i].click			
 					$game_system.se_play($data_system.decision_se)
 					Hwnd.dispose(self)
-					$game_temp.message_proc.call
-					$game_temp.choice_proc.call(i)
+					$game_temp.message_proc.call if $game_temp.message_proc != nil
+					$game_temp.choice_proc.call(i) if $game_temp.choice_proc != nil
 				end
 			end
 		end
@@ -195,7 +194,7 @@ class Jindow_N < Jindow
 					$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
 					$game_map.need_refresh = true
 					$game_system.se_play($data_system.decision_se)
-					$game_temp.message_proc.call
+					$game_temp.message_proc.call if $game_temp.message_proc != nil
 					$game_temp.num_input_variable_id = 0
 					$game_temp.num_input_digits_max = 0
 					Hwnd.dispose(self)

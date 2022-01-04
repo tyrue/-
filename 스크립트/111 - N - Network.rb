@@ -1492,7 +1492,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-					
 					# 변수
 					if $global_x == 30
 						va = []
@@ -1500,6 +1499,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						for i in 0..va.size
 							$game_variables[i] = va[i].to_i
 						end
+						
+						$rpg_skill.base_str = $game_variables[52]
+						$rpg_skill.base_agi = $game_variables[53]
+						$rpg_skill.base_int = $game_variables[54]
+						$rpg_skill.base_dex = $game_variables[55]
 					end
 					
 					# 스킬 핫키
@@ -1597,8 +1601,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					else
 						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
-						
 						self.send_start
+						
 						$cbig = 0
 						$nowtrade = 0
 						$game_player.move_speed = 3

@@ -167,6 +167,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[155] = [5, 4, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 4, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
+	RANGE_SKILLS[159] = [10, 2, "공격스킬", 4, 1] # 테스트
 	
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
@@ -189,6 +190,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도사 스킬
 	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0] # 지진
+	
+	#--------------------------------------------------------------------------
+	# 범위 스킬 방향 및 개수
+	# 스킬의 이동 방향 배열, 배열 원소의 개수가 동시에 나가는 스킬의 개수
+	SKILL_DIRECTION = {}
+	SKILL_DIRECTION[159] = [1, 2, 3, 4, 6, 7, 8, 9]
+	
 	
 	#--------------------------------------------------------------------------
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
@@ -252,8 +260,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[139] = [120 * sec, 0] # 분혼경천
 	
 	# 도사
+	SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
 	SKILL_MASH_TIME[121] = [5 * sec, 0] # 신령지익진
 	SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
+	
+	# 적 스킬
+	SKILL_MASH_TIME[158] = [10 * sec, 0] # 지옥겁화
+	
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
 	SKILL_BUFF_TIME = {}
@@ -296,7 +309,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
 	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
 	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
-	
 	
 	
 	# 무기 격 스킬 : 데미지, 애니메이션 id, 확률
@@ -946,6 +958,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				# 적 캐릭터의 상태 업데이트
 				update_enemy_state(enemy)
+				
+				# 적 캐릭터의 스킬 쿨타임 업데이트
+				update_enemy_skill_mash(enemy)
+				
 				# 화면에 없는 적 캐릭터는 무시
 				#next if !in_screen?(enemy.event)
 				# 적 캐릭터의 적대 관계 형성
@@ -968,6 +984,19 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update_enemy_state(enemy)
 			
+		end
+		
+		#--------------------------------------------------------------------------
+		# * 적 캐릭터의 스킬 쿨타임 업데이트 : 버프, 디버프등 상태 
+		#--------------------------------------------------------------------------
+		def update_enemy_skill_mash(enemy)
+			if enemy.skill_mash != nil
+				for mash in enemy.skill_mash
+					if mash[1] > 0
+						enemy.skill_mash[mash[0]] -= 1
+					end
+				end
+			end
 		end
 		
 		#--------------------------------------------------------------------------
@@ -1067,24 +1096,49 @@ if SDK.state("Mr.Mo's ABS") == true
 					return if skill == nil
 					return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
 					next if !e.can_use_skill?(skill)
+					
+					# 스킬 쿨타임 갱신
+					if SKILL_MASH_TIME[skill.id] != nil 
+						e.skill_mash[skill.id] = SKILL_MASH_TIME[skill.id][0] 
+					end
+					
 					# 스킬을 받는 타입
 					case skill.scope
 					when 1 # One Enemy 적 한놈만 
 						# Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
-						
 						animate(e.event, e.event.character_name+"_cast") if @enemy_ani
+						
 						if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
-							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e가 날리는 스킬을 구현해줌
-							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+							if SKILL_DIRECTION.has_key?(skill.id)
+								for dir in SKILL_DIRECTION[skill.id]
+									@range.push(Game_Ranged_Skill.new(e.event, e, skill, dir)) # e가 날리는 스킬을 구현해줌
+									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+								end
+							else
+								@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e가 날리는 스킬을 구현해줌
+								Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+							end
 							
 							e.sp -= skill.sp_cost
 							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
 							msg_enemy_balloon(skill, e.event)
 							return
+							
+						elsif RANGE_EXPLODE.has_key?(skill.id)
+							
+							#Add to range
+							@range.push(Game_Ranged_Explode.new(e.event, e, skill))
+							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기\
+							
+							#Take off SP
+							e.sp -= skill.sp_cost
+							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
+							msg_enemy_balloon(skill, e.event)
+							return
 						end
-						
+					
 						# 원거리 스킬이 아니라면?
 						enemies = []
 						# 적대 관계의 적들을 배열에 넣음
@@ -1164,8 +1218,6 @@ if SDK.state("Mr.Mo's ABS") == true
 						return		
 						
 					when 3..4, 7 # 자기 자신에게 사용하는 스킬
-						return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
-						next if !e.can_use_skill?(skill)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						
@@ -1174,7 +1226,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						
 						old_hp = e.hp
 						$rpg_skill.heal(skill.id, e) # 이게 회복 스킬인지 확인
-						#e.effect_skill(e, skill)
+						
 						e.sp -= skill.sp_cost
 						msg_enemy_balloon(skill, e.event)
 						
@@ -2503,10 +2555,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def force_movement
 			m = @move_direction
+			@y += 1 if m == 1; @x -= 1 if m == 1
 			@y += 1 if m == 2
+			@y += 1 if m == 3; @x += 1 if m == 3
 			@x -= 1 if m == 4
 			@x += 1 if m == 6
+			@y -= 1 if m == 7; @x -= 1 if m == 7
 			@y -= 1 if m == 8
+			@y -= 1 if m == 9; @x += 1 if m == 9
 		end
 		#--------------------------------------------------------------------------
 		# * Update
@@ -2522,8 +2578,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			# Get new coordinates
 			d = @move_direction
-			new_x = @x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-			new_y = @y + (d == 2 ? 1 : d == 8 ? -1 : 0)
+			new_x = @x
+			new_x += -1 if d == 1 or d == 4 or d == 7
+			new_x += 1 if d == 3 or d == 6 or d == 9
+			
+			new_y = @y
+			new_y += 1 if d == 1 or d == 2 or d == 3
+			new_y -= 1 if d == 7 or d == 8 or d == 9
 			
 			return @stop = true if @step > @range
 			#Increase step
@@ -2531,10 +2592,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			return force_movement if no_one?
 			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
 			m = @move_direction
-			move_down if m == 2
-			move_left if m == 4
-			move_right if m == 6
-			move_up if m == 8
+			move_lower_left 	if m == 1
+			move_down 				if m == 2
+			move_lower_right 	if m == 3
+			move_left 				if m == 4
+			move_right 				if m == 6
+			move_upper_left 	if m == 7
+			move_up 					if m == 8
+			move_upper_right 	if m == 9
 			#Stop if it came to range
 		end
 		#--------------------------------------------------------------------------
@@ -2550,8 +2615,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			objects[0] = $game_player
 			# Get new coordinates
 			d = @move_direction
-			new_x = @x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-			new_y = @y + (d == 2 ? 1 : d == 8 ? -1 : 0)
+			new_x = @x
+			new_x += -1 if d == 1 or d == 4 or d == 7
+			new_x += 1 if d == 3 or d == 6 or d == 9
+			
+			new_y = @y
+			new_y += 1 if d == 1 or d == 2 or d == 3
+			new_y -= 1 if d == 7 or d == 8 or d == 9
 			#Get all pos
 			for o in objects.values
 				next if o == nil
@@ -2577,7 +2647,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
-		def initialize(parent, actor, skill, dummy = false)
+		def initialize(parent, actor, skill, m_dir = -1, dummy = false)
 			super(parent,actor,skill)
 			@range_skill = $ABS.RANGE_EXPLODE[skill.id]
 			@range = @range_skill[0]
@@ -2587,6 +2657,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			@skill = skill
 			@explosive = true
 			@net_players = []
+			if m_dir != -1
+				@move_direction = m_dir
+			end
 			@dummy = dummy
 		end
 		#--------------------------------------------------------------------------
@@ -2739,9 +2812,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			@stop = true
 			#Get enemy
 			actor = $ABS.enemies[id]
-			
 			#Return if actor has NIL value
 			return if actor == nil or actor.hp == 0
+			return if @actor == actor
+			
 			#If the parent is player
 			if @parent.is_a?(Game_Player)
 				#Get enemy
@@ -2765,6 +2839,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$ABS.setup_movement(actor)
 				return
 			end
+			
 			#Get enemy
 			enemy = $ABS.enemies[@parent.id]
 			return if enemy == nil
@@ -2795,14 +2870,17 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
-		def initialize(parent, actor, skill, dummy = false) # 만약 더미라면 그냥 스킬 효과 안나고 통과하도록 하게 해보자
-			super(parent,actor,skill)
+		def initialize(parent, actor, skill, m_dir = -1, dummy = false) # 만약 더미라면 그냥 스킬 효과 안나고 통과하도록 하게 해보자
+			super(parent, actor, skill)
 			@range_skill = $ABS.RANGE_SKILLS[skill.id]
 			@range = @range_skill[0]
 			@opacity = 20 if @range == 1
 			@move_speed = @range_skill[1]
 			@character_name = @range_skill[2]
 			@skill = skill
+			if m_dir != -1
+				@move_direction = m_dir
+			end
 			@dummy = dummy
 		end
 		#--------------------------------------------------------------------------
@@ -3577,14 +3655,19 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     skill_id : skill ID
 		#--------------------------------------------------------------------------
 		def can_use_skill?(skill)
+			
 			# 여기다가 스킬 딜레이가 남아있으면 무시하도록 만들어보자
+			return false if @skill_mash != nil and @skill_mash[skill.id] != nil and @skill_mash[skill.id] > 0
 			
 			# If there's not enough SP, the skill cannot be used.
 			return false if skill.sp_cost > self.sp
+			
 			# Unusable if incapacitated
 			return false if dead?
+			
 			# If silent, only physical skills can be used
 			return false if skill.atk_f == 0 and self.restriction == 1
+			
 			# Get usable time
 			occasion = skill.occasion
 			case occasion
@@ -3757,17 +3840,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if hit_result == true
 				# Calculate power
 				power = skill.power + user.atk / 2
-				power = $rpg_skill.skill_power_custom(user, skill.id, power)
-				# 여기서 헬파이어, 건곤대나이등 체력, 마력 비레해서 공격력 올리도록 하자
-				#~ case skill.id
-				#~ # 적 유닛 스킬
-				#~ when 157 # n퍼 회복
-				#~ user.hp += user.maxhp / 5
-				#~ user.damage = user.maxhp / 5
-				#~ user.critical = "heal"
-				#~ return
-				#~ end				
-				
+				power = $rpg_skill.skill_power_custom(user, skill.id, power)				
 				power = (power * (1.0 + user.atk / 120.0))
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
@@ -4103,7 +4176,24 @@ if SDK.state("Mr.Mo's ABS") == true
 				check_event_trigger_touch(@x, @y-1)
 			end
 		end
+		#--------------------------------------------------------------------------
+		# * 대각선 이동 (스킬 이동만 따져봄)
+		#--------------------------------------------------------------------------
+		def move_lower_left
+			check_event_trigger_touch(@x - 1, @y + 1)
+		end
 		
+		def move_lower_right 	
+			check_event_trigger_touch(@x + 1, @y + 1)
+		end
+		
+		def move_upper_left
+			check_event_trigger_touch(@x - 1, @y - 1)
+		end
+		
+		def move_upper_right
+			check_event_trigger_touch(@x + 1, @y - 1)
+		end
 		#--------------------------------------------------------------------------
 		# * Move at Random
 		#--------------------------------------------------------------------------
@@ -4251,6 +4341,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :respawn
 		attr_accessor :aggro
 		attr_accessor :send_damage
+		attr_accessor :skill_mash # 적 스킬 딜레이 넣기
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
@@ -4279,6 +4370,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@respawn = 0
 			@aggro = $is_map_first
 			@send_damage = true
+			@skill_mash = {}
 		end
 		#--------------------------------------------------------------------------
 		# * Get Enemy ID

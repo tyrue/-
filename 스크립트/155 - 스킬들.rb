@@ -366,8 +366,6 @@ class Rpg_skill
 		return if PARTY_HEAL_SKILL[id] == nil
 		heal_v = 1
 		heal_v = PARTY_HEAL_SKILL[id][0].to_i 
-		heal_v += (user.maxsp * 0.001).to_i
-		heal_v = ((heal_v) * (1 + (user.int / 1000.0) + (user.maxsp / 100000.0))).to_i
 		
 		# 커스텀
 		case id
@@ -378,6 +376,10 @@ class Rpg_skill
 		when 120 # 부활
 			$game_temp.common_event_id = 24
 		end
+		
+		heal_v += (user.maxsp * 0.001).to_i
+		heal_v = ((heal_v) * (1 + (user.int / 1000.0) + (user.maxsp / 100000.0))).to_i
+		
 		skill_cost_custom(user, id)
 		
 		user.damage = heal_v.to_s

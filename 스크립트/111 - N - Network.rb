@@ -1255,11 +1255,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<show_range_skill>(.*)<\/show_range_skill>/	
 					return true if !$scene.is_a?(Scene_Map)
 					data = $1.split(',')
-					# 스킬을 사용하는 타입 (0은 몬스터, 1은 사람), 사용자 id, 스킬 id, 스킬 타입(0은 range, 1은 explode)
+					# 스킬을 사용하는 타입 (0은 몬스터, 1은 사람), 사용자 id, 스킬 id, 스킬 타입(0은 range, 1은 explode), 스킬 이동 방향
 					type = data[0].to_i
 					id = data[1].to_i
 					skill = $data_skills[data[2].to_i]
 					skill_type = data[3].to_i
+					m_dir = data[4].to_i
 					
 					case type
 					when 0
@@ -1267,9 +1268,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						return if e == nil
 						case skill_type
 						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill))
+							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill, m_dir))
 						when 1
-							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill))
+							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill, m_dir))
 						end
 						
 					when 1
@@ -1278,9 +1279,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						return if netplayer == nil
 						case skill_type
 						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, true))
+							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, m_dir, true))
 						when 1
-							$ABS.range.push(Game_Ranged_Explode.new(netplayer, netplayer, skill, true))
+							$ABS.range.push(Game_Ranged_Explode.new(netplayer, netplayer, skill, m_dir, true))
 						end
 					end
 					
@@ -1337,7 +1338,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					player = @players[data[0]]
 					return if player == nil
 					$game_party.actors[0].attack_effect(player)
-						
+					
 					# 다른 유저에 의한 스킬 데미지 계산
 				when /<skill_effect>(.*)<\/skill_effect>/
 					data = $1.split(",")
@@ -2224,9 +2225,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 										$game_party.actors[0].sp += heal_v
 									else
 										$game_party.actors[0].hp += heal_v
-										$game_party.actors[0].critical = "heal"
-										$game_party.actors[0].damage = heal_v
 									end								
+									$game_party.actors[0].critical = "heal"
+									$game_party.actors[0].damage = heal_v
 									self.ani(@id, ani_id)
 									$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")	
 								else

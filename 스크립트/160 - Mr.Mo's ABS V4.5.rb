@@ -167,7 +167,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[155] = [5, 4, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 4, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
-	RANGE_SKILLS[159] = [10, 2, "공격스킬", 4, 1] # 테스트
+	RANGE_SKILLS[159] = [10, 3, "공격스킬", 4, 1] # 테스트
 	
 	#--------------------------------------------------------------------------
 	#Ranged Explosives
@@ -191,11 +191,15 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 도사 스킬
 	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0] # 지진
 	
+	# 적 스킬
+	RANGE_EXPLODE[160] = [5, 1, "공격스킬2", 2, 5, 0] # 테스트2
+	
 	#--------------------------------------------------------------------------
 	# 범위 스킬 방향 및 개수
 	# 스킬의 이동 방향 배열, 배열 원소의 개수가 동시에 나가는 스킬의 개수
 	SKILL_DIRECTION = {}
-	SKILL_DIRECTION[159] = [1, 2, 3, 4, 6, 7, 8, 9]
+	SKILL_DIRECTION[151] = [1, 2, 3, 4, 6, 7, 8, 9] # 청룡의 포효
+	SKILL_DIRECTION[152] = [1, 2, 3, 4, 6, 7, 8, 9] # 현무의 포효
 	
 	
 	#--------------------------------------------------------------------------
@@ -1127,10 +1131,15 @@ if SDK.state("Mr.Mo's ABS") == true
 							return
 							
 						elsif RANGE_EXPLODE.has_key?(skill.id)
-							
-							#Add to range
-							@range.push(Game_Ranged_Explode.new(e.event, e, skill))
-							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기\
+							if SKILL_DIRECTION.has_key?(skill.id)
+								for dir in SKILL_DIRECTION[skill.id]
+									@range.push(Game_Ranged_Explode.new(e.event, e, skill, dir))
+									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+								end
+							else
+								@range.push(Game_Ranged_Explode.new(e.event, e, skill))
+								Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+							end
 							
 							#Take off SP
 							e.sp -= skill.sp_cost
@@ -1138,38 +1147,6 @@ if SDK.state("Mr.Mo's ABS") == true
 							msg_enemy_balloon(skill, e.event)
 							return
 						end
-					
-						# 원거리 스킬이 아니라면?
-						enemies = []
-						# 적대 관계의 적들을 배열에 넣음
-						for enemy in @enemies.values
-							next if enemy == nil or enemy == e
-							next if !e.hate_group.include?(enemy.enemy_id)
-							enemies.push(enemy)
-						end
-						enemies.push($game_player) if e.hate_group.include?(0)
-						
-						# 가장 가까운 적을 우선함
-						enemies.sort! {|a,b|
-							get_range(e.event, a.event) - get_range(e.event, b.event)}
-						
-						# 스킬 사용
-						enemies[0].actor.effect_skill(e, skill)
-						e.sp -= skill.sp_cost
-						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n") if skill.sp_cost != 0	# 몬스터 마력 공유
-						
-						# 애니메이션 실행
-						hit_enemy(enemies[0], e, skill.animation2_id) if enemies[0].actor.damage != "Miss" and enemies[0].actor.damage != 0
-						#Return if enemy is dead 
-						return if enemy_dead?(enemies[0].actor, e)
-						
-						return if enemies[0].attacking == e and enemies[0].in_battle
-						#If its alive, put it in battle
-						enemies[0].in_battle = true
-						#Make it attack the player
-						enemies[0].attacking = e
-						#Setup movement
-						setup_movement(e)
 						return
 						
 					when 2 #All Emenies 적 전체
@@ -2690,10 +2667,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			return force_movement if no_one?
 			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
 			m = @move_direction
-			move_down if m == 2
-			move_left if m == 4
-			move_right if m == 6
-			move_up if m == 8
+			move_lower_left 	if m == 1
+			move_down 				if m == 2
+			move_lower_right 	if m == 3
+			move_left 				if m == 4
+			move_right 				if m == 6
+			move_upper_left 	if m == 7
+			move_up 					if m == 8
+			move_upper_right 	if m == 9
 			
 		end
 		#--------------------------------------------------------------------------
@@ -4176,24 +4157,94 @@ if SDK.state("Mr.Mo's ABS") == true
 				check_event_trigger_touch(@x, @y-1)
 			end
 		end
+		
 		#--------------------------------------------------------------------------
-		# * 대각선 이동 (스킬 이동만 따져봄)
+		# * 대각선 이동
+		# * Move Lower Left
 		#--------------------------------------------------------------------------
 		def move_lower_left
-			check_event_trigger_touch(@x - 1, @y + 1)
+			# If no direction fix
+			unless @direction_fix
+				# Face down is facing right or up
+				@direction = (@direction == 6 ? 4 : @direction == 8 ? 2 : @direction)
+			end
+			# When a down to left or a left to down course is passable
+			if (passable?(@x, @y, 2) and passable?(@x, @y + 1, 4)) or
+				(passable?(@x, @y, 4) and passable?(@x - 1, @y, 2))
+				# Update coordinates
+				@x -= 1
+				@y += 1
+				# Increase steps
+				increase_steps
+			else
+				check_event_trigger_touch(@x - 1, @y + 1)
+			end
 		end
-		
-		def move_lower_right 	
-			check_event_trigger_touch(@x + 1, @y + 1)
+		#--------------------------------------------------------------------------
+		# * Move Lower Right
+		#--------------------------------------------------------------------------
+		def move_lower_right
+			# If no direction fix
+			unless @direction_fix
+				# Face right if facing left, and face down if facing up
+				@direction = (@direction == 4 ? 6 : @direction == 8 ? 2 : @direction)
+			end
+			# When a down to right or a right to down course is passable
+			if (passable?(@x, @y, 2) and passable?(@x, @y + 1, 6)) or
+				(passable?(@x, @y, 6) and passable?(@x + 1, @y, 2))
+				# Update coordinates
+				@x += 1
+				@y += 1
+				# Increase steps
+				increase_steps
+			else
+				check_event_trigger_touch(@x + 1, @y + 1)
+				
+			end
 		end
-		
+		#--------------------------------------------------------------------------
+		# * Move Upper Left
+		#--------------------------------------------------------------------------
 		def move_upper_left
-			check_event_trigger_touch(@x - 1, @y - 1)
+			# If no direction fix
+			unless @direction_fix
+				# Face left if facing right, and face up if facing down
+				@direction = (@direction == 6 ? 4 : @direction == 2 ? 8 : @direction)
+			end
+			# When an up to left or a left to up course is passable
+			if (passable?(@x, @y, 8) and passable?(@x, @y - 1, 4)) or
+				(passable?(@x, @y, 4) and passable?(@x - 1, @y, 8))
+				# Update coordinates
+				@x -= 1
+				@y -= 1
+				# Increase steps
+				increase_steps
+			else
+				check_event_trigger_touch(@x - 1, @y - 1)
+			end
+		end
+		#--------------------------------------------------------------------------
+		# * Move Upper Right
+		#--------------------------------------------------------------------------
+		def move_upper_right
+			# If no direction fix
+			unless @direction_fix
+				# Face right if facing left, and face up if facing down
+				@direction = (@direction == 4 ? 6 : @direction == 2 ? 8 : @direction)
+			end
+			# When an up to right or a right to up course is passable
+			if (passable?(@x, @y, 8) and passable?(@x, @y - 1, 6)) or
+				(passable?(@x, @y, 6) and passable?(@x + 1, @y, 8))
+				# Update coordinates
+				@x += 1
+				@y -= 1
+				# Increase steps
+				increase_steps
+			else
+				check_event_trigger_touch(@x + 1, @y - 1)
+			end
 		end
 		
-		def move_upper_right
-			check_event_trigger_touch(@x + 1, @y - 1)
-		end
 		#--------------------------------------------------------------------------
 		# * Move at Random
 		#--------------------------------------------------------------------------

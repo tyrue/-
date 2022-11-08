@@ -181,6 +181,8 @@ class Game_Actor < Game_Battler
 		
 		$job_degree = 0
 		n = $game_party.actors[0].class_id
+		
+		# 승급차수
 		$job_degree = 1 if (n == 3 or n == 8 or n == 11 or n == 18)
 		$job_degree = 2 if (n == 5 or n == 9 or n == 12 or n == 19)		
 		$job_degree = 3	if (n == 6 or n == 10 or n == 13 or n == 20)
@@ -192,12 +194,14 @@ class Game_Actor < Game_Battler
 				return false if check == nil
 				return false if check[1] > $job_degree
 				return false if !check[0].include?(job_type) and !check[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			if item.is_a?(RPG::Armor)
 				return false if check2 == nil
 				return false if check2[1] > $job_degree
 				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			
@@ -207,12 +211,14 @@ class Game_Actor < Game_Battler
 				return false if check == nil
 				return false if check[1] > $job_degree
 				return false if !check[0].include?(job_type) and !check[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			if item.is_a?(RPG::Armor)
 				return false if check2 == nil
 				return false if check2[1] > $job_degree
 				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			
@@ -222,12 +228,14 @@ class Game_Actor < Game_Battler
 				return false if check == nil
 				return false if check[1] > $job_degree
 				return false if !check[0].include?(job_type) and !check[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			if item.is_a?(RPG::Armor)
 				return false if check2 == nil
 				return false if check2[1] > $job_degree
 				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			
@@ -237,12 +245,14 @@ class Game_Actor < Game_Battler
 				return false if check == nil
 				return false if check[1] > $job_degree
 				return false if !check[0].include?(job_type) and !check[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			if item.is_a?(RPG::Armor)
 				return false if check2 == nil
 				return false if check2[1] > $job_degree
 				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 		else # 평민
@@ -250,12 +260,14 @@ class Game_Actor < Game_Battler
 				return false if check == nil
 				return false if check[1] > $job_degree
 				return false if !check[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 			if item.is_a?(RPG::Armor)
 				return false if check2 == nil
 				return false if check2[1] > $job_degree
 				return false if !check2[0].include?(0)
+				return false if level < item_level(item)
 				return true
 			end
 		end

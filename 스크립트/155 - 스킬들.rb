@@ -886,6 +886,7 @@ class Rpg_skill
 				end
 			end
 		end
+		
 		# Loop all players
 		for player in Network::Main.mapplayers.values
 			# If player coordinates are consistent with move destination
@@ -900,6 +901,7 @@ class Rpg_skill
 				end
 			end
 		end
+		
 		# If player coordinates are consistent with move destination
 		if $game_player.x == new_x and $game_player.y == new_y
 			# If through is OFF
@@ -928,6 +930,7 @@ class Rpg_skill
 				return true
 			end
 		end
+		
 		# Loop all players
 		for player in Network::Main.mapplayers.values
 			# If player coordinates are consistent with move destination

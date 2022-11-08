@@ -29,8 +29,8 @@ if SDK.state("Mr.Mo's ABS")
 			@old_x = 0
 			@old_y = 0
 			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
-			@temp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
-			@ch = 0#@temp.height / 4
+			@tesp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
+			@ch = 0#@tesp.height / 4
 			@cw = 15
 			update    
 		end
@@ -114,8 +114,8 @@ if SDK.state("Mr.Mo's ABS")
 			@old_x = -1
 			@old_y = -1
 			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
-			#~ @temp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
-			#~ @ch = @temp.height / 4 + 20
+			#~ @tesp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
+			#~ @ch = @tesp.height / 4 + 20
 			#~ @cw = 15
 			@ch = 0
 			update    
@@ -190,6 +190,103 @@ if SDK.state("Mr.Mo's ABS")
 		end  
 	end
 	
+	class NetPartyMP_Bars < Sprite
+		#--------------------------------------------------------------------------
+		# * Constants Bar Types and Hues for parameters and parameter names
+		#--------------------------------------------------------------------------
+		HP_BAR = "013-Blues01"
+		# leave this alone if you don't know what you are doing
+		OUTLINE = 1
+		BORDER = 1
+		HP_WIDTH = 35         # WIDTH of the HP Bar
+		HP_HEIGHT = 6         # Height of the HP Bar
+		#--------------------------------------------------------------------------
+		# * Object Initialization
+		#--------------------------------------------------------------------------
+		def initialize(netPlayer, v)
+			super(v)
+			@netPlayer = netPlayer
+			@old_hp = -1
+			@old_x = -1
+			@old_y = -1
+			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
+			#~ @temp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
+			#~ @ch = @temp.height / 4 + 20
+			#~ @cw = 15
+			@ch = 0
+			update    
+		end
+		#--------------------------------------------------------------------------
+		# * Refresh
+		#--------------------------------------------------------------------------
+		def refresh
+			#First move it
+			@old_x = @netPlayer.screen_x - 15
+			@old_y = @netPlayer.screen_y + HP_HEIGHT
+			self.x = @old_x
+			self.y = @old_y
+			#HP Bar Check
+			return if @old_hp == @netPlayer.sp
+			self.bitmap.clear
+			@old_hp = @netPlayer.sp
+			#Show the bar
+			draw_gradient_bar(0,0,@netPlayer.sp,@netPlayer.maxsp,HP_BAR,HP_WIDTH,HP_HEIGHT)
+		end  
+		#--------------------------------------------------------------------------
+		# * Something Changed?
+		#--------------------------------------------------------------------------
+		def something_changed?
+			return dispose if @netPlayer.sp.to_i <= 0
+			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
+				@netPlayer.bar_showing = false
+				return dispose 
+			end
+			
+			if (!@netPlayer.is_transparency) or ($netparty.include?(@netPlayer.name.to_s))
+				self.visible = true 
+			else
+				self.visible = false
+			end
+			
+			return true if @old_hp != @netPlayer.sp.to_i
+			return true if @old_x != @netPlayer.event.screen_x - 15
+			return true if @old_y != @netPlayer.event.screen_y + HP_HEIGHT
+			return false
+		end
+		#--------------------------------------------------------------------------
+		# * Update
+		#--------------------------------------------------------------------------
+		def update
+			refresh if something_changed?
+		end
+		#--------------------------------------------------------------------------
+		# * Draw Gradient Bar 
+		#--------------------------------------------------------------------------
+		def draw_gradient_bar(x, y, min, max, file, width = nil, height = nil, hue = 0, back = "Back", back2 = "Back2")
+			bar = RPG::Cache.gradient(file, hue)
+			back = RPG::Cache.gradient(back)
+			back2 = RPG::Cache.gradient(back2)
+			cx = BORDER
+			cy = BORDER
+			dx = OUTLINE
+			dy = OUTLINE
+			zoom_x = width != nil ? width : back.width
+			zoom_y = height != nil ? height : back.height
+			percent = min / max.to_f if max != 0
+			percent = 0 if max == 0
+			back_dest_rect = Rect.new(x,y,zoom_x,zoom_y)
+			back2_dest_rect = Rect.new(x+dx,y+dy,zoom_x -dx*2,zoom_y-dy*2)
+			bar_dest_rect = Rect.new(x+cx,y+cy,zoom_x * percent-cx*2,zoom_y-cy*2)
+			back_source_rect = Rect.new(0,0,back.width,back.height)
+			back2_source_rect = Rect.new(0,0,back2.width,back2.height)
+			bar_source_rect = Rect.new(0,0,bar.width* percent,bar.height)
+			self.bitmap.stretch_blt(back_dest_rect, back, back_source_rect)
+			self.bitmap.stretch_blt(back2_dest_rect, back2, back2_source_rect)
+			self.bitmap.stretch_blt(bar_dest_rect, bar, bar_source_rect)
+		end  
+	end
+	
+	
 	#============================================================================
 	# * Scene Map
 	#============================================================================
@@ -206,7 +303,9 @@ if SDK.state("Mr.Mo's ABS")
 			for e in $ABS.enemies.values
 				e.bar_showing = false
 			end
+			
 			@netPlayers_hp = {}
+			@netPlayers_sp = {}
 			#Get netplayers
 			for player in Network::Main.mapplayers.values
 				player.bar_showing = false
@@ -225,12 +324,14 @@ if SDK.state("Mr.Mo's ABS")
 					next if e.bar_showing
 					@enemys_hp[e.event.id] = Enemy_Bars.new(e, @spriteset.viewport3)
 					e.bar_showing = true
+					
 				elsif e.bar_showing and @enemys_hp[e.event.id] != nil
 					@enemys_hp[e.event.id].dispose if !@enemys_hp[e.event.id].disposed?
 					@enemys_hp[e.event.id] = nil
 					e.bar_showing = false
 				end
 			end
+			
 			#Update HP BARS
 			for bars in @enemys_hp.values
 				next if bars == nil or bars.disposed?
@@ -252,17 +353,29 @@ if SDK.state("Mr.Mo's ABS")
 				if player.in_range?(14)
 					next if player.bar_showing and @netPlayers_hp[player.netid] != nil
 					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
+					
+					next if player.bar_showing and @netPlayers_sp[player.netid] != nil
+					@netPlayers_sp[player.netid] = NetPartyMP_Bars.new(player, @spriteset.viewport3)
 					player.bar_showing = true
 					
 				elsif player.bar_showing and @netPlayers_hp[player.netid] != nil
 					player.bar_showing = false
 					@netPlayers_hp[player.netid].dispose if !@netPlayers_hp[player.netid].disposed?
 					@netPlayers_hp[player.netid] = nil
+					
+					@netPlayers_sp[player.netid].dispose if !@netPlayers_sp[player.netid].disposed?
+					@netPlayers_sp[player.netid] = nil
 				end
 			end
 			
 			#Update HP BARS
 			for bars in @netPlayers_hp.values
+				next if bars == nil or bars.disposed?
+				bars.update
+			end
+			
+			#Update sp BARS
+			for bars in @netPlayers_sp.values
 				next if bars == nil or bars.disposed?
 				bars.update
 			end

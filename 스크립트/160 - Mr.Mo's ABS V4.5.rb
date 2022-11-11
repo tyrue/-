@@ -275,10 +275,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
 	SKILL_BUFF_TIME = {}
 	# 주술사
-	SKILL_BUFF_TIME[9] = [120 * sec, 0] # 무장
-	SKILL_BUFF_TIME[46] = [120 * sec, 0] # 무장
-	SKILL_BUFF_TIME[20] = [120 * sec, 0] # 보호
-	SKILL_BUFF_TIME[47] = [120 * sec, 0] # 보호
+	SKILL_BUFF_TIME[9] = [180 * sec, 0] # 무장
+	SKILL_BUFF_TIME[46] = [180 * sec, 0] # 무장
+	SKILL_BUFF_TIME[20] = [180 * sec, 0] # 보호
+	SKILL_BUFF_TIME[47] = [180 * sec, 0] # 보호
 	SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
 	SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
 	SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
@@ -309,7 +309,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
 	SKILL_BUFF_TIME[131] = [60 * sec, 0] # 투명
 	SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
-	SKILL_BUFF_TIME[136] = [60 * sec, 0] # 운상미보
+	SKILL_BUFF_TIME[136] = [180 * sec, 0] # 운상미보
 	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
 	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
 	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
@@ -369,9 +369,14 @@ if SDK.state("Mr.Mo's ABS") == true
 	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
 	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
 	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
+	EQUIP_EFFECTS[72] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 해골목걸이
+	EQUIP_EFFECTS[75] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금팔찌
 	
-	# 방어구
+	# 갑옷
 	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
+	
+	# 투구
+	EQUIP_EFFECTS[74] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금투구
 	
 	
 	#--------------------------------------------------------------------------
@@ -470,10 +475,26 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP[102] = 10000000 # 반고
 	BOSS_ENEMY_HP[112] = 2000000 # 청룡
 	BOSS_ENEMY_HP[113] = 2000000 # 현무
+	
+	BOSS_ENEMY_HP[156] = 1500000 # 상어장군
+	BOSS_ENEMY_HP[158] = 2500000 # 해파리장군
 	BOSS_ENEMY_HP[159] = 5000000 # 거북장군
-	BOSS_ENEMY_HP[193] = 4000000 # 파괴왕
-	BOSS_ENEMY_HP[231] = 3000000 # 천구왕
-	BOSS_ENEMY_HP[246] = 2000000 # 선장망령
+	
+	BOSS_ENEMY_HP[189] = 1200000 # 주마관
+	BOSS_ENEMY_HP[191] = 2000000 # 유성지
+	BOSS_ENEMY_HP[192] = 3000000 # 해골왕
+	BOSS_ENEMY_HP[193] = 5000000 # 파괴왕
+	
+	BOSS_ENEMY_HP[220] = 1200000 # 산소괴왕
+	BOSS_ENEMY_HP[224] = 3200000 # 괴성왕
+	BOSS_ENEMY_HP[228] = 5200000 # 뇌신왕
+	BOSS_ENEMY_HP[229] = 1200000 # 연청천구
+	BOSS_ENEMY_HP[230] = 1200000 # 연자천구
+	BOSS_ENEMY_HP[231] = 12000000 # 천구왕
+	
+	BOSS_ENEMY_HP[246] = 3000000 # 선장망령
+	BOSS_ENEMY_HP[250] = 1300000 # 철보장
+	BOSS_ENEMY_HP[251] = 1500000 # 철거인
 	BOSS_ENEMY_HP[252] = 20000000 # 마려
 	BOSS_ENEMY_HP[253] = 5000000 # 현무
 	BOSS_ENEMY_HP[257] = 2000000 # 태산
@@ -482,19 +503,22 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [15000, 0.02, 0.02] # 산속군사
-	ENEMY_EXP[91] = [70000, 0.1, 0.1] # 비류성창병
-	ENEMY_EXP[96] = [90000, 0.1, 0.1] # 비류성자객
-	ENEMY_EXP[97] = [90000, 0.1, 0.1] # 입구지키미
-	ENEMY_EXP[98] = [850000, 1, 1] # 비류장군
+	ENEMY_EXP[45] = [30000, 0.06, 0.06] # 산속군사
+	ENEMY_EXP[91] = [100000, 0.3, 0.3] # 비류성창병
+	ENEMY_EXP[96] = [150000, 0.3, 0.3] # 비류성자객
+	ENEMY_EXP[97] = [90000, 0.3, 0.3] # 입구지키미
+	ENEMY_EXP[98] = [1500000, 2, 2] # 비류장군
 	
-	ENEMY_EXP[254] = [500000, 0.05, 0.08] # 뇌랑
-	ENEMY_EXP[255] = [500000, 0.08, 0.08] # 왕가
-	ENEMY_EXP[256] = [850000, 0.8, 0.8] # 조왕
-	ENEMY_EXP[257] = [3500000, 1, 1] # 태산
-	ENEMY_EXP[258] = [10000000, 3, 3] # 길림장군
+	ENEMY_EXP[254] = [750000, 0.1, 0.15] # 뇌랑
+	ENEMY_EXP[255] = [750000, 0.1, 0.15] # 왕가
+	ENEMY_EXP[256] = [1000000, 1.2, 1.8] # 조왕
+	ENEMY_EXP[257] = [5000000, 2, 2.5] # 태산
+	ENEMY_EXP[258] = [30000000, 3, 6] # 길림장군
 	
-	# 보스몹
+	# 중국
+	ENEMY_EXP[231] = [15000000] # 천구왕
+	
+	# 환상의섬
 	ENEMY_EXP[252] = [20000000] # 마려
 	
 	class MrMo_ABS
@@ -714,6 +738,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			@enemies[event.id].aggro = $is_map_first
+			@enemies[event.id].aggressiveness = (@enemies[event.id].aggressiveness * 45.0 + rand(3) - 2) / 45.0 
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -1054,6 +1079,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_enemy_attack(e, actor)
 			# 만약 행동 리스트가 없으면 무시함
 			return if e.actions == nil or e.actions == [] or e == nil
+			
 			# 행동 리스트 얻음
 			for action in e.actions
 				# 공격 행동이 아니면 무시
@@ -1098,7 +1124,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					skill = $data_skills[action.skill_id]
 					#Return if the skill is NIL
 					return if skill == nil
-					return if Graphics.frame_count % (e.aggressiveness * 45.0).to_i != 0
 					next if !e.can_use_skill?(skill)
 					
 					# 스킬 쿨타임 갱신
@@ -2084,7 +2109,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if ENEMY_EXP[enemy.id] != nil 
 					exp = ENEMY_EXP[enemy.id][0]
 					if ENEMY_EXP[enemy.id].size > 1
-						exp += (actor.maxhp * ENEMY_EXP[enemy.id][1] + actor.maxsp * ENEMY_EXP[enemy.id][2]).to_i
+						exp = (((exp + actor.maxhp * ENEMY_EXP[enemy.id][1] + actor.maxsp * ENEMY_EXP[enemy.id][2]) / exp) * exp).to_i
 					end
 				else
 					exp = enemy.exp
@@ -2120,7 +2145,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					exp = (exp * 1.5).to_i / in_map_player
 					gold = (gold * 1.5).to_i / in_map_player
 					
-					$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
+					$console.write_line("[파티]:경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
 					actor.exp += exp
 					$game_party.gain_gold(gold)
 				else
@@ -2128,7 +2153,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
 					end
 					
-					$console.write_line("경험치:#{exp} 금전:#{gold} 획득. (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
+					$console.write_line("경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
 					actor.exp += exp    
 					$game_party.gain_gold(gold)
 				end
@@ -3332,7 +3357,46 @@ if SDK.state("Mr.Mo's ABS") == true
 			alias mrmo_abs_sprite_update_collapse update
 			#-------------------------------------------------------------------------
 			def update
-				mrmo_abs_sprite_update_collapse # sprite의 업데이트
+				super
+				if @_whiten_duration > 0
+					@_whiten_duration -= 1
+					self.color.alpha = 128 - (16 - @_whiten_duration) * 10
+				end
+				if @_appear_duration > 0
+					@_appear_duration -= 1
+					self.opacity = (16 - @_appear_duration) * 16
+				end
+				if @_escape_duration > 0
+					@_escape_duration -= 1
+					self.opacity = 256 - (32 - @_escape_duration) * 10
+				end
+				if @_collapse_duration > 0
+					@_collapse_duration -= 1
+					self.opacity = 256 - (48 - @_collapse_duration) * 6
+				end
+				
+				update_damage_view
+				
+				if @_animation != nil and (Graphics.frame_count % 2 == 0)
+					@_animation_duration -= 1
+					update_animation
+				end
+				if @_loop_animation != nil and (Graphics.frame_count % 2 == 0)
+					update_loop_animation
+					@_loop_animation_index += 1
+					@_loop_animation_index %= @_loop_animation.frame_max
+				end
+				if @_blink
+					@_blink_count = (@_blink_count + 1) % 32
+					if @_blink_count < 16
+						alpha = (16 - @_blink_count) * 6
+					else
+						alpha = (@_blink_count - 16) * 6
+					end
+					self.color.set(255, 255, 255, alpha)
+				end
+				@@_animations.clear
+				
 				if @_animation != nil and (Graphics.frame_count % 10 == 0)
 					@_animation_duration += 1
 				end
@@ -3353,6 +3417,35 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 			end
+			
+			#--------------------------------------------------------------------------
+			# * update damage view, 데미지 표시 효과 설정
+			#--------------------------------------------------------------------------
+			def update_damage_view
+				if @_damage_duration > 0
+					@_damage_duration -= 1
+					@_damage_sprite.y -= 4 if @_damage_duration > 20
+					@_damage_sprite.opacity = 256
+					if @_damage_duration == 0
+						dispose_damage
+					end
+				end
+			end
+			
+			#--------------------------------------------------------------------------
+			# * 데미지 삭제
+			#--------------------------------------------------------------------------
+			def dispose_damage
+				if @_damage_sprite != nil
+					@_damage_sprite.visible = false
+					@_damage_sprite.bitmap.dispose
+					@_damage_sprite.dispose
+					@_damage_sprite = nil
+					@_damage_duration = 0
+				end
+			end
+			
+			
 			#--------------------------------------------------------------------------
 			# * Collapse and Erase
 			#--------------------------------------------------------------------------
@@ -3392,13 +3485,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
 				# draw_text(x, y, width, height, string, align)
 				
+				y = self.height / 4 
 				
-				y = self.height / 4 / 2
-				# 데미지 그림자
-				bitmap.draw_text(-1, y-1, 160, 36, damage_string, 1)
-				bitmap.draw_text(+1, y-1, 160, 36, damage_string, 1)
-				bitmap.draw_text(-1, y+1, 160, 36, damage_string, 1)
-				bitmap.draw_text(+1, y+1, 160, 36, damage_string, 1)
+				if damage_string.to_i > 0
+					# 데미지 그림자
+					bitmap.draw_text(-1, y-1, 200, 36, change_number_unit(damage_string), 0)
+					bitmap.draw_text(+1, y-1, 200, 36, change_number_unit(damage_string), 0)
+					bitmap.draw_text(-1, y+1, 200, 36, change_number_unit(damage_string), 0)
+					bitmap.draw_text(+1, y+1, 200, 36, change_number_unit(damage_string), 0)
+				else
+					bitmap.draw_text(-1, y-1, 200, 36, damage_string, 0)
+					bitmap.draw_text(+1, y-1, 200, 36, damage_string, 0)
+					bitmap.draw_text(-1, y+1, 200, 36, damage_string, 0)
+					bitmap.draw_text(+1, y+1, 200, 36, damage_string, 0)
+				end
 				# 폰트 칼라 색
 				if value.is_a?(Numeric) and value < 0
 					bitmap.font.color.set(176, 255, 144)
@@ -3410,13 +3510,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap.font.color.set(255, 255, 255) if !critical # 흰색	
 				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
 				
-				bitmap.draw_text(0, y, 160, 36, damage_string, 1)	
+				if damage_string.to_i > 0
+					bitmap.draw_text(0, y, 200, 36, change_number_unit(damage_string), 0)	
+				else
+					bitmap.draw_text(0, y, 200, 36, damage_string, 0)	
+				end
 				
 				@_damage_sprite = ::Sprite.new(self.viewport)
 				@_damage_sprite.bitmap = bitmap
-				@_damage_sprite.ox = 80
+				
 				@_damage_sprite.oy = 20
-				@_damage_sprite.x = self.x
+				@_damage_sprite.x = self.x - @_damage_sprite.bitmap.text_size(change_number_unit(damage_string)).width / 2
 				@_damage_sprite.y = self.y - self.oy
 				@_damage_sprite.z = 3000
 				@_damage_duration = 40
@@ -3697,7 +3801,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if self.damage > 0
 					# Critical correction
 					# 여기다가 크리티컬 확률 높힐 수도 있음
-					if rand(100) < 4.0 * attacker.dex / self.agi
+					if rand(100) < 5.0 * attacker.dex / self.agi
 						self.damage *= 2
 						self.critical = true
 					end
@@ -3715,11 +3819,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Second hit detection
 				# agi : 민첩 (회피율), dex : 손재주 (명중률)
 				# eva : 절대 회피율..
-				a_dex = attacker.dex - attacker.dex * (self.eva / 100.0)
+				a_dex = attacker.dex - attacker.dex * (self.eva / 150.0)
 				#eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
 				eva = [(8 * self.agi / a_dex), 100].min
 				
-				hit = self.damage < 0 ? 100 : [100 - eva, 10].max
+				hit = self.damage < 0 ? 100 : [100 - eva, 5].max
 				hit = self.cant_evade? ? 100 : hit # 피할 수 없는 경우?
 				
 				hit_result = (rand(100) < hit)
@@ -3770,7 +3874,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				
 				# Set damage to "Miss"
-				self.damage = "Miss"
+				self.damage = "Miss!"
 				# Clear critical flag
 				self.critical = false
 			end

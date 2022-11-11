@@ -4,23 +4,25 @@
 # Begin SDK Enabled Check
 #-------------------------------------------------------------------------------
 if SDK.state("Mr.Mo's ABS")
+	BAR_WIDTH = 70
+	BAR_HEIGHT = 15
 	#--------------------------------------------------------------------------
 	# * Constants - MAKE YOUR EDITS HERE
 	#--------------------------------------------------------------------------
 	HP_X = 560            # X POS of the HP Bar
-	HP_Y = 425              # Y POS of the HP Bar
-	HP_WIDTH = 55         # WIDTH of the HP Bar
-	HP_HEIGHT = 5         # Height of the HP Bar
+	HP_Y = 417              # Y POS of the HP Bar
+	HP_WIDTH = BAR_WIDTH         # WIDTH of the HP Bar
+	HP_HEIGHT = BAR_HEIGHT         # Height of the HP Bar
 	#--------------------------------------------------------------------------
 	SP_X = 560             # X POS of the SP Bar
-	SP_Y = 445             # Y POS of the SP Bar
-	SP_WIDTH = 55         # WIDTH of the SP Bar
-	SP_HEIGHT = 5         # Height of the SP Bar
+	SP_Y = HP_Y + BAR_HEIGHT + 5             # Y POS of the SP Bar
+	SP_WIDTH = BAR_WIDTH         # WIDTH of the SP Bar
+	SP_HEIGHT = BAR_HEIGHT         # Height of the SP Bar
 	#--------------------------------------------------------------------------
 	EXP_X = 560           # X POS of the EXP Bar
-	EXP_Y = 465            # Y POS of the EXP Bar
-	EXP_WIDTH = 55        # WIDTH of the EXP Bar
-	EXP_HEIGHT = 5        # Height of the EXP Bar
+	EXP_Y = SP_Y + BAR_HEIGHT + 5            # Y POS of the EXP Bar
+	EXP_WIDTH = BAR_WIDTH        # WIDTH of the EXP Bar
+	EXP_HEIGHT = BAR_HEIGHT        # Height of the EXP Bar
 	#--------------------------------------------------------------------------
 	STATES_SHOW = true    # Show states?
 	STATES_X = 170        # States X display
@@ -119,15 +121,22 @@ if SDK.state("Mr.Mo's ABS")
 			bitmap = RPG::Cache.picture("HUD Graphic")
 			self.contents.blt(0, 0, bitmap, Rect.new(0, 0, 900, 900))
 			#Show the HP Symbol
-			self.contents.draw_frame_text(HP_X - 40, HP_Y - 15, 640, 32, "체력")
+			self.contents.draw_frame_text(HP_X - 40, HP_Y - BAR_HEIGHT / 2, 640, 32, "체력")
+			
 			#Draw the HP BAR
 			draw_gradient_bar(HP_X, HP_Y, @actor.hp, @actor.maxhp, HP_BAR, HP_WIDTH, HP_HEIGHT)
+			self.contents.draw_frame_text(HP_X + 5, HP_Y - BAR_HEIGHT / 2, BAR_WIDTH, 32, change_number_unit(@actor.hp))
+			
 			#Show the SP Symbol
-			self.contents.draw_frame_text(SP_X - 40, SP_Y - 15, 640, 32, "마력")
+			self.contents.draw_frame_text(SP_X - 40, SP_Y - BAR_HEIGHT / 2, 640, 32, "마력")
+			
 			#Draw the SP Bar
 			draw_gradient_bar(SP_X, SP_Y, @actor.sp, @actor.maxsp, SP_BAR, SP_WIDTH, SP_HEIGHT)
+			self.contents.draw_frame_text(SP_X + 5, SP_Y - BAR_HEIGHT / 2, BAR_WIDTH, 32, change_number_unit(@actor.sp))
+			
 			#Show the EXP Symbol
-			self.contents.draw_frame_text(EXP_X - 40, EXP_Y - 15, 640, 32, "경험치")
+			self.contents.draw_frame_text(EXP_X - 40, EXP_Y - BAR_HEIGHT / 2, 640, 32, "경험치")
+			
 			#Draw the EXP Bar
 			min = @actor.level == 99 ? @actor.exp : @actor.now_exp
 			max = @actor.level == 99 ? MAX_EXP : @actor.next_exp
@@ -136,20 +145,25 @@ if SDK.state("Mr.Mo's ABS")
 				max = 1
 			end
 			draw_gradient_bar(EXP_X, EXP_Y, min, max, EXP_BAR, EXP_WIDTH, EXP_HEIGHT)
+			if @actor.level < 99
+				self.contents.draw_frame_text(EXP_X + 5, EXP_Y - BAR_HEIGHT / 2, BAR_WIDTH, 32, change_number_unit(@actor.exp))
+			else
+				self.contents.draw_frame_text(EXP_X + 5, EXP_Y - BAR_HEIGHT / 2, BAR_WIDTH, 32, change_number_unit_han(@actor.exp))
+			end
+			
 			
 			#한글 좌표 위치
 			ui_x = 520
-			
 			
 			#Show Hero Icon
 			self.contents.draw_frame_text(ui_x, 350, 640, 32, "이름:")
 			self.contents.draw_frame_text(ui_x + 30, 350, 640, 32, @actor.name.to_s)
 			#Show Level Icon
 			self.contents.draw_frame_text(ui_x, 370, 640, 32, "레벨:")
-			self.contents.draw_frame_text(ui_x + 30, 370, 640, 32, @actor.level.to_s)
+			self.contents.draw_frame_text(ui_x + 30, 370, 640, 32, change_number_unit(@actor.level))
 			#Show Gold Icon
 			self.contents.draw_frame_text(ui_x, 390, 640, 32, "금전:")
-			self.contents.draw_frame_text(ui_x + 30, 390, 640, 32, $game_party.gold.to_s)
+			self.contents.draw_frame_text(ui_x + 30, 390, 640, 32, change_number_unit($game_party.gold))
 			
 			#맵이름의 표시
 			map_infos = load_data("Data/MapInfos.rxdata")
@@ -284,6 +298,7 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def main_draw
 			@mrmo_hud = Window_MrMo_HUD.new
+			@mrmo_hud.visible = false if !$game_switches[62]
 			mrmo_hud_main_draw
 		end
 		#--------------------------------------------------------------------------
@@ -291,12 +306,16 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def hud_show
 			@mrmo_hud.visible = true
+			@mrmo_hud.pos.visible = true
+			$game_switches[62] = true
 		end
 		#--------------------------------------------------------------------------
 		# * Turn HUD Hide
 		#--------------------------------------------------------------------------
 		def hud_hide
 			@mrmo_hud.visible = false
+			@mrmo_hud.pos.visible = false
+			$game_switches[62] = false
 		end
 		#--------------------------------------------------------------------------
 		# * Main Dispose
@@ -321,12 +340,10 @@ if SDK.state("Mr.Mo's ABS")
 				# 만약 토글키가 눌리면? 보여줄까 말까
 				if @mrmo_hud.CAN_TOGGLE and Key.trigger?(KEY_E)
 					if !@mrmo_hud.visible
-						@mrmo_hud.visible = true 
-						@mrmo_hud.pos.visible = true 
+						hud_show
 						return 
 					elsif @mrmo_hud.visible
-						@mrmo_hud.visible = false
-						@mrmo_hud.pos.visible = false
+						hud_hide
 						return 
 					end
 				end

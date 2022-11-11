@@ -6,7 +6,7 @@
 class Jindow_Status < Jindow
 	def initialize
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 350, 180)
+		super(0, 0, 400, 180)
 		self.name = "상태 정보"
 		@head = true
 		@mark = true
@@ -91,7 +91,7 @@ class Jindow_Status < Jindow
 			"이름: " + actor.name,
 			"레벨: " + actor.level.to_s,
 			"직업: " + actor.class_name,
-			"체력: " + actor.hp.to_s + "/" + actor.maxhp.to_s,
+			"체력: " + change_number_unit(actor.hp.to_s) + "/" + change_number_unit(actor.maxhp.to_s),
 			"마력: " + actor.sp.to_s + "/" + actor.maxsp.to_s,
 			"경험치: " + actor.exp.to_s + "/" + actor.exp_list[actor.level + 1].to_s,
 			"금전: " + $game_party.gold.to_s,
@@ -104,18 +104,18 @@ class Jindow_Status < Jindow
 		
 		for i in 0..10
 			@state[i] = Sprite.new(self)
-			@state[i].bitmap = Bitmap.new(160, 20)
+			@state[i].bitmap = Bitmap.new(180, 20)
 			if i <= 6
 				@state[i].x = 80
 				@state[i].y = 15 * i
 			else
-				@state[i].x = 220
+				@state[i].x = 245
 				@state[i].y = 90 + 15 * (i - 7)
 			end
 			
 			@state[i].bitmap.font.size = 12
 			@state[i].bitmap.font.color.set(0, 0, 0, 255)
-			@state[i].bitmap.draw_text(0, 0, 160, 20, @state_name[i], 0)
+			@state[i].bitmap.draw_text(0, 0, 180, 20, @state_name[i], 0)
 		end
 		
 		@guild = Sprite.new(self)
@@ -124,7 +124,7 @@ class Jindow_Status < Jindow
 		
 		@stat = Sprite.new(self)
 		@stat.bitmap = Bitmap.new(100, 20)
-		@stat.x = 180
+		@stat.x = 210
 		@stat.bitmap.font.size = 12
 		@stat.bitmap.font.color.set(0, 0, 0, 255)
 		@stat.bitmap.draw_text(0, 0, 100, 20, "능력치: ", 1)
@@ -186,7 +186,7 @@ class Jindow_Status < Jindow
 		for i in 0..3
 			@state2[i] = J::Text_Box.new(self)
 			@state2[i].set("tb_2", 2).refresh(44, 0)
-			@state2[i].x = 215
+			@state2[i].x = 245
 			@state2[i].y = 14 * (i + 1) + 5
 			@state2[i].font.alpha = 1
 			@state2[i].bitmap.font.size = 12
@@ -224,10 +224,10 @@ class Jindow_Status < Jindow
 			"이름: " + actor.name,
 			"레벨: " + actor.level.to_s,
 			"직업: " + actor.class_name,
-			"체력: " + actor.hp.to_s + "/" + actor.maxhp.to_s,
-			"마력: " + actor.sp.to_s + "/" + actor.maxsp.to_s,
-			"경험치: " + actor.exp.to_s + "/" + actor.exp_list[actor.level + 1].to_s,
-			"금전: " + $game_party.gold.to_s,
+			"체력: " + change_number_unit(actor.hp.to_s) + "/" + change_number_unit(actor.maxhp.to_s),
+			"마력: " + change_number_unit(actor.sp.to_s) + "/" + change_number_unit(actor.maxsp.to_s),
+			"경험치: " + change_number_unit(actor.exp.to_s) + "/" + change_number_unit(actor.exp_list[actor.level + 1].to_s),
+			"금전: " + change_number_unit($game_party.gold.to_s),
 			
 			"물리 공격력: " + actor.base_atk.to_s,
 			"물리 방어력: " + actor.base_pdef.to_s,
@@ -239,17 +239,17 @@ class Jindow_Status < Jindow
 			if @state_name[i] != @state_name2[i]
 				@state[i].dispose
 				@state[i] = Sprite.new(self)
-				@state[i].bitmap = Bitmap.new(160, 20)
+				@state[i].bitmap = Bitmap.new(180, 20)
 				if i <= 6
 					@state[i].x = 80
 					@state[i].y = 15 * i
 				else
-					@state[i].x = 220
+					@state[i].x = 245
 					@state[i].y = 90 + 15 * (i - 7)
 				end
 				@state[i].bitmap.font.size = 12
 				@state[i].bitmap.font.color.set(0, 0, 0, 255)
-				@state[i].bitmap.draw_text(0, 0, 160, 20, @state_name2[i], 0)
+				@state[i].bitmap.draw_text(0, 0, 180, 20, @state_name2[i], 0)
 				@state_name[i] = @state_name2[i]
 			end
 		end

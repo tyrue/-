@@ -15,6 +15,7 @@ class Jindow_Console < Jindow
 		@max_size = 60
 		@font_size = 12
 		@check = false
+		
 	end	
 	
 	def hide
@@ -35,8 +36,10 @@ class Jindow_Console < Jindow
 	
 	def toggle
 		if @tog
+			$game_switches[61] = false
 			hide
 		else
+			$game_switches[61] = true
 			show(@opacity)
 		end
 	end

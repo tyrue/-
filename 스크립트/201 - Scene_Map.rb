@@ -5,11 +5,14 @@ class Scene_Map
 	def main
 		Hwnd.show
 		$map_chat_input = Jindow_Chat_Input.new if $map_chat_input == nil  # 채팅입력창
-		$console = Jindow_Console.new if $console == nil # 콘솔창
 		$chat = Jindow_Chat_Window.new if $chat == nil # 채팅창
-		
+		$console = Jindow_Console.new if $console == nil # 콘솔창
 		$game_system.menu_disabled = true
+		
+		$chat.hide if !$game_switches[60]
+		$console.hide if !$game_switches[61]
 		scene_map_main
+		
 		$cbig = 0
 		Hwnd.hide
 	end

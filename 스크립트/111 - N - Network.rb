@@ -2202,7 +2202,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						actor.exp += exp
 						$game_party.gain_gold(gold)
-						$console.write_line("[파티]:경험치:#{exp} 금전:#{gold} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
+						$console.write_line("[파티]:경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
 					end
 					
 					return true

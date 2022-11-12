@@ -158,12 +158,10 @@ class Jindow_Chat_Input < Jindow
 		when /\/운영자모드 (.*)/
 			if $1.to_i == 1367
 				Network::Main.set_admin
-			else
-				$console.write_line("틀렸습니다.")
 			end
 			
 		when /\/운영자모드/
-			$console.write_line("비밀 번호를 입력하세요")	
+			$console.write_line(" ")	
 				
 		else # 명령어가 아닌 그냥 일반 채팅일때
 			

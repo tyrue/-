@@ -85,7 +85,7 @@ class Interpreter
 			# Advance index
 			@index += 1
 			# If next event command has shop on second line or after
-			if @list[@index].code == 605
+			if @list[@index].code == 605 or @list[@index].code == 302
 				# Add goods list to new item
 				$game_temp.shop_goods.push(@list[@index].parameters)
 				# If event command does not have shop on second line or after

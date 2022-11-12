@@ -1670,7 +1670,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 경험치 이벤트 확인
 				when /<exp_event>(.*)<\/exp_event>/
 					n = $1.to_i
-					if n > 0
+					if n > 1
 						$chat.write ("<현재 경험치 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
 						$game_switches[1500] = true
 						$exp_event = n
@@ -1813,6 +1813,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_party.gain_armor(info2[0].to_i, info2[1].to_i)
 					end
 					#return true
+					
+					# 소환비서
+				when /<item_summon>([0-9]+),([0-9]+)<\/item_summon>/	
+					$game_player.moveto($1.to_i, $2.to_i)
 					
 					#유저 소환
 				when /<summon>(.*),([0-9]+),([0-9]+),([0-9]+)<\/summon>/

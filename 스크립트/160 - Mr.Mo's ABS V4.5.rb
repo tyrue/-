@@ -472,6 +472,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 보스몹 체력 설정
 	BOSS_ENEMY_HP = {}
 	BOSS_ENEMY_HP[37]  = 2000000000 # 무적토끼
+	BOSS_ENEMY_HP[98] = 1200000 # 비류장군
+	
 	BOSS_ENEMY_HP[102] = 10000000 # 반고
 	BOSS_ENEMY_HP[112] = 2000000 # 청룡
 	BOSS_ENEMY_HP[113] = 2000000 # 현무
@@ -559,10 +561,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			@skill_keys = SKILL_KEYS
 			#Item Keys
 			@item_keys = ITEM_KEYS
+			
 			#Button Mash (스킬 후딜레이)
-			@button_mash = 0
+			@skill_mash = {}
 			# 아이템 후딜레이
 			@item_mash = 0
+			# 공격키 후 딜레이
+			@attack_mash = 0
+			
 			#Ranged Skills and Weapons
 			@range = []
 			#Display Demage true:false
@@ -1301,23 +1307,24 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# 후 딜레이 처리
 			@item_mash -= 1 if @item_mash > 0
-			check_item if active_ok and @item_mash == 0 # 아이템 단축키 눌렸니?
-			
-			@button_mash -= 1 if @button_mash > 0
-			return if @button_mash > 0
+			@attack_mash -= 1 if @attack_mash > 0
+			for s_mash in @skill_mash
+				@skill_mash[s_mash[0]] -= 1 if s_mash[1] > 0
+			end
 			
 			if active_ok
+				check_item if @item_mash == 0 # 아이템 단축키 눌렸니?
 				@actor = $game_party.actors[0]
 				
 				# 공격키가 눌렸니?
-				if Input.trigger?(@attack_key)
+				if Input.trigger?(@attack_key) and @attack_mash == 0
 					# 만약 죽은 상태면 공격 못함
 					if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
 						$console.write_line("귀신은 할 수 없습니다.")
 						return 
 					end
-					return player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
-					return player_melee
+					player_range if RANGE_WEAPONS.has_key?(@actor.weapon_id)
+					player_melee
 				end
 				
 				# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
@@ -1325,9 +1332,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				for key in @skill_keys.keys
 					next if @skill_keys[key] == nil or @skill_keys[key] == 0
 					next if !Input.trigger?(key)
-					
-					# 스킬 아이디 가져옴
-					id = @skill_keys[key]
+					id = @skill_keys[key] # 스킬 아이디 가져옴
+					next if @skill_mash[id] != nil and @skill_mash[id] > 0
 					
 					if RANGE_EXPLODE.has_key?(id)
 						return player_explode(id)
@@ -1388,7 +1394,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if w[3] != 0 and $game_party.item_number(w[3]) == 0
 			$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id
 			#Add mash time
-			@button_mash = (w[5] == nil ? MASH_TIME*10 : w[5]*10)
+			@attack_mash = (w[5] == nil ? MASH_TIME*10 : w[5]*10)
 			#Delete an ammo
 			$game_party.lose_item(w[3], 1) if w[3] != 0
 			#Make the attack
@@ -1406,14 +1412,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			# m은 무기 각 공격 딜레이를 말함, 만약 없으면 기본 공격속도
 			m = MELEE_CUSTOM[@actor.weapon_id]
 			if m != nil and m[0] != nil
-				@button_mash = m[0] * 10
+				@attack_mash = m[0] * 10
 			else
-				@button_mash = MASH_TIME * 10
+				@attack_mash = MASH_TIME * 10
 			end
 			
 			# 만약 스킬로 인한 공격이라면..?
 			if sw
-				@button_mash = MASH_TIME * 6 
+				@attack_mash = MASH_TIME * 6 
 			end
 			
 			Audio.se_play("Audio/SE/무기001-검", $game_variables[13])
@@ -1809,7 +1815,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			case skill.scope
 			when 0 # 자기 자신
 				@actor.sp -= skill.sp_cost
-				@button_mash = MASH_TIME * 2
+				@skill_mash[id] = MASH_TIME * 2
 			when 1 #Enemy 적
 				# 원거리 스킬인가?
 				if RANGE_SKILLS.has_key?(skill.id)
@@ -1819,14 +1825,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
 					# 스킬 사용 후 딜레이
-					@button_mash = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10)
+					@skill_mash[id] = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10)
 					return
 				end
 				
 				if SKILL_CUSTOM[id] != nil
-					@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
+					@skill_mash[id] = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
 				else
-					@button_mash = MASH_TIME*10
+					@skill_mash[id] = MASH_TIME*10
 				end
 				#If the skill is not ranged
 				enemies = []
@@ -1877,12 +1883,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					enemies = get_all_range($game_player, RANGE_SKILLS[skill.id][0])
 					w = RANGE_SKILLS[id]
 					#Add mash time
-					@button_mash = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10) 
+					@skill_mash[id] = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10) 
 				else
 					if SKILL_CUSTOM[id] != nil
-						@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
+						@skill_mash[id] = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
 					else
-						@button_mash = MASH_TIME*10
+						@skill_mash[id] = MASH_TIME*10
 					end
 					enemies = @enemies
 				end
@@ -1921,9 +1927,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 			when 3..4, 7 #User
 				if SKILL_CUSTOM[id] != nil
-					@button_mash = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
+					@skill_mash[id] = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
 				else
-					@button_mash = MASH_TIME*10
+					@skill_mash[id] = MASH_TIME*10
 				end
 				#Use the skill on the player
 				@actor.effect_skill(@actor, skill)
@@ -1978,7 +1984,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			# Show Animation
 			$game_player.animation_id = skill.animation1_id
 			#Add mash time
-			@button_mash = (w[4] == nil ? MASH_TIME*10 : w[4]*10)
+			@skill_mash[id] = (w[4] == nil ? MASH_TIME*10 : w[4]*10)
 			
 			skill_console(id)
 			$rpg_skill.skill_chat(skill) # 스킬 사용시 말하는 것

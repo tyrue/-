@@ -287,6 +287,7 @@ SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
 SKILL_POWER_CUSTOM[137] = [[0, 2.0, 0.5, 20]] # 이기어검
 SKILL_POWER_CUSTOM[138] = [[0, 1.0, 0.2, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
+SKILL_POWER_CUSTOM[142] = [[1, 0.01, 0.02, 0]] # 투명3성
 
 # ---------------- #
 SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
@@ -338,6 +339,10 @@ class Rpg_skill
 			else
 				SKILL_BUFF_TIME[140][1] = 1 # 운기 취소
 			end
+		end
+		
+		if check_buff(136) # 파무쾌보
+			$game_player.move_speed = 3.5
 		end
 		
 		if check_buff(121) # 신령지익진
@@ -1052,7 +1057,9 @@ class Rpg_skill
 				damage *= (5 + $game_variables[10]) # 투명 숙련도
 				$state_trans = false
 				$game_variables[9] = 1
+				damage = skill_power_custom(actor, 142, damage) if self.check_buff(142) # 투명 3성
 			end
+			
 		elsif attacker.is_a?(ABS_Enemy) # 몬스터
 			
 		end

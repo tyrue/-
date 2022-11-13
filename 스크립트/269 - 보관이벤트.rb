@@ -109,6 +109,8 @@ class Sprite_Character
 			self.x = @character.screen_x
 			self.y = @character.screen_y
 			self.z = @character.screen_z(@ch)
+			
+			@is_item = false
 		end
 	end
 end

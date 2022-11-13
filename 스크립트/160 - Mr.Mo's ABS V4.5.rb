@@ -150,22 +150,22 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[137] = [0, 20, "", 4, 0] #이기어검
+	RANGE_SKILLS[137] = [2, 20, "", 4, 0] #이기어검
 	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0] #무형검
 	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
 	
 	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위
 	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 1] #산적 건곤
-	RANGE_SKILLS[59] = [5, 4, "공격스킬", 4, 0] #주작의 노도성황
-	RANGE_SKILLS[61] = [5, 4, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[85] = [8, 4, "공격스킬2", 4, 2] # 필살검무
-	RANGE_SKILLS[151] = [10, 4, "청룡", 4, 1] # 청룡의 포효
-	RANGE_SKILLS[152] = [10, 4, "현무", 4, 1] # 현무의 포효
-	RANGE_SKILLS[153] = [10, 4, "공격스킬2", 4, 3] # 백호검무
-	RANGE_SKILLS[154] = [10, 4, "용", 4, 4] # 청룡마령참
-	RANGE_SKILLS[155] = [5, 4, "공격스킬", 4, 1] # 암흑진파
-	RANGE_SKILLS[156] = [7, 4, "공격스킬", 4, 1] # 흑룡광포
+	RANGE_SKILLS[45] = [8, 3, "공격스킬", 4, 1] #산적 건곤
+	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
+	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
+	RANGE_SKILLS[85] = [5, 4, "공격스킬2", 4, 2] # 필살검무
+	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 1] # 청룡의 포효
+	RANGE_SKILLS[152] = [7, 4, "현무", 4, 1] # 현무의 포효
+	RANGE_SKILLS[153] = [6, 4, "공격스킬2", 4, 3] # 백호검무
+	RANGE_SKILLS[154] = [3, 1, "용", 4, 4] # 청룡마령참
+	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
+	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
 	RANGE_SKILLS[159] = [10, 3, "공격스킬", 4, 1] # 테스트
 	
@@ -258,7 +258,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도적
 	SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
-	SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
+	SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	SKILL_MASH_TIME[138] = [5 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [120 * sec, 0] # 분혼경천
@@ -269,6 +269,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
 	
 	# 적 스킬
+	SKILL_MASH_TIME[154] = [10 * sec, 0] # 청룡마령참
 	SKILL_MASH_TIME[158] = [10 * sec, 0] # 지옥겁화
 	
 	
@@ -1114,12 +1115,14 @@ if SDK.state("Mr.Mo's ABS") == true
 						#Make enemy
 						return if !a.is_a?(ABS_Enemy) # a가 플레이어면 무시
 						return if a.attacking == e and a.in_battle # a가 적 캐릭이면 e를 쫒아감
+						
 						# a가 적캐릭터일 경우 e를 적대하게 됨
 						a.attacking = e
 						#The enemy is now in battle
 						a.in_battle = true
 						#Setup movement
 						setup_movement(e)
+						
 						return
 					when 1..3 #Nothing
 						return
@@ -1256,13 +1259,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			sec = 4
 			id = skill.id
 			name = skill.name
+			
 			case id
 			when 151 # 청룡 포효
 				msg = "크롸롸롸롸!"
 			when 152 # 현무 포효
 				msg = "크롸롸롸롸!"
 			when 154 # 청룡마령참
-				msg = "#{name}!!"
+				msg = "!!#{name}!!"
 			when 155 # 암흑진파
 				msg = "#{name}!!"
 			when 156 # 흑룡광포
@@ -1270,7 +1274,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			when 157 # 회복
 				msg = "가소롭다!!"
 			when 158 # 지옥겁화
-				msg = "#{name}!!"
+				msg = "!!#{name}!!"
 			end
 			
 			if msg != nil
@@ -1453,9 +1457,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				weapon_skill(@actor.weapon_id, e) # 무기 격
 				return if enemy_dead?(e,@actor)
 				return if !e.hate_group.include?(0)
+				
 				e.attacking = $game_player
 				e.in_battle = true
 				setup_movement(e)
+				
 			end
 			
 			# 다른 플레이어 공격 처리
@@ -1915,12 +1921,15 @@ if SDK.state("Mr.Mo's ABS") == true
 					#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 					#Skip this enemy if its dead
 					next if enemy_dead?(e, @actor)
+					
+					
 					#If its alive, put it in battle
 					e.in_battle = true
 					#Make it attack the player
 					e.attacking = $game_player
 					#Setup movement
 					setup_movement(e)
+					
 				end
 				$rpg_skill.skill_cost_custom(@actor, skill.id) if target_enemies.size > 0
 				return
@@ -2277,12 +2286,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemies.sort! {|a,b|
 					get_range(e.event,a.event) - get_range(e.event,b.event) }
 			end
+			
+			
 			#Add to enemy attack list
 			e.attacking = enemies[0]
 			#Enemy is now in battle
 			e.in_battle = true
 			#Setup the movement
 			setup_movement(e)
+			
 			#Return true
 			return true
 		end
@@ -2296,7 +2308,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			e.event.move_frequency = e.temp_frequency
 			#Set Move Type
 			e.temp_move_type = e.event.move_type
-			e.event.move_type = 0
+			e.event.move_type = 0 if e.behavior != 0
 		end
 		#--------------------------------------------------------------------------
 		# * Restore the Movement Type(Enemy)
@@ -2343,6 +2355,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemies.sort! {|a,b|
 					get_range(e.event,a.event) - get_range(e.event,b.event) }
 			end
+			
 			#Add to enemy attack list
 			e.attacking = enemies[0]
 			#Enemy is now in battle
@@ -2350,6 +2363,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Setup the movement
 			setup_movement(e)
 			#Return true
+			
 			return true
 		end
 		#--------------------------------------------------------------------------
@@ -3932,7 +3946,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Calculate power
 				power = skill.power + user.atk / 2
 				power = $rpg_skill.skill_power_custom(user, skill.id, power)				
-				power = (power * (1.0 + user.atk / 120.0))
+				power = (power * (1.0 + user.atk / 100.0))
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
 					power -= self.mdef * skill.mdef_f / 100

@@ -18,7 +18,7 @@ module PLAN_Map_Window
 	
 	ON_OFF_KEY = KEY_M # 윈도우의 온 오프를 바꾸는 버튼 
 	
-	SWITCH = 40 # 맵 윈도우 표시 금지용의 스윗치 번호 
+	SWITCH = 63 # 맵 윈도우 표시 금지용의 스윗치 번호 
 	# (ON로 표시 금지, OFF로 표시 가능) 
 	
 	WINDOW_MOVE = false # 윈도우와 플레이어가 겹쳤을 시 자동적으로 이동할까 
@@ -79,7 +79,7 @@ class Scene_Map
 		plan_map_window_update 
 		
 		# 금지가 아니면, 변환 처리 
-		unless $game_switches[PLAN_Map_Window::SWITCH] 
+		if $game_switches[PLAN_Map_Window::SWITCH] 
 			# 표시되고 있는 경우, 비표시로 한다
 			if not $map_chat_input.active
 				@map_window.visible = false if Key.trigger?(KEY_ESC)
@@ -94,7 +94,10 @@ class Scene_Map
 				end
 			end 
 			# 금지의 경우는 강제적으로 비표시 
-		else 
+		else
+			if Key.trigger?(PLAN_Map_Window::ON_OFF_KEY)
+				$console.write_line("지도를 펼 수 없습니다.")
+			end 
 			if @map_window.visible 
 				@map_window.visible = false
 			end 

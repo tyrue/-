@@ -146,7 +146,6 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[35] = [[0], 0] # 망또
 	EQUIP_JOB_ARMOR[36] = [[0], 0] # 기원부
 	EQUIP_JOB_ARMOR[37] = [[0], 0] # 보라색반지
-	
 	EQUIP_JOB_ARMOR[38] = [[0], 0] # 연두색남자갑주
 	EQUIP_JOB_ARMOR[39] = [[0], 0] # 정화의방패
 	EQUIP_JOB_ARMOR[40] = [[0], 0] # 여신의방패
@@ -171,6 +170,25 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[73] = [[0], 4] # 가릉빈가의날개옷'진
 	EQUIP_JOB_ARMOR[74] = [[0], 0] # 황금투구
 	EQUIP_JOB_ARMOR[75] = [[0], 0] # 황금팔찌
+	
+	EQUIP_JOB_ARMOR[80] = [[0], 0] # 지력의반지1
+	EQUIP_JOB_ARMOR[81] = [[0], 0] # 지력의반지2
+	EQUIP_JOB_ARMOR[82] = [[0], 0] # 지력의반지3
+	EQUIP_JOB_ARMOR[83] = [[0], 0] # 지력의투구2
+	EQUIP_JOB_ARMOR[84] = [[0], 0] # 민첩의반지1
+	EQUIP_JOB_ARMOR[85] = [[0], 0] # 민첩의반지2
+	EQUIP_JOB_ARMOR[86] = [[0], 0] # 민첩의반지3
+	EQUIP_JOB_ARMOR[87] = [[0], 0] # 민첩의투구2
+	EQUIP_JOB_ARMOR[88] = [[0], 0] # 힘의반지1
+	EQUIP_JOB_ARMOR[89] = [[0], 0] # 힘의반지2
+	EQUIP_JOB_ARMOR[90] = [[0], 0] # 힘의반지3
+	EQUIP_JOB_ARMOR[91] = [[0], 0] # 힘의투구2
+	EQUIP_JOB_ARMOR[92] = [[0], 0] # 손재주의반지1
+	EQUIP_JOB_ARMOR[93] = [[0], 0] # 손재주의반지2
+	EQUIP_JOB_ARMOR[94] = [[0], 0] # 손재주의반지3
+	EQUIP_JOB_ARMOR[95] = [[0], 0] # 손재주의투구2
+	EQUIP_JOB_ARMOR[96] = [[0], 0] # 힘의반지4
+	EQUIP_JOB_ARMOR[97] = [[0], 0] # 방어의반지4
 end
 
 class Game_Actor < Game_Battler

@@ -1092,11 +1092,36 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update
 					return true
 					
+				when /<monster2>(.*)<\/monster2>/ # 서버로부터 몬스터 생성 명령어 받음
+					# 맵 id, 이벤트 id, 몹 id, x, y
+					data = $1.split(',')
+					id = data[1].to_i
+					mon_id = 0
+					mon_id = data[2].to_i if data[2] != nil
+					x = 1
+					y = 1
+					x = data[3].to_i if data[3] != nil
+					y = data[4].to_i if data[4] != nil
+					
+					if $ABS.enemies[id] == nil and mon_id != 0
+						create_events(data[1].to_i, data[2].to_i, $game_map.map_id, 2, x, y)
+					end
+						
 				when /<req_monster>(.*)<\/req_monster>/ # 서버로부터 저장된 몬스터 정보를 받아옴
-					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
+					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
+					
+					if data.size <= 1
+						$ABS.getMapMonsterData if $is_map_first # 몬스터 데이터 생성
+						return
+					end
+					
+					if $ABS.enemies[data[1].to_i] == nil and data[7] != nil and data[7].to_i != 0
+						create_events(data[1].to_i, data[7].to_i, $game_map.map_id, 2, 1, 1)
+					end
+					
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					if $ABS.enemies[data[1].to_i] != nil
 						# 몹 죽었을때 리스폰 시간 적용

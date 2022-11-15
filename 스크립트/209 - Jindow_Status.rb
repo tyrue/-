@@ -96,7 +96,7 @@ class Jindow_Status < Jindow
 			"경험치: " + actor.exp.to_s + "/" + actor.exp_list[actor.level + 1].to_s,
 			"금전: " + $game_party.gold.to_s,
 			
-			"물리 공격력: " + actor.base_atk.to_s,
+			"공격력: " + actor.base_atk.to_s,
 			"물리 방어력: " + actor.base_pdef.to_s,
 			"마법 방어력: " + actor.base_mdef.to_s,
 			"회피율: " + actor.base_eva.to_s
@@ -110,7 +110,7 @@ class Jindow_Status < Jindow
 				@state[i].y = 15 * i
 			else
 				@state[i].x = 245
-				@state[i].y = 90 + 15 * (i - 7)
+				@state[i].y = 100 + 15 * (i - 7)
 			end
 			
 			@state[i].bitmap.font.size = 12
@@ -229,7 +229,7 @@ class Jindow_Status < Jindow
 			"경험치: " + change_number_unit(actor.exp.to_s) + "/" + change_number_unit(actor.exp_list[actor.level + 1].to_s),
 			"금전: " + change_number_unit($game_party.gold.to_s),
 			
-			"물리 공격력: " + actor.base_atk.to_s,
+			"공격력: " + actor.base_atk.to_s,
 			"물리 방어력: " + actor.base_pdef.to_s,
 			"마법 방어력: " + actor.base_mdef.to_s,
 			"회피율: " + actor.base_eva.to_s
@@ -245,7 +245,7 @@ class Jindow_Status < Jindow
 					@state[i].y = 15 * i
 				else
 					@state[i].x = 245
-					@state[i].y = 90 + 15 * (i - 7)
+					@state[i].y = 100 + 15 * (i - 7)
 				end
 				@state[i].bitmap.font.size = 12
 				@state[i].bitmap.font.color.set(0, 0, 0, 255)

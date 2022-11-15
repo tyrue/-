@@ -38,7 +38,7 @@ class Jindow_Chat_Input < Jindow
 		text = @type.result
 		
 		# 명령어를 식별
-		case text	
+		case text		
 		when /\/도움말/
 			$chat.write ("/귓 (귓속말 상대), /교환 (교환 상대)", COLOR_HELP)    
 			$chat.write ("단축키 설명은 f1키를 누르세요!", COLOR_HELP) 
@@ -142,8 +142,7 @@ class Jindow_Chat_Input < Jindow
 			
 		when /\/이벤트 고래/ 
 			if Network::Main.group == 'admin'
-				Network::Main.socket.send("<switches>1002,1</switches>\n")
-				$game_switches[1002] = true
+				create_abs_monsters_admin(14, 10)
 				$console.write_line("고래를 소환합니다.")
 			end	
 			
@@ -155,13 +154,16 @@ class Jindow_Chat_Input < Jindow
 				$game_temp.player_new_y = 36
 			end 	
 			
-		when /\/운영자모드 (.*)/
+		when /^\/운영자모드 (.*)/
 			if $1.to_i == 1367
 				Network::Main.set_admin
 			end
 			
-		when /\/운영자모드/
+		when /^\/운영자모드/
 			$console.write_line(" ")	
+			
+		when /^\/(.*?)/	
+			$chat.write ("/귓 (귓속말 상대), /교환 (교환 상대)", COLOR_HELP)    
 				
 		else # 명령어가 아닌 그냥 일반 채팅일때
 			

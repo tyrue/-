@@ -24,7 +24,7 @@ class Interpreter
 		end
 		# Set transferring player flag
 		$game_temp.player_transferring = true
-		# If appointment method is [direct appointment]
+		# If appointment method is [direct appointment] 직접 이동
 		if @parameters[0] == 0
 			# Set player move destination
 			$game_temp.player_new_map_id = @parameters[1]

@@ -1,3 +1,64 @@
+class Interpreter
+	#--------------------------------------------------------------------------
+	# * Transfer Player
+	#--------------------------------------------------------------------------
+	def command_201
+		# If in battle
+		if $game_temp.in_battle
+			# Continue
+			return true
+		end
+		# If transferring player, showing message, or processing transition
+		if $game_temp.player_transferring or
+			$game_temp.message_window_showing or
+			$game_temp.transition_processing
+			# End
+			return false
+		end
+		# Set transferring player flag
+		$game_temp.player_transferring = true
+		# If appointment method is [direct appointment] 직접 이동
+		if @parameters[0] == 0
+			if $game_map.map_id != @parameters[1]
+				$game_temp.player_new_map_id = @parameters[1]
+				$game_temp.player_new_x = @parameters[2]
+				$game_temp.player_new_y = @parameters[3]
+				$game_temp.player_new_direction = @parameters[4]
+			else
+				$game_temp.player_transferring = false
+				$game_player.moveto(@parameters[2], @parameters[3])
+			end
+			# Set player move destination
+			
+			# If appointment method is [appoint with variables]
+		else
+			# Set player move destination
+			if $game_map.map_id != $game_variables[@parameters[1]]
+				$game_temp.player_new_map_id = $game_variables[@parameters[1]]
+				$game_temp.player_new_x = $game_variables[@parameters[2]]
+				$game_temp.player_new_y = $game_variables[@parameters[3]]
+				$game_temp.player_new_direction = @parameters[4]
+			else
+				$game_temp.player_transferring = false
+				$game_player.moveto($game_variables[@parameters[2]], $game_variables[@parameters[3]])
+			end
+		end
+		# Advance index
+		@index += 1
+		# If fade is set
+		if @parameters[5] == 0
+			# Prepare for transition
+			Graphics.freeze
+			# Set transition processing flag
+			$game_temp.transition_processing = true
+			$game_temp.transition_name = ""
+		end
+		# End
+		return false
+	end
+end
+
+
 #----------------------------------------------------
 # 제작자 : 이실로드
 # 간단한 이벤트 생성
@@ -16,9 +77,46 @@ def check_drop_id
 	end
 end
 
+def check_create_monster_id
+	return $game_map.events.size + 10000
+end
+
+def create_abs_monsters(monster_id, num)
+	return if !$is_map_first
+	for i in 0...num
+		id = check_create_monster_id
+		e = create_events(id, monster_id, $game_map.map_id, 2, 1, 1)
+		
+		return if e == nil
+		
+		Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id}</monster2>\n")
+		$ABS.rand_spawn(e)
+		
+	end
+end
+
+def create_abs_monsters_admin(monster_id, num)
+	for i in 0..num
+		id = check_create_monster_id
+		x = $game_player.x
+		y = $game_player.y
+		d = 2
+		r = 12
+		while true
+			x = x + rand(r) - r / 2
+			y = y + rand(r) - r / 2
+			if $game_map.passable?(x, y, d)
+				create_events(id, monster_id, $game_map.map_id, 2, x, y)
+				Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id},#{x},#{y}</monster2>\n")
+				break
+			end
+		end
+	end
+end
 
 def create_events(no, mob_id, map_id, direction, x, y)
 	temp = load_data("Data/Map022.rxdata").events[mob_id]
+	return if temp == nil
 	temp.id = no
 	
 	$game_map.events[no] = Game_Event.new(map_id, temp)
@@ -29,6 +127,7 @@ def create_events(no, mob_id, map_id, direction, x, y)
 	event.direction = direction
 	create_sprite(event) 
 	event.refresh
+	return event
 end
 
 

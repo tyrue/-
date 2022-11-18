@@ -315,6 +315,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
 	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
 	
+	# 기타
+	SKILL_BUFF_TIME[99] = [180 * sec, 0] # 속도시약
 	
 	# 무기 격 스킬 : 데미지, 애니메이션 id, 확률
 	WEAPON_SKILL = {}
@@ -363,15 +365,18 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
 	EQUIP_EFFECTS = {} 
 	# 장신구
-	EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
 	EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
 	EQUIP_EFFECTS[29] = [[1 * sec, "buff", 131]] # 투명구두
-	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
-	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
-	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
-	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
 	EQUIP_EFFECTS[72] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 해골목걸이
 	EQUIP_EFFECTS[75] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금팔찌
+	
+	# 방패 
+	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
+	EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
+	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
+	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
+	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
+	EQUIP_EFFECTS[98] = [[3 * sec, "hp", 0.5], [3 * sec, "sp", 0.5]] # 재생의부적
 	
 	# 갑옷
 	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
@@ -798,7 +803,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			h = $game_map.height
 			w = $game_map.width
 			
-			while true
+			count = 0
+			while count < 10000
+				count += 1
 				x = rand(w)
 				y = rand(h)
 				if $game_map.passable?(x, y, d)
@@ -1357,28 +1364,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 해당 키에 등록된 아이템이 없으면 무시
 				next if @item_keys[key] == nil or @item_keys[key] == 0
 				next if !Input.trigger?(key)
+				
 				item = $data_items[@item_keys[key]] # 아이템데이터 가져옴
-				
-				# 유저 죽음 스위치가 켜져있다면 패스
-				if $game_switches[296]
-					if item.id != 63 # 부활시약
-						$console.write_line("귀신은 할 수 없습니다.")
-						return 
-					end
-				end
-				
-				# 사용 못하는 아이템이면 못쓴다고 효과음 내고 무시
-				return $game_system.se_play($data_system.buzzer_se) if !$game_party.item_can_use?(item.id)
-				# 아이템이 없으면 무시
-				return $game_system.se_play($data_system.buzzer_se) if $game_party.item_number(item.id) == 0
-				
 				target = $game_party.actors[0]
-				if (item.recover_hp > 0 or item.recover_hp_rate > 0) and (target.hp == target.maxhp)
-					$console.write_line("이미 완전 회복된 상태 입니다.")
-					return
-				end
+				return if !target.item_effect(item)
 				
-				target.item_effect(item)
 				$game_player.animation_id = item.animation1_id 
 				Network::Main.ani(Network::Main.id, item.animation1_id)
 				$game_system.se_play(item.menu_se)
@@ -1538,12 +1528,26 @@ if SDK.state("Mr.Mo's ABS") == true
 		# 맵을 이동하기위한 함수
 		def map_m(id, x, y)
 			if $game_map.map_id != id
+				
+				
 				$game_temp.player_transferring = true # 이동 가능
 				$game_temp.player_new_map_id = id
 				$game_temp.player_new_x = x
 				$game_temp.player_new_y = y
+				
+				
 			else
-				$game_player.moveto(x, y)
+				count = 0
+				while count < 10000
+					count += 1
+					if $game_map.passable?(x, y, 2)
+						$game_player.moveto(x, y)
+						return
+					else
+						x += (rand(3) - 1)
+						y += (rand(3) - 1)
+					end
+				end
 			end
 		end
 		
@@ -2036,7 +2040,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			event = enemy.event
 			#여기다가 이 이벤트를 없애는 명령하기
 			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
-			Network::Main.socket.send("<enemy_dead>#{id},#{event.id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
+			Network::Main.socket.send("<enemy_dead>#{id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
+			
 			case enemy.trigger[0]
 			when 0
 				event.fade = true if FADE_DEAD

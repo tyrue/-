@@ -206,8 +206,10 @@ BUFF_SKILL[131] = [["custom", 1]] # 투명
 BUFF_SKILL[141] = [["custom", 1]] # 투명 1성
 BUFF_SKILL[142] = [["custom", 1]] # 투명 2성
 BUFF_SKILL[134] = [["custom", 1]] # 분신
-BUFF_SKILL[136] = [["custom", 1]] # 운상미보
+BUFF_SKILL[136] = [["speed", 0.5]] # 운상미보
 BUFF_SKILL[140] = [["custom", 1]] # 운기
+
+BUFF_SKILL[99] = [["speed", 0.5]] # 속도시약
 
 # 액티브 스킬 행동 커스텀
 ACTIVE_SKILL = {}
@@ -287,9 +289,16 @@ SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
 SKILL_POWER_CUSTOM[137] = [[0, 2.0, 0.5, 20]] # 이기어검
 SKILL_POWER_CUSTOM[138] = [[0, 1.0, 0.2, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
-SKILL_POWER_CUSTOM[142] = [[1, 0.01, 0.02, 0]] # 투명3성
+
+SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
+SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
+SKILL_POWER_CUSTOM[142] = [[1, 0.02, 0.02, 0]] # 투명3성
 
 # ---------------- #
+SKILL_COST_CUSTOM[131] = [[0, 1.0 / 20.0, 0]] # 투명1성
+SKILL_COST_CUSTOM[141] = [[0, 1.0 / 19.0, 0]] # 투명2성
+SKILL_COST_CUSTOM[142] = [[0, 1.0 / 18.0, 0]] # 투명3성
+
 SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
 SKILL_COST_CUSTOM[135] = [[0, 0.2, 0.1]] # 백호검무
 SKILL_COST_CUSTOM[137] = [[0, 1.0 / 6.0, 0.5]] # 이기어검
@@ -319,16 +328,20 @@ class Rpg_skill
 	attr_accessor :base_int
 	attr_accessor :base_agi
 	attr_accessor :base_dex
+	attr_accessor :player_base_move_speed
 	
 	def initialize
 		@base_str = 0
 		@base_agi = 0
 		@base_int = 0
 		@base_dex = 0
+		@player_base_move_speed = 3
 	end
 	
-	def update_buff
+	def update_buff # 버프 지속 효과 (일정 주기마다 해야하는 것 등)
 		sec = Graphics.frame_rate
+		speed = @player_base_move_speed
+		
 		if check_buff(140) # 운기 중
 			if !$game_player.moving?
 				if (Graphics.frame_count % (sec) == 0)
@@ -341,8 +354,12 @@ class Rpg_skill
 			end
 		end
 		
+		if check_buff(99) # 속도시약
+			speed += BUFF_SKILL[99][0][1]
+		end
+		
 		if check_buff(136) # 파무쾌보
-			$game_player.move_speed = 3.5
+			speed += BUFF_SKILL[136][0][1]
 		end
 		
 		if check_buff(121) # 신령지익진
@@ -364,6 +381,8 @@ class Rpg_skill
 			SKILL_BUFF_TIME[141][1] = 1 if check_buff(141)
 			SKILL_BUFF_TIME[142][1] = 1 if check_buff(142)
 		end
+		
+		$game_player.move_speed = speed
 	end
 	
 	# 파티 힐
@@ -524,6 +543,11 @@ class Rpg_skill
 					
 				when "com" # 커먼 이벤트
 					$game_temp.common_event_id = data[1].to_i
+					
+				when "speed" # 속도 변경
+					$game_player.move_speed += data[1]
+					Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+					
 				when "custom" # 자체 수정
 					case id
 					when 66  # 신수둔각도
@@ -550,10 +574,6 @@ class Rpg_skill
 					when 134 # 분신
 						$console.write_line("분신을 생성합니다.")
 						
-					when 136 # 운상미보
-						$game_player.move_speed += 0.5
-						Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-						
 					when 140 # 운기
 						$console.write_line("마력을 회복합니다.")
 					else
@@ -568,24 +588,24 @@ class Rpg_skill
 	def buff_del(id)
 		if BUFF_SKILL[id] != nil
 			for data in BUFF_SKILL[id]
-				n = data[1].to_i
+				n = data[1]
 				case data[0].to_s
 				when "str" # 힘
-					$game_party.actors[0].str -= n
+					$game_party.actors[0].str -= n.to_i
 					@base_str = [0, @base_str - n].max
 				when "dex" # 손재주
-					$game_party.actors[0].dex -= n
+					$game_party.actors[0].dex -= n.to_i
 					@base_dex = [0, @base_dex - n].max
 				when "int" # 지력
-					$game_party.actors[0].int -= n
+					$game_party.actors[0].int -= n.to_i
 					@base_int = [0, @base_int - n].max
 				when "agi" # 민첩
-					$game_party.actors[0].agi -= n
+					$game_party.actors[0].agi -= n.to_i
 					@base_agi = [0, @base_agi - n].max
 				when "mdef" # 마법 방어
-					$game_party.actors[0].mdef -= n
+					$game_party.actors[0].mdef -= n.to_i
 				when "pdef" # 물리 방어
-					$game_party.actors[0].pdef -= n
+					$game_party.actors[0].pdef -= n.to_i
 					
 					# 퍼센트
 				when "per_str" # 힘
@@ -598,6 +618,7 @@ class Rpg_skill
 					end
 					$game_party.actors[0].str -= n
 					@base_str = [0, @base_str - n].max
+					
 				when "per_dex" # 손재주
 					n = 0
 					if(data[2] != nil and data[2] != 0)
@@ -632,9 +653,13 @@ class Rpg_skill
 					@base_agi = [0, @base_agi - n].max
 					
 				when "per_mdef" # 마법 방어
-					$game_party.actors[0].mdef /= data[1].to_f
+					$game_party.actors[0].mdef /= n
 				when "per_pdef" # 물리 방어
-					$game_party.actors[0].pdef /= data[1].to_f	
+					$game_party.actors[0].pdef /= n
+					
+				when "speed"	
+					$game_player.move_speed -= n
+					Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
 					
 				else
 					case id
@@ -658,11 +683,7 @@ class Rpg_skill
 						
 					when 134 # 분신
 						$console.write_line("분신이 사라집니다.")
-						
-					when 136 # 운상미보
-						$game_player.move_speed -= 0.5
-						Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-						
+							
 					when 140 # 운기
 						$console.write_line("운기가 종료 됩니다.")	
 					end
@@ -722,6 +743,7 @@ class Rpg_skill
 		return power if SKILL_POWER_CUSTOM[id] == nil
 		data = SKILL_POWER_CUSTOM[id][0]
 		
+		# 0 : 현재, 1 : 전체
 		type = data[0] != nil ? data[0] : -1
 		p_hp = data[1] != nil ? data[1].to_f : 0
 		p_sp = data[2] != nil ? data[2].to_f : 0
@@ -770,14 +792,13 @@ class Rpg_skill
 	end
 	
 	def 투명
-		u_hp = $game_party.actors[0].hp
-		u_hp -= u_hp / (20 - $game_variables[10])
-		u_hp = 1 if u_hp <= 0
-		$game_party.actors[0].hp = u_hp 
-		
 		$game_variables[9] = 1
 		$state_trans = true # 현재 자신이 투명상태인걸 뜻함
 		Network::Main.send_trans(true)
+	end
+	
+	def 투명해제
+		
 	end
 	
 	def 광량돌격(d = $game_player.direction)
@@ -1053,10 +1074,14 @@ class Rpg_skill
 			damage *= 1.2 if self.check_buff(88) # 분량력법
 			damage *= 2 if self.check_buff(134) # 분신
 			damage *= 1.5 if self.check_buff(122) # 파력무참진
-			if $state_trans # 투명
+			
+			if $state_trans # 투명 풀기
 				damage *= (5 + $game_variables[10]) # 투명 숙련도
 				$state_trans = false
 				$game_variables[9] = 1
+				
+				damage = skill_power_custom(actor, 131, damage) if self.check_buff(131) # 투명 1성
+				damage = skill_power_custom(actor, 141, damage) if self.check_buff(141) # 투명 2성
 				damage = skill_power_custom(actor, 142, damage) if self.check_buff(142) # 투명 3성
 			end
 			

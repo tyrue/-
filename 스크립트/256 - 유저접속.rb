@@ -5,6 +5,7 @@ def 유저접속
 	end
 	Network::Main.update
 	$ABS = MrMo_ABS.new
+	$rpg_skill = Rpg_skill.new # 스킬 사용에 대한 클래스
 	$game_party.setup_starting_members
 	$game_map.setup($data_system.start_map_id)
 	$game_player.moveto($data_system.start_x, $data_system.start_y)
@@ -17,19 +18,15 @@ def 유저접속
 	Network::Main.socket.send("<drop_event></drop_event>\n")     
 	$game_switches[401] = true # 경험치 이벤트는 켜 있는 상태
 	
-	$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
-	$skill_Delay_Console.show
-	
 	$cbig = 0
 	$nowtrade = 0
-	$game_player.move_speed = 3
+	$game_player.move_speed = $rpg_skill.player_base_move_speed
 	$scene = Scene_Reinit.new
 	$Abs_item_data = Item_data.new
 	
 	$console = nil
 	$chat = nil
 	$map_chat_input = nil
-	$rpg_skill = Rpg_skill.new # 스킬 사용에 대한 클래스
 	
 	# 장비 아이템 체력, 마력 옵션 
 	Set_Weapon_plus.new 

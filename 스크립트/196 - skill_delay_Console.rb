@@ -20,6 +20,7 @@ class Skill_Delay_Console < Sprite
 		@console_viewport.z = 999
 		super(@console_viewport)
 		self.bitmap = Bitmap.new(width, height)
+		
 		self.z = 999
 		@console_width = width
 		@console_height = height
@@ -28,11 +29,14 @@ class Skill_Delay_Console < Sprite
 		@console_log = {}  # 딜레이 기간
 		@console_log2 = {} # 버프 기간
 		
-		@tog = true
+		@font_size = 13
+		@old_height = 0
+		@tog = true # 토글 상태
+		
 		# 스킬 딜레이 갱신 id, 배열값
 		for skill_mash in SKILL_MASH_TIME
 			if skill_mash[1][1] > 0
-				sprite = Sprite_Chat.new(@console_viewport)
+				sprite = Sprite_Chat.new(@console_viewport)			
 				@console_log[skill_mash[0]] = [sprite]
 			end
 		end
@@ -46,10 +50,8 @@ class Skill_Delay_Console < Sprite
 		end
 		
 		@back_sprite = Sprite.new(@console_viewport)
-		@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
-		@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
 		@back_sprite.visible = true
-		self.bitmap.font.color.set(255, 255, 255, 255)
+		self.refresh
 	end
 	
 	#--------------------------------------------------------------------------
@@ -75,13 +77,15 @@ class Skill_Delay_Console < Sprite
 					next
 				end
 				
-				sprite.bitmap.clear
+				sprite = Sprite.new(@console_viewport) if sprite == nil
+				sprite.bitmap.clear if sprite.bitmap != nil
 				sprite.bitmap = Bitmap.new(width, 32)
-				sprite.bitmap.font.size = 12
+				sprite.bitmap.font.size = @font_size
 				sprite.bitmap.font.color.set(0, 255, 0, 255)
 				sprite.x = 0
-				sprite.y = (i) * 16
+				sprite.y = (i) * @font_size + 1
 				sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_BUFF_TIME[id][1] / 60.0)}초")
+				sprite.opacity = 255
 				i += 1
 			end
 		end
@@ -97,15 +101,26 @@ class Skill_Delay_Console < Sprite
 					next
 				end
 				
-				sprite.bitmap.clear
+				sprite = Sprite.new(@console_viewport) if sprite == nil
+				sprite.bitmap.clear if sprite.bitmap != nil
 				sprite.bitmap = Bitmap.new(width, 32)
-				sprite.bitmap.font.size = 12
+				sprite.bitmap.font.size = @font_size
 				sprite.bitmap.font.color.set(255, 204, 0, 255)
 				sprite.x = 0
-				sprite.y = (i) * 16
+				sprite.y = (i) * @font_size + 1
 				sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_MASH_TIME[id][1] / 60.0)}초") 	
+				sprite.opacity = 255
 				i += 1
 			end
+		end
+		
+		@old_height = (@console_log.size + @console_log2.size) * (@font_size + 1) + 14
+		if @old_height != @console_viewport.height
+			@console_viewport.height = @old_height
+			@back_sprite.bitmap.clear if @back_sprite.bitmap != nil
+			@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
+			@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
+			@back_sprite.visible = true
 		end
 	end
 	
@@ -119,14 +134,14 @@ class Skill_Delay_Console < Sprite
 		
 		if SKILL_MASH_TIME[id] != nil
 			if SKILL_MASH_TIME[id][1] > 0
-				sprite = Sprite_Chat.new(@console_viewport)
+				sprite = Sprite.new(@console_viewport)
 				@console_log[id] = [sprite]
 			end
 		end
 		
 		if SKILL_BUFF_TIME[id] != nil
 			if SKILL_BUFF_TIME[id][1] > 0
-				sprite = Sprite_Chat.new(@console_viewport)
+				sprite = Sprite.new(@console_viewport)
 				@console_log2[id] = [sprite]
 			end
 		end

@@ -4,6 +4,9 @@ class Chat_balloon_net
 	def initialize()
 		@viewport = Viewport.new(0, 0, 640, 480)
 		@chat_b = {}
+		@width = 120
+		@height = 100
+		@font_size = 16
 	end
 	
 	def refresh
@@ -12,9 +15,9 @@ class Chat_balloon_net
 	
 	def input(txt = "테스트", type = 1, sec = 4, ch = $game_player)
 		return if txt == nil or txt == ""
-		bitmap = Bitmap.new(500, 16)
+		bitmap = Bitmap.new(@width, @height)
 		bitmap.font.name = "맑은 고딕"
-		bitmap.font.size = 16
+		bitmap.font.size = @font_size
 		case type
 		when 1 # 일반
 			bitmap.font.color = COLOR_NORMAL
@@ -25,12 +28,38 @@ class Chat_balloon_net
 		else # 기타
 			
 		end
-		rect = bitmap.text_size(txt)
-		bitmap.fill_rect(0, 0, rect.width, rect.height, Color.new(0, 0, 0, 125)) # 꽉찬 네모
-		bitmap.draw_frame_text(0, 0, 500, 16, txt)
 		
-		cx = ch.screen_x - (rect.width / 2)
-		cy = ch.screen_y - 55
+		w = 0
+		h = 0
+		@now_w = 0
+		@now_h = @font_size
+		
+		for i in txt.scan(/./)
+			rect = bitmap.text_size(i)
+			if w + rect.width > @width
+				h += rect.height
+				w = 0
+				bitmap.draw_frame_text(w, h, rect.width, rect.height, i)
+				w += rect.width
+			else
+				bitmap.draw_frame_text(w, h, rect.width, rect.height, i)
+				w += rect.width
+				@now_w = w if @now_w <= w
+			end
+		end
+		
+		@now_h += h
+		bitmap2 = Bitmap.new(@now_w, @now_h)
+		bitmap2.fill_rect(0, 0, @now_w, @now_h, Color.new(0, 0, 0, 125)) # 꽉찬 네모
+		
+		src_rect = Rect.new(0, 0, bitmap2.width, bitmap2.height) 
+		dest_rect = Rect.new(0, 0, bitmap2.width, bitmap2.height) 
+		bitmap2.stretch_blt(dest_rect, bitmap, src_rect) 
+		
+		bitmap = bitmap2
+		
+		cx = ch.screen_x - (@now_w / 2)
+		cy = ch.screen_y - @now_h - 60
 		
 		if ch != $game_player
 			id = ""
@@ -90,10 +119,9 @@ class Chat_balloon_net
 			if balloon.sec > 0
 				balloon.sec -= 1
 				char = balloon.ch
-				rect = $chat_s[id].bitmap.text_size(balloon.txt)
 				
-				cx = char.screen_x - (rect.width / 2)
-				cy = char.screen_y - 55
+				cx = char.screen_x - (@now_w / 2)
+				cy = char.screen_y - @now_h  - 60
 				
 				if balloon.ox != cx
 					$chat_s[id].x = cx

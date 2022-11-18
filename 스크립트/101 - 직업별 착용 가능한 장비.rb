@@ -189,6 +189,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[95] = [[0], 0] # 손재주의투구2
 	EQUIP_JOB_ARMOR[96] = [[0], 0] # 힘의반지4
 	EQUIP_JOB_ARMOR[97] = [[0], 0] # 방어의반지4
+	EQUIP_JOB_ARMOR[98] = [[0], 0] # 재생의반지
 end
 
 class Game_Actor < Game_Battler

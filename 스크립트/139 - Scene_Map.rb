@@ -17,7 +17,8 @@ class Scene_Map
 	def initialize
 		$game_switches[25] = false # 스킬 사용 불가 off
 		$game_switches[302] = false # pk off
-		$game_switches[63] = true # pk off
+		$game_switches[63] = true # 미니맵 표시 여부
+		$game_switches[88] = true # 노란비서 사용 여부
 		
 		#맵이름의 표시
 		if $game_map.map_id != nil
@@ -31,7 +32,7 @@ class Scene_Map
 		
 		$nowtrade = 0 # 교환 상태 초기화
 		$magic1 = 0 # 석화기탄 초기화
-		$game_player.move_speed = 3
+		$game_player.move_speed = $rpg_skill.player_base_move_speed
 		
 		자동저장 
 		

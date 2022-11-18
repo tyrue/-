@@ -29,8 +29,9 @@ class Jindow_Inventory < Jindow
 		@gold_drop_button.y = 0
 	end
 	
-	def sort
+	def sort(id = 0)
 		자동저장
+		
 		for i in @item
 			next if i == @gold_drop_button
 			if i != nil and !i.disposed?
@@ -117,26 +118,14 @@ class Jindow_Inventory < Jindow
 				# 아이템 더블클릭시 이벤트 실행
 				case i.type
 				when 0 # 아이템
-					# 유저 죽음 스위치가 켜져있다면 패스
-					if $game_switches[296]
-						if i.item.id != 63 # 부활시약
-							$console.write_line("귀신은 할 수 없습니다.")
-							return 
-						end
-					end
-					
-					if (i.item.recover_hp > 0 or i.item.recover_hp_rate > 0) and ($game_party.actors[0].hp == $game_party.actors[0].maxhp)
-						$console.write_line("이미 완전 회복된 상태 입니다.")
-						next
-					else
-						$game_party.actors[0].item_effect(i.item)
-					end
+					next if !$game_party.actors[0].item_effect(i.item)
 					
 					$game_player.animation_id = i.item.animation1_id
 					Network::Main.ani(Network::Main.id, i.item.animation1_id) 
 					$game_party.lose_item(i.item.id, 1) if i.item.consumable
 					$game_system.se_play(i.item.menu_se)
 					$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0
+					
 				when 1 # 무기
 					if $game_switches[296]
 						$console.write_line("귀신은 할 수 없습니다.")
@@ -185,3 +174,30 @@ class Jindow_Inventory < Jindow
 		end
 	end
 end
+
+class Game_Battler
+	alias jindow_item_event item_effect
+	def item_effect(item)
+		# 유저 죽음 스위치가 켜져있다면 패스
+		if $game_switches[296]
+			if item.id != 63 # 부활시약
+				$console.write_line("귀신은 할 수 없습니다.")
+				return false
+			end
+		end
+		
+		if (item.recover_hp > 0 or item.recover_hp_rate > 0) and ($game_party.actors[0].hp == $game_party.actors[0].maxhp)
+			$console.write_line("이미 완전 회복된 상태 입니다.")
+			return false
+		end
+		
+		if (item.recover_sp > 0 or item.recover_sp_rate > 0) and ($game_party.actors[0].sp == $game_party.actors[0].maxsp)
+			$console.write_line("이미 완전 회복된 상태 입니다.")
+			return false
+		end
+		
+		jindow_item_event(item)
+		return true
+	end
+end
+

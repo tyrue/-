@@ -177,7 +177,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				return true
 			else
 				# 투명이라면
-				if $game_variables[9] == 1
+				if $game_variables[9] == 1 # 투명 사용시 착용 변경 알림용
 					a = true
 				end
 				return a
@@ -266,6 +266,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 					@ch = bitmap.height / 4
 					self.ox = @cw / 2
 					self.oy = @ch
+					
 					$game_variables[9] = 0
 				end
 			end

@@ -13,6 +13,9 @@ class MrMo_ABS
 					Network::Main.socket.send("<item_summon>#{player.name},#{$game_player.x},#{$game_player.y}</item_summon>\n")
 				end
 			end
+			
+		when 81 # 속도시약
+			$rpg_skill.buff_active(99) # 속도시약 스킬 사용
 		end
 	end
 end

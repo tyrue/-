@@ -104,6 +104,7 @@ module J
 			@num == 0 ? (return nil) : 0
 			@num > 1 ? 0 : (return self)
 			
+			# 아이템 개수 쓰기
 			self.bitmap.font = @font
 			self.bitmap.font.alpha = @font.alpha
 			self.bitmap.font.beta = @font.beta

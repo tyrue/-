@@ -88,13 +88,12 @@ def create_abs_monsters(monster_id, num)
 		e = create_events(id, monster_id, $game_map.map_id, 2, 1, 1)
 		
 		return if e == nil
-		
-		Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id}</monster2>\n")
 		$ABS.rand_spawn(e)
-		
+		Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id}</monster2>\n")
 	end
 end
 
+# 운영자가 소환하는 몬스터, 한 번 잡으면 서버에서 삭제시키도록 하자
 def create_abs_monsters_admin(monster_id, num)
 	for i in 0..num
 		id = check_create_monster_id
@@ -102,12 +101,15 @@ def create_abs_monsters_admin(monster_id, num)
 		y = $game_player.y
 		d = 2
 		r = 12
-		while true
+		
+		count = 0
+		while count < 10000
+			count += 1
 			x = x + rand(r) - r / 2
 			y = y + rand(r) - r / 2
 			if $game_map.passable?(x, y, d)
 				create_events(id, monster_id, $game_map.map_id, 2, x, y)
-				Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id},#{x},#{y}</monster2>\n")
+				Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id},#{x},#{y},-1</monster2>\n")
 				break
 			end
 		end

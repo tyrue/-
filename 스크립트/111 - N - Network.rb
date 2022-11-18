@@ -1106,14 +1106,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if $ABS.enemies[id] == nil and mon_id != 0
 						create_events(data[1].to_i, data[2].to_i, $game_map.map_id, 2, x, y)
 					end
-						
+					
 				when /<req_monster>(.*)<\/req_monster>/ # 서버로부터 저장된 몬스터 정보를 받아옴
 					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
 					
-					if data.size <= 1
+					if data.size <= 1 # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
 						$ABS.getMapMonsterData if $is_map_first # 몬스터 데이터 생성
 						return
 					end
@@ -1128,12 +1128,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if data[6].to_i != nil 
 							if data[6].to_i > 0  
 								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
-							else
-								$ABS.enemies[data[1].to_i].event.erased = false
-								event = $ABS.enemies[data[1].to_i].event
-								$ABS.rand_spawn(event) # 랜덤 위치 스폰
-								event.refresh
-								return
+							else # 몹 리스폰 시간 됐음
+								# hp가 0이었던 경우에만 다시 리스폰
+								if data[2].to_i <= 0
+									$ABS.enemies[data[1].to_i].event.erased = false
+									event = $ABS.enemies[data[1].to_i].event
+									$ABS.rand_spawn(event) # 랜덤 위치 스폰
+									event.refresh
+									return
+								end
 							end
 						end
 						
@@ -1631,7 +1634,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						$cbig = 0
 						$nowtrade = 0
-						$game_player.move_speed = 3
+						$game_player.move_speed = $rpg_skill.player_base_move_speed
 						
 						$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
 						$skill_Delay_Console.show
@@ -1914,11 +1917,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-				when /<enemy_dead>(.*),(.*),(.*),(.*)<\/enemy_dead>/	
-					id = $1.to_i # 적 id
-					event_id = $2.to_i # 이벤트 id
-					map_id = $3.to_i
-					npt = $4.to_s
+				when /<enemy_dead>(.*)<\/enemy_dead>/	
+					data = $1.split(',')
+					id = data[0].to_i
+					map_id = data[1].to_i
+					npt = data[2].to_i
 					
 					if $game_map.map_id == map_id
 						return if $ABS.enemies[id] == nil
@@ -1929,6 +1932,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						event.fade = true
 						enemy.hp = 0
+						
 						if npt == $npt # 같은 파티라면
 							case enemy.trigger[0]
 							when 1 # 스위치

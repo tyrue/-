@@ -102,11 +102,11 @@ REQ_SKILL_DATA[3] =
 	
 	[48, 2, 10, 50, 28, 22], 		# 야수수금술
 	[54, 20, 1, 83, 22, 59], 		# 천공의희원
+	[56, 20, 10, 96, 29, 30], 		# 지진
 	[61, 10, 10, 88, 29, 30], 	# 분량력법
 	[67, 15, 15, 89, 29, 30], 		# 구름의희원
 	[71, 10, 10, 91, 29, 30], 	# 석화기탄
 	[74, 10, 30, 92, 29, 30], 	# 공력주입
-	[80, 25, 15, 96, 29, 30], 		# 지진
 	[84, 15, 15, 93, 29, 30],		# 태양의희원
 	[92, 30, 3, 95, 30, 31],		# 생명의희원
 	[96, 3, 3, 94, 31, 37], 		# 금강불체
@@ -306,7 +306,7 @@ SKILL_COST_CUSTOM[138] = [[0, 0.5, 0.5]] # 무형검
 SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 
 # 도사
-SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 70.0, 50]] # 지진
+SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 80.0, 100]] # 지진
 
 # ---------------- #
 SKILL_COST_CUSTOM[92] = [[0, 0, 1.0]] # 공력주입
@@ -340,7 +340,6 @@ class Rpg_skill
 	
 	def update_buff # 버프 지속 효과 (일정 주기마다 해야하는 것 등)
 		sec = Graphics.frame_rate
-		speed = @player_base_move_speed
 		
 		if check_buff(140) # 운기 중
 			if !$game_player.moving?
@@ -352,14 +351,6 @@ class Rpg_skill
 			else
 				SKILL_BUFF_TIME[140][1] = 1 # 운기 취소
 			end
-		end
-		
-		if check_buff(99) # 속도시약
-			speed += BUFF_SKILL[99][0][1]
-		end
-		
-		if check_buff(136) # 파무쾌보
-			speed += BUFF_SKILL[136][0][1]
 		end
 		
 		if check_buff(121) # 신령지익진
@@ -381,9 +372,20 @@ class Rpg_skill
 			SKILL_BUFF_TIME[141][1] = 1 if check_buff(141)
 			SKILL_BUFF_TIME[142][1] = 1 if check_buff(142)
 		end
-		
-		$game_player.move_speed = speed
 	end
+	
+	def check_speed_buff
+		speed = 0
+		if check_buff(99) # 속도시약
+			speed += BUFF_SKILL[99][0][1]
+		end
+		
+		if check_buff(136) # 파무쾌보
+			speed += BUFF_SKILL[136][0][1]
+		end
+		return speed
+	end
+	
 	
 	# 파티 힐
 	def party_heal(id, user = $game_party.actors[0])
@@ -401,7 +403,7 @@ class Rpg_skill
 			$game_temp.common_event_id = 24
 		end
 		
-		heal_v += (user.maxsp * 0.001).to_i
+		heal_v += (user.maxsp * 0.001) * (1.0 + user.atk / 100.0)
 		heal_v = ((heal_v) * (1 + (user.int / 1000.0) + (user.maxsp / 100000.0))).to_i
 		
 		skill_cost_custom(user, id)
@@ -441,22 +443,19 @@ class Rpg_skill
 	def heal(id, user = $game_party.actors[0])
 		return if HEAL_SKILL[id] == nil
 		heal_v = HEAL_SKILL[id][0].to_i 
-		is_heal = true
 		
 		# 커스텀
 		case id
 		when 43 # 위태응기
 			heal_v = user.sp * 2
-			is_heal = true
 			
 			# 적 유닛 스킬
 		when 157 # n퍼 회복
 			heal_v = user.maxhp / 5
-			is_heal = true
 		end
 		
 		skill_cost_custom(user, id)
-		heal_v += (user.maxhp * 0.01).to_i
+		heal_v += (user.maxhp * 0.001).to_i
 		user.critical = "heal"
 		user.damage = heal_v.to_s
 		user.hp += heal_v
@@ -683,7 +682,7 @@ class Rpg_skill
 						
 					when 134 # 분신
 						$console.write_line("분신이 사라집니다.")
-							
+						
 					when 140 # 운기
 						$console.write_line("운기가 종료 됩니다.")	
 					end
@@ -692,7 +691,7 @@ class Rpg_skill
 		end
 	end
 	
-	def skill_chat(skill)
+	def skill_chat(skill, user = $game_player)
 		id = skill.id
 		name = $game_party.actors[0].name
 		msg = nil
@@ -729,12 +728,32 @@ class Rpg_skill
 		when 138 # 무형검
 			msg = "#{skill.name}!!"
 		when 139 # 분혼경천
+			msg = "!!#{skill.name}!!"
+			
+			# 적 스킬
+		when 151 # 청룡 포효
+			msg = "크롸롸롸롸!"
+		when 152 # 현무 포효
+			msg = "크롸롸롸롸!"
+		when 154 # 청룡마령참
+			msg = "!!#{skill.name}!!"
+		when 155 # 암흑진파
 			msg = "#{skill.name}!!"
+		when 156 # 흑룡광포
+			msg = "#{skill.name}!!"
+		when 157 # 회복
+			msg = "가소롭다!!"
+		when 158 # 지옥겁화
+			msg = "!!#{skill.name}!!"
 		end
 		
 		if msg != nil
-			$chat_b.input(msg, type, sec, $game_player)
-			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
+			$chat_b.input(msg, type, sec, user)
+			if user == $game_player
+				Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
+			else
+				Network::Main.socket.send "<monster_chat>#{user.id}&#{msg}&#{type}</monster_chat>\n" 
+			end
 		end
 	end
 	

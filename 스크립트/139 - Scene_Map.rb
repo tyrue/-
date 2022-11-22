@@ -33,7 +33,7 @@ class Scene_Map
 		$nowtrade = 0 # 교환 상태 초기화
 		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = $rpg_skill.player_base_move_speed
-		
+		$game_player.move_speed += $rpg_skill.check_speed_buff
 		자동저장 
 		
 		$Drop = [] # 드랍 아이템 내용 초기화

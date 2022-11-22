@@ -56,6 +56,8 @@ class Jindow < Viewport
 		
 		@old_x = x
 		@old_y = y
+		self.opacity = 255
+		@opacity = 255
 		return self
 	end
 	
@@ -238,6 +240,8 @@ class Jindow < Viewport
 		@scroll0bar_mid.opacity = opacity if @scroll0bar_mid != nil
 		@scroll0bar_up.opacity = opacity if @scroll0bar_up != nil
 		@scroll0bar_down.opacity = opacity if @scroll0bar_down != nil
+		
+		#@opacity = opacity
 	end
 	
 	def arrive?
@@ -289,7 +293,7 @@ class Jindow < Viewport
 	def refresh?
 		return @start
 	end
-	
+		
 	def hide # 창 숨기기
 		self.opacity = 0
 		for i in item
@@ -458,6 +462,7 @@ class Jindow < Viewport
 	
 	def update
 		super
+		
 		refresh? ? 0 : return
 		self.scroll
 		self.bluck_update

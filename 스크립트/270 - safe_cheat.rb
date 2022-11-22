@@ -56,6 +56,7 @@ class Game_Party
 			$console.write_line("#{$data_items[item_id].name}을(를) #{n}개 획득. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_items[item_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.item_number(item_id)}개") if $global_x >= 30 and n < 0
 			자동저장 if $global_x >= 30
+			$j_inven.sort if $j_inven != nil # 인벤토리 정렬
 		end 
 	end 
 	#-------------------------------------------------------------------------- 
@@ -70,6 +71,7 @@ class Game_Party
 			$console.write_line("#{$data_weapons[weapon_id].name}을(를) #{n}개 획득. 현재 #{$game_party.weapon_number(weapon_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_weapons[weapon_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.weapon_number(weapon_id)}개") if $global_x >= 30 and n < 0
 			자동저장 if $global_x >= 30
+			$j_inven.sort if $j_inven != nil # 인벤토리 정렬
 		end 
 	end 
 	#-------------------------------------------------------------------------- 
@@ -84,6 +86,7 @@ class Game_Party
 			$console.write_line("#{$data_armors[armor_id].name}을(를) #{n}개 획득. 현재 #{$game_party.armor_number(armor_id)}개") if $global_x >= 30 and n > 0
 			$console.write_line("#{$data_armors[armor_id].name}을(를) #{-n}개 소모. 현재 #{$game_party.armor_number(armor_id)}개") if $global_x >= 30 and n < 0
 			자동저장 if $global_x >= 30
+			$j_inven.sort if $j_inven != nil # 인벤토리 정렬
 		end 
 	end
 end

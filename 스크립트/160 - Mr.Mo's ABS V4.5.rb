@@ -343,10 +343,11 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[114] = [1500, 153, 40]   		# 주작의검
 	WEAPON_SKILL[115] = [100000, 194, 10] 		# 심판의 낫
 	WEAPON_SKILL[126] = [5000, 154, 40]   		# 참마도
-	WEAPON_SKILL[127] = [10000, 184, 40]   		# 청룡신검
-	WEAPON_SKILL[123] = [30000, 192, 40]   		# 현무염도
+	WEAPON_SKILL[127] = [30000, 184, 40]   		# 청룡신검
+	WEAPON_SKILL[123] = [50000, 192, 40]   		# 현무염도
 	
 	# 일본
+	WEAPON_SKILL[136] = [15000, 1, 30]   		# 이가닌자의검
 	WEAPON_SKILL[134] = [100000, 170, 30]   		# 일화접선
 	WEAPON_SKILL[135] = [100000, 171, 30]   		# 진일신검
 	WEAPON_SKILL[138] = [100000, 164, 30]   		# 청일기창
@@ -384,7 +385,70 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 투구
 	EQUIP_EFFECTS[74] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금투구
 	
+	# 보스몹 체력 설정
+	BOSS_ENEMY_HP = {}
+	BOSS_ENEMY_HP[37]  = 2000000000 # 무적토끼
+	BOSS_ENEMY_HP[98] = 1200000 # 비류장군
 	
+	BOSS_ENEMY_HP[102] = 10000000 # 반고
+	BOSS_ENEMY_HP[112] = 2000000 # 청룡
+	BOSS_ENEMY_HP[113] = 2000000 # 현무
+	
+	BOSS_ENEMY_HP[156] = 1500000 # 상어장군
+	BOSS_ENEMY_HP[158] = 2500000 # 해파리장군
+	BOSS_ENEMY_HP[159] = 5000000 # 거북장군
+	
+	BOSS_ENEMY_HP[189] = 1200000 # 주마관
+	BOSS_ENEMY_HP[191] = 2000000 # 유성지
+	BOSS_ENEMY_HP[192] = 3000000 # 해골왕
+	BOSS_ENEMY_HP[193] = 5000000 # 파괴왕
+	
+	# 중국
+	BOSS_ENEMY_HP[220] = 1200000 # 산소괴왕
+	BOSS_ENEMY_HP[224] = 3200000 # 괴성왕
+	BOSS_ENEMY_HP[228] = 5200000 # 뇌신왕
+	BOSS_ENEMY_HP[229] = 1200000 # 연청천구
+	BOSS_ENEMY_HP[230] = 1200000 # 연자천구
+	BOSS_ENEMY_HP[231] = 12000000 # 천구왕
+	
+	BOSS_ENEMY_HP[232] = 40000000 # 산신대왕
+	BOSS_ENEMY_HP[233] = 1500000 # 산신전사
+	BOSS_ENEMY_HP[234] = 1500000 # 산신도사
+	BOSS_ENEMY_HP[235] = 2500000 # 산신도적
+	BOSS_ENEMY_HP[236] = 1500000 # 산신주술사
+	
+	# 환상의섬
+	BOSS_ENEMY_HP[246] = 3000000 # 선장망령
+	BOSS_ENEMY_HP[250] = 1300000 # 철보장
+	BOSS_ENEMY_HP[251] = 1500000 # 철거인
+	BOSS_ENEMY_HP[252] = 20000000 # 마려
+	BOSS_ENEMY_HP[253] = 5000000 # 현무
+	BOSS_ENEMY_HP[257] = 2000000 # 태산
+	BOSS_ENEMY_HP[258] = 30000000 # 길림장군
+	
+	
+	
+	# 몬스터 경험치 설정
+	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
+	# 파티 퀘스트
+	ENEMY_EXP[45] = [30000, 0.06, 0.06] # 산속군사
+	ENEMY_EXP[91] = [100000, 0.3, 0.3] # 비류성창병
+	ENEMY_EXP[96] = [150000, 0.3, 0.3] # 비류성자객
+	ENEMY_EXP[97] = [90000, 0.3, 0.3] # 입구지키미
+	ENEMY_EXP[98] = [1500000, 2, 2] # 비류장군
+	
+	ENEMY_EXP[254] = [750000, 0.1, 0.15] # 뇌랑
+	ENEMY_EXP[255] = [750000, 0.1, 0.15] # 왕가
+	ENEMY_EXP[256] = [1000000, 1.2, 1.8] # 조왕
+	ENEMY_EXP[257] = [5000000, 2, 2.5] # 태산
+	ENEMY_EXP[258] = [30000000, 3, 6] # 길림장군
+	
+	# 중국
+	ENEMY_EXP[231] = [150000000] # 천구왕
+	ENEMY_EXP[232] = [300000000] # 산신대왕
+	
+	# 환상의섬
+	ENEMY_EXP[252] = [200000000] # 마려
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -397,54 +461,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#--------------------------------------------------------------------------
 	ANIMATE_PLAYER = false
 	ANIMATE_ENEMY = false
-	#--------------------------------------------------------------------------
-	DASH_SPEED = 5
-	SNEAK_SPEED = 3
-	#--------------------------------------------------------------------------
-	#Max frames the player can run or sneak
-	DASH_MAX = 0
-	SNEAK_MAX = 0
-	#--------------------------------------------------------------------------
-	#Should the states be gone after a while?
-	STATES_UPDATE = true
-	#If true
-	STATES = {}
-	STATES[19] = 1200    #무장
-	STATES[30] = 1200    #보호
-	#STATES[STATE_ID] = [DURATION in FRAMES, 0]  
-	#if Duration is 0 the state will stay there until healed(item, skill). 
-	#10 frames = 1 sec
-	STATES[1] = 0    #Until Healed
-	STATES[2] = 100  #20 seconds
-	STATES[3] = 100  #20 seconds
-	STATES[4] = 100  #20 seconds
-	STATES[5] = 100  #20 seconds
-	STATES[6] = 100  #20 seconds
-	STATES[7] = 100  #20 seconds
-	STATES[8] = 100  #20 seconds
-	STATES[9] = 100  #20 seconds
-	STATES[10] = 100 #20 seconds
-	STATES[17] = 100 #20 seconds
-	STATES[18] = 100 #20 seconds
-	STATES[19] = 100 #20 seconds
-	#--------------------------------------------------------------------------
-	# Allow state effects?
-	# 상태에 이펙트 처리
-	STATE_EFFECTS = true
-	# Assign the ID of states to each variable. Each effect is described. You can
-	# add more then one id to each to get the effect you want.
-	STUN_EFFECT = [2]      # No movement/atk/skill, and can't use items.
-	DAZZLE_EFFECT = [4]    # Makes the screen bright.
-	MUTE_EFFECT = [5]      # Can't use skill.
-	CONFUSE_EFFECT = [6]   # Controls randomly don't work.
-	SLEEP_EFFECT = [7]     # Can't move until you get hit.
-	PARALAYZE_EFFECT = [8] # Move slowly, cant attack or use skills.
-	CLUMSY_EFFECT = [9,10] # Can't run or sneak.
-	DELAY_EFFECT = [11]    # Walk slow, can't run.
-	BLIND_EFFECT = [17]    # Make screen darker.
-	SPEED_UP = [18]        # Can run without depleting the bar.
-	LIGHT_FEET =[19]       # Can sneak without depleting the bar.
-	#--------------------------------------------------------------------------
+	
 	# 레벨업 표시
 	DISPLAY_LEVELUP = true
 	# 레벨업시 음악
@@ -475,59 +492,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#--------------------------------------------------------------------------
 	# * Class Mo ABS - DO NOT EDIT BELOW, if you don't know what you are doing :)
 	#--------------------------------------------------------------------------
-	# 보스몹 체력 설정
-	BOSS_ENEMY_HP = {}
-	BOSS_ENEMY_HP[37]  = 2000000000 # 무적토끼
-	BOSS_ENEMY_HP[98] = 1200000 # 비류장군
 	
-	BOSS_ENEMY_HP[102] = 10000000 # 반고
-	BOSS_ENEMY_HP[112] = 2000000 # 청룡
-	BOSS_ENEMY_HP[113] = 2000000 # 현무
-	
-	BOSS_ENEMY_HP[156] = 1500000 # 상어장군
-	BOSS_ENEMY_HP[158] = 2500000 # 해파리장군
-	BOSS_ENEMY_HP[159] = 5000000 # 거북장군
-	
-	BOSS_ENEMY_HP[189] = 1200000 # 주마관
-	BOSS_ENEMY_HP[191] = 2000000 # 유성지
-	BOSS_ENEMY_HP[192] = 3000000 # 해골왕
-	BOSS_ENEMY_HP[193] = 5000000 # 파괴왕
-	
-	BOSS_ENEMY_HP[220] = 1200000 # 산소괴왕
-	BOSS_ENEMY_HP[224] = 3200000 # 괴성왕
-	BOSS_ENEMY_HP[228] = 5200000 # 뇌신왕
-	BOSS_ENEMY_HP[229] = 1200000 # 연청천구
-	BOSS_ENEMY_HP[230] = 1200000 # 연자천구
-	BOSS_ENEMY_HP[231] = 12000000 # 천구왕
-	
-	BOSS_ENEMY_HP[246] = 3000000 # 선장망령
-	BOSS_ENEMY_HP[250] = 1300000 # 철보장
-	BOSS_ENEMY_HP[251] = 1500000 # 철거인
-	BOSS_ENEMY_HP[252] = 20000000 # 마려
-	BOSS_ENEMY_HP[253] = 5000000 # 현무
-	BOSS_ENEMY_HP[257] = 2000000 # 태산
-	BOSS_ENEMY_HP[258] = 30000000 # 길림장군
-	
-	# 몬스터 경험치 설정
-	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
-	# 파티 퀘스트
-	ENEMY_EXP[45] = [30000, 0.06, 0.06] # 산속군사
-	ENEMY_EXP[91] = [100000, 0.3, 0.3] # 비류성창병
-	ENEMY_EXP[96] = [150000, 0.3, 0.3] # 비류성자객
-	ENEMY_EXP[97] = [90000, 0.3, 0.3] # 입구지키미
-	ENEMY_EXP[98] = [1500000, 2, 2] # 비류장군
-	
-	ENEMY_EXP[254] = [750000, 0.1, 0.15] # 뇌랑
-	ENEMY_EXP[255] = [750000, 0.1, 0.15] # 왕가
-	ENEMY_EXP[256] = [1000000, 1.2, 1.8] # 조왕
-	ENEMY_EXP[257] = [5000000, 2, 2.5] # 태산
-	ENEMY_EXP[258] = [30000000, 3, 6] # 길림장군
-	
-	# 중국
-	ENEMY_EXP[231] = [15000000] # 천구왕
-	
-	# 환상의섬
-	ENEMY_EXP[252] = [20000000] # 마려
 	
 	class MrMo_ABS
 		#--------------------------------------------------------------------------
@@ -555,12 +520,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		def initialize
 			#ABS Enemy Variables
 			@enemies = {}
-			#Dash
-			@can_dash = CAN_DASH 
-			#Sneak
-			@can_sneak = CAN_SNEAK
-			#States
-			@can_update_states = STATES_UPDATE
 			#Attack Key
 			@attack_key = ATTACK_KEY
 			#Skill Keys
@@ -579,28 +538,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			@range = []
 			#Display Demage true:false
 			@damage_display = DISPLAY_DAMAGE
-			#Game Over?
-			@game_over = GAME_OVER_DEAD
 			#Player Animated?
 			@player_ani = ANIMATE_PLAYER
 			#Enemy Animated?
 			@enemy_ani = ANIMATE_ENEMY
 			#Get Hate
 			@get_hate = true
-			# Dashing
-			@dashing = false
-			@dash_max = DASH_MAX
-			@dash_min = @dash_max
-			@dash_speed = DASH_SPEED
-			# Sneaking 걷기
-			@sneaking = false
-			@sneak_max = SNEAK_MAX
-			@sneak_min = @sneak_max
-			@sneak_speed = SNEAK_SPEED
-			# Old Speed
-			@old_speed = 4
-			# PvP - N+ Only 유저 싸움 가능
-			@pvp_active = true
+			
 			# ABS Active
 			@active = true
 			
@@ -857,58 +801,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		
 		#--------------------------------------------------------------------------
-		# * Update States(Frame) 1프레임마다 실행되는 함수 update함수 안에서 실행 됨
-		#--------------------------------------------------------------------------
-		def update_states
-			# For Player
-			actor = $game_party.actors[0]
-			for id in $game_party.actors[0].states
-				next if !STATES.has_key?(id)
-				state = STATES[id] # 상태 받아오기
-				next if state == 0 # 죽은 상태면 무시
-				add_state_effect(state,id) if actor.state_time == 0
-				actor.state_time += 1
-				if actor.state_time >= state
-					$game_party.actors[0].remove_state(id)
-					actor.state_time = 0
-					remove_state_effects(id)
-					return
-				end
-				update_states_effects(id)
-			end
-		end
-		#--------------------------------------------------------------------------
-		# * Add State Effect(State, ID)
-		#--------------------------------------------------------------------------
-		def add_state_effect(state,id)
-			if STATE_EFFECTS
-				if DAZZLE_EFFECT.include?(id)
-					$game_screen.start_tone_change(Tone.new(200, 200, 130, 0), 20)
-				elsif BLIND_EFFECT.include?(id)
-					$game_screen.start_tone_change(Tone.new(-200,-200,-200, 0), 50)
-				elsif STUN_EFFECT.include?(id)
-					$game_player.movable = false
-				elsif SLEEP_EFFECT.include?(id)
-					$game_player.movable = false
-				elsif PARALAYZE_EFFECT.include?(id)
-					if @sneaking or @dashing
-						$game_player.move_speed = @old_speed
-						@sneaking = false
-						@dashing = false
-					end
-					@old_speed = $game_player.move_speed
-				elsif DELAY_EFFECT.include?(id)
-					if @sneaking or @dashing
-						$game_player.move_speed = @old_speed
-						@sneaking = false
-						@dashing = false
-					end
-					@old_speed = $game_player.move_speed
-				end
-			end
-		end
-		
-		#--------------------------------------------------------------------------
 		# 특정 장비를 착용할 때 효과 
 		#--------------------------------------------------------------------------
 		def update_equip_effects
@@ -948,40 +840,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
-		#--------------------------------------------------------------------------
-		# * Update State Effect(State, ID)
-		#--------------------------------------------------------------------------
-		def update_states_effects(id)
-			return if !STATE_EFFECTS
-			if PARALAYZE_EFFECT.include?(id)
-				$game_player.move_speed = 1
-			elsif DELAY_EFFECT.include?(id)
-				$game_player.move_speed = 2
-			elsif SPEED_UP.include?(id)
-				@dash_min = @dash_max
-			elsif LIGHT_FEET.include?(id)
-				@sneak_min = @sneak_max
-			end
-		end
-		#--------------------------------------------------------------------------
-		# * Removve State Effect(State, ID)
-		#--------------------------------------------------------------------------
-		def remove_state_effects(id)
-			return if !STATE_EFFECTS
-			if STUN_EFFECT.include?(id)
-				$game_player.movable = true
-			elsif DAZZLE_EFFECT.include?(id)
-				$game_screen.start_tone_change(Tone.new(0, 0, 0, 0), 50)
-			elsif BLIND_EFFECT.include?(id)
-				$game_screen.start_tone_change(Tone.new(0, 0, 0, 0), 50)
-			elsif SLEEP_EFFECT.include?(id)
-				$game_player.movable = true
-			elsif PARALAYZE_EFFECT.include?(id)
-				$game_player.move_speed = @old_speed
-			elsif DELAY_EFFECT.include?(id)
-				$game_player.move_speed = @old_speed
-			end
-		end
 		
 		#--------------------------------------------------------------------------
 		# * Update Enemy AI(Frame)
@@ -1168,7 +1026,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							
 							e.sp -= skill.sp_cost
 							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
-							msg_enemy_balloon(skill, e.event)
+							$rpg_skill.skill_chat(skill, e.event)
 							return
 							
 						elsif RANGE_EXPLODE.has_key?(skill.id)
@@ -1185,7 +1043,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							#Take off SP
 							e.sp -= skill.sp_cost
 							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
-							msg_enemy_balloon(skill, e.event)
+							$rpg_skill.skill_chat(skill, e.event)
 							return
 						end
 						return
@@ -1232,7 +1090,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						e.sp -= skill.sp_cost
 						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0# 몬스터 마력 공유
 						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n") if old_hp != e.hp
-						msg_enemy_balloon(skill, e.event)
+						$rpg_skill.skill_chat(skill, e.event)
 						return		
 						
 					when 3..4, 7 # 자기 자신에게 사용하는 스킬
@@ -1246,7 +1104,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						$rpg_skill.heal(skill.id, e) # 이게 회복 스킬인지 확인
 						
 						e.sp -= skill.sp_cost
-						msg_enemy_balloon(skill, e.event)
+						$rpg_skill.skill_chat(skill, e.event)
 						
 						Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	 if skill.sp_cost != 0# 몬스터 마력 공유
 						Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n") if old_hp != e.hp
@@ -1257,38 +1115,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
-		#--------------------------------------------------------------------------
-		# * 적이 어떤 스킬을 쓰냐에 따라 말하는 메시지를 넣자
-		#--------------------------------------------------------------------------
-		def msg_enemy_balloon(skill, event)
-			msg = nil
-			type = 3
-			sec = 4
-			id = skill.id
-			name = skill.name
-			
-			case id
-			when 151 # 청룡 포효
-				msg = "크롸롸롸롸!"
-			when 152 # 현무 포효
-				msg = "크롸롸롸롸!"
-			when 154 # 청룡마령참
-				msg = "!!#{name}!!"
-			when 155 # 암흑진파
-				msg = "#{name}!!"
-			when 156 # 흑룡광포
-				msg = "#{name}!!"
-			when 157 # 회복
-				msg = "가소롭다!!"
-			when 158 # 지옥겁화
-				msg = "!!#{name}!!"
-			end
-			
-			if msg != nil
-				$chat_b.input(msg, type, sec, event) 
-				Network::Main.socket.send "<monster_chat>#{event.id}&#{msg}&#{type}</monster_chat>\n"  
-			end
-		end
 		
 		
 		#--------------------------------------------------------------------------
@@ -2086,13 +1912,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			return true if $game_switches[296] # 죽음 표시 스위치
-			#Check State Effect
-			if STATE_EFFECTS
-				for id in $game_party.actors[0].states
-					$game_player.movable = true if SLEEP_EFFECT.include?(id)
-					$game_party.actors[0].states.delete(id) if SLEEP_EFFECT.include?(id)
-				end
-			end
 			#If the player is dead;
 			Audio.se_play("Audio/SE/죽음", $game_variables[13])
 			Network::Main.ani(Network::Main.id, 199)
@@ -2371,6 +2190,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			return true
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Enemy Ally in_battle?(Enemy)
 		#--------------------------------------------------------------------------
@@ -2399,68 +2219,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Return False
 			return false
 		end
-		#--------------------------------------------------------------------------
-		# * Update Dash
-		#--------------------------------------------------------------------------
-		def update_dash
-			return if @sneaking
-			if Input.pressed?(DASH_KEY)
-				#Check State Effect
-				if STATE_EFFECTS
-					for id in $game_party.actors[0].states
-						return if CLUMSY_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id) or DELAY_EFFECT.include?(id)
-					end
-				end
-				if $game_player.moving?
-					@old_speed = $game_player.move_speed if !@dashing
-					$game_player.character_name = "#{$game_player.character_name}#{DASH_ANIMATION}" if !@dashing and DASH_SHO_AN
-					@dashing = true
-					$game_player.move_speed = DASH_SPEED
-					@dash_min -= 1
-					if @dash_min <= 0
-						@dashing = false
-						$game_player.move_speed = 4
-					end
-				end
-			elsif @dashing
-				@dashing = false
-				$game_player.move_speed = @old_speed if !@sneaking
-				$game_player.character_name = $game_player.character_name.sub(/#{DASH_ANIMATION}/){} if DASH_SHO_AN
-			else
-				@dash_min += 1 if @dash_min < @dash_max
-			end
-		end
-		#--------------------------------------------------------------------------
-		# * Update Sneak
-		#--------------------------------------------------------------------------
-		def update_sneak
-			return if @dashing
-			if Input.pressed?(SNEAK_KEY)
-				#Check State Effect
-				if STATE_EFFECTS
-					for id in $game_party.actors[0].states
-						return if CLUMSY_EFFECT.include?(id) or PARALAYZE_EFFECT.include?(id) or DELAY_EFFECT.include?(id)
-					end
-				end
-				if $game_player.moving?
-					@old_speed = $game_player.move_speed if !@sneaking
-					$game_player.character_name = "#{$game_player.character_name}#{SNEAK_ANIMATION}" if !@sneaking and SNEAK_SHO_AN
-					@sneaking = true
-					$game_player.move_speed = SNEAK_SPEED
-					@sneak_min -= 1
-					if @sneak_min <= 0
-						@sneaking = false
-						$game_player.move_speed = 4
-					end
-				end
-			elsif @sneaking
-				@sneaking = false
-				$game_player.move_speed = @old_speed if !@dashing
-				$game_player.character_name = $game_player.character_name.sub(/#{SNEAK_ANIMATION}/){} if SNEAK_SHO_AN
-			else
-				@sneak_min += 1 if @sneak_min < @sneak_max
-			end
-		end
+		
 		#--------------------------------------------------------------------------
 		# * Get Range(Element, Object) - Near Fantastica
 		#--------------------------------------------------------------------------

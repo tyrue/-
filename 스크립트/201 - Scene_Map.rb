@@ -11,6 +11,7 @@ class Scene_Map
 		
 		$chat.hide if !$game_switches[60]
 		$console.hide if !$game_switches[61]
+		$j_inven.hide if $j_inven != nil and !$j_inven.temp_sw
 		scene_map_main
 		
 		$cbig = 0
@@ -22,10 +23,10 @@ class Scene_Map
 		scene_map_update
 		JS.update
 		
-		if $game_party.actors[0].hp == 0
+		if $game_party.actors[0].hp > 0
 			#Hwnd.dispose("Inventory") if Hwnd.include?("Inventory")
-			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
-			$game_switches[296] = true if $game_switches[296] != true # 유저 죽음 스위치 온
+			$game_switches[50] = true if !$game_switches[50] # 유저 살음 스위치 온
+			$game_switches[296] = false if $game_switches[296] # 유저 죽음 스위치 오프
 		end
 		
 		if not Hwnd.include?("NetPartyInv")
@@ -47,15 +48,13 @@ class Scene_Map
 						end
 					end	
 					
-					if $game_party.actors[0].hp > 0  
-						
-					end	 
 					
 					if Key.trigger?(KEY_I) # i
 						if not Hwnd.include?("Inventory")
-							Jindow_Inventory.new
+							$j_inven = Jindow_Inventory.new
 						else
-							Hwnd.dispose("Inventory")
+							$j_inven.toggle
+							#Hwnd.dispose("Inventory")
 						end
 						#~ if Key.press?(KEY_SHIFT)# 조합창
 						#~ if not Hwnd.include?("craft")

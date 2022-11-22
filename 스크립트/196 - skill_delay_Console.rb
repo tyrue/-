@@ -115,6 +115,12 @@ class Skill_Delay_Console < Sprite
 		end
 		
 		@old_height = (@console_log.size + @console_log2.size) * (@font_size + 1) + 14
+		
+		if @console_log.size <= 0 and @console_log2.size <= 0
+			@back_sprite.visible = false
+			return 
+		end
+		
 		if @old_height != @console_viewport.height
 			@console_viewport.height = @old_height
 			@back_sprite.bitmap.clear if @back_sprite.bitmap != nil

@@ -1,6 +1,7 @@
 
 def 자동저장
 	return if $game_map.map_id == 3
+	return if $rpg_skill == nil
 	if not $game_party.actors[0].name == "/no"
 		@skilllist = ""
 		@itemlist = ""
@@ -13,7 +14,6 @@ def 자동저장
 		@skill_mash_list = ""
 		@buff_mash_list = ""
 		@self_switches = ""
-		
 		
 		$game_variables[52] = $rpg_skill.base_str
 		$game_variables[53] = $rpg_skill.base_agi

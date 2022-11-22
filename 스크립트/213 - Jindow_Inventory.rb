@@ -6,6 +6,7 @@
 $trade_num = 1
 
 class Jindow_Inventory < Jindow
+	attr_reader :temp_sw
 	def initialize
 		자동저장
 		$game_system.se_play($data_system.decision_se)
@@ -15,64 +16,128 @@ class Jindow_Inventory < Jindow
 		@mark = true
 		@drag = true
 		@close = true
-		self.refresh("Inventory")
+		@tog = true
+		@temp_sw = true
+		
 		self.x = 360
 		self.y = 95
 		@inventory_size = 100
 		@margin = 10
 		
-		@data = []
-		sort
-		
 		@gold_drop_button = J::Button.new(self).refresh(60, "금전 버리기")
 		@gold_drop_button.x = self.width - @gold_drop_button.width - 10
 		@gold_drop_button.y = 0
-	end
-	
-	def sort(id = 0)
-		자동저장
 		
-		for i in @item
-			next if i == @gold_drop_button
-			if i != nil and !i.disposed?
-				i.visible = false
-				i.dispose 
-			end
-		end
-		@item.clear
+		@opacity = 255
+		self.opacity = @opacity
+		
+		@data = []
 		
 		for i in 1..$data_items.size
-			if $game_party.item_number(i) > 0
-				if i != nil
-					J::Item.new(self).set(true).refresh($data_items[i].id, 0)
-				end
+			if $game_party.item_number(i) > 0 
+				@data.push($data_items[i])
+				J::Item.new(self).set(true).refresh($data_items[i].id, 0)
 			end
 		end
 		
 		for i in 1..$data_weapons.size
 			if $game_party.weapon_number(i) > 0
-				if i != nil
-					J::Item.new(self).set(true).refresh($data_weapons[i].id, 1)
-				end
+				@data.push($data_weapons[i])
+				J::Item.new(self).set(true).refresh($data_weapons[i].id, 1)
 			end
 		end
 		
 		for i in 1..$data_armors.size
 			if $game_party.armor_number(i) > 0
-				if i != nil
-					J::Item.new(self).set(true).refresh($data_armors[i].id, 2)
-				end
+				@data.push($data_armors[i])
+				J::Item.new(self).set(true).refresh($data_armors[i].id, 2)
+			end
+		end
+		
+		sort
+		self.refresh("Inventory")
+	end
+	
+	def sort(id = 0)
+		자동저장
+		#~ # Add item
+		for i in 1..$data_items.size
+			if $game_party.item_number(i) > 0 and !@data.include?($data_items[i])
+				@data.push($data_items[i]) 
+				J::Item.new(self).set(true).refresh($data_items[i].id, 0)
+			end
+			
+			if $game_party.item_number(i) <= 0 and @data.include?($data_items[i])
+				@data.delete($data_items[i]) 
+			end
+		end
+		
+		for i in 1..$data_weapons.size
+			if $game_party.weapon_number(i) > 0 and !@data.include?($data_weapons[i]) 
+				@data.push($data_weapons[i])
+				J::Item.new(self).set(true).refresh($data_weapons[i].id, 1)
+			end
+			
+			if $game_party.weapon_number(i) <= 0 and @data.include?($data_weapons[i])
+				@data.delete($data_weapons[i]) 
+			end
+		end
+		
+		for i in 1..$data_armors.size
+			if $game_party.armor_number(i) > 0 and !@data.include?($data_armors[i])
+				@data.push($data_armors[i])
+				J::Item.new(self).set(true).refresh($data_armors[i].id, 2)
+			end
+			
+			if $game_party.armor_number(i) <= 0 and @data.include?($data_armors[i])
+				@data.delete($data_armors[i]) 
 			end
 		end
 		
 		for i in @item
-			i.x = (i.id % 6) * 36
-			i.y = (i.id / 6) * 36 + 18
+			if i.is_a?(J::Item) and i.num == 0
+				if i != nil and !i.disposed?
+					i.visible = false
+					i.dispose 
+					@item.delete(i)
+				end
+			end
 		end
-		@item.push(@gold_drop_button)
+		
+		count = 0
+		for i in @item
+			if i.is_a?(J::Item)
+				i.x = (count % 6) * 36
+				i.y = (count / 6) * 36 + 18
+				count += 1
+			end
+		end
 	end	
 	
+	def hide
+		super
+		@tog = false
+	end
+	
+	def show(val = @opacity)
+		super
+		@tog = true
+	end
+	
+	def toggle
+		if @tog
+			hide
+			@temp_sw = false
+		else
+			show(@opacity)
+			@temp_sw = true
+		end
+	end
+	
+	
 	def update
+		return if !@tog
+		
 		if @gold_drop_button.click
 			@gold_drop_button.click = false
 			if $game_switches[296]
@@ -85,29 +150,6 @@ class Jindow_Inventory < Jindow
 				Hwnd.dispose("Item_Drop")
 				Jindow_Drop.new(0, 0, 0) # 돈을 버림
 			end
-		end
-		
-		data = []
-		# Add item
-		for i in 1...$data_items.size
-			if $game_party.item_number(i) > 0
-				data.push($data_items[i])
-			end
-		end
-		for i in 1...$data_weapons.size
-			if $game_party.weapon_number(i) > 0
-				data.push($data_weapons[i])
-			end
-		end
-		for i in 1...$data_armors.size
-			if $game_party.armor_number(i) > 0
-				data.push($data_armors[i])
-			end
-		end
-		
-		if @data.size != data.size
-			@data = data 
-			sort
 		end
 		
 		if not Hwnd.include?('Trade')
@@ -136,7 +178,7 @@ class Jindow_Inventory < Jindow
 						$game_party.actors[0].equip(0, i.item.id)
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
 					end
-					sort
+					
 				when 2 # 방어구
 					if $game_switches[296]
 						$console.write_line("귀신은 할 수 없습니다.")
@@ -147,7 +189,6 @@ class Jindow_Inventory < Jindow
 						$game_party.actors[0].equip(i.item.kind + 1, i.item.id)
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
 					end
-					sort
 				end
 			end	
 			
@@ -156,8 +197,10 @@ class Jindow_Inventory < Jindow
 				i.item? ? 0 : next
 				i.double_click ? 0 : next
 				check(i)
+				
 			end
 		end
+				
 		super
 	end	
 	
@@ -171,9 +214,15 @@ class Jindow_Inventory < Jindow
 		else
 			Hwnd.dispose("Trade2")
 			$console.write_line("[교환]: 더이상 아이템을 올릴수 없습니다.")
-		end
+		end		
+	end
+	
+	def dispose2
+		$game_system.se_play($data_system.cancel_se)
+		toggle
 	end
 end
+
 
 class Game_Battler
 	alias jindow_item_event item_effect
@@ -200,4 +249,3 @@ class Game_Battler
 		return true
 	end
 end
-

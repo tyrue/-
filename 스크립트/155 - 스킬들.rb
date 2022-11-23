@@ -227,7 +227,7 @@ SKILL_POWER_CUSTOM = {}
 SKILL_COST_CUSTOM = {}
 # 											 [[타입(현재(0), 전체(1)), 체력, 마력]]
 
-# 주술사
+# ---------------- 주술사
 SKILL_POWER_CUSTOM[44] = [[0, 0, 1.5, 10]] # 헬파이어
 SKILL_POWER_CUSTOM[53] = [[0, 0, 2.0, 10]] # 삼매진화
 SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
@@ -252,8 +252,9 @@ SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 11.0]] # 성려멸주 2성
 
 SKILL_COST_CUSTOM[58] = [[0, 0, 1.0]] # 지폭지술
 SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
+# -------END------- #
 
-# 전사
+# ---------------- 전사
 SKILL_POWER_CUSTOM[67] = [[0, 2.0, 0, 30]] # 건곤대나이
 SKILL_POWER_CUSTOM[73] = [[0, 0.5, 0, 30]] # 광량돌격
 SKILL_POWER_CUSTOM[79] = [[0, 7, 0, 100]] # 동귀어진
@@ -282,11 +283,12 @@ SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
 SKILL_COST_CUSTOM[78] = [[1, 1.0 / 18.0, 0]] # 십리건곤 1성
 SKILL_COST_CUSTOM[80] = [[1, 1.0 / 15.0, 0]] # 십리건곤 2성
 SKILL_COST_CUSTOM[102] = [[1, 1.0 / 12.0, 0.01]] # 백리건곤 1성
+# -------END------- #
 
-# 도적
+# ---------------- 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
 SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
-SKILL_POWER_CUSTOM[137] = [[0, 2.0, 0.5, 20]] # 이기어검
+SKILL_POWER_CUSTOM[137] = [[0, 0.2, 0.5, 20]] # 이기어검
 SKILL_POWER_CUSTOM[138] = [[0, 1.0, 0.2, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
 
@@ -301,11 +303,12 @@ SKILL_COST_CUSTOM[142] = [[0, 1.0 / 18.0, 0]] # 투명3성
 
 SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
 SKILL_COST_CUSTOM[135] = [[0, 0.2, 0.1]] # 백호검무
-SKILL_COST_CUSTOM[137] = [[0, 1.0 / 6.0, 0.5]] # 이기어검
+SKILL_COST_CUSTOM[137] = [[0, 0.2, 0.5]] # 이기어검
 SKILL_COST_CUSTOM[138] = [[0, 0.5, 0.5]] # 무형검
 SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
+# -------END------- #
 
-# 도사
+# ---------------- 도사
 SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 80.0, 100]] # 지진
 
 # ---------------- #
@@ -316,8 +319,18 @@ SKILL_COST_CUSTOM[119] = [[1, 0, 0.02]] # 봉황의희원
 SKILL_COST_CUSTOM[43] = [[0, 0, 1.0]] # 위태응기
 
 SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
+# -------END------- #
 
 
+# ------ 몬스터 ------#
+SKILL_POWER_CUSTOM[151] = [[2, 0.01, 0, 100]] # 청룡의포효
+SKILL_POWER_CUSTOM[152] = [[2, 0.01, 0, 100]] # 현무의포효
+SKILL_POWER_CUSTOM[154] = [[2, 0.20, 0, 100]] # 청룡마령참
+SKILL_POWER_CUSTOM[155] = [[2, 0.02, 0, 100]] # 암흑진파
+SKILL_POWER_CUSTOM[156] = [[2, 0.02, 0, 100]] # 흑룡광포
+SKILL_POWER_CUSTOM[158] = [[2, 0.10, 0, 100]] # 지옥겁화
+
+# -------END------- #
 
 # $game_variables[19] 플레이어 힘
 # $game_variables[20] 플레이어 민첩
@@ -1141,13 +1154,27 @@ class Rpg_skill
 		return damage.to_i
 	end
 	
-	# 고정 데미지 스킬
-	def damage_by_skill(damage, id)
+	# 비례 데미지 스킬
+	def damage_by_skill(damage, id, victim = nil)
 		case id
 		when 6 # 도토리 던지기
-			damage = 1
+			return 1
 		end
-		return damage
+		
+		return damage if SKILL_POWER_CUSTOM[id] == nil
+		return damage if victim == nil
+		data = SKILL_POWER_CUSTOM[id][0]
+		return damage if data[0] != 2
+		
+		# 2 : 비례데미지
+		type = data[0] != nil ? data[0] : -1
+		p_hp = data[1] != nil ? data[1].to_f : 0
+		p_sp = data[2] != nil ? data[2].to_f : 0
+		val = data[3] != nil ? data[3].to_f : 0
+		
+		damage = damage.to_f
+		damage += (victim.maxhp * p_hp) + val
+		return damage.to_i
 	end
 	
 	# 스킬을 사용하기 위한 재료가 준비 됐는지 확인

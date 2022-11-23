@@ -59,6 +59,7 @@ class Jindow_Inventory < Jindow
 	end
 	
 	def sort(id = 0)
+		return if !@tog
 		자동저장
 		#~ # Add item
 		for i in 1..$data_items.size
@@ -122,6 +123,7 @@ class Jindow_Inventory < Jindow
 	def show(val = @opacity)
 		super
 		@tog = true
+		self.sort
 	end
 	
 	def toggle

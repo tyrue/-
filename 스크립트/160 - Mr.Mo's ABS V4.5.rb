@@ -150,7 +150,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[137] = [2, 20, "", 4, 0] #이기어검
 	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0] #무형검
 	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
 	
@@ -187,6 +186,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 도적 스킬
 	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
+	RANGE_EXPLODE[137] = [0, 6, "공격스킬2", 3, 4, 0] #이기어검
 	
 	# 도사 스킬
 	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0] # 지진
@@ -269,8 +269,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
 	
 	# 적 스킬
-	SKILL_MASH_TIME[154] = [10 * sec, 0] # 청룡마령참
-	SKILL_MASH_TIME[158] = [10 * sec, 0] # 지옥겁화
+	SKILL_MASH_TIME[155] = [5 * sec, 0] # 암흑진파
+	SKILL_MASH_TIME[154] = [20 * sec, 0] # 청룡마령참
+	SKILL_MASH_TIME[156] = [5 * sec, 0] # 흑룡광포
+	SKILL_MASH_TIME[158] = [20 * sec, 0] # 지옥겁화
 	
 	
 	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
@@ -412,10 +414,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP[231] = 12000000 # 천구왕
 	
 	BOSS_ENEMY_HP[232] = 40000000 # 산신대왕
-	BOSS_ENEMY_HP[233] = 1500000 # 산신전사
-	BOSS_ENEMY_HP[234] = 1500000 # 산신도사
-	BOSS_ENEMY_HP[235] = 2500000 # 산신도적
-	BOSS_ENEMY_HP[236] = 1500000 # 산신주술사
+	BOSS_ENEMY_HP[233] = 2000000 # 산신전사
+	BOSS_ENEMY_HP[234] = 1200000 # 산신도사
+	BOSS_ENEMY_HP[235] = 2000000 # 산신도적
+	BOSS_ENEMY_HP[236] = 1700000 # 산신주술사
 	
 	# 환상의섬
 	BOSS_ENEMY_HP[246] = 3000000 # 선장망령
@@ -3738,6 +3740,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
+				self.damage = $rpg_skill.damage_by_skill(self.damage, skill.id, self)
+				
 				# 방어력에 따른 데미지 감소
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
@@ -3757,7 +3761,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
 				self.damage = $rpg_skill.damage_calculation_skill(self.damage, self, user)
-				self.damage = $rpg_skill.damage_by_skill(damage, skill.id)
 				
 				# Second hit detection
 				eva = [(8 * self.agi / user.dex + self.eva), 100].min

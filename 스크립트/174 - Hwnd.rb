@@ -95,22 +95,23 @@ module Hwnd
 		end
 	end
 	
-	
-	
 	def dispose(val = false)
 		if val.jindow?
 			val.dispose
 			@data.delete val
+			val = nil
 		elsif val.string?
 			for i in @data
 				if i.hwnd == val
 					i.dispose
 					@data.delete i
+					i = nil
 				end
 			end
 		else
 			for i in @data
 				i.dispose
+				i = nil
 			end
 			@data = []
 		end

@@ -246,9 +246,9 @@ SKILL_COST_CUSTOM[53] = [[0, 0, 1.0]] # 삼매진화
 SKILL_COST_CUSTOM[57] = [[0, 0, 1.0]] # 삼매진화 1성
 SKILL_COST_CUSTOM[69] = [[0, 0, 1.0]] # 삼매진화 2성
 
-SKILL_COST_CUSTOM[49] = [[1, 0, 1.0 / 15.0]] # 성려멸주
-SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 13.0]] # 성려멸주 1성
-SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 11.0]] # 성려멸주 2성
+SKILL_COST_CUSTOM[49] = [[1, 0, 1.0 / 20.0]] # 성려멸주
+SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 18.0]] # 성려멸주 1성
+SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 17.0]] # 성려멸주 2성
 
 SKILL_COST_CUSTOM[58] = [[0, 0, 1.0]] # 지폭지술
 SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
@@ -280,16 +280,16 @@ SKILL_COST_CUSTOM[105] = [[0, 0.5, 1.0]] # 혈겁만파
 SKILL_COST_CUSTOM[106] = [[0, 0.2, 0.5]] # 초혼비무
 
 SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
-SKILL_COST_CUSTOM[78] = [[1, 1.0 / 18.0, 0]] # 십리건곤 1성
-SKILL_COST_CUSTOM[80] = [[1, 1.0 / 15.0, 0]] # 십리건곤 2성
-SKILL_COST_CUSTOM[102] = [[1, 1.0 / 12.0, 0.01]] # 백리건곤 1성
+SKILL_COST_CUSTOM[78] = [[1, 1.0 / 20.0, 0]] # 십리건곤 1성
+SKILL_COST_CUSTOM[80] = [[1, 1.0 / 18.0, 0]] # 십리건곤 2성
+SKILL_COST_CUSTOM[102] = [[1, 1.0 / 16.0, 0.01]] # 백리건곤 1성
 # -------END------- #
 
 # ---------------- 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
 SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
-SKILL_POWER_CUSTOM[137] = [[0, 0.2, 0.5, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 1.0, 0.2, 20]] # 무형검
+SKILL_POWER_CUSTOM[137] = [[0, 0.6, 1.5, 20]] # 이기어검
+SKILL_POWER_CUSTOM[138] = [[0, 1.5, 0.4, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
 
 SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
@@ -297,14 +297,14 @@ SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
 SKILL_POWER_CUSTOM[142] = [[1, 0.02, 0.02, 0]] # 투명3성
 
 # ---------------- #
-SKILL_COST_CUSTOM[131] = [[0, 1.0 / 20.0, 0]] # 투명1성
-SKILL_COST_CUSTOM[141] = [[0, 1.0 / 19.0, 0]] # 투명2성
-SKILL_COST_CUSTOM[142] = [[0, 1.0 / 18.0, 0]] # 투명3성
+SKILL_COST_CUSTOM[131] = [[1, 1.0 / 100.0, 0]] # 투명1성
+SKILL_COST_CUSTOM[141] = [[1, 1.0 / 100.0, 0]] # 투명2성
+SKILL_COST_CUSTOM[142] = [[1, 1.0 / 100.0, 0]] # 투명3성
 
 SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
 SKILL_COST_CUSTOM[135] = [[0, 0.2, 0.1]] # 백호검무
-SKILL_COST_CUSTOM[137] = [[0, 0.2, 0.5]] # 이기어검
-SKILL_COST_CUSTOM[138] = [[0, 0.5, 0.5]] # 무형검
+SKILL_COST_CUSTOM[137] = [[0, 0.4, 0.4]] # 이기어검
+SKILL_COST_CUSTOM[138] = [[0, 0.5, 0.3]] # 무형검
 SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 # -------END------- #
 
@@ -323,8 +323,8 @@ SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
 
 
 # ------ 몬스터 ------#
-SKILL_POWER_CUSTOM[151] = [[2, 0.01, 0, 100]] # 청룡의포효
-SKILL_POWER_CUSTOM[152] = [[2, 0.01, 0, 100]] # 현무의포효
+SKILL_POWER_CUSTOM[151] = [[2, 0.02, 0, 100]] # 청룡의포효
+SKILL_POWER_CUSTOM[152] = [[2, 0.02, 0, 100]] # 현무의포효
 SKILL_POWER_CUSTOM[154] = [[2, 0.20, 0, 100]] # 청룡마령참
 SKILL_POWER_CUSTOM[155] = [[2, 0.02, 0, 100]] # 암흑진파
 SKILL_POWER_CUSTOM[156] = [[2, 0.02, 0, 100]] # 흑룡광포
@@ -464,7 +464,7 @@ class Rpg_skill
 			
 			# 적 유닛 스킬
 		when 157 # n퍼 회복
-			heal_v = user.maxhp / 5
+			heal_v = user.maxhp * 0.25
 		end
 		
 		skill_cost_custom(user, id)
@@ -616,9 +616,10 @@ class Rpg_skill
 					@base_agi = [0, @base_agi - n].max
 				when "mdef" # 마법 방어
 					$game_party.actors[0].mdef -= n.to_i
+					$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
 				when "pdef" # 물리 방어
 					$game_party.actors[0].pdef -= n.to_i
-					
+					$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
 					# 퍼센트
 				when "per_str" # 힘
 					n = 0
@@ -666,9 +667,10 @@ class Rpg_skill
 					
 				when "per_mdef" # 마법 방어
 					$game_party.actors[0].mdef /= n
+					$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
 				when "per_pdef" # 물리 방어
 					$game_party.actors[0].pdef /= n
-					
+					$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
 				when "speed"	
 					$game_player.move_speed -= n
 					Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
@@ -1111,10 +1113,13 @@ class Rpg_skill
 				damage *= (5 + $game_variables[10]) # 투명 숙련도
 				$state_trans = false
 				$game_variables[9] = 1
+				id = nil
+				id = 131 if self.check_buff(131) # 투명 1성
+				id = 141 if self.check_buff(141) # 투명 2성
+				id = 142 if self.check_buff(142) # 투명 3성
 				
-				damage = skill_power_custom(actor, 131, damage) if self.check_buff(131) # 투명 1성
-				damage = skill_power_custom(actor, 141, damage) if self.check_buff(141) # 투명 2성
-				damage = skill_power_custom(actor, 142, damage) if self.check_buff(142) # 투명 3성
+				damage = skill_power_custom(actor, id, damage) if id != nil
+				skill_cost_custom(attacker, id) if id != nil
 			end
 			
 		elsif attacker.is_a?(ABS_Enemy) # 몬스터
@@ -1122,10 +1127,13 @@ class Rpg_skill
 		end
 		
 		# 피해자 입장
-		if actor.is_a?(Game_Actor)
+		# 플레이어
+		if actor.is_a?(Game_Actor) 
 			damage -= damage * 0.2 if self.check_buff(47) # 보호	
 			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
 			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
+			
+		# 몬스터
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
 		end

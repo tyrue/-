@@ -65,6 +65,7 @@ class Jindow_Console < Jindow
 		if @console_log.size == @max_size
 			@console_log[0].bitmap.clear
 			@console_log[0].dispose
+			@console_log[0] = nil
 			@console_log.shift 
 			clear_and_write
 		end

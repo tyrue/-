@@ -19,6 +19,9 @@ if SDK.state("Mr.Mo's ABS")
 		BORDER = 1
 		HP_WIDTH = 35         # WIDTH of the HP Bar
 		HP_HEIGHT = 6         # Height of the HP Bar
+		HP_WIDTH_BOSS = 70         # WIDTH of the HP Bar
+		HP_HEIGHT_BOSS = 12         # Height of the HP Bar
+		
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
@@ -28,10 +31,17 @@ if SDK.state("Mr.Mo's ABS")
 			@old_hp = 0
 			@old_x = 0
 			@old_y = 0
-			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
+			
 			@tesp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
-			@ch = 0#@tesp.height / 4
-			@cw = 15
+			if BOSS_ENEMY_HP[@enemy.id] != nil
+				self.bitmap = Bitmap.new(HP_WIDTH_BOSS, HP_HEIGHT_BOSS)
+				@ch = 0
+				@cw = HP_WIDTH_BOSS / 2
+			else
+				self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
+				@ch = 0
+				@cw = HP_WIDTH / 2
+			end
 			update    
 		end
 		#--------------------------------------------------------------------------
@@ -47,8 +57,13 @@ if SDK.state("Mr.Mo's ABS")
 			return if @old_hp == @enemy.hp
 			self.bitmap.clear
 			@old_hp = @enemy.hp
+			
 			#Show the bar
-			draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
+			if BOSS_ENEMY_HP[@enemy.id] != nil
+				draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH_BOSS,HP_HEIGHT_BOSS)
+			else
+				draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
+			end
 		end  
 		#--------------------------------------------------------------------------
 		# * Something Changed?

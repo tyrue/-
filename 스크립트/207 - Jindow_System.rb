@@ -9,11 +9,11 @@ class Jindow_System < Jindow
 		@drag = true
 		@close = true
 		self.refresh "System"
-		self.x = 640 / 2 - self.max_width / 2
-		self.y = 480 / 2 - self.max_height / 2
+		
 		
 		@menu_t = [
 			"음량조절",
+			"데미지 표시 설정",
 			"카페주소",
 			"로그아웃",
 			"종료하기"
@@ -25,6 +25,8 @@ class Jindow_System < Jindow
 			@menu[i].y = 12 + i * 30
 		end
 		self.height = @menu[@menu.size - 1].y + 30 
+		self.x = 640 / 2 - self.max_width / 2
+		self.y = 480 / 2 - self.max_height / 2
 		self.refresh "System"
 	end	
 	
@@ -34,12 +36,14 @@ class Jindow_System < Jindow
 			if menu.click
 				$game_system.se_play($data_system.decision_se)
 				case menu.command
+				when "데미지 표시 설정"
+					Jindow_Damage_Set.new
+					Hwnd.dispose(self)
 				when "음량조절"
 					Jindow_volume.new
 					Hwnd.dispose(self)
 				when "카페주소"
 					$chat.write ("카페주소: http://cafe.naver.com/blackowlsbaram", COLOR_HELP)
-					Hwnd.dispose(self)
 				when "로그아웃"
 					JS.game_title
 					Hwnd.dispose(self)

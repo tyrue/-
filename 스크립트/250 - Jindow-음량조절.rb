@@ -23,12 +23,14 @@ class Jindow_volume < Jindow
 		
 		@menu = []
 		@start_x = 0 # 텍스트 스프라이트 초기 x, y
-		@start_y = 0
+		@start_y = 20
 		@font_size = 12
 		@button_size = 30
 		
 		@text = []
-		for i in 0..@menu_t.size - 1
+		@menu2 = [] # on, off 버튼
+		@menu_t2 = ["Max", "Min"]
+		for i in 0...@menu_t.size
 			@text[2 * i] = Sprite.new(self)
 			@text[2 * i].bitmap = Bitmap.new(60, 20) # x, y 크기의 비트맵 상자를 생성
 			@text[2 * i].x = @start_x
@@ -52,8 +54,15 @@ class Jindow_volume < Jindow
 			@menu[2 * i + 1] = J::Button.new(self).refresh(@button_size.to_i, "▶")
 			@menu[2 * i + 1].x = @text[2 * i + 1].x + @text[2 * i + 1].width + 10
 			@menu[2 * i + 1].y = @text[2 * i + 1].y
+			
+			for j in 0...@menu_t2.size
+				@menu2[j + i * @menu_t.size] = J::Button.new(self).refresh(@button_size.to_i, @menu_t2[j].to_s)
+				@menu2[j + i * @menu_t.size].x = @menu[2 * i + 1].x + @menu[2 * i + 1].width + @button_size.to_i * j
+				@menu2[j + i * @menu_t.size].y = @menu[2 * i + 1].y
+			end
 		end
-		self.width = @menu[1].x + @menu[1].width + 10
+		
+		self.width = @menu2[@menu2.size - 1].x + @menu2[@menu2.size - 1].width + 10
 		self.refresh "volume"
 	end
 	
@@ -66,28 +75,20 @@ class Jindow_volume < Jindow
 				$game_variables[12] = 0 if $game_variables[12] < 0
 				$game_system.bgm_play($game_system.playing_bgm)
 				
-				@text[1].dispose
-				@text[1] = Sprite.new(self)
-				@text[1].bitmap = Bitmap.new(100, 20) # x, y 크기의 비트맵 상자를 생성
-				@text[1].x = @menu[0].x + @menu[0].width + 10
-				@text[1].y = @menu[0].y
+				@text[1].bitmap.clear
 				@text[1].bitmap.font.size = @font_size
 				@text[1].bitmap.font.color.set(0, 0, 0, 255)
 				@text[1].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[12]}", 0)
-				else
-					$game_variables[12] = 0
-				end
+			else
+				$game_variables[12] = 0
+			end
 		elsif @menu[1].click
 			if $game_variables[12] < 100
 				$game_variables[12] += 10
 				$game_variables[12] = 100 if $game_variables[12] > 100
 				$game_system.bgm_play($game_system.playing_bgm)
 				
-				@text[1].dispose
-				@text[1] = Sprite.new(self)
-				@text[1].bitmap = Bitmap.new(100, 20) # x, y 크기의 비트맵 상자를 생성
-				@text[1].x = @menu[0].x + @menu[0].width + 10
-				@text[1].y = @menu[0].y
+				@text[1].bitmap.clear
 				@text[1].bitmap.font.size = @font_size
 				@text[1].bitmap.font.color.set(0, 0, 0, 255)
 				@text[1].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[12]}", 0)
@@ -99,11 +100,7 @@ class Jindow_volume < Jindow
 				$game_variables[13] -= 10
 				$game_variables[13] = 0 if $game_variables[13] < 0
 				
-				@text[3].dispose
-				@text[3] = Sprite.new(self)
-				@text[3].bitmap = Bitmap.new(100, 20) # x, y 크기의 비트맵 상자를 생성
-				@text[3].x = @menu[2].x + @menu[2].width + 10
-				@text[3].y = @menu[2].y
+				@text[3].bitmap.clear
 				@text[3].bitmap.font.size = @font_size
 				@text[3].bitmap.font.color.set(0, 0, 0, 255)
 				@text[3].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[13]}", 0)
@@ -115,17 +112,55 @@ class Jindow_volume < Jindow
 				$game_variables[13] += 10
 				$game_variables[13] = 100 if $game_variables[13] > 100
 				
-				@text[3].dispose
-				@text[3] = Sprite.new(self)
-				@text[3].bitmap = Bitmap.new(100, 20) # x, y 크기의 비트맵 상자를 생성
-				@text[3].x = @menu[2].x + @menu[2].width + 10
-				@text[3].y = @menu[2].y
+				@text[3].bitmap.clear
 				@text[3].bitmap.font.size = @font_size
 				@text[3].bitmap.font.color.set(0, 0, 0, 255)
 				@text[3].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[13]}", 0)
 			else
 				$game_variables[13] = 100
 			end
+		end
+		
+		# 배경음
+		# on
+		if @menu2[0].click
+			$game_variables[12] = 100
+			$game_system.bgm_play($game_system.playing_bgm)
+			
+			@text[1].bitmap.clear
+			@text[1].bitmap.font.size = @font_size
+			@text[1].bitmap.font.color.set(0, 0, 0, 255)
+			@text[1].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[12]}", 0)
+		end
+		# off
+		if @menu2[1].click
+			$game_variables[12] = 0
+			$game_system.bgm_play($game_system.playing_bgm)
+			
+			@text[1].bitmap.clear
+			@text[1].bitmap.font.size = @font_size
+			@text[1].bitmap.font.color.set(0, 0, 0, 255)
+			@text[1].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[12]}", 0)
+		end
+		
+		# 효과음
+		# on
+		if @menu2[2].click
+			$game_variables[13] = 100
+			
+			@text[3].bitmap.clear
+			@text[3].bitmap.font.size = @font_size
+			@text[3].bitmap.font.color.set(0, 0, 0, 255)
+			@text[3].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[13]}", 0)
+		end
+		# off
+		if @menu2[3].click
+			$game_variables[13] = 0
+			
+			@text[3].bitmap.clear
+			@text[3].bitmap.font.size = @font_size
+			@text[3].bitmap.font.color.set(0, 0, 0, 255)
+			@text[3].bitmap.draw_text(0, 0, 100, 20, "#{$game_variables[13]}", 0)
 		end
 	end
 end

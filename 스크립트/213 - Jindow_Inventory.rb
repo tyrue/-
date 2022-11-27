@@ -247,6 +247,11 @@ class Game_Battler
 			return false
 		end
 		
+		if $game_party.item_number(item.id) <= 0
+			$console.write_line("아이템이 없습니다.")
+			return false
+		end
+		
 		jindow_item_event(item)
 		return true
 	end

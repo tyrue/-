@@ -5,7 +5,7 @@ class Jindow_Skill_Info < Jindow
 	
 	def initialize(data)
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 200, 100)
+		super(0, 0, 220, 100)
 		@data = data
 		self.name = "⊙ 스킬 정보 (#{@data.name})"
 		@head = true
@@ -85,6 +85,45 @@ class Jindow_Skill_Info < Jindow
 		if @heal_txt != nil
 			@s_info.push("기본 회복량 : #{@heal_txt}")
 		end
+		@s_info.push("")
+		
+		@hit_num = nil
+		@range = nil
+		@stat_rate = []
+		
+		if RANGE_SKILLS[@data.id] != nil 
+			@hit_num = RANGE_SKILLS[@data.id][5] != nil ? RANGE_SKILLS[@data.id][5] : 1
+			@range = RANGE_SKILLS[@data.id][0] 
+			@stat_rate.push(@data.str_f)
+			@stat_rate.push(@data.dex_f)
+			@stat_rate.push(@data.agi_f)
+			@stat_rate.push(@data.int_f)
+			
+		elsif RANGE_EXPLODE[@data.id] != nil
+			@hit_num = RANGE_EXPLODE[@data.id][6] != nil ? RANGE_EXPLODE[@data.id][6] : 1
+			@range = RANGE_EXPLODE[@data.id][0] 
+			@stat_rate.push(@data.str_f)
+			@stat_rate.push(@data.dex_f)
+			@stat_rate.push(@data.agi_f)
+			@stat_rate.push(@data.int_f)
+			
+		end
+		@s_info.push("범위 : #{@range}") if @range != nil
+		@s_info.push("타격수 : #{@hit_num}") if @hit_num != nil
+		
+		if @stat_rate.size > 0
+			txt = "능력치 공격력 영향도"
+			@s_info.push(txt)
+			txt = "[힘 #{@stat_rate[0]}%]"
+			txt += "[민첩 #{@stat_rate[1]}%]"
+			txt += "[손재주 #{@stat_rate[2]}%]"
+			txt += "[지력 #{@stat_rate[3]}%]"
+			@s_info.push(txt)
+		end
+		
+		@mash_time = nil
+		@mash_time = SKILL_MASH_TIME[@data.id][0] / 60.0 if SKILL_MASH_TIME[@data.id] != nil 
+		@s_info.push("재사용 시간 : #{@mash_time}초") if @mash_time != nil
 		
 		@s_info2 = []
 		
@@ -134,6 +173,7 @@ class Jindow_Skill_Info < Jindow
 		end
 		
 		self.height = height
+		self.window_ini
 		self.refresh("Skill_Info")
 	end
 	

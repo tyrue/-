@@ -321,6 +321,7 @@ class Jindow_Item_Info < Jindow
 		end
 		
 		self.height = @detail.y + @detail.height + 10
+		self.window_ini
 		self.refresh("Item_Info")
 	end
 	

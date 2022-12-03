@@ -55,6 +55,7 @@ class Jindow_Inventory < Jindow
 		end
 		
 		sort
+		self.window_ini
 		self.refresh("Inventory")
 	end
 	

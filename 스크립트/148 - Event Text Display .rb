@@ -161,7 +161,7 @@ if SDK.state('Event Text Display') == true
 			@_text_display.oy = 24
 			@_text_display.x = self.x
 			@_text_display.y = self.y - self.oy / 2 - 24
-			@_text_display.z = 30001
+			@_text_display.z = 1000
 			@_text_display.visible = self.visible #true
 		end
 		#--------------------------------------------------------------------------

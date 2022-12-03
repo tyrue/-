@@ -26,7 +26,7 @@ module PLAN_Map_Window
 	OVER_X = 632 - WIN_WIDTH # 이동 후의 X 좌표(초기 위치와 왕복합니다) 
 	OVER_Y = 8 # 이동 후의 Y 좌표(초기 위치와 왕복합니다) 
 	
-	OPACITY = 255 # 윈도우의 투명도
+	OPACITY = 180 # 윈도우의 투명도
 	C_OPACITY = 255 # 맵의 투명도 
 	VISIBLE = false # 최초, 표시할까 하지 않는가(true:하는, false:하지 않는다) 
 end 

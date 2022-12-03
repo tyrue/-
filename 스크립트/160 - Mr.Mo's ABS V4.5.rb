@@ -124,8 +124,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[49] = [10, 10, "공격스킬2", 4, 0] #성려멸주
 	RANGE_SKILLS[52] = [10, 10, "공격스킬2", 4, 0] #성려멸주 1성
 	RANGE_SKILLS[56] = [10, 10, "공격스킬2", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[58] = [10, 6, "공격스킬2", 4, 0] #지폭지술
-	RANGE_SKILLS[68] = [10, 6, "공격스킬2", 4, 0] #폭류유성
+	RANGE_SKILLS[58] = [10, 6, "공격스킬2", 4, 0, 3] #지폭지술
+	RANGE_SKILLS[68] = [10, 6, "공격스킬2", 4, 0, 3] #폭류유성
 	
 	#전사 스킬
 	RANGE_SKILLS[65] = [10, 10, "공격스킬2", 4, 0] #뢰마도
@@ -137,21 +137,21 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [1, 5, "공격스킬2", 4, 0] #십리건곤 1성
-	RANGE_SKILLS[79] = [0, 5, "", 4, 0] #동귀어진
+	RANGE_SKILLS[79] = [0, 5, "", 4, 0, 10] #동귀어진
 	RANGE_SKILLS[80] = [1, 5, "공격스킬2", 4, 0] #십리건곤 2성
 	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
-	RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0] #백호참
+	RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0, 3] #백호참
 	RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
-	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0] #포효검황
-	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0] #혈겁만파
+	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0, 3] #포효검황
+	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0, 3] #혈겁만파
 	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3] #초혼비무
 	#도사 스킬
 	# 부활 스킬을 넣어볼까 생각
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0] #무형검
-	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
+	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0, 10] #무형검
+	RANGE_SKILLS[139] = [10, 5, "", 4, 0, 3] #분혼경천
 	
 	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, (타격수)
 	# 적 캐릭터 스킬
@@ -241,8 +241,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
 	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
-	SKILL_MASH_TIME[58] = [80 * sec, 0] # 지폭지술
-	SKILL_MASH_TIME[68] = [140 * sec, 0] # 폭류유성
+	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
+	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
 	SKILL_MASH_TIME[69] = [7 * sec, 0] # 삼매진화 2성
 	
 	# 전사
@@ -254,8 +254,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [1 * sec, 0] # 백호참
 	SKILL_MASH_TIME[103] = [8 * sec, 0] # 어검술
-	SKILL_MASH_TIME[104] = [80 * sec, 0] # 포효검황
-	SKILL_MASH_TIME[105] = [140 * sec, 0] # 혈겁만파
+	SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
+	SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
 	SKILL_MASH_TIME[106] = [15 * sec, 0] # 초혼비무
 	
 	# 도적
@@ -263,7 +263,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
 	SKILL_MASH_TIME[138] = [3 * sec, 0] # 무형검
-	SKILL_MASH_TIME[139] = [120 * sec, 0] # 분혼경천
+	SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
 	
 	# 도사
 	SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
@@ -423,7 +423,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	BOSS_ENEMY_HP[159] = 5000000 # 거북장군
 	
 	# 일본
-	BOSS_ENEMY_HP[189] = 1200000 # 주마관
+	BOSS_ENEMY_HP[186] = 800000 # 무사
+	BOSS_ENEMY_HP[189] = 1500000 # 주마관
 	BOSS_ENEMY_HP[191] = 2000000 # 유성지
 	BOSS_ENEMY_HP[192] = 3000000 # 해골왕
 	BOSS_ENEMY_HP[193] = 5000000 # 파괴왕
@@ -1675,54 +1676,15 @@ if SDK.state("Mr.Mo's ABS") == true
 					return
 				end
 				
-				if SKILL_CUSTOM[id] != nil
-					@skill_mash[id] = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
-				else
-					@skill_mash[id] = MASH_TIME*10
-				end
-				#If the skill is not ranged
-				enemies = []
-				#Get all enemies
-				
-				for enemy in @enemies.values
-					next if enemy == nil
-					next if !enemy.hate_group.include?(0) and !CAN_HURT_ALLY
-					enemies.push(enemy)
-				end
-				e = $game_player
-				#Order them from closest to the farthest
-				enemies.sort! {|a,b|
-					get_range(e.event,a.event) - get_range(e.event,b.event) }
-				# Return if enemies = nil
-				return if enemies[0] == nil
-				
-				# Attack the closest one
-				enemies[0].effect_skill(@actor, skill)
-				#Take off SP
-				@actor.sp -= skill.sp_cost
-				
-				#Show Animetion on enemy
-				hit_enemy(enemies[0], @actor, skill.animation2_id) if enemies[0].damage != "Miss" and enemies[0].damage != 0
-				e = enemies[0]
-				# 적이 스킬을 맞으면 점프함
-				#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
-				#Return if enemy is dead 
-				return if enemy_dead?(enemies[0],@actor)
-				return if !enemy.hate_group.include?(0)
-				#If its alive, put it in battle
-				enemies[0].in_battle = true
-				#Make it attack the player
-				enemies[0].attacking = $game_player
-				#Setup movement
-				setup_movement(enemies[0])
-				return
 				
 			when 2 #All Emenies 적 전체
 				#Play the animation on player
-				$game_player.animation_id = skill.animation2_id
+				$game_player.animation_id = skill.animation1_id
 				#Take off SP
 				@actor.sp -= skill.sp_cost
 				id = skill.id
+				
+				hit_num = 1
 				
 				#If the skill is ranged
 				if RANGE_SKILLS.has_key?(skill.id)
@@ -1730,6 +1692,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					w = RANGE_SKILLS[id]
 					#Add mash time
 					@skill_mash[id] = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10) 
+					hit_num = RANGE_SKILLS[skill.id][5] == nil ? 1 : [RANGE_SKILLS[skill.id][5], 1].max
+					
 				else
 					if SKILL_CUSTOM[id] != nil
 						@skill_mash[id] = (SKILL_CUSTOM[id] == nil ? MASH_TIME*10 : SKILL_CUSTOM[id] != nil and SKILL_CUSTOM[id][0] != nil ? SKILL_CUSTOM[id][0]*10 : MASH_TIME*10)
@@ -1738,6 +1702,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					enemies = @enemies
 				end
+				
 				
 				target_enemies = []
 				for e in enemies
@@ -1754,9 +1719,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get all enemies
 				for e in target_enemies
 					#Attack enemy
-					e.effect_skill(@actor, skill)
+					hit_num.times{
+						e.effect_skill(@actor, skill)
+						hit_enemy(e, @actor, skill.animation2_id)
+					}
+					
 					#Show Animetion on enemy
-					hit_enemy(e, @actor, 0) if e.damage != "Miss" and e.damage != 0
+					
 					#jump(e.event, $game_player, SKILL_CUSTOM[id][1]) if SKILL_CUSTOM[id] != nil and e.damage != "Miss" and e.damage != 0
 					#Skip this enemy if its dead
 					next if enemy_dead?(e, @actor)
@@ -2048,15 +2017,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if !a.hate_group.include?(e.id)
 			end
 			
-			# hit 애니메이션 재생
-			animate(e,e.character_name+"_hit") if e.is_a?(Game_Player) and @player_ani
-			# Animate Enemy
-			animate(e.event, e.event.character_name+"_hit") if e.is_a?(ABS_Enemy) and @enemy_ani
 			if animation == nil
 				e.event.animation_id = a.animation2_id
+				e.event.ani_array.push(a.animation2_id)
 				Network::Main.ani(Network::Main.id, e.event.animation_id)
 			else
 				e.event.animation_id = animation
+				e.event.ani_array.push(animation)
+				Network::Main.ani(Network::Main.id, e.event.animation_id)
 			end
 		end
 		#--------------------------------------------------------------------------
@@ -2627,11 +2595,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Get enemy
 				enemy = $game_party.actors[0]
 				#Attack It's enemy
-				actor.event.animation_id = @skill.animation2_id 
-				Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
 				
 				@hit_num.times{
+					actor.event.animation_id = @skill.animation2_id
 					actor.effect_skill(enemy, @skill)
+					actor.event.ani_array.push(actor.event.animation_id)
+					Network::Main.ani(actor.event.id, actor.event.animation_id, 1) #몬스터 대상의 애니매이션 공유
 				}
 				
 				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
@@ -2789,12 +2758,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				#Show animation on event
 				@enani = actor.event
-				@enani.animation_id = @skill.animation2_id
-				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 				
 				#Attack It's enemy
 				@hit_num.times{
+					@enani.animation_id = @skill.animation2_id
 					actor.effect_skill(enemy, @skill)
+					@enani.ani_array.push(@enani.animation_id)
+					Network::Main.ani(@enani.id, @enani.animation_id, 1)
 				}
 				
 				$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
@@ -2824,7 +2794,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			#Attack It's enemy
-			actor.effect_skill(enemy, @skill)
+			@hit_num.times{
+				actor.effect_skill(enemy, @skill)	
+			}
+			
 			$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
 			
 			#Show animation on event
@@ -3098,7 +3071,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	module RPG
 		class Sprite < ::Sprite
 			attr_accessor :_damage_duration
+			attr_accessor :_damage_duration_max
 			attr_accessor :_max_height
+			attr_accessor :_damage_string 
 			
 			def initialize(viewport = nil)
 				super(viewport)
@@ -3108,6 +3083,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@_collapse_duration = 0
 				@_collapse_erase_duration = 0
 				@_damage_duration = 0
+				@_damage_duration_max = 0
 				@_damage_sprite = []
 				
 				@_animation_duration = 0
@@ -3115,60 +3091,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				@force_opacity = false
 				@stop_animation = true
 				@_max_height = 0
-			end
-			
-			def update_animation
-				if @_animation_duration > 0
-					frame_index = @_animation.frame_max - @_animation_duration
-					cell_data = @_animation.frames[frame_index].cell_data
-					position = @_animation.position
-					animation_set_sprites(@_animation_sprites, cell_data, position)
-					for timing in @_animation.timings
-						if timing.frame == frame_index
-							animation_process_timing(timing, @_animation_hit)
-						end
-					end
-				else
-					@stop_animation = true
-					dispose_animation
-				end
-			end
-			
-			def animation(animation, hit)
-				@stop_animation = false
-				dispose_animation
-				@_animation = animation
-				return if @_animation == nil
-				@_animation_hit = hit
-				@_animation_duration = @_animation.frame_max
-				animation_name = @_animation.animation_name
-				animation_hue = @_animation.animation_hue
-				bitmap = RPG::Cache.animation(animation_name, animation_hue)
-				if @@_reference_count.include?(bitmap)
-					@@_reference_count[bitmap] += 1
-				else
-					@@_reference_count[bitmap] = 1
-				end
-				@_animation_sprites = []
-				if @_animation.position != 3 or not @@_animations.include?(animation)
-					for i in 0..15
-						sprite = ::Sprite.new(self.viewport)
-						sprite.bitmap = bitmap
-						sprite.visible = false
-						@_animation_sprites.push(sprite)
-					end
-					unless @@_animations.include?(animation)
-						@@_animations.push(animation)
-					end
-				end
-				update_animation
+				@_damage_string = ""
 			end
 			
 			def stop_animation?
 				return @stop_animation 
 			end
+			
 			#-------------------------------------------------------------------------
-			alias mrmo_abs_sprite_update_collapse update
+			# update
 			#-------------------------------------------------------------------------
 			def update
 				super
@@ -3189,7 +3120,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					self.opacity = 256 - (48 - @_collapse_duration) * 6
 				end
 				
-				update_damage_view
+				update_damage_view if @_damage_sprite.size > 0
 				
 				if @_animation != nil and (Graphics.frame_count % 2 == 0)
 					@_animation_duration -= 1
@@ -3200,6 +3131,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					@_loop_animation_index += 1
 					@_loop_animation_index %= @_loop_animation.frame_max
 				end
+				
 				if @_blink
 					@_blink_count = (@_blink_count + 1) % 32
 					if @_blink_count < 16
@@ -3236,14 +3168,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			# * update damage view, 데미지 표시 효과 설정
 			#--------------------------------------------------------------------------
 			def update_damage_view
+				count = 0
 				for sprite in @_damage_sprite
 					if sprite._damage_duration > 0
 						sprite._damage_duration -= 1
-						sprite.y = [sprite.y - 4, sprite._max_height].max 
+						tempY = self.y - self.oy
+						time = sprite._damage_duration_max - sprite._damage_duration
+						
+						sprite.x = self.x - sprite.bitmap.text_size(sprite._damage_string).width / 2
+						sprite.y = [tempY - time * 4, tempY - 10 * count - 40].max
 						sprite.opacity = 256
 						if sprite._damage_duration == 0
 							dispose_damage(sprite)
 						end
+						count += 1
 					end
 				end
 			end
@@ -3305,6 +3243,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				else
 					damage_string = value.to_s
 				end
+				damage_string = change_number_unit(damage_string, type) if damage_string.to_i > 0
+				
 				bitmap = Bitmap.new(self.width, self.height)
 				bitmap.font.name = $ABS.DAMAGE_FONT_NAME
 				bitmap.font.size = critical == true ? 25 : $ABS.DAMAGE_FONT_SIZE 
@@ -3313,18 +3253,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				y = self.height / 4 
 				
-				if damage_string.to_i > 0
-					# 데미지 그림자
-					bitmap.draw_text(-1, y-1, 200, 36, change_number_unit(damage_string, type), 0)
-					bitmap.draw_text(+1, y-1, 200, 36, change_number_unit(damage_string, type), 0)
-					bitmap.draw_text(-1, y+1, 200, 36, change_number_unit(damage_string, type), 0)
-					bitmap.draw_text(+1, y+1, 200, 36, change_number_unit(damage_string, type), 0)
-				else
-					bitmap.draw_text(-1, y-1, 200, 36, damage_string, 0)
-					bitmap.draw_text(+1, y-1, 200, 36, damage_string, 0)
-					bitmap.draw_text(-1, y+1, 200, 36, damage_string, 0)
-					bitmap.draw_text(+1, y+1, 200, 36, damage_string, 0)
-				end
+				bitmap.draw_text(-1, y-1, 200, 36, damage_string, 0)
+				bitmap.draw_text(+1, y-1, 200, 36, damage_string, 0)
+				bitmap.draw_text(-1, y+1, 200, 36, damage_string, 0)
+				bitmap.draw_text(+1, y+1, 200, 36, damage_string, 0)
+				
 				# 폰트 칼라 색
 				if value.is_a?(Numeric) and value < 0
 					bitmap.font.color.set(176, 255, 144)
@@ -3336,25 +3269,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap.font.color.set(255, 255, 255) if !critical # 흰색	
 				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
 				
-				if damage_string.to_i > 0
-					bitmap.draw_text(0, y, 200, 36, change_number_unit(damage_string, type), 0)	
-				else
-					bitmap.draw_text(0, y, 200, 36, damage_string, 0)	
-				end
+				bitmap.draw_text(0, y, 200, 36, damage_string, 0)
+				
 				
 				sprite = Sprite.new(self.viewport)
 				sprite.bitmap = bitmap
 				sprite.oy = 20
-				if damage_string.to_i > 0
-					sprite.x = self.x - sprite.bitmap.text_size(change_number_unit(damage_string, type)).width / 2
-				else
-					sprite.x = self.x - sprite.bitmap.text_size(damage_string).width / 2
-				end
+				sprite.x = self.x - sprite.bitmap.text_size(damage_string).width / 2
+				sprite._damage_string = damage_string
 				sprite.y = self.y - self.oy
 				sprite.z = 3000
 				sprite._damage_duration = 50
+				sprite._damage_duration_max = 50
+				
 				@_damage_sprite.push(sprite)
-				sprite._max_height = [sprite.y - @_damage_sprite.size * 10 - 50, sprite.y - $ABS.DAMAGE_FONT_SIZE * 5].max
 			end
 		end
 	end
@@ -3493,7 +3421,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			
-			
+			if @character.ani_array != nil and @character.ani_array.size > 0
+				for ani in @character.ani_array
+					animation = $data_animations[ani]
+					animation2(animation, true)
+				end
+			end
+			@character.ani_array.clear
 		end
 	end
 	#==============================================================================
@@ -3574,7 +3508,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	class Game_Battler
 		attr_accessor :state_time
 		attr_accessor :damage_array # 표시할 데미지를 모아두는 배열
-		attr_accessor :critical_array # 표시할 데미지를 모아두는 배열
+		attr_accessor :critical_array # 표시할 크리티컬을 모아두는 배열
+		attr_accessor :ani_array # 표시할 애니메이션 아이디를 모아두는 배열
 		#--------------------------------------------------------------------------
 		alias mrmo_abs_gb_int initialize
 		#--------------------------------------------------------------------------
@@ -3585,6 +3520,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@state_time = 0
 			@damage_array = []
 			@critical_array = []
+			@ani_array = []
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3875,6 +3811,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@damage_array.push(self.damage)
 				@critical_array.push(self.critical)
 				
+				
 				r = rand(100)
 				if r <= [(self.damage * 100 / self.maxhp), 30].max
 					if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
@@ -3923,6 +3860,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :frame
 		attr_accessor :fade
 		attr_accessor :through # 겹치기 가능 여부
+		attr_accessor :ani_array # 표시할 애니메이션 아이디를 모아두는 배열
+		
+		alias mrmo_abs_game_character_ini initialize
+		def initialize
+			mrmo_abs_game_character_ini
+			@ani_array = []
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Jump
 		#     x_plus : x-coordinate plus value

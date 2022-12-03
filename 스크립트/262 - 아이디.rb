@@ -40,7 +40,7 @@ class Sprite_Character < Sprite_Character
 		@_id_sprite.oy = 20
 		@_id_sprite.x = self.x 
 		@_id_sprite.y = self.y - self.oy / 2 
-		@_id_sprite.z = 3000 
+		@_id_sprite.z = 1000 
 		if $game_variables[11] == 0
 			@_id_sprite.visible = false 
 		else

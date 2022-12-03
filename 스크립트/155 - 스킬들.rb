@@ -237,8 +237,8 @@ SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 8.0, 90]] # 성려멸주
 SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 7.0, 100]] # 성려멸주 1성
 SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 6.0, 120]] # 성려멸주 2성
 
-SKILL_POWER_CUSTOM[58] = [[0, 0, 2.0, 10]] # 지폭지술
-SKILL_POWER_CUSTOM[68] = [[0, 1.0, 2.0, 10]] # 폭류유성
+SKILL_POWER_CUSTOM[58] = [[0, 0, 0.65, 10]] # 지폭지술
+SKILL_POWER_CUSTOM[68] = [[0, 0.5, 0.65, 10]] # 폭류유성
 
 # ---------------- #
 SKILL_COST_CUSTOM[44] = [[0, 0, 1.0]] # 헬파이어
@@ -257,11 +257,11 @@ SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
 # ---------------- 전사
 SKILL_POWER_CUSTOM[67] = [[0, 2.0, 0, 30]] # 건곤대나이
 SKILL_POWER_CUSTOM[73] = [[0, 0.5, 0, 30]] # 광량돌격
-SKILL_POWER_CUSTOM[79] = [[0, 7, 0, 100]] # 동귀어진
-SKILL_POWER_CUSTOM[101] = [[0, 3, 0.1, 60]] # 백호참
+SKILL_POWER_CUSTOM[79] = [[0, 1, 0, 100]] # 동귀어진
+SKILL_POWER_CUSTOM[101] = [[0, 1, 0.1, 60]] # 백호참
 SKILL_POWER_CUSTOM[103] = [[0, 0.6, 0.5, 20]] # 어검술
-SKILL_POWER_CUSTOM[104] = [[0, 1.0, 1.0, 20]] # 포효검황
-SKILL_POWER_CUSTOM[105] = [[0, 1.2, 1.5, 100]] # 혈겁만파
+SKILL_POWER_CUSTOM[104] = [[0, 0.3, 0.3, 20]] # 포효검황
+SKILL_POWER_CUSTOM[105] = [[0, 0.4, 0.5, 100]] # 혈겁만파
 SKILL_POWER_CUSTOM[106] = [[0, 0.5, 1.5, 100]] # 초혼비무
 
 SKILL_POWER_CUSTOM[74] = [[1, 1.0 / 12.0, 0, 20]] # 십리건곤
@@ -289,8 +289,8 @@ SKILL_COST_CUSTOM[102] = [[1, 1.0 / 16.0, 0.01]] # 백리건곤 1성
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
 SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
 SKILL_POWER_CUSTOM[137] = [[0, 0.4, 1.0, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 1.5, 0.4, 20]] # 무형검
-SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
+SKILL_POWER_CUSTOM[138] = [[0, 0.15, 0.4, 20]] # 무형검
+SKILL_POWER_CUSTOM[139] = [[0, 0.6, 0.4, 100]] # 분혼경천
 
 SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
 SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
@@ -859,15 +859,20 @@ class Rpg_skill
 		$game_player.moveto(x, y)
 	end
 	
-	def 비영승보(x = $game_player.x, y = $game_player.y, d = $game_player.direction)
+	def 비영승보(x = $game_player.x, y = $game_player.y, d = $game_player.direction, user = $game_player)
 		if 비영_passable2?(x, y, d) 
 			if 비영_passable?(x, y, d)
 				new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)
 				new_y = y + (d == 2 ? 2 : d == 8 ? -2 : 0)
 				
-				$game_player.moveto(new_x, new_y) 
-				$game_player.direction = 10 - d
-				$ABS.player_melee(true)
+				if user == $game_player
+					$game_player.moveto(new_x, new_y) 
+					$game_player.direction = 10 - d
+					$ABS.player_melee(true)
+				else
+					user.moveto(new_x, new_y) 
+					user.direction = 10 - d
+				end
 			else
 				r = rand(100)
 				new_x = x 
@@ -917,9 +922,15 @@ class Rpg_skill
 						new_y -= 1
 					end
 				end
-				$game_player.moveto(new_x, new_y) 
-				$game_player.direction = d
-				$ABS.player_melee(true)
+				
+				if user == $game_player
+					$game_player.moveto(new_x, new_y) 
+					$game_player.direction = d
+					$ABS.player_melee(true)
+				else
+					user.moveto(new_x, new_y) 
+					user.direction = 10 - d
+				end
 			end
 		end
 	end
@@ -1133,7 +1144,7 @@ class Rpg_skill
 			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
 			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
 			
-		# 몬스터
+			# 몬스터
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
 		end

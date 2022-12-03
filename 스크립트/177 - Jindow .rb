@@ -541,6 +541,11 @@ class Jindow < Viewport
 		end
 	end
 	
+	def window_ini
+		self.x = self.x - (self.x + self.width - 640 + 20) if self.x + self.width > 640
+		self.y = self.y - (self.y + self.height - 480 + 20) if self.y + self.height > 480
+	end
+	
 	def dispose2
 		$game_system.se_play($data_system.cancel_se)
 		Hwnd.dispose(self)

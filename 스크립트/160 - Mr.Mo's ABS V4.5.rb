@@ -93,7 +93,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#Ranged Skills
 	RANGE_SKILLS = {}
 	# RANGE_SKILLS[Skill_ID] = [Range, Move Speed, Character Set Name, Mash Time(in seconds), Kick Back(in tiles)]
-	# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위
+	# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, 히트수
 	# 주술사 스킬
 	RANGE_SKILLS[1] = [10, 10, "공격스킬2", 4, 0] 	#뢰진주
 	RANGE_SKILLS[2] = [10, 10, "공격스킬2", 4, 0] 	#백열주
@@ -153,16 +153,16 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0] #무형검
 	RANGE_SKILLS[139] = [10, 5, "", 4, 0] #분혼경천
 	
-	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위
+	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, (타격수)
 	# 적 캐릭터 스킬
 	RANGE_SKILLS[45] = [8, 3, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
 	RANGE_SKILLS[85] = [5, 4, "공격스킬2", 4, 2] # 필살검무
-	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 1] # 청룡의 포효
-	RANGE_SKILLS[152] = [7, 4, "현무", 4, 1] # 현무의 포효
-	RANGE_SKILLS[153] = [6, 4, "공격스킬2", 4, 3] # 백호검무
-	RANGE_SKILLS[154] = [3, 1, "용", 4, 4] # 청룡마령참
+	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 3] # 청룡의 포효
+	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 3] # 현무의 포효
+	RANGE_SKILLS[153] = [3, 3, "공격스킬2", 4, 3, 2] # 백호검무
+	RANGE_SKILLS[154] = [3, 1, "용", 4, 6] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
@@ -173,23 +173,23 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 폭발 범위
 	RANGE_EXPLODE = {}
 	# RANGE_EXPLODE[Skill_ID] = [Range, Move Speed, Character Set Name, Explosive Range, Mash Time(in seconds), Kick Back(in tiles)]
-	# 폭발 스킬 = 					범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백
+	# 폭발 스킬 = 					범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백, 히트수
 	RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
 	
 	# 주술사 스킬
 	RANGE_EXPLODE[53] = [10, 10, "공격스킬2", 2, 4, 0] #삼매진화
 	RANGE_EXPLODE[57] = [10, 10, "공격스킬2", 2, 4, 0] #삼매진화 1성
-	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 3, 4, 0] # 삼매진화 2성
+	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 3, 4, 0, 2] # 삼매진화 2성
 	
 	# 전사스킬
-	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0] # 어검술
+	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0, 2] # 어검술
 	
 	# 도적 스킬
 	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
-	RANGE_EXPLODE[137] = [0, 6, "공격스킬2", 3, 4, 0] #이기어검
+	RANGE_EXPLODE[137] = [0, 6, "공격스킬2", 3, 4, 0, 2] #이기어검
 	
 	# 도사 스킬
-	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0] # 지진
+	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0, 2] # 지진
 	
 	# 적 스킬
 	RANGE_EXPLODE[160] = [5, 1, "공격스킬2", 2, 5, 0] # 테스트2
@@ -711,6 +711,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			@enemies[event.id].aggro = $is_map_first
 			@enemies[event.id].aggressiveness = (@enemies[event.id].aggressiveness * 45.0 + rand(3) - 2) / 45.0 
+			
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -2457,6 +2459,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@move_direction = m_dir
 			end
 			@dummy = dummy
+			@hit_num = @range_skill[6] == nil ? 1 : [@range_skill[6], 1].max
 		end
 		#--------------------------------------------------------------------------
 		# * Check Event Trigger Touch(x,y)
@@ -2595,7 +2598,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get Enemy
 			enemy = @actor
 			#Attack Actor
-			actor.effect_skill(enemy, @skill) if enemy != nil 
+			@hit_num.times{
+				actor.effect_skill(enemy, @skill) if enemy != nil 
+			}
+			
 			$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
 			
 			$game_player.animation_id = @skill.animation2_id if actor.damage != "Miss" and actor.damage != 0
@@ -2623,7 +2629,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Attack It's enemy
 				actor.event.animation_id = @skill.animation2_id 
 				Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
-				actor.effect_skill(enemy, @skill)
+				
+				@hit_num.times{
+					actor.effect_skill(enemy, @skill)
+				}
 				
 				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
 				return if $ABS.enemy_dead?(actor, enemy)
@@ -2639,7 +2648,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy = $ABS.enemies[@parent.id]
 			return if enemy == nil
 			#Attack It's enemy
-			actor.effect_skill(enemy, @skill)
+			@hit_num.times{
+				actor.effect_skill(enemy, @skill)
+			}
 			#Show animation on event
 			if actor.damage != "Miss" and actor.damage != 0
 				actor.event.animation_id = @skill.animation2_id 
@@ -2677,6 +2688,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@move_direction = m_dir
 			end
 			@dummy = dummy
+			@hit_num = @range_skill[5] == nil ? 1 : [@range_skill[5], 1].max
 		end
 		#--------------------------------------------------------------------------
 		# * Check Event Trigger Touch(x,y)
@@ -2738,16 +2750,23 @@ if SDK.state("Mr.Mo's ABS") == true
 			if enemy.is_a?(ABS_Enemy) and actor.is_a?(Game_Actor)
 				return if !enemy.hate_group.include?(0)
 			end
-			actor.effect_skill(enemy, @skill)
+			
+			hit_bool = false
+			@hit_num.times{
+				actor.effect_skill(enemy, @skill)
+				hit_bool = true if actor.damage != "Miss" and actor.damage != 0
+			}
+			
 			$rpg_skill.skill_cost_custom(enemy, @skill.id)
+			
 			#Show animation on player
-			if actor.damage != "Miss" and actor.damage != 0
+			if hit_bool
 				$game_player.animation_id = @skill.animation2_id 
 				Network::Main.ani(Network::Main.id, $game_player.animation_id) #몬스터 대상의 애니매이션 공유
 			end
 			
 			#Jump
-			$ABS.jump($game_player, self, @range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and @range_skill[4] != 0
+			$ABS.jump($game_player, self, @range_skill[4]) if hit_bool and @range_skill[4] != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2774,10 +2793,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 				
 				#Attack It's enemy
-				actor.effect_skill(enemy, @skill)
+				@hit_num.times{
+					actor.effect_skill(enemy, @skill)
+				}
+				
 				$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
 				
-				if @skill.id == 138
+				if @skill.id == 138 # 무형검
 					$rpg_skill.비영승보(x, y, @move_direction)
 				end
 				
@@ -3421,25 +3443,53 @@ if SDK.state("Mr.Mo's ABS") == true
 			if $ABS.damage_display
 				#Skip if no demage or dead;
 				if !@character.is_a?(Game_Player) and $ABS.enemies[id] != nil
-					#Display damage  #몬스터한태 데미지 표시        
-					if $ABS.enemies[id].damage != nil
+					dmg_array = $ABS.enemies[id].damage_array
+					cri_array = $ABS.enemies[id].critical_array
+					if dmg_array != nil and dmg_array.size > 0
+						for i in 0...dmg_array.size
+							dmg = dmg_array[i]
+							cri = cri_array[i]
+							next if dmg == nil
+							damage(dmg, cri) 
+							# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
+							Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{dmg},#{cri}</mon_damage>\n")	if $ABS.enemies[id].send_damage
+						end
+					elsif $ABS.enemies[id].damage != nil
 						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
 						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage
+						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage						
 					end
+					
 					#Make Damage nil
 					$ABS.enemies[id].damage = nil
+					$ABS.enemies[id].damage_array.clear
+					$ABS.enemies[id].critical_array.clear
 					$ABS.enemies[id].send_damage = true
+					
 				elsif @character.is_a?(Game_Player)					
 					a = $game_party.actors[0]
-					#Display damage
-					if a.damage != nil
+					
+					dmg_array = a.damage_array
+					cri_array = a.critical_array
+					if dmg_array != nil and dmg_array.size > 0
+						for i in 0...dmg_array.size
+							dmg = dmg_array[i]
+							cri = cri_array[i]
+							next if dmg == nil
+							damage(dmg, cri) 
+							# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
+							Network::Main.socket.send("<player_damage>#{$game_map.map_id},#{Network::Main.id},#{dmg},#{cri}</player_damage>\n")	
+						end
+						#Display damage
+					elsif a.damage != nil
 						damage(a.damage, a.critical) 
 						# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
 						Network::Main.socket.send("<player_damage>#{$game_map.map_id},#{Network::Main.id},#{a.damage},#{a.critical}</player_damage>\n")	
 					end
 					#Make Damage nil
 					a.damage = nil
+					a.damage_array.clear
+					a.critical_array.clear
 				end
 			end
 			
@@ -3523,6 +3573,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	#==============================================================================
 	class Game_Battler
 		attr_accessor :state_time
+		attr_accessor :damage_array # 표시할 데미지를 모아두는 배열
+		attr_accessor :critical_array # 표시할 데미지를 모아두는 배열
 		#--------------------------------------------------------------------------
 		alias mrmo_abs_gb_int initialize
 		#--------------------------------------------------------------------------
@@ -3531,6 +3583,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		def initialize
 			mrmo_abs_gb_int
 			@state_time = 0
+			@damage_array = []
+			@critical_array = []
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3669,6 +3723,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				self.hp -= self.damage
+				@damage_array.push(self.damage)
+				@critical_array.push(self.critical)
+				
 				return $ABS.player_dead?(self, attacker) if self.is_a?(Game_Actor)
 				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
@@ -3787,7 +3844,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
 				self.damage = $rpg_skill.damage_calculation_skill(self.damage, self, user)
-				self.damage += $ABS.weapon_skill(user.weapon_id, self) # 특정 무기를 착용하면 추가 격 데미지가 있음
+				temp = $ABS.weapon_skill(user.weapon_id, self)
+				if temp > 0 
+					self.critical = true
+					self.damage += temp
+				end
 				
 				# Second hit detection
 				eva = [(8 * self.agi / user.dex + self.eva), 100].min
@@ -3811,6 +3872,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Substract damage from HP
 				last_hp = self.hp
 				self.hp -= self.damage
+				@damage_array.push(self.damage)
+				@critical_array.push(self.critical)
 				
 				r = rand(100)
 				if r <= [(self.damage * 100 / self.maxhp), 30].max

@@ -231,7 +231,7 @@ SKILL_COST_CUSTOM = {}
 SKILL_POWER_CUSTOM[44] = [[0, 0, 1.5, 10]] # 헬파이어
 SKILL_POWER_CUSTOM[53] = [[0, 0, 2.0, 10]] # 삼매진화
 SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
-SKILL_POWER_CUSTOM[69] = [[0, 0, 2.5, 10]] # 삼매진화 2성
+SKILL_POWER_CUSTOM[69] = [[0, 0, 1.5, 10]] # 삼매진화 2성
 
 SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 8.0, 90]] # 성려멸주
 SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 7.0, 100]] # 성려멸주 1성
@@ -259,7 +259,7 @@ SKILL_POWER_CUSTOM[67] = [[0, 2.0, 0, 30]] # 건곤대나이
 SKILL_POWER_CUSTOM[73] = [[0, 0.5, 0, 30]] # 광량돌격
 SKILL_POWER_CUSTOM[79] = [[0, 7, 0, 100]] # 동귀어진
 SKILL_POWER_CUSTOM[101] = [[0, 3, 0.1, 60]] # 백호참
-SKILL_POWER_CUSTOM[103] = [[0, 1.0, 0.5, 20]] # 어검술
+SKILL_POWER_CUSTOM[103] = [[0, 0.6, 0.5, 20]] # 어검술
 SKILL_POWER_CUSTOM[104] = [[0, 1.0, 1.0, 20]] # 포효검황
 SKILL_POWER_CUSTOM[105] = [[0, 1.2, 1.5, 100]] # 혈겁만파
 SKILL_POWER_CUSTOM[106] = [[0, 0.5, 1.5, 100]] # 초혼비무
@@ -288,7 +288,7 @@ SKILL_COST_CUSTOM[102] = [[1, 1.0 / 16.0, 0.01]] # 백리건곤 1성
 # ---------------- 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
 SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
-SKILL_POWER_CUSTOM[137] = [[0, 0.6, 1.5, 20]] # 이기어검
+SKILL_POWER_CUSTOM[137] = [[0, 0.4, 1.0, 20]] # 이기어검
 SKILL_POWER_CUSTOM[138] = [[0, 1.5, 0.4, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 2.0, 1.0, 100]] # 분혼경천
 
@@ -325,9 +325,9 @@ SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
 # ------ 몬스터 ------#
 SKILL_POWER_CUSTOM[151] = [[2, 0.02, 0, 100]] # 청룡의포효
 SKILL_POWER_CUSTOM[152] = [[2, 0.02, 0, 100]] # 현무의포효
-SKILL_POWER_CUSTOM[154] = [[2, 0.20, 0, 100]] # 청룡마령참
-SKILL_POWER_CUSTOM[155] = [[2, 0.02, 0, 100]] # 암흑진파
-SKILL_POWER_CUSTOM[156] = [[2, 0.02, 0, 100]] # 흑룡광포
+SKILL_POWER_CUSTOM[154] = [[2, 0.50, 0, 100]] # 청룡마령참
+SKILL_POWER_CUSTOM[155] = [[2, 0.03, 0, 100]] # 암흑진파
+SKILL_POWER_CUSTOM[156] = [[2, 0.03, 0, 100]] # 흑룡광포
 SKILL_POWER_CUSTOM[158] = [[2, 0.10, 0, 100]] # 지옥겁화
 
 # -------END------- #

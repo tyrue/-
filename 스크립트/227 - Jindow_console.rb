@@ -55,7 +55,9 @@ class Jindow_Console < Jindow
 	
 	def clear_and_write
 		for i in 0...@console_log.size
-			return if @console_log[i] == nil or @console_log[i].bitmap == nil
+			next if @console_log[i] == nil
+			next if @console_log[i].bitmap == nil
+			next if @console_log[i].disposed?
 			@console_log[i].y = i * @font_size
 		end
 	end
@@ -85,6 +87,14 @@ class Jindow_Console < Jindow
 			@check = false
 			scroll_end if @height_scroll
 		end
+	end
+	
+	def dispose2
+		for log in @console_log.size
+			log.dispose
+			log = nil
+		end
+		super
 	end
 end
 

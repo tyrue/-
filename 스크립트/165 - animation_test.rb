@@ -52,7 +52,7 @@ module RPG
 			return if animation == nil
 			ani = AniData.new(animation, hit)
 			ani.duration = animation.frame_max
-			ani.pause_duration = @_animation_overlap.size
+			ani.pause_duration = @_animation_overlap.size * 3
 			
 			animation_name = animation.animation_name
 			animation_hue = animation.animation_hue

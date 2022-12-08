@@ -32,6 +32,9 @@ class Jindow_Chat_Input < Jindow
 		@sec = 0
 		@ox = 0
 		@oy = 0
+		
+		#맵이름의 표시
+		@map_infos = load_data("Data/MapInfos.rxdata")
 	end
 	
 	def send_chat
@@ -85,10 +88,14 @@ class Jindow_Chat_Input < Jindow
 			if Network::Main.group == 'admin'		
 				for player in Network::Main.players.values
 					if player.name == $1.to_s 
-						$game_temp.player_transferring = true # 이동 가능
-						$game_temp.player_new_map_id = player.map_id
-						$game_temp.player_new_x = player.x
-						$game_temp.player_new_y = player.y
+						if player.map_id == $game_map.map_id
+							$game_player.moveto(player.x, player.y)
+						else
+							$game_temp.player_transferring = true # 이동 가능
+							$game_temp.player_new_map_id = player.map_id
+							$game_temp.player_new_x = player.x
+							$game_temp.player_new_y = player.y
+						end
 						break
 					end
 				end	
@@ -121,7 +128,7 @@ class Jindow_Chat_Input < Jindow
 			
 		when /\/공지 (.*)/
 			if Network::Main.group == 'admin'
-				Network::Main.socket.send "<chat>[공지]: #{$1.to_s}</chat>\n"
+				Network::Main.socket.send "<chat>(공지): #{$1.to_s}</chat>\n"
 			end 
 			
 		when /\/감옥 (.*)/ # 감옥으로 보내는 명령어
@@ -140,11 +147,35 @@ class Jindow_Chat_Input < Jindow
 				$console.write_line("#{$2.to_s}마일리지를 유저에게 지급하였습니다.")
 			end
 			
-		when /\/이벤트 고래/ 
+		when /^\/이벤트 고래\s?(\d*)$/ 
 			if Network::Main.group == 'admin'
-				create_abs_monsters_admin(14, 10)
-				$console.write_line("고래를 소환합니다.")
+				n = ($1 == nil or $1 == "") ? 10 : $1.to_i
+				if create_abs_monsters_admin(14, n) != nil
+					$console.write_line("고래를 #{n}마리 소환합니다.")
+					
+					mapname = ""
+					if $game_map.map_id != nil
+						mapname = @map_infos[$game_map.map_id].name.to_s if @map_infos[$game_map.map_id] != nil
+					end
+					
+					Network::Main.socket.send "<chat>(이벤트)고래가 #{mapname}에 출몰하였습니다!!</chat>\n"
+				else
+					$console.write_line("오류 발생 (id 없음)")
+				end
 			end	
+			
+		when /^\/몬스터 소환\s?(\d*)\s?(\d*)$/ 
+			if Network::Main.group == 'admin'
+				return if ($1 == nil or $1 == "")
+				id = $1.to_i
+				n = ($2 == nil or $2 == "") ? 1 : $2.to_i
+				
+				if create_abs_monsters_admin(id, n) != nil
+					$console.write_line("몬스터를 #{n}마리 소환합니다.") 
+				else
+					$console.write_line("오류 발생 (id 없음)")
+				end
+			end			
 			
 		when /\/테스트/
 			if Network::Main.group == 'admin'		
@@ -164,7 +195,7 @@ class Jindow_Chat_Input < Jindow
 			
 		when /^\/(.*?)/	
 			$chat.write ("/귓 (귓속말 상대), /교환 (교환 상대)", COLOR_HELP)    
-				
+			
 		else # 명령어가 아닌 그냥 일반 채팅일때
 			
 			case @chat_type

@@ -22,6 +22,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			return ['(착용)철도'] 			if id == 22 or id == 23  #비철단도, 철도
 			return ['(착용)야월도'] 			if id == 24   #야월도
 			return ['(착용)흑월도'] 			if id == 25   #흑월도
+			return ['(착용)녹호박별검'] 	if id == 26   #녹호박별검
 			
 			return ['(착용)목도'] 			if id == 101 	#목도
 			return ['(착용)목도'] 			if id == 102 	#목검

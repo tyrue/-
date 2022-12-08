@@ -150,7 +150,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0, 10] #무형검
+	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0, 5] #무형검
 	RANGE_SKILLS[139] = [10, 5, "", 4, 0, 3] #분혼경천
 	
 	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, (타격수)
@@ -158,10 +158,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[45] = [8, 3, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[85] = [5, 4, "공격스킬2", 4, 2] # 필살검무
-	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 3] # 청룡의 포효
-	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 3] # 현무의 포효
-	RANGE_SKILLS[153] = [3, 3, "공격스킬2", 4, 3, 2] # 백호검무
+	RANGE_SKILLS[85] = [5, 4, "공격스킬2", 4, 4] # 필살검무
+	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 4, 3] # 청룡의 포효
+	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 4, 3] # 현무의 포효
+	RANGE_SKILLS[153] = [3, 3, "공격스킬2", 4, 0] # 백호검무
 	RANGE_SKILLS[154] = [3, 1, "용", 4, 6] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
@@ -374,7 +374,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	EQUIP_EFFECTS = {} 
 	# 장신구
 	EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
-	EQUIP_EFFECTS[29] = [[1 * sec, "buff", 131]] # 투명구두
+	EQUIP_EFFECTS[29] = [[0.5 * sec, "buff", 131]] # 투명구두
 	EQUIP_EFFECTS[72] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 해골목걸이
 	EQUIP_EFFECTS[75] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금팔찌
 	
@@ -384,7 +384,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
 	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
 	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
-	EQUIP_EFFECTS[98] = [[3 * sec, "hp", 0.5], [3 * sec, "sp", 0.5]] # 재생의부적
+	EQUIP_EFFECTS[98] = [[3 * sec, "hp", 1], [3 * sec, "sp", 1]] # 재생의부적
 	
 	# 갑옷
 	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
@@ -1016,7 +1016,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Get the skill
 					skill = $data_skills[action.skill_id]
 					#Return if the skill is NIL
-					return if skill == nil
+					next if skill == nil
 					next if !e.can_use_skill?(skill)
 					
 					# 스킬 쿨타임 갱신
@@ -1708,6 +1708,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				for e in enemies
 					#Skip NIL values
 					next if e == nil
+					next if e.is_a?(Array)
 					#Skip 이미 적이 죽은거면 넘어가
 					next if e.dead?
 					# Skip if the enemy is an ally and can't hurt allies.
@@ -3172,11 +3173,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				for sprite in @_damage_sprite
 					if sprite._damage_duration > 0
 						sprite._damage_duration -= 1
-						tempY = self.y - self.oy
+						tempY = self.y - 20
 						time = sprite._damage_duration_max - sprite._damage_duration
 						
 						sprite.x = self.x - sprite.bitmap.text_size(sprite._damage_string).width / 2
-						sprite.y = [tempY - time * 4, tempY - 10 * count - 40].max
+						sprite.y = [tempY - time * 4, tempY - 10 * count - 60].max
 						sprite.opacity = 256
 						if sprite._damage_duration == 0
 							dispose_damage(sprite)
@@ -3274,13 +3275,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				sprite = Sprite.new(self.viewport)
 				sprite.bitmap = bitmap
-				sprite.oy = 20
+				sprite.oy = self.oy
 				sprite.x = self.x - sprite.bitmap.text_size(damage_string).width / 2
 				sprite._damage_string = damage_string
 				sprite.y = self.y - self.oy
 				sprite.z = 3000
 				sprite._damage_duration = 50
-				sprite._damage_duration_max = 50
+				sprite._damage_duration_max = sprite._damage_duration
 				
 				@_damage_sprite.push(sprite)
 			end

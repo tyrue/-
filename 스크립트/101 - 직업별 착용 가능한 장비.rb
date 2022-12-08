@@ -67,6 +67,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[17] = [[0], 0] # 음양도
 	EQUIP_JOB_WEAPON[22] = [[0], 0] # 비철단도
 	EQUIP_JOB_WEAPON[23] = [[0], 0] # 철도
+	EQUIP_JOB_WEAPON[26] = [[0], 0] # 녹호박별검
 	
 	EQUIP_JOB_WEAPON[101] = [[0], 0] # 목도
 	EQUIP_JOB_WEAPON[102] = [[0], 0] # 목검

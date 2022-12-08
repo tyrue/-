@@ -120,7 +120,7 @@ class Jindow_N < Jindow
 			last_text = text.clone
 			
 			# 변수
-			text.gsub!(/\\[Vv]\[([0-9]+)\]/) { $game_variables[$1.to_i] }
+			text.gsub!(/\\[Vv]\[([0-9]+)\]/) { change_number_unit($game_variables[$1.to_i]) }
 			# 스킬이름
 			text.gsub!(/\\[Ss]\[([0-9]+)\]/) do 
 				$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].name : ""

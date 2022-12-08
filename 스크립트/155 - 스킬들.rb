@@ -289,7 +289,7 @@ SKILL_COST_CUSTOM[102] = [[1, 1.0 / 16.0, 0.01]] # 백리건곤 1성
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
 SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
 SKILL_POWER_CUSTOM[137] = [[0, 0.4, 1.0, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 0.15, 0.4, 20]] # 무형검
+SKILL_POWER_CUSTOM[138] = [[0, 0.3, 0.8, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 0.6, 0.4, 100]] # 분혼경천
 
 SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
@@ -309,7 +309,7 @@ SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 # -------END------- #
 
 # ---------------- 도사
-SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 80.0, 100]] # 지진
+SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 50.0, 100]] # 지진
 
 # ---------------- #
 SKILL_COST_CUSTOM[92] = [[0, 0, 1.0]] # 공력주입

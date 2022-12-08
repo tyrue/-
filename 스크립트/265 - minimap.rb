@@ -292,9 +292,9 @@ class Window_Map < Window_Base
 	def update 
 		return if !self.visible
 		super 
-		if @old_real_x != $game_player.real_x or @old_real_y != $game_player.real_y 
-			@old_real_x = $game_player.real_x 
-			@old_real_y = $game_player.real_y 
+		if @old_real_x != $game_player.x or @old_real_y != $game_player.y 
+			@old_real_x = $game_player.x 
+			@old_real_y = $game_player.y 
 			refresh 
 		end 
 	end 

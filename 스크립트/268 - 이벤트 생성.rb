@@ -46,7 +46,7 @@ class Interpreter
 		# Advance index
 		@index += 1
 		# If fade is set
-		if @parameters[5] == 0
+		if @parameters[5] == 0 and $game_temp.player_transferring
 			# Prepare for transition
 			Graphics.freeze
 			# Set transition processing flag

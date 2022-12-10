@@ -144,7 +144,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
 	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0, 3] #포효검황
 	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0, 3] #혈겁만파
-	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3] #초혼비무
+	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3, 5] #초혼비무
 	#도사 스킬
 	# 부활 스킬을 넣어볼까 생각
 	
@@ -406,6 +406,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[250] = 1300000 # 철보장
 	ABS_ENEMY_HP[251] = 1500000 # 철거인
+	
+	ABS_ENEMY_HP[269] = 2000000 # 무적다람쥐
 	
 	# 보스몹 체력 설정
 	BOSS_ENEMY_HP = {}

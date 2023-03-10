@@ -26,7 +26,7 @@ class Chat_balloon_net
 		when 3 # 스킬
 			bitmap.font.color = COLOR_EVENT
 		else # 기타
-			
+			bitmap.font.color = COLOR_NORMAL
 		end
 		
 		w = 0

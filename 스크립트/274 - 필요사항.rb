@@ -28,7 +28,6 @@ def 로그아웃
 		
 		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
 		$global_x = 0
-		p "로그아웃 합니다"
 	end
 	$scene = Scene_Connect.new
 end
@@ -50,7 +49,6 @@ def 게임종료
 		
 		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
 		$global_x = 0
-		p "게임을 종료합니다"
 	end
 	$scene = nil
 end

@@ -162,7 +162,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 4, 3] # 청룡의 포효
 	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 4, 3] # 현무의 포효
 	RANGE_SKILLS[153] = [3, 3, "공격스킬2", 4, 0] # 백호검무
-	RANGE_SKILLS[154] = [5, 3, "용", 4, 6] # 청룡마령참
+	RANGE_SKILLS[154] = [6, 3, "용", 4, 6] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
@@ -183,17 +183,17 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 3, 4, 0, 2] # 삼매진화 2성
 	
 	# 전사스킬
-	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0, 2] # 어검술
+	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0, 3] # 어검술
 	
 	# 도적 스킬
 	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
 	RANGE_EXPLODE[137] = [0, 6, "공격스킬2", 3, 4, 0, 2] #이기어검
 	
 	# 도사 스킬
-	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0, 2] # 지진
+	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0, 3] # 지진
 	
 	# 적 스킬
-	RANGE_EXPLODE[160] = [5, 1, "공격스킬2", 2, 5, 0] # 테스트2
+	
 	
 	#--------------------------------------------------------------------------
 	# 범위 스킬 방향 및 개수
@@ -203,7 +203,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_DIRECTION[151] = [1, 2, 3, 4, 6, 7, 8, 9] # 청룡의 포효
 	SKILL_DIRECTION[152] = [1, 2, 3, 4, 6, 7, 8, 9] # 현무의 포효
 	SKILL_DIRECTION[153] = [2, 4, 6, 8] # 백호검무
-	SKILL_DIRECTION[154] = [1, 2, 3, 4, 6, 7, 8, 9] # 청룡마령참
+	
 	
 	#--------------------------------------------------------------------------
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
@@ -391,6 +391,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	EQUIP_EFFECTS[98] = [[3 * sec, "hp", 1], [3 * sec, "sp", 1]] # 재생의부적
 	
 	# 갑옷
+	EQUIP_EFFECTS[30] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷
 	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
 	
 	# 투구

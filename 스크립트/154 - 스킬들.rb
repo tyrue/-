@@ -287,7 +287,7 @@ SKILL_COST_CUSTOM[102] = [[1, 1.0 / 16.0, 0.01]] # 백리건곤 1성
 
 # ---------------- 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
-SKILL_POWER_CUSTOM[135] = [[0, 0.35, 0.2, 20]] # 백호검무
+SKILL_POWER_CUSTOM[135] = [[1, 0.05, 0.10, 20]] # 백호검무
 SKILL_POWER_CUSTOM[137] = [[0, 0.4, 1.0, 20]] # 이기어검
 SKILL_POWER_CUSTOM[138] = [[0, 0.1, 1.0, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 0.6, 0.4, 100]] # 분혼경천
@@ -309,7 +309,7 @@ SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 # -------END------- #
 
 # ---------------- 도사
-SKILL_POWER_CUSTOM[96] = [[1, 0, 1.0 / 50.0, 100]] # 지진
+SKILL_POWER_CUSTOM[96] = [[1, 0, 0.015, 100]] # 지진
 
 # ---------------- #
 SKILL_COST_CUSTOM[92] = [[0, 0, 1.0]] # 공력주입
@@ -326,12 +326,12 @@ SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
 # 											 [[타입(2 : 몬스터), 전체 체력 피해 비율, 전체 마력 피해 비율, 기본값]]
 SKILL_POWER_CUSTOM[151] = [[2, 0.02, 0, 100]] # 청룡의포효
 SKILL_POWER_CUSTOM[152] = [[2, 0.02, 0, 100]] # 현무의포효
-SKILL_POWER_CUSTOM[154] = [[2, 0.70, 0, 100]] # 청룡마령참
+SKILL_POWER_CUSTOM[154] = [[2, 1.00, 0, 100]] # 청룡마령참
 SKILL_POWER_CUSTOM[155] = [[2, 0.03, 0, 100]] # 암흑진파
 SKILL_POWER_CUSTOM[156] = [[2, 0.03, 0, 100]] # 흑룡광포
-SKILL_POWER_CUSTOM[158] = [[2, 0.10, 0, 100]] # 지옥겁화
-SKILL_POWER_CUSTOM[159] = [[2, 0.70, 0, 100]] # 혈겁만파
-SKILL_POWER_CUSTOM[160] = [[2, 0.40, 0, 100]] # 분혼경천
+SKILL_POWER_CUSTOM[158] = [[2, 0.40, 0, 100]] # 지옥겁화
+SKILL_POWER_CUSTOM[159] = [[2, 0.90, 0, 100]] # 혈겁만파
+SKILL_POWER_CUSTOM[160] = [[2, 1.00, 0, 100]] # 분혼경천
 
 # -------END------- #
 

@@ -17,10 +17,10 @@ if SDK.state("Mr.Mo's ABS")
 		# leave this alone if you don't know what you are doing
 		OUTLINE = 1
 		BORDER = 1
-		HP_WIDTH = 35         # WIDTH of the HP Bar
+		HP_WIDTH = 40         # WIDTH of the HP Bar
 		HP_HEIGHT = 6         # Height of the HP Bar
-		HP_WIDTH_BOSS = 70         # WIDTH of the HP Bar
-		HP_HEIGHT_BOSS = 12         # Height of the HP Bar
+		HP_WIDTH_BOSS = 90         # WIDTH of the HP Bar
+		HP_HEIGHT_BOSS = 15         # Height of the HP Bar
 		
 		#--------------------------------------------------------------------------
 		# * Object Initialization
@@ -33,7 +33,7 @@ if SDK.state("Mr.Mo's ABS")
 			@old_y = 0
 			
 			@tesp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
-			if BOSS_ENEMY_HP[@enemy.id] != nil
+			if ABS_ENEMY_HP[@enemy.id] != nil and ABS_ENEMY_HP[@enemy.id][1] == 1
 				self.bitmap = Bitmap.new(HP_WIDTH_BOSS, HP_HEIGHT_BOSS)
 				@ch = 0
 				@cw = HP_WIDTH_BOSS / 2
@@ -42,6 +42,7 @@ if SDK.state("Mr.Mo's ABS")
 				@ch = 0
 				@cw = HP_WIDTH / 2
 			end
+			
 			update    
 		end
 		#--------------------------------------------------------------------------
@@ -59,10 +60,12 @@ if SDK.state("Mr.Mo's ABS")
 			@old_hp = @enemy.hp
 			
 			#Show the bar
-			if BOSS_ENEMY_HP[@enemy.id] != nil
-				draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH_BOSS,HP_HEIGHT_BOSS)
+			if ABS_ENEMY_HP[@enemy.id] != nil and ABS_ENEMY_HP[@enemy.id][1] == 1
+				draw_gradient_bar2(0, 0, @enemy.hp, @enemy.maxhp, HP_WIDTH_BOSS, HP_HEIGHT_BOSS)
+				#draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH_BOSS,HP_HEIGHT_BOSS)
 			else
-				draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
+				draw_gradient_bar2(0, 0, @enemy.hp, @enemy.maxhp, HP_WIDTH, HP_HEIGHT)
+				#draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
 			end
 		end  
 		#--------------------------------------------------------------------------
@@ -84,6 +87,23 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		# * Draw Gradient Bar 
 		#--------------------------------------------------------------------------
+		def draw_gradient_bar2(x, y, min, max, width = nil, height = nil, hue = 0)
+			return if max == 0
+			percent = min / max.to_f if max != 0
+			back = Bitmap.new(width, height)
+			back.fill_rect(back.rect, Color.new(0, 0, 0, 175)) # 꽉찬 네모
+			self.bitmap.stretch_blt(back.rect, back, back.rect)
+			
+			if (width * percent).to_i > 0 
+				n = 2
+				bar = Bitmap.new((width * percent).to_i, height)
+				redVal = [(255 * (1 - percent) * n).to_i, 255].min
+				greenVal = redVal >= 255 ? [(255 * percent * n / (n - 1)).to_i, 0].max : 255
+				bar.fill_rect(bar.rect, Color.new(redVal, greenVal, 0, 230)) # 꽉찬 네모
+				self.bitmap.stretch_blt(bar.rect, bar, bar.rect)
+			end
+		end
+		
 		def draw_gradient_bar(x, y, min, max, file, width = nil, height = nil, hue = 0, back = "Back", back2 = "Back2")
 			bar = RPG::Cache.gradient(file, hue)
 			back = RPG::Cache.gradient(back)

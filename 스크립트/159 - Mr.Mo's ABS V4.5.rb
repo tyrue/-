@@ -155,13 +155,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, (타격수)
 	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [8, 3, "공격스킬", 4, 1] #산적 건곤
+	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
 	RANGE_SKILLS[85] = [5, 4, "공격스킬2", 4, 4] # 필살검무
 	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 4, 3] # 청룡의 포효
 	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 4, 3] # 현무의 포효
-	RANGE_SKILLS[153] = [3, 3, "공격스킬2", 4, 0] # 백호검무
+	RANGE_SKILLS[153] = [3, 5, "공격스킬2", 4, 0] # 백호검무
 	RANGE_SKILLS[154] = [6, 3, "용", 4, 6] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
@@ -241,10 +241,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 주술사
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
-	SKILL_MASH_TIME[57] = [7 * sec, 0] # 삼매진화 1성
+	SKILL_MASH_TIME[57] = [6.5 * sec, 0] # 삼매진화 1성
 	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
 	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
-	SKILL_MASH_TIME[69] = [7 * sec, 0] # 삼매진화 2성
+	SKILL_MASH_TIME[69] = [5 * sec, 0] # 삼매진화 2성
 	
 	# 전사
 	SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
@@ -277,7 +277,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
 	SKILL_MASH_TIME[155] = [5 * sec, 0] # 암흑진파
 	SKILL_MASH_TIME[156] = [5 * sec, 0] # 흑룡광포
-	SKILL_MASH_TIME[157] = [3 * sec, 0] # 회복스킬
+	SKILL_MASH_TIME[157] = [10 * sec, 0] # 회복스킬
 	SKILL_MASH_TIME[158] = [20 * sec, 0] # 지옥겁화
 	SKILL_MASH_TIME[159] = [30 * sec, 0] # 혈겁만파
 	SKILL_MASH_TIME[160] = [30 * sec, 0] # 분혼경천
@@ -379,13 +379,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 장신구
 	EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
 	EQUIP_EFFECTS[29] = [[0.5 * sec, "buff", 131]] # 투명구두
-	EQUIP_EFFECTS[72] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 해골목걸이
-	EQUIP_EFFECTS[75] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금팔찌
+	EQUIP_EFFECTS[72] = [[10 * sec, "hp", 2], [10 * sec, "sp", 2]] # 해골목걸이
+	EQUIP_EFFECTS[75] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금팔찌
 	
 	# 방패 
 	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
 	EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
-	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 도깨비부적
+	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 1.5], [10 * sec, "sp", 1.5]] # 도깨비부적
 	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
 	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
 	EQUIP_EFFECTS[98] = [[3 * sec, "hp", 1], [3 * sec, "sp", 1]] # 재생의부적
@@ -395,62 +395,63 @@ if SDK.state("Mr.Mo's ABS") == true
 	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
 	
 	# 투구
-	EQUIP_EFFECTS[74] = [[10 * sec, "hp", 3], [10 * sec, "sp", 3]] # 황금투구
+	EQUIP_EFFECTS[61] = [[10 * sec, "sp", 2]] # 연청투구
+	EQUIP_EFFECTS[62] = [[10 * sec, "hp", 2]] # 연홍투구
+	EQUIP_EFFECTS[74] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금투구
 	
 	# 백만 넘어가는 체력 설정
 	ABS_ENEMY_HP = {}
-	ABS_ENEMY_HP[37]  = 2000000000 # 무적토끼
+	ABS_ENEMY_HP[37]  = [2000000000, 0] # 무적토끼
+	ABS_ENEMY_HP[269] = [2000000, 0] # 무적다람쥐
 	
-	ABS_ENEMY_HP[229] = 1200000 # 연청천구
-	ABS_ENEMY_HP[230] = 1200000 # 연자천구
+	# 기타
+	ABS_ENEMY_HP[61] = [3000000, 1] # 주작
+	ABS_ENEMY_HP[62] = [3000000, 1] # 백호
 	
-	ABS_ENEMY_HP[233] = 2000000 # 산신전사
-	ABS_ENEMY_HP[234] = 1200000 # 산신도사
-	ABS_ENEMY_HP[235] = 2000000 # 산신도적
-	ABS_ENEMY_HP[236] = 1700000 # 산신주술사
+	ABS_ENEMY_HP[98] = [1200000, 1] # 비류장군
 	
-	ABS_ENEMY_HP[250] = 1300000 # 철보장
-	ABS_ENEMY_HP[251] = 1500000 # 철거인
+	ABS_ENEMY_HP[102] = [30000000, 1] # 반고
+	ABS_ENEMY_HP[112] = [8000000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [8000000, 1] # 현무
 	
-	ABS_ENEMY_HP[269] = 2000000 # 무적다람쥐
-	
-	# 보스몹 체력 설정
-	BOSS_ENEMY_HP = {}
-	BOSS_ENEMY_HP[98] = 1200000 # 비류장군
-	
-	BOSS_ENEMY_HP[61] = 3000000 # 주작
-	BOSS_ENEMY_HP[62] = 3000000 # 백호
-	
-	BOSS_ENEMY_HP[102] = 30000000 # 반고
-	BOSS_ENEMY_HP[112] = 8000000 # 청룡
-	BOSS_ENEMY_HP[113] = 8000000 # 현무
-	
-	BOSS_ENEMY_HP[156] = 1500000 # 상어장군
-	BOSS_ENEMY_HP[158] = 3000000 # 해파리장군
-	BOSS_ENEMY_HP[159] = 10000000 # 거북장군
+	# 용궁
+	ABS_ENEMY_HP[156] = [1500000, 1] # 상어장군
+	ABS_ENEMY_HP[158] = [3000000, 1] # 해파리장군
+	ABS_ENEMY_HP[159] = [10000000, 1] # 거북장군
 	
 	# 일본
-	BOSS_ENEMY_HP[186] = 800000 # 무사
-	BOSS_ENEMY_HP[189] = 1500000 # 주마관
-	BOSS_ENEMY_HP[191] = 2000000 # 유성지
-	BOSS_ENEMY_HP[192] = 3000000 # 해골왕
-	BOSS_ENEMY_HP[193] = 5000000 # 파괴왕
+	ABS_ENEMY_HP[186] = [800000, 1] # 무사
+	ABS_ENEMY_HP[189] = [1500000, 1] # 주마관
+	ABS_ENEMY_HP[191] = [2000000, 1] # 유성지
+	ABS_ENEMY_HP[192] = [3000000, 1] # 해골왕
+	ABS_ENEMY_HP[193] = [5000000, 1] # 파괴왕
 	
 	# 중국
-	BOSS_ENEMY_HP[220] = 1200000 # 산소괴왕
-	BOSS_ENEMY_HP[224] = 3200000 # 괴성왕
-	BOSS_ENEMY_HP[228] = 5200000 # 뇌신왕
-	BOSS_ENEMY_HP[231] = 12000000 # 천구왕
-	BOSS_ENEMY_HP[232] = 40000000 # 산신대왕
+	ABS_ENEMY_HP[220] = [1200000, 1]# 산소괴왕
+	ABS_ENEMY_HP[224] = [3200000, 1]# 괴성왕
+	ABS_ENEMY_HP[228] = [5200000, 1]# 뇌신왕
+	
+	ABS_ENEMY_HP[229] = [1200000, 0]# 연청천구
+	ABS_ENEMY_HP[230] = [1200000, 0]# 연자천구
+	ABS_ENEMY_HP[231] = [12000000, 1] # 천구왕
+	
+	ABS_ENEMY_HP[232] = [40000000, 1] # 산신대왕
+	ABS_ENEMY_HP[233] = [2000000, 0]# 산신전사
+	ABS_ENEMY_HP[234] = [1200000, 0]# 산신도사
+	ABS_ENEMY_HP[235] = [2000000, 0]# 산신도적
+	ABS_ENEMY_HP[236] = [1700000, 0]# 산신주술사
 	
 	# 환상의섬
-	BOSS_ENEMY_HP[246] = 3000000 # 선장망령
-	BOSS_ENEMY_HP[252] = 20000000 # 마려
-	BOSS_ENEMY_HP[253] = 5000000 # 현무
-	BOSS_ENEMY_HP[257] = 2000000 # 태산
-	BOSS_ENEMY_HP[258] = 30000000 # 길림장군
-	BOSS_ENEMY_HP[259] = 400000000 # 가릉빈가
+	ABS_ENEMY_HP[246] = [3000000, 1]	# 선장망령
 	
+	ABS_ENEMY_HP[250] = [1300000, 0]	# 철보장
+	ABS_ENEMY_HP[251] = [1500000, 0]	#	철거인
+	ABS_ENEMY_HP[252] = [20000000, 1]	# 마려
+	
+	ABS_ENEMY_HP[253] = [5000000, 1]	# 현무
+	ABS_ENEMY_HP[257] = [2000000, 1]	# 태산
+	ABS_ENEMY_HP[258] = [30000000, 1]	# 길림장군
+	ABS_ENEMY_HP[259] = [400000000, 1]# 가릉빈가
 	
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
@@ -1066,6 +1067,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					next if skill == nil
 					next if !e.can_use_skill?(skill) if e.casting_action == nil
+					if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
+						range = RANGE_SKILLS[skill.id][0]
+						next if !in_range?(e.event, actor.event, range + 1)
+					elsif RANGE_EXPLODE.has_key?(skill.id)
+						range = RANGE_EXPLODE[skill.id][0]
+						next if !in_range?(e.event, actor.event, range + 1)
+					end
 					
 					# 스킬 쿨타임 갱신
 					if SKILL_MASH_TIME[skill.id] != nil 
@@ -1132,6 +1140,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						return
 						
 					when 2 #All Emenies 적 전체
+						next if !RANGE_SKILLS.has_key?(skill.id)
 						#Animate the enemy
 						e.event.animation_id = skill.animation1_id
 						Network::Main.ani(e.event.id, skill.animation1_id, 1)
@@ -1925,12 +1934,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.fade = true if FADE_DEAD
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 				$game_switches[enemy.trigger[1]] = true
-				$game_map.need_refresh = true
+				#$game_map.need_refresh = true
 			when 2
 				event.fade = true if FADE_DEAD
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 				$game_variables[enemy.trigger[1]] += 1
-				$game_map.need_refresh = true
+				#$game_map.need_refresh = true
 			when 3 
 				event.fade = true if FADE_DEAD
 				value = "A" if enemy.trigger[1] == 1
@@ -1940,7 +1949,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
 				key = [$game_map.map_id, event.id, value]
 				$game_self_switches[key] = true
-				$game_map.need_refresh = true
+				#$game_map.need_refresh = true
 			end
 			#Return true if the e is dead
 			return true
@@ -3608,7 +3617,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     skill_id : skill ID
 		#--------------------------------------------------------------------------
 		def can_use_skill?(skill)
-			
 			# 여기다가 스킬 딜레이가 남아있으면 무시하도록 만들어보자
 			return false if @skill_mash != nil and @skill_mash[skill.id] != nil and @skill_mash[skill.id] > 0
 			
@@ -3620,6 +3628,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# If silent, only physical skills can be used
 			return false if skill.atk_f == 0 and self.restriction == 1
+			
 			
 			# Get usable time
 			occasion = skill.occasion
@@ -4397,8 +4406,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def initialize(enemy_id)
 			super()
-			$data_enemies[enemy_id].maxhp = ABS_ENEMY_HP[enemy_id] if ABS_ENEMY_HP[enemy_id] != nil 
-			$data_enemies[enemy_id].maxhp = BOSS_ENEMY_HP[enemy_id] if BOSS_ENEMY_HP[enemy_id] != nil
+			$data_enemies[enemy_id].maxhp = ABS_ENEMY_HP[enemy_id][0] if ABS_ENEMY_HP[enemy_id] != nil 
 			
 			@event_id= 0
 			@see_range = 0

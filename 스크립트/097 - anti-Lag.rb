@@ -77,8 +77,8 @@ module Update_Range
 	def in_range?(object)
 		# Using 256 here will speed things up a tad, but may cause Large Sprites
 		# that go offscreen to glitch and stay on screen when they actually aren't
-		display_x = $game_map.display_x - 260 # 256
-		display_y = $game_map.display_y - 260 # 256
+		display_x = $game_map.display_x - 512 # 256
+		display_y = $game_map.display_y - 512 # 256
 		display_width = $game_map.display_x + 2916 #2820
 		display_height = $game_map.display_y + 2570 #2180
 		# If too far off screen
@@ -143,11 +143,10 @@ class Game_Map
 		end
 		# End Event Anti Lag Code
 		
-		
-		
 		for common_event in @common_events.values
 			common_event.update
 		end
+		
 		@fog_ox -= @fog_sx / 8.0
 		@fog_oy -= @fog_sy / 8.0
 		if @fog_tone_duration >= 1

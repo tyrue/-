@@ -10,7 +10,7 @@ class Jindow_Inventory < Jindow
 	def initialize
 		자동저장
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 220, 200)
+		super(0, 0, 260, 240)
 		self.name = "아이템"
 		@head = true
 		@mark = true
@@ -24,42 +24,48 @@ class Jindow_Inventory < Jindow
 		@inventory_size = 100
 		@margin = 10
 		
+		@line_count = 7
+		@item_margin = 6
+		
 		@sort_button = J::Button.new(self).refresh(60, "정렬하기")
 		@gold_drop_button = J::Button.new(self).refresh(60, "금전 버리기")
 		
-		@sort_button.x = self.width - @sort_button.width - @gold_drop_button.width - 10
+		@opacity = 255
+		self.opacity = @opacity
+		
+		@data = {}
+		@data[0] = [] # 아이템
+		@data[1] = [] # 무기
+		@data[2] = [] # 방어구
+		
+		for i in 1..$data_items.size
+			@data[0].push(J::Item.new(self).set(true).refresh($data_items[i].id, 0)) if $data_items[i] != nil and $data_items[i].name != ""
+		end
+		
+		for i in 1..$data_weapons.size
+			@data[1].push(J::Item.new(self).set(true).refresh($data_weapons[i].id, 1)) if $data_weapons[i] != nil and $data_weapons[i].name != ""
+		end
+		
+		for i in 1..$data_armors.size
+			@data[2].push(J::Item.new(self).set(true).refresh($data_armors[i].id, 2)) if $data_armors[i] != nil and $data_armors[i].name != ""
+		end
+		
+		for i in @item
+			if i.is_a?(J::Item)
+				i.offVisible
+			end
+		end
+		
+		@item.clear()
+		sort
+		
+		self.width = @line_count * (@item_margin + @data[0][0].width)
+		@sort_button.x = self.width - @sort_button.width - @gold_drop_button.width - 20
 		@sort_button.y = 0
 		
 		@gold_drop_button.x = @sort_button.x + @sort_button.width + 10
 		@gold_drop_button.y = @sort_button.y
 		
-		@opacity = 255
-		self.opacity = @opacity
-		
-		@data = []
-		
-		for i in 1..$data_items.size
-			if $game_party.item_number(i) > 0 
-				@data.push($data_items[i])
-				J::Item.new(self).set(true).refresh($data_items[i].id, 0)
-			end
-		end
-		
-		for i in 1..$data_weapons.size
-			if $game_party.weapon_number(i) > 0
-				@data.push($data_weapons[i])
-				J::Item.new(self).set(true).refresh($data_weapons[i].id, 1)
-			end
-		end
-		
-		for i in 1..$data_armors.size
-			if $game_party.armor_number(i) > 0
-				@data.push($data_armors[i])
-				J::Item.new(self).set(true).refresh($data_armors[i].id, 2)
-			end
-		end
-		
-		sort
 		self.window_ini
 		self.refresh("Inventory")
 	end
@@ -67,55 +73,27 @@ class Jindow_Inventory < Jindow
 	def sort(id = 0)
 		return if !@tog
 		자동저장
-		#~ # Add item
-		for i in 1..$data_items.size
-			if $game_party.item_number(i) > 0 and !@data.include?($data_items[i])
-				@data.push($data_items[i]) 
-				J::Item.new(self).set(true).refresh($data_items[i].id, 0)
-			end
-			
-			if $game_party.item_number(i) <= 0 and @data.include?($data_items[i])
-				@data.delete($data_items[i]) 
-			end
-		end
+		@item.push(@gold_drop_button) if !@item.include?(@gold_drop_button)
+		@item.push(@sort_button) if !@item.include?(@sort_button)
 		
-		for i in 1..$data_weapons.size
-			if $game_party.weapon_number(i) > 0 and !@data.include?($data_weapons[i]) 
-				@data.push($data_weapons[i])
-				J::Item.new(self).set(true).refresh($data_weapons[i].id, 1)
-			end
-			
-			if $game_party.weapon_number(i) <= 0 and @data.include?($data_weapons[i])
-				@data.delete($data_weapons[i]) 
-			end
-		end
-		
-		for i in 1..$data_armors.size
-			if $game_party.armor_number(i) > 0 and !@data.include?($data_armors[i])
-				@data.push($data_armors[i])
-				J::Item.new(self).set(true).refresh($data_armors[i].id, 2)
-			end
-			
-			if $game_party.armor_number(i) <= 0 and @data.include?($data_armors[i])
-				@data.delete($data_armors[i]) 
-			end
-		end
-		
-		for i in @item
-			if i.is_a?(J::Item) and i.num == 0
-				if i != nil and !i.disposed?
-					i.visible = false
-					i.dispose 
-					@item.delete(i)
+		for d in @data
+			for item in d[1]
+				next if item == nil
+				if item.num <= 0
+					@item.delete(item) if @item.include?(item)
+					item.offVisible 
+				else
+					@item.push(item) if !@item.include?(item)
 				end
 			end
 		end
 		
 		count = 0
 		for i in @item
+			i.visible = @tog
 			if i.is_a?(J::Item)
-				i.x = (count % 6) * 36
-				i.y = (count / 6) * 36 + 18
+				i.x = (count % @line_count) * (i.width + @item_margin)
+				i.y = (count / @line_count) * (i.height + @item_margin) + @gold_drop_button.y + @gold_drop_button.height + 5
 				count += 1
 			end
 		end
@@ -148,11 +126,7 @@ class Jindow_Inventory < Jindow
 		if @sort_button.click
 			@sort_button.click = false
 			$console.write_line("물품을 정리했습니다.")
-			
-			@data.clear
-			@item.clear
-			@item.push(@gold_drop_button)
-			@item.push(@sort_button)
+			@item.clear()
 			self.sort
 		end
 		

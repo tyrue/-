@@ -1,7 +1,7 @@
 class Sprite
 	alias jingukang_jindow_initialize initialize
 	def initialize(viewport = Viewport.new(0, 0, 640, 480), push = true)
-		(viewport.jindow? and push) ? (viewport.item.push(self)) : 0
+		(viewport.jindow? and push) ? (viewport.item.push(self)) : 0 # 여기서 자동으로 스프라이트 생성이 되면 진도우에 item배열에 넣어짐
 		jingukang_jindow_initialize(viewport)
 	end
 	

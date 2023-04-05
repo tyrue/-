@@ -2226,16 +2226,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						gold = $2.to_i
 						in_map_player = $4.to_i
 						
-						if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
-							exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
-						end 
-						
+						nextExp = actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]
+						limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
+						exp = actor.level < 99 ? [exp, limitExp].min : exp
 						exp = (exp * 1.5).to_i / in_map_player
 						gold = (gold * 1.5).to_i / in_map_player
 						
 						actor.exp += exp
 						$game_party.gain_gold(gold)
-						$console.write_line("[파티]:경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
+						$console.write_line("[파티]경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % ((actor.exp - actor.exp_list[actor.level]).to_f * 100.0 / nextExp)}%)")
 					end
 					
 					return true

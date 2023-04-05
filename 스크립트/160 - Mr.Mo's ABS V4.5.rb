@@ -1,4 +1,4 @@
-$exp_limit = 8 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_limit = 20 # 한번에 최대 얻을 수 있는 경험치 퍼센트
 $exp_event = 0 # 경험치 이벤트
 
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")
@@ -474,6 +474,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 환상의섬
 	ENEMY_EXP[252] = [200000000] # 마려
+	ENEMY_EXP[259] = [4000000000] # 가릉빈가
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -2032,26 +2033,19 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
+				nextExp = actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]
+				limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
+				gainExp = actor.level < 99 ? [exp, limitExp].min : exp
+				
 				if in_map_player >= 2
 					Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
-					if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
-						exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
-					end
-					exp = (exp * 1.5).to_i / in_map_player
+					gainExp = (gainExp * 1.5).to_i / in_map_player
 					gold = (gold * 1.5).to_i / in_map_player
-					
-					$console.write_line("[파티]:경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
-					actor.exp += exp
-					$game_party.gain_gold(gold)
-				else
-					if(exp > (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit and actor.level <= 99)
-						exp = (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) / $exp_limit
-					end
-					
-					$console.write_line("경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{((actor.exp + exp - actor.exp_list[actor.level]) * 1.0 / (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) * 100).to_i}%)")
-					actor.exp += exp    
-					$game_party.gain_gold(gold)
 				end
+				
+				actor.exp += gainExp
+				$game_party.gain_gold(gold)
+				$console.write_line("경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp)}%)")
 				drop_enemy(enemy) # ABS monster item drop 파일 참조
 			end
 		end

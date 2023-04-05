@@ -16,7 +16,15 @@ def 유저접속
 	Network::Main.socket.send("<dtloadreq>'req'</dtloadreq>\n")
 	Network::Main.socket.send("<exp_event></exp_event>\n")
 	Network::Main.socket.send("<drop_event></drop_event>\n")     
+	
+	$game_variables[11] = 1
+	$game_variables[12] = 60
+	$game_variables[13] = 60
+	
 	$game_switches[401] = true # 경험치 이벤트는 켜 있는 상태
+	$game_switches[60] = true
+	$game_switches[61] = true
+	$game_switches[62] = true
 	
 	$cbig = 0
 	$nowtrade = 0
@@ -32,4 +40,5 @@ def 유저접속
 	# 장비 아이템 체력, 마력 옵션 
 	Set_Weapon_plus.new 
 	Set_Armor_plus.new
+	
 end

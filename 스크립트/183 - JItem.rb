@@ -61,7 +61,7 @@ module J
 			end
 		end
 		
-		def refresh(id, type = 0)
+		def refresh(id, type = 0, zm = 1.2)
 			@start = true
 			@type = type
 			case @type
@@ -75,17 +75,32 @@ module J
 			return if @item == nil 
 			
 			# 아이템 창 배경 비트맵
-			self.bitmap = Bitmap.new(@route2 + "item_win")
+			win_bitmap = Bitmap.new(@route2 + "item_win")
+			zoom = zm
+			w = (win_bitmap.width * zoom).to_i
+			h = (win_bitmap.height * zoom).to_i
+			self.bitmap = Bitmap.new(w, h) 
+			self.bitmap.stretch_blt(self.bitmap.rect, win_bitmap, win_bitmap.rect) 
+			
 			itemwin_mid = Sprite.new
 			itemwin_mid.bitmap = Bitmap.new(@route2 + "itemwin_mid")
+			self.bitmap.stretch_blt(self.bitmap.rect, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
 			
 			item_bitmap = Sprite.new
 			if @item.icon_name == "" or @item.icon_name == nil
 				@item.icon_name = "null"	
 			end
+			
 			item_bitmap.bitmap = Bitmap.new(@route + @item.icon_name)
-			self.bitmap.blt(1, 1, itemwin_mid.bitmap, itemwin_mid.bitmap.rect)
-			self.bitmap.blt(1, 1, item_bitmap.bitmap, item_bitmap.bitmap.rect)
+			w = (item_bitmap.bitmap.width * zoom).to_i
+			h = (item_bitmap.bitmap.height * zoom).to_i
+			item_zoom_bitmap = Bitmap.new(w, h)
+			item_zoom_bitmap.stretch_blt(item_zoom_bitmap.rect, item_bitmap.bitmap, item_bitmap.bitmap.rect)
+			
+			difx = (self.bitmap.width - item_zoom_bitmap.width) / 2
+			self.bitmap.blt(difx, 1, item_zoom_bitmap, item_zoom_bitmap.rect)
+			
+			win_bitmap.dispose
 			itemwin_mid.dispose
 			item_bitmap.dispose
 			@memory = JS.get_bitmap(self)
@@ -211,6 +226,16 @@ module J
 			if self.num == 0 and (@viewport.hwnd != "NetPlayer_Info" and @viewport.hwnd != "Trade")
 				self.dispose
 			end
+		end
+		
+		def offVisible
+			self.visible = false
+			return if @item_name == nil
+			return if @item_name.disposed?
+			
+			@item_name.visible = false
+			@item_name.dispose 
+			@item_name = nil
 		end
 		
 		def dispose

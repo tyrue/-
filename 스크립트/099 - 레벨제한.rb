@@ -188,12 +188,12 @@ class Game_Actor < Game_Battler
 			
 			if(actor.class_id == 7) # 전사 99때 체력 4500
 				actor.maxhp += 16
-				actor.str += 3
+				actor.str += 4
 			elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-				actor.maxsp += 5
-				actor.int += 3
+				actor.maxsp += 6
+				actor.int += 4
 			elsif(actor.class_id == 17) # 도적
-				actor.maxhp += 8
+				actor.maxhp += 16
 				actor.dex += 2 # 손재주(명중률)
 				actor.agi += 2 # 민첩 (회피율)
 			end

@@ -129,7 +129,6 @@ class Game_Map
 		end
 		
 		
-		
 		# This is the Event Anti Lag Code
 		for event in @events.values
 			# If Event is In Range, Auto, Parallel, Set Move Route, or Cat Actor

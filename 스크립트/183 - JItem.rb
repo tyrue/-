@@ -116,8 +116,8 @@ module J
 			@viewport.hwnd == "NetPlayer_Info" ? (return self) : 0
 			
 			@num = self.num
-			@num == 0 ? (return nil) : 0
-			@num > 1 ? 0 : (return self)
+			#@num == 0 ? (return nil) : 0
+			#@num > 1 ? 0 : (return self)
 			
 			# 아이템 개수 쓰기
 			self.bitmap.font = @font

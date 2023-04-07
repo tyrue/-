@@ -25,7 +25,7 @@ class Jindow_Inventory < Jindow
 		@margin = 10
 		
 		@line_count = 7
-		@item_margin = 6
+		@item_margin = 7
 		
 		@sort_button = J::Button.new(self).refresh(60, "정렬하기")
 		@gold_drop_button = J::Button.new(self).refresh(60, "금전 버리기")

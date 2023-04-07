@@ -2014,11 +2014,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				gold += enemy.gold
 			end
 			
-			# 경험치 이벤트!
-			if $game_switches[1500] == true  
-				exp *= $exp_event
-			end
-			
 			if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
 				last_level = actor.level
 				in_map_player = 1
@@ -2033,9 +2028,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
-				nextExp = actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]
+				nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
 				limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
 				gainExp = actor.level < 99 ? [exp, limitExp].min : exp
+				gainExp *= $exp_event if $game_switches[1500] == true  # 경험치 이벤트!
+				exp *= $exp_event if $game_switches[1500] == true  # 경험치 이벤트!
 				
 				if in_map_player >= 2
 					Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
@@ -2043,9 +2040,10 @@ if SDK.state("Mr.Mo's ABS") == true
 					gold = (gold * 1.5).to_i / in_map_player
 				end
 				
+				expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
+				$console.write_line("경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
 				actor.exp += gainExp
 				$game_party.gain_gold(gold)
-				$console.write_line("경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp)}%)")
 				drop_enemy(enemy) # ABS monster item drop 파일 참조
 			end
 		end

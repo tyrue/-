@@ -15,10 +15,7 @@ class Scene_Map
 	# * Initializes map.
 	#--------------------------------------------------------------------------
 	def initialize
-		$game_switches[25] = false # 스킬 사용 불가 off
-		$game_switches[302] = false # pk off
-		$game_switches[63] = true # 미니맵 표시 여부
-		$game_switches[88] = true # 노란비서 사용 여부
+		self.ini_sw # 스위치 초기화
 		
 		#맵이름의 표시
 		if $game_map.map_id != nil
@@ -47,6 +44,14 @@ class Scene_Map
 		$chat_b.refresh
 		
 		맵이동
+	end
+	
+	def ini_sw
+		$game_switches[25] = false # 스킬 사용 불가 off
+		$game_switches[302] = false # pk off
+		$game_switches[63] = true # 미니맵 표시 여부
+		$game_switches[64] = true # 미니맵 표시 여부
+		$game_switches[88] = true # 노란비서 사용 여부
 	end
 	
 	#--------------------------------------------------------------------------

@@ -21,6 +21,10 @@ module PLAN_Map_Window
 	SWITCH = 63 # 맵 윈도우 표시 금지용의 스윗치 번호 
 	# (ON로 표시 금지, OFF로 표시 가능) 
 	
+	NAME_SWITCH = 64 # 맵 이벤트 이름의 스윗치 번호 
+	# (ON로 표시 금지, OFF로 표시 가능) 
+	
+	
 	WINDOW_MOVE = false # 윈도우와 플레이어가 겹쳤을 시 자동적으로 이동할까 
 	# (true:하는, false:하지 않는다) 
 	OVER_X = 632 - WIN_WIDTH # 이동 후의 X 좌표(초기 위치와 왕복합니다) 
@@ -166,48 +170,55 @@ class Window_Map < Window_Base
 		@old_real_y = $game_player.real_y 
 		
 		# 맵 그래픽 구현 
+		@mapTxtBitmap = Bitmap.new(self.contents.width, self.contents.height)
 		@all_map = make_all_map 
 		@all_event = make_all_event
-		
-	
 		
 		# 창 표시
 		self.visible = PLAN_Map_Window::VISIBLE 
 		refresh 
 	end 
-	
+		
 	def make_all_event
-		test_bitmap = Bitmap.new(self.contents.width, self.contents.height)
+		event_bitmap = Bitmap.new(self.contents.width, self.contents.height)
+		map_infos = load_data("Data/MapInfos.rxdata")
+		
 		for event in $game_map.events.values
 			next if event.list == nil
 			if event.list[0].code != 108
 				size = 8
 				bitmap = Bitmap.new(size, size)
-				if event.list[0].code == 201
+				mapBitmap = Bitmap.new(100, 20)
+				mapBitmap.font.size = 12
+				mapBitmap.font.color = COLOR_NORMAL
+				
+				txt_size = 0
+				txt = nil
+				if event.list[0].code == 201 # 맵 이동 이벤트
+					txt = map_infos[event.list[0].parameters[1]].name.to_s if event.list[0].parameters != nil
 					bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
 				else
+					txt = event.sprite_id if event.sprite_id != nil
 					bitmap.fill_rect(bitmap.rect, Color.new(0, 255, 0)) # 꽉찬 네모  
 				end
-				w = bitmap.width 
-				h = bitmap.height
-				
-				src_rect = Rect.new(0, 0, w, h) 
 				
 				one_tile_size = 32 / $zoom
 				
 				x = (event.x ) * one_tile_size + (self.contents.width - @all_map.width) / 2
 				y = (event.y ) * one_tile_size + (self.contents.height - @all_map.height) / 2
 				
-				dest_rect = Rect.new(x, y, w, h) 
-				test_bitmap.stretch_blt(dest_rect, bitmap, src_rect) 
+				event_bitmap.blt(x, y, bitmap, bitmap.rect) 
+				if txt != nil
+					mapBitmap.draw_frame_text(0, 0, mapBitmap.width, mapBitmap.height, txt) 
+					txt_size = mapBitmap.text_size(txt)
+					txt_x = x - (txt_size.width - size) / 2
+					txt_y = y - size / 4
+					@mapTxtBitmap.blt(txt_x, txt_y, mapBitmap, mapBitmap.rect)
+				end
 			end
 		end
 		
-		ret_bitmap = Bitmap.new(self.contents.width, self.contents.height)
-		src_rect = Rect.new(0, 0, test_bitmap.width, test_bitmap.height) 
-		dest_rect = Rect.new(0, 0, ret_bitmap.width, ret_bitmap.height) 
-		ret_bitmap.stretch_blt(dest_rect, test_bitmap, src_rect) 
-		return ret_bitmap
+		return event_bitmap
 	end
 	
 	#-------------------------------------------------------------------------- 
@@ -259,9 +270,9 @@ class Window_Map < Window_Base
 		y = (self.contents.height - @all_map.height) / 2
 		
 		src_rect = Rect.new(0, 0, self.contents.width, self.contents.height)
-		src_rect2 = Rect.new(0, 0, self.contents.width, self.contents.height)
 		self.contents.blt(x, y, @all_map, src_rect) 
-		self.contents.blt(0, 0, @all_event, src_rect2)
+		self.contents.blt(0, 0, @all_event, src_rect)
+		self.contents.blt(0, 0, @mapTxtBitmap, src_rect) if $game_switches[PLAN_Map_Window::NAME_SWITCH]
 		
 		# 액터가 있는 경우는 최초의 액터를 맵에 표시 
 		if $game_party.actors.size > 0 

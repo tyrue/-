@@ -132,8 +132,9 @@ class Game_Map
 		# This is the Event Anti Lag Code
 		for event in @events.values
 			# If Event is In Range, Auto, Parallel, Set Move Route, or Cat Actor
+			#event.update
 			if event.trigger == 3 or event.trigger == 4 or event.lag_include or
-				in_range?(event) 
+				in_range?(event) or $ABS.enemies[event.id] != nil
 				# Update the Event
 				event.update
 				# If you have other code to run, allow this part to run first, then

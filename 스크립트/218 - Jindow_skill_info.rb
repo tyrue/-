@@ -74,7 +74,7 @@ class Jindow_Skill_Info < Jindow
 			end
 			txt += "체력 #{p_hp}% " if p_hp > 0
 			txt += "마력 #{p_sp}%" if p_sp > 0
-			@txt_power += val
+			@txt_power = val
 			@s_info.push(txt)
 		end		
 		@s_info.push("기본 공격력 : #{@txt_power}") if @txt_power > 0

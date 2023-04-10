@@ -414,6 +414,14 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[112] = [8000000, 1] # 청룡
 	ABS_ENEMY_HP[113] = [8000000, 1] # 현무
 	
+	# 12 지신
+	ABS_ENEMY_HP[119] = [1200000, 1] # 백호왕
+	ABS_ENEMY_HP[123] = [500000, 1] # 뱀왕
+	ABS_ENEMY_HP[128] = [700000, 1] # 원숭이왕
+	ABS_ENEMY_HP[132] = [1200000, 1] # 건룡
+	ABS_ENEMY_HP[133] = [1200000, 1] # 감룡
+	ABS_ENEMY_HP[134] = [1200000, 1] # 진룡
+	
 	# 용궁
 	ABS_ENEMY_HP[156] = [1500000, 1] # 상어장군
 	ABS_ENEMY_HP[158] = [3000000, 1] # 해파리장군

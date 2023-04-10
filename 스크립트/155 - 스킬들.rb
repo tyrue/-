@@ -233,9 +233,9 @@ SKILL_POWER_CUSTOM[53] = [[0, 0, 2.0, 10]] # 삼매진화
 SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
 SKILL_POWER_CUSTOM[69] = [[0, 0, 1.5, 10]] # 삼매진화 2성
 
-SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 6.0, 90]] # 성려멸주
-SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 5.0, 100]] # 성려멸주 1성
-SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 4.0, 120]] # 성려멸주 2성
+SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 6.0, 150]] # 성려멸주
+SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 5.0, 150]] # 성려멸주 1성
+SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 4.0, 150]] # 성려멸주 2성
 
 SKILL_POWER_CUSTOM[58] = [[0, 0, 0.65, 10]] # 지폭지술
 SKILL_POWER_CUSTOM[68] = [[0, 0.5, 0.65, 10]] # 폭류유성

@@ -5,118 +5,125 @@
 # E a mesma coisa com armaduras, porem devem ser adcionados depois do "else"
 #   return ['equip\\Icone_defesa', 0] if id == id_do_equip_no_database
 #--------------------------------------------------------------------------
+module VisualEquipData
+	VISUAL_EQUIP_DATA = {}
+	# data[type][id] = [착용 캐릭터 이미지 이름, hud]
+	
+	# 방어구류
+	VISUAL_EQUIP_DATA[1] = {}
+				# 방어구
+	VISUAL_EQUIP_DATA[1][1] = ['(착용)연두갑주'] 					#초심자의갑주
+	VISUAL_EQUIP_DATA[1][11] = ['(착용)죄수복'] 						#죄수복
+	VISUAL_EQUIP_DATA[1][12] = ['(착용)주술갑옷'] 					#주술갑옷
+	VISUAL_EQUIP_DATA[1][13] = ['(착용)남자타라의옷'] 				#남자타라의옷
+	VISUAL_EQUIP_DATA[1][14] = ['(착용)해골갑옷'] 					#해골갑옷
+	VISUAL_EQUIP_DATA[1][30] = ['(착용)가릉빈가의날개옷'] 			#가릉빈가의날개옷
+	VISUAL_EQUIP_DATA[1][31] = ['(착용)초록색도포'] 				#초록색도포
+	VISUAL_EQUIP_DATA[1][32] = ['(착용)현인의영혼'] 				#현인의영혼
+	VISUAL_EQUIP_DATA[1][34] = ['(착용)초록갑주'] 					#초록색남자갑주
+	VISUAL_EQUIP_DATA[1][35] = ['(착용)망또'] 						#망또
+	VISUAL_EQUIP_DATA[1][38] = ['(착용)연두갑주'] 			 		#연두색남자갑주
+	VISUAL_EQUIP_DATA[1][39] = ['(착용)정화의방패'] 		 		#정화의방패
+	VISUAL_EQUIP_DATA[1][40] = ['(착용)여신의방패'] 		 		#여신의방패
+	VISUAL_EQUIP_DATA[1][41] = ['(착용)검황의영혼'] 		 		#검황의영혼
+	VISUAL_EQUIP_DATA[1][42] = ['(착용)황혼의갑주'] 		 		#황혼의갑주
+	VISUAL_EQUIP_DATA[1][43] = ['(착용)산신의정화'] 		 		#산신의정화
+	VISUAL_EQUIP_DATA[1][44] = ['(착용)여명의도복'] 		 		#여명의도복
+	VISUAL_EQUIP_DATA[1][47] = ['(착용)망또1'] 				 		#망또1
+	VISUAL_EQUIP_DATA[1][48] = ['(착용)망또2'] 				 		#망또2
+	VISUAL_EQUIP_DATA[1][49] = ['(착용)망또3'] 				 		#망또3
+	VISUAL_EQUIP_DATA[1][52] = ['(착용)현인의영혼'] 		 		#진인의영혼
+	VISUAL_EQUIP_DATA[1][54] = ['(착용)검황의영혼'] 		 		#귀검의영혼
+	VISUAL_EQUIP_DATA[1][59] = ['(착용)초록장삼'] 			 		#초록장삼
+	VISUAL_EQUIP_DATA[1][73] = ['(착용)가릉빈가의날개옷\'진']		#가릉빈가의날개옷'진
+	
+	
+	# 무기류
+	VISUAL_EQUIP_DATA[2] = {}
+	VISUAL_EQUIP_DATA[2][1] = ['(착용)주작의검']		# 신수둔각
+	VISUAL_EQUIP_DATA[2][2] = ['(착용)녹호박별검'] 	# 신수둔각
+	VISUAL_EQUIP_DATA[2][3] = ['(착용)현무염도'] 	# 신수둔각
+	VISUAL_EQUIP_DATA[2][4] = ['(착용)청룡신검'] 	# 신수둔각
+	
+	VISUAL_EQUIP_DATA[2][6] = ['(착용)현자금봉']	  #현자금봉
+	VISUAL_EQUIP_DATA[2][7] = ['(착용)검성기검']	  #검성기검
+	VISUAL_EQUIP_DATA[2][8] = ['(착용)진선역봉']	  #진선역봉
+	VISUAL_EQUIP_DATA[2][9] = ['(착용)태성태도']	  #태성태도
+		
+	VISUAL_EQUIP_DATA[2][11] = ['(착용)대모홍접선'] 		#대모홍
+	VISUAL_EQUIP_DATA[2][12] = ['(착용)구곡검'] 			  #구곡검
+	VISUAL_EQUIP_DATA[2][13] = ['(착용)영후단봉'] 		  #영후단
+	VISUAL_EQUIP_DATA[2][14] = ['(착용)협가검'] 			  #협가검
+	VISUAL_EQUIP_DATA[2][15] = ['(착용)석단장'] 			  #석단장
+	VISUAL_EQUIP_DATA[2][16] = ['(착용)백사도'] 			  #백사도
+	VISUAL_EQUIP_DATA[2][17] = ['(착용)음양도'] 			  #음양도
+	
+	VISUAL_EQUIP_DATA[2][22] = ['(착용)철도'] 			# 비철단도
+	VISUAL_EQUIP_DATA[2][23] = ['(착용)철도'] 			# 철도
+	VISUAL_EQUIP_DATA[2][24] = ['(착용)야월도'] 			# 야월도
+	VISUAL_EQUIP_DATA[2][25] = ['(착용)흑월도'] 			# 흑월도
+	VISUAL_EQUIP_DATA[2][26] = ['(착용)녹호박별검'] 	# 녹호박별검
+	
+	VISUAL_EQUIP_DATA[2][101] = ['(착용)목도'] 			 	#목도
+	VISUAL_EQUIP_DATA[2][102] = ['(착용)목도'] 			 	#목검
+	VISUAL_EQUIP_DATA[2][103] = ['(착용)목도'] 			 	#사두
+	VISUAL_EQUIP_DATA[2][104] = ['(착용)목도', 125] 	#사두목검
+	VISUAL_EQUIP_DATA[2][105] = ['(착용)영혼마령봉'] 	 	#영혼마령봉
+	VISUAL_EQUIP_DATA[2][106] = ['(착용)현철중검'] 		#현철중검
+	VISUAL_EQUIP_DATA[2][107] = ['(착용)불의영혼봉'] 	 	#불의영혼봉
+	VISUAL_EQUIP_DATA[2][108] = ['(착용)백화검'] 			#백화검
+	VISUAL_EQUIP_DATA[2][109] = ['(착용)백화검'] 			#이벤트백화검
+	VISUAL_EQUIP_DATA[2][110] = ['(착용)현랑부'] 			#현랑부
+	VISUAL_EQUIP_DATA[2][111] = ['(착용)현랑부'] 			#이벤트현랑부
+	VISUAL_EQUIP_DATA[2][112] = ['(착용)양첨목봉'] 		#양첨목봉
+	VISUAL_EQUIP_DATA[2][113] = ['(착용)양첨목봉'] 		#이벤트양첨목봉
+	VISUAL_EQUIP_DATA[2][114] = ['(착용)주작의검'] 		#주작의검
+	VISUAL_EQUIP_DATA[2][115] = ['(착용)심판의낫'] 		#심판의낫
+	VISUAL_EQUIP_DATA[2][116] = ['(착용)진일신검'] 		#진일신검
+	VISUAL_EQUIP_DATA[2][117] = ['(착용)괴력선창'] 		#괴력선창
+	VISUAL_EQUIP_DATA[2][118] = ['(착용)철도'] 				#철단도
+	VISUAL_EQUIP_DATA[2][119] = ['(착용)철도'] 				#비철단도
+	VISUAL_EQUIP_DATA[2][120] = ['(착용)현철중검'] 	 	#흑철중검
+	VISUAL_EQUIP_DATA[2][121] = ['(착용)목도'] 				#초심자의목도
+	VISUAL_EQUIP_DATA[2][122] = ['(착용)용마제구검'] 		#용마제팔검
+	VISUAL_EQUIP_DATA[2][123] = ['(착용)현무염도'] 	  #현무염도
+	VISUAL_EQUIP_DATA[2][124] = ['(착용)철도'] 				#얼음검
+	VISUAL_EQUIP_DATA[2][125] = ['(착용)일월대도'] 	  #일월대도
+	VISUAL_EQUIP_DATA[2][126] = ['(착용)참마도']				#참마도
+	VISUAL_EQUIP_DATA[2][127] = ['(착용)청룡신검'] 	  #청룡신검
+	VISUAL_EQUIP_DATA[2][128] = ['(착용)용랑제구봉'] 		#용량제육봉
+	VISUAL_EQUIP_DATA[2][129] = ['(착용)현철중검'] 	  #도깨비방망이
+	VISUAL_EQUIP_DATA[2][130] = ['(착용)영웅의칼\'뇌']  #산적왕의칼 
+	VISUAL_EQUIP_DATA[2][131] = ['(착용)다문창'] 		  #다문창
+	VISUAL_EQUIP_DATA[2][132] = ['(착용)영혼죽장'] 	  #인어장군지팡이
+	VISUAL_EQUIP_DATA[2][133] = ['(착용)해골죽장'] 	  # 해골죽장
+	VISUAL_EQUIP_DATA[2][137] = ['(착용)영혼죽장']			#영혼
+	
+	VISUAL_EQUIP_DATA[2][134] = ['(착용)일화접선'] 	  #일화
+	VISUAL_EQUIP_DATA[2][135] = ['(착용)진일신검'] 	  #진일
+	VISUAL_EQUIP_DATA[2][138] = ['(착용)청일기창'] 	  #청일
+	VISUAL_EQUIP_DATA[2][136] = ['(착용)이가닌자의검']   #이가
+	
+	VISUAL_EQUIP_DATA[2][141] = ['(착용)용마제일검'] 	  #용마일검
+	VISUAL_EQUIP_DATA[2][142] = ['(착용)용마제사검'] 	  #용마사
+	VISUAL_EQUIP_DATA[2][143] = ['(착용)용마제칠검'] 	  #용마칠
+	VISUAL_EQUIP_DATA[2][144] = ['(착용)용마제팔검'] 	  #용마팔
+	VISUAL_EQUIP_DATA[2][145] = ['(착용)용마제구검'] 	  #용마구
+
+	VISUAL_EQUIP_DATA[2][146] = ['(착용)용랑제일봉'] 	  #용랄일
+	VISUAL_EQUIP_DATA[2][147] = ['(착용)용랑제사봉'] 	  #용랄사
+	VISUAL_EQUIP_DATA[2][148] = ['(착용)용랑제칠봉'] 	  #용랄칠
+	VISUAL_EQUIP_DATA[2][149] = ['(착용)용랑제팔봉'] 	  #용랄팔
+	VISUAL_EQUIP_DATA[2][150] = ['(착용)용랑제구봉'] 	  #용랄구
+
+end
+
+
 if User_Edit::VISUAL_EQUIP_ACTIVE
 	def equip_character(type, id)
-		if type == 2
-			# 무기
-			return ['(착용)주작의검'] 		if id == 1 # 신수둔각도(주작)
-			return ['(착용)녹호박별검'] 	if id == 2 # 신수둔각도(백호)
-			return ['(착용)현무염도'] 		if id == 3 # 신수둔각도(현무)
-			return ['(착용)청룡신검'] 		if id == 4 # 신수둔각도(청룡)
-			
-			return ['(착용)현자금봉']		if id == 6  #현자금봉
-			return ['(착용)검성기검']		if id == 7  #검성기검
-			return ['(착용)진선역봉']		if id == 8  #진선역봉
-			return ['(착용)태성태도']		if id == 9  #태성태도
-			
-			return ['(착용)철도'] 			if id == 22 or id == 23  #비철단도, 철도
-			return ['(착용)야월도'] 			if id == 24   #야월도
-			return ['(착용)흑월도'] 			if id == 25   #흑월도
-			return ['(착용)녹호박별검'] 	if id == 26   #녹호박별검
-			
-			return ['(착용)목도'] 			if id == 101 	#목도
-			return ['(착용)목도'] 			if id == 102 	#목검
-			return ['(착용)목도'] 			if id == 103 	#사두목도
-			return ['(착용)목도'] 			if id == 104 	#사두목검
-			return ['(착용)영혼마령봉'] 	if id == 105 	#영혼마령봉
-			return ['(착용)현철중검'] 		if id == 106 	#현철중검
-			return ['(착용)불의영혼봉'] 	if id == 107 	#불의영혼봉
-			return ['(착용)백화검'] 			if id == 108 	#백화검
-			return ['(착용)백화검'] 			if id == 109 	#이벤트백화검
-			return ['(착용)현랑부'] 			if id == 110  #현랑부
-			return ['(착용)현랑부'] 			if id == 111  #이벤트현랑부
-			return ['(착용)양첨목봉'] 		if id == 112  #양첨목봉
-			return ['(착용)양첨목봉'] 		if id == 113  #이벤트양첨목봉
-			return ['(착용)주작의검'] 		if id == 114  #주작의검
-			return ['(착용)심판의낫'] 		if id == 115  #심판의낫
-			return ['(착용)진일신검'] 		if id == 116  #진일신검
-			return ['(착용)괴력선창'] 		if id == 117  #괴력선창
-			return ['(착용)철도'] 			if id == 118 	#철단도
-			return ['(착용)철도'] 			if id == 119  #비철단도
-			return ['(착용)현철중검'] 		if id == 120 	#흑철중검
-			return ['(착용)목도'] 			if id == 121 	#초심자의목도
-			return ['(착용)용마제구검'] 	if id == 122  #용마제팔검
-			return ['(착용)현무염도'] 		if id == 123  #현무염도
-			return ['(착용)철도'] 			if id == 124  #얼음검
-			return ['(착용)일월대도'] 		if id == 125  #일월대도
-			return ['(착용)참마도']			if id == 126  #참마도
-			return ['(착용)청룡신검'] 		if id == 127  #청룡신검
-			return ['(착용)용랑제구봉'] 	if id == 128  #용량제육봉
-			return ['(착용)현철중검'] 		if id == 129  #도깨비방망이
-			return ['(착용)영웅의칼\'뇌']	if id == 130  #산적왕의칼
-			return ['(착용)다문창'] 			if id == 131  #다문창
-			return ['(착용)영혼죽장'] 		if id == 132  #인어장군지팡이
-			return ['(착용)해골죽장'] 		if id == 133  #해골죽장
-			
-			
-			return ['(착용)영혼죽장']		if id == 137  #영혼죽장
-			
-			# 일본무기
-			return ['(착용)일화접선'] 		if id == 134  #일화접선
-			return ['(착용)진일신검'] 		if id == 135  #진일신검
-			return ['(착용)청일기창'] 		if id == 138  #청일기창
-			return ['(착용)이가닌자의검'] 	if id == 136  #이가닌자의 검
-			
-			# 용무기
-			return ['(착용)용마제일검'] 	if id == 141  #용마제일검
-			return ['(착용)용마제사검'] 	if id == 142  #용마제사검
-			return ['(착용)용마제칠검'] 	if id == 143  #용마제칠검
-			return ['(착용)용마제팔검'] 	if id == 144  #용마제팔검
-			return ['(착용)용마제구검'] 	if id == 145  #용마제구검
-
-			return ['(착용)용랑제일봉'] 	if id == 146  #용랄제일봉
-			return ['(착용)용랑제사봉'] 	if id == 147  #용랄제사봉
-			return ['(착용)용랑제칠봉'] 	if id == 148  #용랄제칠봉
-			return ['(착용)용랑제팔봉'] 	if id == 149  #용랄제팔봉
-			return ['(착용)용랑제구봉'] 	if id == 150  #용랄제구봉
-			
-			# 중국무기
-			return ['(착용)대모홍접선'] 	if id == 11  #대모홍접선
-			return ['(착용)구곡검'] 			if id == 12  #구곡검
-			return ['(착용)영후단봉'] 		if id == 13  #영후단봉
-			return ['(착용)협가검'] 			if id == 14  #협가검
-			return ['(착용)석단장'] 			if id == 15  #석단장
-			return ['(착용)백사도'] 			if id == 16  #백사도
-			return ['(착용)음양도'] 			if id == 17  #음양도
-			
-		else
-			# 방어구
-			return ['(착용)연두갑주'] 			if id == 1  	#초심자의갑주
-			return ['(착용)죄수복'] 				if id == 11 	#죄수복
-			return ['(착용)주술갑옷'] 			if id == 12 	#주술갑옷
-			return ['(착용)남자타라의옷'] 		if id == 13 	#남자타라의옷
-			return ['(착용)해골갑옷'] 			if id == 14 	#해골갑옷
-			return ['(착용)가릉빈가의날개옷'] 	if id == 30 	#가릉빈가의날개옷
-			return ['(착용)초록색도포'] 		if id == 31 	#초록색도포
-			return ['(착용)현인의영혼'] 		if id == 32 	#현인의영혼
-			return ['(착용)초록갑주'] 			if id == 34 	#초록색남자갑주
-			return ['(착용)망또'] 				if id == 35 	#망또
-			return ['(착용)연두갑주'] 			if id == 38  	#연두색남자갑주
-			return ['(착용)정화의방패'] 		if id == 39  	#정화의방패
-			return ['(착용)여신의방패'] 		if id == 40  	#여신의방패
-			return ['(착용)검황의영혼'] 		if id == 41  	#검황의영혼
-			return ['(착용)황혼의갑주'] 		if id == 42  	#황혼의갑주
-			return ['(착용)산신의정화'] 		if id == 43  	#산신의정화
-			return ['(착용)여명의도복'] 		if id == 44  	#여명의도복
-			return ['(착용)망또1'] 				if id == 47  	#망또1
-			return ['(착용)망또2'] 				if id == 48  	#망또2
-			return ['(착용)망또3'] 				if id == 49  	#망또3
-			return ['(착용)현인의영혼'] 		if id == 52  	#진인의영혼
-			return ['(착용)검황의영혼'] 		if id == 54  	#귀검의영혼
-			return ['(착용)초록장삼'] 			if id == 59  	#초록장삼
-			return ['(착용)가릉빈가의날개옷\'진'] 	if id == 73 	#가릉빈가의날개옷'진
-		end
-		
-		return false
+		data = VisualEquipData::VISUAL_EQUIP_DATA[type]
+		return false if data == nil
+		return false if data[id] == nil
+		return data[id]
 	end
 end

@@ -15,6 +15,7 @@ $item_maximum_place = 3
 
 # 특정 아이템 개수 제한
 ITEM_LIMIT_NUM = {}
+ITEM_LIMIT_NUM[146] = 1 # 정화비서
 ITEM_LIMIT_NUM[163] = 5 # 일본주막비서
 ITEM_LIMIT_NUM[217] = 5 # 고균도주막비서
 

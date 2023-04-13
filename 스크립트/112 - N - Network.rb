@@ -1640,6 +1640,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$skill_Delay_Console.show
 						
 						$rpg_skill.job_select
+						
 						$game_map.autoplay
 						$game_map.update 
 						$scene = Scene_Map.new 

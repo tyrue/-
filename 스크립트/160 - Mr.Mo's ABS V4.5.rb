@@ -241,16 +241,17 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 주술사
 	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
 	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
-	SKILL_MASH_TIME[57] = [6.5 * sec, 0] # 삼매진화 1성
+	SKILL_MASH_TIME[57] = [6.5 * sec, 0] # 삼매진화 2성
 	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
 	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
-	SKILL_MASH_TIME[69] = [5 * sec, 0] # 삼매진화 2성
+	SKILL_MASH_TIME[69] = [5 * sec, 0] # 삼매진화 3성
 	
 	# 전사
 	SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
+	SKILL_MASH_TIME[66] = [120 * sec, 0] # 신수둔각도
 	SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
 	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
-	SKILL_MASH_TIME[75] = [3 * sec, 0] # 뢰마도 1성
+	SKILL_MASH_TIME[75] = [5 * sec, 0] # 뢰마도 2성
 	SKILL_MASH_TIME[77] = [1 * sec, 0] # 유비후타
 	SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
 	SKILL_MASH_TIME[101] = [1 * sec, 0] # 백호참
@@ -331,10 +332,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 무기 격 스킬 : 데미지, 애니메이션 id, 확률
 	WEAPON_SKILL = {}
 	# 신수둔각도
-	WEAPON_SKILL[1] = [1000, 154, 3]   		# 주작의검
-	WEAPON_SKILL[2] = [1000, 154, 3]   		# 백호의검
-	WEAPON_SKILL[3] = [1000, 154, 3]   		# 현무의검
-	WEAPON_SKILL[4] = [1000, 154, 3]   		# 청룡의검
+	WEAPON_SKILL[1] = [1000, 154, 5]   		# 주작의검
+	WEAPON_SKILL[2] = [1000, 154, 5]   		# 백호의검
+	WEAPON_SKILL[3] = [1000, 154, 5]   		# 현무의검
+	WEAPON_SKILL[4] = [1000, 154, 5]   		# 청룡의검
 	
 	# 4차 무기
 	WEAPON_SKILL[6] = [50000, 165, 20]   		# 현자금봉
@@ -1449,14 +1450,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		# 맵을 이동하기위한 함수
 		def map_m(id, x, y)
 			if $game_map.map_id != id
-				
-				
 				$game_temp.player_transferring = true # 이동 가능
 				$game_temp.player_new_map_id = id
 				$game_temp.player_new_x = x
 				$game_temp.player_new_y = y
-				
-				
 			else
 				count = 0
 				while count < 10000

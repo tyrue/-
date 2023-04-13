@@ -30,7 +30,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[120] = [[2], 0] # 흑철중검
 	
 	# 방어구
-	EQUIP_JOB_ARMOR[34] = [[2], 0] # 초록색남자갑주
+	EQUIP_JOB_ARMOR[34] = [[2, 4], 0] # 초록색남자갑주
 	EQUIP_JOB_ARMOR[41] = [[2], 3] # 검황의영혼
 	
 	#----------

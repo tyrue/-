@@ -40,5 +40,4 @@ def 유저접속
 	# 장비 아이템 체력, 마력 옵션 
 	Set_Weapon_plus.new 
 	Set_Armor_plus.new
-	
 end

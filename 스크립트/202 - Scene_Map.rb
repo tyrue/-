@@ -7,6 +7,12 @@ class Scene_Map
 		$map_chat_input = Jindow_Chat_Input.new if $map_chat_input == nil  # 채팅입력창
 		$chat = Jindow_Chat_Window.new if $chat == nil # 채팅창
 		$console = Jindow_Console.new if $console == nil # 콘솔창
+		 
+		if not Hwnd.include?("Inventory")
+			$j_inven = Jindow_Inventory.new
+			$j_inven.toggle
+		end
+		
 		$game_system.menu_disabled = true
 		
 		$chat.hide if !$game_switches[60]

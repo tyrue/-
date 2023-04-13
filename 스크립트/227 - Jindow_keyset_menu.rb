@@ -21,13 +21,13 @@ class Jindow_Keyset_menu < Jindow
 		@id_value = nil
 		case @type
 		when 0
-			@id_value = $data_items[@id]
+			@id_value = $data_items[@check_id]
 		when 1
-			@id_value = $data_weapons[@id]
+			@id_value = $data_weapons[@check_id]
 		when 2
-			@id_value = $data_armors[@id]
+			@id_value = $data_armors[@check_id]
 		when 3
-			@id_value = $data_skills[@id]
+			@id_value = $data_skills[@check_id]
 		end
 		
 		@description = []

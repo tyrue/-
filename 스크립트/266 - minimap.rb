@@ -8,6 +8,8 @@
 # 캐스터 마이즈포인트 
 #============================================================================== 
 $zoom = 1.0
+$minimap_data_cache = {} # 미니맵 데이터를 저장하자.
+
 module PLAN_Map_Window 
 	WIN_X = 100 # 윈도우의 X 좌표 
 	WIN_Y = 20 # 윈도우의 Y 좌표 
@@ -33,6 +35,9 @@ module PLAN_Map_Window
 	OPACITY = 180 # 윈도우의 투명도
 	C_OPACITY = 255 # 맵의 투명도 
 	VISIBLE = false # 최초, 표시할까 하지 않는가(true:하는, false:하지 않는다) 
+	
+	
+	
 end 
 
 #============================================================================== 
@@ -150,35 +155,46 @@ class Window_Map < Window_Base
 		unless PLAN_Map_Window::WINDOWSKIN.empty? 
 			self.windowskin = RPG::Cache.windowskin(PLAN_Map_Window::WINDOWSKIN) 
 		end 
-		self.contents = Bitmap.new(width - 32, height - 32) 
 		
+		self.contents = Bitmap.new(width - 32, height - 32) 
 		self.opacity = PLAN_Map_Window::OPACITY 
 		self.contents_opacity = PLAN_Map_Window::C_OPACITY 
-		@map_data = $game_map.data 
 		
-		# 현재 맵의 타일 데이터 가져옴 
-		@tileset = RPG::Cache.tileset($game_map.tileset_name) if $game_map.tileset_name != nil
-		@autotiles = [] 
-		for i in 0..6 
-			if $game_map.autotile_names != nil
-				autotile_name = $game_map.autotile_names[i] 
-				@autotiles[i] = RPG::Cache.autotile(autotile_name) 
-			end
-		end 
 		# 플레이어 위치 저장
 		@old_real_x = $game_player.real_x 
 		@old_real_y = $game_player.real_y 
 		
-		# 맵 그래픽 구현 
-		@mapTxtBitmap = Bitmap.new(self.contents.width, self.contents.height)
-		@all_map = make_all_map 
-		@all_event = make_all_event
+		if $minimap_data_cache[$game_map.map_id] != nil
+			@all_map = $minimap_data_cache[$game_map.map_id][0] 
+			@all_event = $minimap_data_cache[$game_map.map_id][1]
+			@mapTxtBitmap = $minimap_data_cache[$game_map.map_id][2]
+			$zoom = $minimap_data_cache[$game_map.map_id][3]
+		else
+			@map_data = $game_map.data 
+			
+			# 현재 맵의 타일 데이터 가져옴 
+			@tileset = RPG::Cache.tileset($game_map.tileset_name) if $game_map.tileset_name != nil
+			@autotiles = [] 
+			for i in 0..6 
+				if $game_map.autotile_names != nil
+					autotile_name = $game_map.autotile_names[i] 
+					@autotiles[i] = RPG::Cache.autotile(autotile_name) 
+				end
+			end 
+			
+			# 맵 그래픽 구현 
+			@mapTxtBitmap = Bitmap.new(self.contents.width, self.contents.height)
+			@all_map = make_all_map 
+			@all_event = make_all_event
+			
+			$minimap_data_cache[$game_map.map_id] = [@all_map, @all_event, @mapTxtBitmap, $zoom]
+		end
 		
 		# 창 표시
 		self.visible = PLAN_Map_Window::VISIBLE 
 		refresh 
 	end 
-		
+	
 	def make_all_event
 		event_bitmap = Bitmap.new(self.contents.width, self.contents.height)
 		map_infos = load_data("Data/MapInfos.rxdata")
@@ -314,6 +330,8 @@ class Window_Map < Window_Base
 	#-------------------------------------------------------------------------- 
 	def dispose 
 		super 
-		@all_map.dispose 
+		#@all_map.dispose 
+		#@mapTxtBitmap.dispose
+		#@all_event.dispose
 	end 
 end

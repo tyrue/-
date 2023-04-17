@@ -124,45 +124,42 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_SKILLS[49] = [10, 10, "공격스킬2", 4, 0] #성려멸주
 	RANGE_SKILLS[52] = [10, 10, "공격스킬2", 4, 0] #성려멸주 1성
 	RANGE_SKILLS[56] = [10, 10, "공격스킬2", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[58] = [10, 6, "공격스킬2", 4, 0, 3] #지폭지술
-	RANGE_SKILLS[68] = [10, 6, "공격스킬2", 4, 0, 3] #폭류유성
+	RANGE_SKILLS[58] = [12, 6, "공격스킬2", 4, 0, 3] #지폭지술
+	RANGE_SKILLS[68] = [12, 6, "공격스킬2", 4, 0, 3] #폭류유성
 	
 	#전사 스킬
 	RANGE_SKILLS[65] = [10, 10, "공격스킬2", 4, 0] #뢰마도
 	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
-	RANGE_SKILLS[69] = [0, 5, "", 4, 0] #???
-	RANGE_SKILLS[70] = [0, 5, "", 4, 0] #???
 	RANGE_SKILLS[73] = [0, 6, "공격스킬2", 4, 0] #광량돌격
 	RANGE_SKILLS[74] = [1, 5, "공격스킬2", 4, 0] #십리건곤
 	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
 	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
 	RANGE_SKILLS[78] = [1, 5, "공격스킬2", 4, 0] #십리건곤 1성
-	RANGE_SKILLS[79] = [0, 5, "", 4, 0, 10] #동귀어진
+	RANGE_SKILLS[79] = [0, 5, "", 4, 0, 5] #동귀어진
 	RANGE_SKILLS[80] = [1, 5, "공격스킬2", 4, 0] #십리건곤 2성
-	RANGE_SKILLS[82] = [0, 5, "", 4, 0] #적반의기원
 	RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0, 3] #백호참
 	RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
-	RANGE_SKILLS[104] = [10, 5, "공격스킬2", 4, 0, 3] #포효검황
-	RANGE_SKILLS[105] = [10, 5, "공격스킬2", 4, 0, 3] #혈겁만파
+	RANGE_SKILLS[104] = [12, 5, "공격스킬2", 4, 0, 3] #포효검황
+	RANGE_SKILLS[105] = [12, 5, "공격스킬2", 4, 0, 3] #혈겁만파
 	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3, 5] #초혼비무
 	#도사 스킬
 	# 부활 스킬을 넣어볼까 생각
 	
 	#도적 스킬
 	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0, 5] #무형검
-	RANGE_SKILLS[139] = [10, 5, "", 4, 0, 3] #분혼경천
+	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0, 6] #무형검
+	RANGE_SKILLS[139] = [12, 5, "", 4, 0, 3] #분혼경천
 	
 	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, (타격수)
 	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [8, 4, "공격스킬", 4, 1] #산적 건곤
+	RANGE_SKILLS[45] = [10, 4, "공격스킬", 4, 1] #산적 건곤
 	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
 	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[85] = [5, 4, "공격스킬2", 4, 4] # 필살검무
+	RANGE_SKILLS[85] = [4, 2, "공격스킬2", 4, 4] # 필살검무
 	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 4, 3] # 청룡의 포효
 	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 4, 3] # 현무의 포효
 	RANGE_SKILLS[153] = [3, 5, "공격스킬2", 4, 0] # 백호검무
-	RANGE_SKILLS[154] = [6, 3, "용", 4, 6] # 청룡마령참
+	RANGE_SKILLS[154] = [10, 3, "용", 4, 6] # 청룡마령참
 	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
 	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
 	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
@@ -178,9 +175,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
 	
 	# 주술사 스킬
-	RANGE_EXPLODE[53] = [10, 10, "공격스킬2", 2, 4, 0] #삼매진화
-	RANGE_EXPLODE[57] = [10, 10, "공격스킬2", 2, 4, 0] #삼매진화 1성
-	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 3, 4, 0, 2] # 삼매진화 2성
+	RANGE_EXPLODE[53] = [10, 10, "공격스킬2", 3, 4, 0] #삼매진화
+	RANGE_EXPLODE[57] = [10, 10, "공격스킬2", 3, 4, 0] #삼매진화 1성
+	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 4, 4, 0, 2] # 삼매진화 2성
 	
 	# 전사스킬
 	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0, 3] # 어검술
@@ -239,12 +236,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
 	
 	# 주술사
-	SKILL_MASH_TIME[44] = [7 * sec, 0] # 헬파이어
-	SKILL_MASH_TIME[53] = [7 * sec, 0] # 삼매진화
-	SKILL_MASH_TIME[57] = [6.5 * sec, 0] # 삼매진화 2성
+	SKILL_MASH_TIME[44] = [5 * sec, 0] # 헬파이어
+	SKILL_MASH_TIME[53] = [5 * sec, 0] # 삼매진화
+	SKILL_MASH_TIME[57] = [4.5 * sec, 0] # 삼매진화 2성
 	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
 	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
-	SKILL_MASH_TIME[69] = [5 * sec, 0] # 삼매진화 3성
+	SKILL_MASH_TIME[69] = [4 * sec, 0] # 삼매진화 3성
 	
 	# 전사
 	SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
@@ -264,10 +261,11 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
 	SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
 	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
-	SKILL_MASH_TIME[138] = [3 * sec, 0] # 무형검
+	SKILL_MASH_TIME[138] = [2 * sec, 0] # 무형검
 	SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
 	
 	# 도사
+	SKILL_MASH_TIME[94] = [4.5 * sec, 0] # 금강불체
 	SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
 	SKILL_MASH_TIME[121] = [5 * sec, 0] # 신령지익진
 	SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
@@ -313,7 +311,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	SKILL_BUFF_TIME[88] = [60 * sec, 0] # 분량력법
 	SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
 	SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
-	SKILL_BUFF_TIME[94] = [6 * sec, 0] # 금강불체
+	SKILL_BUFF_TIME[94] = [5 * sec, 0] # 금강불체
 	SKILL_BUFF_TIME[121] = [10 * sec, 0] # 신령지익진
 	SKILL_BUFF_TIME[122] = [10 * sec, 0] # 파력무참진
 	
@@ -354,7 +352,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	WEAPON_SKILL[114] = [3000, 153, 40]   		# 주작의검
 	WEAPON_SKILL[115] = [1000000, 194, 5] 		# 심판의 낫
 	WEAPON_SKILL[117] = [100000, 120, 5] 		# 괴력선창
-	WEAPON_SKILL[126] = [5000, 154, 40]   		# 참마도
+	WEAPON_SKILL[124] = [500, 162, 40]   		# 얼음검
+	WEAPON_SKILL[126] = [8000, 154, 40]   		# 참마도
 	WEAPON_SKILL[127] = [60000, 184, 40]   		# 청룡신검
 	WEAPON_SKILL[123] = [100000, 192, 40]   		# 현무염도
 	
@@ -425,12 +424,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 용궁
 	ABS_ENEMY_HP[156] = [1500000, 1] # 상어장군
-	ABS_ENEMY_HP[158] = [3000000, 1] # 해파리장군
+	ABS_ENEMY_HP[158] = [4000000, 1] # 해파리장군
 	ABS_ENEMY_HP[159] = [10000000, 1] # 거북장군
 	
 	# 일본
-	ABS_ENEMY_HP[186] = [800000, 1] # 무사
-	ABS_ENEMY_HP[189] = [1500000, 1] # 주마관
+	ABS_ENEMY_HP[186] = [2500000, 1] # 무사
+	ABS_ENEMY_HP[189] = [5000000, 1] # 주마관
 	ABS_ENEMY_HP[191] = [2000000, 1] # 유성지
 	ABS_ENEMY_HP[192] = [3000000, 1] # 해골왕
 	ABS_ENEMY_HP[193] = [5000000, 1] # 파괴왕
@@ -477,9 +476,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[257] = [5000000, 20.0, 25.0] # 태산
 	ENEMY_EXP[258] = [30000000, 500.0, 500.0] # 길림장군
 	
+	# 용궁
+	ENEMY_EXP[159] = [12000000] # 거북장군
+	
 	# 중국
-	ENEMY_EXP[231] = [150000000] # 천구왕
-	ENEMY_EXP[232] = [300000000] # 산신대왕
+	ENEMY_EXP[231] = [160000000] # 천구왕
+	ENEMY_EXP[232] = [500000000] # 산신대왕
 	
 	# 환상의섬
 	ENEMY_EXP[252] = [200000000] # 마려
@@ -510,7 +512,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#--------------------------------------------------------------------------
 	ANIMATION_DIVIDE = 2
 	#--------------------------------------------------------------------------
-	DAMAGE_FONT_NAME = "맑은 고딕"
+	DAMAGE_FONT_NAME = "메이플스토리"
 	#--------------------------------------------------------------------------
 	DAMAGE_FONT_SIZE = 20
 	#--------------------------------------------------------------------------
@@ -1680,37 +1682,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@actor = $game_party.actors[0]
 			#Get Skill
 			skill = $data_skills[id]
-			# 단축키에 스킬이 없으면 실행 안됨
-			return if skill == nil
-			# 액터가 가지고 있는 스킬이 아님
-			return if !@actor.skills.include?(skill.id)
-			# 마력이 부족하면 무시
-			if @actor.sp < skill.sp_cost
-				$console.write_line("마력이 부족합니다.")
-				return
-			end
-			# 엑터가 사용할 수 없는 상황이면 무시
-			if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
-				$console.write_line("귀신은 할 수 없습니다.")
-				return 
-			end
-			
-			# 스킬 사용 불가 지역
-			if $game_switches[352] or $game_switches[25]
-				$console.write_line("스킬 사용 불가 지역입니다.")
-				return
-			end
-			
-			id = skill.id 
-			
-			# 아직 스킬 딜레이가 남아있다면 무시
-			skill_mash = SKILL_MASH_TIME[id]
-			if skill_mash != nil and skill_mash[1]/60.0 > 0
-				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
-				return
-			end
-			
-			return if !$rpg_skill.check_need_skill_item(skill.id) # 스킬 사용 재료가 부족하면 취소
+			return if !player_can_skill(skill) # 스킬 사용 여부 확인
 			
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
@@ -1846,37 +1818,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if !RANGE_EXPLODE.has_key?(id)
 			#Get Skill
 			skill = $data_skills[id]
-			#Return if the skill doesn't exist
-			return if skill == nil
-			#Return if the actor doesn't have the skill
-			return if !@actor.skills.include?(skill.id)
-			
-			# 마력이 부족하면 무시
-			if @actor.sp < skill.sp_cost
-				$console.write_line("마력이 부족합니다.")
-				return
-			end
-			
-			# 엑터가 사용할 수 없는 상황이면 무시
-			if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
-				$console.write_line("귀신은 할 수 없습니다.")
-				return 
-			end
-			
-			# 스킬 사용 불가 지역
-			if $game_switches[352] or $game_switches[25]
-				$console.write_line("스킬 사용 불가 지역입니다.")
-				return
-			end
-			
-			# 아직 스킬 딜레이가 남아있다면 무시
-			skill_mash = SKILL_MASH_TIME[id]
-			if skill_mash != nil and skill_mash[1]/60.0 > 0
-				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
-				return
-			end
-			
-			return if !$rpg_skill.check_need_skill_item(skill.id) # 스킬 사용 재료가 부족하면 취소
+			return if !player_can_skill(skill) # 스킬 사용 여부 확인
 			
 			w = RANGE_EXPLODE[skill.id]
 			# Show Animation
@@ -1900,6 +1842,41 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Take off SP
 			@actor.sp -= skill.sp_cost
 			return
+		end
+		
+		def player_can_skill(skill)
+			#Return if the skill doesn't exist
+			return false if skill == nil
+			#Return if the actor doesn't have the skill
+			return false if !@actor.skills.include?(skill.id)
+			
+			# 스킬 사용 불가 지역
+			if $game_switches[352] or $game_switches[25]
+				$console.write_line("스킬 사용 불가 지역입니다.")
+				return false
+			end
+			
+			# 마력이 부족하면 무시
+			if @actor.sp < skill.sp_cost
+				$console.write_line("마력이 부족합니다.")
+				return false
+			end
+			
+			# 아직 스킬 딜레이가 남아있다면 무시
+			skill_mash = SKILL_MASH_TIME[skill.id]
+			if skill_mash != nil and skill_mash[1]/60.0 > 0
+				$console.write_line("딜레이가 남아있습니다. #{'%.1f' % (skill_mash[1]/60.0)}초")
+				return false
+			end
+			
+			# 엑터가 사용할 수 없는 상황이면 무시
+			if !@actor.can_use_skill?(skill) and skill.id != 8 and skill.id != 120 #성황령, 부활은 죽을 때 사용하는 거니까 죽어서 사용할 수 있어야함
+				$console.write_line("귀신은 할 수 없습니다.")
+				return false
+			end
+			
+			return false if !$rpg_skill.check_need_skill_item(skill.id) # 스킬 사용 재료가 부족하면 취소
+			return true
 		end
 		
 		#--------------------------------------------------------------------------
@@ -1939,12 +1916,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.fade = true if FADE_DEAD
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 				$game_switches[enemy.trigger[1]] = true
-				#$game_map.need_refresh = true
+				$game_map.need_refresh = true
 			when 2
 				event.fade = true if FADE_DEAD
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
 				$game_variables[enemy.trigger[1]] += 1
-				#$game_map.need_refresh = true
+				$game_map.need_refresh = true
 			when 3 
 				event.fade = true if FADE_DEAD
 				value = "A" if enemy.trigger[1] == 1
@@ -1954,7 +1931,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
 				key = [$game_map.map_id, event.id, value]
 				$game_self_switches[key] = true
-				#$game_map.need_refresh = true
+				$game_map.need_refresh = true
 			end
 			#Return true if the e is dead
 			return true
@@ -2045,10 +2022,10 @@ if SDK.state("Mr.Mo's ABS") == true
 					gold = (gold * 1.5).to_i / in_map_player
 				end
 				
-				expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
-				$console.write_line("경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
 				actor.exp += gainExp
 				$game_party.gain_gold(gold)
+				expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
+				$console.write_line("경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
 				drop_enemy(enemy) # ABS monster item drop 파일 참조
 			end
 		end
@@ -2089,12 +2066,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if !a.hate_group.include?(e.id)
 			end
 			
+			ani_id = 0
 			if animation == nil
-				e.event.animation_id = a.animation2_id
+				ani_id = a.animation2_id
 			else
-				e.event.animation_id = animation
+				ani_id = animation
 			end
-			e.event.ani_array.push(e.event.animation_id)
+			e.event.ani_array.push(ani_id)
 			Network::Main.ani(Network::Main.id, e.event.animation_id)
 		end
 		#--------------------------------------------------------------------------
@@ -2390,6 +2368,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Force Movement
 		#--------------------------------------------------------------------------
 		def force_movement
+			
 			m = @move_direction
 			@y += 1 if m == 1; @x -= 1 if m == 1
 			@y += 1 if m == 2
@@ -2399,6 +2378,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@y -= 1 if m == 7; @x -= 1 if m == 7
 			@y -= 1 if m == 8
 			@y -= 1 if m == 9; @x += 1 if m == 9
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Update
@@ -2412,21 +2392,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			if @parent == nil or @actor == nil
 				@stop = true
 			end
-			# Get new coordinates
-			d = @move_direction
-			new_x = @x
-			new_x += -1 if d == 1 or d == 4 or d == 7
-			new_x += 1 if d == 3 or d == 6 or d == 9
-			
-			new_y = @y
-			new_y += 1 if d == 1 or d == 2 or d == 3
-			new_y -= 1 if d == 7 or d == 8 or d == 9
 			
 			return @stop = true if @step > @range
 			#Increase step
 			@step += 1
+			#return if !no_one?
 			return force_movement if no_one?
 			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
+			
 			m = @move_direction
 			move_lower_left 	if m == 1
 			move_down 				if m == 2
@@ -2446,9 +2419,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			objects = {}
 			for event in $game_map.events.values
 				next if event == nil
-				objects[event.id] = event
+				objects[event.id] = event if @parent != event
 			end
-			objects[0] = $game_player
+			
+			objects[0] = $game_player if @parent != $game_player
 			# Get new coordinates
 			d = @move_direction
 			new_x = @x
@@ -2461,20 +2435,21 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get all pos
 			for o in objects.values
 				next if o == nil
-				return false if o.x == new_x and o.y == new_y
+				return false if (o.x == new_x and o.y == new_y) or (o.x == @x and o.y == @y)
 			end
 			
 			# 여기서 넷 플레이어인지 확인해야함
 			for player in Network::Main.mapplayers.values
 				next if player == nil
-				if player.x == new_x and player.y == new_y
-					return false
+				if (player.x == new_x and player.y == new_y) or (player.x == @x and player.y == @y)
+					return false if @parent != player
 				end
 			end
 			
 			#Return False if no one was found
 			return true
 		end
+		
 	end
 	#============================================================================
 	# * Game Ranged Explode
@@ -2483,7 +2458,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
-		def initialize(parent, actor, skill, m_dir = -1, dummy = false)
+		def initialize(parent, actor, skill, m_dir = 0, dummy = false)
 			super(parent,actor,skill)
 			@range_skill = $ABS.RANGE_EXPLODE[skill.id]
 			@range = @range_skill[0]
@@ -2493,9 +2468,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@skill = skill
 			@explosive = true
 			@net_players = []
-			if m_dir != -1
-				@move_direction = m_dir
-			end
+			@move_direction = m_dir != 0 ? m_dir : @parent.direction
+			
 			@dummy = dummy
 			@hit_num = @range_skill[6] == nil ? 1 : [@range_skill[6], 1].max
 		end
@@ -2503,8 +2477,32 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Check Event Trigger Touch(x,y)
 		#--------------------------------------------------------------------------
 		def check_event_trigger_touch(x, y)
-			return
+			return if @stop
+			return if @dummy
+			
+			if (x == $game_player.x and y == $game_player.y) or (@x == $game_player.x and @y == $game_player.y)
+				return blow if @parent != $game_player
+			end
+			
+			# 여기서 넷 플레이어인지 확인해야함
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				if (player.x == x and player.y == y) or (player.x == @x and player.y == @y)
+					return blow if @parent != player
+				end
+			end
+			
+			for event in $game_map.events.values
+				if (event.x == x and event.y == y) or (event.x == @x and event.y == @y)
+					if event.character_name == "" or ($ABS.enemies[event.id] != nil and $ABS.enemies[event.id].dead?) or event.erased
+						force_movement
+					else
+						return blow if @parent != event
+					end
+				end
+			end
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Update
 		#--------------------------------------------------------------------------
@@ -2516,16 +2514,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			if @parent == nil or @actor == nil
 				@stop = true
 			end
-			# Get new coordinates
-			d = @move_direction
-			new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-			new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
 			
-			return blow if @step > @range
+			return @stop = true if @step > @range
 			#Increase step
 			@step += 1
 			return force_movement if no_one?
-			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
+			
 			m = @move_direction
 			move_lower_left 	if m == 1
 			move_down 				if m == 2
@@ -2537,6 +2531,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			move_upper_right 	if m == 9
 			
 		end
+		
 		#--------------------------------------------------------------------------
 		# * In Range?(Element, Object, Range) - Near Fantastica
 		#--------------------------------------------------------------------------
@@ -2667,10 +2662,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				#Attack It's enemy
 				
 				@hit_num.times{
-					actor.event.animation_id = @skill.animation2_id
 					actor.effect_skill(enemy, @skill)
-					actor.event.ani_array.push(actor.event.animation_id)
-					Network::Main.ani(actor.event.id, actor.event.animation_id, 1) #몬스터 대상의 애니매이션 공유
+					actor.event.ani_array.push(@skill.animation2_id)
+					Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
 				}
 				
 				#$ABS.jump(e.event,self,$ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0
@@ -2715,7 +2709,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
-		def initialize(parent, actor, skill, m_dir = -1, dummy = false) # 만약 더미라면 그냥 스킬 효과 안나고 통과하도록 하게 해보자
+		def initialize(parent, actor, skill, m_dir = 0, dummy = false) # 만약 더미라면 그냥 스킬 효과 안나고 통과하도록 하게 해보자
 			super(parent, actor, skill)
 			@range_skill = $ABS.RANGE_SKILLS[skill.id]
 			@range = @range_skill[0]
@@ -2723,11 +2717,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			@move_speed = @range_skill[1]
 			@character_name = @range_skill[2]
 			@skill = skill
-			if m_dir != -1
-				@move_direction = m_dir
-			end
+			@move_direction = m_dir != 0 ? m_dir : @parent.direction
+			
 			@dummy = dummy
 			@hit_num = @range_skill[5] == nil ? 1 : [@range_skill[5], 1].max
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Check Event Trigger Touch(x,y)
@@ -2735,18 +2729,21 @@ if SDK.state("Mr.Mo's ABS") == true
 		def check_event_trigger_touch(x, y)
 			return if @stop
 			return if @dummy
-			hit_player if x == $game_player.x and y == $game_player.y
+			
+			if (x == $game_player.x and y == $game_player.y) or (@x == $game_player.x and @y == $game_player.y)
+				hit_player
+			end
 			
 			# 여기서 넷 플레이어인지 확인해야함
 			for player in Network::Main.mapplayers.values
 				next if player == nil
-				if player.x == x and player.y == y
+				if (player.x == x and player.y == y) or (player.x == @x and player.y == @y)
 					hit_net_player(player)
 				end
 			end
 			
 			for event in $game_map.events.values
-				if event.x == x and event.y == y
+				if (event.x == x and event.y == y) or (event.x == @x and event.y == @y)
 					if event.character_name == "" or ($ABS.enemies[event.id] != nil and $ABS.enemies[event.id].dead?) or event.erased
 						force_movement
 					else
@@ -2785,6 +2782,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy = @actor
 			return if enemy == nil
 			#Attack Actor
+			return if enemy.is_a?(Game_Actor) and actor.is_a?(Game_Actor)
+			
 			# 만약 내게 호의적인 적이라면 무시
 			if enemy.is_a?(ABS_Enemy) and actor.is_a?(Game_Actor)
 				return if !enemy.hate_group.include?(0)
@@ -2831,10 +2830,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				#Attack It's enemy
 				@hit_num.times{
-					@enani.animation_id = @skill.animation2_id
 					actor.effect_skill(enemy, @skill)
-					@enani.ani_array.push(@enani.animation_id)
-					Network::Main.ani(@enani.id, @enani.animation_id, 1)
+					@enani.ani_array.push(@skill.animation2_id)
+					Network::Main.ani(@enani.id, @skill.animation2_id, 1)
 				}
 				
 				$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
@@ -3142,8 +3140,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		class Sprite < ::Sprite
 			attr_accessor :_damage_duration
 			attr_accessor :_damage_duration_max
-			attr_accessor :_max_height
-			attr_accessor :_damage_string 
+			attr_accessor :_damage_max_height
+			attr_accessor :_damage_string
 			
 			def initialize(viewport = nil)
 				super(viewport)
@@ -3152,15 +3150,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				@_escape_duration = 0
 				@_collapse_duration = 0
 				@_collapse_erase_duration = 0
+				
+				@_damage_max_height = 0
 				@_damage_duration = 0
-				@_damage_duration_max = 0
+				@_damage_duration_max = 60
 				@_damage_sprite = []
 				
 				@_animation_duration = 0
 				@_blink = false
 				@force_opacity = false
 				@stop_animation = true
-				@_max_height = 0
+				
 				@_damage_string = ""
 			end
 			
@@ -3239,26 +3239,23 @@ if SDK.state("Mr.Mo's ABS") == true
 			#--------------------------------------------------------------------------
 			def update_damage_view
 				count = 0
-				if @_damage_sprite.size > 5
+				if @_damage_sprite.size > 50
 					dispose_damage(@_damage_sprite.first)
 				end
 				
 				for sprite in @_damage_sprite
-					if sprite._damage_duration > 0
-						sprite._damage_duration -= 1
-						if sprite._damage_duration == 0
-							dispose_damage(sprite)
-							next
-						end
-						
-						tempY = self.y - 20
-						time = sprite._damage_duration_max - sprite._damage_duration
-						
-						sprite.x = self.x - sprite.ox
-						sprite.y = [tempY - time * 4, tempY - 10 * count - 60].max
-						
-						count += 1
+					sprite._damage_duration += 1
+					
+					if sprite._damage_duration == sprite._damage_duration_max
+						dispose_damage(sprite)
+						next
 					end
+					
+					tempY = self.y + self.height / 4 - 20
+					time = sprite._damage_duration
+					
+					sprite.x = self.x - sprite.ox
+					sprite.y = [tempY - time * 4, tempY - sprite._damage_max_height].max if @collapse_character == nil or @collapse_character.character_name != ""
 				end
 			end
 			
@@ -3321,31 +3318,28 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				damage_string = change_number_unit(damage_string, type) if damage_string.to_i > 0
 				
-				bitmap = Bitmap.new(self.width, self.height)
+				bitmap = Bitmap.new(self.width, 30)
 				bitmap.font.name = $ABS.DAMAGE_FONT_NAME
-				bitmap.font.size = critical == true ? 25 : $ABS.DAMAGE_FONT_SIZE 
+				bitmap.font.bold = true
+				bitmap.font.size = critical == true ? 25 : 19#$ABS.DAMAGE_FONT_SIZE 
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
+				
+				
 				# draw_text(x, y, width, height, string, align)
 				
-				y = self.height / 4 
+				#y = self.height / 4 
 				
-				bitmap.draw_text(-1, y-1, 200, 36, damage_string, 0)
-				bitmap.draw_text(+1, y-1, 200, 36, damage_string, 0)
-				bitmap.draw_text(-1, y+1, 200, 36, damage_string, 0)
-				bitmap.draw_text(+1, y+1, 200, 36, damage_string, 0)
-				
-				# 폰트 칼라 색
-				if value.is_a?(Numeric) and value < 0
-					bitmap.font.color.set(176, 255, 144)
-				else
-					bitmap.font.color.set(255, 255, 255) # 흰색
-				end
+				#~ bitmap.draw_text(-1, y-1, 200, 36, damage_string, 0)
+				#~ bitmap.draw_text(+1, y-1, 200, 36, damage_string, 0)
+				#~ bitmap.draw_text(-1, y+1, 200, 36, damage_string, 0)
+				bitmap.draw_text(+1, +1, 200, 36, damage_string, 0)
 				
 				bitmap.font.color.set(255, 0, 51) if critical # 빨간색 
 				bitmap.font.color.set(255, 255, 255) if !critical # 흰색	
 				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
 				
-				bitmap.draw_text(0, y, 200, 36, damage_string, 0)
+				bitmap.draw_text(0, 0, 200, 36, damage_string, 0)
+				
 				
 				sprite = Sprite.new(self.viewport)
 				sprite.bitmap = bitmap
@@ -3353,11 +3347,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				sprite.ox = sprite.bitmap.text_size(damage_string).width / 4
 				sprite.x = self.x - sprite.ox
 				sprite._damage_string = damage_string
-				sprite.y = self.y - self.oy
+				sprite.y = self.y - 20# + self.height / 4 #self.oy
 				sprite.z = 3000
-				sprite._damage_duration = 50
-				sprite._damage_duration_max = sprite._damage_duration
-				
+				sprite.opacity = 255
+				sprite._damage_max_height = 10 * @_damage_sprite.size + 60
 				@_damage_sprite.push(sprite)
 			end
 		end
@@ -3398,6 +3391,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				@_collapse_erase_duration = 0
 			end
 			dispose_loop_animation
+			
+			if @_animation_overlap != nil and @_animation_overlap.size > 0
+				for ani in @_animation_overlap
+					dispose_animation2(ani)
+				end
+			end
 			super
 		end
 		#--------------------------------------------------------------------------
@@ -3405,10 +3404,17 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			for sprite in @_damage_sprite
-				if sprite != nil and !sprite.disposed? and sprite._damage_duration <= 0
+				if sprite != nil and !sprite.disposed? and sprite._damage_duration >= sprite._damage_duration_max
 					dispose_damage(sprite)
 				end
 			end
+			
+			if @character.animation_id != 0
+				@character.ani_array = [] if @character.ani_array == nil
+				@character.ani_array.push(@character.animation_id) if !@character.ani_array.include?(@character.animation_id)
+				@character.animation_id = 0
+			end
+			
 			mrmo_abs_sc_update
 			
 			#Skip if no demage or dead;
@@ -3497,7 +3503,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			
-			if @character.ani_array != nil and @character.ani_array.size > 1
+			if @character.ani_array != nil and @character.ani_array.size >= 1
 				for ani in @character.ani_array
 					animation = $data_animations[ani]
 					animation2(animation, true)

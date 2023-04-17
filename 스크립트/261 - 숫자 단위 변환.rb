@@ -4,6 +4,7 @@ module Change_number_type
 	NUMBER_TYPE[1] = ["욜", "꾤", "쑐", "뾸", "쬴", "뚈", "욜", "꾤", "쑐", "뾸"]
 end
 
+
 def change_number_unit(num, type = 0)
 	num = num.to_i
 	str = ""
@@ -54,3 +55,4 @@ def change_number_unit_han(num)
 	end
 	return str
 end
+

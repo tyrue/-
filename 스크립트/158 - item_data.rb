@@ -41,14 +41,22 @@ class Item_data
 		end
 				
 		# 교환불가 아이템 추가
+		@Trade_ban_item.push(46) # 암호수리검
 		@Trade_ban_item.push(52) # 청룡의 비늘
 		@Trade_ban_item.push(53) # 화룡의 비늘
 		@Trade_ban_item.push(114) # 팔괘
+		@Trade_ban_item.push(117) # 청룡 보옥
+		@Trade_ban_item.push(118) # 현무 보옥
 		@Trade_ban_item.push(119) # 반고의 심장
 		@Trade_ban_item.push(163) # 일본주막비서
 		@Trade_ban_item.push(217) # 고균도주막비서
 		
 		# 교환 불가 무기 추가
+		# 4차 무기
+		@Trade_ban_weapon.push(6)
+		@Trade_ban_weapon.push(7)
+		@Trade_ban_weapon.push(8)
+		@Trade_ban_weapon.push(9) 
 		
 		# 교환 불가 장비 추가
 	end

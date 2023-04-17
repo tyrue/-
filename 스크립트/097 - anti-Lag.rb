@@ -133,8 +133,9 @@ class Game_Map
 		for event in @events.values
 			# If Event is In Range, Auto, Parallel, Set Move Route, or Cat Actor
 			#event.update
-			if event.trigger == 3 or event.trigger == 4 or event.lag_include or
-				in_range?(event) or $ABS.enemies[event.id] != nil
+			if event.trigger == 3 or event.trigger == 4 or 
+				event.lag_include or in_range?(event) or $ABS.enemies[event.id] != nil
+				
 				# Update the Event
 				event.update
 				# If you have other code to run, allow this part to run first, then
@@ -245,8 +246,7 @@ class Spriteset_Map
 			if sprite.character.is_a?(Game_Event)
 				# If Event is Auto, Parallel, Set to Always Update (/al_update) or In Range
 				if sprite.character.trigger == 3 or sprite.character.trigger == 4 or
-					sprite.character.lag_include or
-					in_range?(sprite.character) 
+					sprite.character.lag_include or in_range?(sprite.character) 
 					# Update the Sprite
 					sprite.character.lag_sw = true
 					sprite.update

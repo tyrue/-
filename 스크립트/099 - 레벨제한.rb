@@ -190,7 +190,7 @@ class Game_Actor < Game_Battler
 				actor.maxhp += 16
 				actor.str += 4
 			elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-				actor.maxsp += 6
+				actor.maxsp += 8
 				actor.int += 4
 			elsif(actor.class_id == 17) # 도적
 				actor.maxhp += 16

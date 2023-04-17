@@ -114,12 +114,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			
 			def self.set_admin
 				if @group == "admin"
-					p "운영자모드 off"
+					$console.write_line("운영자모드 off")
 					@group = "standard"
+					$game_switches[54] = false
 				else
-					p "운영자모드 on"
+					$console.write_line("운영자모드 on")
 					@group = "admin"
-					p @group
+					$game_switches[54] = true
 				end
 			end
 			#--------------------------------------------------------------------------
@@ -1247,7 +1248,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true if $scene.spriteset == nil
 					
 					$ABS.enemies[id].send_damage = false
-					$ABS.enemies[id].damage = dmg
+					$ABS.enemies[id].damage_array.push(dmg)
 					if cri == "true"
 						$ABS.enemies[id].critical = true
 					elsif cri == "false"
@@ -1631,6 +1632,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 						self.send_start
+						 
+						if $game_switches[54] # 운영자모드
+							p "운영자모드"
+							@group = "admin"
+						else
+							@group = "standard"
+						end
 						
 						$cbig = 0
 						$nowtrade = 0
@@ -2232,11 +2240,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						exp = actor.level < 99 ? [exp, limitExp].min : exp
 						exp = (exp * 1.5).to_i / in_map_player
 						gold = (gold * 1.5).to_i / in_map_player
-						expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
 						
-						$console.write_line("[파티]경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
 						actor.exp += exp
 						$game_party.gain_gold(gold)
+						expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
+						$console.write_line("[파티]경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
 					end
 					
 					return true

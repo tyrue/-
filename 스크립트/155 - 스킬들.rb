@@ -105,9 +105,9 @@ REQ_SKILL_DATA[3] =
 	[61, 10, 10, 88, 29, 30], 	# 분량력법
 	[67, 15, 15, 89, 29, 30], 		# 구름의희원
 	[74, 10, 30, 92, 29, 30], 	# 공력주입
-	[84, 15, 15, 93, 29, 30],		# 태양의희원
+	[80, 15, 15, 93, 29, 30],		# 태양의희원
 	[92, 30, 3, 95, 30, 31],		# 생명의희원
-	[96, 3, 3, 94, 31, 37], 		# 금강불체
+	[95, 3, 3, 94, 31, 37], 		# 금강불체 
 	[99, 10, 3, 120, 31, 37] 		# 부활
 ]
 
@@ -199,7 +199,6 @@ BUFF_SKILL[72] = [["per_str", 2, 0]] # 혼신의힘
 BUFF_SKILL[76] = [["per_str", 1.4, 0]] # 팔량분법
 
 BUFF_SKILL[91] = [["com", 129]] # 석화기탄
-BUFF_SKILL[94] = [["mdef", 999], ["pdef", 999]] # 금강불체
 BUFF_SKILL[130] = [["dex", 50], ["agi", 50]] # 무영보법
 BUFF_SKILL[131] = [["custom", 1]] # 투명
 BUFF_SKILL[141] = [["custom", 1]] # 투명 1성
@@ -232,9 +231,9 @@ SKILL_POWER_CUSTOM[53] = [[0, 0, 2.0, 10]] # 삼매진화
 SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
 SKILL_POWER_CUSTOM[69] = [[0, 0, 1.5, 10]] # 삼매진화 2성
 
-SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 6.0, 150]] # 성려멸주
-SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 5.0, 150]] # 성려멸주 1성
-SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 4.0, 150]] # 성려멸주 2성
+SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 6.0, 200]] # 성려멸주
+SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 5.0, 200]] # 성려멸주 1성
+SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 4.0, 200]] # 성려멸주 2성
 
 SKILL_POWER_CUSTOM[58] = [[0, 0, 0.65, 10]] # 지폭지술
 SKILL_POWER_CUSTOM[68] = [[0, 0.5, 0.65, 10]] # 폭류유성
@@ -246,8 +245,8 @@ SKILL_COST_CUSTOM[57] = [[0, 0, 1.0]] # 삼매진화 1성
 SKILL_COST_CUSTOM[69] = [[0, 0, 1.0]] # 삼매진화 2성
 
 SKILL_COST_CUSTOM[49] = [[1, 0, 1.0 / 20.0]] # 성려멸주
-SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 18.0]] # 성려멸주 1성
-SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 17.0]] # 성려멸주 2성
+SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 20.0]] # 성려멸주 1성
+SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 20.0]] # 성려멸주 2성
 
 SKILL_COST_CUSTOM[58] = [[0, 0, 1.0]] # 지폭지술
 SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
@@ -280,8 +279,8 @@ SKILL_COST_CUSTOM[106] = [[0, 0.1, 0.6]] # 초혼비무
 
 SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
 SKILL_COST_CUSTOM[78] = [[1, 1.0 / 20.0, 0]] # 십리건곤 1성
-SKILL_COST_CUSTOM[80] = [[1, 1.0 / 18.0, 0]] # 십리건곤 2성
-SKILL_COST_CUSTOM[102] = [[1, 1.0 / 16.0, 0.01]] # 백리건곤 1성
+SKILL_COST_CUSTOM[80] = [[1, 1.0 / 20.0, 0]] # 십리건곤 2성
+SKILL_COST_CUSTOM[102] = [[1, 1.0 / 20.0, 0.01]] # 백리건곤 1성
 # -------END------- #
 
 # ---------------- 도적
@@ -317,7 +316,7 @@ SKILL_COST_CUSTOM[118] = [[1, 0, 0.02]] # 신령의희원
 SKILL_COST_CUSTOM[119] = [[1, 0, 0.02]] # 봉황의희원
 SKILL_COST_CUSTOM[43] = [[0, 0, 1.0]] # 위태응기
 
-SKILL_COST_CUSTOM[96] = [[1, 0, 0.05]] # 지진
+SKILL_COST_CUSTOM[96] = [[1, 0, 1.0 / 15.0]] # 지진
 # -------END------- #
 
 
@@ -374,7 +373,7 @@ class Rpg_skill
 			if !$game_player.moving?
 				if (Graphics.frame_count % (sec) == 0)
 					$game_party.actors[0].sp += $game_party.actors[0].maxsp * 0.15
-					$game_player.animation_id = 4
+					$game_player.ani_array.push(4)  
 					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 				end
 			else
@@ -384,14 +383,14 @@ class Rpg_skill
 		
 		if check_buff(121) # 신령지익진
 			if (Graphics.frame_count % (sec * 2) == 0)
-				$game_player.animation_id = 7
+				$game_player.ani_array.push(7)
 				Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 			end
 		end	
 		
 		if check_buff(122) # 신령지익진
 			if (Graphics.frame_count % (sec * 2) == 0)
-				$game_player.animation_id = 8
+				$game_player.ani_array.push(8)
 				Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 			end
 		end
@@ -427,7 +426,7 @@ class Rpg_skill
 		when 92 # 공력주입
 			heal_v = user.sp
 		when 117 # 백호의희원
-			heal_v = user.sp * 2
+			heal_v = user.sp * 4
 		when 120 # 부활
 			$game_temp.common_event_id = 24
 		end
@@ -440,11 +439,7 @@ class Rpg_skill
 		user.damage = heal_v.to_s
 		user.critical = "heal"
 		user.hp += heal_v
-		
-		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
-		$game_player.animation_id = ani_id
-		Network::Main.ani(Network::Main.id, ani_id)
-		
+				
 		if $netparty.size >= 2 # 파티가 2인 이상이라면
 			name = user.name
 			Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
@@ -1179,6 +1174,7 @@ class Rpg_skill
 		if actor.is_a?(Game_Actor) 
 			damage -= damage * 0.2 if self.check_buff(47) # 보호	
 			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
+			damage -= damage * 0.99 if self.check_buff(94) # 금강불체
 			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
 			
 			# 몬스터
@@ -1203,6 +1199,7 @@ class Rpg_skill
 		if actor.is_a?(Game_Actor)
 			damage -= damage * 0.2 if self.check_buff(47) # 보호	
 			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
+			damage -= damage * 0.99 if self.check_buff(94) # 금강불체
 			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐

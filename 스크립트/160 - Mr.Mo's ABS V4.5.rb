@@ -90,119 +90,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#[Character Set Name, Move Speed, Animation, Ammo, Range,  Mash Time(in seconds), Kick Back(in tiles),Animation Suffix]
 	# Leave kickback 0 if you don't want kick back effect.
 	#-------------------------------------------------------------------------
-	#Ranged Skills
-	RANGE_SKILLS = {}
-	# RANGE_SKILLS[Skill_ID] = [Range, Move Speed, Character Set Name, Mash Time(in seconds), Kick Back(in tiles)]
-	# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, 히트수
-	# 주술사 스킬
-	RANGE_SKILLS[1] = [10, 10, "공격스킬2", 4, 0] 	#뢰진주
-	RANGE_SKILLS[2] = [10, 10, "공격스킬2", 4, 0] 	#백열주
-	RANGE_SKILLS[3] = [10, 10, "공격스킬2", 4, 0] 	#화염주
-	RANGE_SKILLS[4] = [10, 10, "공격스킬2", 4, 0] 	#자무주
-	RANGE_SKILLS[10] = [10, 10, "공격스킬2", 4, 0] #뢰진주 1성
-	RANGE_SKILLS[11] = [10, 10, "공격스킬2", 4, 0] #백열주 1성
-	RANGE_SKILLS[12] = [10, 10, "공격스킬2", 4, 0] #화염주 1성
-	RANGE_SKILLS[13] = [10, 10, "공격스킬2", 4, 0] #자무주 1성
-	RANGE_SKILLS[14] = [10, 10, "공격스킬2", 4, 0] #뢰진주 첨
-	RANGE_SKILLS[16] = [10, 10, "공격스킬2", 4, 0] #뢰진주 2성
-	RANGE_SKILLS[17] = [10, 10, "공격스킬2", 4, 0] #백열주 2성
-	RANGE_SKILLS[18] = [10, 10, "공격스킬2", 4, 0] #화염주 2성
-	RANGE_SKILLS[19] = [10, 10, "공격스킬2", 4, 0] #자무주 2성
-	RANGE_SKILLS[22] = [10, 10, "공격스킬2", 4, 0] #뢰진주 3성
-	RANGE_SKILLS[23] = [10, 10, "공격스킬2", 4, 0] #백열주 3성
-	RANGE_SKILLS[24] = [10, 10, "공격스킬2", 4, 0] #화염주 3성
-	RANGE_SKILLS[25] = [10, 10, "공격스킬2", 4, 0] #자무주 3성
-	RANGE_SKILLS[30] = [10, 10, "공격스킬2", 4, 0] #뢰진주 4성
-	RANGE_SKILLS[31] = [10, 10, "공격스킬2", 4, 0] #백열주 4성
-	RANGE_SKILLS[32] = [10, 10, "공격스킬2", 4, 0] #화염주 4성
-	RANGE_SKILLS[33] = [10, 10, "공격스킬2", 4, 0] #자무주 4성
-	RANGE_SKILLS[37] = [10, 10, "공격스킬2", 4, 0] #뢰진주 5성
-	RANGE_SKILLS[38] = [10, 10, "공격스킬2", 4, 0] #백열주 5성
-	RANGE_SKILLS[39] = [10, 10, "공격스킬2", 4, 0] #화염주 5성
-	RANGE_SKILLS[40] = [10, 10, "공격스킬2", 4, 0] #자무주 5성
-	RANGE_SKILLS[44] = [10, 10, "공격스킬2", 4, 0] #헬파이어
-	RANGE_SKILLS[49] = [10, 10, "공격스킬2", 4, 0] #성려멸주
-	RANGE_SKILLS[52] = [10, 10, "공격스킬2", 4, 0] #성려멸주 1성
-	RANGE_SKILLS[56] = [10, 10, "공격스킬2", 4, 0] #성려멸주 2성
-	RANGE_SKILLS[58] = [12, 6, "공격스킬2", 4, 0, 3] #지폭지술
-	RANGE_SKILLS[68] = [12, 6, "공격스킬2", 4, 0, 3] #폭류유성
-	
-	#전사 스킬
-	RANGE_SKILLS[65] = [10, 10, "공격스킬2", 4, 0] #뢰마도
-	RANGE_SKILLS[67] = [0, 5, "", 4, 0] #건곤대나이
-	RANGE_SKILLS[73] = [0, 6, "공격스킬2", 4, 0] #광량돌격
-	RANGE_SKILLS[74] = [1, 5, "공격스킬2", 4, 0] #십리건곤
-	RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
-	RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
-	RANGE_SKILLS[78] = [1, 5, "공격스킬2", 4, 0] #십리건곤 1성
-	RANGE_SKILLS[79] = [0, 5, "", 4, 0, 5] #동귀어진
-	RANGE_SKILLS[80] = [1, 5, "공격스킬2", 4, 0] #십리건곤 2성
-	RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0, 3] #백호참
-	RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
-	RANGE_SKILLS[104] = [12, 5, "공격스킬2", 4, 0, 3] #포효검황
-	RANGE_SKILLS[105] = [12, 5, "공격스킬2", 4, 0, 3] #혈겁만파
-	RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3, 5] #초혼비무
-	#도사 스킬
-	# 부활 스킬을 넣어볼까 생각
-	
-	#도적 스킬
-	RANGE_SKILLS[133] = [0, 5, "", 4, 0] #필살검무
-	RANGE_SKILLS[138] = [10, 10, "공격스킬2", 4, 0, 6] #무형검
-	RANGE_SKILLS[139] = [12, 5, "", 4, 0, 3] #분혼경천
-	
-	# 									범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, (타격수)
-	# 적 캐릭터 스킬
-	RANGE_SKILLS[45] = [10, 4, "공격스킬", 4, 1] #산적 건곤
-	RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
-	RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
-	RANGE_SKILLS[85] = [4, 2, "공격스킬2", 4, 4] # 필살검무
-	RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 4, 3] # 청룡의 포효
-	RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 4, 3] # 현무의 포효
-	RANGE_SKILLS[153] = [3, 5, "공격스킬2", 4, 0] # 백호검무
-	RANGE_SKILLS[154] = [10, 3, "용", 4, 6] # 청룡마령참
-	RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
-	RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
-	RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
-	RANGE_SKILLS[159] = [10, 3, "공격스킬", 4, 3] # 혈겁만파
-	RANGE_SKILLS[160] = [10, 3, "공격스킬", 4, 3] # 분혼경천
-	
-	#--------------------------------------------------------------------------
-	#Ranged Explosives
-	# 폭발 범위
-	RANGE_EXPLODE = {}
-	# RANGE_EXPLODE[Skill_ID] = [Range, Move Speed, Character Set Name, Explosive Range, Mash Time(in seconds), Kick Back(in tiles)]
-	# 폭발 스킬 = 					범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백, 히트수
-	RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
-	
-	# 주술사 스킬
-	RANGE_EXPLODE[53] = [10, 10, "공격스킬2", 3, 4, 0] #삼매진화
-	RANGE_EXPLODE[57] = [10, 10, "공격스킬2", 3, 4, 0] #삼매진화 1성
-	RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 4, 4, 0, 2] # 삼매진화 2성
-	
-	# 전사스킬
-	RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0, 3] # 어검술
-	
-	# 도적 스킬
-	RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
-	RANGE_EXPLODE[137] = [0, 6, "공격스킬2", 3, 4, 0, 2] #이기어검
-	
-	# 도사 스킬
-	RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0, 3] # 지진
-	
-	# 적 스킬
-	
-	
-	#--------------------------------------------------------------------------
-	# 범위 스킬 방향 및 개수
-	# 스킬의 이동 방향 배열, 배열 원소의 개수가 동시에 나가는 스킬의 개수
-	SKILL_DIRECTION = {}
-	
-	SKILL_DIRECTION[151] = [1, 2, 3, 4, 6, 7, 8, 9] # 청룡의 포효
-	SKILL_DIRECTION[152] = [1, 2, 3, 4, 6, 7, 8, 9] # 현무의 포효
-	SKILL_DIRECTION[153] = [2, 4, 6, 8] # 백호검무
-	
-	
-	#--------------------------------------------------------------------------
+
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
 	MELEE_CUSTOM = {}
 	# if left blank the default mash time will be MASH_TIME(below)
@@ -217,9 +105,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	# if left blank the default mash time will be MASH_TIME(below)
 	# No need to use the animation suffix if you don't plan to animate the player's character set.
 	# SKILL_CUSTOM[Skill_ID] = [Mash Time(in seconds), Kick Back(in tiles), animation suffix]
-	SKILL_CUSTOM[1] = [3, 0]
-	SKILL_CUSTOM[7] = [3, 0]
-	SKILL_CUSTOM[8] = [3, 0, "_cast"]
+	#~ SKILL_CUSTOM[1] = [3, 0]
+	#~ SKILL_CUSTOM[7] = [3, 0]
+	#~ SKILL_CUSTOM[8] = [3, 0, "_cast"]
 	#--------------------------------------------------------------------------
 	# 플레이어가 죽을때 게임오버 할거냐
 	GAME_OVER_DEAD = false # 아니
@@ -229,175 +117,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	#Mash Time
 	# 공격 딜레이 초단위
 	MASH_TIME = 4
-	
-	sec = 60 # 1초
-	# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
-	SKILL_MASH_TIME = {}
-	SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
-	
-	# 주술사
-	SKILL_MASH_TIME[44] = [5 * sec, 0] # 헬파이어
-	SKILL_MASH_TIME[53] = [5 * sec, 0] # 삼매진화
-	SKILL_MASH_TIME[57] = [4.5 * sec, 0] # 삼매진화 2성
-	SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
-	SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
-	SKILL_MASH_TIME[69] = [4 * sec, 0] # 삼매진화 3성
-	
-	# 전사
-	SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
-	SKILL_MASH_TIME[66] = [120 * sec, 0] # 신수둔각도
-	SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
-	SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
-	SKILL_MASH_TIME[75] = [5 * sec, 0] # 뢰마도 2성
-	SKILL_MASH_TIME[77] = [1 * sec, 0] # 유비후타
-	SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
-	SKILL_MASH_TIME[101] = [1 * sec, 0] # 백호참
-	SKILL_MASH_TIME[103] = [8 * sec, 0] # 어검술
-	SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
-	SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
-	SKILL_MASH_TIME[106] = [15 * sec, 0] # 초혼비무
-	
-	# 도적
-	SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
-	SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
-	SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
-	SKILL_MASH_TIME[138] = [2 * sec, 0] # 무형검
-	SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
-	
-	# 도사
-	SKILL_MASH_TIME[94] = [4.5 * sec, 0] # 금강불체
-	SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
-	SKILL_MASH_TIME[121] = [5 * sec, 0] # 신령지익진
-	SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
-	
-	# 적 스킬
-	SKILL_MASH_TIME[151] = [5 * sec, 0] # 청룡포효
-	SKILL_MASH_TIME[152] = [5 * sec, 0] # 현무포효
-	SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
-	SKILL_MASH_TIME[155] = [5 * sec, 0] # 암흑진파
-	SKILL_MASH_TIME[156] = [5 * sec, 0] # 흑룡광포
-	SKILL_MASH_TIME[157] = [10 * sec, 0] # 회복스킬
-	SKILL_MASH_TIME[158] = [20 * sec, 0] # 지옥겁화
-	SKILL_MASH_TIME[159] = [30 * sec, 0] # 혈겁만파
-	SKILL_MASH_TIME[160] = [30 * sec, 0] # 분혼경천
-	
-	
-	# 스킬 지속 시간 [원래 지속 시간, 현재 남은 시간]
-	SKILL_BUFF_TIME = {}
-	# 주술사
-	SKILL_BUFF_TIME[9] = [180 * sec, 0] # 무장
-	SKILL_BUFF_TIME[46] = [180 * sec, 0] # 무장
-	SKILL_BUFF_TIME[20] = [180 * sec, 0] # 보호
-	SKILL_BUFF_TIME[47] = [180 * sec, 0] # 보호
-	SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
-	SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
-	SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
-	SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
-	SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
-	
-	
-	# 전사
-	SKILL_BUFF_TIME[62] = [180 * sec, 0] # 수심각도
-	SKILL_BUFF_TIME[63] = [180 * sec, 0] # 반영대도
-	SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
-	SKILL_BUFF_TIME[66] = [60 * sec, 0] # 신수둔각도
-	SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
-	SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
-	SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
-	
-	
-	# 도사
-	SKILL_BUFF_TIME[50] = [60 * sec, 0] # 야수금술술
-	SKILL_BUFF_TIME[88] = [60 * sec, 0] # 분량력법
-	SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
-	SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
-	SKILL_BUFF_TIME[94] = [5 * sec, 0] # 금강불체
-	SKILL_BUFF_TIME[121] = [10 * sec, 0] # 신령지익진
-	SKILL_BUFF_TIME[122] = [10 * sec, 0] # 파력무참진
-	
-	# 도적
-	SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
-	SKILL_BUFF_TIME[131] = [60 * sec, 0] # 투명
-	SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
-	SKILL_BUFF_TIME[136] = [180 * sec, 0] # 운상미보
-	SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
-	SKILL_BUFF_TIME[141] = [60 * sec, 0] # 투명 1성
-	SKILL_BUFF_TIME[142] = [60 * sec, 0] # 투명 2성
-	
-	# 기타
-	SKILL_BUFF_TIME[99] = [180 * sec, 0] # 속도시약
-	
-	# 무기 격 스킬 : 데미지, 애니메이션 id, 확률
-	WEAPON_SKILL = {}
-	# 신수둔각도
-	WEAPON_SKILL[1] = [1000, 154, 5]   		# 주작의검
-	WEAPON_SKILL[2] = [1000, 154, 5]   		# 백호의검
-	WEAPON_SKILL[3] = [1000, 154, 5]   		# 현무의검
-	WEAPON_SKILL[4] = [1000, 154, 5]   		# 청룡의검
-	
-	# 4차 무기
-	WEAPON_SKILL[6] = [50000, 165, 20]   		# 현자금봉
-	WEAPON_SKILL[7] = [50000, 165, 20]   		# 검성기검
-	WEAPON_SKILL[8] = [50000, 165, 20]   		# 진선역봉
-	WEAPON_SKILL[9] = [50000, 165, 20]   		# 태성태도
-	
-	# 중국무기
-	WEAPON_SKILL[11] = [700000, 115, 15]   		# 대모홍접선
-	WEAPON_SKILL[12] = [700000, 117, 15]   		# 구곡검
-	WEAPON_SKILL[13] = [700000, 166, 15]   		# 영후단봉
-	WEAPON_SKILL[14] = [700000, 125, 15]   		# 협가검
-	WEAPON_SKILL[17] = [100000, 196, 90]   		# 음양도
-	
-	# 기타 검
-	WEAPON_SKILL[114] = [3000, 153, 40]   		# 주작의검
-	WEAPON_SKILL[115] = [1000000, 194, 5] 		# 심판의 낫
-	WEAPON_SKILL[117] = [100000, 120, 5] 		# 괴력선창
-	WEAPON_SKILL[124] = [500, 162, 40]   		# 얼음검
-	WEAPON_SKILL[126] = [8000, 154, 40]   		# 참마도
-	WEAPON_SKILL[127] = [60000, 184, 40]   		# 청룡신검
-	WEAPON_SKILL[123] = [100000, 192, 40]   		# 현무염도
-	
-	# 일본
-	WEAPON_SKILL[136] = [15000, 1, 40]   		# 이가닌자의검
-	WEAPON_SKILL[134] = [400000, 170, 30]   		# 일화접선
-	WEAPON_SKILL[135] = [400000, 171, 30]   		# 진일신검
-	WEAPON_SKILL[138] = [400000, 164, 30]   		# 청일기창
-	
-	# 용무기
-	WEAPON_SKILL[142] = [1000, 123, 10]   		# 용마제사검
-	WEAPON_SKILL[143] = [50000, 123, 10]   		# 용마제칠검
-	WEAPON_SKILL[144] = [400000, 123, 5]   		# 용마제팔검
-	WEAPON_SKILL[145] = [3200000, 174, 5]   		# 용마제구검
-	
-	WEAPON_SKILL[147] = [1000, 141, 10]   		# 용랑제사봉
-	WEAPON_SKILL[148] = [50000, 141, 10]   		# 용랑제칠봉
-	WEAPON_SKILL[149] = [400000, 141, 5]   		# 용랑제팔봉
-	WEAPON_SKILL[150] = [3200000, 176, 5]   		# 용랑제구봉
-	
-	# 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
-	EQUIP_EFFECTS = {} 
-	# 장신구
-	EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
-	EQUIP_EFFECTS[29] = [[0.5 * sec, "buff", 131]] # 투명구두
-	EQUIP_EFFECTS[72] = [[10 * sec, "hp", 2], [10 * sec, "sp", 2]] # 해골목걸이
-	EQUIP_EFFECTS[75] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금팔찌
-	
-	# 방패 
-	EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
-	EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
-	EQUIP_EFFECTS[33] = [[10 * sec, "hp", 1.5], [10 * sec, "sp", 1.5]] # 도깨비부적
-	EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
-	EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
-	EQUIP_EFFECTS[98] = [[3 * sec, "hp", 1], [3 * sec, "sp", 1]] # 재생의부적
-	
-	# 갑옷
-	EQUIP_EFFECTS[30] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷
-	EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
-	
-	# 투구
-	EQUIP_EFFECTS[61] = [[10 * sec, "sp", 2]] # 연청투구
-	EQUIP_EFFECTS[62] = [[10 * sec, "hp", 2]] # 연홍투구
-	EQUIP_EFFECTS[74] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금투구
 	
 	# 백만 넘어가는 체력 설정
 	ABS_ENEMY_HP = {}
@@ -410,7 +129,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[98] = [1200000, 1] # 비류장군
 	
-	ABS_ENEMY_HP[102] = [30000000, 1] # 반고
+	ABS_ENEMY_HP[102] = [60000000, 1] # 반고
 	ABS_ENEMY_HP[112] = [8000000, 1] # 청룡
 	ABS_ENEMY_HP[113] = [8000000, 1] # 현무
 	
@@ -476,6 +195,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[257] = [5000000, 20.0, 25.0] # 태산
 	ENEMY_EXP[258] = [30000000, 500.0, 500.0] # 길림장군
 	
+	# 4차 퀘스트
+	ENEMY_EXP[102] = [30000000] # 반고
+	
 	# 용궁
 	ENEMY_EXP[159] = [12000000] # 거북장군
 	
@@ -530,7 +252,6 @@ if SDK.state("Mr.Mo's ABS") == true
 	# * Class Mo ABS - DO NOT EDIT BELOW, if you don't know what you are doing :)
 	#--------------------------------------------------------------------------
 	
-	
 	class MrMo_ABS
 		#--------------------------------------------------------------------------
 		# * Public Instance Variables
@@ -584,7 +305,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# ABS Active
 			@active = true
-			
 			
 		end
 		# 반환 함수들
@@ -695,8 +415,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				if spec[9] != nil
 					@enemies[event.id].respawn = spec[9].to_i * 6
 				end
-				
 			else
+				
 				#Set Behavior
 				behavior = parameters[1].split
 				@enemies[event.id].behavior = behavior[1].to_i
@@ -732,8 +452,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			@enemies[event.id].aggro = $is_map_first
 			@enemies[event.id].aggressiveness = (@enemies[event.id].aggressiveness * 45.0 + rand(3) - 2) / 45.0 
-			
-			
 		end
 		#--------------------------------------------------------------------------
 		# * Make Hate Points(Enemy)
@@ -844,7 +562,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update_equip_effects
 			equip = []
-			equip.push($game_party.actors[0].weapon_id)
+			#equip.push($game_party.actors[0].weapon_id)
 			equip.push($game_party.actors[0].armor1_id)
 			equip.push($game_party.actors[0].armor2_id)
 			equip.push($game_party.actors[0].armor3_id)
@@ -1731,8 +1449,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				
 			when 2 #All Emenies 적 전체
-				#Play the animation on player
-				$game_player.animation_id = skill.animation1_id
 				#Take off SP
 				@actor.sp -= skill.sp_cost
 				id = skill.id
@@ -2494,11 +2210,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			for event in $game_map.events.values
 				if (event.x == x and event.y == y) or (event.x == @x and event.y == @y)
-					if event.character_name == "" or ($ABS.enemies[event.id] != nil and $ABS.enemies[event.id].dead?) or event.erased
-						force_movement
-					else
+					if ($ABS.enemies[event.id] != nil and !$ABS.enemies[event.id].dead?)
 						return blow if @parent != event
 					end
+					force_movement
 				end
 			end
 		end
@@ -2514,8 +2229,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			if @parent == nil or @actor == nil
 				@stop = true
 			end
-			
-			return @stop = true if @step > @range
+			 
+			return blow if @step > @range
 			#Increase step
 			@step += 1
 			return force_movement if no_one?
@@ -2730,6 +2445,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if @stop
 			return if @dummy
 			
+			
 			if (x == $game_player.x and y == $game_player.y) or (@x == $game_player.x and @y == $game_player.y)
 				hit_player
 			end
@@ -2744,13 +2460,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			for event in $game_map.events.values
 				if (event.x == x and event.y == y) or (event.x == @x and event.y == @y)
-					if event.character_name == "" or ($ABS.enemies[event.id] != nil and $ABS.enemies[event.id].dead?) or event.erased
-						force_movement
-					else
+					if ($ABS.enemies[event.id] != nil and !$ABS.enemies[event.id].dead?)
 						hit_event(event.id)
 					end
+					force_movement
 				end
 			end
+			
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2825,6 +2541,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if actor.is_a?(ABS_Enemy) and enemy.is_a?(Game_Actor)
 					return if !actor.hate_group.include?(0)
 				end
+				
 				#Show animation on event
 				@enani = actor.event
 				
@@ -3414,7 +3131,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				@character.ani_array.push(@character.animation_id) if !@character.ani_array.include?(@character.animation_id)
 				@character.animation_id = 0
 			end
-			
 			mrmo_abs_sc_update
 			
 			#Skip if no demage or dead;
@@ -3502,6 +3218,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					a.critical_array.clear
 				end
 			end
+			
 			
 			if @character.ani_array != nil and @character.ani_array.size >= 1
 				for ani in @character.ani_array
@@ -3699,15 +3416,17 @@ if SDK.state("Mr.Mo's ABS") == true
 					amp = [self.damage.abs * 15 / 100, 1].max
 					self.damage += rand(amp+1) + rand(amp+1) - amp
 				end
+				
 				# Second hit detection
 				# agi : 민첩 (회피율), dex : 손재주 (명중률)
 				# eva : 절대 회피율..
-				a_dex = attacker.dex - attacker.dex * (self.eva / 150.0)
+				a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
 				#eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
-				eva = [(8 * self.agi / a_dex), 100].min
+				eva = [(8.0 * self.agi / a_dex).to_i, 100].min
 				
-				hit = self.damage < 0 ? 100 : [100 - eva, 5].max
-				hit = self.cant_evade? ? 100 : hit # 피할 수 없는 경우?
+				# 데미지가 음수면 힐한다는 뜻인데.. 사실 의미 없음 위에서 음수면 1로 했기 때문
+				hit = [100 - eva, 5].max # 적어도 5%확률로 명중
+				hit = self.cant_evade? ? 100 : hit # 피할 수 없는 경우엔 명중률이 100%!
 				
 				hit_result = (rand(100) < hit)
 			end
@@ -3798,7 +3517,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			# Set effective flag if common ID is effective
 			effective |= skill.common_event_id > 0
 			# First hit detection
-			hit = skill.hit
+			hit = skill.hit # 스킬 자체 명중률
+			
+			# user.hit : user의 상태에 따라 명중률 계산하는 함수
 			if skill.atk_f > 0
 				hit *= user.hit / 100 if !user.is_a?(Game_NetPlayer)
 			end
@@ -3846,11 +3567,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 방어력에 따른 데미지 감소
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
-						limit = 400.0
-						self.damage = [((self.damage) * (1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.1).to_i].max
+						limit = 600.0
+						self.damage = (self.damage * [1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min / limit), 0.01].max).to_i
 					else
 						limit = 2000.0
-						self.damage = [((self.damage) * (1.0 - ([self.pdef + self.mdef * 2, limit].min) / limit)).to_i, (self.damage * 0.1).to_i].max
+						self.damage = (self.damage * [1.0 - ([self.pdef + self.mdef * 2, limit].min / limit), 0.1].max).to_i
 					end
 				end
 				
@@ -3870,7 +3591,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# Second hit detection
 				eva = [(8 * self.agi / user.dex + self.eva), 100].min
-				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 25].max
+				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 15].max # 적어도 10% 확률로는 맞춘다 skill.eva_f : 회피 영향률
 				hit = self.cant_evade? ? 100 : hit
 				hit_result = (rand(100) < hit)
 				# Set effective flag if skill is uncertain

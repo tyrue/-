@@ -137,202 +137,6 @@ REQ_SKILL_DATA[4] =
 	[99, 5, 3, 134, 31, 37],	# 분신
 ]
 
-# 치유 마법 (기원류)
-HEAL_SKILL = {}
-HEAL_SKILL[5] = [75]  		# 누리의기원
-HEAL_SKILL[21] = [100]		# 바다의기원
-HEAL_SKILL[27] = [170]		# 동해의기원
-HEAL_SKILL[29] = [300]		# 천공의기원
-HEAL_SKILL[36] = [500]		# 구름의기원
-HEAL_SKILL[48] = [1000]		# 태양의기원
-HEAL_SKILL[54] = [2000]		# 태양의기원 1성
-HEAL_SKILL[55] = [5000]		# 현인의기원
-HEAL_SKILL[157] = [5000]	# 적 회복 스킬
-HEAL_SKILL[43] = [1]			# 위태응기
-
-# 치유마법 (희원류)
-PARTY_HEAL_SKILL = {}
-PARTY_HEAL_SKILL[81] = [170]  	# 동해의희원
-PARTY_HEAL_SKILL[83] = [200]  	# 천공의희원
-PARTY_HEAL_SKILL[86] = [75] 	 	# 바다의희원
-PARTY_HEAL_SKILL[87] = [200]  	# 천공의희원
-PARTY_HEAL_SKILL[89] = [500]  	# 구름의희원
-PARTY_HEAL_SKILL[93] = [1000] 	# 태양의희원
-PARTY_HEAL_SKILL[92] = [1]  		# 공력주입
-PARTY_HEAL_SKILL[95] = [3000]  	# 생명의희원
-PARTY_HEAL_SKILL[117] = [1]  		# 백호의희원
-PARTY_HEAL_SKILL[118] = [7000]  # 신령의희원
-PARTY_HEAL_SKILL[119] = [15000] # 봉황의희원
-PARTY_HEAL_SKILL[120] = [1]  		# 부활
-
-# 파티 버프 스킬 아이디 저장
-PARTY_BUFF_SKILL = {}
-PARTY_BUFF_SKILL[50] = [] # 야수수금술
-PARTY_BUFF_SKILL[88] = [] # 분량력법
-PARTY_BUFF_SKILL[90] = [] # 분량방법
-PARTY_BUFF_SKILL[42] = [] # 주술마도
-PARTY_BUFF_SKILL[46] = [] # 무장
-PARTY_BUFF_SKILL[47] = [] # 보호
-PARTY_BUFF_SKILL[121] = [] # 신령지익진
-PARTY_BUFF_SKILL[122] = [] # 파력무참진
-PARTY_BUFF_SKILL[136] = [] # 운상미보
-
-# 버프 스킬 값 저장
-BUFF_SKILL = {} # 스텟(int, dex, str, agi등), 값 
-BUFF_SKILL[26] = [["str", 20]] # 누리의힘
-BUFF_SKILL[28] = [["com", 40]] # 야수
-BUFF_SKILL[35] = [["com", 42]] # 비호
-BUFF_SKILL[42] = [["per_int", 1.5, 0]] # 주술마도
-
-BUFF_SKILL[50] = [["com", 40]] # 야수수금술
-BUFF_SKILL[88] = [["per_str", 1.5, 0]] # 분량력법
-BUFF_SKILL[90] = [["per_agi", 1.5, 0]] # 분량방법
-BUFF_SKILL[46] = [["mdef", 10], ["pdef", 10]] # 무장
-BUFF_SKILL[47] = [["mdef", 15], ["pdef", 15]] # 보호
-
-BUFF_SKILL[62] = [["dex", 50]] # 수심각도
-BUFF_SKILL[63] = [["agi", 50]] # 반영대도
-BUFF_SKILL[64] = [["per_str", 1.2, 0]] # 십량분법
-BUFF_SKILL[66] = [["custom", 1]] # 신수둔각도
-BUFF_SKILL[71] = [["per_str", 1.3, 0]] # 구량분법
-BUFF_SKILL[72] = [["per_str", 2, 0]] # 혼신의힘
-BUFF_SKILL[76] = [["per_str", 1.4, 0]] # 팔량분법
-
-BUFF_SKILL[91] = [["com", 129]] # 석화기탄
-BUFF_SKILL[130] = [["dex", 50], ["agi", 50]] # 무영보법
-BUFF_SKILL[131] = [["custom", 1]] # 투명
-BUFF_SKILL[141] = [["custom", 1]] # 투명 1성
-BUFF_SKILL[142] = [["custom", 1]] # 투명 2성
-BUFF_SKILL[134] = [["custom", 1]] # 분신
-BUFF_SKILL[136] = [["speed", 0.5]] # 운상미보
-BUFF_SKILL[140] = [["custom", 1]] # 운기
-
-BUFF_SKILL[99] = [["speed", 0.5]] # 속도시약
-
-# 액티브 스킬 행동 커스텀
-ACTIVE_SKILL = {}
-ACTIVE_SKILL[73] = [] # 광량돌격
-ACTIVE_SKILL[132] = [] # 비영승보
-
-# 스킬 사용하기 위한 재료
-NEED_SKILL_ACTIVE_ITEM = {}
-# 												[아이템 타입, 아이템 id, 개수], []....
-NEED_SKILL_ACTIVE_ITEM[6] = [[0, 3, 10]] # 도토리 던지기, 도토리 1개
-
-
-SKILL_POWER_CUSTOM = {}
-# 											 [[타입(현재(0), 전체(1)), 체력, 마력, 기본값]]
-SKILL_COST_CUSTOM = {}
-# 											 [[타입(현재(0), 전체(1)), 체력, 마력]]
-
-# ---------------- 주술사
-SKILL_POWER_CUSTOM[44] = [[0, 0, 1.5, 10]] # 헬파이어
-SKILL_POWER_CUSTOM[53] = [[0, 0, 2.0, 10]] # 삼매진화
-SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
-SKILL_POWER_CUSTOM[69] = [[0, 0, 1.5, 10]] # 삼매진화 2성
-
-SKILL_POWER_CUSTOM[49] = [[1, 0, 1.0 / 6.0, 200]] # 성려멸주
-SKILL_POWER_CUSTOM[52] = [[1, 0, 1.0 / 5.0, 200]] # 성려멸주 1성
-SKILL_POWER_CUSTOM[56] = [[1, 0, 1.0 / 4.0, 200]] # 성려멸주 2성
-
-SKILL_POWER_CUSTOM[58] = [[0, 0, 0.65, 10]] # 지폭지술
-SKILL_POWER_CUSTOM[68] = [[0, 0.5, 0.65, 10]] # 폭류유성
-
-# ---------------- #
-SKILL_COST_CUSTOM[44] = [[0, 0, 1.0]] # 헬파이어
-SKILL_COST_CUSTOM[53] = [[0, 0, 1.0]] # 삼매진화
-SKILL_COST_CUSTOM[57] = [[0, 0, 1.0]] # 삼매진화 1성
-SKILL_COST_CUSTOM[69] = [[0, 0, 1.0]] # 삼매진화 2성
-
-SKILL_COST_CUSTOM[49] = [[1, 0, 1.0 / 20.0]] # 성려멸주
-SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 20.0]] # 성려멸주 1성
-SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 20.0]] # 성려멸주 2성
-
-SKILL_COST_CUSTOM[58] = [[0, 0, 1.0]] # 지폭지술
-SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
-# -------END------- #
-
-# ---------------- 전사
-SKILL_POWER_CUSTOM[67] = [[0, 1.0, 0, 30]] # 건곤대나이
-SKILL_POWER_CUSTOM[73] = [[0, 0.5, 0, 30]] # 광량돌격
-SKILL_POWER_CUSTOM[79] = [[0, 3.0, 0, 100]] # 동귀어진
-SKILL_POWER_CUSTOM[101] = [[0, 1.0, 0.1, 60]] # 백호참
-SKILL_POWER_CUSTOM[103] = [[0, 0.6, 0.5, 20]] # 어검술
-SKILL_POWER_CUSTOM[104] = [[0, 0.3, 0.3, 20]] # 포효검황
-SKILL_POWER_CUSTOM[105] = [[0, 0.4, 0.5, 100]] # 혈겁만파
-SKILL_POWER_CUSTOM[106] = [[0, 0.3, 2.0, 100]] # 초혼비무
-
-SKILL_POWER_CUSTOM[74] = [[1, 1.0 / 12.0, 0, 20]] # 십리건곤
-SKILL_POWER_CUSTOM[78] = [[1, 1.0 / 10.0, 0.01, 30]] # 십리건곤 2성
-SKILL_POWER_CUSTOM[80] = [[1, 1.0 / 8.0, 0.01, 40]] # 십리건곤 3성
-SKILL_POWER_CUSTOM[102] = [[1, 1.0 / 7.0, 0.02, 50]] # 백리건곤 1성
-
-# ---------------- #
-SKILL_COST_CUSTOM[67] = [[0, 2.0 / 3.0, 0]] # 건곤대나이
-SKILL_COST_CUSTOM[73] = [[0, 0.4, 0]] # 광량돌격
-SKILL_COST_CUSTOM[79] = [[0, 1.0, 0]] # 동귀어진
-SKILL_COST_CUSTOM[101] = [[0, 0.5, 0]] # 백호참
-SKILL_COST_CUSTOM[103] = [[0, 0.5, 0.2]] # 어검술
-SKILL_COST_CUSTOM[104] = [[0, 0.4, 0.3]] # 포효검황
-SKILL_COST_CUSTOM[105] = [[0, 0.5, 1.0]] # 혈겁만파
-SKILL_COST_CUSTOM[106] = [[0, 0.1, 0.6]] # 초혼비무
-
-SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
-SKILL_COST_CUSTOM[78] = [[1, 1.0 / 20.0, 0]] # 십리건곤 1성
-SKILL_COST_CUSTOM[80] = [[1, 1.0 / 20.0, 0]] # 십리건곤 2성
-SKILL_COST_CUSTOM[102] = [[1, 1.0 / 20.0, 0.01]] # 백리건곤 1성
-# -------END------- #
-
-# ---------------- 도적
-SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
-SKILL_POWER_CUSTOM[135] = [[1, 0.05, 0.10, 20]] # 백호검무
-SKILL_POWER_CUSTOM[137] = [[0, 0.4, 1.0, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 0.1, 1.0, 20]] # 무형검
-SKILL_POWER_CUSTOM[139] = [[0, 0.6, 0.4, 100]] # 분혼경천
-
-SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
-SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
-SKILL_POWER_CUSTOM[142] = [[1, 0.02, 0.02, 0]] # 투명3성
-
-# ---------------- #
-SKILL_COST_CUSTOM[131] = [[1, 1.0 / 100.0, 0]] # 투명1성
-SKILL_COST_CUSTOM[141] = [[1, 1.0 / 100.0, 0]] # 투명2성
-SKILL_COST_CUSTOM[142] = [[1, 1.0 / 100.0, 0]] # 투명3성
-
-SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
-SKILL_COST_CUSTOM[135] = [[0, 0.2, 0.1]] # 백호검무
-SKILL_COST_CUSTOM[137] = [[0, 0.4, 0.4]] # 이기어검
-SKILL_COST_CUSTOM[138] = [[0, 0.2, 0.5]] # 무형검
-SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
-# -------END------- #
-
-# ---------------- 도사
-SKILL_POWER_CUSTOM[96] = [[1, 0, 0.015, 80]] # 지진
-
-# ---------------- #
-SKILL_COST_CUSTOM[92] = [[0, 0, 1.0]] # 공력주입
-SKILL_COST_CUSTOM[117] = [[0, 0, 1.0]] # 백호의희원
-SKILL_COST_CUSTOM[118] = [[1, 0, 0.02]] # 신령의희원
-SKILL_COST_CUSTOM[119] = [[1, 0, 0.02]] # 봉황의희원
-SKILL_COST_CUSTOM[43] = [[0, 0, 1.0]] # 위태응기
-
-SKILL_COST_CUSTOM[96] = [[1, 0, 1.0 / 15.0]] # 지진
-# -------END------- #
-
-
-# ------ 몬스터 ------#
-# 											 [[타입(2 : 몬스터), 전체 체력 피해 비율, 전체 마력 피해 비율, 기본값]]
-SKILL_POWER_CUSTOM[151] = [[2, 0.02, 0, 100]] # 청룡의포효
-SKILL_POWER_CUSTOM[152] = [[2, 0.02, 0, 100]] # 현무의포효
-SKILL_POWER_CUSTOM[154] = [[2, 3.00, 0, 100]] # 청룡마령참
-SKILL_POWER_CUSTOM[155] = [[2, 0.03, 0, 100]] # 암흑진파
-SKILL_POWER_CUSTOM[156] = [[2, 0.03, 0, 100]] # 흑룡광포
-SKILL_POWER_CUSTOM[158] = [[2, 1.00, 0, 100]] # 지옥겁화
-SKILL_POWER_CUSTOM[159] = [[2, 3.00, 0, 100]] # 혈겁만파
-SKILL_POWER_CUSTOM[160] = [[2, 3.00, 0, 100]] # 분혼경천
-
-# -------END------- #
-
 
 # ----------------------------------#
 # ----- 몬스터 스킬 주문 외우는 데이터---------#
@@ -351,6 +155,7 @@ ABS_ENEMY_SKILL_CASTING[160] = [[4, "너의 무력함을 깨달아라.."], [1, "
 # $game_variables[20] 플레이어 민첩
 # $game_variables[21] 플레이어 지력
 # $game_variables[22] 플레이어 손재주
+
 class Rpg_skill
 	attr_accessor :base_str
 	attr_accessor :base_int
@@ -471,7 +276,7 @@ class Rpg_skill
 		# 커스텀
 		case id
 		when 43 # 위태응기
-			heal_v = user.sp * 2
+			heal_v = user.sp * 2.5
 			
 			# 적 유닛 스킬
 		when 157 # n퍼 회복
@@ -479,7 +284,7 @@ class Rpg_skill
 		end
 		
 		skill_cost_custom(user, id)
-		heal_v += (user.maxhp * 0.001).to_i
+		heal_v += (user.maxhp * 0.005).to_i
 		user.critical = "heal"
 		user.damage = heal_v.to_s
 		user.hp += heal_v

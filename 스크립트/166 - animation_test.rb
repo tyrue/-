@@ -41,15 +41,16 @@ module RPG
 						next
 					end
 					
-					ani.duration -= 1 if (Graphics.frame_count % 2 == 0)
+					ani.duration -= 1 if (Graphics.frame_count % 2 == 0) or ani.duration == ani.animation.frame_max
+					#ani.duration += 1 if (Graphics.frame_count % 10 == 0) and ani.duration < ani.animation.frame_max - 1
 					update_animation2(ani)
-					ani.duration += 1 if (Graphics.frame_count % 10 == 0) 
 				end
 			end
 		end
 		
 		def animation2(animation, hit)
 			return if animation == nil
+			
 			ani = AniData.new(animation, hit)
 			ani.duration = animation.frame_max
 			ani.pause_duration = @_animation_overlap.size * 6
@@ -81,6 +82,7 @@ module RPG
 			if @_animation_overlap.size > 10
 				dispose_animation2(@_animation_overlap[0])
 			end
+			
 			update_animation2(ani)
 		end
 		

@@ -29,11 +29,16 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[1][42] = ['(착용)황혼의갑주'] 		 		#황혼의갑주
 	VISUAL_EQUIP_DATA[1][43] = ['(착용)산신의정화'] 		 		#산신의정화
 	VISUAL_EQUIP_DATA[1][44] = ['(착용)여명의도복'] 		 		#여명의도복
+	
 	VISUAL_EQUIP_DATA[1][47] = ['(착용)망또1'] 				 		#망또1
 	VISUAL_EQUIP_DATA[1][48] = ['(착용)망또2'] 				 		#망또2
 	VISUAL_EQUIP_DATA[1][49] = ['(착용)망또3'] 				 		#망또3
+	VISUAL_EQUIP_DATA[1][55] = ['(착용)망또3', 155] 		 				#망또4
+	VISUAL_EQUIP_DATA[1][56] = ['(착용)망또3', 300] 		 				#망또5
+	
 	VISUAL_EQUIP_DATA[1][52] = ['(착용)현인의영혼'] 		 		#진인의영혼
 	VISUAL_EQUIP_DATA[1][54] = ['(착용)검황의영혼'] 		 		#귀검의영혼
+	
 	VISUAL_EQUIP_DATA[1][59] = ['(착용)초록장삼'] 			 		#초록장삼
 	VISUAL_EQUIP_DATA[1][73] = ['(착용)가릉빈가의날개옷\'진']		#가릉빈가의날개옷'진
 	
@@ -92,7 +97,7 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][126] = ['(착용)참마도']				#참마도
 	VISUAL_EQUIP_DATA[2][127] = ['(착용)청룡신검'] 	  #청룡신검
 	VISUAL_EQUIP_DATA[2][128] = ['(착용)용랑제구봉'] 		#용량제육봉
-	VISUAL_EQUIP_DATA[2][129] = ['(착용)현철중검'] 	  #도깨비방망이
+	VISUAL_EQUIP_DATA[2][129] = ['(착용)도깨비방망이'] 	  #도깨비방망이
 	VISUAL_EQUIP_DATA[2][130] = ['(착용)영웅의칼\'뇌']  #산적왕의칼 
 	VISUAL_EQUIP_DATA[2][131] = ['(착용)다문창'] 		  #다문창
 	VISUAL_EQUIP_DATA[2][132] = ['(착용)영혼죽장'] 	  #인어장군지팡이

@@ -79,7 +79,7 @@ module Update_Range
 		# that go offscreen to glitch and stay on screen when they actually aren't
 		display_x = $game_map.display_x - 512 # 256
 		display_y = $game_map.display_y - 512 # 256
-		display_width = $game_map.display_x + 2916 #2820
+		display_width = $game_map.display_x + 3216 #2820
 		display_height = $game_map.display_y + 2570 #2180
 		# If too far off screen
 		if object.real_x <= display_x or

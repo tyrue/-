@@ -177,7 +177,7 @@ class Rpg_skill
 		if check_buff(140) # 운기 중
 			if !$game_player.moving?
 				if (Graphics.frame_count % (sec) == 0)
-					$game_party.actors[0].sp += $game_party.actors[0].maxsp * 0.15
+					$game_party.actors[0].sp += $game_party.actors[0].maxsp * 0.12
 					$game_player.ani_array.push(4)  
 					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 				end
@@ -276,7 +276,7 @@ class Rpg_skill
 		# 커스텀
 		case id
 		when 43 # 위태응기
-			heal_v = user.sp * 2.5
+			heal_v = user.sp * 2.1
 			
 			# 적 유닛 스킬
 		when 157 # n퍼 회복

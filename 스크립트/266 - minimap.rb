@@ -211,7 +211,9 @@ class Window_Map < Window_Base
 				txt_size = 0
 				txt = nil
 				if event.list[0].code == 201 # 맵 이동 이벤트
-					txt = map_infos[event.list[0].parameters[1]].name.to_s if event.list[0].parameters != nil
+					if event.list[0].parameters != nil and map_infos[event.list[0].parameters[1]] != nil
+						txt = map_infos[event.list[0].parameters[1]].name.to_s
+					end
 					bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
 				else
 					txt = event.sprite_id if event.sprite_id != nil

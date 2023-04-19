@@ -146,7 +146,7 @@ RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
 RANGE_SKILLS[78] = [1, 5, "공격스킬2", 4, 0] #십리건곤 1성
 RANGE_SKILLS[79] = [0, 5, "", 4, 0, 5] #동귀어진
 RANGE_SKILLS[80] = [1, 5, "공격스킬2", 4, 0] #십리건곤 2성
-RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0, 3] #백호참
+RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0, 2] #백호참
 RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
 RANGE_SKILLS[104] = [12, 5, "공격스킬2", 4, 0, 3] #포효검황
 RANGE_SKILLS[105] = [12, 5, "공격스킬2", 4, 0, 3] #혈겁만파
@@ -197,101 +197,6 @@ RANGE_EXPLODE[137] = [0, 6, "공격스킬2", 3, 4, 0, 2] #이기어검
 RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
 # //////////////////////////end///////////////////////////////#
 
-# -------------------------스킬 딜레이----------------------------#
-# 주술사
-# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
-SKILL_MASH_TIME[44] = [5 * sec, 0] # 헬파이어
-SKILL_MASH_TIME[53] = [5 * sec, 0] # 삼매진화
-SKILL_MASH_TIME[57] = [4.5 * sec, 0] # 삼매진화 2성
-SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
-SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
-SKILL_MASH_TIME[69] = [4 * sec, 0] # 삼매진화 3성
-
-# 전사
-SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
-SKILL_MASH_TIME[66] = [120 * sec, 0] # 신수둔각도
-SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
-SKILL_MASH_TIME[73] = [10 * sec, 0] # 광량돌격
-SKILL_MASH_TIME[75] = [5 * sec, 0] # 뢰마도 2성
-SKILL_MASH_TIME[77] = [1 * sec, 0] # 유비후타
-SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
-SKILL_MASH_TIME[101] = [1 * sec, 0] # 백호참
-SKILL_MASH_TIME[103] = [8 * sec, 0] # 어검술
-SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
-SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
-SKILL_MASH_TIME[106] = [15 * sec, 0] # 초혼비무
-
-# 도사
-SKILL_MASH_TIME[94] = [4.5 * sec, 0] # 금강불체
-SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
-SKILL_MASH_TIME[121] = [5 * sec, 0] # 신령지익진
-SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
-
-# 도적
-SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
-SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
-SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
-SKILL_MASH_TIME[138] = [2 * sec, 0] # 무형검
-SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
-
-# 적 스킬
-SKILL_MASH_TIME[151] = [5 * sec, 0] # 청룡포효
-SKILL_MASH_TIME[152] = [5 * sec, 0] # 현무포효
-SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
-SKILL_MASH_TIME[155] = [5 * sec, 0] # 암흑진파
-SKILL_MASH_TIME[156] = [5 * sec, 0] # 흑룡광포
-SKILL_MASH_TIME[157] = [10 * sec, 0] # 회복스킬
-SKILL_MASH_TIME[158] = [20 * sec, 0] # 지옥겁화
-SKILL_MASH_TIME[159] = [30 * sec, 0] # 혈겁만파
-SKILL_MASH_TIME[160] = [30 * sec, 0] # 분혼경천
-
-# 기타
-SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
-# //////////////////////////end///////////////////////////////#
-
-# -------------------------버프 지속시간----------------------------#
-# 주술사
-# [원래 지속 시간, 현재 남은 시간]
-SKILL_BUFF_TIME[9] = [180 * sec, 0] # 무장
-SKILL_BUFF_TIME[46] = [180 * sec, 0] # 무장
-SKILL_BUFF_TIME[20] = [180 * sec, 0] # 보호
-SKILL_BUFF_TIME[47] = [180 * sec, 0] # 보호
-SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
-SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
-SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
-SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
-SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
-
-# 전사
-SKILL_BUFF_TIME[62] = [180 * sec, 0] # 수심각도
-SKILL_BUFF_TIME[63] = [180 * sec, 0] # 반영대도
-SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
-SKILL_BUFF_TIME[66] = [60 * sec, 0] # 신수둔각도
-SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
-SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
-SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
-
-# 도사
-SKILL_BUFF_TIME[50] = [60 * sec, 0] # 야수금술술
-SKILL_BUFF_TIME[88] = [60 * sec, 0] # 분량력법
-SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
-SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
-SKILL_BUFF_TIME[94] = [5 * sec, 0] # 금강불체
-SKILL_BUFF_TIME[121] = [10 * sec, 0] # 신령지익진
-SKILL_BUFF_TIME[122] = [10 * sec, 0] # 파력무참진
-
-# 도적
-SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
-SKILL_BUFF_TIME[131] = [20 * sec, 0] # 투명
-SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
-SKILL_BUFF_TIME[136] = [180 * sec, 0] # 운상미보
-SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
-SKILL_BUFF_TIME[141] = [20 * sec, 0] # 투명 1성
-SKILL_BUFF_TIME[142] = [30 * sec, 0] # 투명 2성
-
-# 기타
-SKILL_BUFF_TIME[99] = [180 * sec, 0] # 속도시약
-# //////////////////////////end///////////////////////////////#
 
 # -------------------------스킬 공격력 설정----------------------------#
 # 주술사
@@ -401,6 +306,102 @@ SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
 SKILL_COST_CUSTOM[137] = [[0, 0.4, 0.4]] # 이기어검
 SKILL_COST_CUSTOM[138] = [[0, 0.2, 0.5]] # 무형검
 SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
+# //////////////////////////end///////////////////////////////#
+
+# -------------------------스킬 딜레이----------------------------#
+# 주술사
+# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
+SKILL_MASH_TIME[44] = [5 * sec, 0] # 헬파이어
+SKILL_MASH_TIME[53] = [5 * sec, 0] # 삼매진화
+SKILL_MASH_TIME[57] = [4.5 * sec, 0] # 삼매진화 2성
+SKILL_MASH_TIME[58] = [90 * sec, 0] # 지폭지술
+SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
+SKILL_MASH_TIME[69] = [4 * sec, 0] # 삼매진화 3성
+
+# 전사
+SKILL_MASH_TIME[65] = [5 * sec, 0] # 뢰마도
+SKILL_MASH_TIME[66] = [120 * sec, 0] # 신수둔각도
+SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
+SKILL_MASH_TIME[73] = [7 * sec, 0] # 광량돌격
+SKILL_MASH_TIME[75] = [5 * sec, 0] # 뢰마도 2성
+SKILL_MASH_TIME[77] = [1 * sec, 0] # 유비후타
+SKILL_MASH_TIME[79] = [30 * sec, 0] # 동귀어진
+SKILL_MASH_TIME[101] = [1 * sec, 0] # 백호참
+SKILL_MASH_TIME[103] = [8 * sec, 0] # 어검술
+SKILL_MASH_TIME[104] = [90 * sec, 0] # 포효검황
+SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
+SKILL_MASH_TIME[106] = [15 * sec, 0] # 초혼비무
+
+# 도사
+SKILL_MASH_TIME[94] = [4.5 * sec, 0] # 금강불체
+SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
+SKILL_MASH_TIME[121] = [5 * sec, 0] # 신령지익진
+SKILL_MASH_TIME[122] = [5 * sec, 0] # 파력무참진
+
+# 도적
+SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
+SKILL_MASH_TIME[135] = [2 * sec, 0] # 백호검무
+SKILL_MASH_TIME[137] = [20 * sec, 0] # 이기어검
+SKILL_MASH_TIME[138] = [2 * sec, 0] # 무형검
+SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
+
+# 적 스킬
+SKILL_MASH_TIME[151] = [5 * sec, 0] # 청룡포효
+SKILL_MASH_TIME[152] = [5 * sec, 0] # 현무포효
+SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
+SKILL_MASH_TIME[155] = [5 * sec, 0] # 암흑진파
+SKILL_MASH_TIME[156] = [5 * sec, 0] # 흑룡광포
+SKILL_MASH_TIME[157] = [10 * sec, 0] # 회복스킬
+SKILL_MASH_TIME[158] = [20 * sec, 0] # 지옥겁화
+SKILL_MASH_TIME[159] = [30 * sec, 0] # 혈겁만파
+SKILL_MASH_TIME[160] = [30 * sec, 0] # 분혼경천
+
+# 기타
+SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
+# //////////////////////////end///////////////////////////////#
+
+# -------------------------버프 지속시간----------------------------#
+# 주술사
+# [원래 지속 시간, 현재 남은 시간]
+SKILL_BUFF_TIME[9] = [180 * sec, 0] # 무장
+SKILL_BUFF_TIME[46] = [180 * sec, 0] # 무장
+SKILL_BUFF_TIME[20] = [180 * sec, 0] # 보호
+SKILL_BUFF_TIME[47] = [180 * sec, 0] # 보호
+SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
+SKILL_BUFF_TIME[28] = [120 * sec, 0] # 야수
+SKILL_BUFF_TIME[35] = [120 * sec, 0] # 비호
+SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
+SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
+
+# 전사
+SKILL_BUFF_TIME[62] = [180 * sec, 0] # 수심각도
+SKILL_BUFF_TIME[63] = [180 * sec, 0] # 반영대도
+SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
+SKILL_BUFF_TIME[66] = [60 * sec, 0] # 신수둔각도
+SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
+SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
+SKILL_BUFF_TIME[71] = [60 * sec, 0] # 혼신의힘
+
+# 도사
+SKILL_BUFF_TIME[50] = [60 * sec, 0] # 야수금술술
+SKILL_BUFF_TIME[88] = [60 * sec, 0] # 분량력법
+SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
+SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
+SKILL_BUFF_TIME[94] = [5 * sec, 0] # 금강불체
+SKILL_BUFF_TIME[121] = [10 * sec, 0] # 신령지익진
+SKILL_BUFF_TIME[122] = [10 * sec, 0] # 파력무참진
+
+# 도적
+SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
+SKILL_BUFF_TIME[131] = [20 * sec, 0] # 투명
+SKILL_BUFF_TIME[134] = [60 * sec, 0] # 분신
+SKILL_BUFF_TIME[136] = [180 * sec, 0] # 운상미보
+SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
+SKILL_BUFF_TIME[141] = [20 * sec, 0] # 투명 1성
+SKILL_BUFF_TIME[142] = [30 * sec, 0] # 투명 2성
+
+# 기타
+SKILL_BUFF_TIME[99] = [180 * sec, 0] # 속도시약
 # //////////////////////////end///////////////////////////////#
 
 # -----------------------방향 설정--------------------------------#

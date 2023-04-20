@@ -41,8 +41,7 @@ module RPG
 						next
 					end
 					
-					ani.duration -= 1 if (Graphics.frame_count % 2 == 0) or ani.duration == ani.animation.frame_max
-					#ani.duration += 1 if (Graphics.frame_count % 10 == 0) and ani.duration < ani.animation.frame_max - 1
+					ani.duration -= 1 if (Graphics.frame_count % 2 == 0) 
 					update_animation2(ani)
 				end
 			end

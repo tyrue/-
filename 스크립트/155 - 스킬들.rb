@@ -136,7 +136,7 @@ REQ_SKILL_DATA[4] =
 	[88, 20, 3, 142, 30, 31], 	# 투명 2성
 	[99, 5, 3, 134, 31, 37],	# 분신
 ]
-
+# -------------END----------------- #
 
 # ----------------------------------#
 # ----- 몬스터 스킬 주문 외우는 데이터---------#
@@ -147,9 +147,36 @@ ABS_ENEMY_SKILL_CASTING[154] = [[2, "여의주의 힘을 받은 용이여..."], 
 ABS_ENEMY_SKILL_CASTING[158] = [[4, "불타버려라.."]] # 지옥겁화
 ABS_ENEMY_SKILL_CASTING[159] = [[4, "하늘 높은 줄 모르고 겁도 없구나.."], [1, "신의 분노를 받아라!!"]] # 혈겁만파
 ABS_ENEMY_SKILL_CASTING[160] = [[4, "너의 무력함을 깨달아라.."], [1, "압도적인 힘에 굴복해라!!"]] # 분혼경천
-
 # -------------END----------------- #
 
+# ----------------------------------#
+# ----- 직업별 승급 필요 체력, 마력---------#
+# ----------------------------------#
+NEED_ADVANCE_RESOURCE = {} # 각 요소는 승급시 필요 체/마
+NEED_ADVANCE_RESOURCE[0] = [
+	[4500, 4500], 
+	[10000, 15000], 
+	[25000, 50000], 
+	[70000, 150000]] # 주술사
+
+NEED_ADVANCE_RESOURCE[1] = [
+	[6000, 2500], 
+	[20000, 6000], 
+	[80000, 12000], 
+	[200000, 25000]] # 전사
+
+NEED_ADVANCE_RESOURCE[2] = [
+	[4500, 4500], 
+	[10000, 10000], 
+	[25000, 35000], 
+	[60000, 100000]] # 도사
+
+NEED_ADVANCE_RESOURCE[3] = [
+	[6000, 2500], 
+	[20000, 6000], 
+	[80000, 12000], 
+	[200000, 25000]] # 도적
+# -------------END----------------- #
 
 # $game_variables[19] 플레이어 힘
 # $game_variables[20] 플레이어 민첩
@@ -244,7 +271,7 @@ class Rpg_skill
 		user.damage = heal_v.to_s
 		user.critical = "heal"
 		user.hp += heal_v
-				
+		
 		if $netparty.size >= 2 # 파티가 2인 이상이라면
 			name = user.name
 			Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
@@ -906,6 +933,28 @@ class Rpg_skill
 			$game_variables[103] = 0
 			$game_variables[104] = 0
 		end
+	end
+	
+	# 승급시 필요 체력, 마력 반환하는 함수
+	def need_advancement_resource
+		self.job_select # 현재 상태 초기화
+		# NEED_ADVANCE_RESOURCE[0] = [[4500, 4500], [10000, 15000], [25000, 40000], [70000, 120000]] # 주술사
+		idx = -1
+		if $game_switches[6] # 주술사
+			idx = 0
+		elsif $game_switches[156] # 전사
+			idx = 1
+		elsif $game_switches[144] # 도사
+			idx = 2
+		elsif $game_switches[426] # 도적	
+			idx = 3
+		end
+		return if idx == -1
+		return if NEED_ADVANCE_RESOURCE[idx] == nil
+		return if NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i] == nil
+		
+		$game_variables[195] = NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i][0] # 승급 필요 체
+		$game_variables[196] = NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i][1] # 승급 필요 마
 	end
 	
 	# 자기 직업 스위치 온

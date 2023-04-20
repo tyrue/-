@@ -82,16 +82,16 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[114] = [[0], 0] # 주작의검
 	EQUIP_JOB_WEAPON[115] = [[0], 0] # 심판의낫
 	EQUIP_JOB_WEAPON[116] = [[0], 0] # 진일신검손상
-	EQUIP_JOB_WEAPON[117] = [[0], 0] # 괴력선창
+	EQUIP_JOB_WEAPON[117] = [[0], 1] # 괴력선창
 	EQUIP_JOB_WEAPON[118] = [[0], 0] # 철단도
 	EQUIP_JOB_WEAPON[119] = [[0], 0] # 비철단도
 	EQUIP_JOB_WEAPON[121] = [[0], 0] # 흑철중검
 	EQUIP_JOB_WEAPON[122] = [[0], 0] # 초심자의목도
-	EQUIP_JOB_WEAPON[123] = [[0], 0] # 현무염도
+	EQUIP_JOB_WEAPON[123] = [[0], 2] # 현무염도
 	EQUIP_JOB_WEAPON[124] = [[0], 0] # 얼음검
 	EQUIP_JOB_WEAPON[125] = [[0], 0] # 일월대도
 	EQUIP_JOB_WEAPON[126] = [[0], 0] # 참마도
-	EQUIP_JOB_WEAPON[127] = [[0], 0] # 청룡신검
+	EQUIP_JOB_WEAPON[127] = [[0], 2] # 청룡신검
 	EQUIP_JOB_WEAPON[128] = [[0], 0] # 용량제구봉?
 	EQUIP_JOB_WEAPON[129] = [[0], 0] # 도깨비방망이
 	EQUIP_JOB_WEAPON[130] = [[0], 0] # 산적왕의칼
@@ -104,12 +104,12 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	
 	EQUIP_JOB_WEAPON[141] = [[0], 0] # 용마제일검
 	EQUIP_JOB_WEAPON[142] = [[0], 0] # 용마제사검
-	EQUIP_JOB_WEAPON[143] = [[0], 0] # 용마제칠검
+	EQUIP_JOB_WEAPON[143] = [[0], 1] # 용마제칠검
 	EQUIP_JOB_WEAPON[144] = [[0], 3] # 용마제팔검
 	EQUIP_JOB_WEAPON[145] = [[0], 4] # 용마제구검
 	EQUIP_JOB_WEAPON[146] = [[0], 0] # 용랑제일봉
 	EQUIP_JOB_WEAPON[147] = [[0], 0] # 용랑제사봉
-	EQUIP_JOB_WEAPON[148] = [[0], 0] # 용랑제칠봉
+	EQUIP_JOB_WEAPON[148] = [[0], 1] # 용랑제칠봉
 	EQUIP_JOB_WEAPON[149] = [[0], 3] # 용랑제팔봉
 	EQUIP_JOB_WEAPON[150] = [[0], 4] # 용랑제구봉
 	
@@ -142,7 +142,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[27] = [[0], 0] # 숫사슴화서
 	EQUIP_JOB_ARMOR[28] = [[0], 0] # 보무의목걸이
 	EQUIP_JOB_ARMOR[29] = [[0], 0] # 투명구두
-	EQUIP_JOB_ARMOR[30] = [[0], 0] # 가릉빈가의날개옷
+	EQUIP_JOB_ARMOR[30] = [[0], 4] # 가릉빈가의날개옷
 	EQUIP_JOB_ARMOR[33] = [[0], 0] # 도깨비부적
 	EQUIP_JOB_ARMOR[35] = [[0], 0] # 망또
 	EQUIP_JOB_ARMOR[36] = [[0], 0] # 기원부

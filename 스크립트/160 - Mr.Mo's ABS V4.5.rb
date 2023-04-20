@@ -673,6 +673,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def update_enemy_battle(enemy)
+			return if enemy == nil
+			return if enemy.attacking == nil
 			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
 			if update_enemy_battle_check(enemy)	
 				# 원래 움직임으로 돌아옴
@@ -683,11 +685,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end      
 			
+			# Skip this if the attack killed the enemy
+			return if enemy.event.moving?
 			return if update_enemy_casting(enemy)
 			# 공격주기마다 행동 시작
 			update_enemy_attack(enemy, enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
-			# Skip this if the attack killed the enemy
-			return if enemy == nil or enemy.attacking == nil or enemy.event.moving?
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
 			enemy.event.turn_to(enemy.attacking.event) if !in_direction?(enemy.event, enemy.attacking.event) and in_range?(enemy.event, enemy.attacking.event, 1)
 		end

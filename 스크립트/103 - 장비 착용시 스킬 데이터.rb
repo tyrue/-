@@ -28,7 +28,7 @@ WEAPON_SKILL[17] = [100000, 196, 90]   		# 음양도
 # 기타 검
 WEAPON_SKILL[114] = [3000, 153, 40]   		# 주작의검
 WEAPON_SKILL[115] = [1000000, 194, 5] 		# 심판의 낫
-WEAPON_SKILL[117] = [100000, 120, 5] 		# 괴력선창
+WEAPON_SKILL[117] = [100000, 120, 7] 		# 괴력선창
 WEAPON_SKILL[124] = [500, 162, 40]   		# 얼음검
 WEAPON_SKILL[126] = [8000, 154, 40]   		# 참마도
 WEAPON_SKILL[127] = [60000, 184, 40]   		# 청룡신검
@@ -63,9 +63,9 @@ EQUIP_EFFECTS[75] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금팔찌
 # 방패 
 EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
 EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
-EQUIP_EFFECTS[33] = [[10 * sec, "hp", 1.5], [10 * sec, "sp", 1.5]] # 도깨비부적
-EQUIP_EFFECTS[39] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 정화의방패
-EQUIP_EFFECTS[40] = [[10 * sec, "hp", 1], [10 * sec, "sp", 1]] # 여신의방패
+EQUIP_EFFECTS[33] = [[10 * sec, "hp", 1.75], [10 * sec, "sp", 1.75]] # 도깨비부적
+EQUIP_EFFECTS[39] = [[5 * sec, "hp", 1], [5 * sec, "sp", 1]] # 정화의방패
+EQUIP_EFFECTS[40] = [[5 * sec, "hp", 1], [5 * sec, "sp", 1]] # 여신의방패
 EQUIP_EFFECTS[98] = [[3 * sec, "hp", 1], [3 * sec, "sp", 1]] # 재생의부적
 
 # 갑옷

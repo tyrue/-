@@ -144,7 +144,7 @@ RANGE_SKILLS[74] = [1, 5, "공격스킬2", 4, 0] #십리건곤
 RANGE_SKILLS[75] = [10, 10, "공격스킬2", 4, 0] #뢰마도 1성
 RANGE_SKILLS[77] = [1, 10, "공격스킬2", 4, 7] #유비후타
 RANGE_SKILLS[78] = [1, 5, "공격스킬2", 4, 0] #십리건곤 1성
-RANGE_SKILLS[79] = [0, 5, "", 4, 0, 5] #동귀어진
+RANGE_SKILLS[79] = [0, 5, "", 4, 0, 10] #동귀어진
 RANGE_SKILLS[80] = [1, 5, "공격스킬2", 4, 0] #십리건곤 2성
 RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0] #백호참
 RANGE_SKILLS[102] = [2, 6, "공격스킬2", 4, 0] #백리건곤 1성
@@ -164,13 +164,13 @@ RANGE_SKILLS[139] = [12, 5, "", 4, 0, 3] #분혼경천
 RANGE_SKILLS[45] = [10, 4, "공격스킬", 4, 1] #산적 건곤
 RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
 RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
-RANGE_SKILLS[85] = [4, 2, "공격스킬2", 4, 4] # 필살검무
+RANGE_SKILLS[85] = [4, 3, "공격스킬2", 4, 3] # 필살검무
 RANGE_SKILLS[151] = [7, 4, "청룡", 4, 4, 4, 3] # 청룡의 포효
 RANGE_SKILLS[152] = [7, 4, "현무", 4, 4, 4, 3] # 현무의 포효
-RANGE_SKILLS[153] = [3, 5, "공격스킬2", 4, 0] # 백호검무
+RANGE_SKILLS[153] = [3, 6, "공격스킬2", 4, 0] # 백호검무
 RANGE_SKILLS[154] = [10, 3, "용", 4, 6] # 청룡마령참
-RANGE_SKILLS[155] = [5, 2, "공격스킬", 4, 1] # 암흑진파
-RANGE_SKILLS[156] = [7, 2, "공격스킬", 4, 1] # 흑룡광포
+RANGE_SKILLS[155] = [6, 2, "공격스킬", 4, 1] # 암흑진파
+RANGE_SKILLS[156] = [6, 2, "공격스킬", 4, 1] # 흑룡광포
 RANGE_SKILLS[158] = [10, 4, "공격스킬", 4, 1] # 지옥겁화
 RANGE_SKILLS[159] = [10, 3, "공격스킬", 4, 3] # 혈겁만파
 RANGE_SKILLS[160] = [10, 3, "공격스킬", 4, 3] # 분혼경천
@@ -187,7 +187,7 @@ RANGE_EXPLODE[69] = [10, 10, "공격스킬2", 4, 4, 0, 2] # 삼매진화 2성
 RANGE_EXPLODE[103] = [1, 6, "공격스킬2", 3, 4, 0, 3] # 어검술
 
 # 도사
-RANGE_EXPLODE[96] = [10, 6, "공격스킬2", 2, 4, 0, 3] # 지진
+RANGE_EXPLODE[96] = [10, 10, "공격스킬2", 2, 4, 0, 3] # 지진
 
 # 도적
 RANGE_EXPLODE[135] = [0, 6, "공격스킬", 2, 4, 0] # 백호검무
@@ -217,12 +217,12 @@ SKILL_POWER_CUSTOM[68] = [[0, 0.5, 0.65, 10]] # 폭류유성
 # [[타입(현재(0), 전체(1)), 체력, 마력, 기본값]]
 SKILL_POWER_CUSTOM[67] = [[0, 0.9, 0, 30]] # 건곤대나이
 SKILL_POWER_CUSTOM[73] = [[0, 0.4, 0, 30]] # 광량돌격
-SKILL_POWER_CUSTOM[79] = [[0, 3.0, 0, 100]] # 동귀어진
+SKILL_POWER_CUSTOM[79] = [[0, 1.0, 0, 100]] # 동귀어진
 SKILL_POWER_CUSTOM[101] = [[0, 1.3, 0.1, 60]] # 백호참
 SKILL_POWER_CUSTOM[103] = [[0, 0.6, 0.5, 20]] # 어검술
 SKILL_POWER_CUSTOM[104] = [[0, 0.3, 0.3, 20]] # 포효검황
 SKILL_POWER_CUSTOM[105] = [[0, 0.4, 0.5, 100]] # 혈겁만파
-SKILL_POWER_CUSTOM[106] = [[0, 0.3, 2.0, 100]] # 초혼비무
+SKILL_POWER_CUSTOM[106] = [[0, 0.3, 1.2, 100]] # 초혼비무
 
 SKILL_POWER_CUSTOM[74] = [[1, 1.0 / 12.0, 0, 20]] # 십리건곤
 SKILL_POWER_CUSTOM[78] = [[1, 1.0 / 10.0, 0.01, 30]] # 십리건곤 2성
@@ -274,12 +274,12 @@ SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
 # [[타입(현재(0), 전체(1)), 체력, 마력]]
 SKILL_COST_CUSTOM[67] = [[0, 2.0 / 3.0, 0]] # 건곤대나이
 SKILL_COST_CUSTOM[73] = [[0, 0.4, 0]] # 광량돌격
-SKILL_COST_CUSTOM[79] = [[0, 1.0, 0]] # 동귀어진
+SKILL_COST_CUSTOM[79] = [[0, 1.0, 1.0]] # 동귀어진
 SKILL_COST_CUSTOM[101] = [[0, 0.5, 0]] # 백호참
 SKILL_COST_CUSTOM[103] = [[0, 0.5, 0.2]] # 어검술
 SKILL_COST_CUSTOM[104] = [[0, 0.4, 0.3]] # 포효검황
 SKILL_COST_CUSTOM[105] = [[0, 0.5, 1.0]] # 혈겁만파
-SKILL_COST_CUSTOM[106] = [[0, 0.1, 0.6]] # 초혼비무
+SKILL_COST_CUSTOM[106] = [[0, 0.3, 1.0]] # 초혼비무
 
 SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
 SKILL_COST_CUSTOM[78] = [[1, 1.0 / 20.0, 0]] # 십리건곤 1성
@@ -346,8 +346,10 @@ SKILL_MASH_TIME[138] = [2 * sec, 0] # 무형검
 SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
 
 # 적 스킬
+SKILL_MASH_TIME[85] = [1 * sec, 0] # 필살검무
 SKILL_MASH_TIME[151] = [5 * sec, 0] # 청룡포효
 SKILL_MASH_TIME[152] = [5 * sec, 0] # 현무포효
+SKILL_MASH_TIME[153] = [2 * sec, 0] # 백호검무
 SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
 SKILL_MASH_TIME[155] = [5 * sec, 0] # 암흑진파
 SKILL_MASH_TIME[156] = [5 * sec, 0] # 흑룡광포

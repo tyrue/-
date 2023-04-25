@@ -90,7 +90,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	#[Character Set Name, Move Speed, Animation, Ammo, Range,  Mash Time(in seconds), Kick Back(in tiles),Animation Suffix]
 	# Leave kickback 0 if you don't want kick back effect.
 	#-------------------------------------------------------------------------
-
+	
 	# Since Melee weapons aren't listed I made this for customazation of melee weapons.
 	MELEE_CUSTOM = {}
 	# if left blank the default mash time will be MASH_TIME(below)
@@ -124,14 +124,14 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[269] = [2000000, 0] # 무적다람쥐
 	
 	# 기타
-	ABS_ENEMY_HP[61] = [3000000, 1] # 주작
-	ABS_ENEMY_HP[62] = [3000000, 1] # 백호
+	ABS_ENEMY_HP[61] = [5000000, 1] # 주작
+	ABS_ENEMY_HP[62] = [5000000, 1] # 백호
 	
-	ABS_ENEMY_HP[98] = [1200000, 1] # 비류장군
+	ABS_ENEMY_HP[98] = [2500000, 1] # 비류장군
 	
 	ABS_ENEMY_HP[102] = [60000000, 1] # 반고
-	ABS_ENEMY_HP[112] = [8000000, 1] # 청룡
-	ABS_ENEMY_HP[113] = [8000000, 1] # 현무
+	ABS_ENEMY_HP[112] = [10000000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [10000000, 1] # 현무
 	
 	# 12 지신
 	ABS_ENEMY_HP[119] = [1200000, 1] # 백호왕
@@ -154,12 +154,12 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[193] = [5000000, 1] # 파괴왕
 	
 	# 중국
-	ABS_ENEMY_HP[220] = [1200000, 1]# 산소괴왕
-	ABS_ENEMY_HP[224] = [3200000, 1]# 괴성왕
-	ABS_ENEMY_HP[228] = [5200000, 1]# 뇌신왕
+	ABS_ENEMY_HP[220] = [1300000, 1]# 산소괴왕
+	ABS_ENEMY_HP[224] = [3500000, 1]# 괴성왕
+	ABS_ENEMY_HP[228] = [6000000, 1]# 뇌신왕
 	
-	ABS_ENEMY_HP[229] = [1200000, 0]# 연청천구
-	ABS_ENEMY_HP[230] = [1200000, 0]# 연자천구
+	ABS_ENEMY_HP[229] = [1000000, 0]# 연청천구
+	ABS_ENEMY_HP[230] = [1000000, 0]# 연자천구
 	ABS_ENEMY_HP[231] = [12000000, 1] # 천구왕
 	
 	ABS_ENEMY_HP[232] = [40000000, 1] # 산신대왕
@@ -171,8 +171,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 환상의섬
 	ABS_ENEMY_HP[246] = [3000000, 1]	# 선장망령
 	
-	ABS_ENEMY_HP[250] = [1300000, 0]	# 철보장
-	ABS_ENEMY_HP[251] = [1500000, 0]	#	철거인
+	ABS_ENEMY_HP[250] = [700000, 0]	# 철보장
+	ABS_ENEMY_HP[251] = [800000, 0]	#	철거인
 	ABS_ENEMY_HP[252] = [20000000, 1]	# 마려
 	
 	ABS_ENEMY_HP[253] = [5000000, 1]	# 현무
@@ -183,11 +183,11 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [30000, 0.6, 0.6] # 산속군사
-	ENEMY_EXP[91] = [200000, 3.0, 3.0] # 비류성창병
-	ENEMY_EXP[96] = [400000, 3.0, 3.0] # 비류성자객
-	ENEMY_EXP[97] = [500000, 3.0, 3.0] # 입구지키미
-	ENEMY_EXP[98] = [3000000, 100.0, 100.0] # 비류장군
+	ENEMY_EXP[45] = [60000, 1.0, 1.0] # 산속군사
+	ENEMY_EXP[91] = [300000, 3.0, 3.0] # 비류성창병
+	ENEMY_EXP[96] = [750000, 3.0, 3.0] # 비류성자객
+	ENEMY_EXP[97] = [1500000, 3.0, 3.0] # 비류성수문장
+	ENEMY_EXP[98] = [5000000, 100.0, 100.0] # 비류장군
 	
 	ENEMY_EXP[254] = [750000, 5.0, 5.5] # 뇌랑
 	ENEMY_EXP[255] = [750000, 5.0, 5.5] # 왕가
@@ -202,7 +202,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[159] = [12000000] # 거북장군
 	
 	# 중국
-	ENEMY_EXP[231] = [160000000] # 천구왕
+	ENEMY_EXP[228] = [13000000] # 뇌신왕
+	ENEMY_EXP[231] = [30000000] # 천구왕
 	ENEMY_EXP[232] = [500000000] # 산신대왕
 	
 	# 환상의섬
@@ -674,9 +675,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def update_enemy_battle(enemy)
 			return if enemy == nil
-			return if enemy.attacking == nil
 			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
-			if update_enemy_battle_check(enemy)	
+			if enemy.attacking == nil or update_enemy_battle_check(enemy)	
 				# 원래 움직임으로 돌아옴
 				restore_movement(enemy)
 				# 적대모드 풀림
@@ -690,6 +690,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if update_enemy_casting(enemy)
 			# 공격주기마다 행동 시작
 			update_enemy_attack(enemy, enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
+			return if enemy == nil
+			return if enemy.attacking == nil
+			
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
 			enemy.event.turn_to(enemy.attacking.event) if !in_direction?(enemy.event, enemy.attacking.event) and in_range?(enemy.event, enemy.attacking.event, 1)
 		end
@@ -798,13 +801,14 @@ if SDK.state("Mr.Mo's ABS") == true
 					#Return if the skill is NIL
 					
 					next if skill == nil
-					next if !e.can_use_skill?(skill) if e.casting_action == nil
-					if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
-						range = RANGE_SKILLS[skill.id][0]
-						next if !in_range?(e.event, actor.event, range + 1)
-					elsif RANGE_EXPLODE.has_key?(skill.id)
-						range = RANGE_EXPLODE[skill.id][0]
-						next if !in_range?(e.event, actor.event, range + 1)
+					if e.casting_action == nil # 미리 예약된 스킬이 없다면
+						next if !e.can_use_skill?(skill)
+						range = nil
+						range = RANGE_SKILLS[skill.id][0] if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
+						range = RANGE_EXPLODE[skill.id][0] if RANGE_EXPLODE.has_key?(skill.id) # 만약 폭발 스킬이라면
+						if range != nil
+							next if !in_range?(e.event, actor.event, range + 1) 
+						end
 					end
 					
 					# 스킬 쿨타임 갱신
@@ -844,9 +848,10 @@ if SDK.state("Mr.Mo's ABS") == true
 									@range.push(Game_Ranged_Skill.new(e.event, e, skill, dir)) # e가 날리는 스킬을 구현해줌
 									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 								end
+							else
+								@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e가 날리는 스킬을 구현해줌
+								Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							end
-							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e가 날리는 스킬을 구현해줌
-							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							
 							e.sp -= skill.sp_cost
 							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
@@ -859,10 +864,10 @@ if SDK.state("Mr.Mo's ABS") == true
 									@range.push(Game_Ranged_Explode.new(e.event, e, skill, dir))
 									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 								end	
+							else
+								@range.push(Game_Ranged_Explode.new(e.event, e, skill))
+								Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							end
-							@range.push(Game_Ranged_Explode.new(e.event, e, skill))
-							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-							
 							#Take off SP
 							e.sp -= skill.sp_cost
 							Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")	if skill.sp_cost != 0 # 몬스터 마력 공유
@@ -1691,7 +1696,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			$game_party.actors[0].pdef = 0 # 물리방어
 			$game_party.actors[0].mdef = 0 # 마법방어
-			$scene = Scene_Map.new
+			#$scene = Scene_Map.new
+			Network::Main.send_map
 			return true
 		end
 		#--------------------------------------------------------------------------
@@ -2103,7 +2109,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#-------------------------------------------------------------------------
 		def update
 			super
-			return if @explosive
+			return if @stop
 			#Return if moving
 			return if moving?
 			#Check if something is still here
@@ -2118,38 +2124,28 @@ if SDK.state("Mr.Mo's ABS") == true
 			return force_movement if no_one?
 			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
 			
-			m = @move_direction
-			move_lower_left 	if m == 1
-			move_down 				if m == 2
-			move_lower_right 	if m == 3
-			move_left 				if m == 4
-			move_right 				if m == 6
-			move_upper_left 	if m == 7
-			move_up 					if m == 8
-			move_upper_right 	if m == 9
 			#Stop if it came to range
 		end
 		#--------------------------------------------------------------------------
 		# * No One
 		#-------------------------------------------------------------------------
 		def no_one?
-			#Get All Events
+			# 적 이벤트 넣기
 			objects = {}
 			for event in $game_map.events.values
 				next if event == nil
-				objects[event.id] = event if @parent != event
+				next if $ABS.enemies[event.id] == nil
+				next if $ABS.enemies[event.id].dead?
+				next if @parent == event
+				objects[event.id] = event 
 			end
 			
 			objects[0] = $game_player if @parent != $game_player
 			# Get new coordinates
 			d = @move_direction
 			new_x = @x
-			new_x += -1 if d == 1 or d == 4 or d == 7
-			new_x += 1 if d == 3 or d == 6 or d == 9
-			
 			new_y = @y
-			new_y += 1 if d == 1 or d == 2 or d == 3
-			new_y -= 1 if d == 7 or d == 8 or d == 9
+			
 			#Get all pos
 			for o in objects.values
 				next if o == nil
@@ -2190,34 +2186,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			@dummy = dummy
 			@hit_num = @range_skill[6] == nil ? 1 : [@range_skill[6], 1].max
+			
+			@check_blow = false
 		end
-		#--------------------------------------------------------------------------
-		# * Check Event Trigger Touch(x,y)
-		#--------------------------------------------------------------------------
+		
 		def check_event_trigger_touch(x, y)
-			return if @stop
-			return if @dummy
-			
-			if (x == $game_player.x and y == $game_player.y) or (@x == $game_player.x and @y == $game_player.y)
-				return blow if @parent != $game_player
-			end
-			
-			# 여기서 넷 플레이어인지 확인해야함
-			for player in Network::Main.mapplayers.values
-				next if player == nil
-				if (player.x == x and player.y == y) or (player.x == @x and player.y == @y)
-					return blow if @parent != player
-				end
-			end
-			
-			for event in $game_map.events.values
-				if (event.x == x and event.y == y) or (event.x == @x and event.y == @y)
-					if ($ABS.enemies[event.id] != nil and !$ABS.enemies[event.id].dead?)
-						return blow if @parent != event
-					end
-					force_movement
-				end
-			end
+			return
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2231,22 +2205,17 @@ if SDK.state("Mr.Mo's ABS") == true
 			if @parent == nil or @actor == nil
 				@stop = true
 			end
-			 
-			return blow if @step > @range
+			
+			if @step > @range
+				return blow if !@check_blow
+			end
+			
+			return if @stop
+			
 			#Increase step
 			@step += 1
 			return force_movement if no_one?
-			
-			m = @move_direction
-			move_lower_left 	if m == 1
-			move_down 				if m == 2
-			move_lower_right 	if m == 3
-			move_left 				if m == 4
-			move_right 				if m == 6
-			move_upper_left 	if m == 7
-			move_up 					if m == 8
-			move_upper_right 	if m == 9
-			
+			return blow
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2293,6 +2262,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def blow
 			#Stop
 			@stop = true
+			@check_blow = true
 			return if @dummy
 			#Play Animation
 			#Show animation on event
@@ -2440,35 +2410,41 @@ if SDK.state("Mr.Mo's ABS") == true
 			@hit_num = @range_skill[5] == nil ? 1 : [@range_skill[5], 1].max
 			
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Update
+		#-------------------------------------------------------------------------
+		def update
+			super
+			return if @stop
+			check_event_trigger_touch(@x, @y)
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Check Event Trigger Touch(x,y)
 		#--------------------------------------------------------------------------
 		def check_event_trigger_touch(x, y)
-			return if @stop
 			return if @dummy
 			
-			
-			if (x == $game_player.x and y == $game_player.y) or (@x == $game_player.x and @y == $game_player.y)
+			if (x == $game_player.x and y == $game_player.y)
 				hit_player
 			end
 			
 			# 여기서 넷 플레이어인지 확인해야함
 			for player in Network::Main.mapplayers.values
 				next if player == nil
-				if (player.x == x and player.y == y) or (player.x == @x and player.y == @y)
+				if (player.x == x and player.y == y)
 					hit_net_player(player)
 				end
 			end
 			
 			for event in $game_map.events.values
-				if (event.x == x and event.y == y) or (event.x == @x and event.y == @y)
+				if (event.x == x and event.y == y)
 					if ($ABS.enemies[event.id] != nil and !$ABS.enemies[event.id].dead?)
-						hit_event(event.id)
+						hit_event(event.id) if @parent != event
 					end
-					force_movement
 				end
 			end
-			
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2530,18 +2506,21 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Object Initialization
 		#--------------------------------------------------------------------------
 		def hit_event(id)
-			@stop = true
 			#Get enemy
 			actor = $ABS.enemies[id]
 			#Return if actor has NIL value
 			return if actor == nil
 			#If the parent is player
+			@stop = true
 			if @parent.is_a?(Game_Player)
 				#Get enemy
 				enemy = $game_party.actors[0]
 				# 만약 내게 호의적인 적이라면 무시
 				if actor.is_a?(ABS_Enemy) and enemy.is_a?(Game_Actor)
-					return if !actor.hate_group.include?(0)
+					if !actor.hate_group.include?(0)
+						@stop = false
+						return force_movement 
+					end
 				end
 				
 				#Show animation on event
@@ -2577,7 +2556,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if enemy == nil
 			# 적끼리 싸우는게 아니면 무시
 			if enemy.is_a?(ABS_Enemy) and actor.is_a?(ABS_Enemy)
-				return if !actor.hate_group.include?(enemy.id)
+				if !enemy.hate_group.include?(actor.id)
+					@stop = false
+					return force_movement
+				end
 			end
 			
 			#Attack It's enemy

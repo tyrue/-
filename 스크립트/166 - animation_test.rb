@@ -41,8 +41,10 @@ module RPG
 						next
 					end
 					
-					ani.duration -= 1 if (Graphics.frame_count % 2 == 0) 
 					update_animation2(ani)
+					if ani != nil and ani.animation != nil
+						ani.duration -= 1 if (Graphics.frame_count % 2 == 0) or ani.animation.frame_max == ani.duration
+					end
 				end
 			end
 		end
@@ -82,7 +84,7 @@ module RPG
 				dispose_animation2(@_animation_overlap[0])
 			end
 			
-			update_animation2(ani)
+			#update_animation2(ani)
 		end
 		
 		def update_animation2(ani)

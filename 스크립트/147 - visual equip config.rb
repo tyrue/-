@@ -11,7 +11,7 @@ module VisualEquipData
 	
 	# 방어구류
 	VISUAL_EQUIP_DATA[1] = {}
-				# 방어구
+	# 갑옷
 	VISUAL_EQUIP_DATA[1][1] = ['(착용)연두갑주'] 					#초심자의갑주
 	VISUAL_EQUIP_DATA[1][11] = ['(착용)죄수복'] 						#죄수복
 	VISUAL_EQUIP_DATA[1][12] = ['(착용)주술갑옷'] 					#주술갑옷
@@ -23,8 +23,7 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[1][34] = ['(착용)초록갑주'] 					#초록색남자갑주
 	VISUAL_EQUIP_DATA[1][35] = ['(착용)망또'] 						#망또
 	VISUAL_EQUIP_DATA[1][38] = ['(착용)연두갑주'] 			 		#연두색남자갑주
-	VISUAL_EQUIP_DATA[1][39] = ['(착용)정화의방패'] 		 		#정화의방패
-	VISUAL_EQUIP_DATA[1][40] = ['(착용)여신의방패'] 		 		#여신의방패
+	
 	VISUAL_EQUIP_DATA[1][41] = ['(착용)검황의영혼'] 		 		#검황의영혼
 	VISUAL_EQUIP_DATA[1][42] = ['(착용)황혼의갑주'] 		 		#황혼의갑주
 	VISUAL_EQUIP_DATA[1][43] = ['(착용)산신의정화'] 		 		#산신의정화
@@ -42,6 +41,10 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[1][59] = ['(착용)초록장삼'] 			 		#초록장삼
 	VISUAL_EQUIP_DATA[1][73] = ['(착용)가릉빈가의날개옷\'진']		#가릉빈가의날개옷'진
 	
+	# 방패류
+	VISUAL_EQUIP_DATA[4] = {}
+	VISUAL_EQUIP_DATA[4][39] = ['(착용)정화의방패'] 		 		#정화의방패
+	VISUAL_EQUIP_DATA[4][40] = ['(착용)여신의방패'] 		 		#여신의방패
 	
 	# 무기류
 	VISUAL_EQUIP_DATA[2] = {}

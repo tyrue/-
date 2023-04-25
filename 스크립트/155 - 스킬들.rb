@@ -143,8 +143,11 @@ REQ_SKILL_DATA[4] =
 # ----------------------------------#
 #															[[시간초, "주문", (색깔 타입)], []...]
 ABS_ENEMY_SKILL_CASTING = {}
+ABS_ENEMY_SKILL_CASTING[153] = [[0.5, "백호의 힘을 받으라!"]] # 백호검무
 ABS_ENEMY_SKILL_CASTING[154] = [[2, "여의주의 힘을 받은 용이여..."], [1, "그대 이름은 청룡일지다..."], [1, "네 주인 이름으로 명하노니"], [1, "네 분노를 적에게 발산하라!"]] # 청룡마령참
-ABS_ENEMY_SKILL_CASTING[158] = [[4, "불타버려라.."]] # 지옥겁화
+ABS_ENEMY_SKILL_CASTING[155] = [[1, "암흑의 힘이여.."]] # 암흑진파
+ABS_ENEMY_SKILL_CASTING[156] = [[1, "지옥의 검은 용이여...!"], [1, "계약을 받아 이곳에 소환될지어다!"]] # 흑룡광포
+ABS_ENEMY_SKILL_CASTING[158] = [[4, "지옥에서 불타버려라!!"]] # 지옥겁화
 ABS_ENEMY_SKILL_CASTING[159] = [[4, "하늘 높은 줄 모르고 겁도 없구나.."], [1, "신의 분노를 받아라!!"]] # 혈겁만파
 ABS_ENEMY_SKILL_CASTING[160] = [[4, "너의 무력함을 깨달아라.."], [1, "압도적인 힘에 굴복해라!!"]] # 분혼경천
 # -------------END----------------- #
@@ -234,17 +237,12 @@ class Rpg_skill
 		end
 	end
 	
-	def check_speed_buff
-		speed = 0
-		if check_buff(99) # 속도시약
-			speed += BUFF_SKILL[99][0][1]
-		end
-		
-		if check_buff(136) # 파무쾌보
-			speed += BUFF_SKILL[136][0][1]
-		end
-		return speed
-	end
+  def check_speed_buff
+    speed = 0
+    speed += BUFF_SKILL[99][0][1] if check_buff(99) # 속도시약
+    speed += BUFF_SKILL[136][0][1] if check_buff(136) # 파무쾌보
+    return speed
+  end
 	
 	
 	# 파티 힐

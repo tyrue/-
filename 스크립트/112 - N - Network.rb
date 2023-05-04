@@ -1714,7 +1714,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					else
 						$chat.write ("<현재 경험치 이벤트가 종료되었습니다.>", COLOR_EVENT) 
 						$game_switches[1500] = false
-						$exp_event = 0
+						$exp_event = 1
 					end
 					
 					# 드롭율 이벤트 확인

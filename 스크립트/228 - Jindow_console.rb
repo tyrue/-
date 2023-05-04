@@ -72,7 +72,7 @@ class Jindow_Console < Jindow
 			clear_and_write
 		end
 		@console_log[@console_log.size - 1].x = 0
-		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * @font_size
+		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * (@font_size + 2)
 		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width + 5, @font_size)
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
 		#@console_log[@console_log.size - 1].bitmap.font.color = Color.new(0, 0, 0)

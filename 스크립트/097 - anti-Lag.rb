@@ -316,6 +316,7 @@ class Game_Event < Game_Character
 	
 	def initialize(map_id, event, *args)
 		# Run the Original
+		@lag_sw = true
 		anti_lag_initialize(map_id, event, *args)
 		# Check for Events with \al_update
 		check_name_tags(event)    

@@ -123,16 +123,16 @@ REQ_SKILL_DATA[4] =
 	[23, 15, 15, 130, 11, 12],  # 무영보법
 	[27, 10, 20, 131, 11, 12], 	# 투명
 	[30, 10, 10, 10, 12, 50], 	# 신수마법 1성
-	[35, 20, 10, 132, 50, 19], 	# 비영승보
-	[43, 10, 10, 16, 19, 20], 	# 신수마법 2성
-	[50, 5, 15, 29, 28, 22], 	# 천공의기원
+	[33, 20, 10, 132, 50, 19], 	# 비영승보
+	[37, 10, 10, 16, 19, 20], 	# 신수마법 2성
+	[45, 5, 15, 29, 28, 22], 	# 천공의기원
 	
-	[53, 20, 10, 140, 29, 30],		# 운기
+	[50, 20, 10, 140, 29, 30],		# 운기
 	[56, 15, 5, 133, 29, 30], 	# 필살검무
 	[64, 10, 15, 64, 29, 30], 	# 십량분법
 	[70, 5, 5, 34, 29, 30], 		# 귀환
 	[75, 15, 20, 141, 29, 30], 	# 투명 1성
-	[80, 10, 10, 28, 29, 30], 	# 야수
+	[80, 5, 5, 28, 29, 30], 	# 야수
 	[81, 10, 25, 43, 29, 30], 		# 위태응기
 	[88, 20, 3, 142, 30, 31], 	# 투명 2성
 	[99, 4, 4, 134, 99, 100],	# 분신
@@ -595,6 +595,8 @@ class Rpg_skill
 			msg = "!!#{skill.name}!!"
 		when 105 # 혈겁만파
 			msg = "!!#{skill.name}!!"
+		when 123 # 귀염추혼소
+			msg = "!!#{skill.name}!!"
 		when 133 # 필살검무
 			msg = "#{skill.name}!!"
 		when 135 # 백호검무
@@ -607,6 +609,8 @@ class Rpg_skill
 			msg = "!!#{skill.name}!!"
 			
 			# 적 스킬
+		when 85 # 필살검무
+			msg = "필살검무!"
 		when 151 # 청룡 포효
 			msg = "크롸롸롸롸!"
 		when 152 # 현무 포효
@@ -723,8 +727,8 @@ class Rpg_skill
 	end
 	
 	def 비영승보(x = $game_player.x, y = $game_player.y, d = $game_player.direction, user = $game_player)
-		if 비영_passable2?(x, y, d) 
-			if 비영_passable?(x, y, d)
+		if 비영_passable2?(x, y, d) # 시전자 앞에 이벤트가 있는가?
+			if 비영_passable?(x, y, d) # 뛰어 넘을 이벤트 뒤로 뛰어 넘을 수 있는가?
 				new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)
 				new_y = y + (d == 2 ? 2 : d == 8 ? -2 : 0)
 				
@@ -737,7 +741,6 @@ class Rpg_skill
 					user.direction = 10 - d
 				end
 			else
-				r = rand(100)
 				new_x = x 
 				new_y = y 
 				case d
@@ -792,7 +795,7 @@ class Rpg_skill
 					$ABS.player_melee(true)
 				else
 					user.moveto(new_x, new_y) 
-					user.direction = 10 - d
+					user.direction = d
 				end
 			end
 		end
@@ -850,7 +853,7 @@ class Rpg_skill
 	# end
 	
 	# 비영_passable2 시작
-	def 비영_passable2?(x, y, d) # 해당 이벤트를 뛰어 넘을 수 있는가?
+	def 비영_passable2?(x, y, d) # 좌표에 이벤트가 있는가?
 		# Get new coordinates
 		new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
 		new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
@@ -858,7 +861,7 @@ class Rpg_skill
 		# Loop all events
 		for event in $game_map.events.values
 			# If event coordinates are consistent with move destination
-			if event.x == new_x and event.y == new_y
+			if (event.x == new_x and event.y == new_y) or (event.x == x and event.y == y)
 				# If through is OFF
 				next if event.through or event.character_name == ""
 				return true
@@ -1006,7 +1009,7 @@ class Rpg_skill
 			damage *= 1.5 if self.check_buff(122) # 파력무참진
 			
 			if $state_trans # 투명 풀기
-				damage *= (5 + $game_variables[10]) # 투명 숙련도
+				damage *= (6 + $game_variables[10]) # 투명 숙련도
 				$state_trans = false
 				$game_variables[9] = 1
 				id = nil

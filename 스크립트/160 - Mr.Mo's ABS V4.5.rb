@@ -1,4 +1,4 @@
-$exp_limit = 20 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_limit = 33 # 한번에 최대 얻을 수 있는 경험치 퍼센트
 $exp_event = 0 # 경험치 이벤트
 
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")
@@ -237,6 +237,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ANIMATION_DIVIDE = 2
 	#--------------------------------------------------------------------------
 	DAMAGE_FONT_NAME = "메이플스토리"
+	DAMAGE_FONT_NAME2 = "맑은 고딕"
 	#--------------------------------------------------------------------------
 	DAMAGE_FONT_SIZE = 20
 	#--------------------------------------------------------------------------
@@ -2537,7 +2538,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$rpg_skill.skill_cost_custom(enemy, @skill.id) # 스킬 코스트 
 				
 				if @skill.id == 138 # 무형검
-					$rpg_skill.비영승보(x, y, @move_direction)
+					$rpg_skill.비영승보(@x, @y, @move_direction)
 				end
 				
 				#Jump
@@ -3021,7 +3022,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				damage_string = change_number_unit(damage_string, type) if damage_string.to_i > 0
 				
 				bitmap = Bitmap.new(self.width, 30)
-				bitmap.font.name = $ABS.DAMAGE_FONT_NAME
+				bitmap.font.name = Font.exist?($ABS.DAMAGE_FONT_NAME) ? $ABS.DAMAGE_FONT_NAME : DAMAGE_FONT_NAME2
 				bitmap.font.bold = true
 				bitmap.font.size = critical == true ? 25 : 19#$ABS.DAMAGE_FONT_SIZE 
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR

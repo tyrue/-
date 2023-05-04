@@ -15,7 +15,7 @@ class Jindow_Chat_Window < Jindow
 		
 		@old_size = 0
 		@max_size = 60
-		@font_size = 14
+		@font_size = 13
 		
 		@check = false	
 	end	
@@ -71,8 +71,8 @@ class Jindow_Chat_Window < Jindow
 			re_write
 		end
 		
-		@chat_log[@chat_log.size - 1].x = 0
-		@chat_log[@chat_log.size - 1].y = (@chat_log.size - 1) * @font_size
+		@chat_log[@chat_log.size - 1].x = 5
+		@chat_log[@chat_log.size - 1].y = (@chat_log.size - 1) * (@font_size + 3)
 		@chat_log[@chat_log.size - 1].bitmap = Bitmap.new(self.width, @font_size)
 		@chat_log[@chat_log.size - 1].bitmap.font.size = @font_size
 		@chat_log[@chat_log.size - 1].bitmap.font.color = color

@@ -173,17 +173,17 @@ def create_moneys2(no, mob_id, map_id, x, y, money)
 	event.id = no
 	event.moveto(x, y)
 	if 0 < money and money < 10
-		event.es_set_graphic("../Icons/1전", 255, 0)
+		event.es_set_graphic("../Icons/[기타]1전", 255, 0)
 	elsif 10 <= money and money < 100
-		event.es_set_graphic("../Icons/10전", 255, 0)
+		event.es_set_graphic("../Icons/[기타]10전", 255, 0)
 	elsif 100 <= money and money < 500
-		event.es_set_graphic("../Icons/100전", 255, 0)
+		event.es_set_graphic("../Icons/[기타]100전", 255, 0)
 	elsif 500 <= money and money < 1000
-		event.es_set_graphic("../Icons/500전", 255, 0)
+		event.es_set_graphic("../Icons/[기타]500전", 255, 0)
 	elsif 1000 <= money and money < 5000
-		event.es_set_graphic("../Icons/1000전", 255, 0)
+		event.es_set_graphic("../Icons/[기타]1000전", 255, 0)
 	else
-		event.es_set_graphic("../Icons/10000전", 255, 0)
+		event.es_set_graphic("../Icons/[기타]10000전", 255, 0)
 	end
 	
 	event.name = "[id#{money}전]"

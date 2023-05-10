@@ -5,7 +5,7 @@ class Jindow_Chat_Window < Jindow
 		#@head = true
 		@name = "대화창"
 		@bottom = false
-		@opacity = 150
+		@opacity = 200
 		
 		self.refresh "Chat_Window"
 		self.opacity = @opacity
@@ -58,7 +58,7 @@ class Jindow_Chat_Window < Jindow
 	def re_write
 		for i in 0...@chat_log.size
 			return if @chat_log[i] == nil or @chat_log[i].bitmap == nil
-			@chat_log[i].y = i * @font_size
+			@chat_log[i].y = i * (@font_size + 3)
 		end
 	end
 	

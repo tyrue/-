@@ -3,7 +3,7 @@ class Jindow_Console < Jindow
 		super(450, 255, 180, 85)
 		@name = "콘솔 창"
 		@bottom = false
-		@opacity = 150
+		@opacity = 200
 		
 		self.refresh "Console"
 		self.opacity = @opacity
@@ -58,7 +58,7 @@ class Jindow_Console < Jindow
 			next if @console_log[i] == nil
 			next if @console_log[i].bitmap == nil
 			next if @console_log[i].disposed?
-			@console_log[i].y = i * @font_size
+			@console_log[i].y = i * (@font_size + 2)
 		end
 	end
 	
@@ -75,8 +75,11 @@ class Jindow_Console < Jindow
 		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * (@font_size + 2)
 		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width + 5, @font_size)
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
-		#@console_log[@console_log.size - 1].bitmap.font.color = Color.new(0, 0, 0)
-		@console_log[@console_log.size - 1].bitmap.draw_frame_text(0, 0, self.width + 5, @font_size, text, 0)
+		@console_log[@console_log.size - 1].bitmap.font.color.set(0, 0, 0)
+		@console_log[@console_log.size - 1].bitmap.draw_text(1, 1, self.width + 5, @font_size, text, 0)
+		@console_log[@console_log.size - 1].bitmap.font.color.set(255, 255, 255)
+		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width + 5, @font_size, text, 0)
+		#@console_log[@console_log.size - 1].bitmap.draw_frame_text(0, 0, self.width + 5, @font_size, text, 0)
 		@console_log[@console_log.size - 1].visible = @tog
 		@check = true
 	end

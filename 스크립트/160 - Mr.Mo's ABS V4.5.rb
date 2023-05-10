@@ -1,4 +1,4 @@
-$exp_limit = 33 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_limit = 30 # 한번에 최대 얻을 수 있는 경험치 퍼센트
 $exp_event = 0 # 경험치 이벤트
 
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")
@@ -120,6 +120,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 백만 넘어가는 체력 설정
 	ABS_ENEMY_HP = {}
+	#ABS_ENEMY_HP[37]  = [20, 0] # 무적토끼
 	ABS_ENEMY_HP[37]  = [2000000000, 0] # 무적토끼
 	ABS_ENEMY_HP[269] = [2000000, 0] # 무적다람쥐
 	
@@ -1613,12 +1614,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Return false if enemy dead
 			return false if !e.dead?
 			enemy = e
+			
 			treasure(enemy) if a != nil and a.is_a?(Game_Actor)
 			# 적 유닛이 적을 죽이면 평상시로 돌아옴
 			if a != nil and !a.is_a?(Game_Actor)
 				a.attacking = nil 
-				#a.in_battle = false
-				#restore_movement(a)
 			end
 			
 			id = enemy.event_id
@@ -3023,23 +3023,21 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				bitmap = Bitmap.new(self.width, 30)
 				bitmap.font.name = Font.exist?($ABS.DAMAGE_FONT_NAME) ? $ABS.DAMAGE_FONT_NAME : DAMAGE_FONT_NAME2
-				bitmap.font.bold = true
-				bitmap.font.size = critical == true ? 25 : 19#$ABS.DAMAGE_FONT_SIZE 
+				
+				bitmap.font.size = critical == true ? 22 : 19#$ABS.DAMAGE_FONT_SIZE 
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
 				
-				
-				# draw_text(x, y, width, height, string, align)
-				
-				#y = self.height / 4 
-				
-				#~ bitmap.draw_text(-1, y-1, 200, 36, damage_string, 0)
-				#~ bitmap.draw_text(+1, y-1, 200, 36, damage_string, 0)
-				#~ bitmap.draw_text(-1, y+1, 200, 36, damage_string, 0)
 				bitmap.draw_text(+1, +1, 200, 36, damage_string, 0)
 				
-				bitmap.font.color.set(255, 0, 51) if critical # 빨간색 
-				bitmap.font.color.set(255, 255, 255) if !critical # 흰색	
-				bitmap.font.color.set(102, 255, 102) if critical.to_s == "heal" # 연두색
+				if critical.to_s == "heal" 
+					bitmap.font.color.set(102, 255, 102) # 연두색
+				elsif !critical 
+					bitmap.font.color.set(255, 255, 255) # 흰색	
+				elsif critical
+					bitmap.font.bold = true
+					bitmap.font.color.set(255, 0, 51) # 빨간색 
+				end
+				
 				
 				bitmap.draw_text(0, 0, 200, 36, damage_string, 0)
 				
@@ -3348,97 +3346,70 @@ if SDK.state("Mr.Mo's ABS") == true
 				return false
 			end
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Applying Normal Attack Effects
 		#     attacker : battler
 		#--------------------------------------------------------------------------
 		def attack_effect(attacker)
 			# 나한테 적이아니면 공격 못함
-			if self.is_a?(ABS_Enemy) and attacker.is_a?(Game_Actor)
-				return if !self.hate_group.include?(0)
-			end
-			# Clear critical flag
-			self.critical = false
-			# First hit detection
+			return if self.is_a?(ABS_Enemy) && attacker.is_a?(Game_Actor) && !self.hate_group.include?(0)
 			
-			# If hit occurs
-			hit_result = true
-			# 1차로 명중률을 계산함
-			if hit_result == true
-				# Calculate basic damage
-				
+			self.critical = false  # Clear critical flag
+			hit_result = true  # First hit detection
+			
+			if hit_result
 				if self.is_a?(Game_Actor)
 					atk = [(attacker.atk + attacker.str / 100.0) - (self.base_pdef * 2 / 5), (attacker.atk / 20.0)].max
 				else
 					atk = [(attacker.atk + attacker.str / 100.0) - (self.pdef * 2 / 5), (attacker.atk / 20.0)].max
 				end
-				self.damage = (atk * (20 + attacker.str) / 20.0)
+				self.damage = (atk * (20 + attacker.str) / 20.0)  # Calculate basic damage
 				
-				#self.damage = [((self.damage) * (1.0 - ([self.base_pdef, limit_v].min) / limit_v)).to_i, (self.damage * 0.1).to_i].max
-				# Element correction
 				if !attacker.is_a?(Game_NetPlayer)
-					self.damage *= elements_correct(attacker.element_set)  # 기본 반환값이 100임
-					self.damage /= 100 
+					self.damage *= elements_correct(attacker.element_set)  # Element correction
+					self.damage /= 100
 				end
 				
 				self.damage = self.damage.to_i
 				self.damage = 1 if self.damage <= 0
-				# If damage value is strictly positive
-				if self.damage > 0
-					# Critical correction
-					# 여기다가 크리티컬 확률 높힐 수도 있음
-					if rand(100) < 5.0 * attacker.dex / self.agi
+				
+				if self.damage > 0  # If damage value is strictly positive
+					if rand(100) < 5.0 * attacker.dex / self.agi  # Critical correction
 						self.damage *= 2
 						self.critical = true
 					end
-					# Guard correction
-					if self.guarding?
-						self.damage /= 2
-					end
+					
+					self.damage /= 2 if self.guarding?  # Guard correction
 				end
 				
-				# Dispersion
-				if self.damage.abs > 0
+				if self.damage.abs > 0  # Dispersion
 					amp = [self.damage.abs * 15 / 100, 1].max
-					self.damage += rand(amp+1) + rand(amp+1) - amp
+					self.damage += rand(amp + 1) + rand(amp + 1) - amp
 				end
 				
-				# Second hit detection
-				# agi : 민첩 (회피율), dex : 손재주 (명중률)
-				# eva : 절대 회피율..
 				a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
-				#eva = [(8 * self.agi / attacker.dex + self.eva), 100].min
-				eva = [(8.0 * self.agi / a_dex).to_i, 100].min
+				eva = [(8.0 * self.agi / a_dex).to_i, 100].min  # Second hit detection
 				
-				# 데미지가 음수면 힐한다는 뜻인데.. 사실 의미 없음 위에서 음수면 1로 했기 때문
-				hit = [100 - eva, 5].max # 적어도 5%확률로 명중
-				hit = self.cant_evade? ? 100 : hit # 피할 수 없는 경우엔 명중률이 100%!
+				hit = [100 - eva, 5].max  # Hit probability
+				hit = 100 if self.cant_evade?  # If evasion is impossible, set hit probability to 100
 				
 				hit_result = (rand(100) < hit)
 			end
 			
-			# If hit occurs
-			if hit_result == true
-				# State Removed by Shock
-				remove_states_shock
-				# Substract damage from HP
+			if hit_result
+				remove_states_shock  # State Removed by Shock
 				
-				if self.is_a?(Game_Actor) and attacker.is_a?(ABS_Enemy)
-					if $game_player.direction == attacker.event.direction
-						self.damage *= 2
-					end
-				elsif attacker.is_a?(Game_Actor) and self.is_a?(ABS_Enemy)
-					if self.event.direction == $game_player.direction
-						self.damage *= 2
-					end
+				if (self.is_a?(Game_Actor) && attacker.is_a?(ABS_Enemy) && $game_player.direction == attacker.event.direction) ||
+					(attacker.is_a?(Game_Actor) && self.is_a?(ABS_Enemy) && self.event.direction == $game_player.direction)
+					self.damage *= 2
 				end
 				
-				# 최종 데미지 계산
-				self.damage = $rpg_skill.damage_calculation_attack(self.damage, self, attacker)
-				self.damage += $ABS.weapon_skill(attacker.weapon_id, self) # 특정 무기를 착용하면 추가 격 데미지가 있음
+				self.damage = $rpg_skill.damage_calculation_attack(self.damage, self, attacker)  # 최종 데미지 계산
+				self.damage += $ABS.weapon_skill(attacker.weapon_id, self)  # 특정 무기를 착용하면 추가 격 데미지가 있음
 				
 				r = rand(100)
-				if r <= (self.damage * 100 / self.maxhp) or r <= 40
+				if r <= (self.damage * 100 / self.maxhp) || r <= 40
 					if !self.is_a?(Game_Actor)
 						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
 						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
@@ -3451,27 +3422,23 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				return $ABS.player_dead?(self, attacker) if self.is_a?(Game_Actor)
 				
-				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if !self.is_a?(Game_Actor)
+					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
 				end
-				# State change
-				@state_changed = false
+				
+				@state_changed = false  # State change
 				if !attacker.is_a?(Game_NetPlayer)
 					states_plus(attacker.plus_state_set)
 					states_minus(attacker.minus_state_set)
 				end
-				# When missing
 			else
-				
-				# Set damage to "Miss"
-				self.damage = "Miss!"
-				# Clear critical flag
-				self.critical = false
+				self.damage = "Miss!"  # Set damage to "Miss"
+				self.critical = false  # Clear critical flag
 			end
-			# End Method
-			return true
+			
+			return true  # End Method			
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3480,72 +3447,69 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     skill : skill
 		#--------------------------------------------------------------------------
 		def effect_skill(user, skill)
-			# 나한테 적이 아니면 공격 안하게 함
-			if self.is_a?(ABS_Enemy) and user.is_a?(Game_Actor)
+			# 공격 대상 확인
+			if self.is_a?(ABS_Enemy) && user.is_a?(Game_Actor)
 				return if !self.hate_group.include?(0)
 			end
-			if self.is_a?(ABS_Enemy) and user.is_a?(ABS_Enemy)
-				return if self.id != user.id and !self.hate_group.include?(user.id)
+			
+			if self.is_a?(ABS_Enemy) && user.is_a?(ABS_Enemy)
+				return if self.id != user.id && !self.hate_group.include?(user.id)
 			end
 			
 			# Clear critical flag
 			self.critical = false
-			# If skill scope is for ally with 1 or more HP, and your own HP = 0,
-			# or skill scope is for ally with 0, and your own HP = 1 or more
-			if ((skill.scope == 3 or skill.scope == 4) and self.hp == 0) or
-				((skill.scope == 5 or skill.scope == 6) and self.hp >= 1)
-				# End Method
+			
+			# 스킬 범위에 따른 처리
+			if (skill.scope == 3 || skill.scope == 4) && self.hp == 0 ||
+				(skill.scope == 5 || skill.scope == 6) && self.hp >= 1
 				return false
 			end
 			
 			# Clear effective flag
 			effective = false
-			# Set effective flag if common ID is effective
-			effective |= skill.common_event_id > 0
-			# First hit detection
-			hit = skill.hit # 스킬 자체 명중률
 			
-			# user.hit : user의 상태에 따라 명중률 계산하는 함수
+			# 스킬이 효과를 가지는 경우
+			effective |= skill.common_event_id > 0
+			
+			# 첫 번째 명중 판정
+			hit = skill.hit
+			
+			# 스킬 사용자의 명중률 계산
 			if skill.atk_f > 0
 				hit *= user.hit / 100 if !user.is_a?(Game_NetPlayer)
 			end
 			
-			# 스킬 명중률
-			hit_result = (rand(10) < hit)
-			# Set effective flag if skill is uncertain
+			# 명중 판정
+			hit_result = rand(10) < hit
+			
+			# 불확실한 명중률인 경우 효과가 있다고 설정
 			effective |= hit < 100
 			
-			# If hit occurs
-			if hit_result == true
-				# Calculate power
+			# 명중 시
+			if hit_result
 				power = skill.power + user.atk / 2
-				power = $rpg_skill.skill_power_custom(user, skill.id, power)				
-				power = (power * (1.0 + user.atk / 100.0))
+				power = $rpg_skill.skill_power_custom(user, skill.id, power)
+				power *= (1.0 + user.atk / 100.0)
+				
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
 					power -= self.mdef * skill.mdef_f / 100
 					power = [power, 1].max
 				end
 				
-				# Calculate rate
 				rate = 20
-				rate += (user.str * skill.str_f / 100.0)
-				rate += (user.dex * skill.dex_f / 100.0)
-				rate += (user.agi * skill.agi_f / 100.0)
-				rate += (user.int * skill.int_f / 100.0)
-				# Calculate basic damage
+				rate += user.str * skill.str_f / 100.0
+				rate += user.dex * skill.dex_f / 100.0
+				rate += user.agi * skill.agi_f / 100.0
+				rate += user.int * skill.int_f / 100.0
+				
 				self.damage = (power * rate / 20.0)
-				# Element correction
 				self.damage *= elements_correct(skill.element_set)
 				self.damage /= 100
 				self.damage = self.damage.to_i
 				
-				# If damage value is strictly positive
-				if self.damage > 0
-					# Guard correction
-					if self.guarding?
-						self.damage /= 2
-					end
+				if self.damage > 0 && self.guarding?
+					self.damage /= 2
 				end
 				
 				self.damage = $rpg_skill.damage_by_skill(self.damage, skill.id, self)
@@ -3562,25 +3526,26 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				# Dispersion
-				if skill.variance > 0 and self.damage.abs > 0
+				if skill.variance > 0 && self.damage.abs > 0
 					amp = [self.damage.abs * skill.variance / 100, 1].max
-					self.damage += rand(amp+1) + rand(amp+1) - amp
+					self.damage += rand(amp + 1) + rand(amp + 1) - amp
 				end
 				
-				# 여기서 최종 데미지 계산하기(버프 같은거 걸렸을 경우)
+				# 최종 데미지 계산
 				self.damage = $rpg_skill.damage_calculation_skill(self.damage, self, user)
 				temp = $ABS.weapon_skill(user.weapon_id, self)
-				if temp > 0 
+				if temp > 0
 					self.critical = true
 					self.damage += temp
 				end
 				
 				# Second hit detection
 				eva = [(8 * self.agi / user.dex + self.eva), 100].min
-				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 15].max # 적어도 10% 확률로는 맞춘다 skill.eva_f : 회피 영향률
+				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 15].max
 				hit = self.cant_evade? ? 100 : hit
-				hit_result = (rand(100) < hit)
-				# Set effective flag if skill is uncertain
+				hit_result = rand(100) < hit
+				
+				# 불확실한 명중률인 경우 효과가 있다고 설정
 				effective |= hit < 100
 			end
 			

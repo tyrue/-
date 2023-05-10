@@ -28,9 +28,7 @@ class Sprite_Character < Sprite_Character
 	def create_id_sprite(text) 
 		bitmap = Bitmap.new(160, 20) 
 		bitmap.font.name = "맑은 고딕" 
-		bitmap.font.size = 16
-		bitmap.font.color.set(0, 0, 0) 
-		bitmap.draw_frame_text(+1, +1, 160, 20, text, 1) 
+		bitmap.font.size = 18
 		bitmap.font.color.set(255, 255, 255) 
 		bitmap.draw_frame_text(0, 0, 160, 20, text, 1) 
 		

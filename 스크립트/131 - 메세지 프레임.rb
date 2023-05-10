@@ -47,11 +47,13 @@ class Bitmap
 		origin_color = font.color.dup 
 		# ?取り 
 		font.color = frame_color 
+		
 		draw_text(x - 1, y - 1, width, height, string, align) 
 		draw_text(x - 1, y + 1, width, height, string, align) 
 		draw_text(x + 1, y - 1, width, height, string, align) 
 		draw_text(x + 1, y + 1, width, height, string, align) 
 		# 元の色に?す 
+		
 		font.color = origin_color 
 		draw_text(x, y, width, height, string, align) 
 	end 

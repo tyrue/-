@@ -1017,7 +1017,7 @@ class Rpg_skill
 				id = 141 if self.check_buff(141) # 투명 2성
 				id = 142 if self.check_buff(142) # 투명 3성
 				
-				damage = skill_power_custom(actor, id, damage) if id != nil
+				damage = skill_power_custom(attacker, id, damage) if id != nil
 				skill_cost_custom(attacker, id) if id != nil
 			end
 			

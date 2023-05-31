@@ -1281,6 +1281,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true
 					
 					# 같은 맵의 유저 또는 몬스터가 보내는 값
+					# type,id,skill,skill_type,m_dir
 				when /<show_range_skill>(.*)<\/show_range_skill>/	
 					return true if !$scene.is_a?(Scene_Map)
 					data = $1.split(',')
@@ -1290,9 +1291,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					skill = $data_skills[data[2].to_i]
 					skill_type = data[3].to_i
 					m_dir = data[4].to_i
+					hit_sw = !$game_switches[302] # pk 여부
 					
 					case type
-					when 0
+					when 0 # 몬스터
 						e = $ABS.enemies[id]
 						return if e == nil
 						case skill_type
@@ -1302,15 +1304,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill, m_dir))
 						end
 						
-					when 1
+					when 1 # 사람
 						return if @id == id
 						netplayer = @mapplayers[id.to_s]						
 						return if netplayer == nil
 						case skill_type
 						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, m_dir, true))
+							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, m_dir, hit_sw))
 						when 1
-							$ABS.range.push(Game_Ranged_Explode.new(netplayer, netplayer, skill, m_dir, true))
+							$ABS.range.push(Game_Ranged_Explode.new(netplayer, netplayer, skill, m_dir, hit_sw))
+						when 2 # 원거리 무기
+							$ABS.range.push(Game_Ranged_Weapon.new(netplayer, netplayer, data[2].to_i, m_dir, hit_sw))
 						end
 					end
 					

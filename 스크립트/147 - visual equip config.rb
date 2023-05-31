@@ -72,6 +72,8 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][25] = ['(착용)흑월도'] 			# 흑월도
 	VISUAL_EQUIP_DATA[2][26] = ['(착용)녹호박별검'] 	# 녹호박별검
 	
+	VISUAL_EQUIP_DATA[2][31] = ['(착용)활'] 	# 활
+	
 	VISUAL_EQUIP_DATA[2][101] = ['(착용)목도'] 			 	#목도
 	VISUAL_EQUIP_DATA[2][102] = ['(착용)목도'] 			 	#목검
 	VISUAL_EQUIP_DATA[2][103] = ['(착용)목도'] 			 	#사두

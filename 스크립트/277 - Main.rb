@@ -22,15 +22,8 @@ end
 begin
 	Graphics.freeze
 	Graphics.frame_rate = 60
-	
-
-	
 	$global_x = 0  
 	#하우징
-	$global_house1 = 0
-	$global_house2 = 0
-	$global_house3 = 0
-	$global_house4 = 0
 	
 	$scene = Scene_Connect.new
 	

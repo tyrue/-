@@ -220,7 +220,7 @@ SKILL_POWER_CUSTOM[68] = [[0, 0.5, 0.65, 10]] # 폭류유성
 SKILL_POWER_CUSTOM[67] = [[0, 0.9, 0, 30]] # 건곤대나이
 SKILL_POWER_CUSTOM[73] = [[0, 0.4, 0, 30]] # 광량돌격
 SKILL_POWER_CUSTOM[79] = [[0, 1.0, 0, 100]] # 동귀어진
-SKILL_POWER_CUSTOM[101] = [[0, 1.3, 0.1, 60]] # 백호참
+SKILL_POWER_CUSTOM[101] = [[0, 1.4, 0.1, 60]] # 백호참
 SKILL_POWER_CUSTOM[103] = [[0, 0.6, 0.5, 20]] # 어검술
 SKILL_POWER_CUSTOM[104] = [[0, 0.3, 0.3, 20]] # 포효검황
 SKILL_POWER_CUSTOM[105] = [[0, 0.4, 0.5, 100]] # 혈겁만파
@@ -237,11 +237,11 @@ SKILL_POWER_CUSTOM[123] = [[0, 0.1, 0.5, 10]] # 귀염추혼소
 
 # 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
-SKILL_POWER_CUSTOM[137] = [[0, 0.4, 1.0, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 0.1, 1.0, 20]] # 무형검
+SKILL_POWER_CUSTOM[137] = [[0, 0.4, 0.4, 20]] # 이기어검
+SKILL_POWER_CUSTOM[138] = [[0, 0.2, 0.3, 20]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 0.6, 0.4, 100]] # 분혼경천
 
-SKILL_POWER_CUSTOM[135] = [[1, 0.05, 0.10, 20]] # 백호검무
+SKILL_POWER_CUSTOM[135] = [[1, 0.08, 0.10, 20]] # 백호검무
 SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
 SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
 SKILL_POWER_CUSTOM[142] = [[1, 0.02, 0.02, 0]] # 투명3성
@@ -276,9 +276,9 @@ SKILL_COST_CUSTOM[68] = [[0, 0.5, 0.5]] # 폭류유성
 # 전사
 # [[타입(현재(0), 전체(1)), 체력, 마력]]
 SKILL_COST_CUSTOM[67] = [[0, 2.0 / 3.0, 0]] # 건곤대나이
-SKILL_COST_CUSTOM[73] = [[0, 0.4, 0]] # 광량돌격
+SKILL_COST_CUSTOM[73] = [[0, 0.4, 0.10]] # 광량돌격
 SKILL_COST_CUSTOM[79] = [[0, 1.0, 1.0]] # 동귀어진
-SKILL_COST_CUSTOM[101] = [[0, 0.5, 0]] # 백호참
+SKILL_COST_CUSTOM[101] = [[0, 0.5, 0.05]] # 백호참
 SKILL_COST_CUSTOM[103] = [[0, 0.5, 0.2]] # 어검술
 SKILL_COST_CUSTOM[104] = [[0, 0.4, 0.3]] # 포효검황
 SKILL_COST_CUSTOM[105] = [[0, 0.5, 1.0]] # 혈겁만파
@@ -305,11 +305,11 @@ SKILL_COST_CUSTOM[96] = [[1, 0, 1.0 / 15.0]] # 지진
 SKILL_COST_CUSTOM[131] = [[1, 0.01, 0]] # 투명1성
 SKILL_COST_CUSTOM[141] = [[1, 0.01, 0]] # 투명2성
 SKILL_COST_CUSTOM[142] = [[1, 0.01, 0]] # 투명3성
-SKILL_COST_CUSTOM[135] = [[1, 0.2, 0.1]] # 백호검무
+SKILL_COST_CUSTOM[135] = [[1, 0.1, 0.2]] # 백호검무
 
 SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
 SKILL_COST_CUSTOM[137] = [[0, 0.4, 0.4]] # 이기어검
-SKILL_COST_CUSTOM[138] = [[0, 0.2, 0.5]] # 무형검
+SKILL_COST_CUSTOM[138] = [[0, 0.2, 0.3]] # 무형검
 SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
 # //////////////////////////end///////////////////////////////#
 

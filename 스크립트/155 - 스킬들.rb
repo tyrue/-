@@ -238,12 +238,12 @@ class Rpg_skill
 		end
 	end
 	
-  def check_speed_buff
-    speed = 0
-    speed += BUFF_SKILL[99][0][1] if check_buff(99) # 속도시약
-    speed += BUFF_SKILL[136][0][1] if check_buff(136) # 파무쾌보
-    return speed
-  end
+	def check_speed_buff
+		speed = 0
+		speed += BUFF_SKILL[99][0][1] if check_buff(99) # 속도시약
+		speed += BUFF_SKILL[136][0][1] if check_buff(136) # 파무쾌보
+		return speed
+	end
 	
 	
 	# 파티 힐
@@ -706,149 +706,113 @@ class Rpg_skill
 		move_num = 10 # 스킬 범위만큼
 		x = $game_player.x
 		y = $game_player.y
-		
+		d = $game_player.direction
 		for i in 0...move_num
-			if $game_player.passable?(x, y, $game_player.direction)
-				case $game_player.direction
-				when 2 # 아래
-					y += 1
-				when 4 # 왼쪽
-					x -= 1
-				when 6 # 오른쪽
-					x += 1
-				when 8 # 위
-					y -= 1
-				end
-			else
-				break
-			end
+			break if !$game_player.passable?(x, y, d)			
+			x += (d == 6 ? 1 : d == 4 ? -1 : 0)
+			y += (d == 2 ? 1 : d == 8 ? -1 : 0)
 		end
 		$game_player.moveto(x, y)
 	end
 	
-	def 비영승보(x = $game_player.x, y = $game_player.y, d = $game_player.direction, user = $game_player)
-		if 비영_passable2?(x, y, d) # 시전자 앞에 이벤트가 있는가?
-			if 비영_passable?(x, y, d) # 뛰어 넘을 이벤트 뒤로 뛰어 넘을 수 있는가?
-				new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)
-				new_y = y + (d == 2 ? 2 : d == 8 ? -2 : 0)
-				
-				if user == $game_player
-					$game_player.moveto(new_x, new_y) 
-					$game_player.direction = 10 - d
-					$ABS.player_melee(true)
-				else
-					user.moveto(new_x, new_y) 
-					user.direction = 10 - d
-				end
-			else
-				new_x = x 
-				new_y = y 
-				case d
-				when 4
-					if 비영_passable?(x - 1, y - 1, 2)
-						d = 8
-						new_x -= 1
-						new_y += 1
-					elsif 비영_passable?(x - 1, y + 1, 8)
-						d = 2
-						new_x -= 1
-						new_y -= 1
-					end
-					
-				when 6
-					if 비영_passable?(x + 1, y - 1, 2)
-						d = 8
-						new_x += 1
-						new_y += 1
-					elsif 비영_passable?(x + 1, y + 1, 8)
-						d = 2
-						new_x += 1
-						new_y -= 1
-					end
-					
-				when 2
-					if 비영_passable?(x - 1, y + 1, 6)
-						d = 4
-						new_x += 1
-						new_y += 1
-					elsif 비영_passable?(x + 1, y + 1, 4)
-						d = 6
-						new_x -= 1
-						new_y += 1
-					end
-					
-				when 8
-					if 비영_passable?(x - 1, y - 1, 6)
-						d = 4
-						new_x += 1
-						new_y -= 1
-					elsif 비영_passable?(x + 1, y - 1, 4)
-						d = 6
-						new_x -= 1
-						new_y -= 1
-					end
-				end
-				
-				if user == $game_player
-					$game_player.moveto(new_x, new_y) 
-					$game_player.direction = d
-					$ABS.player_melee(true)
-				else
-					user.moveto(new_x, new_y) 
-					user.direction = d
-				end
-			end
+	def 비영승보(enemy = nil, actor = $game_player)
+		return if actor == nil
+		x = actor.x
+		y = actor.y
+		d = actor.direction
+		
+		if(enemy == nil)
+			enemy = 비영_passable2?(x, y, d)
+			return if enemy == nil	
 		end
+		data = 비영_passable?(enemy, d) # [x, y, d]
+		if data != nil
+			actor.moveto(data[0], data[1]) 
+			actor.direction = data[2]
+		end
+		$ABS.player_melee(true) if actor == $game_player
 	end
 	
 	# 비영_passable 시작
-	def 비영_passable?(x, y, d) # 해당 위치로 이동할 수 있는가?
+	def 비영_passable?(enemy, d) # 해당 위치로 이동할 수 있는가?
 		# Get new coordinates
-		new_x = x + (d == 6 ? 2 : d == 4 ? -2 : 0)
-		new_y = y + (d == 2 ? 2 : d == 8 ? -2 : 0)
-		# If coordinates are outside of map; impassable
-		return false unless $game_map.valid?(new_x, new_y)
-		# If through is ON; passable
-		return true if @through
+		x = enemy.x
+		y = enemy.y
+		check_point = []
 		
-		return false unless $game_map.passable?(new_x, new_y, 10 - d)
+		n_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
+		n_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
 		
-		# Loop all events
-		for event in $game_map.events.values
-			# If event coordinates are consistent with move destination
-			if event.x == new_x and event.y == new_y
-				unless event.through
-					# With self as the player and partner graphic as character; impassable
-					return false if event.character_name != ""
+		n_x2 = x + ((d == 2 or d == 8) ? -1 : 0)
+		n_y2 = y + ((d == 4 or d == 6) ? -1 : 0)
+		
+		n_x3 = x + ((d == 2 or d == 8) ? 1 : 0)
+		n_y3 = y + ((d == 4 or d == 6) ? 1 : 0)
+		
+		check_point.push([n_x, n_y])
+		check_point.push([n_x2, n_y2])
+		check_point.push([n_x3, n_y3])
+		
+		for check in check_point
+			new_x = check[0]
+			new_y = check[1]
+			
+			sx = new_x - x
+			sy = new_y - y
+			
+			if sx.abs > 0
+				d = sx > 0 ? 4 : 6
+			elsif sy.abs > 0
+				d = sy > 0 ? 8 : 2
+			end
+			
+			data = [new_x, new_y, d]
+			
+			# If coordinates are outside of map; impassable
+			next unless $game_map.valid?(new_x, new_y)
+			next unless $game_map.passable?(new_x, new_y, 10 - d)
+			# If through is ON; passable
+			return data if @through
+			
+			object = []
+			# Loop all events
+			for event in $game_map.events.values
+				# If event coordinates are consistent with move destination
+				if event.x == new_x and event.y == new_y
+					unless event.through
+						# With self as the player and partner graphic as character; impassable
+						object.push(event) if event.character_name != ""
+					end
 				end
 			end
-		end
-		
-		# Loop all players
-		for player in Network::Main.mapplayers.values
+			
+			# Loop all players
+			for player in Network::Main.mapplayers.values
+				# If player coordinates are consistent with move destination
+				next if player == nil
+				if player.x == new_x and player.y == new_y
+					# If through is OFF
+					unless player.through
+						# If self is player; impassable
+						obeject.push(player) if self != $game_player or player.character_name != ""
+					end
+				end
+			end
+			
 			# If player coordinates are consistent with move destination
-			next if player == nil
-			if player.x == new_x and player.y == new_y
+			if $game_player.x == new_x and $game_player.y == new_y
 				# If through is OFF
-				unless player.through
-					# If self is player; impassable
-					return false if self != $game_player
-					# With self as the player and partner graphic as character; impassable
-					return false if player.character_name != ""
+				unless $game_player.through
+					# If your own graphic is the character; impassable
+					object.push($game_player) if @character_name != ""
 				end
 			end
+			next if object.size > 0
+			
+			# passable
+			return data
 		end
-		
-		# If player coordinates are consistent with move destination
-		if $game_player.x == new_x and $game_player.y == new_y
-			# If through is OFF
-			unless $game_player.through
-				# If your own graphic is the character; impassable
-				return false if @character_name != ""
-			end
-		end
-		# passable
-		return true
+		return
 	end
 	# end
 	
@@ -864,7 +828,7 @@ class Rpg_skill
 			if (event.x == new_x and event.y == new_y) or (event.x == x and event.y == y)
 				# If through is OFF
 				next if event.through or event.character_name == ""
-				return true
+				return event
 			end
 		end
 		
@@ -874,12 +838,12 @@ class Rpg_skill
 			next if player == nil
 			if player.x == new_x and player.y == new_y
 				# If through is OFF
-				return false if player.through
-				return true
+				next if player.through
+				return player
 			end
 		end
 		
-		return false
+		return
 	end
 	# 비영_passable2 end
 	

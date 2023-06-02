@@ -2132,9 +2132,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Check if something is still here
 			if @parent == nil or @actor == nil
 				@stop = true
+				return
 			end
 			
-			return @stop = true if @step > @range
+			@stop = true if @step > @range
 			#Increase step
 			@step += 1
 			#return if !no_one?
@@ -2412,9 +2413,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Hit net_Player
 		#--------------------------------------------------------------------------
-		def hit_net_player(actor)
+		def hit_net_player(net_player)
+			return if !@parent.is_a?(Game_Player)
 			if @skill.id == 138
-				$rpg_skill.비영승보(@x, @y, @move_direction)
+				$rpg_skill.비영승보(net_player)
 			end
 		end 
 		
@@ -2459,7 +2461,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				target_id = 0
 				
 				if skill_id == 138 # 무형검
-					$rpg_skill.비영승보(@x, @y, @move_direction)
+					$rpg_skill.비영승보(@enani)
 				end
 			else
 				enemy = $ABS.enemies[@parent.id]

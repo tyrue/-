@@ -794,7 +794,7 @@ class Rpg_skill
 					# If through is OFF
 					unless player.through
 						# If self is player; impassable
-						obeject.push(player) if self != $game_player or player.character_name != ""
+						object.push(player) if self != $game_player or player.character_name != ""
 					end
 				end
 			end

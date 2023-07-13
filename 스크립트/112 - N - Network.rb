@@ -2012,6 +2012,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
+					# 효과음 실행
+				when /<se_play>(.*)<\/se_play>/
+					file_name = $1.to_s
+					Audio.se_play(file_name, $game_variables[13])
+					
+					
 					# 파티퀘스트 입장 여부 확인 : 스위치 번호, 1/0
 				when /<party_quest_check>(.*)<\/party_quest_check>/
 					data = $1.split(',')

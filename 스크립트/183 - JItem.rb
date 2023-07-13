@@ -114,6 +114,7 @@ module J
 			@viewport.hwnd == "Status" ? (return self) : 0
 			@viewport.hwnd == "Trade" ? (return self) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return self) : 0
+			@viewport.hwnd == "Shop_Window" ? (return self) : 0
 			
 			@num = self.num
 			#@num == 0 ? (return nil) : 0
@@ -154,12 +155,22 @@ module J
 					@push ? (@push = false) : 0
 				end
 				
-				if Mouse.arrive_sprite_rect?(self) and Input.mouse_rbutton
+				if Input.mouse_rbutton and Mouse.arrive_sprite_rect?(self)
 					jindow = Hwnd.include?("Item_Info")
 					jindow ? Hwnd.dispose("Item_Info") : 0
 					jindow = Jindow_Item_Info.new(@item.id, @type, @viewport.hwnd)
+					
 					jindow.x = Mouse.x - jindow.max_width / 2
+					jindow.x = [15, jindow.x].max
+					if (jindow.x + jindow.width) > 620
+						jindow.x -= (jindow.x + jindow.width - 620)
+					end
+					
 					jindow.y = Mouse.y - jindow.max_height / 2
+					jindow.y = [15, jindow.y].max
+					if (jindow.y + jindow.height) > 460
+						jindow.y -= (jindow.y + jindow.height - 460)
+					end
 				end
 				
 				if Mouse.arrive_sprite_rect?(self)
@@ -177,16 +188,14 @@ module J
 						@item_name.bitmap.fill_rect(rect, Color.new(0, 0, 0, 50))
 						@item_name.bitmap.draw_frame_text(0, 0, @item_name.width, @item_name.height, @item.name, 0)
 					end
+					@item_name.opacity = 255
 				else
 					# 아이템 이름 감추기
-					if @item_name != nil and !@item_name.disposed?
-						@item_name.visible = false
-						@item_name.dispose 
-						@item_name = nil
-					end
+					@item_name.opacity = 0 if @item_name != nil
 				end
-			else
 				
+			else
+				self.offName
 			end
 			
 			if @click and @double_wait == 0
@@ -201,11 +210,17 @@ module J
 			
 			@viewport.hwnd == "Status" ? (return) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return) : 0
+			@viewport.hwnd == "Shop_Window" ? (return) : 0
 			
 			cnum = self.num
+			if cnum == 0
+				self.dispose
+			end
+			
 			if @num != cnum
 				@num = cnum
 				self.bitmap.clear
+				
 				for x in 0..self.bitmap.width
 					for y in 0..self.bitmap.height
 						self.bitmap.set_pixel(x, y, @memory.color[x][y])
@@ -222,20 +237,20 @@ module J
 					self.bitmap.draw_text(0, self.height - rect.height, self.width, rect.height, @num.to_s, 2)
 				end
 			end
-			
-			if self.num == 0 and (@viewport.hwnd != "NetPlayer_Info" and @viewport.hwnd != "Trade")
-				self.dispose
-			end
 		end
 		
-		def offVisible
-			self.visible = false
+		def offName
 			return if @item_name == nil
 			return if @item_name.disposed?
 			
 			@item_name.visible = false
 			@item_name.dispose 
 			@item_name = nil
+		end
+		
+		def offVisible
+			self.visible = false
+			self.offName
 		end
 		
 		def dispose

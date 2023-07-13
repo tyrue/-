@@ -1,5 +1,83 @@
+# 무기에 따라 휘두르는 효과음 다르게 하기
+# WEAPON_SE_DATA[id] = ["실행할 SE 파일 이름"]
+WEAPON_SE_DATA = {}
+WEAPON_SE_DATA[1] = ["주작의검"]
+WEAPON_SE_DATA[2] = ["백호의검"]
+WEAPON_SE_DATA[3] = ["현무의검"]
+WEAPON_SE_DATA[4] = ["청룡의검"]
+
+WEAPON_SE_DATA[6] = ["4차무기"]
+WEAPON_SE_DATA[7] = ["4차무기"]
+WEAPON_SE_DATA[8] = ["4차무기"]
+WEAPON_SE_DATA[9] = ["4차무기"]
+
+WEAPON_SE_DATA[11] = ["대모홍접선"]
+WEAPON_SE_DATA[12] = ["협가검"]
+WEAPON_SE_DATA[13] = ["협가검"]
+WEAPON_SE_DATA[14] = ["협가검"]
+
+WEAPON_SE_DATA[15] = ["석단장"]
+WEAPON_SE_DATA[16] = ["석단장"]
+WEAPON_SE_DATA[17] = ["석단장"]
+
+WEAPON_SE_DATA[22] = ["철도"]
+WEAPON_SE_DATA[23] = ["철도"]
+WEAPON_SE_DATA[118] = ["철도"]
+WEAPON_SE_DATA[119] = ["철도"]
+
+WEAPON_SE_DATA[24] = ["야월도"]
+WEAPON_SE_DATA[25] = ["야월도"]
+
+WEAPON_SE_DATA[26] = ["현철중검"]
+WEAPON_SE_DATA[106] = ["현철중검"]
+WEAPON_SE_DATA[120] = ["현철중검"]
+WEAPON_SE_DATA[126] = ["현철중검"]
+
+WEAPON_SE_DATA[31] = ["활"]
+
+WEAPON_SE_DATA[108] = ["현랑부"]
+WEAPON_SE_DATA[109] = ["현랑부"]
+WEAPON_SE_DATA[110] = ["현랑부"]
+WEAPON_SE_DATA[111] = ["현랑부"]
+
+WEAPON_SE_DATA[114] = ["주작의검"]
+
+WEAPON_SE_DATA[115] = ["심판의낫"]
+
+WEAPON_SE_DATA[117] = ["괴력선창"]
+
+WEAPON_SE_DATA[123] = ["현무의검"]
+
+WEAPON_SE_DATA[125] = ["일월대도"]
+WEAPON_SE_DATA[130] = ["일월대도"]
+
+WEAPON_SE_DATA[127] = ["청룡의검"]
+
+WEAPON_SE_DATA[131] = ["다문창"]
+WEAPON_SE_DATA[132] = ["다문창"]
+
+WEAPON_SE_DATA[134] = ["일본전설"]
+WEAPON_SE_DATA[135] = ["일본전설"]
+WEAPON_SE_DATA[138] = ["청일"]
+
+WEAPON_SE_DATA[136] = ["이가"]
+
+WEAPON_SE_DATA[141] = ["용마"]
+WEAPON_SE_DATA[142] = ["용마"]
+WEAPON_SE_DATA[143] = ["용마"]
+WEAPON_SE_DATA[144] = ["용마"]
+WEAPON_SE_DATA[145] = ["용마"]
+
+WEAPON_SE_DATA[146] = ["용랑"]
+WEAPON_SE_DATA[147] = ["용랑"]
+WEAPON_SE_DATA[148] = ["용랑"]
+WEAPON_SE_DATA[149] = ["용랑"]
+WEAPON_SE_DATA[150] = ["용랑"]
+
+
 class Item_data
 	attr_accessor :Trade_ban_item
+
 	
 	def initialize
 		@Trade_ban_item = []
@@ -71,5 +149,19 @@ class Item_data
 		when 2 # 장비
 			return !@Trade_ban_armor.include?(id)
 		end
+	end
+	
+	def weapon_se(id)
+		default_root = "Audio/SE/무기/"
+		file_name = WEAPON_SE_DATA[id] != nil ? WEAPON_SE_DATA[id][0] : "기본"
+		file_name = default_root + file_name
+		
+		begin
+			Audio.se_play(file_name.to_s, $game_variables[13])
+		rescue
+			file_name = default_root + "기본"
+			Audio.se_play(file_name, $game_variables[13])
+		end
+		Network::Main.socket.send("<se_play>#{file_name.to_s}</se_play>\n")	# range 스킬 사용했다고 네트워크 알리기
 	end
 end

@@ -42,11 +42,9 @@ module Mouse
 		x, y = Input.mouse_pos
 		(x == nil or y == nil) ? return : 0
 		
-		if Input.mouse_lbutton
-			@ox = x; @oy = y
-		else
-			@ox = x; @oy = y
-			@x = x; @y = y
+		@ox = x; @oy = y
+		if !Input.mouse_lbutton
+			@x = x; @y = y	
 		end
 	end
 	

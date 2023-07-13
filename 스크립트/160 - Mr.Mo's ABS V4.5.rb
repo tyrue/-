@@ -133,6 +133,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[98] = [2500000, 1] # 비류장군
 	
+	ABS_ENEMY_HP[111] = [300000, 1] # 산적왕
+	
 	ABS_ENEMY_HP[102] = [60000000, 1] # 반고
 	ABS_ENEMY_HP[112] = [10000000, 1] # 청룡
 	ABS_ENEMY_HP[113] = [10000000, 1] # 현무
@@ -538,6 +540,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
 			return false if Hwnd.include?("Npc_dialog")
 			return false if Hwnd.include?("Item_Drop")
+			return false if Hwnd.include?("Shop_Num_Window")
 			return false if $map_chat_input.active # 채팅이 활성화 된게 아니라면
 			return true
 		end
@@ -956,7 +959,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		
-		
 		#--------------------------------------------------------------------------
 		# * Update Player  실시간 반영 되는 함수
 		#--------------------------------------------------------------------------
@@ -1061,6 +1063,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			@attack_mash = (w[5] == nil ? MASH_TIME*10 : w[5]*10)
 			#Delete an ammo
 			$game_party.lose_item(w[3], 1) if w[3] != 0
+			
+			$Abs_item_data.weapon_se(@actor.weapon_id)
+			
 			#Make the attack
 			@range.push(Game_Ranged_Weapon.new($game_player, @actor, @actor.weapon_id))
 			Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{@actor.weapon_id},#{2}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
@@ -1069,6 +1074,17 @@ if SDK.state("Mr.Mo's ABS") == true
 			animate($game_player, $game_player.character_name+w[7].to_s) if @player_ani
 			return
 		end
+		
+		def animation_melee(dir)
+			ani_id = 0
+			ani_id = 201 if dir == 6 # 우
+			ani_id = 202 if dir == 4 # 좌
+			ani_id = 203 if dir == 2 # 하 
+			ani_id = 204 if dir == 8 # 상
+			$game_player.ani_array.push(ani_id)
+			Network::Main.ani(Network::Main.id, ani_id)
+		end
+		
 		
 		#--------------------------------------------------------------------------
 		# * 플레이어의 기본공격
@@ -1087,8 +1103,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				@attack_mash = MASH_TIME * 6 
 			end
 			
-			Audio.se_play("Audio/SE/무기001-검", $game_variables[13])
-			Network::Main.ani(Network::Main.id, 191)
+			# 무기 공격 효과음 재생
+			$Abs_item_data.weapon_se(@actor.weapon_id)
+			
+			# 휘두르는 애니메이션 추가
+			animation_melee($game_player.direction)
 			
 			for e in @enemies.values
 				# 적이 없거나 적이 죽으면 공격 안함
@@ -1461,8 +1480,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 원거리 스킬인가?
 				if RANGE_SKILLS.has_key?(skill.id)
 					# 원거리 스킬 캐릭터 생성
-					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
-					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+					if SKILL_DIRECTION.has_key?(skill.id)
+						for dir in SKILL_DIRECTION[skill.id]
+							@range.push(Game_Ranged_Skill.new($game_player, @actor, skill, dir))
+							Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+						end
+					else
+						@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
+						Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+					end
+					
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
 					# 스킬 사용 후 딜레이
@@ -2424,9 +2451,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Hit Player
 		#--------------------------------------------------------------------------
 		def hit_player
+			@hit_num.times{
+				$game_player.ani_array.push(@skill.animation2_id)
+			}
+			Network::Main.ani(Network::Main.id, @skill.animation2_id) #애니매이션 공유
 			#Get Actor
-			$game_player.animation_id = @skill.animation2_id 
-			Network::Main.ani(Network::Main.id, $game_player.animation_id) #몬스터 대상의 애니매이션 공유
 			return if @dummy
 			
 			actor = $game_party.actors[0]
@@ -2440,7 +2469,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.skill_cost_custom(enemy, @skill.id)
 			
 			#Jump
-			$ABS.jump($game_player, self, @range_skill[4]) if @range_skill[4] != 0
+			$ABS.jump($game_player, self, @range_skill[4]) if actor.damage != "Miss" and @range_skill[4] != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2530,15 +2559,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Hit Player
 		#--------------------------------------------------------------------------
 		def hit_player
+			$game_player.animation_id = @range_weapon[2]
+			return if @dummy
 			#Get Actor
 			actor = $game_party.actors[0]
 			#Get Enemy
 			enemy = @actor
 			#Attack Actor 적이 플레이어를 공격함
 			actor.attack_effect(enemy)
-			
-			#Show animation on player
-			$game_player.animation_id = @range_weapon[2] if actor.damage != "Miss" and actor.damage != 0
 			#jump
 			$ABS.jump($game_player, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead

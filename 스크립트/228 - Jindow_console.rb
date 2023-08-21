@@ -12,7 +12,7 @@ class Jindow_Console < Jindow
 		@console_txt = []
 		
 		@old_size = 0
-		@max_size = 60
+		@max_size = 80
 		@font_size = 12
 		@check = false
 		

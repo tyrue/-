@@ -133,6 +133,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[98] = [2500000, 1] # 비류장군
 	
+	ABS_ENEMY_HP[111] = [300000, 1] # 산적왕
+	
 	ABS_ENEMY_HP[102] = [60000000, 1] # 반고
 	ABS_ENEMY_HP[112] = [10000000, 1] # 청룡
 	ABS_ENEMY_HP[113] = [10000000, 1] # 현무
@@ -146,16 +148,19 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[134] = [1200000, 1] # 진룡
 	
 	# 용궁
-	ABS_ENEMY_HP[156] = [1500000, 1] # 상어장군
-	ABS_ENEMY_HP[158] = [4000000, 1] # 해파리장군
-	ABS_ENEMY_HP[159] = [10000000, 1] # 거북장군
+	ABS_ENEMY_HP[150] = [2000000, 1] # 해마장군
+	ABS_ENEMY_HP[153] = [4000000, 1] # 인어장군
+	ABS_ENEMY_HP[156] = [7000000, 1] # 상어장군
+	ABS_ENEMY_HP[158] = [12000000, 1] # 해파리장군
+	ABS_ENEMY_HP[159] = [20000000, 1] # 거북장군
+	ABS_ENEMY_HP[160] = [1000000, 0] # 수괴
 	
 	# 일본
 	ABS_ENEMY_HP[186] = [2500000, 1] # 무사
 	ABS_ENEMY_HP[189] = [5000000, 1] # 주마관
-	ABS_ENEMY_HP[191] = [6000000, 1] # 유성지
-	ABS_ENEMY_HP[192] = [7000000, 1] # 해골왕
-	ABS_ENEMY_HP[193] = [8000000, 1] # 파괴왕
+	ABS_ENEMY_HP[191] = [8000000, 1] # 유성지
+	ABS_ENEMY_HP[192] = [10000000, 1] # 해골왕
+	ABS_ENEMY_HP[193] = [15000000, 1] # 파괴왕
 	
 	# 중국
 	ABS_ENEMY_HP[220] = [1500000, 1]# 산소괴왕
@@ -167,7 +172,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[230] = [1500000, 0]# 연자천구
 	ABS_ENEMY_HP[231] = [15000000, 1] # 천구왕
 	
-	ABS_ENEMY_HP[232] = [40000000, 1] # 산신대왕
+	ABS_ENEMY_HP[232] = [60000000, 1] # 산신대왕
 	ABS_ENEMY_HP[233] = [2000000, 0]# 산신전사
 	ABS_ENEMY_HP[234] = [1200000, 0]# 산신도사
 	ABS_ENEMY_HP[235] = [2000000, 0]# 산신도적
@@ -183,7 +188,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[253] = [5000000, 1]	# 현무
 	ABS_ENEMY_HP[257] = [2000000, 1]	# 태산
 	ABS_ENEMY_HP[258] = [30000000, 1]	# 길림장군
-	ABS_ENEMY_HP[259] = [400000000, 1]# 가릉빈가
+	ABS_ENEMY_HP[259] = [500000000, 1]# 가릉빈가
 	
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
@@ -204,12 +209,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[102] = [30000000] # 반고
 	
 	# 용궁
+	ENEMY_EXP[158] = [15000000] # 해파리장군
 	ENEMY_EXP[159] = [25000000] # 거북장군
 	
 	# 일본
 	ENEMY_EXP[191] = [10000000] # 유성지
-	ENEMY_EXP[192] = [12000000] # 해골왕
-	ENEMY_EXP[193] = [18000000] # 파괴왕
+	ENEMY_EXP[192] = [15000000] # 해골왕
+	ENEMY_EXP[193] = [20000000] # 파괴왕
 	
 	# 중국
 	ENEMY_EXP[228] = [15000000] # 뇌신왕
@@ -533,12 +539,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * ABS 비활성화 여부 확인
 		#--------------------------------------------------------------------------
 		def active_ok
-			return false if Hwnd.include?("NetPartyInv")
-			return false if Hwnd.include?("Trade")
-			return false if Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
-			return false if Hwnd.include?("Npc_dialog")
-			return false if Hwnd.include?("Item_Drop")
-			return false if $map_chat_input.active # 채팅이 활성화 된게 아니라면
+			#~ return false if Hwnd.include?("NetPartyInv")
+			#~ return false if Hwnd.include?("Trade")
+			#~ return false if Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
+			#~ return false if Hwnd.include?("Npc_dialog")
+			#~ return false if Hwnd.include?("Item_Drop")
+			#~ return false if Hwnd.include?("Shop_Num_Window")
+			#~ return false if $map_chat_input.active # 채팅이 활성화 된게 아니라면
+			return false if $inputKeySwitch # 채팅이 활성화 된게 아니라면
 			return true
 		end
 		
@@ -697,8 +705,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			end      
 			
 			# Skip this if the attack killed the enemy
-			return if enemy.event.moving?
 			return if update_enemy_casting(enemy)
+			#return if enemy.event.moving?
 			# 공격주기마다 행동 시작
 			update_enemy_attack(enemy, enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
 			return if enemy == nil
@@ -764,7 +772,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			for action in e.actions
 				# 공격 행동이 아니면 무시
 				if e.casting_action != nil
-					next if action != e.casting_action
+					action = e.casting_action
+					#next if action != e.casting_action
 				else
 					next if enemy_pre_attack(e, action)
 				end
@@ -787,7 +796,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						animate(e.event, e.event.character_name+"_melee") if @enemy_ani
 						
 						#Show Animation
-						hit_enemy(actor,e) if a.damage != "Miss" and a.damage != 0
+						hit_enemy(actor, e) if a.damage != "Miss" and a.damage != 0
 						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
 						return if enemy_dead?(a, e)
 						#Make enemy
@@ -956,7 +965,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		
-		
 		#--------------------------------------------------------------------------
 		# * Update Player  실시간 반영 되는 함수
 		#--------------------------------------------------------------------------
@@ -1061,6 +1069,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			@attack_mash = (w[5] == nil ? MASH_TIME*10 : w[5]*10)
 			#Delete an ammo
 			$game_party.lose_item(w[3], 1) if w[3] != 0
+			
+			$Abs_item_data.weapon_se(@actor.weapon_id)
+			
 			#Make the attack
 			@range.push(Game_Ranged_Weapon.new($game_player, @actor, @actor.weapon_id))
 			Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{@actor.weapon_id},#{2}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
@@ -1069,6 +1080,17 @@ if SDK.state("Mr.Mo's ABS") == true
 			animate($game_player, $game_player.character_name+w[7].to_s) if @player_ani
 			return
 		end
+		
+		def animation_melee(dir)
+			ani_id = 0
+			ani_id = 201 if dir == 6 # 우
+			ani_id = 202 if dir == 4 # 좌
+			ani_id = 203 if dir == 2 # 하 
+			ani_id = 204 if dir == 8 # 상
+			$game_player.ani_array.push(ani_id)
+			Network::Main.ani(Network::Main.id, ani_id)
+		end
+		
 		
 		#--------------------------------------------------------------------------
 		# * 플레이어의 기본공격
@@ -1087,8 +1109,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				@attack_mash = MASH_TIME * 6 
 			end
 			
-			Audio.se_play("Audio/SE/무기001-검", $game_variables[13])
-			Network::Main.ani(Network::Main.id, 191)
+			# 무기 공격 효과음 재생
+			$Abs_item_data.weapon_se(@actor.weapon_id)
+			
+			# 휘두르는 애니메이션 추가
+			animation_melee($game_player.direction)
 			
 			for e in @enemies.values
 				# 적이 없거나 적이 죽으면 공격 안함
@@ -1461,8 +1486,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 원거리 스킬인가?
 				if RANGE_SKILLS.has_key?(skill.id)
 					# 원거리 스킬 캐릭터 생성
-					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
-					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+					if SKILL_DIRECTION.has_key?(skill.id)
+						for dir in SKILL_DIRECTION[skill.id]
+							@range.push(Game_Ranged_Skill.new($game_player, @actor, skill, dir))
+							Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+						end
+					else
+						@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
+						Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+					end
+					
 					@actor.sp -= skill.sp_cost
 					w = RANGE_SKILLS[id]
 					# 스킬 사용 후 딜레이
@@ -1719,55 +1752,82 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * 몬스터를 잡았을 경우 주는것
 		#--------------------------------------------------------------------------
 		def treasure(enemy)
+			actor = $game_party.actors[0]
+			return if actor.cant_get_exp? # 경험치를 얻을 수 없는 상황
+			abs_gain_treasure(enemy)
+			
+			in_map_player = 1
+			if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
+				# 여기서 파티원이 맵에 있는지 확인			
+				for player in Network::Main.mapplayers.values
+					next if player == nil
+					if $netparty.include?(player.name) and player.name != $game_party.actors[0].name
+						in_map_player = in_map_player + 1 # 같은 맵에 파티원이 있으면 추가
+					end
+				end
+			end
+			
+			if in_map_player >= 2
+				Network::Main.socket.send("<nptgain>#{$npt} #{enemy.event.id}</nptgain>\n")
+			end
+			drop_enemy(enemy) # ABS monster item drop 파일 참조
+		end
+		
+		def abs_gain_treasure(enemy, type = 0)
 			exp = 0
 			gold = 0
 			actor = $game_party.actors[0]
+			return if actor.cant_get_exp? # 경험치를 얻을 수 없는 상황
+			
 			unless enemy.hidden
+				exp = enemy.exp
 				if ENEMY_EXP[enemy.id] != nil 
 					exp = ENEMY_EXP[enemy.id][0]
 					if ENEMY_EXP[enemy.id].size > 1
-						exp = (((exp + actor.maxhp * ENEMY_EXP[enemy.id][1].to_f + actor.maxsp * ENEMY_EXP[enemy.id][2].to_f) / exp) * exp).to_i
+						hp_per = ENEMY_EXP[enemy.id][1] != nil ? ENEMY_EXP[enemy.id][1].to_f : 0
+						sp_per = ENEMY_EXP[enemy.id][2] != nil ? ENEMY_EXP[enemy.id][2].to_f : 0
+						exp += (actor.maxhp * hp_per + actor.maxsp * sp_per).to_i
 					end
-				else
-					exp = enemy.exp
 				end
 				
 				gold += enemy.gold
 			end
 			
-			if actor.cant_get_exp? == false # 경험치를 얻을 수 있는 상황
-				last_level = actor.level
-				in_map_player = 1
-				
-				if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
-					# 여기서 파티원이 맵에 있는지 확인			
-					for player in Network::Main.mapplayers.values
-						next if player == nil
-						if $netparty.include?(player.name) and player.name != $game_party.actors[0].name
-							in_map_player = in_map_player + 1 # 같은 맵에 파티원이 있으면 추가
-						end
+			in_map_player = 1
+			if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
+				# 여기서 파티원이 맵에 있는지 확인			
+				for player in Network::Main.mapplayers.values
+					next if player == nil
+					if $netparty.include?(player.name) and player.name != $game_party.actors[0].name
+						in_map_player = in_map_player + 1 # 같은 맵에 파티원이 있으면 추가
 					end
 				end
-				
-				nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
-				limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
-				gainExp = actor.level < 99 ? [exp, limitExp].min : exp
-				gainExp *= $exp_event if $game_switches[1500] == true  # 경험치 이벤트!
-				exp *= $exp_event if $game_switches[1500] == true  # 경험치 이벤트!
-				
-				if in_map_player >= 2
-					Network::Main.socket.send("<nptgain>#{exp} #{gold} #{$npt} #{in_map_player} #{enemy.event.id}</nptgain>\n")
-					gainExp = (gainExp * 1.5).to_i / in_map_player
-					gold = (gold * 1.5).to_i / in_map_player
-				end
-				
-				actor.exp += gainExp
-				$game_party.gain_gold(gold)
-				expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
-				$console.write_line("경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
-				drop_enemy(enemy) # ABS monster item drop 파일 참조
 			end
+			
+			nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
+			limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
+			gainExp = actor.level < 99 ? [exp, limitExp].min : exp
+			gainExp *= $exp_event if $game_switches[1500] == true  # 경험치 이벤트!
+			
+			if in_map_player >= 2
+				gainExp = (gainExp * 1.5 / in_map_player).to_i
+				gold = (gold * 1.5 / in_map_player).to_i
+			end
+			
+			$game_party.gain_gold(gold)
+			expPer = actor.level < 99 ? (actor.exp + gainExp - actor.exp_list[actor.level]) * 100.0 / nextExp : (actor.exp + gainExp) * 100.0 / nextExp
+			actor.exp += gainExp
+			
+			printTxt = ""
+			case type
+			when 1
+				printTxt += "[파티]"
+			end
+			printTxt += "경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)"
+			
+			$console.write_line(printTxt)
 		end
+		
 		
 		# 간단하게 경험치 바로 얻을 수 있는 함수
 		def simple_exp(id, val = 0)
@@ -1798,7 +1858,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def hit_enemy(e, a, animation=nil)
 			return if animation == 0
 			# 나한테 적이 아니면 공격 안하게 함
-			if a.is_a?(ABS_Enemy) and e.is_a?(Game_Actor)
+			if a.is_a?(ABS_Enemy) and e.is_a?(Game_Player)
 				return if !a.hate_group.include?(0)
 			end
 			if a.is_a?(ABS_Enemy) and e.is_a?(ABS_Enemy)
@@ -1811,8 +1871,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				ani_id = animation
 			end
+			
 			e.event.ani_array.push(ani_id)
-			Network::Main.ani(Network::Main.id, e.event.animation_id)
+			Network::Main.ani(e.event.id, ani_id, 1) if e.is_a?(ABS_Enemy)
+			Network::Main.ani(Network::Main.id, ani_id) if e.is_a?(Game_Player)
 		end
 		#--------------------------------------------------------------------------
 		# * Jump
@@ -2310,7 +2372,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def hit_player
 			return if @actor == $game_party.actors[0]
-			$game_player.animation_id = @skill.animation2_id
+			@hit_num.times{
+				$game_player.ani_array.push(@skill.animation2_id)
+			}
 			Network::Main.ani(Network::Main.id, @skill.animation2_id)
 			return if @dummy
 			
@@ -2352,8 +2416,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@hit_num.times{
 				actor.effect_skill(enemy, @skill)
 				actor.event.ani_array.push(@skill.animation2_id)
-				Network::Main.ani(actor.event.id, @skill.animation2_id, 1) #몬스터 대상의 애니매이션 공유
 			}
+			Network::Main.ani(actor.event.id, @skill.animation2_id, 1, @hit_num) #몬스터 대상의 애니매이션 공유
 			
 			e = actor
 			$ABS.jump(e.event, self, $ABS.RANGE_EXPLODE[@skill.id][5]) if actor.damage != "Miss" and actor.damage != 0 and $ABS.RANGE_EXPLODE[@skill.id][5] != 0
@@ -2424,9 +2488,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Hit Player
 		#--------------------------------------------------------------------------
 		def hit_player
+			@hit_num.times{
+				$game_player.ani_array.push(@skill.animation2_id)
+			}
+			Network::Main.ani(Network::Main.id, @skill.animation2_id) #애니매이션 공유
 			#Get Actor
-			$game_player.animation_id = @skill.animation2_id 
-			Network::Main.ani(Network::Main.id, $game_player.animation_id) #몬스터 대상의 애니매이션 공유
 			return if @dummy
 			
 			actor = $game_party.actors[0]
@@ -2440,7 +2506,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.skill_cost_custom(enemy, @skill.id)
 			
 			#Jump
-			$ABS.jump($game_player, self, @range_skill[4]) if @range_skill[4] != 0
+			$ABS.jump($game_player, self, @range_skill[4]) if actor.damage != "Miss" and @range_skill[4] != 0
 			#Check if enemy is dead
 			$ABS.enemy_dead?(actor, enemy)
 		end  
@@ -2472,8 +2538,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@hit_num.times do
 				actor.effect_skill(enemy, @skill)
 				@enani.ani_array.push(animation_id)
-				Network::Main.ani(@enani.id, animation_id, 1)
 			end
+			Network::Main.ani(@enani.id, animation_id, 1, @hit_num)
 			
 			$rpg_skill.skill_cost_custom(enemy, skill_id)
 			
@@ -2530,15 +2596,14 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Hit Player
 		#--------------------------------------------------------------------------
 		def hit_player
+			$game_player.animation_id = @range_weapon[2]
+			return if @dummy
 			#Get Actor
 			actor = $game_party.actors[0]
 			#Get Enemy
 			enemy = @actor
 			#Attack Actor 적이 플레이어를 공격함
 			actor.attack_effect(enemy)
-			
-			#Show animation on player
-			$game_player.animation_id = @range_weapon[2] if actor.damage != "Miss" and actor.damage != 0
 			#jump
 			$ABS.jump($game_player, self, @range_weapon[6]) if actor.damage != "Miss" and actor.damage != 0
 			#Check if enemy is dead

@@ -66,8 +66,23 @@ class Jindow_Inventory < Jindow
 		@gold_drop_button.x = @sort_button.x + @sort_button.width + 10
 		@gold_drop_button.y = @sort_button.y
 		
+		# 모드 : 기본 인벤토리, 교환 모드, 상점 판매 모드 등
+		@mode = 0 
+		
 		self.window_ini
 		self.refresh("Inventory")
+	end
+	
+	def setMode(id)
+		@mode = id
+		case @mode
+		when 0
+			$console.write_line("기본 가방 상태")
+		when 1
+			$console.write_line("교환 가방 상태")
+		when 2
+			$console.write_line("상점 판매 가방 상태")
+		end
 	end
 	
 	def sort(id = 0)
@@ -144,12 +159,14 @@ class Jindow_Inventory < Jindow
 			end
 		end
 		
-		if not Hwnd.include?('Trade')
-			for i in @item
-				i.item? ? 0 : next
-				i.double_click ? 0 : next
-				i.double_click = false
-				# 아이템 더블클릭시 이벤트 실행
+		for i in @item
+			i.item? ? 0 : next
+			i.double_click ? 0 : next
+			i.double_click = false
+			# 아이템 더블클릭시 이벤트 실행
+			
+			case @mode
+			when 0
 				case i.type
 				when 0 # 아이템
 					next if !$game_party.actors[0].item_effect(i.item)
@@ -182,19 +199,25 @@ class Jindow_Inventory < Jindow
 						Audio.se_play("Audio/SE/장비", $game_variables[13])
 					end
 				end
-			end	
-			
-		else # 교환창이 열린 상태인가?
-			for i in @item
-				i.item? ? 0 : next
-				i.double_click ? 0 : next
-				check(i)
 				
+			when 1
+				check(i)
+			when 2
+				shopSellItem(i)
 			end
-		end
+		end	
 		
 		super
 	end	
+	
+	def shopSellItem(i)
+		if i.item.price > 0
+			Hwnd.include?("Shop_Num_Window") ? Hwnd.dispose("Shop_Num_Window") : 0
+			Jindow_Shop_Num.new(i.item, i.type, 1) # 판매모드로 열기
+		else
+			$console.write_line("판매 불가 아이템입니다.")
+		end
+	end
 	
 	def check(i)
 		if $trade_num <= $MAX_TRADE

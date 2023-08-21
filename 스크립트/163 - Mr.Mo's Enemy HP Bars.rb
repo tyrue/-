@@ -62,10 +62,8 @@ if SDK.state("Mr.Mo's ABS")
 			#Show the bar
 			if ABS_ENEMY_HP[@enemy.id] != nil and ABS_ENEMY_HP[@enemy.id][1] == 1
 				draw_gradient_bar2(0, 0, @enemy.hp, @enemy.maxhp, HP_WIDTH_BOSS, HP_HEIGHT_BOSS)
-				#draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH_BOSS,HP_HEIGHT_BOSS)
 			else
 				draw_gradient_bar2(0, 0, @enemy.hp, @enemy.maxhp, HP_WIDTH, HP_HEIGHT)
-				#draw_gradient_bar(0,0,@enemy.hp,@enemy.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
 			end
 		end  
 		#--------------------------------------------------------------------------
@@ -105,33 +103,8 @@ if SDK.state("Mr.Mo's ABS")
 				bar.fill_rect(bar.rect, Color.new(redVal, greenVal, 0, 255)) # 꽉찬 네모
 				bar_dest_rect = Rect.new(cx, cy, (width * percent).to_i - cx * 2, height - cy * 2)
 				self.bitmap.stretch_blt(bar_dest_rect, bar, bar.rect)
-				#self.bitmap.stretch_blt(bar.rect, bar, bar.rect)
 			end
 		end
-		
-		def draw_gradient_bar(x, y, min, max, file, width = nil, height = nil, hue = 0, back = "Back", back2 = "Back2")
-			bar = RPG::Cache.gradient(file, hue)
-			back = RPG::Cache.gradient(back)
-			back2 = RPG::Cache.gradient(back2)
-			cx = BORDER
-			cy = BORDER
-			dx = OUTLINE
-			dy = OUTLINE
-			zoom_x = width != nil ? width : back.width
-			zoom_y = height != nil ? height : back.height
-			
-			percent = min / max.to_f if max != 0
-			percent = 0 if max == 0
-			back_dest_rect = Rect.new(x, y, zoom_x, zoom_y)
-			back2_dest_rect = Rect.new(x + dx, y + dy, zoom_x - dx * 2, zoom_y - dy * 2)
-			bar_dest_rect = Rect.new(x + cx, y + cy, zoom_x * percent - cx * 2, zoom_y - cy * 2)
-			back_source_rect = Rect.new(0,0,back.width,back.height)
-			back2_source_rect = Rect.new(0,0,back2.width,back2.height)
-			bar_source_rect = Rect.new(0,0,bar.width* percent,bar.height)
-			self.bitmap.stretch_blt(back_dest_rect, back, back_source_rect)
-			self.bitmap.stretch_blt(back2_dest_rect, back2, back2_source_rect)
-			self.bitmap.stretch_blt(bar_dest_rect, bar, bar_source_rect)
-		end  
 	end
 	
 	class NetPartyHP_Bars < Sprite
@@ -180,7 +153,6 @@ if SDK.state("Mr.Mo's ABS")
 		# * Something Changed?
 		#--------------------------------------------------------------------------
 		def something_changed?
-			return dispose if @netPlayer.hp.to_i <= 0
 			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
 				@netPlayer.bar_showing = false
 				return dispose 
@@ -276,7 +248,6 @@ if SDK.state("Mr.Mo's ABS")
 		# * Something Changed?
 		#--------------------------------------------------------------------------
 		def something_changed?
-			return dispose if @netPlayer.sp.to_i <= 0
 			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
 				@netPlayer.bar_showing = false
 				return dispose 
@@ -391,12 +362,12 @@ if SDK.state("Mr.Mo's ABS")
 				
 				#if in screen
 				if player.in_range?(14)
+					player.bar_showing = true
 					next if player.bar_showing and @netPlayers_hp[player.netid] != nil
 					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
-					
+						
 					next if player.bar_showing and @netPlayers_sp[player.netid] != nil
 					@netPlayers_sp[player.netid] = NetPartyMP_Bars.new(player, @spriteset.viewport3)
-					player.bar_showing = true
 					
 				elsif player.bar_showing and @netPlayers_hp[player.netid] != nil
 					player.bar_showing = false

@@ -59,7 +59,12 @@ class Jindow_Trade < Jindow
 		@b = J::Button.new(self).refresh(40, "취소")
 		@b.x = @a.x + @a.width + 10
 		@b.y = @a.y
-		Jindow_Inventory.new if not Hwnd.include?("Inventory")
+		
+		# 인벤토리 모드 변경
+		if $j_inven != nil
+			$j_inven.show
+			$j_inven.setMode(1)
+		end
 		
 		$item_number = [] # 내 아이템
 		@item_img = []
@@ -72,6 +77,17 @@ class Jindow_Trade < Jindow
 		$trade_num = 1
 		self.height = @b.y + 40
 		self.refresh("Trade")
+	end
+	
+	def dispose
+		$trade1_ok = 0
+		$trade2_ok = 0
+		$trade_player_money = 0
+		$trade_player = ""
+		$nowtrade = 0
+		$trade_money = 0
+		$j_inven.setMode(0) if $j_inven != nil
+		super
 	end
 	
 	def self.trade_fail
@@ -92,13 +108,7 @@ class Jindow_Trade < Jindow
 		end
 		$game_party.gain_gold($trade_money.to_i)
 		
-		$trade1_ok = 0
-		$trade2_ok = 0
-		$trade_player_money = 0
-		$trade_player = ""
-		$nowtrade = 0
-		$trade_money = 0
-		Hwnd.dispose("Trade")
+		Hwnd.dispose(self)
 	end
 	
 	def update
@@ -180,14 +190,7 @@ class Jindow_Trade < Jindow
 			end
 			$game_party.gain_gold($trade_player_money.to_i)
 			
-			$trade2_ok = 0
-			$trade1_ok = 0
-			
-			$trade_player = ""
-			$trade_player_money = 0
-			$item_number.clear
-			$nowtrade = 0
-			Hwnd.dispose("Trade")
+			Hwnd.dispose(self)
 		end
 		
 		if @a.click

@@ -794,7 +794,7 @@ class Rpg_skill
 					# If through is OFF
 					unless player.through
 						# If self is player; impassable
-						obeject.push(player) if self != $game_player or player.character_name != ""
+						object.push(player) if self != $game_player or player.character_name != ""
 					end
 				end
 			end
@@ -967,9 +967,9 @@ class Rpg_skill
 	def damage_calculation_attack(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor) # 플레이어
-			damage *= 1.2 if self.check_buff(71) # 혼신의힘
+			damage *= 2 if self.check_buff(71) # 혼신의힘
 			damage *= 1.2 if self.check_buff(88) # 분량력법
-			damage *= 2 if self.check_buff(134) # 분신
+			damage *= 3 if self.check_buff(134) # 분신
 			damage *= 1.5 if self.check_buff(122) # 파력무참진
 			
 			if $state_trans # 투명 풀기
@@ -1008,9 +1008,10 @@ class Rpg_skill
 	def damage_calculation_skill(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor)
-			damage *= 1.2 if self.check_buff(71) # 혼신의힘
+			damage *= 2 if self.check_buff(71) # 혼신의힘
 			damage *= 1.2 if self.check_buff(88) # 분량력법
 			damage *= 1.5 if self.check_buff(122) # 파력무참진
+			damage *= 1.1 if self.check_buff(134) # 분신
 		elsif attacker.is_a?(ABS_Enemy)
 			
 		end

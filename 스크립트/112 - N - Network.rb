@@ -752,13 +752,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#--------------------------------------------------------------------------
 			# * Send animation
 			#-------------------------------------------------------------------------- 
-			def self.ani(id, number, type = 0)
+			def self.ani(id, number, type = 0, count = 1)
 				return if @mapplayers.size == 0
 				case type
 				when 0
-					@socket.send("<27>@ani_id = #{id}; @ani_number = #{number};</27>\n") # 유저 이펙트
+					@socket.send("<27>@ani_id = #{id}; @ani_number = #{number}; count = #{count}</27>\n") # 유저 이펙트
 				when 1
-					@socket.send("<27>@ani_event = #{id}; @ani_number = #{number};</27>\n") # 이벤트 이펙트
+					@socket.send("<27>@ani_event = #{id}; @ani_number = #{number}; count = #{count}</27>\n") # 이벤트 이펙트
 				end
 			end
 			
@@ -1636,7 +1636,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 						self.send_start
-						 
+						
 						if $game_switches[54] # 운영자모드
 							p "운영자모드"
 							@group = "admin"
@@ -1934,36 +1934,33 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					data = $1.split(',')
 					id = data[0].to_i
 					map_id = data[1].to_i
-					npt = data[2].to_i
+					npt = data[2]
 					
-					if $game_map.map_id == map_id
-						return if $ABS.enemies[id] == nil
-						return if $ABS.enemies[id].event == nil
-						
-						enemy = $ABS.enemies[id]
-						event = enemy.event
-						
-						event.fade = true
-						enemy.hp = 0
-						
-						if npt == $npt # 같은 파티라면
-							case enemy.trigger[0]
-							when 1 # 스위치
-								$game_switches[enemy.trigger[1]] = true
-							when 2 # 변수 조작
-								$game_variables[enemy.trigger[1]] += 1
-							when 3  # 셀프 스위치
-								value = "A" if enemy.trigger[1] == 1
-								value = "B" if enemy.trigger[1] == 2
-								value = "C" if enemy.trigger[1] == 3
-								value = "D" if enemy.trigger[1] == 4
-								key = [$game_map.map_id, event.id, value]
-								$game_self_switches[key] = true
-							end						
-							$game_map.refresh	
-						end
-					end
+					return if $game_map.map_id != map_id
+					return if $ABS.enemies[id] == nil
+					return if $ABS.enemies[id].event == nil
 					
+					enemy = $ABS.enemies[id]
+					event = enemy.event
+					
+					event.fade = true
+					enemy.hp = 0
+					
+					return if npt != $npt # 같은 파티가 아니라면
+					case enemy.trigger[0]
+					when 1 # 스위치
+						$game_switches[enemy.trigger[1]] = true
+					when 2 # 변수 조작
+						$game_variables[enemy.trigger[1]] += 1
+					when 3  # 셀프 스위치
+						value = "A" if enemy.trigger[1] == 1
+						value = "B" if enemy.trigger[1] == 2
+						value = "C" if enemy.trigger[1] == 3
+						value = "D" if enemy.trigger[1] == 4
+						key = [$game_map.map_id, event.id, value]
+						$game_self_switches[key] = true
+					end						
+					$game_map.refresh	
 					
 					# 템 드랍 
 					#drop 번호, 아이템 타입1, 아이템 타입2, 아이템 id, 맵 아이디, x좌표, y좌표, 개수
@@ -2011,6 +2008,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							$game_map.events.delete(event)
 						end
 					end
+					
+					# 효과음 실행
+				when /<se_play>(.*)<\/se_play>/
+					file_name = $1.to_s
+					Audio.se_play(file_name, $game_variables[13])
+					
 					
 					# 파티퀘스트 입장 여부 확인 : 스위치 번호, 1/0
 				when /<party_quest_check>(.*)<\/party_quest_check>/
@@ -2230,28 +2233,35 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_temp.player_new_direction = 1
 					$game_temp.player_transferring = true
 					
+				when /<nptgain>(.*) (.*)<\/nptgain>/ # 파티장, 몬스터 아이디
+					return if $npt != $1.to_s
+					return if $game_party.actors[0].hp <= 0
+					id = $2.to_i
+					enemy = $ABS.enemies[id]
+					return if enemy == nil
+					$ABS.abs_gain_treasure(enemy, 1)
 					
-				when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/ # 경험치, 돈, 파티장, 맵의 파티원 수, 몬스터 아이디
-					if $npt == $3.to_s
-						return if $game_party.actors[0].hp <= 0 
-						actor = $game_party.actors[0]
-						exp = $1.to_i
-						gold = $2.to_i
-						in_map_player = $4.to_i
-						
-						nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
-						limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
-						exp = actor.level < 99 ? [exp, limitExp].min : exp
-						exp = (exp * 1.5).to_i / in_map_player
-						gold = (gold * 1.5).to_i / in_map_player
-						
-						actor.exp += exp
-						$game_party.gain_gold(gold)
-						expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
-						$console.write_line("[파티]경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
-					end
+					#~ when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/ # 경험치, 돈, 파티장, 맵의 파티원 수, 몬스터 아이디
+					#~ if $npt == $3.to_s
+					#~ return if $game_party.actors[0].hp <= 0 
+					#~ actor = $game_party.actors[0]
+					#~ exp = $1.to_i
+					#~ gold = $2.to_i
+					#~ in_map_player = $4.to_i
 					
-					return true
+					#~ nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
+					#~ limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
+					#~ exp = actor.level < 99 ? [exp, limitExp].min : exp
+					#~ exp = (exp * 1.5).to_i / in_map_player
+					#~ gold = (gold * 1.5).to_i / in_map_player
+					
+					#~ actor.exp += exp
+					#~ $game_party.gain_gold(gold)
+					#~ expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
+					#~ $console.write_line("[파티]경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
+					#~ end
+					
+					#~ return true
 					#-----------------------------------------------------------------------      
 				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # 시전자이름, 마법번호, 파티크기, 맵번호, 체력/마력(0이면 버프라고 생각)
 					if $npt == $3.to_s
@@ -2321,22 +2331,27 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					
 				when /<27>(.*)<\/27>/
-					#@ani_event = #{e.event.id}; @ani_number = #{a}; @ani_map = #{$game_map.map_id} # 몹 이벤트
-					#@ani_id = #{Network::Main.id}; @ani_number = #{e.event.animation_id}; @ani_map = #{$game_map.map_id} # 자신 이벤트
+					#@ani_id = #{id}; @ani_number = #{number}; count = #{count} # 유저 이펙트				
+					#@ani_event = #{id}; @ani_number = #{number}; count = #{count} # 이벤트 이펙트
+					count = 1
 					eval($1)
 					
 					if @ani_event >= 0
 						if $game_map.events[@ani_event] != nil
-							$game_map.events[@ani_event].animation_id = @ani_number # 이벤트 애니 공유
+							count.times do
+								$game_map.events[@ani_event].ani_array.push(@ani_number)  # 이벤트 애니 공유
+							end
 						end
 					end
 					
 					if @ani_id.to_i != @id.to_i
 						if $ani_character[@ani_id.to_i] != nil # 다른 유저 애니 공유
-							$ani_character[@ani_id.to_i].animation_id = @ani_number 
+							$ani_character[@ani_id.to_i].animation_id = @ani_number
 						end
 					else
-						$game_player.animation_id = @ani_number # 각각의 플레이어에게만 보이는 애니메이션 공유.
+						count.times do
+							$game_player.ani_array.push(@ani_number) # 각각의 플레이어에게만 보이는 애니메이션 공유.
+						end
 					end
 					
 					@ani_id = -1; @ani_number = -1; @ani_event = -1

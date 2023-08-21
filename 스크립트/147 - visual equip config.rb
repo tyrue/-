@@ -125,7 +125,11 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][148] = ['(착용)용랑제칠봉'] 	  #용랄칠
 	VISUAL_EQUIP_DATA[2][149] = ['(착용)용랑제팔봉'] 	  #용랄팔
 	VISUAL_EQUIP_DATA[2][150] = ['(착용)용랑제구봉'] 	  #용랄구
-
+	
+	VISUAL_EQUIP_DATA[2][152] = ['(착용)용마제칠검'] 	  #용마칠
+	VISUAL_EQUIP_DATA[2][153] = ['(착용)용마제팔검'] 	  #용마팔
+	VISUAL_EQUIP_DATA[2][154] = ['(착용)용랑제칠봉'] 	  #용랄칠
+	VISUAL_EQUIP_DATA[2][155] = ['(착용)용랑제팔봉'] 	  #용랄팔
 end
 
 

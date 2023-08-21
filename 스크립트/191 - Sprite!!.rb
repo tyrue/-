@@ -19,6 +19,7 @@ class Sprite
 	end
 	
 	def height
+		return 0 if self.bitmap == nil
 		return bitmap.height
 	end
 end

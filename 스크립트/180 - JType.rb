@@ -524,6 +524,7 @@ module J
 		def bluck=(val)
 			if val and not @bluck
 				@bluck = true
+				$inputKeySwitch = true
 				self.tone.set(-64, -64, 64)
 				for i in self.viewport.item
 					i == self ? next : 0
@@ -532,9 +533,11 @@ module J
 				end
 			elsif not val and @bluck
 				@bluck = false
+				$inputKeySwitch = false
 				self.tone.set(0, 0, 0)
 			end
 		end
+		
 		
 		def refresh(x, y, width, height, hangul = true)
 			@start = true

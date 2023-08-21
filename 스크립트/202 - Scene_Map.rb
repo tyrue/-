@@ -18,6 +18,11 @@ class Scene_Map
 		$chat.hide if !$game_switches[60]
 		$console.hide if !$game_switches[61]
 		$j_inven.hide if $j_inven != nil and !$j_inven.temp_sw
+		
+		Hwnd.include?("Shop_Window") ? Hwnd.dispose("Shop_Window") : 0
+		Hwnd.include?("Shop_Sell_Window") ? Hwnd.dispose("Shop_Sell_Window") : 0
+		Hwnd.include?("Shop_Menu_Window") ? Hwnd.dispose("Shop_Menu_Window") : 0
+		
 		scene_map_main
 		
 		$cbig = 0

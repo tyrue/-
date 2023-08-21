@@ -156,8 +156,8 @@ module J
 				end
 				
 				if Input.mouse_rbutton and Mouse.arrive_sprite_rect?(self)
-					jindow = Hwnd.include?("Item_Info")
-					jindow ? Hwnd.dispose("Item_Info") : 0
+					#jindow = Hwnd.include?("Item_Info")
+					#jindow ? Hwnd.dispose("Item_Info") : 0
 					jindow = Jindow_Item_Info.new(@item.id, @type, @viewport.hwnd)
 					
 					jindow.x = Mouse.x - jindow.max_width / 2

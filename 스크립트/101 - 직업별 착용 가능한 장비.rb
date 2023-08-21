@@ -64,7 +64,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	# 무기
 	EQUIP_JOB_WEAPON[15] = [[0], 0] # 석단장
 	EQUIP_JOB_WEAPON[16] = [[0], 0] # 백사도
-	EQUIP_JOB_WEAPON[17] = [[0], 0] # 음양도
+	EQUIP_JOB_WEAPON[17] = [[0], 2] # 음양도
 	EQUIP_JOB_WEAPON[22] = [[0], 0] # 비철단도
 	EQUIP_JOB_WEAPON[23] = [[0], 0] # 철도
 	EQUIP_JOB_WEAPON[26] = [[0], 0] # 녹호박별검
@@ -83,7 +83,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[112] = [[0], 0] # 양첨목봉
 	EQUIP_JOB_WEAPON[113] = [[0], 0] # 이벤트양첨목봉
 	EQUIP_JOB_WEAPON[114] = [[0], 0] # 주작의검
-	EQUIP_JOB_WEAPON[115] = [[0], 0] # 심판의낫
+	EQUIP_JOB_WEAPON[115] = [[0], 3] # 심판의낫
 	EQUIP_JOB_WEAPON[116] = [[0], 0] # 진일신검손상
 	EQUIP_JOB_WEAPON[117] = [[0], 1] # 괴력선창
 	EQUIP_JOB_WEAPON[118] = [[0], 0] # 철단도
@@ -102,7 +102,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[132] = [[0], 0] # 인어장군지팡이
 	EQUIP_JOB_WEAPON[134] = [[0], 2] # 일화접선
 	EQUIP_JOB_WEAPON[135] = [[0], 2] # 진일신검
-	EQUIP_JOB_WEAPON[136] = [[0], 0] # 이가닌자의검
+	EQUIP_JOB_WEAPON[136] = [[0], 1] # 이가닌자의검
 	EQUIP_JOB_WEAPON[138] = [[0], 2] # 청일기창
 	
 	EQUIP_JOB_WEAPON[141] = [[0], 0] # 용마제일검
@@ -116,6 +116,11 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[149] = [[0], 3] # 용랑제팔봉
 	EQUIP_JOB_WEAPON[150] = [[0], 4] # 용랑제구봉
 	
+	EQUIP_JOB_WEAPON[152] = [[0], 1] # 용마제칠검(손상)
+	EQUIP_JOB_WEAPON[153] = [[0], 3] # 용마제칠검(손상)
+	EQUIP_JOB_WEAPON[154] = [[0], 1] # 용랑제칠봉(손상)
+	EQUIP_JOB_WEAPON[155] = [[0], 3] # 용랑제팔봉(손상)
+	
 	# 방어구
 	EQUIP_JOB_ARMOR[1] = [[0], 0] # 초심자의갑주
 	EQUIP_JOB_ARMOR[2] = [[0], 0] # 지력의투구1
@@ -127,9 +132,9 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[9] = [[0], 0] # 다람쥐화서
 	EQUIP_JOB_ARMOR[10] = [[0], 0] # 토끼화서
 	EQUIP_JOB_ARMOR[11] = [[0], 0] # 죄수복
-	EQUIP_JOB_ARMOR[12] = [[0], 0] # 주술갑옷
+	EQUIP_JOB_ARMOR[12] = [[0], 1] # 주술갑옷
 	EQUIP_JOB_ARMOR[13] = [[0], 0] # 남자타라의 옷
-	EQUIP_JOB_ARMOR[14] = [[0], 0] # 해골갑옷
+	EQUIP_JOB_ARMOR[14] = [[0], 2] # 해골갑옷
 	EQUIP_JOB_ARMOR[15] = [[0], 0] # 수선도사의머리띠
 	EQUIP_JOB_ARMOR[16] = [[0], 0] # 수정귀걸이
 	EQUIP_JOB_ARMOR[17] = [[0], 0] # 용왕의반지모조
@@ -137,8 +142,8 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[19] = [[0], 0] # 청선투구
 	EQUIP_JOB_ARMOR[20] = [[0], 0] # 청선팔찌
 	EQUIP_JOB_ARMOR[21] = [[0], 0] # 해골목걸이
-	EQUIP_JOB_ARMOR[22] = [[0], 0] # 황금투구
-	EQUIP_JOB_ARMOR[23] = [[0], 0] # 황금팔찌
+	EQUIP_JOB_ARMOR[22] = [[0], 3] # 황금투구
+	EQUIP_JOB_ARMOR[23] = [[0], 3] # 황금팔찌
 	EQUIP_JOB_ARMOR[24] = [[0], 0] # 용왕둔갑두루마리
 	EQUIP_JOB_ARMOR[25] = [[0], 0] # 강건부
 	EQUIP_JOB_ARMOR[26] = [[0], 0] # 암사슴화서
@@ -151,10 +156,10 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[36] = [[0], 0] # 기원부
 	EQUIP_JOB_ARMOR[37] = [[0], 0] # 보라색반지
 	EQUIP_JOB_ARMOR[38] = [[0], 0] # 연두색남자갑주
-	EQUIP_JOB_ARMOR[39] = [[0], 0] # 정화의방패
-	EQUIP_JOB_ARMOR[40] = [[0], 0] # 여신의방패
-	EQUIP_JOB_ARMOR[42] = [[0], 0] # 황혼의갑주
-	EQUIP_JOB_ARMOR[43] = [[0], 0] # 산신의정화
+	EQUIP_JOB_ARMOR[39] = [[0], 2] # 정화의방패
+	EQUIP_JOB_ARMOR[40] = [[0], 2] # 여신의방패
+	EQUIP_JOB_ARMOR[42] = [[0], 3] # 황혼의갑주
+	EQUIP_JOB_ARMOR[43] = [[0], 3] # 산신의정화
 	EQUIP_JOB_ARMOR[44] = [[0], 0] # 황혼의활복
 	EQUIP_JOB_ARMOR[45] = [[0], 0] # 인어반지
 	EQUIP_JOB_ARMOR[46] = [[0], 0] # 진주반지
@@ -165,20 +170,20 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[55] = [[0], 0] # 망또4
 	EQUIP_JOB_ARMOR[56] = [[0], 0] # 망또5
 	
-	EQUIP_JOB_ARMOR[50] = [[0], 0] # 용왕의반지'진
-	EQUIP_JOB_ARMOR[51] = [[0], 0] # 용왕의투구'진
+	EQUIP_JOB_ARMOR[50] = [[0], 2] # 용왕의반지'진
+	EQUIP_JOB_ARMOR[51] = [[0], 2] # 용왕의투구'진
 	EQUIP_JOB_ARMOR[53] = [[0], 0] # 힘의투구1
 	
-	EQUIP_JOB_ARMOR[61] = [[0], 0] # 연청투구
-	EQUIP_JOB_ARMOR[62] = [[0], 0] # 연홍투구
+	EQUIP_JOB_ARMOR[61] = [[0], 2] # 연청투구
+	EQUIP_JOB_ARMOR[62] = [[0], 2] # 연홍투구
 	EQUIP_JOB_ARMOR[63] = [[0], 0] # 비취의목걸이
 	EQUIP_JOB_ARMOR[64] = [[0], 0] # 수정의목걸이
-	EQUIP_JOB_ARMOR[70] = [[0], 0] # 주술투구
-	EQUIP_JOB_ARMOR[71] = [[0], 0] # 주술팔찌
-	EQUIP_JOB_ARMOR[72] = [[0], 0] # 해골목걸이
+	EQUIP_JOB_ARMOR[70] = [[0], 1] # 주술투구
+	EQUIP_JOB_ARMOR[71] = [[0], 1] # 주술팔찌
+	EQUIP_JOB_ARMOR[72] = [[0], 1] # 해골목걸이
 	EQUIP_JOB_ARMOR[73] = [[0], 4] # 가릉빈가의날개옷'진
-	EQUIP_JOB_ARMOR[74] = [[0], 0] # 황금투구
-	EQUIP_JOB_ARMOR[75] = [[0], 0] # 황금팔찌
+	EQUIP_JOB_ARMOR[74] = [[0], 3] # 황금투구
+	EQUIP_JOB_ARMOR[75] = [[0], 3] # 황금팔찌
 	
 	EQUIP_JOB_ARMOR[80] = [[0], 0] # 지력의반지1
 	EQUIP_JOB_ARMOR[81] = [[0], 0] # 지력의반지2
@@ -216,89 +221,69 @@ class Game_Actor < Game_Battler
 		$job_degree = 3	if (n == 6 or n == 10 or n == 13 or n == 20)
 		$job_degree = 4 if (n == 14 or n == 15 or n == 16 or n == 21)
 		
+		job_type = 0
 		if $game_switches[6] # 주술사
-			job_type = 1
-			if item.is_a?(RPG::Weapon)
-				return false if check == nil
-				return false if check[1] > $job_degree
-				return false if !check[0].include?(job_type) and !check[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			if item.is_a?(RPG::Armor)
-				return false if check2 == nil
-				return false if check2[1] > $job_degree
-				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			
+			job_type = 1	
 		elsif $game_switches[156] # 전사
 			job_type = 2
-			if item.is_a?(RPG::Weapon)
-				return false if check == nil
-				return false if check[1] > $job_degree
-				return false if !check[0].include?(job_type) and !check[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			if item.is_a?(RPG::Armor)
-				return false if check2 == nil
-				return false if check2[1] > $job_degree
-				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			
 		elsif $game_switches[144] # 도사
 			job_type = 3
-			if item.is_a?(RPG::Weapon)
-				return false if check == nil
-				return false if check[1] > $job_degree
-				return false if !check[0].include?(job_type) and !check[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			if item.is_a?(RPG::Armor)
-				return false if check2 == nil
-				return false if check2[1] > $job_degree
-				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			
 		elsif $game_switches[426] # 도적
 			job_type = 4
-			if item.is_a?(RPG::Weapon)
-				return false if check == nil
-				return false if check[1] > $job_degree
-				return false if !check[0].include?(job_type) and !check[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			if item.is_a?(RPG::Armor)
-				return false if check2 == nil
-				return false if check2[1] > $job_degree
-				return false if !check2[0].include?(job_type) and !check2[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
 		else # 평민
-			if item.is_a?(RPG::Weapon)
-				return false if check == nil
-				return false if check[1] > $job_degree
-				return false if !check[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
-			if item.is_a?(RPG::Armor)
-				return false if check2 == nil
-				return false if check2[1] > $job_degree
-				return false if !check2[0].include?(0)
-				return false if level < item_level(item)
-				return true
-			end
+			
+		end
+		
+		if item.is_a?(RPG::Weapon)
+			return false if check == nil
+			return false if check[1] > $job_degree
+			return false if !(check[0].include?(job_type) or check[0].include?(0))
+			return false if level < item_level(item)
+			return true
+		end
+		
+		if item.is_a?(RPG::Armor)
+			return false if check2 == nil
+			return false if check2[1] > $job_degree
+			return false if !(check2[0].include?(job_type) or check2[0].include?(0))
+			return false if level < item_level(item)
+			return true
 		end
 		return false
+	end
+	
+	def item_level(item)
+		return 0 if item == nil
+		text = item.description.dup 
+		
+		check = nil
+		if item.is_a?(RPG::Weapon)
+			check = Equip_Job_Type::EQUIP_JOB_WEAPON[item.id]
+		elsif item.is_a?(RPG::Armor)
+			check = Equip_Job_Type::EQUIP_JOB_ARMOR[item.id]
+		end
+		
+		if check != nil and (check[1] >= 1 or check[2] != nil)
+			findTxt = text.scan(/\[[제재][한][레래][벨밸]:([0-9]+)\]/)
+			reqLevel = check[1] >= 1 ? 99 : check[2]
+			
+			if findTxt == nil
+				item.description += "[제한레벨:" + reqLevel.to_s + "]"
+			else
+				findLevel = findTxt[0][0].to_i
+				if(findLevel != reqLevel)
+					item.description.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) do
+						|s| s = "[제한레벨:" + reqLevel.to_s + "]"
+					end
+				end
+			end
+			return reqLevel
+		end
+		
+		
+		text.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) do
+			return $1.to_i
+		end
+		return 0
 	end
 end

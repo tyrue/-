@@ -8,11 +8,12 @@ class Jindow_N < Jindow
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 105)
 		name = "" if name.include?("EV")		
-		name.delete!("[id")
-		name.delete!("[Id")
-		name.delete!("[iD")
-		name.delete!("[ID")
+		
+		name.gsub!(/\[[iI][dD]/) do
+			|s|
+		end
 		name.delete!("]") 
+		
 		self.name = name
 		@head = true
 		@drag = true
@@ -133,19 +134,25 @@ class Jindow_N < Jindow
 			text.gsub!(/\\[Ii]\[([0-9]+)\]/) do
 				$data_items[$1.to_i] != nil ? $data_items[$1.to_i].name : ""
 			end
-			# 변수 처리
-			text.gsub!(/\#{([\w!@#\$+-\/\*]*)}/) do
-				txt = $1.to_s
-				txt
+			
+			text.gsub!(/\\[Ww]\[([0-9]+)\]/) do
+				$data_weapons[$1.to_i] != nil ? $data_weapons[$1.to_i].name : ""
+			end
+			
+			text.gsub!(/\\[Aa]\[([0-9]+)\]/) do
+				$data_armors[$1.to_i] != nil ? $data_armors[$1.to_i].name : ""
+			end
+			
+			#~ # 변수 처리
+			text.gsub!(/\#\{(.*)\}/) do
+				txt = "txt = #{$1}"
 				begin # try
-					txt = eval(txt)
-					txt 
+					eval(txt)
 				rescue # 예외
-					txt = $1.to_s
-				ensure # 
-					txt
+					""
 				end	
 			end
+			
 		end until text == last_text
 		text.gsub!(/\\[Nn]\[([0-9]+)\]/) do
 			$game_actors[$1.to_i] != nil ? $game_actors[$1.to_i].name : ""
@@ -467,12 +474,15 @@ class Window_Message < Window_Selectable
 				text.gsub!(/\\[Ss]\[([0-9]+)\]/) do 
 					$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].name : ""
 				end
+				
 				text.gsub!(/\\[Dd]\[([0-9]+)\]/) do 
 					$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].description : ""
 				end
+				
 				text.gsub!(/\\[Ii]\[([0-9]+)\]/) do
 					$data_items[$1.to_i] != nil ? $data_items[$1.to_i].name : ""
 				end
+				
 			end until text == last_text
 			text.gsub!(/\\[Nn]\[([0-9]+)\]/) do
 				$game_actors[$1.to_i] != nil ? $game_actors[$1.to_i].name : ""

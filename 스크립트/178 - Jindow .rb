@@ -556,6 +556,7 @@ class Jindow < Viewport
 			i.jindow? ? 0 : next
 			Hwnd.dispose(i)
 		end
+		$inputKeySwitch = false
 		super
 		@back.dispose
 	end

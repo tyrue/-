@@ -12,7 +12,8 @@ class Jindow_Shop_Menu < Jindow
 		@drag = true
 		@close = true
 		@event = $game_map.events[eventId]
-		self.name = @event.name
+		
+		self.name = @event.sprite_id != nil ? @event.sprite_id : "상점"
 		self.refresh "Shop_Menu_Window"
 		self.x = (640 - self.max_width) / 6
 		self.y = (480 - self.max_height) / 2

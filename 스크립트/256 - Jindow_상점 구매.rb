@@ -12,7 +12,8 @@ class Jindow_Shop < Jindow
 		@drag = true
 		@close = true
 		@event = $game_map.events[eventId]
-		self.name = @event.name
+		
+		self.name = @event.sprite_id != nil ? @event.sprite_id : "상점"
 		self.refresh "Shop_Window"
 		self.x = (640 - self.max_width) / 2
 		self.y = (480 - self.max_height) / 2
@@ -36,6 +37,8 @@ class Jindow_Shop < Jindow
 			end
 		end
 		
+		return if @data.size == 0
+		
 		# 캐릭터 비트맵
 		bmp = RPG::Cache.character(@event.character_name, @event.character_hue)
 		
@@ -53,7 +56,7 @@ class Jindow_Shop < Jindow
 		@eventBitmap.y = 10
 		
 		@helloText = Sprite.new(self)
-		@helloText.bitmap = Bitmap.new(self.width - (@eventBitmap.x + @eventBitmap.width + 10), 80)
+		@helloText.bitmap = Bitmap.new(self.width - (@eventBitmap.x + @eventBitmap.width + 10), 60)
 		@helloText.bitmap.font.size = 12
 		@helloText.bitmap.font.color.set(0, 0, 0, 255)
 		@helloText.x = @eventBitmap.x + @eventBitmap.width + 5
@@ -83,7 +86,7 @@ class Jindow_Shop < Jindow
 		for i in @data
 			if i.is_a?(J::Item)
 				i.x = (count % @line_count) * (i.width + @item_margin)
-				i.y = (count / @line_count) * (i.height + @item_margin) + (@eventBitmap.y + @eventBitmap.height + 5)
+				i.y = (count / @line_count) * (i.height + @item_margin) + (@helloText.y + @helloText.height + 5)
 				count += 1
 			end
 		end

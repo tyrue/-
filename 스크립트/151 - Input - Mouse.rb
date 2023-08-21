@@ -59,7 +59,7 @@ $client_rect = Win32API.new 'user32', 'GetClientRect', %w(l p), 'i'
 $readini = Win32API.new 'kernel32', 'GetPrivateProfileStringA',
 %w(p p p p l p), 'l'
 $findwindow = Win32API.new 'user32', 'FindWindowA', %w(p p), 'l'
-def screen_to_client(x, y)
+def screen_to_client(x = 0, y = 0)
 	return nil unless x and y
 	pos = [x, y].pack('ll')
 	if $scr2cli.call(hwnd, pos) != 0

@@ -74,6 +74,24 @@ WEAPON_SE_DATA[148] = ["용랑"]
 WEAPON_SE_DATA[149] = ["용랑"]
 WEAPON_SE_DATA[150] = ["용랑"]
 
+WEAPON_SE_DATA[152] = ["용마"]
+WEAPON_SE_DATA[153] = ["용마"]
+WEAPON_SE_DATA[154] = ["용랑"]
+WEAPON_SE_DATA[155] = ["용랑"]
+
+
+# 용무기 강화 데이터
+# DRAGON_WEAPON_DATA[weapon_id] = [강화확률, 필요한 은나무가지 개수, 성공시 얻는 무기, 실패시 얻는 무기]
+DRAGON_WEAPON_DATA = {}
+DRAGON_WEAPON_DATA[141] = [70, 1, 142] # 용마제일검
+DRAGON_WEAPON_DATA[142] = [40, 2, 143] # 용마제사검
+DRAGON_WEAPON_DATA[143] = [10, 3, 144, 152] # 용마제칠검
+DRAGON_WEAPON_DATA[144] = [3, 4, 145, 153] # 용마제팔검
+
+DRAGON_WEAPON_DATA[146] = [70, 1, 147] # 용랑제일봉
+DRAGON_WEAPON_DATA[147] = [40, 2, 148] # 용랑제사봉
+DRAGON_WEAPON_DATA[148] = [10, 3, 149, 154] # 용랑제칠봉
+DRAGON_WEAPON_DATA[149] = [3, 4, 150, 155] # 용랑제팔봉
 
 class Item_data
 	attr_accessor :Trade_ban_item

@@ -90,18 +90,17 @@ class Scene_Map
 		# 금지가 아니면, 변환 처리 
 		if $game_switches[PLAN_Map_Window::SWITCH] 
 			# 표시되고 있는 경우, 비표시로 한다
-			if not $map_chat_input.active
-				@map_window.visible = false if Key.trigger?(KEY_ESC)
-				if Key.trigger?(PLAN_Map_Window::ON_OFF_KEY)
+			return if $inputKeySwitch
+			@map_window.visible = false if Key.trigger?(KEY_ESC)
+			if Key.trigger?(PLAN_Map_Window::ON_OFF_KEY)
+				# 표시되어 있지 않은 경우, 표시한다 
+				if @map_window.visible 
+					@map_window.visible = false 
 					# 표시되어 있지 않은 경우, 표시한다 
-					if @map_window.visible 
-						@map_window.visible = false 
-						# 표시되어 있지 않은 경우, 표시한다 
-					else 
-						@map_window.visible = true 
-					end 
-				end
-			end 
+				else 
+					@map_window.visible = true 
+				end 
+			end
 			# 금지의 경우는 강제적으로 비표시 
 		else
 			if Key.trigger?(PLAN_Map_Window::ON_OFF_KEY)

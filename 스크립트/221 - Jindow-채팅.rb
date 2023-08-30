@@ -306,27 +306,25 @@ class Jindow_Chat_Input < Jindow
 				return if Hwnd.highlight?.to_s.include?("Jindow_N")
 				
 				Hwnd.highlight = self
-				@active = false
+				@type.bluck = true
+				@type.set ""
+				@active = true
 			end
 			
-			if not @type.result == ""
-				if @active == true
+			
+			if @type.bluck
+				if @type.result != ""
 					send_chat
-					@type.set "(대화하려면 Enter 키를 누르세요)"
-					@type.view
-					@type.bluck = false
-					@active = false
-				else
-					@type.set ""
-					@type.view
-					@type.bluck = true
-					@active = true
 				end
-			else
 				@type.set "(대화하려면 Enter 키를 누르세요)"
 				@type.view
 				@type.bluck = false
 				@active = false
+			else
+				@type.set ""
+				@type.view
+				@type.bluck = true
+				@active = true
 			end
 			
 		elsif Key.trigger?(KEY_ESC) # 채팅 취소

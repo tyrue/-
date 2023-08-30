@@ -52,6 +52,7 @@ class Scene_Map
 		$game_switches[63] = true # 미니맵 표시 여부
 		$game_switches[64] = true # 미니맵 표시 여부
 		$game_switches[88] = true # 노란비서 사용 여부
+		$game_system.timer_working = false # 타이머 종료
 	end
 	
 	#--------------------------------------------------------------------------

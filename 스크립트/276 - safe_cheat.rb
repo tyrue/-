@@ -38,8 +38,8 @@ class Game_Party
 	def gain_gold(n) 
 		#-------------------------------------------------------------------------- 
 		@gold = [[gold + n, 0].max, 999999999999].min + $safe_cheat_num
-		$console.write_line("금전 #{-n}전 감소. 현재 #{gold}전") if $global_x >= 30 and n < 0
-		$console.write_line("금전 #{n}전 증가. 현재 #{gold}전") if $global_x >= 30 and n > 0
+		$console.write_line("금전 #{change_number_unit(-n)}전 감소. 현재 #{change_number_unit(gold)}전") if $global_x >= 30 and n < 0
+		$console.write_line("금전 #{change_number_unit(n)}전 증가. 현재 #{change_number_unit(gold)}전") if $global_x >= 30 and n > 0
 		자동저장 if $global_x >= 30
 	end 
 	#-------------------------------------------------------------------------- 

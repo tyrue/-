@@ -7,7 +7,7 @@ class Scene_Map
 		$map_chat_input = Jindow_Chat_Input.new if $map_chat_input == nil  # 채팅입력창
 		$chat = Jindow_Chat_Window.new if $chat == nil # 채팅창
 		$console = Jindow_Console.new if $console == nil # 콘솔창
-		 
+		
 		if not Hwnd.include?("Inventory")
 			$j_inven = Jindow_Inventory.new
 			$j_inven.toggle
@@ -153,9 +153,12 @@ class Scene_Map
 						end
 					end	
 					
+					# npc 이름 보이기
 					if Key.trigger?(KEY_N)
 						@spriteset.toggle_id
-					end
+					end	
+					
+					
 				end
 			end
 		end

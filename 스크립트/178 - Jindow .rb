@@ -146,6 +146,13 @@ class Jindow < Viewport
 		return self
 	end
 	
+	def change_name(name)
+		return if @name_s == nil
+		return if @name_s.bitmap == nil
+		@name_s.bitmap.clear 
+		@name_s.bitmap.draw_text(0, 0, self.width, @um.bitmap.height, name)
+	end
+	
 	def x=(mx)
 		cx = mx - self.x
 		super(mx)
@@ -293,7 +300,7 @@ class Jindow < Viewport
 	def refresh?
 		return @start
 	end
-		
+	
 	def hide # 창 숨기기
 		self.opacity = 0
 		for i in item

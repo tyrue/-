@@ -142,15 +142,18 @@ REQ_SKILL_DATA[4] =
 # ----------------------------------#
 # ----- 몬스터 스킬 주문 외우는 데이터---------#
 # ----------------------------------#
-#															[[시간초, "주문", (색깔 타입)], []...]
+#															[[시간초, "주문", (색깔 타입), (애니메이션 id)], []...]
 ABS_ENEMY_SKILL_CASTING = {}
-ABS_ENEMY_SKILL_CASTING[153] = [[0.5, "백호의 힘을 받으라!"]] # 백호검무
-ABS_ENEMY_SKILL_CASTING[154] = [[2, "여의주의 힘을 받은 용이여..."], [1, "그대 이름은 청룡일지다..."], [1, "네 주인 이름으로 명하노니"], [1, "네 분노를 적에게 발산하라!"]] # 청룡마령참
-ABS_ENEMY_SKILL_CASTING[155] = [[1, "암흑의 힘이여.."]] # 암흑진파
-ABS_ENEMY_SKILL_CASTING[156] = [[1, "지옥의 검은 용이여...!"], [1, "계약을 받아 이곳에 소환될지어다!"]] # 흑룡광포
+ABS_ENEMY_SKILL_CASTING[151] = [[1, "멀리 날려주마!!!"]] # 청룡의 포효
+ABS_ENEMY_SKILL_CASTING[152] = [[1, "물러나라!!!"]] # 현무의 포효
+ABS_ENEMY_SKILL_CASTING[153] = [[0.5, "..!"]] # 백호검무
+ABS_ENEMY_SKILL_CASTING[154] = [[2, "여의주의 힘을 받은 용이여..."], [2, "그대 이름은 청룡일지다..."], [2, "네 주인 이름으로 명하노니"], [1, "네 분노를 적에게 발산하라!"]] # 청룡마령참
+ABS_ENEMY_SKILL_CASTING[155] = [[2, "암흑에 물들어라.."]] # 암흑진파
+ABS_ENEMY_SKILL_CASTING[156] = [[2, "명계의 흑룡이여...!"], [1, "계약에 따라 이곳에 소환될지어다!"]] # 흑룡광포
 ABS_ENEMY_SKILL_CASTING[158] = [[3, "지옥에서 불타버려라!!"]] # 지옥겁화
-ABS_ENEMY_SKILL_CASTING[159] = [[3, "하늘 높은 줄 모르고 겁도 없구나.."], [1, "신의 분노를 받아라!!"]] # 혈겁만파
-ABS_ENEMY_SKILL_CASTING[160] = [[3, "너의 무력함을 깨달아라.."], [1, "압도적인 힘에 굴복해라!!"]] # 분혼경천
+ABS_ENEMY_SKILL_CASTING[159] = [[2, "미천한 필멸자여.."], [1, "하늘 높은 줄 모르고 날뛰는구나.."], [0.5, "너의 나약함을 깨닫게 해주마!!"]] # 혈겁만파
+ABS_ENEMY_SKILL_CASTING[160] = [[3, "진정한 무에 눈뜨게 해주지.."], [0.5, "압도적인 힘에 절망해라!!"]] # 분혼경천
+ABS_ENEMY_SKILL_CASTING[161] = [[2, "나의 진정한 힘을 보여주마.."], [1, "공허의 무수한 파편들이여.."], [1, "공간을 열어 이곳에 소환하노니.."], [1, "저들 머리위에 내리쳐라!!"]] # 폭류유성
 # -------------END----------------- #
 
 # ----------------------------------#
@@ -306,7 +309,7 @@ class Rpg_skill
 			
 			# 적 유닛 스킬
 		when 157 # n퍼 회복
-			heal_v = user.maxhp * 0.25
+			heal_v = user.maxhp * 0.3
 		end
 		
 		skill_cost_custom(user, id)
@@ -967,7 +970,7 @@ class Rpg_skill
 	def damage_calculation_attack(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor) # 플레이어
-			damage *= 2 if self.check_buff(71) # 혼신의힘
+			damage *= 1.6 if self.check_buff(71) # 혼신의힘
 			damage *= 1.2 if self.check_buff(88) # 분량력법
 			damage *= 3 if self.check_buff(134) # 분신
 			damage *= 1.5 if self.check_buff(122) # 파력무참진
@@ -992,7 +995,7 @@ class Rpg_skill
 		# 피해자 입장
 		# 플레이어
 		if actor.is_a?(Game_Actor) 
-			damage -= damage * 0.2 if self.check_buff(47) # 보호	
+			damage -= damage * 0.25 if self.check_buff(47) # 보호	
 			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
 			damage -= damage * 0.99 if self.check_buff(94) # 금강불체
 			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
@@ -1008,7 +1011,7 @@ class Rpg_skill
 	def damage_calculation_skill(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor)
-			damage *= 2 if self.check_buff(71) # 혼신의힘
+			damage *= 1.6 if self.check_buff(71) # 혼신의힘
 			damage *= 1.2 if self.check_buff(88) # 분량력법
 			damage *= 1.5 if self.check_buff(122) # 파력무참진
 			damage *= 1.1 if self.check_buff(134) # 분신
@@ -1018,7 +1021,7 @@ class Rpg_skill
 		
 		# 피해자 입장
 		if actor.is_a?(Game_Actor)
-			damage -= damage * 0.2 if self.check_buff(47) # 보호	
+			damage -= damage * 0.25 if self.check_buff(47) # 보호	
 			damage -= damage * 0.2 if self.check_buff(90) # 분량방법
 			damage -= damage * 0.99 if self.check_buff(94) # 금강불체
 			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진

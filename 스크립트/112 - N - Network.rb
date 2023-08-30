@@ -880,7 +880,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				
 				case line
 					# 제한 처리
-				when /<sever_msg>(.*)<\/sever_msg>/
+				when /<server_msg>(.*)<\/server_msg>/
 					p $1
 					return true
 					

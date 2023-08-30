@@ -135,7 +135,6 @@ class Game_Map
 			#event.update
 			if event.trigger == 3 or event.trigger == 4 or 
 				event.lag_include or in_range?(event) or $ABS.enemies[event.id] != nil
-				
 				# Update the Event
 				event.update
 				# If you have other code to run, allow this part to run first, then
@@ -320,6 +319,7 @@ class Game_Event < Game_Character
 		anti_lag_initialize(map_id, event, *args)
 		# Check for Events with \al_update
 		check_name_tags(event)    
+		check_map_id(map_id)
 	end
 	
 	#----------------------------------------------------------------------------
@@ -331,5 +331,15 @@ class Game_Event < Game_Character
 		event.name.gsub(/\\al_update/i) {@lag_include = true}
 	end 
 	
+	def check_map_id(map_id)
+		case map_id
+		when 51 # 용궁 파퀘
+			@lag_include = true
+		when 113 # 비류성 파퀘
+			@lag_include = true
+		when 404 # 고균도 파퀘
+			@lag_include = true
+		end
+	end
 end
 

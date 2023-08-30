@@ -6,7 +6,7 @@
 class Jindow_Shop < Jindow
 	def initialize(shopData, eventId) # 상점 데이터, 이벤트 아이디
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 220, 300)
+		super(0, 0, 240, 330)
 		@head = true
 		@mark = true
 		@drag = true
@@ -15,7 +15,7 @@ class Jindow_Shop < Jindow
 		
 		self.name = @event.sprite_id != nil ? @event.sprite_id : "상점"
 		self.refresh "Shop_Window"
-		self.x = (640 - self.max_width) / 2
+		self.x = (640 - self.max_width) / 4
 		self.y = (480 - self.max_height) / 2
 		
 		@data = []
@@ -104,6 +104,13 @@ class Jindow_Shop < Jindow
 		
 	end
 	
+	def dispose
+		$game_temp.message_proc.call if $game_temp.message_proc != nil
+		$j_inven.setMode(0) if $j_inven != nil
+		super
+	end
+	
+	
 	def update
 		super
 		for i in @item
@@ -113,5 +120,27 @@ class Jindow_Shop < Jindow
 			Hwnd.include?("Shop_Num_Window") ? Hwnd.dispose("Shop_Num_Window") : 0
 			Jindow_Shop_Num.new(i.item, i.type, 0)
 		end
+	end
+end
+
+class Scene_Map
+	
+	#--------------------------------------------------------------------------
+	# * Shop Call
+	#--------------------------------------------------------------------------
+	def call_shop
+		# Clear shop call flag
+		$game_temp.shop_calling = false
+		Jindow_Shop.new($game_temp.shop_goods, $temp_event_id)
+		
+		if $j_inven != nil
+			$j_inven.show
+			$j_inven.setMode(2)
+			
+			$j_inven.x = 360
+			$j_inven.y = 95
+		end
+		
+		$temp_event_id = 0
 	end
 end

@@ -133,16 +133,18 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[98] = [2500000, 1] # 비류장군
 	
-	ABS_ENEMY_HP[111] = [300000, 1] # 산적왕
+	ABS_ENEMY_HP[111] = [400000, 1] # 산적왕
 	
-	ABS_ENEMY_HP[102] = [60000000, 1] # 반고
+	ABS_ENEMY_HP[102] = [100000000, 1] # 반고
 	ABS_ENEMY_HP[112] = [10000000, 1] # 청룡
 	ABS_ENEMY_HP[113] = [10000000, 1] # 현무
 	
 	# 12 지신
-	ABS_ENEMY_HP[119] = [1200000, 1] # 백호왕
-	ABS_ENEMY_HP[123] = [500000, 1] # 뱀왕
-	ABS_ENEMY_HP[128] = [700000, 1] # 원숭이왕
+	ABS_ENEMY_HP[119] = [1500000, 1] # 백호왕
+	ABS_ENEMY_HP[123] = [1000000, 1] # 뱀왕
+	ABS_ENEMY_HP[124] = [150000, 1] # 쥐왕
+	ABS_ENEMY_HP[126] = [450000, 1] # 돼지왕
+	ABS_ENEMY_HP[128] = [1700000, 1] # 원숭이왕
 	ABS_ENEMY_HP[132] = [1200000, 1] # 건룡
 	ABS_ENEMY_HP[133] = [1200000, 1] # 감룡
 	ABS_ENEMY_HP[134] = [1200000, 1] # 진룡
@@ -193,36 +195,44 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [60000, 1.0, 1.0] # 산속군사
-	ENEMY_EXP[91] = [300000, 3.0, 3.0] # 비류성창병
-	ENEMY_EXP[96] = [750000, 3.0, 3.0] # 비류성자객
-	ENEMY_EXP[97] = [1500000, 3.0, 3.0] # 비류성수문장
+	ENEMY_EXP[45] = [60000, 1.5, 1.5] # 산속군사
+	
+	ENEMY_EXP[91] = [300000, 5.0, 5.0] # 비류성창병
+	ENEMY_EXP[96] = [750000, 7.0, 7.0] # 비류성자객
+	ENEMY_EXP[97] = [1500000, 9.0, 9.0] # 비류성수문장
+	ENEMY_EXP[90] = [1500000, 15.0, 15.0] # 비류성정예군
 	ENEMY_EXP[98] = [5000000, 100.0, 100.0] # 비류장군
 	
-	ENEMY_EXP[254] = [750000, 5.0, 5.5] # 뇌랑
-	ENEMY_EXP[255] = [750000, 5.0, 5.5] # 왕가
-	ENEMY_EXP[256] = [1000000, 8.2, 8.8] # 조왕
-	ENEMY_EXP[257] = [5000000, 20.0, 25.0] # 태산
+	ENEMY_EXP[254] = [1500000, 10.0, 10.0] # 뇌랑
+	ENEMY_EXP[255] = [1500000, 11.0, 11.0] # 왕가
+	ENEMY_EXP[256] = [4000000, 20.0, 20.0] # 조왕
+	ENEMY_EXP[257] = [10000000, 30.0, 30.0] # 태산
 	ENEMY_EXP[258] = [30000000, 500.0, 500.0] # 길림장군
 	
 	# 4차 퀘스트
-	ENEMY_EXP[102] = [30000000] # 반고
+	ENEMY_EXP[102] = [160000000] # 반고
 	
 	# 용궁
-	ENEMY_EXP[158] = [15000000] # 해파리장군
-	ENEMY_EXP[159] = [25000000] # 거북장군
+	ENEMY_EXP[150] = [7000000] # 해마장군
+	ENEMY_EXP[153] = [15000000] # 인어장군
+	ENEMY_EXP[156] = [27000000] # 상어장군
+	ENEMY_EXP[158] = [40000000] # 해파리장군
+	ENEMY_EXP[159] = [80000000] # 거북장군
 	
 	# 일본
-	ENEMY_EXP[191] = [10000000] # 유성지
-	ENEMY_EXP[192] = [15000000] # 해골왕
-	ENEMY_EXP[193] = [20000000] # 파괴왕
+	ENEMY_EXP[186] = [7500000] # 무사
+	ENEMY_EXP[189] = [15000000] # 주마관
+	ENEMY_EXP[191] = [25000000] # 유성지
+	ENEMY_EXP[192] = [35000000] # 해골왕
+	ENEMY_EXP[193] = [50000000] # 파괴왕
 	
 	# 중국
 	ENEMY_EXP[228] = [15000000] # 뇌신왕
-	ENEMY_EXP[231] = [30000000] # 천구왕
+	ENEMY_EXP[231] = [40000000] # 천구왕
 	ENEMY_EXP[232] = [500000000] # 산신대왕
 	
 	# 환상의섬
+	ENEMY_EXP[246] = [12000000]	# 선장망령
 	ENEMY_EXP[252] = [200000000] # 마려
 	ENEMY_EXP[259] = [4000000000] # 가릉빈가
 	#--------------------------------------------------------------------------
@@ -694,6 +704,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def update_enemy_battle(enemy)
 			return if enemy == nil
+			return if update_enemy_casting(enemy)
+			return update_enemy_attack(enemy, enemy.attacking) if enemy.casting_action != nil
 			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
 			if enemy.attacking == nil or update_enemy_battle_check(enemy)	
 				# 원래 움직임으로 돌아옴
@@ -705,7 +717,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end      
 			
 			# Skip this if the attack killed the enemy
-			return if update_enemy_casting(enemy)
 			#return if enemy.event.moving?
 			# 공격주기마다 행동 시작
 			update_enemy_attack(enemy, enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
@@ -840,6 +851,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					if e.casting_mash <= 0 and e.casting_action == nil
 						cast_data = ABS_ENEMY_SKILL_CASTING[skill.id]
 						if cast_data != nil 
+							e.casting_idx = 0
 							e.casting_mash = cast_data[0][0] * Graphics.frame_rate
 							e.casting_action = action
 							$rpg_skill.casting_chat(cast_data[0], e.event)
@@ -916,8 +928,12 @@ if SDK.state("Mr.Mo's ABS") == true
 							next if enemy == nil
 							next if !enemy.is_a?(Game_Player) and enemy.dead? 
 							
-							enemy.actor.effect_skill(e, skill)
-							hit_enemy(enemy, e, skill.animation2_id) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
+							hit_num = RANGE_SKILLS[skill.id][5] != nil ? RANGE_SKILLS[skill.id][5] : 1
+							hit_num.times{
+								enemy.actor.effect_skill(e, skill)
+								hit_enemy(enemy, e, skill.animation2_id) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
+							}
+							
 							next if enemy_dead?(enemy.actor, e)
 							#Skip this enemy if its dead
 							next if enemy.is_a?(Game_Player)
@@ -1825,7 +1841,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			printTxt += "경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)"
 			
-			$console.write_line(printTxt)
+			#$console.write_line(printTxt)
 		end
 		
 		
@@ -2301,6 +2317,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			super
+			@stop = true if @step >= @range
 			return blow if @stop
 		end
 		
@@ -2340,6 +2357,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Blow
 		#--------------------------------------------------------------------------
 		def blow
+			
+			return if @check_blow
 			#Stop
 			@check_blow = true
 			
@@ -2365,6 +2384,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if objects.size > 0
 				$rpg_skill.skill_cost_custom(@actor, @skill.id) # 스킬 코스트
 			end
+			
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3382,6 +3402,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@critical_array.push(self.critical)
 				
 				return $ABS.player_dead?(self, attacker) if self.is_a?(Game_Actor)
+				return $ABS.enemies[self.event.id] == nil
 				
 				if !self.is_a?(Game_Actor)
 					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
@@ -3537,6 +3558,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				return $ABS.player_dead?(self, user) if self.is_a?(Game_Actor)
+				return $ABS.enemies[self.event.id] == nil
+				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")

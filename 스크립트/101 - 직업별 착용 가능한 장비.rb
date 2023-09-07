@@ -267,7 +267,7 @@ class Game_Actor < Game_Battler
 			findTxt = text.scan(/\[[제재][한][레래][벨밸]:([0-9]+)\]/)
 			reqLevel = check[1] >= 1 ? 99 : check[2]
 			
-			if findTxt == nil
+			if findTxt.size == 0
 				item.description += "[제한레벨:" + reqLevel.to_s + "]"
 			else
 				findLevel = findTxt[0][0].to_i

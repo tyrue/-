@@ -162,7 +162,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[189] = [5000000, 1] # 주마관
 	ABS_ENEMY_HP[191] = [8000000, 1] # 유성지
 	ABS_ENEMY_HP[192] = [10000000, 1] # 해골왕
-	ABS_ENEMY_HP[193] = [15000000, 1] # 파괴왕
+	ABS_ENEMY_HP[193] = [60000000, 1] # 파괴왕
 	
 	# 중국
 	ABS_ENEMY_HP[220] = [1500000, 1]# 산소괴왕
@@ -207,7 +207,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[255] = [1500000, 11.0, 11.0] # 왕가
 	ENEMY_EXP[256] = [4000000, 20.0, 20.0] # 조왕
 	ENEMY_EXP[257] = [10000000, 30.0, 30.0] # 태산
-	ENEMY_EXP[258] = [30000000, 500.0, 500.0] # 길림장군
+	ENEMY_EXP[258] = [150000000, 500.0, 500.0] # 길림장군
 	
 	# 4차 퀘스트
 	ENEMY_EXP[102] = [160000000] # 반고
@@ -504,7 +504,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			#Update Player
-			if (Graphics.frame_count % (Graphics.frame_rate / 3) == 0)
+			if (Graphics.frame_count % (Graphics.frame_rate / 10) == 0)
 				$skill_Delay_Console.refresh if $skill_Delay_Console != nil and $skill_Delay_Console.tog
 			end
 			update_player if @active
@@ -551,11 +551,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		def active_ok
 			#~ return false if Hwnd.include?("NetPartyInv")
 			#~ return false if Hwnd.include?("Trade")
-			#~ return false if Hwnd.include?("Keyset_menu")# 파티 초대, 교환 창이 켜지지 않았다면?
 			#~ return false if Hwnd.include?("Npc_dialog")
 			#~ return false if Hwnd.include?("Item_Drop")
 			#~ return false if Hwnd.include?("Shop_Num_Window")
 			#~ return false if $map_chat_input.active # 채팅이 활성화 된게 아니라면
+			return false if Hwnd.include?("Keyset_menu") # 단축키 지정
 			return false if $inputKeySwitch # 채팅이 활성화 된게 아니라면
 			return true
 		end

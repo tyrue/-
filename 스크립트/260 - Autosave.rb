@@ -15,11 +15,17 @@ def 자동저장
 		@buff_mash_list = ""
 		@self_switches = ""
 		
+		if $skill_Delay_Console != nil and $skill_Delay_Console.console_log2.size <= 0 
+			$rpg_skill.base_str = 0
+			$rpg_skill.base_agi = 0
+			$rpg_skill.base_int = 0
+			$rpg_skill.base_dex = 0
+		end
+		
 		$game_variables[52] = $rpg_skill.base_str
 		$game_variables[53] = $rpg_skill.base_agi
 		$game_variables[54] = $rpg_skill.base_int
 		$game_variables[55] = $rpg_skill.base_dex
-		
 		
 		for i in 0...$game_party.actors[0].skills.size
 			skill = $game_party.actors[0].skills[i]

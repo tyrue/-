@@ -103,7 +103,7 @@ module User_Edit
 	SERVERREFRESH     = 300
 	# IP              # Port   # Display
 	#SERVERS           = [["52.79.69.102", 52001, "흑부엉 서버"]] # 외부 아이피
-	SERVERS           = [["127.0.0.1" ,52001, "흑부엉 서버"]] # 테스트용 내부 아이피
+	SERVERS           = [["127.0.0.1", 52001, "흑부엉 서버"]] # 테스트용 내부 아이피
 	#TEST							= true
 	
 	#Avialbe Chat Systems;

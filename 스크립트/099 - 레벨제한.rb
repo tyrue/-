@@ -24,11 +24,11 @@
 BASE_FINAL_LEVEL = 100   #상한 레벨（level）(그다지 큰 값을 설정한다면 항 합니다)
 MAXHP_LIMIT = 4000000000    #HP 한계 치 40억
 MAXSP_LIMIT = 4000000000    #SP 한계 치
-STR_LIMIT   = 4000      	#STR 한계 치
-DEX_LIMIT   = 4000      	#DEX 한계 치
-AGI_LIMIT   = 4000      	#AGI 한계 치
-INT_LIMIT   = 4000      	#INT 한계 치
-BONUS_LIMIT = 5000					#아이템 착용시 더 추가 할수 있는 능력치
+STR_LIMIT   = 9999      	#STR 한계 치
+DEX_LIMIT   = 9999      	#DEX 한계 치
+AGI_LIMIT   = 9999      	#AGI 한계 치
+INT_LIMIT   = 9999      	#INT 한계 치
+BONUS_LIMIT = 50000					#아이템 착용시 더 추가 할수 있는 능력치
 
 MAX_EXP			= 42000000000  #만렙시 경험치 
 

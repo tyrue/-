@@ -15,7 +15,7 @@ class Jindow_Shop < Jindow
 		
 		self.name = @event.sprite_id != nil ? @event.sprite_id : "상점"
 		self.refresh "Shop_Window"
-		self.x = (640 - self.max_width) / 4
+		self.x = (640 - self.max_width) / 5
 		self.y = (480 - self.max_height) / 2
 		
 		@data = []
@@ -106,7 +106,10 @@ class Jindow_Shop < Jindow
 	
 	def dispose
 		$game_temp.message_proc.call if $game_temp.message_proc != nil
-		$j_inven.setMode(0) if $j_inven != nil
+		if $j_inven != nil
+			$j_inven.setMode(0) 
+			$j_inven.hide
+		end
 		super
 	end
 	
@@ -137,7 +140,7 @@ class Scene_Map
 			$j_inven.show
 			$j_inven.setMode(2)
 			
-			$j_inven.x = 360
+			$j_inven.x = 350
 			$j_inven.y = 95
 		end
 		

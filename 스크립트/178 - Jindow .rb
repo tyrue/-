@@ -525,7 +525,7 @@ class Jindow < Viewport
 					dispose2
 					return
 				elsif @head and @close and not @close_yn and Mouse.arrive_sprite?(@close_s)  # 로울버 효과
-					@close_s.tone.set(10, 10, 20)
+					@close_s.tone.set(50, 50, 50)
 				elsif @head and @close and not @close_yn and not Mouse.arrive_sprite?(@close_s)
 					@close_s.tone.set(0, 0, 0)
 				end
@@ -540,7 +540,7 @@ class Jindow < Viewport
 			return
 		end
 		
-		if !drag?
+		if !(drag? and Input.mouse_lbutton)
 			for i in @item
 				i == nil ? next : 0
 				i.update
@@ -566,5 +566,21 @@ class Jindow < Viewport
 		$inputKeySwitch = false
 		super
 		@back.dispose
+	end
+	
+	# 마우스 위치에 옮기기
+	def pos_in_mouse
+		
+		self.x = Mouse.x - (self.max_width) / 2
+		self.x = [15, self.x].max
+		if (self.x + self.width) > 620
+			self.x -= (self.x + self.width - 620)
+		end
+		
+		self.y = Mouse.y - (self.max_height) / 2
+		self.y = [15, self.y].max
+		if (self.y + self.height) > 460
+			self.y -= (self.y + self.height - 460)
+		end
 	end
 end

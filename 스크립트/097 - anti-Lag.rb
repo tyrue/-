@@ -77,10 +77,10 @@ module Update_Range
 	def in_range?(object)
 		# Using 256 here will speed things up a tad, but may cause Large Sprites
 		# that go offscreen to glitch and stay on screen when they actually aren't
-		display_x = $game_map.display_x - 512 # 256
-		display_y = $game_map.display_y - 512 # 256
+		display_x = $game_map.display_x - 350 # 256
+		display_y = $game_map.display_y - 350 # 256
 		display_width = $game_map.display_x + 3216 #2820
-		display_height = $game_map.display_y + 2570 #2180
+		display_height = $game_map.display_y + 2670 #2180
 		# If too far off screen
 		if object.real_x <= display_x or
 			object.real_x >= display_width or
@@ -335,9 +335,9 @@ class Game_Event < Game_Character
 		case map_id
 		when 51 # 용궁 파퀘
 			@lag_include = true
-		when 113 # 비류성 파퀘
+		#when 113 # 비류성 파퀘
 			@lag_include = true
-		when 404 # 고균도 파퀘
+		#when 404 # 고균도 파퀘
 			@lag_include = true
 		end
 	end

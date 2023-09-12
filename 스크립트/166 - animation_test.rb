@@ -2,6 +2,7 @@
 # 애니메이션 여러개 겹치게 나오게 하기
 # 애니메이션 효과음 설정
 
+# 애니메이션 끝나면 이벤트 삭제하는 기능 추가하기
 module RPG
 	class AniData
 		attr_accessor :hit

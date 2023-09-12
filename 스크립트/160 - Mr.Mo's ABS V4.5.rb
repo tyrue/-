@@ -136,8 +136,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[111] = [400000, 1] # 산적왕
 	
 	ABS_ENEMY_HP[102] = [100000000, 1] # 반고
-	ABS_ENEMY_HP[112] = [10000000, 1] # 청룡
-	ABS_ENEMY_HP[113] = [10000000, 1] # 현무
+	ABS_ENEMY_HP[112] = [20000000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [20000000, 1] # 현무
 	
 	# 12 지신
 	ABS_ENEMY_HP[119] = [1500000, 1] # 백호왕
@@ -145,9 +145,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[124] = [150000, 1] # 쥐왕
 	ABS_ENEMY_HP[126] = [450000, 1] # 돼지왕
 	ABS_ENEMY_HP[128] = [1700000, 1] # 원숭이왕
-	ABS_ENEMY_HP[132] = [1200000, 1] # 건룡
-	ABS_ENEMY_HP[133] = [1200000, 1] # 감룡
-	ABS_ENEMY_HP[134] = [1200000, 1] # 진룡
+	ABS_ENEMY_HP[132] = [3600000, 1] # 건룡
+	ABS_ENEMY_HP[133] = [3600000, 1] # 감룡
+	ABS_ENEMY_HP[134] = [3600000, 1] # 진룡
 	
 	# 용궁
 	ABS_ENEMY_HP[150] = [2000000, 1] # 해마장군
@@ -158,10 +158,19 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[160] = [1000000, 0] # 수괴
 	
 	# 일본
-	ABS_ENEMY_HP[186] = [2500000, 1] # 무사
-	ABS_ENEMY_HP[189] = [5000000, 1] # 주마관
+	ABS_ENEMY_HP[172] = [300000, 1] # 아귀
+	ABS_ENEMY_HP[176] = [700000, 1] # 백향
+	ABS_ENEMY_HP[180] = [3200000, 1] # 견귀
+	ABS_ENEMY_HP[194] = [7000000, 1] # 문려
+	
+	ABS_ENEMY_HP[186] = [10000000, 1] # 무사
+	
+	ABS_ENEMY_HP[187] = [1100000, 0] # 선월
+	ABS_ENEMY_HP[188] = [1200000, 0] # 이광
+	ABS_ENEMY_HP[189] = [20000000, 1] # 주마관
+	
 	ABS_ENEMY_HP[191] = [8000000, 1] # 유성지
-	ABS_ENEMY_HP[192] = [10000000, 1] # 해골왕
+	ABS_ENEMY_HP[192] = [15000000, 1] # 해골왕
 	ABS_ENEMY_HP[193] = [60000000, 1] # 파괴왕
 	
 	# 중국
@@ -174,23 +183,27 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[230] = [1500000, 0]# 연자천구
 	ABS_ENEMY_HP[231] = [15000000, 1] # 천구왕
 	
-	ABS_ENEMY_HP[232] = [60000000, 1] # 산신대왕
-	ABS_ENEMY_HP[233] = [2000000, 0]# 산신전사
-	ABS_ENEMY_HP[234] = [1200000, 0]# 산신도사
-	ABS_ENEMY_HP[235] = [2000000, 0]# 산신도적
-	ABS_ENEMY_HP[236] = [1700000, 0]# 산신주술사
+	ABS_ENEMY_HP[232] = [90000000, 1] # 산신대왕
+	ABS_ENEMY_HP[233] = [4500000, 0]# 산신전사
+	ABS_ENEMY_HP[234] = [3000000, 0]# 산신도사
+	ABS_ENEMY_HP[235] = [3500000, 0]# 산신도적
+	ABS_ENEMY_HP[236] = [3000000, 0]# 산신주술사
 	
 	# 환상의섬
-	ABS_ENEMY_HP[246] = [3000000, 1]	# 선장망령
+	ABS_ENEMY_HP[246] = [5000000, 1]	# 선장망령
+	ABS_ENEMY_HP[249] = [1500000, 1]	# 야월진랑
 	
-	ABS_ENEMY_HP[250] = [700000, 0]	# 철보장
-	ABS_ENEMY_HP[251] = [800000, 0]	#	철거인
-	ABS_ENEMY_HP[252] = [20000000, 1]	# 마려
+	ABS_ENEMY_HP[250] = [1700000, 0]	# 철보장
+	ABS_ENEMY_HP[251] = [1800000, 0]	#	철거인
+	ABS_ENEMY_HP[252] = [60000000, 1]	# 마려
 	
 	ABS_ENEMY_HP[253] = [5000000, 1]	# 현무
 	ABS_ENEMY_HP[257] = [2000000, 1]	# 태산
 	ABS_ENEMY_HP[258] = [30000000, 1]	# 길림장군
 	ABS_ENEMY_HP[259] = [500000000, 1]# 가릉빈가
+	
+	# 한두고개
+	ABS_ENEMY_HP[269] = [5000000, 0]# 무적다람쥐
 	
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
@@ -220,20 +233,27 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[159] = [80000000] # 거북장군
 	
 	# 일본
-	ENEMY_EXP[186] = [7500000] # 무사
-	ENEMY_EXP[189] = [15000000] # 주마관
-	ENEMY_EXP[191] = [25000000] # 유성지
-	ENEMY_EXP[192] = [35000000] # 해골왕
-	ENEMY_EXP[193] = [50000000] # 파괴왕
+	ENEMY_EXP[194] = [17000000] # 문려
+	ENEMY_EXP[186] = [27500000] # 무사
+	ENEMY_EXP[189] = [45000000] # 주마관
+	
+	ENEMY_EXP[191] = [50000000] # 유성지
+	ENEMY_EXP[192] = [70000000] # 해골왕
+	ENEMY_EXP[193] = [350000000] # 파괴왕
 	
 	# 중국
 	ENEMY_EXP[228] = [15000000] # 뇌신왕
 	ENEMY_EXP[231] = [40000000] # 천구왕
+	
 	ENEMY_EXP[232] = [500000000] # 산신대왕
+	ENEMY_EXP[233] = [14500000]# 산신전사
+	ENEMY_EXP[234] = [9000000]# 산신도사
+	ENEMY_EXP[235] = [11500000]# 산신도적
+	ENEMY_EXP[236] = [9500000]# 산신주술사
 	
 	# 환상의섬
-	ENEMY_EXP[246] = [12000000]	# 선장망령
-	ENEMY_EXP[252] = [200000000] # 마려
+	ENEMY_EXP[246] = [15000000]	# 선장망령
+	ENEMY_EXP[252] = [300000000] # 마려
 	ENEMY_EXP[259] = [4000000000] # 가릉빈가
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
@@ -504,7 +524,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update
 			#Update Player
-			if (Graphics.frame_count % (Graphics.frame_rate / 10) == 0)
+			if (Graphics.frame_count % (Graphics.frame_rate / 5) == 0)
 				$skill_Delay_Console.refresh if $skill_Delay_Console != nil and $skill_Delay_Console.tog
 			end
 			update_player if @active
@@ -1505,7 +1525,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					if SKILL_DIRECTION.has_key?(skill.id)
 						for dir in SKILL_DIRECTION[skill.id]
 							@range.push(Game_Ranged_Skill.new($game_player, @actor, skill, dir))
-							Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+							Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{0},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 						end
 					else
 						@range.push(Game_Ranged_Skill.new($game_player, @actor, skill))
@@ -1624,9 +1644,18 @@ if SDK.state("Mr.Mo's ABS") == true
 			else
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
+			
 			#Add to range
-			@range.push(Game_Ranged_Explode.new($game_player, @actor, skill))
-			Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{1}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+			if SKILL_DIRECTION.has_key?(skill.id)
+				for dir in SKILL_DIRECTION[skill.id]
+					@range.push(Game_Ranged_Explode.new($game_player, @actor, skill, dir))
+					Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{1},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+				end
+			else
+				@range.push(Game_Ranged_Explode.new($game_player, @actor, skill))
+				Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{skill.id},#{1}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
+			end
+			
 			#Take off SP
 			@actor.sp -= skill.sp_cost
 			return
@@ -2206,7 +2235,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			super
 			return if @stop
 			#Return if moving
-			return if moving?
+			#return if moving?
 			#Check if something is still here
 			if @parent == nil or @actor == nil
 				@stop = true
@@ -2331,6 +2360,29 @@ if SDK.state("Mr.Mo's ABS") == true
 			return true if r <= (range * range)
 			return false
 		end
+		
+		# 범위안에 이벤트 만들고 이펙트 내보기
+		def make_range_event(element, range)
+			x = element.x
+			y = element.y
+			
+			for i in 0..range * 2 # y 
+				for j in 0..range * 2 # x
+					nowY = y + i - range
+					nowX = x + j - range
+					
+					ry = (y - nowY) * (y - nowY)
+					rx = (x - nowX) * (x - nowX)
+					r = ry + rx
+					if r <= range * range
+						event = create_events2(1, nowX, nowY, 0)
+						event.ani_array.push(@skill.animation2_id)
+						event.one_use = true
+					end
+				end
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Get ALL Range(Element, Range)
 		#--------------------------------------------------------------------------
@@ -2385,6 +2437,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				$rpg_skill.skill_cost_custom(@actor, @skill.id) # 스킬 코스트
 			end
 			
+			make_range_event(self, @range_skill[3])
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2669,6 +2722,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_reader   :event
 		attr_accessor :erased
 		attr_reader   :page
+		
+		attr_accessor :one_use
 		#--------------------------------------------------------------------------
 		# * Alias
 		#--------------------------------------------------------------------------
@@ -3192,6 +3247,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 			end
 			@character.ani_array.clear
+			
+			if @_animation_overlap != nil and @_animation_overlap.size == 0
+				if @character.is_a?(Game_Event) and @character.one_use
+					delete_events(@character.id)
+					return
+				end
+			end
 		end
 	end
 	#==============================================================================

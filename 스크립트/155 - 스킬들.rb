@@ -978,10 +978,10 @@ class Rpg_skill
 	def damage_calculation_attack(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor) # 플레이어
-			damage *= 1.6 if self.check_buff(71) # 혼신의힘
-			damage *= 1.3 if self.check_buff(88) # 분량력법
-			damage *= 3 if self.check_buff(134) # 분신
-			damage *= 2.0 if self.check_buff(122) # 파력무참진
+			for data in $skill_Delay_Console.console_log2
+				id = data[0]
+				damage *= DAMAGE_CAL_ATTACK[id][0] if DAMAGE_CAL_ATTACK[id] != nil
+			end
 			
 			if $state_trans # 투명 풀기
 				damage *= (6 + $game_variables[10]) # 투명 숙련도
@@ -1003,11 +1003,10 @@ class Rpg_skill
 		# 피해자 입장
 		# 플레이어
 		if actor.is_a?(Game_Actor) 
-			damage -= damage * 0.25 if self.check_buff(47) # 보호	
-			damage -= damage * 0.3 if self.check_buff(90) # 분량방법
-			damage -= damage * 0.99 if self.check_buff(94) # 금강불체
-			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
-			
+			for data in $skill_Delay_Console.console_log2
+				id = data[0]
+				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] if DAMAGE_CAL_DEFENSE[id] != nil
+			end
 			# 몬스터
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
@@ -1019,20 +1018,20 @@ class Rpg_skill
 	def damage_calculation_skill(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor)
-			damage *= 1.6 if self.check_buff(71) # 혼신의힘
-			damage *= 1.3 if self.check_buff(88) # 분량력법
-			damage *= 2.0 if self.check_buff(122) # 파력무참진
-			damage *= 1.1 if self.check_buff(134) # 분신
+			for data in $skill_Delay_Console.console_log2
+				id = data[0]
+				damage *= DAMAGE_CAL_SKILL[id][0] if DAMAGE_CAL_SKILL[id] != nil
+			end
 		elsif attacker.is_a?(ABS_Enemy)
 			
 		end
 		
 		# 피해자 입장
 		if actor.is_a?(Game_Actor)
-			damage -= damage * 0.25 if self.check_buff(47) # 보호	
-			damage -= damage * 0.3 if self.check_buff(90) # 분량방법
-			damage -= damage * 0.99 if self.check_buff(94) # 금강불체
-			damage -= damage * 0.5 if self.check_buff(121) # 신령지익진
+			for data in $skill_Delay_Console.console_log2
+				id = data[0]
+				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] if DAMAGE_CAL_DEFENSE[id] != nil
+			end
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
 		end

@@ -139,7 +139,7 @@ module Hwnd
 	end
 	
 	
-	def highlight
+	def highlight()
 		Input.mouse_lbutton ? 0 : return
 		i = @data.size - 1
 		@highlight = false

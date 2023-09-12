@@ -115,6 +115,7 @@ module J
 			@viewport.hwnd == "Trade" ? (return self) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return self) : 0
 			@viewport.hwnd == "Shop_Window" ? (return self) : 0
+			@viewport.hwnd == "Shop_Window_Coin" ? (return self) : 0
 			
 			@num = self.num
 			#@num == 0 ? (return nil) : 0
@@ -211,6 +212,7 @@ module J
 			@viewport.hwnd == "Status" ? (return) : 0
 			@viewport.hwnd == "NetPlayer_Info" ? (return) : 0
 			@viewport.hwnd == "Shop_Window" ? (return) : 0
+			@viewport.hwnd == "Shop_Window_Coin" ? (return) : 0
 			
 			cnum = self.num
 			if cnum == 0

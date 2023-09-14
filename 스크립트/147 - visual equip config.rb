@@ -92,7 +92,7 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][116] = ['(착용)진일신검'] 		#진일신검
 	VISUAL_EQUIP_DATA[2][117] = ['(착용)괴력선창'] 		#괴력선창
 	VISUAL_EQUIP_DATA[2][118] = ['(착용)철도'] 				#철단도
-	VISUAL_EQUIP_DATA[2][119] = ['(착용)철도'] 				#비철단도
+	
 	VISUAL_EQUIP_DATA[2][120] = ['(착용)현철중검'] 	 	#흑철중검
 	VISUAL_EQUIP_DATA[2][121] = ['(착용)목도'] 				#초심자의목도
 	VISUAL_EQUIP_DATA[2][122] = ['(착용)용마제구검'] 		#용마제팔검

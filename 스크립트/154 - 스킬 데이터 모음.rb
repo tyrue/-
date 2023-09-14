@@ -362,8 +362,8 @@ SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
 SKILL_MASH_TIME[85] = [2 * sec, 0] # 필살검무
 SKILL_MASH_TIME[151] = [10 * sec, 0] # 청룡포효
 SKILL_MASH_TIME[152] = [10 * sec, 0] # 현무포효
-SKILL_MASH_TIME[153] = [2.5 * sec, 0] # 백호검무
-SKILL_MASH_TIME[154] = [60 * sec, 0] # 청룡마령참
+SKILL_MASH_TIME[153] = [3 * sec, 0] # 백호검무
+SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
 SKILL_MASH_TIME[155] = [10 * sec, 0] # 암흑진파
 SKILL_MASH_TIME[156] = [10 * sec, 0] # 흑룡광포
 SKILL_MASH_TIME[157] = [10 * sec, 0] # 회복스킬
@@ -461,6 +461,18 @@ DAMAGE_CAL_SKILL[71] = [1.5] # 혼신의힘
 DAMAGE_CAL_SKILL[88] = [1.3] # 분량력법
 DAMAGE_CAL_SKILL[134] = [1.1] # 분신
 DAMAGE_CAL_SKILL[122] = [2.0] # 파력무참진
+# //////////////////////////end///////////////////////////////#
 
+# ----------------------- 평타, 스킬 비례 데미지 설정 ----------------------------#
+SHOW_SKILL_EFECT = {}
+SHOW_SKILL_EFECT[154] = 1
+SHOW_SKILL_EFECT[155] = 1
+SHOW_SKILL_EFECT[156] = 1
+SHOW_SKILL_EFECT[158] = 1
+SHOW_SKILL_EFECT[159] = 1
+SHOW_SKILL_EFECT[160] = 1
+SHOW_SKILL_EFECT[161] = 1
+SHOW_SKILL_EFECT[200] = 1
+
+# //////////////////////////end///////////////////////////////#
 # -------------------------설정 데이터 끝-----------------------------#
-# ------------------------------------------------------------#

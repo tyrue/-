@@ -87,7 +87,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[116] = [[0], 0] # 진일신검손상
 	EQUIP_JOB_WEAPON[117] = [[0], 1] # 괴력선창
 	EQUIP_JOB_WEAPON[118] = [[0], 0] # 철단도
-	EQUIP_JOB_WEAPON[119] = [[0], 0] # 비철단도
+	
 	EQUIP_JOB_WEAPON[121] = [[0], 0] # 흑철중검
 	EQUIP_JOB_WEAPON[122] = [[0], 0] # 초심자의목도
 	EQUIP_JOB_WEAPON[123] = [[0], 2] # 현무염도

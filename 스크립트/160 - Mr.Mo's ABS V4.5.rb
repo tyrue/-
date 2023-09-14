@@ -184,9 +184,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[231] = [15000000, 1] # 천구왕
 	
 	ABS_ENEMY_HP[232] = [90000000, 1] # 산신대왕
-	ABS_ENEMY_HP[233] = [4500000, 0]# 산신전사
+	ABS_ENEMY_HP[233] = [5000000, 0]# 산신전사
 	ABS_ENEMY_HP[234] = [3000000, 0]# 산신도사
-	ABS_ENEMY_HP[235] = [3500000, 0]# 산신도적
+	ABS_ENEMY_HP[235] = [4000000, 0]# 산신도적
 	ABS_ENEMY_HP[236] = [3000000, 0]# 산신주술사
 	
 	# 환상의섬
@@ -210,17 +210,17 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 파티 퀘스트
 	ENEMY_EXP[45] = [60000, 1.5, 1.5] # 산속군사
 	
-	ENEMY_EXP[91] = [300000, 5.0, 5.0] # 비류성창병
-	ENEMY_EXP[96] = [750000, 7.0, 7.0] # 비류성자객
+	ENEMY_EXP[91] = [600000, 5.0, 5.0] # 비류성창병
+	ENEMY_EXP[96] = [1500000, 7.0, 7.0] # 비류성자객
 	ENEMY_EXP[97] = [1500000, 9.0, 9.0] # 비류성수문장
-	ENEMY_EXP[90] = [1500000, 15.0, 15.0] # 비류성정예군
-	ENEMY_EXP[98] = [5000000, 100.0, 100.0] # 비류장군
+	ENEMY_EXP[90] = [3000000, 15.0, 15.0] # 비류성정예군
+	ENEMY_EXP[98] = [10000000, 100.0, 100.0] # 비류장군
 	
-	ENEMY_EXP[254] = [1500000, 10.0, 10.0] # 뇌랑
-	ENEMY_EXP[255] = [1500000, 11.0, 11.0] # 왕가
-	ENEMY_EXP[256] = [4000000, 20.0, 20.0] # 조왕
-	ENEMY_EXP[257] = [10000000, 30.0, 30.0] # 태산
-	ENEMY_EXP[258] = [150000000, 500.0, 500.0] # 길림장군
+	ENEMY_EXP[254] = [5000000, 10.0, 10.0] # 뇌랑
+	ENEMY_EXP[255] = [6000000, 11.0, 11.0] # 왕가
+	ENEMY_EXP[256] = [10000000, 20.0, 20.0] # 조왕
+	ENEMY_EXP[257] = [50000000, 30.0, 30.0] # 태산
+	ENEMY_EXP[258] = [500000000, 1000.0, 1000.0] # 길림장군
 	
 	# 4차 퀘스트
 	ENEMY_EXP[102] = [160000000] # 반고
@@ -245,7 +245,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[228] = [15000000] # 뇌신왕
 	ENEMY_EXP[231] = [40000000] # 천구왕
 	
-	ENEMY_EXP[232] = [500000000] # 산신대왕
+	ENEMY_EXP[232] = [700000000] # 산신대왕
 	ENEMY_EXP[233] = [14500000]# 산신전사
 	ENEMY_EXP[234] = [9000000]# 산신도사
 	ENEMY_EXP[235] = [11500000]# 산신도적
@@ -875,6 +875,13 @@ if SDK.state("Mr.Mo's ABS") == true
 							e.casting_mash = cast_data[0][0] * Graphics.frame_rate
 							e.casting_action = action
 							$rpg_skill.casting_chat(cast_data[0], e.event)
+							# 여기에 범위 미리 보여주는 이펙트 하면 좋을듯
+							
+							# 범위 이펙트 보여주기
+							if skill.scope == 2 and RANGE_SKILLS.has_key?(skill.id)
+								
+								make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], $data_skills[200])
+							end
 							return
 						end
 					end
@@ -939,6 +946,9 @@ if SDK.state("Mr.Mo's ABS") == true
 						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
 						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
 						enemies_net = get_all_range_net(e.event, RANGE_SKILLS[skill.id][0]) if e.hate_group.include?(0)
+						
+						# 범위 이펙트 보여주기
+						make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], skill)
 						
 						old_hp = e.hp
 						for enemy in enemies
@@ -2173,6 +2183,37 @@ if SDK.state("Mr.Mo's ABS") == true
 		def animate(object, name)
 			object.set_animate(name)
 		end
+		
+		# 범위안에 이벤트 만들고 이펙트 내보기
+		def make_range_event(element, range, skill)
+			x = element.x
+			y = element.y
+			
+			for i in 0..range * 2 # y 
+				for j in 0..range * 2 # x
+					nowY = y + i - range
+					nowX = x + j - range
+					
+					ry = (y - nowY) * (y - nowY)
+					rx = (x - nowX) * (x - nowX)
+					r = ry + rx
+					if r <= range * range
+						event = create_events2(1, nowX, nowY, 0)
+						next if event == nil
+						event.ani_array.push(skill.animation2_id)
+						event.one_use = true
+					end
+				end
+			end
+		end
+		
+		# 범위안에 이벤트 만들고 이펙트 내보기
+		def make_range_sprite(element, range, skill)
+			return if SHOW_SKILL_EFECT[skill.id] == nil
+			# 이펙트 보여주는 스킬만 동작하도록 하자
+			$scene.spriteset.make_range_sprite(element, range, skill)
+		end
+		
 		#--------------------------------------------------------------------------
 		# * End of class
 		#--------------------------------------------------------------------------
@@ -2235,7 +2276,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			super
 			return if @stop
 			#Return if moving
-			#return if moving?
+			return if moving?
 			#Check if something is still here
 			if @parent == nil or @actor == nil
 				@stop = true
@@ -2815,6 +2856,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	# * Scene Map
 	#============================================================================
 	class Scene_Map
+		attr_accessor :spriteset
 		#--------------------------------------------------------------------------
 		alias mrmo_abs_scene_map_update update
 		alias mrmo_abs_scene_map_transfer_player transfer_player
@@ -3267,6 +3309,55 @@ if SDK.state("Mr.Mo's ABS") == true
 		alias mrmo_spriteset_map_init_characters init_characters
 		alias mrmo_spriteset_map_update_character_sprites update_character_sprites
 		alias mrmo_spriteset_map_dispose dispose
+		
+
+		# 범위안에 이벤트 만들고 이펙트 내보기
+		def make_range_sprite(element, range, skill)
+			
+			for i in 0..range * 2 # y 
+				for j in 0..range * 2 # x
+					nowY = i - range
+					nowX = j - range
+					
+					ry = (nowY) * (nowY)
+					rx = (nowX) * (nowX)
+					r = ry + rx
+					if r <= range * range
+						sprite = RPG::Sprite.new(@viewport1)
+						sprite.visible = true
+						sprite.opacity = 255
+						sprite.one_use = true
+						
+						sprite.ox = (nowX)
+						sprite.oy = (nowY)
+						
+						sprite.x = element.screen_x + (nowX) * 32
+						sprite.y = element.screen_y + (nowY) * 32
+						
+						sprite.animation2($data_animations[skill.animation2_id], true)
+						@ranged_sprites2.push([sprite, element])
+					end
+				end
+			end
+		end
+		
+		def update_range_sprite
+			for data in @ranged_sprites2
+				range = data[0]
+				element = data[1]
+				
+				#Skip NIL Values
+				if range == nil or range.disposed?
+					@ranged_sprites2.delete(data)
+					next
+				end
+				
+				range.x = element.screen_x + range.ox * 32
+				range.y = element.screen_y + range.oy * 32
+				range.update
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Character Sprite Initialization
 		#--------------------------------------------------------------------------
@@ -3280,6 +3371,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				sprite = Sprite_Character.new(@viewport1, range)
 				@ranged_sprites.push(sprite)
 			end
+			
+			@ranged_sprites2 = []
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Dispose
@@ -3312,6 +3406,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					range.character.character_name = ""
 				end
 			end
+			
+			update_range_sprite
 			
 			# Draw Sprite
 			for range in $ABS.range

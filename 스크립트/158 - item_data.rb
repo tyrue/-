@@ -22,8 +22,8 @@ WEAPON_SE_DATA[17] = ["석단장"]
 
 WEAPON_SE_DATA[22] = ["철도"]
 WEAPON_SE_DATA[23] = ["철도"]
+WEAPON_SE_DATA[104] = ["철도"]
 WEAPON_SE_DATA[118] = ["철도"]
-WEAPON_SE_DATA[119] = ["철도"]
 
 WEAPON_SE_DATA[24] = ["야월도"]
 WEAPON_SE_DATA[25] = ["야월도"]

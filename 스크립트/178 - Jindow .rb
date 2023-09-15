@@ -258,7 +258,6 @@ class Jindow < Viewport
 		@scroll0bar_up.opacity = opacity if @scroll0bar_up != nil
 		@scroll0bar_down.opacity = opacity if @scroll0bar_down != nil
 		
-		#@opacity = opacity
 	end
 	
 	def arrive?
@@ -326,6 +325,7 @@ class Jindow < Viewport
 	end
 	
 	def scroll
+		return if @base_s != nil and @base_s.opacity == 0
 		ow, oh = self.scroll?
 		if ow != @wsv and ow > 0
 			@wsv = ow
@@ -383,6 +383,7 @@ class Jindow < Viewport
 			@scroll0bar_up.x = @scroll0mid.x; @scroll0bar_up.y = @scroll0bar_mid.y - @scroll0bar_up.bitmap.height
 			@scroll0bar_down.x = @scroll0mid.x; @scroll0bar_down.y = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height
 		elsif oh == 0
+			@hsv = oh
 			scroll_height_dispose
 		end
 	end
@@ -415,6 +416,7 @@ class Jindow < Viewport
 	def scroll?
 		ow = self.width
 		oh = self.height
+		
 		for i in @item
 			i == nil ? next : 0
 			tw = (i.x + i.width)
@@ -492,6 +494,7 @@ class Jindow < Viewport
 		super
 		
 		refresh? ? 0 : return
+		
 		self.scroll
 		self.bluck_update
 		

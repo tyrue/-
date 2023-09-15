@@ -38,6 +38,7 @@ def 게임종료
 	Audio.bgm_fade(800)
 	Audio.bgs_fade(800)
 	Audio.me_fade(800)
+	
 	if Network::Main.socket != nil
 		자동저장 if $game_party.actors[0].name != "\no"
 		$ABS.close_buff if $ABS != nil

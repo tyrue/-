@@ -1,4 +1,4 @@
-$exp_limit = 30 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_limit = 45 # 한번에 최대 얻을 수 있는 경험치 퍼센트
 $exp_event = 0 # 경험치 이벤트
 
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")

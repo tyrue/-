@@ -3,6 +3,7 @@ def 자동저장
 	return if $game_map.map_id == 3
 	return if $rpg_skill == nil
 	if not $game_party.actors[0].name == "/no"
+		
 		@skilllist = ""
 		@itemlist = ""
 		@weaponlist = ""

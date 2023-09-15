@@ -31,6 +31,7 @@ begin
 	while $scene != nil
 		$scene.main
 	end
+	
 	# Fade out
 	Network::Main.close_socket 
 	Graphics.transition(25)
@@ -53,7 +54,7 @@ rescue Errno::ENOENT
 	time = time.strftime("%a %d %b %Y, %X") 
 	File.open("ErrorLog.rxdata","a+"){ |fh| fh.puts("On <<#{time}>> the file <<#{filename}>> was missing." )}
 ensure
+	게임종료 #if $scene.is_a?(Scene_Map)
 	$!.message.sub!($!.message, traceback_report)
 	raise_traceback_error
-	게임종료 #if $scene.is_a?(Scene_Map)
 end

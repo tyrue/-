@@ -66,7 +66,7 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][16] = ['(착용)백사도'] 			  #백사도
 	VISUAL_EQUIP_DATA[2][17] = ['(착용)음양도'] 			  #음양도
 	
-	VISUAL_EQUIP_DATA[2][22] = ['(착용)철도'] 			# 비철단도
+	VISUAL_EQUIP_DATA[2][22] = ['(착용)철단도'] 			# 비철단도
 	VISUAL_EQUIP_DATA[2][23] = ['(착용)철도'] 			# 철도
 	VISUAL_EQUIP_DATA[2][24] = ['(착용)야월도'] 			# 야월도
 	VISUAL_EQUIP_DATA[2][25] = ['(착용)흑월도'] 			# 흑월도
@@ -91,13 +91,13 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][115] = ['(착용)심판의낫'] 		#심판의낫
 	VISUAL_EQUIP_DATA[2][116] = ['(착용)진일신검'] 		#진일신검
 	VISUAL_EQUIP_DATA[2][117] = ['(착용)괴력선창'] 		#괴력선창
-	VISUAL_EQUIP_DATA[2][118] = ['(착용)철도'] 				#철단도
+	VISUAL_EQUIP_DATA[2][118] = ['(착용)철단도'] 				#철단도
 	
 	VISUAL_EQUIP_DATA[2][120] = ['(착용)현철중검'] 	 	#흑철중검
 	VISUAL_EQUIP_DATA[2][121] = ['(착용)목도'] 				#초심자의목도
 	VISUAL_EQUIP_DATA[2][122] = ['(착용)용마제구검'] 		#용마제팔검
 	VISUAL_EQUIP_DATA[2][123] = ['(착용)현무염도'] 	  #현무염도
-	VISUAL_EQUIP_DATA[2][124] = ['(착용)철도'] 				#얼음검
+	VISUAL_EQUIP_DATA[2][124] = ['(착용)얼음검'] 				#얼음검
 	VISUAL_EQUIP_DATA[2][125] = ['(착용)일월대도'] 	  #일월대도
 	VISUAL_EQUIP_DATA[2][126] = ['(착용)참마도']				#참마도
 	VISUAL_EQUIP_DATA[2][127] = ['(착용)청룡신검'] 	  #청룡신검
@@ -107,7 +107,7 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[2][131] = ['(착용)다문창'] 		  #다문창
 	VISUAL_EQUIP_DATA[2][132] = ['(착용)영혼죽장'] 	  #인어장군지팡이
 	VISUAL_EQUIP_DATA[2][133] = ['(착용)해골죽장'] 	  # 해골죽장
-	VISUAL_EQUIP_DATA[2][137] = ['(착용)영혼죽장']			#영혼
+	VISUAL_EQUIP_DATA[2][137] = ['(착용)영혼죽장']			#영혼죽장
 	
 	VISUAL_EQUIP_DATA[2][134] = ['(착용)일화접선'] 	  #일화
 	VISUAL_EQUIP_DATA[2][135] = ['(착용)진일신검'] 	  #진일

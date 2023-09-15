@@ -3,7 +3,7 @@ class Scene_Map
 	
 	alias scene_map_main main
 	def main
-		Hwnd.show
+		#Hwnd.show
 		$map_chat_input = Jindow_Chat_Input.new if $map_chat_input == nil  # 채팅입력창
 		$chat = Jindow_Chat_Window.new if $chat == nil # 채팅창
 		$console = Jindow_Console.new if $console == nil # 콘솔창
@@ -26,7 +26,7 @@ class Scene_Map
 		scene_map_main
 		
 		$cbig = 0
-		Hwnd.hide
+		#Hwnd.hide
 	end
 	
 	alias scene_map_update update

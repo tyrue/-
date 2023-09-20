@@ -14,7 +14,9 @@ class Skill_Delay_Console < Sprite
 	#     max_line : 최대 줄 수
 	#--------------------------------------------------------------------------
 	attr_accessor :console_log
+	attr_accessor :console_log2
 	attr_accessor :tog
+	
 	def initialize(x, y, width, height, max_line = 8)
 		@console_viewport = Viewport.new(x, y, width, height)
 		@console_viewport.z = 999

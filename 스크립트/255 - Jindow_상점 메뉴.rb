@@ -6,7 +6,7 @@
 class Jindow_Shop_Menu < Jindow
 	def initialize(shopData, eventId) # 상점 데이터, 이벤트 아이디
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 200, 60)
+		super(0, 0, 200, 40)
 		@head = true
 		@mark = true
 		@drag = true
@@ -20,8 +20,8 @@ class Jindow_Shop_Menu < Jindow
 		
 		@data = shopData
 		@shop_button = J::Button.new(self).refresh(60, "물건 사기")
-		@shop_button.x = 10
-		@shop_button.y = 10
+		@shop_button.x = 5
+		@shop_button.y = 5
 		
 		@sell_button = J::Button.new(self).refresh(60, "물건 팔기")
 		@sell_button.x = @shop_button.x + @shop_button.width + 5
@@ -30,6 +30,12 @@ class Jindow_Shop_Menu < Jindow
 		@close_button = J::Button.new(self).refresh(60, "종료")
 		@close_button.x = @sell_button.x + @sell_button.width + 5
 		@close_button.y = @sell_button.y
+		
+		Jindow_Shop.new($game_temp.shop_goods, @event.id)
+		if $j_inven != nil
+			$j_inven.show
+			$j_inven.setMode(2)
+		end
 	end
 	
 	def dispose
@@ -48,8 +54,6 @@ class Jindow_Shop_Menu < Jindow
 		
 		if @sell_button.click
 			@sell_button.click = false
-			Hwnd.include?("Shop_Window") ? Hwnd.dispose("Shop_Window") : 0
-			
 			# 인벤토리 모드 변경
 			if $j_inven != nil
 				$j_inven.show

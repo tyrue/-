@@ -75,22 +75,28 @@ class Jindow < Viewport
 		@start = true
 		# 스프라이트 선언
 		# 위쪽 가장자리
-		@ul = Sprite.new(@back)
-		@um = Sprite.new(@back)
-		@ur = Sprite.new(@back)
+		@ul = Sprite.new(@back) if @ul == nil
+		@um = Sprite.new(@back) if @um == nil
+		@ur = Sprite.new(@back) if @ur == nil
+		
 		# 중간 가장자리
-		@ml = Sprite.new(@back)
-		@mr = Sprite.new(@back)
+		@ml = Sprite.new(@back) if @ml == nil
+		@mr = Sprite.new(@back) if @mr == nil
+		
 		# 아래쪽 가장자리
-		@dl = Sprite.new(@back)
-		@dm = Sprite.new(@back)
-		@dr = Sprite.new(@back)
+		@dl = Sprite.new(@back) if @dl == nil
+		@dm = Sprite.new(@back) if @dm == nil
+		@dr = Sprite.new(@back) if @dr == nil
+		
 		if @head
 			@mark ? (@mark_s = Sprite.new(@back)) : 0
 			@name ? (@name_s = Sprite.new(@back)) : 0
 			@close ? (@close_s = Sprite.new(@back)) : 0
 		end
-		@base_s = Sprite.new(@back)
+		@base_s = Sprite.new(@back) if @base_s == nil
+		
+		
+		
 		# 비트 맵 선언 (틀 잡기)
 		@ul.bitmap = Bitmap.new(@route + (@head ? "hl" : "ml"))
 		@ur.bitmap = Bitmap.new(@route + (@head ? "hr" : "mr"))
@@ -109,11 +115,14 @@ class Jindow < Viewport
 		@ml.bitmap = Bitmap.new(@ul.bitmap.width, ch, @route + "ml", 1)
 		@mr.bitmap = Bitmap.new(@ur.bitmap.width, ch, @route + "mr", 1)
 		@dm.bitmap = Bitmap.new(cw, @dl.bitmap.height, @route + (@bottom ? "dm" : "um"), 1)
+		
 		if @head
 			@mark ? (@mark_s.bitmap = Bitmap.new(@route + "mark")) : 0
 			@head ? (@name_s.bitmap = Bitmap.new(self.width, @um.bitmap.height)) : 0
 			@close ? (@close_s.bitmap = Bitmap.new(@route + "close")) : 0
 		end
+		
+		@base_s.bitmap.clear if @base_s.bitmap != nil
 		case @base_type
 		when 0
 			@base_s.bitmap = Bitmap.new(self.width, self.height, @base_file, 1)
@@ -121,6 +130,7 @@ class Jindow < Viewport
 			@base_s.bitmap = Bitmap.new(self.width, self.heght)
 			@base_s.bitmap.fill_rect(@base_s.bitmap.rect, @base_color)
 		end
+		
 		# 창 배열
 		@um.x = @ul.bitmap.width
 		@ur.x = @back.width - @ur.bitmap.width
@@ -144,6 +154,13 @@ class Jindow < Viewport
 			@close ? (@close_s.y = (@ur.bitmap.height / 2) - (@close_s.bitmap.height / 2)) : 0
 		end
 		return self
+	end
+	
+	def change_name(name)
+		return if @name_s == nil
+		return if @name_s.bitmap == nil
+		@name_s.bitmap.clear 
+		@name_s.bitmap.draw_text(0, 0, self.width, @um.bitmap.height, name)
 	end
 	
 	def x=(mx)
@@ -241,7 +258,6 @@ class Jindow < Viewport
 		@scroll0bar_up.opacity = opacity if @scroll0bar_up != nil
 		@scroll0bar_down.opacity = opacity if @scroll0bar_down != nil
 		
-		#@opacity = opacity
 	end
 	
 	def arrive?
@@ -293,7 +309,7 @@ class Jindow < Viewport
 	def refresh?
 		return @start
 	end
-		
+	
 	def hide # 창 숨기기
 		self.opacity = 0
 		for i in item
@@ -309,6 +325,7 @@ class Jindow < Viewport
 	end
 	
 	def scroll
+		return if @base_s != nil and @base_s.opacity == 0
 		ow, oh = self.scroll?
 		if ow != @wsv and ow > 0
 			@wsv = ow
@@ -337,6 +354,7 @@ class Jindow < Viewport
 			@scroll1bar_left.x = @scroll1bar_mid.x - @scroll1bar_left.bitmap.width; @scroll1bar_left.y = @scroll1bar_mid.y
 			@scroll1bar_right.x = @scroll1bar_mid.x + @scroll1bar_mid.bitmap.width; @scroll1bar_right.y = @scroll1bar_mid.y
 		end
+		
 		if oh != @hsv and oh > 0
 			@hsv = oh
 			@height_scroll ? scroll_height_dispose : (@height_scroll = true)
@@ -364,6 +382,9 @@ class Jindow < Viewport
 			@scroll0bar_mid.x = @scroll0mid.x - h_x; @scroll0bar_mid.y = @scroll0mid.y
 			@scroll0bar_up.x = @scroll0mid.x; @scroll0bar_up.y = @scroll0bar_mid.y - @scroll0bar_up.bitmap.height
 			@scroll0bar_down.x = @scroll0mid.x; @scroll0bar_down.y = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height
+		elsif oh == 0
+			@hsv = oh
+			scroll_height_dispose
 		end
 	end
 	
@@ -377,17 +398,25 @@ class Jindow < Viewport
 	end
 	
 	def scroll_height_dispose
-		@scroll0mid.dispose
-		@scroll0up.dispose
-		@scroll0down.dispose
-		@scroll0bar_mid.dispose
-		@scroll0bar_up.dispose
-		@scroll0bar_down.dispose
+		@scroll0mid.dispose if @scroll0mid != nil
+		@scroll0up.dispose	if @scroll0up != nil
+		@scroll0down.dispose	if @scroll0down != nil
+		@scroll0bar_mid.dispose	if @scroll0bar_mid != nil
+		@scroll0bar_up.dispose	if @scroll0bar_up != nil
+		@scroll0bar_down.dispose	if @scroll0bar_down != nil
+		
+		@scroll0mid = nil
+		@scroll0up = nil	
+		@scroll0down = nil 
+		@scroll0bar_mid = nil
+		@scroll0bar_up = nil
+		@scroll0bar_down = nil
 	end
 	
 	def scroll?
 		ow = self.width
 		oh = self.height
+		
 		for i in @item
 			i == nil ? next : 0
 			tw = (i.x + i.width)
@@ -396,6 +425,7 @@ class Jindow < Viewport
 			th = (i.y + i.height)
 			th > oh ? (oh = th) : 0
 		end
+		
 		pw = ow - self.width
 		ph = oh - self.height
 		return pw, ph
@@ -464,6 +494,7 @@ class Jindow < Viewport
 		super
 		
 		refresh? ? 0 : return
+		
 		self.scroll
 		self.bluck_update
 		
@@ -518,7 +549,7 @@ class Jindow < Viewport
 					dispose2
 					return
 				elsif @head and @close and not @close_yn and Mouse.arrive_sprite?(@close_s)  # 로울버 효과
-					@close_s.tone.set(10, 10, 20)
+					@close_s.tone.set(50, 50, 50)
 				elsif @head and @close and not @close_yn and not Mouse.arrive_sprite?(@close_s)
 					@close_s.tone.set(0, 0, 0)
 				end
@@ -533,7 +564,7 @@ class Jindow < Viewport
 			return
 		end
 		
-		if !drag?
+		if !(drag? and Input.mouse_lbutton)
 			for i in @item
 				i == nil ? next : 0
 				i.update
@@ -559,5 +590,21 @@ class Jindow < Viewport
 		$inputKeySwitch = false
 		super
 		@back.dispose
+	end
+	
+	# 마우스 위치에 옮기기
+	def pos_in_mouse
+		
+		self.x = Mouse.x - (self.max_width) / 2
+		self.x = [15, self.x].max
+		if (self.x + self.width) > 620
+			self.x -= (self.x + self.width - 620)
+		end
+		
+		self.y = Mouse.y - (self.max_height) / 2
+		self.y = [15, self.y].max
+		if (self.y + self.height) > 460
+			self.y -= (self.y + self.height - 460)
+		end
 	end
 end

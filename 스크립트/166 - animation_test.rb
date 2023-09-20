@@ -2,6 +2,7 @@
 # 애니메이션 여러개 겹치게 나오게 하기
 # 애니메이션 효과음 설정
 
+# 애니메이션 끝나면 이벤트 삭제하는 기능 추가하기
 module RPG
 	class AniData
 		attr_accessor :hit
@@ -22,6 +23,7 @@ module RPG
 		alias mrmo_abs_sprite_ini initialize
 		alias mrmo_abs_sprite_update update
 		
+		attr_accessor :one_use # 애니메이션 끝나면 사라짐
 		# ------------------
 		# 애니메이션 겹치기 코드 시작
 		# ------------------
@@ -29,10 +31,11 @@ module RPG
 			mrmo_abs_sprite_ini(viewport)
 			# 애니메이션 겹치기용 배열들
 			@_animation_overlap = []
-			
+			@one_use = false
 		end
 		
 		def update
+			
 			mrmo_abs_sprite_update
 			if @_animation_overlap != nil and @_animation_overlap.size > 0
 				for ani in @_animation_overlap
@@ -46,6 +49,13 @@ module RPG
 						ani.duration -= 1 if (Graphics.frame_count % 2 == 0) or ani.animation.frame_max == ani.duration
 					end
 				end
+			end
+			
+			
+			
+			if @_animation_overlap != nil and @_animation_overlap.size == 0 and @one_use
+				
+				self.dispose
 			end
 		end
 		

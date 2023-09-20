@@ -880,7 +880,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				
 				case line
 					# 제한 처리
-				when /<sever_msg>(.*)<\/sever_msg>/
+				when /<server_msg>(.*)<\/server_msg>/
 					p $1
 					return true
 					
@@ -1533,11 +1533,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						for i in 0..va.size
 							$game_variables[i] = va[i].to_i
 						end
-						
-						$rpg_skill.base_str = $game_variables[52]
-						$rpg_skill.base_agi = $game_variables[53]
-						$rpg_skill.base_int = $game_variables[54]
-						$rpg_skill.base_dex = $game_variables[55]
 					end
 					
 					# 스킬 핫키
@@ -1628,6 +1623,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_party.actors[0].int = $int
 					$game_player.refresh
 					
+					$rpg_skill.base_str = $game_variables[52]
+					$rpg_skill.base_agi = $game_variables[53]
+					$rpg_skill.base_int = $game_variables[54]
+					$rpg_skill.base_dex = $game_variables[55]
 					
 					if $game_party.actors[0].name == "/no"
 						p "데이터 로드에 실패했습니다. 다시 실행해주세요."

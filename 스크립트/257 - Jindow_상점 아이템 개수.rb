@@ -23,6 +23,8 @@ class Jindow_Shop_Num < Jindow
 		self.x = (640 - self.max_width) * 3 / 4
 		self.y = (480 - self.max_height) * 3 / 4
 		
+		pos_in_mouse
+		
 		@totalPriceText = Sprite.new(self)
 		@totalPriceText.bitmap = Bitmap.new(150, 20)
 		@totalPriceText.bitmap.font.size = 12
@@ -47,6 +49,8 @@ class Jindow_Shop_Num < Jindow
 		
 		@oldInputText = ""
 		@totalPrice = 0
+		
+		
 	end
 	
 	def checkMaxNum

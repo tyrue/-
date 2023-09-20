@@ -617,6 +617,7 @@ module J
 			if Hwnd.highlight? == @viewport and self.bluck? and Key.trigger?(4) # 엔터
 				@click = true
 			end
+			
 			self.bluck? ? 0 : return
 			Hwnd.highlight? == @viewport ? 0 : return
 			update_key if @edit == true

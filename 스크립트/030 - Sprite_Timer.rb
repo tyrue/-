@@ -14,9 +14,9 @@ class Sprite_Timer < Sprite
 		self.bitmap = Bitmap.new(88, 48)
 		self.bitmap.font.name = "Arial"
 		self.bitmap.font.size = 32
-		self.x = 640 - self.bitmap.width
-		self.y = 0
-		self.z = 500
+		self.x = 10
+		self.y = 10
+		self.z = 50000
 		update
 	end
 	#--------------------------------------------------------------------------

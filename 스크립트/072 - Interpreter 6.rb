@@ -187,6 +187,9 @@ class Interpreter
 		# Process with iterator
 		iterate_actor(@parameters[0]) do |actor|
 			# Change actor EXP
+			if value > 0
+				value *= $exp_event if $exp_event > 1# 경험치 이벤트 만큼 곱하기
+			end
 			actor.exp += value
 		end
 		# Continue

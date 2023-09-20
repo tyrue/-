@@ -77,10 +77,16 @@ class Jindow_Inventory < Jindow
 		@mode = id
 		case @mode
 		when 0
+			self.name = "아이템"
+			self.change_name(@name)
 			$console.write_line("기본 가방 상태")
 		when 1
+			self.name = "교환할 아이템을 더블 클릭하세요."
+			self.change_name(@name)
 			$console.write_line("교환 가방 상태")
 		when 2
+			self.name = "판매할 아이템을 더블 클릭하세요."
+			self.change_name(@name)
 			$console.write_line("상점 판매 가방 상태")
 		end
 	end

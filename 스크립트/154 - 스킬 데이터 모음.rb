@@ -152,7 +152,7 @@ RANGE_SKILLS[101] = [0, 5, "공격스킬2", 4, 0, 2] #백호참
 RANGE_SKILLS[102] = [2, 10, "공격스킬2", 4, 0] #백리건곤 1성
 RANGE_SKILLS[104] = [12, 5, "공격스킬2", 4, 0, 3] #포효검황
 RANGE_SKILLS[105] = [12, 5, "공격스킬2", 4, 0, 3] #혈겁만파
-RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3, 5] #초혼비무
+RANGE_SKILLS[106] = [4, 10, "공격스킬2", 4, -3, 4] #초혼비무
 
 # 도사
 RANGE_SKILLS[123] = [12, 5, "공격스킬2", 4, 0, 3] #귀염추혼소
@@ -221,7 +221,7 @@ SKILL_POWER_CUSTOM[68] = [[0, 0.7, 0.7, 10]] # 폭류유성
 # [[타입(현재(0), 전체(1)), 체력, 마력, 기본값]]
 SKILL_POWER_CUSTOM[67] = [[0, 0.9, 0, 30]] # 건곤대나이
 SKILL_POWER_CUSTOM[73] = [[0, 0.4, 0, 30]] # 광량돌격
-SKILL_POWER_CUSTOM[79] = [[0, 1.0, 0.5, 100]] # 동귀어진
+SKILL_POWER_CUSTOM[79] = [[0, 1.2, 0.01, 100]] # 동귀어진
 SKILL_POWER_CUSTOM[101] = [[0, 0.8, 0.1, 60]] # 백호참
 SKILL_POWER_CUSTOM[103] = [[0, 0.5, 0.5, 60]] # 어검술
 SKILL_POWER_CUSTOM[104] = [[0, 0.3, 0.3, 20]] # 포효검황
@@ -329,7 +329,7 @@ SKILL_MASH_TIME[69] = [3.5 * sec, 0] # 삼매진화 3성
 
 # 전사
 SKILL_MASH_TIME[65] = [3 * sec, 0] # 뢰마도
-SKILL_MASH_TIME[66] = [120 * sec, 0] # 신수둔각도
+SKILL_MASH_TIME[66] = [180 * sec, 0] # 신수둔각도
 SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
 SKILL_MASH_TIME[71] = [90 * sec, 0] # 혼신의힘
 SKILL_MASH_TIME[73] = [5 * sec, 0] # 광량돌격
@@ -463,8 +463,28 @@ DAMAGE_CAL_SKILL[134] = [1.1] # 분신
 DAMAGE_CAL_SKILL[122] = [2.0] # 파력무참진
 # //////////////////////////end///////////////////////////////#
 
-# ----------------------- 평타, 스킬 비례 데미지 설정 ----------------------------#
+# ----------------------- 범위 마법 범위 보여주기 ----------------------------#
 SHOW_SKILL_EFECT = {}
+# 주술
+SHOW_SKILL_EFECT[53] = 1 #삼매진화
+SHOW_SKILL_EFECT[57] = 1 #삼매진화 1성
+SHOW_SKILL_EFECT[69] = 1 # 삼매진화 2성
+
+# 전사
+SHOW_SKILL_EFECT[103] = 1 # 어검술
+
+# 도사
+SHOW_SKILL_EFECT[96] = 1 # 지진
+SHOW_SKILL_EFECT[124] = 1 # 지진'첨
+
+# 도적
+SHOW_SKILL_EFECT[135] = 1 # 백호검무
+SHOW_SKILL_EFECT[137] = 1 #이기어검
+
+# 기타
+SHOW_SKILL_EFECT[6] = 1 	# 도토리 던지기
+
+# 적 스킬
 SHOW_SKILL_EFECT[154] = 1
 SHOW_SKILL_EFECT[155] = 1
 SHOW_SKILL_EFECT[156] = 1

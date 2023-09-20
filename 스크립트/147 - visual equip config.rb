@@ -13,33 +13,42 @@ module VisualEquipData
 	VISUAL_EQUIP_DATA[1] = {}
 	# 갑옷
 	VISUAL_EQUIP_DATA[1][1] = ['(착용)연두갑주'] 					#초심자의갑주
+	VISUAL_EQUIP_DATA[1][38] = ['(착용)연두갑주'] 			 		#연두색남자갑주
+	
+	VISUAL_EQUIP_DATA[1][31] = ['(착용)초록색도포'] 				#초록색도포
+	VISUAL_EQUIP_DATA[1][131] = ['(착용)보라색도포'] 			 		#보라도포
+	VISUAL_EQUIP_DATA[1][132] = ['(착용)구리도포'] 			 		#구리도포
+	
+	VISUAL_EQUIP_DATA[1][34] = ['(착용)초록갑주'] 					#초록색남자갑주
+	VISUAL_EQUIP_DATA[1][133] = ['(착용)보라갑주'] 			 		#보라갑주
+	VISUAL_EQUIP_DATA[1][134] = ['(착용)구리갑주'] 			 		#구리갑주
+	
+	VISUAL_EQUIP_DATA[1][59] = ['(착용)초록장삼'] 			 		#초록장삼
+	VISUAL_EQUIP_DATA[1][135] = ['(착용)보라장삼'] 			 		#보라장삼
+	VISUAL_EQUIP_DATA[1][136] = ['(착용)구리장삼'] 			 		#구리장삼
+	
 	VISUAL_EQUIP_DATA[1][11] = ['(착용)죄수복'] 						#죄수복
 	VISUAL_EQUIP_DATA[1][12] = ['(착용)주술갑옷'] 					#주술갑옷
 	VISUAL_EQUIP_DATA[1][13] = ['(착용)남자타라의옷'] 				#남자타라의옷
 	VISUAL_EQUIP_DATA[1][14] = ['(착용)해골갑옷'] 					#해골갑옷
 	VISUAL_EQUIP_DATA[1][30] = ['(착용)가릉빈가의날개옷'] 			#가릉빈가의날개옷
-	VISUAL_EQUIP_DATA[1][31] = ['(착용)초록색도포'] 				#초록색도포
-	VISUAL_EQUIP_DATA[1][32] = ['(착용)현인의영혼'] 				#현인의영혼
-	VISUAL_EQUIP_DATA[1][34] = ['(착용)초록갑주'] 					#초록색남자갑주
-	VISUAL_EQUIP_DATA[1][35] = ['(착용)망또'] 						#망또
-	VISUAL_EQUIP_DATA[1][38] = ['(착용)연두갑주'] 			 		#연두색남자갑주
+	VISUAL_EQUIP_DATA[1][73] = ['(착용)가릉빈가의날개옷\'진']		#가릉빈가의날개옷'진
 	
-	VISUAL_EQUIP_DATA[1][41] = ['(착용)검황의영혼'] 		 		#검황의영혼
 	VISUAL_EQUIP_DATA[1][42] = ['(착용)황혼의갑주'] 		 		#황혼의갑주
 	VISUAL_EQUIP_DATA[1][43] = ['(착용)산신의정화'] 		 		#산신의정화
 	VISUAL_EQUIP_DATA[1][44] = ['(착용)여명의도복'] 		 		#여명의도복
 	
+	VISUAL_EQUIP_DATA[1][35] = ['(착용)망또'] 						#망또
 	VISUAL_EQUIP_DATA[1][47] = ['(착용)망또1'] 				 		#망또1
 	VISUAL_EQUIP_DATA[1][48] = ['(착용)망또2'] 				 		#망또2
 	VISUAL_EQUIP_DATA[1][49] = ['(착용)망또3'] 				 		#망또3
-	VISUAL_EQUIP_DATA[1][55] = ['(착용)망또3', 155] 		 				#망또4
-	VISUAL_EQUIP_DATA[1][56] = ['(착용)망또3', 300] 		 				#망또5
+	VISUAL_EQUIP_DATA[1][55] = ['(착용)망또3', 155] 		 	#망또4
+	VISUAL_EQUIP_DATA[1][56] = ['(착용)망또3', 300] 		 	#망또5
 	
+	VISUAL_EQUIP_DATA[1][32] = ['(착용)현인의영혼'] 				#현인의영혼
+	VISUAL_EQUIP_DATA[1][41] = ['(착용)검황의영혼'] 		 		#검황의영혼
 	VISUAL_EQUIP_DATA[1][52] = ['(착용)현인의영혼'] 		 		#진인의영혼
 	VISUAL_EQUIP_DATA[1][54] = ['(착용)검황의영혼'] 		 		#귀검의영혼
-	
-	VISUAL_EQUIP_DATA[1][59] = ['(착용)초록장삼'] 			 		#초록장삼
-	VISUAL_EQUIP_DATA[1][73] = ['(착용)가릉빈가의날개옷\'진']		#가릉빈가의날개옷'진
 	
 	# 방패류
 	VISUAL_EQUIP_DATA[4] = {}

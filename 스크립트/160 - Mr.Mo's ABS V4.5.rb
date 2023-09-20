@@ -2478,7 +2478,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				$rpg_skill.skill_cost_custom(@actor, @skill.id) # 스킬 코스트
 			end
 			
-			make_range_event(self, @range_skill[3])
+			#make_range_event(self, @range_skill[3])
+			$ABS.make_range_sprite(self, @range_skill[3], @skill)
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3498,12 +3499,21 @@ if SDK.state("Mr.Mo's ABS") == true
 			hit_result = true  # First hit detection
 			
 			if hit_result
+				#~ if self.is_a?(Game_Actor)
+					#~ atk = [(attacker.atk + attacker.str / 100.0) - (self.base_pdef * 0.4), (attacker.atk / 10.0)].max
+				#~ else
+					#~ atk = [(attacker.atk + attacker.str / 100.0) - (self.pdef * 0.4), (attacker.atk / 10.0)].max
+				#~ end
+				#~ self.damage = (atk * (20 + attacker.str) / 20.0)  # Calculate basic damage
+				
+				
+				atk = (attacker.atk + attacker.str / 100.0)
 				if self.is_a?(Game_Actor)
-					atk = [(attacker.atk + attacker.str / 100.0) - (self.base_pdef * 0.4), (attacker.atk / 10.0)].max
+					self.damage = (atk * (20 + attacker.str) / 20.0) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
 				else
-					atk = [(attacker.atk + attacker.str / 100.0) - (self.pdef * 0.4), (attacker.atk / 10.0)].max
+					self.damage = (atk * (20 + attacker.str) / 20.0) * (250.0 / (250 + self.base_pdef)) # Calculate basic damage
 				end
-				self.damage = (atk * (20 + attacker.str) / 20.0)  # Calculate basic damage
+				
 				
 				if !attacker.is_a?(Game_NetPlayer)
 					self.damage *= elements_correct(attacker.element_set)  # Element correction
@@ -3655,15 +3665,25 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage = $rpg_skill.damage_by_skill(self.damage, skill.id, self)
 				
 				# 방어력에 따른 데미지 감소
+				#~ if self.damage > 0
+					#~ if self.is_a?(Game_Actor)
+						#~ limit = 600.0
+						#~ self.damage = (self.damage * [1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min / limit), 0.01].max).to_i
+					#~ else
+						#~ limit = 2000.0
+						#~ self.damage = (self.damage * [1.0 - ([self.pdef + self.mdef * 2, limit].min / limit), 0.1].max).to_i
+					#~ end
+				#~ end
+				
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
-						limit = 600.0
-						self.damage = (self.damage * [1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min / limit), 0.01].max).to_i
+						limit = 200.0
 					else
-						limit = 2000.0
-						self.damage = (self.damage * [1.0 - ([self.pdef + self.mdef * 2, limit].min / limit), 0.1].max).to_i
-					end
+						limit = 1000.0
+					end					
+					self.damage *= limit / (limit + (self.base_pdef + self.base_mdef * 4))
 				end
+				
 				
 				# Dispersion
 				if skill.variance > 0 && self.damage.abs > 0

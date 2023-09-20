@@ -14,6 +14,9 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	
 	# 방어구
 	EQUIP_JOB_ARMOR[31] = [[1], 0] # 초록색도포
+	EQUIP_JOB_ARMOR[131] = [[1], 0] # 보라색도포
+	EQUIP_JOB_ARMOR[132] = [[1], 0] # 구리도포
+	
 	EQUIP_JOB_ARMOR[32] = [[1], 3] # 현인의영혼
 	
 	#----------
@@ -31,6 +34,8 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	
 	# 방어구
 	EQUIP_JOB_ARMOR[34] = [[2, 4], 0] # 초록색남자갑주
+	EQUIP_JOB_ARMOR[133] = [[2, 4], 0] # 보라색남자갑주
+	EQUIP_JOB_ARMOR[134] = [[2, 4], 0] # 구리남자갑주
 	EQUIP_JOB_ARMOR[41] = [[2], 3] # 검황의영혼
 	
 	#----------
@@ -45,6 +50,8 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	# 방어구
 	EQUIP_JOB_ARMOR[52] = [[3], 3] # 진인의영혼
 	EQUIP_JOB_ARMOR[59] = [[3], 0] # 초록장삼
+	EQUIP_JOB_ARMOR[135] = [[3], 0] # 보라색장삼
+	EQUIP_JOB_ARMOR[136] = [[3], 0] # 구리장삼
 	
 	#----------
 	# 도적 전용
@@ -160,7 +167,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[40] = [[0], 2] # 여신의방패
 	EQUIP_JOB_ARMOR[42] = [[0], 3] # 황혼의갑주
 	EQUIP_JOB_ARMOR[43] = [[0], 3] # 산신의정화
-	EQUIP_JOB_ARMOR[44] = [[0], 0] # 황혼의활복
+	EQUIP_JOB_ARMOR[44] = [[0], 1] # 황혼의활복
 	EQUIP_JOB_ARMOR[45] = [[0], 0] # 인어반지
 	EQUIP_JOB_ARMOR[46] = [[0], 0] # 진주반지
 	

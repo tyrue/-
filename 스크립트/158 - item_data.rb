@@ -32,6 +32,7 @@ WEAPON_SE_DATA[26] = ["현철중검"]
 WEAPON_SE_DATA[106] = ["현철중검"]
 WEAPON_SE_DATA[120] = ["현철중검"]
 WEAPON_SE_DATA[126] = ["현철중검"]
+WEAPON_SE_DATA[129] = ["현철중검"]
 
 WEAPON_SE_DATA[31] = ["활"]
 
@@ -48,6 +49,7 @@ WEAPON_SE_DATA[117] = ["괴력선창"]
 
 WEAPON_SE_DATA[123] = ["현무의검"]
 
+WEAPON_SE_DATA[124] = ["일월대도"]
 WEAPON_SE_DATA[125] = ["일월대도"]
 WEAPON_SE_DATA[130] = ["일월대도"]
 

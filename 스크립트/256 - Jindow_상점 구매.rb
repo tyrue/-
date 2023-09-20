@@ -81,12 +81,13 @@ class Jindow_Shop < Jindow
 		
 		@line_count = 1
 		@item_margin = 10
+		@item_y = [(@eventBitmap.y + @eventBitmap.height), (@helloText.y + @helloText.height)].max
 		
 		count = 0
 		for i in @data
 			if i.is_a?(J::Item)
 				i.x = (count % @line_count) * (i.width + @item_margin)
-				i.y = (count / @line_count) * (i.height + @item_margin) + (@helloText.y + @helloText.height + 5)
+				i.y = (count / @line_count) * (i.height + @item_margin) + (@item_y + 5)
 				count += 1
 			end
 		end

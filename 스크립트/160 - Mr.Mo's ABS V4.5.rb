@@ -128,6 +128,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[269] = [2000000, 0] # 무적다람쥐
 	
 	# 기타
+	ABS_ENEMY_HP[58] = [800000, 1] # 수룡
+	ABS_ENEMY_HP[59] = [800000, 1] # 화룡
+	
 	ABS_ENEMY_HP[61] = [5000000, 1] # 주작
 	ABS_ENEMY_HP[62] = [5000000, 1] # 백호
 	
@@ -203,7 +206,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[259] = [500000000, 1]# 가릉빈가
 	
 	# 한두고개
-	ABS_ENEMY_HP[269] = [5000000, 0]# 무적다람쥐
+	ABS_ENEMY_HP[268] = [7777777, 1]# 최강다람쥐
+	ABS_ENEMY_HP[269] = [22222222, 1]# 무적다람쥐
 	
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
@@ -255,6 +259,10 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[246] = [15000000]	# 선장망령
 	ENEMY_EXP[252] = [300000000] # 마려
 	ENEMY_EXP[259] = [4000000000] # 가릉빈가
+	
+	# 한두고개
+	ENEMY_EXP[268] = [9999999, 0]# 최강다람쥐
+	ENEMY_EXP[269] = [22222222, 0]# 무적다람쥐
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -1487,6 +1495,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			Network::Main.ani(Network::Main.id, 129)
 		end
 		
+		def check_rpg_skill(id, character, battler)
+			$rpg_skill.heal(id, battler) # 이게 회복 스킬인지 확인
+			$rpg_skill.party_heal(id, battler) # 이게 파티 회복 스킬인지 확인
+			$rpg_skill.buff(id, battler) # 이게 버프 스킬인지 확인
+			$rpg_skill.party_buff(id, battler) # 파티 버프 스킬인지 확인
+			$rpg_skill.active_skill(id, character, battler) # 액티브 스킬 행동 커스텀 확인
+		end
+		
 		#--------------------------------------------------------------------------
 		# *  플레이어의 스킬 공격
 		#--------------------------------------------------------------------------
@@ -1509,6 +1525,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.party_buff(id) # 파티 버프 스킬인지 확인
 			$rpg_skill.active_skill(id) # 액티브 스킬 행동 커스텀 확인
+			#check_rpg_skill(id, $game_player, @actor)
 			$rpg_skill.skill_chat(skill) # 스킬 사용시 말하는 것
 			skill_console(id)   # 스킬 딜레이 표시
 			
@@ -2478,7 +2495,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				$rpg_skill.skill_cost_custom(@actor, @skill.id) # 스킬 코스트
 			end
 			
-			#make_range_event(self, @range_skill[3])
 			$ABS.make_range_sprite(self, @range_skill[3], @skill)
 		end
 		
@@ -2595,7 +2611,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def hit_net_player(net_player)
 			return if !@parent.is_a?(Game_Player)
 			if @skill.id == 138
-				$rpg_skill.비영승보(net_player)
+				$rpg_skill.비영승보(@actor, net_player)
 			end
 		end 
 		
@@ -2642,7 +2658,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				target_id = 0
 				
 				if skill_id == 138 # 무형검
-					$rpg_skill.비영승보(@enani)
+					$rpg_skill.비영승보(@actor, @enani)
 				end
 			else
 				enemy = $ABS.enemies[@parent.id]
@@ -3329,14 +3345,12 @@ if SDK.state("Mr.Mo's ABS") == true
 						sprite.opacity = 255
 						sprite.one_use = true
 						
-						sprite.ox = (nowX)
-						sprite.oy = (nowY)
-						
-						sprite.x = element.screen_x + (nowX) * 32
-						sprite.y = element.screen_y + (nowY) * 32
-						
 						sprite.animation2($data_animations[skill.animation2_id], true)
-						@ranged_sprites2.push([sprite, element])
+						
+						sprite.ox = 0
+						sprite.oy = 0
+						
+						@ranged_sprites2.push([sprite, element, nowX, nowY])
 					end
 				end
 			end
@@ -3346,6 +3360,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			for data in @ranged_sprites2
 				range = data[0]
 				element = data[1]
+				ox = data[2]
+				oy = data[3]
 				
 				#Skip NIL Values
 				if range == nil or range.disposed?
@@ -3353,8 +3369,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					next
 				end
 				
-				range.x = element.screen_x + range.ox * 32
-				range.y = element.screen_y + range.oy * 32
+				range.x = element.screen_x + ox * 32
+				range.y = element.screen_y + oy * 32 - 32
 				range.update
 			end
 		end

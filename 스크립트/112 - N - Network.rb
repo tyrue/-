@@ -2263,40 +2263,42 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#~ return true
 					#-----------------------------------------------------------------------      
 				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # 시전자이름, 마법번호, 파티크기, 맵번호, 체력/마력(0이면 버프라고 생각)
-					if $npt == $3.to_s
-						map_id = $4.to_i
-						if $game_map.map_id == map_id
-							if $netparty.size > 1 # 파티에 가입된 경우에만
-								name = $1.to_s
-								skill_id = $2.to_i
-								heal_v = $5.to_i
-								ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
-								if not $game_party.actors[0].hp == 0 # 회복 스킬
-									$game_player.animation_id = ani_id
-									$rpg_skill.buff(skill_id)
-									
-									case skill_id
-									when 92 # 공력주입
-										$game_party.actors[0].sp += heal_v
-									else
-										$game_party.actors[0].hp += heal_v
-									end								
-									$game_party.actors[0].critical = "heal"
-									$game_party.actors[0].damage = heal_v
-									self.ani(@id, ani_id)
-									$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")	
-								else
-									case skill_id
-									when 120 # 부활
-										$game_player.animation_id = ani_id
-										$game_temp.common_event_id = 24
-										self.ani(@id, ani_id)	
-										$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")	
-									end	
-								end
-							end
-						end
+					map_id = $4.to_i
+					return if $npt != $3.to_s
+					return if $game_map.map_id != map_id
+					return if $netparty.size <= 1 # 파티에 가입한 경우에만
+					
+					name = $1.to_s
+					skill_id = $2.to_i
+					heal_v = $5.to_i
+					ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
+					
+					sw = false
+					if not $game_party.actors[0].hp == 0 # 회복 스킬
+						sw = true
+						$rpg_skill.buff(skill_id)
+						case skill_id
+						when 92 # 공력주입
+							$game_party.actors[0].sp += heal_v
+						else
+							$game_party.actors[0].hp += heal_v
+						end								
+					else
+						case skill_id
+						when 120 # 부활
+							$game_temp.common_event_id = 24
+							sw = true
+						end	
 					end
+					
+					if sw
+						$game_player.animation_id = ani_id
+						self.ani(@id, ani_id)
+						$game_party.actors[0].critical = "heal"
+						$game_party.actors[0].damage = heal_v
+						$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")
+					end
+					
 					return true
 					
 					#-----------------------------------------------------------------    

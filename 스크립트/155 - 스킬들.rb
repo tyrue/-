@@ -281,19 +281,21 @@ class Rpg_skill
 	end
 	
 	# 파티 버프
-	def party_buff(id)
+	def party_buff(id, character = $game_player)
 		is_party_buff = false
 		is_party_buff = true if PARTY_BUFF_SKILL[id] != nil
+		return !is_party_buff
 		
-		if is_party_buff
-			ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
-			$game_player.animation_id = ani_id
+		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
+		character.ani_array.push(ani_id)
+		if character == $game_player
 			Network::Main.ani(Network::Main.id, ani_id)
-			
 			if $netparty.size >= 2 # 파티가 2인 이상이라면
 				name = $game_party.actors[0].name
 				Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{0}</partyhill>\n")	
 			end
+		else
+			Network::Main.ani(Network::Main.id, ani_id)
 		end
 	end
 	
@@ -340,223 +342,231 @@ class Rpg_skill
 		end
 	end
 	
-	def buff(id)
+	def buff(id, battler = $game_party.actors[0])
 		# 아직 버프가 지속중이면 무시
 		skill_mash = SKILL_BUFF_TIME[id]
 		return if skill_mash == nil
-		time_now = skill_mash[1]
-		$ABS.skill_console(id) # 스킬 표시
-		return if time_now > 0
 		
-		if BUFF_SKILL[id] != nil
-			for data in BUFF_SKILL[id]
-				case data[0].to_s
-				when "str" # 힘
-					$game_party.actors[0].str += data[1].to_i
-					@base_str += data[1].to_i
-				when "dex" # 손재주
-					$game_party.actors[0].dex += data[1].to_i
-					@base_dex += data[1].to_i
-				when "int" # 지력
-					@base_int += data[1].to_i
-					$game_party.actors[0].int += data[1].to_i
-				when "agi" # 민첩
-					$game_party.actors[0].agi += data[1].to_i
-					@base_agi += data[1].to_i
-				when "mdef" # 마법 방어
-					$game_party.actors[0].mdef += data[1].to_i
-				when "pdef" # 물리 방어
-					$game_party.actors[0].pdef += data[1].to_i
-					
-					# 퍼센트
-				when "per_str" # 힘
-					base = $game_party.actors[0].take_base_str
-					n = (base * (data[1].to_f - 1.0)).to_i
-					data[2] = n
-					$game_party.actors[0].str += n
-					@base_str += n
-				when "per_dex" # 손재주
-					base = $game_party.actors[0].take_base_dex
-					n = (base * (data[1].to_f - 1.0)).to_i
-					data[2] = n
-					$game_party.actors[0].dex += n
-					@base_dex += n
-				when "per_int" # 지력
-					base = $game_party.actors[0].take_base_int
-					n = (base * (data[1].to_f - 1.0)).to_i
-					data[2] = n
-					$game_party.actors[0].int += n
-					@base_int += n
-				when "per_agi" # 민첩
-					base = $game_party.actors[0].take_base_agi
-					n = (base * (data[1].to_f - 1.0)).to_i
-					data[2] = n
-					$game_party.actors[0].agi += n
-					@base_agi += n
-				when "per_mdef" # 마법 방어
-					$game_party.actors[0].mdef *= data[1].to_f
-				when "per_pdef" # 물리 방어
-					$game_party.actors[0].pdef *= data[1].to_f
-					
-				when "com" # 커먼 이벤트
-					$game_temp.common_event_id = data[1].to_i
-					
-				when "speed" # 속도 변경
-					$game_player.move_speed += data[1]
-					Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-					
-				when "custom" # 자체 수정
-					case id
-					when 66  # 신수둔각도
-						$game_variables[41] = $game_party.actors[0].weapon_id # 대충 현재 착용 했던 무기 아이디 저장
-						if $game_switches[1] == true # 청룡
-							$game_party.gain_weapon(4, 1)
-							$game_party.actors[0].equip(0, 4)
-							
-						elsif $game_switches[2] == true # 백호
-							$game_party.gain_weapon(2, 1)
-							$game_party.actors[0].equip(0, 2)
-							
-						elsif $game_switches[3] == true # 주작
-							$game_party.gain_weapon(1, 1)
-							$game_party.actors[0].equip(0, 1)
-							
-						elsif $game_switches[4] == true # 현무
-							$game_party.gain_weapon(3, 1)
-							$game_party.actors[0].equip(0, 3)
-						end
+		if battler == $game_party.actors[0] # 플레이어
+			time_now = skill_mash[1] # 버프 시간 갱신
+			$ABS.skill_console(id) # 스킬 표시
+			return if time_now > 0
+		else # abs 적
+			return self.buff_enemy(id, battler)
+		end
+		return if BUFF_SKILL[id] == nil
+		
+		for data in BUFF_SKILL[id]
+			case data[0].to_s
+			when "str" # 힘
+				$game_party.actors[0].str += data[1].to_i
+				@base_str += data[1].to_i
+			when "dex" # 손재주
+				$game_party.actors[0].dex += data[1].to_i
+				@base_dex += data[1].to_i
+			when "int" # 지력
+				@base_int += data[1].to_i
+				$game_party.actors[0].int += data[1].to_i
+			when "agi" # 민첩
+				$game_party.actors[0].agi += data[1].to_i
+				@base_agi += data[1].to_i
+			when "mdef" # 마법 방어
+				$game_party.actors[0].mdef += data[1].to_i
+			when "pdef" # 물리 방어
+				$game_party.actors[0].pdef += data[1].to_i
+				
+				# 퍼센트
+			when "per_str" # 힘
+				base = $game_party.actors[0].take_base_str
+				n = (base * (data[1].to_f - 1.0)).to_i
+				data[2] = n
+				$game_party.actors[0].str += n
+				@base_str += n
+			when "per_dex" # 손재주
+				base = $game_party.actors[0].take_base_dex
+				n = (base * (data[1].to_f - 1.0)).to_i
+				data[2] = n
+				$game_party.actors[0].dex += n
+				@base_dex += n
+			when "per_int" # 지력
+				base = $game_party.actors[0].take_base_int
+				n = (base * (data[1].to_f - 1.0)).to_i
+				data[2] = n
+				$game_party.actors[0].int += n
+				@base_int += n
+			when "per_agi" # 민첩
+				base = $game_party.actors[0].take_base_agi
+				n = (base * (data[1].to_f - 1.0)).to_i
+				data[2] = n
+				$game_party.actors[0].agi += n
+				@base_agi += n
+			when "per_mdef" # 마법 방어
+				$game_party.actors[0].mdef *= data[1].to_f
+			when "per_pdef" # 물리 방어
+				$game_party.actors[0].pdef *= data[1].to_f
+				
+			when "com" # 커먼 이벤트
+				$game_temp.common_event_id = data[1].to_i
+				
+			when "speed" # 속도 변경
+				$game_player.move_speed += data[1]
+				Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+				
+			when "custom" # 자체 수정
+				case id
+				when 66  # 신수둔각도
+					$game_variables[41] = $game_party.actors[0].weapon_id # 대충 현재 착용 했던 무기 아이디 저장
+					if $game_switches[1] == true # 청룡
+						$game_party.gain_weapon(4, 1)
+						$game_party.actors[0].equip(0, 4)
 						
-					when 131, 141, 142 # 투명
-						self.투명
+					elsif $game_switches[2] == true # 백호
+						$game_party.gain_weapon(2, 1)
+						$game_party.actors[0].equip(0, 2)
 						
-					when 134 # 분신
-						$console.write_line("분신을 생성합니다.")
+					elsif $game_switches[3] == true # 주작
+						$game_party.gain_weapon(1, 1)
+						$game_party.actors[0].equip(0, 1)
 						
-					when 140 # 운기
-						$console.write_line("마력을 회복합니다.")
-					else
-						
+					elsif $game_switches[4] == true # 현무
+						$game_party.gain_weapon(3, 1)
+						$game_party.actors[0].equip(0, 3)
 					end
+					
+				when 131, 141, 142 # 투명
+					self.투명
+					
+				when 134 # 분신
+					$console.write_line("분신을 생성합니다.")
+					
+				when 140 # 운기
+					$console.write_line("마력을 회복합니다.")
+				else
+					
+				end
+			end
+		end
+		
+	end
+	
+	def buff_del(id)
+		return if BUFF_SKILL[id] == nil
+		
+		for data in BUFF_SKILL[id]
+			n = data[1]
+			case data[0].to_s
+			when "str" # 힘
+				$game_party.actors[0].str -= n.to_i
+				@base_str = [0, @base_str - n].max
+			when "dex" # 손재주
+				$game_party.actors[0].dex -= n.to_i
+				@base_dex = [0, @base_dex - n].max
+			when "int" # 지력
+				$game_party.actors[0].int -= n.to_i
+				@base_int = [0, @base_int - n].max
+			when "agi" # 민첩
+				$game_party.actors[0].agi -= n.to_i
+				@base_agi = [0, @base_agi - n].max
+			when "mdef" # 마법 방어
+				$game_party.actors[0].mdef -= n.to_i
+				$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
+			when "pdef" # 물리 방어
+				$game_party.actors[0].pdef -= n.to_i
+				$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
+				# 퍼센트
+			when "per_str" # 힘
+				n = 0
+				if(data[2] != nil and data[2] != 0)
+					n = data[2]
+				else
+					r = (data[1].to_f - 1.0)
+					base = $game_party.actors[0].take_base_str
+					n = base * (r / (1 + r))
+				end
+				$game_party.actors[0].str -= n
+				@base_str = [0, @base_str - n].max
+				
+			when "per_dex" # 손재주
+				n = 0
+				if(data[2] != nil and data[2] != 0)
+					n = data[2]
+				else
+					r = (data[1].to_f - 1.0)
+					base = $game_party.actors[0].take_base_dex
+					n = base * (r / (1 + r))
+				end
+				$game_party.actors[0].dex -= n
+				@base_dex = [0, @base_dex - n].max
+				
+			when "per_int" # 지력
+				n = 0
+				if(data[2] != nil and data[2] != 0)
+					n = data[2]
+				else
+					base = $game_party.actors[0].take_base_int
+					r = (data[1].to_f - 1.0)
+					n = base * (r / (1 + r))
+				end
+				$game_party.actors[0].int -= n 
+				@base_int = [0, @base_int - n].max
+				
+			when "per_agi" # 민첩
+				n = 0
+				if(data[2] != nil and data[2] != 0)
+					n = data[2]
+				else
+					base = $game_party.actors[0].take_base_agi
+					r = (data[1].to_f - 1.0)
+					n = base * (r / (1 + r))
+				end
+				$game_party.actors[0].agi -= n
+				@base_agi = [0, @base_agi - n].max
+				
+			when "per_mdef" # 마법 방어
+				$game_party.actors[0].mdef /= n
+				$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
+			when "per_pdef" # 물리 방어
+				$game_party.actors[0].pdef /= n
+				$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
+			when "speed"	
+				$game_player.move_speed -= n
+				Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
+				
+			else
+				case id
+				when 28 # 야수
+					$game_temp.common_event_id = 41
+				when 35 # 비호
+					$game_temp.common_event_id = 41
+				when 50 # 야수금술
+					$game_temp.common_event_id = 41
+				when 66  # 신수둔각도
+					$game_party.actors[0].equip(0, 0)
+					$game_party.lose_weapon(1, 999)
+					$game_party.lose_weapon(2, 999)
+					$game_party.lose_weapon(3, 999)
+					$game_party.lose_weapon(4, 999)
+					Audio.se_play("Audio/SE/장비", $game_variables[13])
+					
+					$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
+					
+				when 131, 141, 142 # 투명, 1, 2성
+					$game_variables[9] = 1
+					Network::Main.send_trans(false)
+					$state_trans = false
+					
+				when 134 # 분신
+					$console.write_line("분신이 사라집니다.")
+					
+				when 140 # 운기
+					$console.write_line("운기가 종료 됩니다.")	
 				end
 			end
 		end
 	end
 	
-	
-	def buff_del(id)
-		if BUFF_SKILL[id] != nil
-			for data in BUFF_SKILL[id]
-				n = data[1]
-				case data[0].to_s
-				when "str" # 힘
-					$game_party.actors[0].str -= n.to_i
-					@base_str = [0, @base_str - n].max
-				when "dex" # 손재주
-					$game_party.actors[0].dex -= n.to_i
-					@base_dex = [0, @base_dex - n].max
-				when "int" # 지력
-					$game_party.actors[0].int -= n.to_i
-					@base_int = [0, @base_int - n].max
-				when "agi" # 민첩
-					$game_party.actors[0].agi -= n.to_i
-					@base_agi = [0, @base_agi - n].max
-				when "mdef" # 마법 방어
-					$game_party.actors[0].mdef -= n.to_i
-					$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
-				when "pdef" # 물리 방어
-					$game_party.actors[0].pdef -= n.to_i
-					$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
-					# 퍼센트
-				when "per_str" # 힘
-					n = 0
-					if(data[2] != nil and data[2] != 0)
-						n = data[2]
-					else
-						r = (data[1].to_f - 1.0)
-						base = $game_party.actors[0].take_base_str
-						n = base * (r / (1 + r))
-					end
-					$game_party.actors[0].str -= n
-					@base_str = [0, @base_str - n].max
-					
-				when "per_dex" # 손재주
-					n = 0
-					if(data[2] != nil and data[2] != 0)
-						n = data[2]
-					else
-						r = (data[1].to_f - 1.0)
-						base = $game_party.actors[0].take_base_dex
-						n = base * (r / (1 + r))
-					end
-					$game_party.actors[0].dex -= n
-					@base_dex = [0, @base_dex - n].max
-					
-				when "per_int" # 지력
-					n = 0
-					if(data[2] != nil and data[2] != 0)
-						n = data[2]
-					else
-						base = $game_party.actors[0].take_base_int
-						r = (data[1].to_f - 1.0)
-						n = base * (r / (1 + r))
-					end
-					$game_party.actors[0].int -= n 
-					@base_int = [0, @base_int - n].max
-					
-				when "per_agi" # 민첩
-					n = 0
-					if(data[2] != nil and data[2] != 0)
-						n = data[2]
-					else
-						base = $game_party.actors[0].take_base_agi
-						r = (data[1].to_f - 1.0)
-						n = base * (r / (1 + r))
-					end
-					$game_party.actors[0].agi -= n
-					@base_agi = [0, @base_agi - n].max
-					
-				when "per_mdef" # 마법 방어
-					$game_party.actors[0].mdef /= n
-					$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
-				when "per_pdef" # 물리 방어
-					$game_party.actors[0].pdef /= n
-					$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
-				when "speed"	
-					$game_player.move_speed -= n
-					Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-					
-				else
-					case id
-					when 28 # 야수
-						$game_temp.common_event_id = 41
-					when 35 # 비호
-						$game_temp.common_event_id = 41
-					when 50 # 야수금술
-						$game_temp.common_event_id = 41
-					when 66  # 신수둔각도
-						$game_party.actors[0].equip(0, 0)
-						$game_party.lose_weapon(1, 999)
-						$game_party.lose_weapon(2, 999)
-						$game_party.lose_weapon(3, 999)
-						$game_party.lose_weapon(4, 999)
-						Audio.se_play("Audio/SE/장비", $game_variables[13])
-						
-						$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
-						
-					when 131, 141, 142 # 투명, 1, 2성
-						$game_variables[9] = 1
-						Network::Main.send_trans(false)
-						$state_trans = false
-						
-					when 134 # 분신
-						$console.write_line("분신이 사라집니다.")
-						
-					when 140 # 운기
-						$console.write_line("운기가 종료 됩니다.")	
-					end
-				end
-			end
-		end
+	def buff_enemy(id, battler)
+		
 	end
 	
 	def casting_chat(data, user = $game_player)
@@ -692,15 +702,21 @@ class Rpg_skill
 	end
 	
 	# 액티브 스킬 커스텀
-	def active_skill(id)
+	def active_skill(id, character = $game_player, battler = $game_party.actors[0])
 		if ACTIVE_SKILL[id] != nil
 			case id
+			when 15 # 공력증강
+				
 			when 73 # 광량돌격
-				광량돌격
+				광량돌격(character)
 			when 132
-				비영승보
+				비영승보(character)
 			end
 		end
+	end
+	
+	def 공력증강(actor)
+		
 	end
 	
 	def 투명
@@ -713,20 +729,20 @@ class Rpg_skill
 		
 	end
 	
-	def 광량돌격(d = $game_player.direction)
+	def 광량돌격(actor)
 		move_num = 10 # 스킬 범위만큼
-		x = $game_player.x
-		y = $game_player.y
-		d = $game_player.direction
+		x = actor.x
+		y = actor.y
+		d = actor.direction
 		for i in 0...move_num
-			break if !$game_player.passable?(x, y, d)			
+			break if !actor.passable?(x, y, d)			
 			x += (d == 6 ? 1 : d == 4 ? -1 : 0)
 			y += (d == 2 ? 1 : d == 8 ? -1 : 0)
 		end
-		$game_player.moveto(x, y)
+		actor.moveto(x, y)
 	end
 	
-	def 비영승보(enemy = nil, actor = $game_player)
+	def 비영승보(actor = $game_player, enemy = nil)
 		return if actor == nil
 		x = actor.x
 		y = actor.y

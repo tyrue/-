@@ -69,6 +69,7 @@ module RPG
 			animation_name = animation.animation_name
 			animation_hue = animation.animation_hue
 			bitmap = RPG::Cache.animation(animation_name, animation_hue)
+			
 			if @@_reference_count.include?(bitmap)
 				@@_reference_count[bitmap] += 1
 			else

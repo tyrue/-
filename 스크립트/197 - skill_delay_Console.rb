@@ -44,10 +44,12 @@ class Skill_Delay_Console < Sprite
 		end
 		
 		# 버프 지속시간 갱신
-		for skill_mash in SKILL_BUFF_TIME
-			if skill_mash[1][1] > 0
+		for buff_time in $game_party.actors[0].buff_time
+			id = buff_time[0]
+			time = buff_time[1]
+			if time > 0
 				sprite = Sprite_Chat.new(@console_viewport)
-				@console_log2[skill_mash[0]] = [sprite]
+				@console_log2[id] = [sprite]
 			end
 		end
 		
@@ -71,25 +73,26 @@ class Skill_Delay_Console < Sprite
 		for log in @console_log2
 			id = log[0]
 			sprite = log[1][0]
+			buff_time = $game_party.actors[0].buff_time[id]
+			next if buff_time == nil
 			
-			if SKILL_BUFF_TIME[id] != nil
-				if SKILL_BUFF_TIME[id][1].to_i == 0 
-					sprite.dispose if !sprite.disposed?
-					@console_log2.delete(id)
-					next
-				end
-				
-				sprite = Sprite.new(@console_viewport) if sprite == nil
-				sprite.bitmap.clear if sprite.bitmap != nil
-				sprite.bitmap = Bitmap.new(width, 32)
-				sprite.bitmap.font.size = @font_size
-				sprite.bitmap.font.color.set(0, 255, 0, 255)
-				sprite.x = 0
-				sprite.y = (i) * @font_size + 1
-				sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_BUFF_TIME[id][1] / 60.0)}초")
-				sprite.opacity = 255
-				i += 1
+			if buff_time == 0 
+				sprite.dispose if !sprite.disposed?
+				@console_log2.delete(id)
+				next
 			end
+			
+			sprite = Sprite.new(@console_viewport) if sprite == nil
+			sprite.bitmap.clear if sprite.bitmap != nil
+			sprite.bitmap = Bitmap.new(width, 32)
+			sprite.bitmap.font.size = @font_size
+			sprite.bitmap.font.color.set(0, 255, 0, 255)
+			sprite.x = 0
+			sprite.y = (i) * @font_size + 1
+			sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (buff_time / 60.0)}초")
+			sprite.opacity = 255
+			i += 1
+			
 		end
 		
 		for log in @console_log
@@ -140,17 +143,16 @@ class Skill_Delay_Console < Sprite
 		@console_log[id][0].dispose if @console_log[id] != nil and !@console_log[id][0].disposed?
 		@console_log2[id][0].dispose if @console_log2[id] != nil and !@console_log2[id][0].disposed?
 		
+		buff_time = $game_party.actors[0].buff_time[id]
+		if buff_time != nil and buff_time > 0		
+			sprite = Sprite.new(@console_viewport)
+			@console_log2[id] = [sprite]			
+		end
+		
 		if SKILL_MASH_TIME[id] != nil
 			if SKILL_MASH_TIME[id][1] > 0
 				sprite = Sprite.new(@console_viewport)
 				@console_log[id] = [sprite]
-			end
-		end
-		
-		if SKILL_BUFF_TIME[id] != nil
-			if SKILL_BUFF_TIME[id][1] > 0
-				sprite = Sprite.new(@console_viewport)
-				@console_log2[id] = [sprite]
 			end
 		end
 	end

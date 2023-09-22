@@ -1587,7 +1587,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							break if d == "*null*"
 							i = []
 							i = d.split ","
-							SKILL_BUFF_TIME[i[0].to_i][1] = i[1].to_i if i[1] != nil and SKILL_BUFF_TIME[i[0].to_i] != nil
+							$game_party.actors[0].buff_time[i[0].to_i] = i[1].to_i
 						end
 					end
 					if $global_x == 37
@@ -2240,28 +2240,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return if enemy == nil
 					$ABS.abs_gain_treasure(enemy, 1)
 					
-					#~ when /<nptgain>(.*) (.*) (.*) (.*) (.*)<\/nptgain>/ # 경험치, 돈, 파티장, 맵의 파티원 수, 몬스터 아이디
-					#~ if $npt == $3.to_s
-					#~ return if $game_party.actors[0].hp <= 0 
-					#~ actor = $game_party.actors[0]
-					#~ exp = $1.to_i
-					#~ gold = $2.to_i
-					#~ in_map_player = $4.to_i
-					
-					#~ nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
-					#~ limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
-					#~ exp = actor.level < 99 ? [exp, limitExp].min : exp
-					#~ exp = (exp * 1.5).to_i / in_map_player
-					#~ gold = (gold * 1.5).to_i / in_map_player
-					
-					#~ actor.exp += exp
-					#~ $game_party.gain_gold(gold)
-					#~ expPer = actor.level < 99 ? ((actor.exp - actor.exp_list[actor.level]) * 100.0 / nextExp) : (actor.exp * 100.0 / nextExp)
-					#~ $console.write_line("[파티]경험치:#{change_number_unit(exp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)")
-					#~ end
-					
-					#~ return true
-					#-----------------------------------------------------------------------      
 				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # 시전자이름, 마법번호, 파티크기, 맵번호, 체력/마력(0이면 버프라고 생각)
 					map_id = $4.to_i
 					return if $npt != $3.to_s
@@ -2276,7 +2254,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					sw = false
 					if not $game_party.actors[0].hp == 0 # 회복 스킬
 						sw = true
-						$rpg_skill.buff(skill_id)
+						$rpg_skill.buff(skill_id, false)
 						case skill_id
 						when 92 # 공력주입
 							$game_party.actors[0].sp += heal_v

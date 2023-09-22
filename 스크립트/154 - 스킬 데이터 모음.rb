@@ -55,50 +55,47 @@ PARTY_HEAL_SKILL[120] = [1]  		# 부활
 # //////////////////////////end///////////////////////////////#
 
 # ----------------------- 버프 --------------------------------#
-# 스텟(int, dex, str, agi등), 값 
-#BUFF_SKILL[id] = [time, [[스텟, 값, (버프 해제시 되돌릴 값)], []..], 파티 버프 여부] # 누리의힘
+#BUFF_SKILL[id] = [time, 파티 버프 여부, [[스텟, 값, (버프 해제시 되돌릴 값)], []..]] # 누리의힘
+# 주술사
+BUFF_SKILL[26] = [180, false, [["str", 20]] ] # 누리의힘
+BUFF_SKILL[28] = [60, false, [["com", 40]] ] # 야수
+BUFF_SKILL[35] = [60, false, [["com", 42]] ] # 비호
+BUFF_SKILL[42] = [180, true, [["per_int", 1.2, 0]] ] # 주술마도
 
-BUFF_SKILL[26] = [["str", 20]] # 누리의힘
-BUFF_SKILL[28] = [["com", 40]] # 야수
-BUFF_SKILL[35] = [["com", 42]] # 비호
-BUFF_SKILL[42] = [["per_int", 1.2, 0]] # 주술마도
+# 도사
+BUFF_SKILL[50] = [60, true, [["com", 40]] ] # 야수수금술
+BUFF_SKILL[51] = [180, true, [["str", 30]] ] # 대지의힘
+BUFF_SKILL[88] = [60, true, [["per_str", 1.2, 0]] ] # 분량력법
+BUFF_SKILL[90] = [60, true, [["per_agi", 1.2, 0]] ] # 분량방법
+BUFF_SKILL[91] = [60, false, [["com", 129]] ] # 석화기탄
+BUFF_SKILL[46] = [180, true, [["mdef", 10], ["pdef", 10]] ] # 무장
+BUFF_SKILL[47] = [180, true, [["mdef", 15], ["pdef", 15]] ] # 보호
+BUFF_SKILL[94] = [5, false] # 금강불체
+BUFF_SKILL[121] = [10, true] # 신령지익진
+BUFF_SKILL[122] = [10, true] # 파력무참진
 
-BUFF_SKILL[50] = [["com", 40]] # 야수수금술
-BUFF_SKILL[88] = [["per_str", 1.2, 0]] # 분량력법
-BUFF_SKILL[90] = [["per_agi", 1.2, 0]] # 분량방법
-BUFF_SKILL[46] = [["mdef", 10], ["pdef", 10]] # 무장
-BUFF_SKILL[47] = [["mdef", 15], ["pdef", 15]] # 보호
 
-BUFF_SKILL[62] = [["dex", 50]] # 수심각도
-BUFF_SKILL[63] = [["agi", 50]] # 반영대도
-BUFF_SKILL[64] = [["per_str", 1.1, 0]] # 십량분법
-BUFF_SKILL[66] = [["custom", 1]] # 신수둔각도
-BUFF_SKILL[71] = [["per_str", 1.6, 0]] # 혼신의힘
-BUFF_SKILL[72] = [["per_str", 1.2, 0]] # 구량분법
-BUFF_SKILL[76] = [["per_str", 1.3, 0]] # 팔량분법
+# 전사
+BUFF_SKILL[62] = [180, false, [["dex", 50]] ] # 수심각도
+BUFF_SKILL[63] = [180, false, [["agi", 50]] ] # 반영대도
+BUFF_SKILL[64] = [180, false, [["per_str", 1.1, 0]] ] # 십량분법
+BUFF_SKILL[66] = [60, false, [["custom", 1]] ] # 신수둔각도
+BUFF_SKILL[71] = [10, false, [["per_str", 1.6, 0]] ] # 혼신의힘
+BUFF_SKILL[72] = [180, false, [["per_str", 1.2, 0]] ] # 구량분법
+BUFF_SKILL[76] = [180, false, [["per_str", 1.3, 0]] ] # 팔량분법
 
-BUFF_SKILL[91] = [["com", 129]] # 석화기탄
-BUFF_SKILL[130] = [["dex", 50], ["agi", 50]] # 무영보법
-BUFF_SKILL[131] = [["custom", 1]] # 투명
-BUFF_SKILL[141] = [["custom", 1]] # 투명 1성
-BUFF_SKILL[142] = [["custom", 1]] # 투명 2성
-BUFF_SKILL[134] = [["custom", 1]] # 분신
-BUFF_SKILL[136] = [["speed", 0.5]] # 운상미보
-BUFF_SKILL[140] = [["custom", 1]] # 운기
 
-BUFF_SKILL[99] = [["speed", 0.5]] # 속도시약
-# //////////////////////////end///////////////////////////////#
 
-# ----------------------- 파티 버프 --------------------------------#
-PARTY_BUFF_SKILL[50] = [] # 야수수금술
-PARTY_BUFF_SKILL[88] = [] # 분량력법
-PARTY_BUFF_SKILL[90] = [] # 분량방법
-PARTY_BUFF_SKILL[42] = [] # 주술마도
-PARTY_BUFF_SKILL[46] = [] # 무장
-PARTY_BUFF_SKILL[47] = [] # 보호
-PARTY_BUFF_SKILL[121] = [] # 신령지익진
-PARTY_BUFF_SKILL[122] = [] # 파력무참진
-PARTY_BUFF_SKILL[136] = [] # 운상미보
+# 도적
+BUFF_SKILL[130] = [180, false, [["dex", 50], ["agi", 50]] ] # 무영보법
+BUFF_SKILL[131] = [20, false, [["custom", 1]] ] # 투명
+BUFF_SKILL[141] = [20, false, [["custom", 1]] ] # 투명 1성
+BUFF_SKILL[142] = [30, false, [["custom", 1]] ] # 투명 2성
+BUFF_SKILL[134] = [120, false, [["custom", 1]] ] # 분신
+BUFF_SKILL[136] = [180, true, [["speed", 0.5]] ] # 운상미보
+BUFF_SKILL[140] = [10, false, [["custom", 1]] ] # 운기
+
+BUFF_SKILL[99] = [360, false, [["speed", 0.5]] ] # 속도시약
 # //////////////////////////end///////////////////////////////#
 
 # -----------------------액티브 커스텀 스킬--------------------------------#
@@ -378,50 +375,6 @@ SKILL_MASH_TIME[161] = [90 * sec, 0] # 폭류유성
 
 # 기타
 SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
-# //////////////////////////end///////////////////////////////#
-
-# -------------------------버프 지속시간----------------------------#
-# 주술사
-# [원래 지속 시간, 현재 남은 시간]
-SKILL_BUFF_TIME[9] = [180 * sec, 0] # 무장
-SKILL_BUFF_TIME[46] = [180 * sec, 0] # 무장
-SKILL_BUFF_TIME[20] = [180 * sec, 0] # 보호
-SKILL_BUFF_TIME[47] = [180 * sec, 0] # 보호
-SKILL_BUFF_TIME[26] = [180 * sec, 0] # 누리의힘
-SKILL_BUFF_TIME[28] = [60 * sec, 0] # 야수
-SKILL_BUFF_TIME[35] = [60 * sec, 0] # 비호
-SKILL_BUFF_TIME[42] = [180 * sec, 0] # 주술마도
-SKILL_BUFF_TIME[51] = [180 * sec, 0] # 대지의힘
-
-# 전사
-SKILL_BUFF_TIME[62] = [180 * sec, 0] # 수심각도
-SKILL_BUFF_TIME[63] = [180 * sec, 0] # 반영대도
-SKILL_BUFF_TIME[64] = [180 * sec, 0] # 십량분법
-SKILL_BUFF_TIME[66] = [60 * sec, 0] # 신수둔각도
-SKILL_BUFF_TIME[72] = [180 * sec, 0] # 구량분법
-SKILL_BUFF_TIME[76] = [180 * sec, 0] # 팔량분법
-SKILL_BUFF_TIME[71] = [10 * sec, 0] # 혼신의힘
-
-# 도사
-SKILL_BUFF_TIME[50] = [60 * sec, 0] # 야수금술술
-SKILL_BUFF_TIME[88] = [60 * sec, 0] # 분량력법
-SKILL_BUFF_TIME[90] = [60 * sec, 0] # 분량방법
-SKILL_BUFF_TIME[91] = [60 * sec, 0] # 석화기탄
-SKILL_BUFF_TIME[94] = [5 * sec, 0] # 금강불체
-SKILL_BUFF_TIME[121] = [10 * sec, 0] # 신령지익진
-SKILL_BUFF_TIME[122] = [10 * sec, 0] # 파력무참진
-
-# 도적
-SKILL_BUFF_TIME[130] = [180 * sec, 0] # 무영보법
-SKILL_BUFF_TIME[131] = [20 * sec, 0] # 투명
-SKILL_BUFF_TIME[134] = [120 * sec, 0] # 분신
-SKILL_BUFF_TIME[136] = [180 * sec, 0] # 운상미보
-SKILL_BUFF_TIME[140] = [10 * sec, 0] # 운기
-SKILL_BUFF_TIME[141] = [20 * sec, 0] # 투명 1성
-SKILL_BUFF_TIME[142] = [30 * sec, 0] # 투명 2성
-
-# 기타
-SKILL_BUFF_TIME[99] = [360 * sec, 0] # 속도시약
 # //////////////////////////end///////////////////////////////#
 
 # -----------------------방향 설정--------------------------------#

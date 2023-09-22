@@ -591,7 +591,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * 로그아웃 등 스킬 버프, 딜레이 초기화
 		#--------------------------------------------------------------------------
-		def close_buff
+		def close_buff(actor = $game_party.actors[0])
+			buff_data = actor.buff_time
+			
 			# 스킬 딜레이 초기화
 			for skill_mash in SKILL_MASH_TIME
 				if skill_mash[1][1] > 0
@@ -600,14 +602,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			# 버프 지속시간 초기화
-			for skill_mash in SKILL_BUFF_TIME
-				if skill_mash[1][1] > 0
-					skill_mash[1][1] = 0 
-					$rpg_skill.buff_del(skill_mash[0])
+			for buff in buff_data
+				id = buff[0]
+				if buff[1] > 0
+					actor.buff_time[id] = 0 
+					$rpg_skill.buff_del(id)
 				end
 			end
 			
-			if $skill_Delay_Console != nil
+			if actor == $game_party.actors[0] and $skill_Delay_Console != nil
 				$skill_Delay_Console.refresh
 				$skill_Delay_Console.refresh
 				$skill_Delay_Console.dispose
@@ -1034,12 +1037,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			# 버프 지속시간 갱신
-			for skill_mash in SKILL_BUFF_TIME
-				if skill_mash[1][1] > 0
-					skill_mash[1][1] -= 1 
-					if skill_mash[1][1] == 0
-						$console.write_line("#{$data_skills[skill_mash[0]].name} 끝")
-						$rpg_skill.buff_del(skill_mash[0]) # 버프 끝 표시
+			for buff_data in $game_party.actors[0].buff_time
+				id = buff_data[0]
+				if buff_data[1] > 0
+					$game_party.actors[0].buff_time[id] -= 1 
+					if $game_party.actors[0].buff_time[id] == 0
+						$console.write_line("#{$data_skills[id].name} 끝")
+						$rpg_skill.buff_del(id) # 버프 끝 표시
 					end
 				end
 			end
@@ -1261,10 +1265,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			# 버프의 지속시간 표시
-			skill_mash_time = SKILL_BUFF_TIME[id]
-			if skill_mash_time != nil and skill_mash_time[1] != skill_mash_time[0]
-				skill_mash_time[1] = skill_mash_time[0]
-				$console.write_line("#{$data_skills[id].name} 지속시간 : #{skill_mash_time[0] / Graphics.frame_rate}초")
+			buff_data = BUFF_SKILL[id]
+			if buff_data != nil
+				time = buff_data[0] * Graphics.frame_rate.to_f
+				$console.write_line("#{$data_skills[id].name} 지속시간 : #{time / Graphics.frame_rate}초")
 				$skill_Delay_Console.write_line(id)
 			end
 		end
@@ -1511,7 +1515,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Get Skill
 			skill = $data_skills[id]
 			return if !player_can_skill(skill) # 스킬 사용 여부 확인
-			
+		  
 			#Animate
 			if SKILL_CUSTOM.has_key?(id)
 				l = SKILL_CUSTOM[id]
@@ -1523,10 +1527,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
 			$rpg_skill.party_heal(id) # 이게 파티 회복 스킬인지 확인
 			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
-			$rpg_skill.party_buff(id) # 파티 버프 스킬인지 확인
 			$rpg_skill.active_skill(id) # 액티브 스킬 행동 커스텀 확인
 			#check_rpg_skill(id, $game_player, @actor)
 			$rpg_skill.skill_chat(skill) # 스킬 사용시 말하는 것
+			
 			skill_console(id)   # 스킬 딜레이 표시
 			
 			# 커먼 이벤트 실행
@@ -1808,10 +1812,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
 			$game_switches[296] = true if $game_switches[296] != true# 유저 죽음 스위치 온
+			
 			# 이때 모든 버프들을 지우자
-			for skill_mash in SKILL_BUFF_TIME
-				if skill_mash[1][1] > 0
-					skill_mash[1][1] = 1 
+			for buff_data in $game_party.actors[0].buff_time
+				id = buff_data[0]
+				if buff_data[1] > 0
+					$game_party.actors[0].buff_time[id] = 1 
 				end
 			end
 			$game_party.actors[0].pdef = 0 # 물리방어
@@ -2611,7 +2617,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def hit_net_player(net_player)
 			return if !@parent.is_a?(Game_Player)
 			if @skill.id == 138
-				$rpg_skill.비영승보(@actor, net_player)
+				$rpg_skill.비영승보(@parent, net_player)
 			end
 		end 
 		
@@ -2658,7 +2664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				target_id = 0
 				
 				if skill_id == 138 # 무형검
-					$rpg_skill.비영승보(@actor, @enani)
+					$rpg_skill.비영승보(@parent, @enani)
 				end
 			else
 				enemy = $ABS.enemies[@parent.id]
@@ -3449,6 +3455,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :damage_array # 표시할 데미지를 모아두는 배열
 		attr_accessor :critical_array # 표시할 크리티컬을 모아두는 배열
 		attr_accessor :ani_array # 표시할 애니메이션 아이디를 모아두는 배열
+		attr_accessor :buff_time # 버프 남은 시간
+		attr_accessor :skill_mash # 쿨타임 남은 시간
 		#--------------------------------------------------------------------------
 		alias mrmo_abs_gb_int initialize
 		#--------------------------------------------------------------------------
@@ -3460,6 +3468,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@damage_array = []
 			@critical_array = []
 			@ani_array = []
+			@buff_time = {} # 버프 남은 시간
+			@skill_mash = {} # 쿨타임 남은 시간
 		end
 		
 		#--------------------------------------------------------------------------

@@ -93,9 +93,11 @@ def 자동저장
 			end
 		end
 		
-		for skill_mash_time in SKILL_BUFF_TIME
-			if skill_mash_time[1][1] > 0 
-				@buff_mash_list += (skill_mash_time[0].to_s + "," + skill_mash_time[1][1].to_s + ".")
+		for buff_time in $game_party.actors[0].buff_time
+			id = buff_time[0]
+			time = buff_time[1]
+			if time > 0 
+				@buff_mash_list += (id.to_s + "," + time.to_s + ".")
 			end
 		end
 		

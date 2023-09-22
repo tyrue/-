@@ -216,7 +216,7 @@ class Rpg_skill
 					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
 				end
 			else
-				SKILL_BUFF_TIME[140][1] = 1 # 운기 취소
+				$game_party.actors[0].buff_time[140] = 1 # 운기 취소
 			end
 		end
 		
@@ -235,16 +235,24 @@ class Rpg_skill
 		end
 		
 		if !$state_trans # 투명 풀기
-			SKILL_BUFF_TIME[131][1] = 1 if check_buff(131)
-			SKILL_BUFF_TIME[141][1] = 1 if check_buff(141)
-			SKILL_BUFF_TIME[142][1] = 1 if check_buff(142)
+			$game_party.actors[0].buff_time[131] = 1 if check_buff(131)
+			$game_party.actors[0].buff_time[141] = 1 if check_buff(141)
+			$game_party.actors[0].buff_time[142] = 1 if check_buff(142)
 		end
 	end
 	
 	def check_speed_buff
 		speed = 0
-		speed += BUFF_SKILL[99][0][1] if check_buff(99) # 속도시약
-		speed += BUFF_SKILL[136][0][1] if check_buff(136) # 파무쾌보
+		check_arr = []
+		check_arr.push(99)
+		check_arr.push(136)
+		
+		for id in check_arr
+			if check_buff(id)
+				buff_data = BUFF_SKILL[id][2][0]
+				speed += buff_data[1] 
+			end
+		end
 		return speed
 	end
 	
@@ -282,10 +290,6 @@ class Rpg_skill
 	
 	# 파티 버프
 	def party_buff(id, character = $game_player)
-		is_party_buff = false
-		is_party_buff = true if PARTY_BUFF_SKILL[id] != nil
-		return !is_party_buff
-		
 		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 		character.ani_array.push(ani_id)
 		if character == $game_player
@@ -324,12 +328,7 @@ class Rpg_skill
 	
 	# 이미 버프가 걸려있는지 확인
 	def check_buff(id, actor = $game_party.actors[0])
-		if actor == $game_party.actors[0]
-			skill_mash = SKILL_BUFF_TIME[id]
-			return (skill_mash != nil and skill_mash[1] > 0)
-		else # 몬스터의 버프 확인
-			return nil
-		end
+		return (actor.buff_time[id] != nil and actor.buff_time[id] > 0)
 	end
 	
 	# 버프 사용
@@ -342,21 +341,22 @@ class Rpg_skill
 		end
 	end
 	
-	def buff(id, battler = $game_party.actors[0])
-		# 아직 버프가 지속중이면 무시
-		skill_mash = SKILL_BUFF_TIME[id]
-		return if skill_mash == nil
-		
-		if battler == $game_party.actors[0] # 플레이어
-			time_now = skill_mash[1] # 버프 시간 갱신
-			$ABS.skill_console(id) # 스킬 표시
-			return if time_now > 0
-		else # abs 적
-			return self.buff_enemy(id, battler)
-		end
+	def buff(id, sw = true)
 		return if BUFF_SKILL[id] == nil
+		# 아직 버프가 지속중이면 무시
+		buff_data = BUFF_SKILL[id]
+		time_now = $game_party.actors[0].buff_time[id] # 현재 남은 버프 시간
+		buff_time = buff_data[0] * Graphics.frame_rate
+		$game_party.actors[0].buff_time[id] = buff_time
 		
-		for data in BUFF_SKILL[id]
+		is_party = buff_data[1]
+		self.party_buff(id) if is_party and sw # 파티버프라면 파티로 버프 sw는 자신이 버프를 실행한 건지 
+		return if time_now != nil and time_now > 0 # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
+		
+		$ABS.skill_console(id)   # 스킬 딜레이 표시
+		buff_val = buff_data[2]
+		return if buff_val == nil
+		for data in buff_val
 			case data[0].to_s
 			when "str" # 힘
 				$game_party.actors[0].str += data[1].to_i
@@ -442,17 +442,17 @@ class Rpg_skill
 				when 140 # 운기
 					$console.write_line("마력을 회복합니다.")
 				else
-					
 				end
 			end
 		end
-		
 	end
 	
 	def buff_del(id)
 		return if BUFF_SKILL[id] == nil
+		buff_data = BUFF_SKILL[id][2]
+		return if buff_data == nil
 		
-		for data in BUFF_SKILL[id]
+		for data in buff_data
 			n = data[1]
 			case data[0].to_s
 			when "str" # 힘

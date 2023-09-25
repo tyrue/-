@@ -4,9 +4,11 @@ class Chat_balloon_net
 	def initialize()
 		@viewport = Viewport.new(0, 0, 640, 480)
 		@chat_b = {}
-		@width = 120
+		@width = 150
 		@height = 100
-		@font_size = 16
+		@font_size = 20
+		@font_name = "메이플스토리"
+		@font_name_default = "맑은 고딕"
 	end
 	
 	def refresh
@@ -16,8 +18,9 @@ class Chat_balloon_net
 	def input(txt = "테스트", type = 1, sec = 4, ch = $game_player)
 		return if txt == nil or txt == ""
 		bitmap = Bitmap.new(@width, @height)
-		bitmap.font.name = "맑은 고딕"
-		bitmap.font.size = @font_size
+		
+		@font_size = 18
+		@font_name = Font.exist?("메이플스토리") ? "메이플스토리" : @font_name_default
 		case type
 		when 1 # 일반
 			bitmap.font.color = COLOR_NORMAL
@@ -25,10 +28,15 @@ class Chat_balloon_net
 			bitmap.font.color = COLOR_PARTY
 		when 3 # 스킬
 			bitmap.font.color = COLOR_EVENT
+			@font_size = 20
+		when 4 # 귓속말
+			bitmap.font.color = COLOR_WHISPER
 		else # 기타
 			bitmap.font.color = COLOR_NORMAL
 		end
 		
+		bitmap.font.name = @font_name
+		bitmap.font.size = @font_size
 		w = 0
 		h = 0
 		@now_w = 0
@@ -58,57 +66,40 @@ class Chat_balloon_net
 		
 		bitmap = bitmap2
 		
-		cx = ch.screen_x - (@now_w / 2)
-		cy = ch.screen_y - @now_h - 60
+		cx = @now_w / 2
+		cy = @now_h + 60
 		
+		id = 0
 		if ch != $game_player
 			id = ""
 			if ch.is_a?(Game_Event)
 				id = ch.id.to_s
 			else
 				id = ch.name
-			end
-			
-			@chat_b[id] = Chat_data.new
-			@chat_b[id].ch = ch
-			@chat_b[id].sec = sec * 60
-			@chat_b[id].ox = cx
-			@chat_b[id].oy = cy
-			@chat_b[id].txt = txt
-			
-			if $chat_s[id] != nil and not $chat_s[id].disposed?
-				$chat_s[id].bitmap.clear
-				$chat_s[id].dispose 
-			end
-			
-			$chat_s[id] = Sprite.new
-			$chat_s[id].bitmap = bitmap
-			$chat_s[id].x = cx
-			$chat_s[id].y = cy
-			
-			$chat_s[id].z = 3000
-			$chat_s[id].visible = true
-			$chat_s[id].opacity = 255
-			
-		else
-			@chat_b[0] = Chat_data.new
-			@chat_b[0].ch = ch
-			@chat_b[0].sec = sec * 60
-			@chat_b[0].ox = cx
-			@chat_b[0].oy = cy
-			@chat_b[0].txt = txt
-			
-			$chat_s[0].dispose if $chat_s[0] != nil and not $chat_s[0].disposed?
-			
-			$chat_s[0] = Sprite.new
-			$chat_s[0].bitmap = bitmap
-			$chat_s[0].x = cx
-			$chat_s[0].y = cy
-			
-			$chat_s[0].z = 3000
-			$chat_s[0].visible = true
-			$chat_s[0].opacity = 255
+			end		
 		end 
+		
+		@chat_b[id] = Chat_data.new
+		@chat_b[id].ch = ch
+		@chat_b[id].sec = sec * 60
+		@chat_b[id].ox = cx
+		@chat_b[id].oy = cy
+		@chat_b[id].txt = txt
+		
+		if $chat_s[id] != nil and !$chat_s[id].disposed?
+			$chat_s[id].bitmap.clear
+			$chat_s[id].dispose 
+		end
+		
+		$chat_s[id] = Sprite.new
+		$chat_s[id].bitmap = bitmap
+		
+		$chat_s[id].x = ch.screen_x - cx
+		$chat_s[id].y = ch.screen_y - cy
+		
+		$chat_s[id].z = 3000
+		$chat_s[id].visible = true
+		$chat_s[id].opacity = 255
 	end
 	
 	def update
@@ -120,18 +111,11 @@ class Chat_balloon_net
 				balloon.sec -= 1
 				char = balloon.ch
 				
-				cx = char.screen_x - (@now_w / 2)
-				cy = char.screen_y - @now_h  - 60
+				cx = char.screen_x - balloon.ox
+				cy = char.screen_y - balloon.oy
 				
-				if balloon.ox != cx
-					$chat_s[id].x = cx
-					balloon.ox = cx
-				end
-				
-				if balloon.oy != cy
-					$chat_s[id].y = cy
-					balloon.oy = cy
-				end
+				$chat_s[id].x = cx 
+				$chat_s[id].y = cy 
 				
 				if balloon.sec <= 0
 					$chat_s[id].visible = false

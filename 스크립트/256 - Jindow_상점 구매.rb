@@ -100,7 +100,7 @@ class Jindow_Shop < Jindow
 		for i in @data
 			x = i.x + i.width + 5
 			@itemText.bitmap.draw_text(x, i.y, 60, 30, i.item.name.to_s)
-			@itemText.bitmap.draw_text(130, i.y, 60, 30, i.item.price.to_s + "전", 2)
+			@itemText.bitmap.draw_text(130, i.y, 90, 30, change_number_unit(i.item.price) + "전", 2)
 		end
 		
 	end

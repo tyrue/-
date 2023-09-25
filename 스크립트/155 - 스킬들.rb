@@ -213,7 +213,7 @@ class Rpg_skill
 				if (Graphics.frame_count % (sec) == 0)
 					$game_party.actors[0].sp += $game_party.actors[0].maxsp * 0.12
 					$game_player.ani_array.push(4)  
-					Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
+					Network::Main.ani(Network::Main.id, 4) #애니메이션 공유
 				end
 			else
 				$game_party.actors[0].buff_time[140] = 1 # 운기 취소
@@ -223,14 +223,14 @@ class Rpg_skill
 		if check_buff(121) # 신령지익진
 			if (Graphics.frame_count % (sec * 2) == 0)
 				$game_player.ani_array.push(7)
-				Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
+				Network::Main.ani(Network::Main.id, 7) #애니메이션 공유
 			end
 		end	
 		
 		if check_buff(122) # 신령지익진
 			if (Graphics.frame_count % (sec * 2) == 0)
 				$game_player.ani_array.push(8)
-				Network::Main.ani(Network::Main.id, $game_player.animation_id) #애니메이션 공유
+				Network::Main.ani(Network::Main.id, 8) #애니메이션 공유
 			end
 		end
 		
@@ -241,15 +241,14 @@ class Rpg_skill
 		end
 	end
 	
-	def check_speed_buff
+	def check_speed_buff(actor = $game_party.actors[0])
 		speed = 0
-		check_arr = []
-		check_arr.push(99)
-		check_arr.push(136)
-		
-		for id in check_arr
-			if check_buff(id)
-				buff_data = BUFF_SKILL[id][2][0]
+		for data in actor.buff_time
+			next if data[1] <= 0
+			id = data[0]
+			next if BUFF_SKILL[id][2] == nil
+			buff_data = BUFF_SKILL[id][2][0]
+			if buff_data[0] == "speed"
 				speed += buff_data[1] 
 			end
 		end
@@ -612,6 +611,8 @@ class Rpg_skill
 			msg = "!!#{skill.name}!!"
 		when 105 # 혈겁만파
 			msg = "!!#{skill.name}!!"
+		when 106 # 초혼비무
+			msg = "#{skill.name}!!"			
 		when 123 # 귀염추혼소
 			msg = "!!#{skill.name}!!"
 		when 133 # 필살검무
@@ -639,6 +640,7 @@ class Rpg_skill
 		when 156 # 흑룡광포
 			msg = "#{skill.name}!!"
 		when 157 # 회복
+			type = 4
 			msg = "가소롭다!!"
 		when 158 # 지옥겁화
 			msg = "!!지옥겁화!!"
@@ -703,20 +705,34 @@ class Rpg_skill
 	
 	# 액티브 스킬 커스텀
 	def active_skill(id, character = $game_player, battler = $game_party.actors[0])
-		if ACTIVE_SKILL[id] != nil
-			case id
-			when 15 # 공력증강
-				
-			when 73 # 광량돌격
-				광량돌격(character)
-			when 132
-				비영승보(character)
-			end
-		end
+		return if ACTIVE_SKILL[id] == nil
+		
+		case id
+		when 15 # 공력증강
+			공력증강(character, battler)
+		when 73 # 광량돌격
+			광량돌격(character)
+		when 132
+			비영승보(character)
+		end		
 	end
 	
-	def 공력증강(actor)
+	def 공력증강(character, battler)
+		r = rand(100)
+		if(r <= 40)
+			$console.write_line("실패했습니다.") if battler == $game_party.actors[0]
+			character.ani_array.push(158)
+			return 
+		end
+		battler.hp /= 2
+		battler.sp += battler.maxsp
+		character.ani_array.push(135)
 		
+		if character == $game_player
+			Network::Main.ani(Network::Main.id, 135)
+		else
+			Network::Main.ani(character.id, 135, 1)
+		end
 	end
 	
 	def 투명

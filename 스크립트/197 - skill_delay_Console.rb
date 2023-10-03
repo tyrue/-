@@ -62,6 +62,31 @@ class Skill_Delay_Console < Sprite
 	# ● 리프레쉬
 	#--------------------------------------------------------------------------
 	def refresh
+		# 스킬 딜레이 갱신 id, 배열값
+		for skill_mash in SKILL_MASH_TIME
+			id = skill_mash[0]
+			if skill_mash[1][1] > 0 and @console_log[id] == nil
+				sprite = Sprite_Chat.new(@console_viewport)			
+				@console_log[id] = [sprite]
+			elsif skill_mash[1][1] <= 0 and @console_log[id] != nil
+				@console_log[id][0].dispose if !@console_log[id][0].disposed?
+				@console_log.delete(id)
+			end
+		end
+		
+		# 버프 지속시간 갱신
+		for buff_time in $game_party.actors[0].buff_time
+			id = buff_time[0]
+			time = buff_time[1]
+			if time > 0 and @console_log2[id] == nil
+				sprite = Sprite_Chat.new(@console_viewport)
+				@console_log2[id] = [sprite]
+			elsif time <= 0 and @console_log2[id] != nil
+				@console_log2[id][0].dispose if !@console_log2[id][0].disposed?
+				@console_log2.delete(id)
+			end
+		end
+		
 		if @console_log.size <= 0 and @console_log2.size <= 0
 			@back_sprite.visible = false
 			return 
@@ -75,12 +100,6 @@ class Skill_Delay_Console < Sprite
 			sprite = log[1][0]
 			buff_time = $game_party.actors[0].buff_time[id]
 			next if buff_time == nil
-			
-			if buff_time == 0 
-				sprite.dispose if !sprite.disposed?
-				@console_log2.delete(id)
-				next
-			end
 			
 			sprite = Sprite.new(@console_viewport) if sprite == nil
 			sprite.bitmap.clear if sprite.bitmap != nil
@@ -98,34 +117,21 @@ class Skill_Delay_Console < Sprite
 		for log in @console_log
 			id = log[0]
 			sprite = log[1][0]
+			next if SKILL_MASH_TIME[id] == nil
 			
-			if SKILL_MASH_TIME[id] != nil
-				if SKILL_MASH_TIME[id][1].to_i == 0 
-					sprite.dispose if !sprite.disposed?
-					@console_log.delete(id)
-					next
-				end
-				
-				sprite = Sprite.new(@console_viewport) if sprite == nil
-				sprite.bitmap.clear if sprite.bitmap != nil
-				sprite.bitmap = Bitmap.new(width, 32)
-				sprite.bitmap.font.size = @font_size
-				sprite.bitmap.font.color.set(255, 204, 0, 255)
-				sprite.x = 0
-				sprite.y = (i) * @font_size + 1
-				sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_MASH_TIME[id][1] / 60.0)}초") 	
-				sprite.opacity = 255
-				i += 1
-			end
+			sprite = Sprite.new(@console_viewport) if sprite == nil
+			sprite.bitmap.clear if sprite.bitmap != nil
+			sprite.bitmap = Bitmap.new(width, 32)
+			sprite.bitmap.font.size = @font_size
+			sprite.bitmap.font.color.set(255, 204, 0, 255)
+			sprite.x = 0
+			sprite.y = (i) * @font_size + 1
+			sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_MASH_TIME[id][1] / 60.0)}초") 	
+			sprite.opacity = 255
+			i += 1
 		end
 		
 		@old_height = (@console_log.size + @console_log2.size) * (@font_size + 1) + 14
-		
-		if @console_log.size <= 0 and @console_log2.size <= 0
-			@back_sprite.visible = false
-			return 
-		end
-		
 		if @old_height != @console_viewport.height
 			@console_viewport.height = @old_height
 			@back_sprite.bitmap.clear if @back_sprite.bitmap != nil

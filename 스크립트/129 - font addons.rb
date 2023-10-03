@@ -200,7 +200,8 @@ class Bitmap
 	# * draw_text (underline & strikethrough)
 	#--------------------------------------------------------------------------
 	def draw_text(*args)
-		yeyinde_us_draw_text(*args)    
+		
+		yeyinde_us_draw_text(*args)
 		if self.font.underline
 			u_color = self.font.color.dup
 			if args[0].is_a?(Rect)

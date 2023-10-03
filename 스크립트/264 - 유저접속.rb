@@ -7,11 +7,6 @@ def 유저접속
 	$ABS = MrMo_ABS.new
 	$rpg_skill = Rpg_skill.new # 스킬 사용에 대한 클래스
 	$game_party.setup_starting_members
-	$game_map.setup($data_system.start_map_id)
-	$game_player.moveto($data_system.start_x, $data_system.start_y)
-	$game_player.refresh
-	$game_map.autoplay
-	$game_map.update
 	
 	Network::Main.socket.send("<dtloadreq>'req'</dtloadreq>\n")
 	Network::Main.socket.send("<exp_event></exp_event>\n")
@@ -40,4 +35,13 @@ def 유저접속
 	# 장비 아이템 체력, 마력 옵션 
 	Set_Weapon_plus.new 
 	Set_Armor_plus.new
+	
+	$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
+	$skill_Delay_Console.show
+	
+	$game_map.setup($data_system.start_map_id)
+	$game_player.moveto($data_system.start_x, $data_system.start_y)
+	$game_player.refresh
+	$game_map.autoplay
+	$game_map.update
 end

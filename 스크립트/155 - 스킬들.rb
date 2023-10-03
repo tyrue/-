@@ -347,14 +347,14 @@ class Rpg_skill
 		time_now = $game_party.actors[0].buff_time[id] # 현재 남은 버프 시간
 		buff_time = buff_data[0] * Graphics.frame_rate
 		$game_party.actors[0].buff_time[id] = buff_time
+		$ABS.skill_console(id)   # 스킬 딜레이 표시
 		
 		is_party = buff_data[1]
 		self.party_buff(id) if is_party and sw # 파티버프라면 파티로 버프 sw는 자신이 버프를 실행한 건지 
-		return if time_now != nil and time_now > 0 # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
+		return true if time_now != nil and time_now > 0 # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
 		
-		$ABS.skill_console(id)   # 스킬 딜레이 표시
 		buff_val = buff_data[2]
-		return if buff_val == nil
+		return true if buff_val == nil
 		for data in buff_val
 			case data[0].to_s
 			when "str" # 힘
@@ -441,9 +441,11 @@ class Rpg_skill
 				when 140 # 운기
 					$console.write_line("마력을 회복합니다.")
 				else
+					
 				end
 			end
 		end
+		return true
 	end
 	
 	def buff_del(id)
@@ -1010,7 +1012,7 @@ class Rpg_skill
 	def damage_calculation_attack(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor) # 플레이어
-			for data in $skill_Delay_Console.console_log2
+			for data in $game_party.actors[0].buff_time
 				id = data[0]
 				damage *= DAMAGE_CAL_ATTACK[id][0] if DAMAGE_CAL_ATTACK[id] != nil
 			end
@@ -1035,7 +1037,7 @@ class Rpg_skill
 		# 피해자 입장
 		# 플레이어
 		if actor.is_a?(Game_Actor) 
-			for data in $skill_Delay_Console.console_log2
+			for data in $game_party.actors[0].buff_time
 				id = data[0]
 				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] if DAMAGE_CAL_DEFENSE[id] != nil
 			end
@@ -1050,7 +1052,7 @@ class Rpg_skill
 	def damage_calculation_skill(damage, actor, attacker)
 		# 가해자 입장
 		if attacker.is_a?(Game_Actor)
-			for data in $skill_Delay_Console.console_log2
+			for data in $game_party.actors[0].buff_time
 				id = data[0]
 				damage *= DAMAGE_CAL_SKILL[id][0] if DAMAGE_CAL_SKILL[id] != nil
 			end
@@ -1060,7 +1062,7 @@ class Rpg_skill
 		
 		# 피해자 입장
 		if actor.is_a?(Game_Actor)
-			for data in $skill_Delay_Console.console_log2
+			for data in $game_party.actors[0].buff_time
 				id = data[0]
 				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] if DAMAGE_CAL_DEFENSE[id] != nil
 			end

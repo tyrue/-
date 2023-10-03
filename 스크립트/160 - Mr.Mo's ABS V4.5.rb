@@ -181,7 +181,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[212] = [1000000, 1]# 기린왕
 	ABS_ENEMY_HP[215] = [2000000, 1]# 악어왕
 	
-	ABS_ENEMY_HP[220] = [1500000, 1]# 산소괴왕
+	ABS_ENEMY_HP[220] = [3000000, 1]# 산소괴왕
 	ABS_ENEMY_HP[224] = [7000000, 1]# 괴성왕
 	ABS_ENEMY_HP[227] = [1300000, 0]# 뇌신'태
 	ABS_ENEMY_HP[228] = [18000000, 1]# 뇌신왕
@@ -297,7 +297,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	DAMAGE_FONT_NAME = "메이플스토리"
 	DAMAGE_FONT_NAME2 = "맑은 고딕"
 	#--------------------------------------------------------------------------
-	DAMAGE_FONT_SIZE = 20
+	DAMAGE_FONT_SIZE = 19
+	DAMAGE_CRI_FONT_SIZE = 22
 	#--------------------------------------------------------------------------
 	# To change the color you need to adjust the numbers below.
 	# The numbers reperesnt 3 colors, red, greend and blue. All you have to do is
@@ -380,6 +381,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def DAMAGE_FONT_SIZE
 			return DAMAGE_FONT_SIZE
+		end
+		
+		def DAMAGE_CRI_FONT_SIZE
+			return DAMAGE_CRI_FONT_SIZE
 		end
 		#--------------------------------------------------------------------------
 		# * Damage Font Name
@@ -988,7 +993,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					e.event.animation_id = skill.animation1_id
 					Network::Main.ani(e.event.id, skill.animation1_id, 1)
 					
-					e.sp -= skill.sp_cost
+					e.sp = [e.sp - skill.sp_cost, 0].max
 					Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")
 					Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
 					$rpg_skill.skill_chat(skill, e.event)
@@ -1499,14 +1504,13 @@ if SDK.state("Mr.Mo's ABS") == true
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
 			
+			check = nil
+			check = $rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
 			$rpg_skill.party_heal(id) # 이게 파티 회복 스킬인지 확인
-			$rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.active_skill(id) # 액티브 스킬 행동 커스텀 확인
-			#check_rpg_skill(id, $game_player, @actor)
 			$rpg_skill.skill_chat(skill) # 스킬 사용시 말하는 것
-			
-			skill_console(id)   # 스킬 딜레이 표시
+			skill_console(id) if check == nil   # 스킬 딜레이 표시
 			
 			# 커먼 이벤트 실행
 			if skill.common_event_id > 0
@@ -2282,14 +2286,20 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end
 			
-			@stop = true if @step > @range
-			#Increase step
-			@step += 1
-			#return if !no_one?
-			return force_movement if no_one?
-			#return force_movement if $game_map.terrain_tag(new_x, new_y) == $ABS.PASS_TAG and no_one?
+			#~ @stop = true if @step > @range
+			#~ #Increase step
+			#~ @step += 1
+			#~ #return if !no_one?
+			#~ return force_movement if no_one?
 			
+			no_one?
 			#Stop if it came to range
+			if @step <= @range
+				force_movement
+				@step += 1
+			else
+				@stop = true
+			end
 		end
 		
 		def is_enemy?(event)
@@ -2922,6 +2932,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			attr_accessor :_damage_duration_max
 			attr_accessor :_damage_max_height
 			attr_accessor :_damage_string
+			attr_accessor :_damage_idx
 			
 			def initialize(viewport = nil)
 				super(viewport)
@@ -2934,6 +2945,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@_damage_max_height = 0
 				@_damage_duration = 0
 				@_damage_duration_max = 60
+				@_damage_idx = 0
 				@_damage_sprite = []
 				
 				@_animation_duration = 0
@@ -3025,17 +3037,19 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				for sprite in @_damage_sprite
 					sprite._damage_duration += 1
+					sprite.visible = true if sprite._damage_duration >= 0
 					
 					if sprite._damage_duration == sprite._damage_duration_max
 						dispose_damage(sprite)
 						next
 					end
 					
-					tempY = self.y + self.height / 4 - 20
+					tempY = self.y + self.height / 4 - (20 + sprite._damage_idx * 11)
 					time = sprite._damage_duration
 					
 					sprite.x = self.x - sprite.ox
-					sprite.y = [tempY - time * 4, tempY - sprite._damage_max_height].max if @collapse_character == nil or @collapse_character.character_name != ""
+					sprite.y = tempY if @collapse_character == nil or @collapse_character.character_name != ""
+					#sprite.y = [tempY - time * 4, tempY - sprite._damage_max_height].max if @collapse_character == nil or @collapse_character.character_name != ""
 				end
 			end
 			
@@ -3101,7 +3115,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				bitmap = Bitmap.new(self.width, 30)
 				bitmap.font.name = Font.exist?($ABS.DAMAGE_FONT_NAME) ? $ABS.DAMAGE_FONT_NAME : DAMAGE_FONT_NAME2
 				
-				bitmap.font.size = critical == true ? 22 : 19#$ABS.DAMAGE_FONT_SIZE 
+				bitmap.font.size = critical ? DAMAGE_CRI_FONT_SIZE : $ABS.DAMAGE_FONT_SIZE 
 				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
 				
 				bitmap.draw_text(+1, +1, 200, 36, damage_string, 0)
@@ -3118,7 +3132,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				bitmap.draw_text(0, 0, 200, 36, damage_string, 0)
 				
-				
 				sprite = Sprite.new(self.viewport)
 				sprite.bitmap = bitmap
 				sprite.oy = self.oy
@@ -3128,7 +3141,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				sprite.y = self.y - 20# + self.height / 4 #self.oy
 				sprite.z = 3000
 				sprite.opacity = 255
-				sprite._damage_max_height = 10 * @_damage_sprite.size + 60
+				sprite._damage_idx = @_damage_sprite.size
+				#sprite._damage_max_height = 11 * @_damage_sprite.size + 60
 				@_damage_sprite.push(sprite)
 			end
 		end
@@ -3513,7 +3527,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if self.is_a?(Game_Actor)
 					self.damage = (atk * (20 + attacker.str) / 20.0) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
 				else
-					self.damage = (atk * (20 + attacker.str) / 20.0) * (250.0 / (250 + self.base_pdef)) # Calculate basic damage
+					self.damage = (atk * (20 + attacker.str) / 20.0) * (100.0 / (100 + self.base_pdef)) # Calculate basic damage
 				end
 				
 				
@@ -3681,7 +3695,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					if self.is_a?(Game_Actor)
 						limit = 200.0
 					else
-						limit = 1000.0
+						limit = 500.0
 					end					
 					self.damage *= limit / (limit + (self.base_pdef + self.base_mdef * 4))
 				end
@@ -3726,8 +3740,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.hp -= self.damage
 				@damage_array.push(self.damage)
 				@critical_array.push(self.critical)
-				
-				
+					
 				r = rand(100)
 				if r <= [(self.damage * 100 / self.maxhp), 30].max
 					if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
@@ -3737,11 +3750,11 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 				end
 				
-				return $ABS.player_dead?(self, user) if self.is_a?(Game_Actor)
-				return $ABS.enemies[self.event.id] == nil
+				return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, user) 
+				return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] == nil
 				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
-				if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
+				if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] != nil
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
 				end

@@ -51,8 +51,6 @@ module RPG
 				end
 			end
 			
-			
-			
 			if @_animation_overlap != nil and @_animation_overlap.size == 0 and @one_use
 				
 				self.dispose

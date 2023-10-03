@@ -87,7 +87,7 @@ class Scene_Map
 		# Update Mouse
 		update_mouse if SDK.state("Path Finding") == true
 		# Update Input
-		update_input if User_Edit::SERVERS[0][0] != "127.0.0.1"
+		update_input 
 		# Update old systems
 		netplay2_update_systems
 		# Update Netplayers
@@ -107,6 +107,9 @@ end
 # * Updates Input
 #--------------------------------------------------------------------------
 def update_input
+	return if User_Edit::SERVERS[0][0] == "127.0.0.1" 
+	return if User_Edit::TEST
+	
 	t_dir = Dir.entries("./")
 	for s in t_dir
 		if(s.include?(".rxproj"))

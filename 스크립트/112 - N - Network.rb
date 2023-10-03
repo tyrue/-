@@ -840,6 +840,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					t_dir = Dir.entries("./")
 					for s in t_dir
 						break if User_Edit::SERVERS[0][0] == "127.0.0.1"
+						break if User_Edit::TEST
 						if(s.include?(".rxproj"))
 							Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
 							p "버전이 다릅니다."
@@ -1574,7 +1575,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							break if d == "*null*"
 							i = []
 							i = d.split ","
-							SKILL_MASH_TIME[i[0].to_i][1] = i[1].to_i if i[1] != nil and SKILL_MASH_TIME[i[0].to_i] != nil
+							id = i[0].to_i
+							
+							if i[1] != nil and SKILL_MASH_TIME[id] != nil
+								SKILL_MASH_TIME[id][1] = i[1].to_i 
+								$skill_Delay_Console.write_line(id)
+							end
 						end
 					end
 					
@@ -1587,9 +1593,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							break if d == "*null*"
 							i = []
 							i = d.split ","
-							$game_party.actors[0].buff_time[i[0].to_i] = i[1].to_i
+							id = i[0].to_i
+							
+							$game_party.actors[0].buff_time[id] = i[1].to_i
+							$skill_Delay_Console.write_line(id)
 						end
 					end
+					
 					if $global_x == 37
 						$cha_name = $1.to_s
 					end
@@ -1616,7 +1626,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_party.actors[0].equip(3, $armedarmor3.to_i)
 					$game_party.actors[0].equip(4, $armedarmor4.to_i)
 					
-					$game_party.lose_weapon(1,1)
 					$game_party.actors[0].str = $str
 					$game_party.actors[0].dex = $dex
 					$game_party.actors[0].agi = $agi
@@ -1642,13 +1651,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						else
 							@group = "standard"
 						end
-						
-						$cbig = 0
-						$nowtrade = 0
-						$game_player.move_speed = $rpg_skill.player_base_move_speed
-						
-						$skill_Delay_Console = Skill_Delay_Console.new(520, 0, 140, 110, 6)
-						$skill_Delay_Console.show
 						
 						$rpg_skill.job_select
 						

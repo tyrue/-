@@ -179,7 +179,7 @@ class Game_Actor < Game_Battler
 			expPer = @level < 99 ? (@exp - @exp_list[@level]) * 100.0 / (@exp_list[@level + 1] - @exp_list[@level]) : @exp * 100.0 / @exp_list[@level + 1]
 			printTxt = "경험치:#{change_number_unit(gainExp)} 획득. (#{'%.2f' % expPer}%)" if gainExp > 0
 			printTxt = "경험치:#{change_number_unit(-gainExp)} 감소. (#{'%.2f' % expPer}%)" if gainExp < 0
-			$console.write_line(printTxt)
+			$console.write_line(printTxt) if printTxt != nil
 		end
 		
 		# 레벨업（level up）

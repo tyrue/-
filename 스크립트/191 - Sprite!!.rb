@@ -8,6 +8,7 @@ class Sprite
 	alias jingukang_jindow_dispose dispose
 	def dispose
 		return if self.disposed?
+		# Create an Alias
 		if viewport != nil
 			viewport.jindow? ? (viewport.item.delete(self)) : 0
 		end

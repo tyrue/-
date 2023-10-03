@@ -2933,6 +2933,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			attr_accessor :_damage_max_height
 			attr_accessor :_damage_string
 			attr_accessor :_damage_idx
+			attr_accessor :_damage_muti
 			
 			def initialize(viewport = nil)
 				super(viewport)
@@ -2946,6 +2947,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@_damage_duration = 0
 				@_damage_duration_max = 60
 				@_damage_idx = 0
+				@_damage_muti = false
 				@_damage_sprite = []
 				
 				@_animation_duration = 0
@@ -3037,6 +3039,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				for sprite in @_damage_sprite
 					sprite._damage_duration += 1
+					next if sprite._damage_duration < 0
 					sprite.visible = true if sprite._damage_duration >= 0
 					
 					if sprite._damage_duration == sprite._damage_duration_max
@@ -3044,12 +3047,13 @@ if SDK.state("Mr.Mo's ABS") == true
 						next
 					end
 					
-					tempY = self.y + self.height / 4 - (20 + sprite._damage_idx * 11)
+					tempY = self.y + self.height / 4 - (30 + sprite._damage_idx * 13)
+					tempY -= 50 if sprite._damage_muti
 					time = sprite._damage_duration
 					
 					sprite.x = self.x - sprite.ox
-					sprite.y = tempY if @collapse_character == nil or @collapse_character.character_name != ""
-					#sprite.y = [tempY - time * 4, tempY - sprite._damage_max_height].max if @collapse_character == nil or @collapse_character.character_name != ""
+					#sprite.y = tempY if @collapse_character == nil or @collapse_character.character_name != ""
+					sprite.y = [tempY - time * 4, tempY - sprite._damage_max_height].max if @collapse_character == nil or @collapse_character.character_name != ""
 				end
 			end
 			
@@ -3102,7 +3106,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			#--------------------------------------------------------------------------
 			# * Damage  데미지를 표시하는 부분
 			#--------------------------------------------------------------------------
-			def damage(value, critical)
+			def damage(value, critical, multi = false)
 				type = $game_variables[60] # 데미지 표시 타입
 				#dispose_damage
 				if value.is_a?(Numeric)
@@ -3138,12 +3142,17 @@ if SDK.state("Mr.Mo's ABS") == true
 				sprite.ox = sprite.bitmap.text_size(damage_string).width / 4
 				sprite.x = self.x - sprite.ox
 				sprite._damage_string = damage_string
-				sprite.y = self.y - 20# + self.height / 4 #self.oy
+				sprite.y = self.y# + self.height / 4 #self.oy
 				sprite.z = 3000
 				sprite.opacity = 255
-				sprite._damage_idx = @_damage_sprite.size
+				sprite._damage_idx = @_damage_idx
+				sprite._damage_duration = 0 - @_damage_idx * 6
+				sprite.visible = false
 				#sprite._damage_max_height = 11 * @_damage_sprite.size + 60
+				sprite._damage_max_height = multi ? 0 : 50
+				sprite._damage_muti = multi
 				@_damage_sprite.push(sprite)
+				@_damage_idx += 1
 			end
 		end
 	end
@@ -3247,11 +3256,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					dmg_array = $ABS.enemies[id].damage_array
 					cri_array = $ABS.enemies[id].critical_array
 					if dmg_array != nil and dmg_array.size > 0
+						sw = dmg_array.size > 1 ? true : false
 						for i in 0...dmg_array.size
 							dmg = dmg_array[i]
 							cri = cri_array[i]
 							next if dmg == nil
-							damage(dmg, cri) 
+							damage(dmg, cri, sw) 
 							# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
 							Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{dmg},#{cri}</mon_damage>\n")	if $ABS.enemies[id].send_damage
 						end
@@ -3273,11 +3283,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					dmg_array = a.damage_array
 					cri_array = a.critical_array
 					if dmg_array != nil and dmg_array.size > 0
+						sw = dmg_array.size > 1 ? true : false
 						for i in 0...dmg_array.size
 							dmg = dmg_array[i]
 							cri = cri_array[i]
 							next if dmg == nil
-							damage(dmg, cri) 
+							damage(dmg, cri, sw) 
 							# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
 							Network::Main.socket.send("<player_damage>#{$game_map.map_id},#{Network::Main.id},#{dmg},#{cri}</player_damage>\n")	
 						end
@@ -3292,6 +3303,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					a.damage_array.clear
 					a.critical_array.clear
 				end
+				@_damage_idx = 0
 			end
 			
 			
@@ -3585,8 +3597,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				@damage_array.push(self.damage)
 				@critical_array.push(self.critical)
 				
-				return $ABS.player_dead?(self, attacker) if self.is_a?(Game_Actor)
-				return $ABS.enemies[self.event.id] == nil
+				return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, attacker)
+				return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] == nil
 				
 				if !self.is_a?(Game_Actor)
 					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
@@ -3753,10 +3765,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, user) 
 				return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] == nil
 				
+				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
 				if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] != nil
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
+					
 				end
 				effective |= self.hp != last_hp
 				# State change

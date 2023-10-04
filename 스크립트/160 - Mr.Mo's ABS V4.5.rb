@@ -901,7 +901,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							# 범위 이펙트 보여주기
 							if skill.scope == 2 and RANGE_SKILLS.has_key?(skill.id)
 								
-								make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], $data_skills[200])
+								make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], $data_skills[200], true)
 							end
 							return
 						end
@@ -952,7 +952,7 @@ if SDK.state("Mr.Mo's ABS") == true
 						enemies_net = get_all_range_net(e.event, RANGE_SKILLS[skill.id][0]) if e.hate_group.include?(0)
 						
 						# 범위 이펙트 보여주기
-						make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], skill)
+						make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], skill, true)
 						
 						for enemy in enemies
 							# 나한테 적이 아니면 공격 안하게 함
@@ -1504,6 +1504,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				animate($game_player, $game_player.character_name+"_cast") if @player_ani
 			end
 			
+			# 스킬 애니메이션 
+			$game_player.animation_id = skill.animation1_id
+			Network::Main.ani(Network::Main.id, skill.animation1_id)
+			
 			check = nil
 			check = $rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
@@ -1517,11 +1521,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Common event call reservation
 				$game_temp.common_event_id = skill.common_event_id
 			end
-			
-			# 스킬 애니메이션 
-			
-			$game_player.animation_id = skill.animation1_id
-			Network::Main.ani(Network::Main.id, skill.animation1_id)
 			
 			#Get the skill scope
 			# 스킬 맞는 쪽
@@ -2211,10 +2210,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		# 범위안에 이벤트 만들고 이펙트 내보기
-		def make_range_sprite(element, range, skill)
+		def make_range_sprite(element, range, skill, sw = false)
 			return if SHOW_SKILL_EFECT[skill.id] == nil
 			# 이펙트 보여주는 스킬만 동작하도록 하자
-			$scene.spriteset.make_range_sprite(element, range, skill)
+			$scene.spriteset.make_range_sprite(element, range, skill, sw)
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3146,10 +3145,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				sprite.z = 3000
 				sprite.opacity = 255
 				sprite._damage_idx = @_damage_idx
-				sprite._damage_duration = 0 - @_damage_idx * 6
+				sprite._damage_duration = 0 - @_damage_idx * 5
 				sprite.visible = false
 				#sprite._damage_max_height = 11 * @_damage_sprite.size + 60
-				sprite._damage_max_height = multi ? 0 : 50
+				sprite._damage_max_height = multi ? 0 : 60
 				sprite._damage_muti = multi
 				@_damage_sprite.push(sprite)
 				@_damage_idx += 1
@@ -3257,18 +3256,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					cri_array = $ABS.enemies[id].critical_array
 					if dmg_array != nil and dmg_array.size > 0
 						sw = dmg_array.size > 1 ? true : false
+						dmg = ""
 						for i in 0...dmg_array.size
-							dmg = dmg_array[i]
-							cri = cri_array[i]
-							next if dmg == nil
-							damage(dmg, cri, sw) 
+							next if dmg_array[i] == nil
+							damage(dmg_array[i], cri_array[i], sw) 
+							dmg += dmg_array[i].to_s + "|"
 							# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-							Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{dmg},#{cri}</mon_damage>\n")	if $ABS.enemies[id].send_damage
 						end
+						Network::Main.socket.send("<mon_damage>#{id},#{dmg},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage
 					elsif $ABS.enemies[id].damage != nil
 						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
 						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<mon_damage>#{$game_map.map_id},#{id},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage						
+						Network::Main.socket.send("<mon_damage>#{id},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage						
 					end
 					
 					#Make Damage nil
@@ -3279,24 +3278,24 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 				elsif @character.is_a?(Game_Player)					
 					a = $game_party.actors[0]
-					
 					dmg_array = a.damage_array
 					cri_array = a.critical_array
+					
 					if dmg_array != nil and dmg_array.size > 0
 						sw = dmg_array.size > 1 ? true : false
+						dmg = ""
 						for i in 0...dmg_array.size
-							dmg = dmg_array[i]
-							cri = cri_array[i]
-							next if dmg == nil
-							damage(dmg, cri, sw) 
-							# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
-							Network::Main.socket.send("<player_damage>#{$game_map.map_id},#{Network::Main.id},#{dmg},#{cri}</player_damage>\n")	
+							next if dmg_array[i] == nil
+							damage(dmg_array[i], cri_array[i], sw) 
+							dmg += dmg_array[i].to_s + "|"
 						end
+						# 사람 데미지 표시(네트워크 id, 데미지, 크리티컬)
+						Network::Main.socket.send("<player_damage>#{Network::Main.id},#{dmg},#{a.critical}</player_damage>\n")	
 						#Display damage
 					elsif a.damage != nil
 						damage(a.damage, a.critical) 
-						# 사람 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<player_damage>#{$game_map.map_id},#{Network::Main.id},#{a.damage},#{a.critical}</player_damage>\n")	
+						# 사람 데미지 표시(네트워크 id, 데미지, 크리티컬)
+						Network::Main.socket.send("<player_damage>#{Network::Main.id},#{a.damage},#{a.critical}</player_damage>\n")	
 					end
 					#Make Damage nil
 					a.damage = nil
@@ -3305,7 +3304,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				@_damage_idx = 0
 			end
-			
 			
 			if @character.ani_array != nil and @character.ani_array.size >= 1
 				for ani in @character.ani_array
@@ -3337,7 +3335,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		
 		# 범위안에 이벤트 만들고 이펙트 내보기
-		def make_range_sprite(element, range, skill)
+		def make_range_sprite(element, range, skill, sw = false) 
+			if sw
+				Network::Main.socket.send("<make_range_sprite>#{element.id},#{range},#{skill.id}</make_range_sprite>\n")	# range 스킬 사용했다고 네트워크 알리기
+			end
 			
 			for i in 0..range * 2 # y 
 				for j in 0..range * 2 # x

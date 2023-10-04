@@ -1239,17 +1239,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<mon_damage>(.*)<\/mon_damage>/
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					map_id = data[0].to_i
-					id = data[1].to_i
-					dmg = data[2]
-					cri = data[3].to_s
+					id = data[0].to_i
+					dmg = data[1]
+					cri = data[2].to_s
 					return true if !$scene.is_a?(Scene_Map)
-					return true if $game_map.map_id != map_id
 					return true if $ABS.enemies[id] == nil
 					return true if $scene.spriteset == nil
-					
 					$ABS.enemies[id].send_damage = false
-					$ABS.enemies[id].damage_array.push(dmg)
+					
+					dmg_arr = dmg.split('|')
+					for d in dmg_arr
+						$ABS.enemies[id].damage_array.push(d.to_i)
+					end
+					
 					if cri == "true"
 						$ABS.enemies[id].critical = true
 					elsif cri == "false"
@@ -1263,22 +1265,26 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<player_damage>(.*)<\/player_damage>/
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					map_id = data[0].to_i
-					id = data[1]
-					dmg = data[2]
-					cri = data[3].to_s
+					id = data[0]
+					dmg = data[1]
+					cri = data[2].to_s
 					
 					return true if !$scene.is_a?(Scene_Map)
-					return true if $game_map.map_id != map_id
 					return true if @mapplayers[id] == nil
 					
-					if cri == "true"
-						@mapplayers[id].show_demage(dmg, true)
-					elsif cri == "false"
-						@mapplayers[id].show_demage(dmg, false)
-					else
-						@mapplayers[id].show_demage(dmg, cri)
+					dmg_arr = dmg.split('|')
+					for d in dmg_arr
+						@mapplayers[id].damage_array.push(d.to_i)
 					end
+					
+					if cri == "true"
+						@mapplayers[id].show_critical = true
+					elsif cri == "false"
+						@mapplayers[id].show_critical = false
+					else
+						@mapplayers[id].show_critical = cri
+					end
+					
 					return true
 					
 					# 같은 맵의 유저 또는 몬스터가 보내는 값
@@ -2034,6 +2040,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					when 1
 						$game_switches[33] = true # 일본 
 					end
+					
+				when /^<make_range_sprite>(.*)<\/make_range_sprite>/	
+					data = $1.split(',')
+					id = data[0].to_i
+					range = data[1].to_i
+					s_id = data[2].to_i
+					
+					$ABS.make_range_sprite($game_map.events[id], range, $data_skills[s_id])
 					
 					#----------------------------길드---------------------------------
 					return true

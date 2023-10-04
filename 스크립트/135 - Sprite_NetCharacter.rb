@@ -134,10 +134,21 @@ class Sprite_NetCharacter < RPG::Sprite
 		# Animation
 		update_ani if $ani_character[@netid.to_i].animation_id != 0
 		
-		if @character.damage_show != nil
+		dmg_array = @character.damage_array
+		if dmg_array != nil and dmg_array.size > 0
+			sw = dmg_array.size > 1 ? true : false
+			for i in 0...dmg_array.size
+				next if dmg_array[i] == nil
+				damage(dmg_array[i], @character.show_critical, sw) 
+			end
+		elsif @character.damage_show != nil
 			damage(@character.damage_show, @character.show_critical)
-			@character.show_demage(nil, false)
 		end
+		
+		#Make Damage nil
+		@character.damage = nil
+		@character.damage_array.clear
+		@_damage_idx = 0
 		
 		# Name Sprite
 		@_text_display.x = self.x

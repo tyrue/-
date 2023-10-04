@@ -54,6 +54,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			attr_accessor :equips
 			attr_accessor :equip_change
 			attr_accessor :is_transparency # 스킬 투명 썼는지 여부
+			attr_accessor :damage_array # 스킬 투명 썼는지 여부
 		end  
 		#--------------------------------------------------------------------------
 		# * Initializes a network player.
@@ -88,6 +89,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@character_name = "바람머리"
 			@is_transparency = false
 			@trans_v = 0
+			@damage_array = []
 			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false

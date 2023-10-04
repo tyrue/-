@@ -17,7 +17,7 @@ class Game_Character
 	attr_reader   :original_pattern
 	attr_reader   :move_route
 	attr_reader   :damage_show
-	attr_reader   :show_critical
+	attr_accessor :show_critical
 	attr_accessor :direction
 	alias mr_mo_pvp_gc_initialize initialize
 	#--------------------------------------------------------------------------

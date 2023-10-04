@@ -721,9 +721,14 @@ class Rpg_skill
 	
 	def 공력증강(character, battler)
 		r = rand(100)
-		if(r <= 40)
-			$console.write_line("실패했습니다.") if battler == $game_party.actors[0]
+		if(r <= 40)			
 			character.ani_array.push(158)
+			if character == $game_player
+				$console.write_line("실패했습니다.")
+				Network::Main.ani(Network::Main.id, 158)
+			else
+				Network::Main.ani(character.id, 158, 1)
+			end
 			return 
 		end
 		battler.hp /= 2

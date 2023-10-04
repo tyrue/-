@@ -13,6 +13,7 @@ class MrMo_ABS
 					Network::Main.socket.send("<item_summon>#{player.name},#{$game_player.x},#{$game_player.y}</item_summon>\n")
 				end
 			end
+		
 		when 67 # 갈색시약
 			$rpg_skill.buff_active(46) # 무장
 		when 68 # 초록시약
@@ -21,6 +22,7 @@ class MrMo_ABS
 			$rpg_skill.buff_active(99) # 속도시약 스킬 사용
 		end
 	end
+	
 end
 
 class Game_Battler

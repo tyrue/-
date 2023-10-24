@@ -5,7 +5,7 @@ class Jindow_Chat_Window < Jindow
 		#@head = true
 		@name = "대화창"
 		@bottom = false
-		@opacity = 200
+		@opacity = 130
 		
 		@tog = true
 		@chat_log = []
@@ -13,7 +13,7 @@ class Jindow_Chat_Window < Jindow
 		@old_size = 0
 		@max_size = 80
 		@font_size = 13
-		@margin = 3
+		@margin = 5
 		@view_line = 6
 		
 		@mode = 0 # 0 전체, 1 최소화, 2 off
@@ -36,7 +36,7 @@ class Jindow_Chat_Window < Jindow
 	end
 	
 	def hide
-		
+		self.y = $map_chat_input.y
 		super
 		@tog = false
 		for log in @chat_log

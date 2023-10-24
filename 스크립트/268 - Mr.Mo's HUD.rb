@@ -247,8 +247,8 @@ if SDK.state("Mr.Mo's ABS")
 				@pos.bitmap.font.size = 12
 				
 				@pos.visible = self.visible
-				@pos.x = 410
-				@pos.y = 338
+				@pos.x = 520
+				@pos.y = 320
 				@pos.z = 99999
 				@pos.bitmap.font.color = normal_color
 				@pos.bitmap.draw_frame_text(0, 0, 640, 32, "좌표: [#{'%03d' % ($game_player.x + 1)}] [#{'%03d' % ($game_player.y + 1)}]")

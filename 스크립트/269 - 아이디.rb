@@ -24,6 +24,7 @@ end
 
 class Sprite_Character < Sprite_Character
 	attr_accessor :_id_sprite
+	attr_accessor :_old_id
 	
 	def create_id_sprite(text) 
 		bitmap = Bitmap.new(160, 20) 
@@ -32,6 +33,7 @@ class Sprite_Character < Sprite_Character
 		bitmap.font.color.set(255, 255, 255) 
 		bitmap.draw_frame_text(0, 0, 160, 20, text, 1) 
 		
+		@_id_sprite.dispose if @_id_sprite != nil and !@_id_sprite.disposed?
 		@_id_sprite = Sprite.new(self.viewport) 
 		@_id_sprite.bitmap = bitmap 
 		@_id_sprite.ox = 80 
@@ -54,7 +56,8 @@ class Sprite_Character < Sprite_Character
 	
 	def update_id_sprite 
 		if @character.sprite_id != nil
-			if @_id_sprite == nil
+			if @_id_sprite == nil or @_old_id != @character.sprite_id
+				@_old_id = @character.sprite_id
 				create_id_sprite(@character.sprite_id)
 			end
 			if !@_id_sprite.disposed?

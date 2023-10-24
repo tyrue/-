@@ -35,6 +35,8 @@ class Jindow_Chat_Input < Jindow
 		
 		#맵이름의 표시
 		@map_infos = load_data("Data/MapInfos.rxdata")
+		@chat_list = []
+		@chat_idx = -1
 	end
 	
 	def send_chat
@@ -147,10 +149,11 @@ class Jindow_Chat_Input < Jindow
 				$console.write_line("#{$2.to_s}마일리지를 유저에게 지급하였습니다.")
 			end
 			
-		when /^\/이벤트 고래\s?(\d*)$/ 
+			
+		when /^\/이벤트\s?고래\s?(\d*)$/ 
 			if Network::Main.group == 'admin'
 				n = ($1 == nil or $1 == "") ? 10 : $1.to_i
-				if create_abs_monsters_admin(14, n) != nil
+				if create_abs_monsters_admin(49, n) != nil
 					$console.write_line("고래를 #{n}마리 소환합니다.")
 					
 					mapname = ""
@@ -164,14 +167,21 @@ class Jindow_Chat_Input < Jindow
 				end
 			end	
 			
-		when /^\/몬스터 소환\s?(\d*)\s?(\d*)$/ 
+		when /^\/몬스터\s?소환\s?(\d*)\s?(\d*)$/ 
 			if Network::Main.group == 'admin'
 				return if ($1 == nil or $1 == "")
 				id = $1.to_i
 				n = ($2 == nil or $2 == "") ? 1 : $2.to_i
+				return if $data_enemies[id] == nil
+				name = $data_enemies[id].name
+				mapname = ""
+				if $game_map.map_id != nil
+					mapname = @map_infos[$game_map.map_id].name.to_s if @map_infos[$game_map.map_id] != nil
+				end
 				
 				if create_abs_monsters_admin(id, n) != nil
-					$console.write_line("몬스터를 #{n}마리 소환합니다.") 
+					$console.write_line("#{name}를 #{n}마리 소환합니다.") 
+					Network::Main.socket.send "<chat>#{name}(이)가 #{mapname}에 출몰하였습니다!!</chat>\n"
 				else
 					$console.write_line("오류 발생 (id 없음)")
 				end
@@ -296,44 +306,66 @@ class Jindow_Chat_Input < Jindow
 				@chat_type = "전체"
 			end
 			@a.refresh(40, @chat_type)
-			@type.set ""
-			@type.bluck = true
-			@active = true
+			self.chat_on
 			
 		elsif Key.trigger?(KEY_ENTER) # 채팅 메세지를 전송
 			if Hwnd.highlight? != self
 				return if $inputKeySwitch
 				return if Hwnd.highlight?.to_s.include?("Jindow_N")
-				
 				Hwnd.highlight = self
-				@type.bluck = true
-				@type.set ""
-				@active = true
+				self.chat_on
 			end
-			
 			
 			if @type.bluck
 				if @type.result != ""
+					@chat_list.delete(@type.result)
+					@chat_list.push(@type.result)
+					@chat_idx = @chat_list.size
 					send_chat
 				end
-				@type.set "(대화하려면 Enter 키를 누르세요)"
-				@type.view
-				@type.bluck = false
-				@active = false
+				
+				self.chat_off
 			else
-				@type.set ""
-				@type.view
-				@type.bluck = true
-				@active = true
+				self.chat_on
 			end
 			
 		elsif Key.trigger?(KEY_ESC) # 채팅 취소
-			@type.set "(대화하려면 Enter 키를 누르세요)"
-			@type.view
-			@type.bluck = false
-			@active = false
+			self.chat_off
 			Hwnd.dis_highlight(self)
+			
+		elsif Key.trigger?(KEY_UP) # 채팅 내역
+			return if @chat_list == nil
+			return if @chat_list.size == 0
+			
+			@chat_idx -= 1
+			@chat_idx = [@chat_idx, @chat_list.size - 1].min
+			@chat_idx = [0, @chat_idx].max
+			@type.set(@chat_list[@chat_idx]) 
+			
+			
+		elsif Key.trigger?(KEY_DOWN) # 채팅 내역
+			return if @chat_list == nil
+			return if @chat_list.size == 0
+			
+			@chat_idx += 1
+			@chat_idx = [@chat_idx, @chat_list.size - 1].min
+			@chat_idx = [0, @chat_idx].max
+			@type.set(@chat_list[@chat_idx]) 	
 		end
+	end
+	
+	def chat_on
+		@type.set ""
+		@type.view
+		@type.bluck = true
+		@active = true
+	end
+	
+	def chat_off
+		@type.set "(대화하려면 Enter 키를 누르세요)"
+		@type.view
+		@type.bluck = false
+		@active = false
 	end
 end
 

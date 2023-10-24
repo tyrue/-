@@ -11,7 +11,7 @@ class Game_Event < Game_Character
 	# * Public Instance Variables
 	#--------------------------------------------------------------------------
 	attr_reader   :trigger                  # trigger
-	attr_reader   :list                     # list of event commands
+	attr_accessor   :list                     # list of event commands
 	attr_reader   :starting                 # starting flag
 	#--------------------------------------------------------------------------
 	# * Object Initialization

@@ -1022,65 +1022,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update
 					return true
 					
-					#-----------하우징 시스템 -----------------
-					
-					
-					
-					#---------------엔피씨 배치 시스템----------------     
-					# (no, mob_id, map_id, direction, x, y)  	
-				when /<npc_batch>(.*)<\/npc_batch>/ 
-					data = $1.split('.')
-					for npc_data in data
-						npc_data2 = npc_data.split(',')
-						# 데이터 분해
-						no = npc_data2[0].to_i
-						mob_id = npc_data2[1].to_i
-						map_id = $game_map.map_id
-						direction = npc_data2[3].to_i
-						x = npc_data2[4].to_i
-						y = npc_data2[5].to_i
-						
-						if no != 0
-							create_events(no, mob_id, map_id, direction, x, y)
-						end
-					end
-					#return true
-				when /<npc_regen>(.*)<\/npc_regen>/
-					data = $1.split('.')
-					for npc_data in data
-						npc_data2 = npc_data.split(',')
-						if npc_data2[0].to_i != 0
-							if $mob_id[npc_data2[0].to_i] == $game_map.map_id
-								$mob_id[npc_data2[0].to_i] = nil
-								create_events(npc_data2[0].to_i, npc_data2[1].to_i, npc_data2[2].to_i, npc_data2[3].to_i, npc_data2[4].to_i , npc_data2[5].to_i)
-							end
-						end
-					end
-					return true
-				when /<npc_move>(.*)<\/npc_move>/
-					data = $1.split(',')
-					if data[1].to_i == $game_map.map_id
-						if data[5].to_s != $game_party.actors[0].name
-							$game_map.events[data[0].to_i].direction = data[2].to_i
-							$game_map.events[data[0].to_i].moveto(data[3].to_i, data[4].to_i)
-						end
-					end
-					return true
-					
-				when /<npc_make>(.*)<\/npc_make>/
-					data = $1.split('.')
-					for npc_data in data
-						npc_data2 = npc_data.split(',')
-						if npc_data2[0].to_i != 0
-							보관이벤트(npc_data2[1].to_i).moveto(npc_data2[2].to_i, npc_data2[3].to_i)
-						end
-					end
-					
-					
-					
-					#-------------------------------------------
-					
-					
 				when /<10c>(.*)<\/10c>/
 					eval($1)
 					$game_map.need_refresh = true
@@ -1106,65 +1047,69 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					y = data[4].to_i if data[4] != nil
 					
 					if $ABS.enemies[id] == nil and mon_id != 0
-						create_events(data[1].to_i, data[2].to_i, $game_map.map_id, 2, x, y)
+						create_events(16, x, y, 2, id, mon_id)
 					end
 					
 				when /<req_monster>(.*)<\/req_monster>/ # 서버로부터 저장된 몬스터 정보를 받아옴
 					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
+					map_id = data[0].to_i if data[0] != nil
+					id = data[1].to_i if data[1] != nil
+					hp = data[2].to_i if data[2] != nil
+					x = data[3].to_i if data[3] != nil
+					y = data[4].to_i if data[4] != nil
+					d = data[5].to_i if data[5] != nil
+					res = data[6].to_i if data[6] != nil
+					mon_id = data[7].to_i if data[7] != nil
+					
+					return true if $game_map.map_id != map_id
 					
 					if data.size <= 1 # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
 						$ABS.getMapMonsterData if $is_map_first # 몬스터 데이터 생성
 						return
 					end
 					
-					if $ABS.enemies[data[1].to_i] == nil and data[7] != nil and data[7].to_i != 0
-						create_events(data[1].to_i, data[7].to_i, $game_map.map_id, 2, 1, 1)
+					if $ABS.enemies[id] == nil and mon_id != nil and mon_id != 0
+						create_events(16, x, y, d, id, mon_id)
 					end
 					
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
-					if $ABS.enemies[data[1].to_i] != nil
-						# 몹 죽었을때 리스폰 시간 적용
-						if data[6].to_i != nil 
-							if data[6].to_i > 0  
-								$ABS.enemies[data[1].to_i].respawn = data[6].to_i
-							else # 몹 리스폰 시간 됐음
-								# hp가 0이었던 경우에만 다시 리스폰
-								if data[2].to_i <= 0
-									$ABS.enemies[data[1].to_i].event.erased = false
-									event = $ABS.enemies[data[1].to_i].event
-									$ABS.rand_spawn(event) # 랜덤 위치 스폰
-									event.refresh
-									return
-								end
-							end
-						end
-						
-						# 몹 체력 적용
-						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
-							$ABS.enemies[data[1].to_i].hp = data[2].to_i
-							if $ABS.enemies[data[1].to_i].hp <= 0 # 체력이 0이면 죽은거지
-								$ABS.enemies[data[1].to_i].event.erase
+					return if $ABS.enemies[id] == nil
+					enemy = $ABS.enemies[id]
+					event = enemy.event
+					
+					# 몹 죽었을때 리스폰 시간 적용
+					if res != nil 
+						if res > 0  
+							enemy.respawn = res
+						else # 몹 리스폰 시간 됐음
+							# hp가 0이었던 경우에만 다시 리스폰
+							if hp <= 0
+								event.erased = false
+								$ABS.rand_spawn(event) # 랜덤 위치 스폰
+								event.refresh
 								return
 							end
 						end
-						
-						# 몹 방향과 좌표 적용
-						x = $ABS.enemies[data[1].to_i].event.x
-						y = $ABS.enemies[data[1].to_i].event.y
-						if x != data[3].to_i and y != data[4].to_i
-							$ABS.enemies[data[1].to_i].event.moveto(data[3].to_i, data[4].to_i)
-							$ABS.enemies[data[1].to_i].event.direction = data[5].to_i
-						end
-						
-						if $is_map_first
-							$ABS.enemies[data[1].to_i].aggro = true
-						else
-							$ABS.enemies[data[1].to_i].aggro = false
+					end
+					
+					# 몹 체력 적용
+					if enemy.hp != hp
+						enemy.hp = hp
+						if enemy.hp <= 0 # 체력이 0이면 죽은거지
+							event.erase
+							return
 						end
 					end
+					
+					# 몹 방향과 좌표 적용
+					ex = event.x
+					ey = event.y
+					event.moveto(x, y) if ex != x and ey != y
+					event.direction = d if event.direction != d
+					
+					enemy.aggro = $is_map_first ? true : false
 					return true
 					
 				when /<hp>(.*)<\/hp>/ # 체력 공유

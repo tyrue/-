@@ -85,8 +85,8 @@ def create_abs_monsters(monster_id, num)
 	return if !$is_map_first
 	for i in 0...num
 		id = check_create_monster_id
-		e = create_events(id, monster_id, $game_map.map_id, 2, 1, 1)
-		
+		d = (rand(4) + 1) * 2
+		e = create_events(16, 1, 1, d, id, monster_id)
 		return if e == nil
 		$ABS.rand_spawn(e)
 		Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id}</monster2>\n")
@@ -97,56 +97,45 @@ end
 def create_abs_monsters_admin(monster_id, num)
 	x = $game_player.x
 	y = $game_player.y
-	d = 2
 	r = 12
 	
 	for i in 0...num
-		id = check_create_monster_id	
 		count = 0
 		while count < 10000
 			count += 1
 			x2 = x + rand(r) - r / 2
 			y2 = y + rand(r) - r / 2
+			d = (rand(4) + 1) * 2
+			
 			if $game_map.passable?(x2, y2, d)
-				e = create_events(id, monster_id, $game_map.map_id, 2, x2, y2)
+				e = create_events(16, x2, y2, d, -1, monster_id)
 				return if e == nil
-				Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id},#{x2},#{y2},-1</monster2>\n")
+				e.list[1].parameters[0] = "ID #{monster_id}"
+				Network::Main.socket.send("<monster2>#{$game_map.map_id},#{e.id},#{monster_id},#{x2},#{y2},-1</monster2>\n")
 				break
 			end
 		end
 	end
 end
 
-
-def create_events(no, mob_id, map_id, direction, x, y)
+def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
 	temp = load_data("Data/Map022.rxdata").events[mob_id]
 	return if temp == nil
-	temp.id = no
-	
-	$game_map.events[no] = Game_Event.new(map_id, temp)
-	event = $game_map.events[no]
-	return if not event
-	event.id = no
-	event.moveto(x, y)
-	event.direction = direction
-	create_sprite(event) 
-	event.refresh
-	return event
-end
-
-def create_events2(mob_id, x, y, dir)
-	temp = load_data("Data/Map022.rxdata").events[mob_id]
-	return if temp == nil
-	no = check_create_monster_id
+	no = event_no <= -1 ? check_create_monster_id : event_no
 	map_id = $game_map.map_id
-	temp.id = no
 	
 	$game_map.events[no] = Game_Event.new(map_id, temp)
 	event = $game_map.events[no]
 	return if not event
+	
+	if monster_id > 0 and event.list[0].parameters[0].include?("ABS")
+		event.list[1].parameters[0] = "ID #{monster_id}" 
+	end
+	
 	event.id = no
 	event.moveto(x, y)
 	event.direction = dir
+	event.refresh_set_page
 	create_sprite(event) 
 	event.refresh
 	return event
@@ -158,12 +147,6 @@ def create_drops(type, id, x, y, num = 1)
 	d_id = check_drop_id
 	Network::Main.socket.send "<Drop>#{d_id},1,#{type},#{id},#{$game_map.map_id},#{x},#{y},#{num}</Drop>\n" # 나를 포함한 전체 방송
 end
-
-def create_moneys(money, x, y)
-	d_id = check_drop_id
-	Network::Main.socket.send "<Drop>#{d_id},0,0,0,#{$game_map.map_id},#{x},#{y},#{money}</Drop>\n"
-end
-
 
 def create_drops2(no, mob_id, map_id, x, y, image, name = "", num = 0)
 	return if num == 0
@@ -182,6 +165,11 @@ def create_drops2(no, mob_id, map_id, x, y, image, name = "", num = 0)
 	end
 	
 	event.refresh
+end
+
+def create_moneys(money, x, y)
+	d_id = check_drop_id
+	Network::Main.socket.send "<Drop>#{d_id},0,0,0,#{$game_map.map_id},#{x},#{y},#{money}</Drop>\n"
 end
 
 def create_moneys2(no, mob_id, map_id, x, y, money)

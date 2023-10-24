@@ -70,7 +70,11 @@ if SDK.state("Mr.Mo's ABS")
 		# * Something Changed?
 		#--------------------------------------------------------------------------
 		def something_changed?
-			return dispose if @enemy.dead? or $ABS.enemies[@enemy.event_id] == nil
+			return dispose if @enemy == nil
+			return dispose if @enemy.event_id == nil
+			return dispose if @enemy.dead? 
+			return dispose if $ABS.enemies[@enemy.event_id] == nil
+			
 			return true if @old_hp != @enemy.hp
 			return true if @old_x != @enemy.event.screen_x - @cw
 			return true if @old_y != @enemy.event.screen_y - @ch

@@ -267,7 +267,7 @@ class Game_Battler
 	# * Decide Incapacitation
 	#--------------------------------------------------------------------------
 	def dead?
-		return (@hp == 0 and not @immortal)
+		return (@hp <= 0 and not @immortal)
 	end
 	#--------------------------------------------------------------------------
 	# * Decide Existance

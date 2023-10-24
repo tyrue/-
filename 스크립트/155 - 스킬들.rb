@@ -11,12 +11,16 @@ SINSU_SKILL_ID =
 
 # 업그레이드 하는 스킬들
 UPGRADE_SKILL_ID = {}
-UPGRADE_SKILL_ID[1] =	[1, 2, 3, 4, 10, 11, 12, 13, 16, 17, 18, 19, 22, 23, 24, 25, 30, 31, 32, 33, 37, 38, 39, 40] # 신수 마법
-UPGRADE_SKILL_ID[2]	= [64, 72, 76] # 십량분법류
-UPGRADE_SKILL_ID[3]	= [65, 75] # 뢰마도
-UPGRADE_SKILL_ID[4]	= [74, 78, 80, 102] # 십리건곤
-UPGRADE_SKILL_ID[5] = [131, 141, 142] # 투명
-UPGRADE_SKILL_ID[6] = [49, 52, 56] # 성려멸주
+UPGRADE_SKILL_ID[1] =	[1, 10, 16, 22, 30, 37] # 뢰진주류
+UPGRADE_SKILL_ID[2] =	[2, 11, 17, 23, 31, 38] # 백열주류
+UPGRADE_SKILL_ID[3] =	[3, 12, 18, 24, 32, 39] # 화염주류
+UPGRADE_SKILL_ID[4] =	[4, 13, 19, 25, 33, 40] # 자무주류
+
+UPGRADE_SKILL_ID[5]	= [64, 72, 76] # 십량분법류
+UPGRADE_SKILL_ID[6]	= [65, 75] # 뢰마도
+UPGRADE_SKILL_ID[7]	= [74, 78, 80, 102] # 십리건곤
+UPGRADE_SKILL_ID[8] = [131, 141, 142] # 투명
+UPGRADE_SKILL_ID[9] = [49, 52, 56] # 성려멸주
 
 # 0~15 : 도토리, 토끼고기, 사슴고기, 녹용
 # 15~25 : 쥐고기, 박쥐고기, 뱀고기
@@ -1019,7 +1023,9 @@ class Rpg_skill
 		if attacker.is_a?(Game_Actor) # 플레이어
 			for data in $game_party.actors[0].buff_time
 				id = data[0]
-				damage *= DAMAGE_CAL_ATTACK[id][0] if DAMAGE_CAL_ATTACK[id] != nil
+				next if DAMAGE_CAL_ATTACK[id] == nil
+				next if !self.check_buff(id)
+				damage *= DAMAGE_CAL_ATTACK[id][0] 
 			end
 			
 			if $state_trans # 투명 풀기
@@ -1044,7 +1050,9 @@ class Rpg_skill
 		if actor.is_a?(Game_Actor) 
 			for data in $game_party.actors[0].buff_time
 				id = data[0]
-				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] if DAMAGE_CAL_DEFENSE[id] != nil
+				next if DAMAGE_CAL_DEFENSE[id] == nil
+				next if !self.check_buff(id)
+				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
 			end
 			# 몬스터
 		elsif actor.is_a?(ABS_Enemy)
@@ -1059,7 +1067,9 @@ class Rpg_skill
 		if attacker.is_a?(Game_Actor)
 			for data in $game_party.actors[0].buff_time
 				id = data[0]
-				damage *= DAMAGE_CAL_SKILL[id][0] if DAMAGE_CAL_SKILL[id] != nil
+				next if DAMAGE_CAL_SKILL[id] == nil
+				next if !self.check_buff(id)
+				damage *= DAMAGE_CAL_SKILL[id][0] 
 			end
 		elsif attacker.is_a?(ABS_Enemy)
 			
@@ -1069,7 +1079,9 @@ class Rpg_skill
 		if actor.is_a?(Game_Actor)
 			for data in $game_party.actors[0].buff_time
 				id = data[0]
-				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] if DAMAGE_CAL_DEFENSE[id] != nil
+				next if DAMAGE_CAL_DEFENSE[id] == nil
+				next if !self.check_buff(id)
+				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
 			end
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
@@ -1162,15 +1174,15 @@ class Game_Actor < Game_Battler
 		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
 		for i in 1..UPGRADE_SKILL_ID.size
 			u_skill = UPGRADE_SKILL_ID[i]
-			if u_skill.include?(skill_id)
-				for j in u_skill
-					return if j == skill_id
-					if skill_learn?(j)
-						forget_skill(j) 
-						$console.write_line("이전 마법 #{$data_skills[j].name}은(는) 사라졌다!") if $global_x >= 26
-					end
-				end
-			end
+			next if !u_skill.include?(skill_id)
+			
+			for j in u_skill
+				return if j == skill_id
+				next if !skill_learn?(j)
+				
+				forget_skill(j) 
+				$console.write_line("이전 마법 #{$data_skills[j].name}은(는) 사라졌다!") if $global_x >= 26				
+			end			
 		end
 		
 		# 투명 등 숙련도 설정

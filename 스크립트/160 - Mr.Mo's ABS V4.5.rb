@@ -233,6 +233,11 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 4차 퀘스트
 	ENEMY_EXP[102] = [160000000] # 반고
 	
+	# 12지신
+	ENEMY_EXP[132] = [11600000] # 건룡
+	ENEMY_EXP[133] = [11600000] # 감룡
+	ENEMY_EXP[134] = [11600000] # 진룡
+	
 	# 용궁
 	ENEMY_EXP[150] = [7000000] # 해마장군
 	ENEMY_EXP[153] = [15000000] # 인어장군
@@ -248,6 +253,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[191] = [50000000] # 유성지
 	ENEMY_EXP[192] = [70000000] # 해골왕
 	ENEMY_EXP[193] = [350000000] # 파괴왕
+	
 	
 	# 중국
 	ENEMY_EXP[224] = [15000000]# 괴성왕
@@ -333,6 +339,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :sneak_min
 		attr_accessor :active
 		attr_accessor :button_mash
+		attr_accessor :char_dir
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		# 생성자, 변수 초기화
@@ -367,7 +374,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			# ABS Active
 			@active = true
-			
+			@char_dir = Dir.entries("./Graphics/Characters")
 		end
 		# 반환 함수들
 		#--------------------------------------------------------------------------
@@ -432,12 +439,18 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * ABS Refresh(Event, List, Characterset Name) 새로고침
 		#--------------------------------------------------------------------------
 		def refresh(event, list, character_name)
+			if event.character_name != "" and !@char_dir.include?(event.character_name + ".png")
+				event.character_name = "공격스킬2"
+			end
+			
 			@get_hate = true
 			#Delete the event from the list
 			@enemies.delete(event.id)
-			#Skip the event if its invisible or doesn't contain a list
-			# 캐릭터 파일 이름이 없거나, 이벤트가 없다면 무시
-			return if event.character_name == "" or list == nil
+			# 이벤트가 없다면 무시
+			return if list == nil
+			# 캐릭터 파일 이름이 없다면 무시
+			# return if event.character_name == ""
+			
 			#Get the parameters 속성 받아오기, 주석처리한걸
 			parameters = SDK.event_comment_input(event, 11, "ABS")
 			#Skip if the paramete is NIL 속성이 없다면 무시
@@ -453,6 +466,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies[event.id].event_id = event.id
 			#Get Event 
 			event.name = "[id#{@enemies[event.id].name}]" if @enemies[event.id].name != ""
+			sw = false
+			#sw = true if !@char_dir.include?(event.character_name + ".png")
+			sw = true if event.character_name == "공격스킬2"
+			
+			if ABS_ENEMY_CHAR[enemy.id] != nil and sw
+				char_name = "(몬)" + ABS_ENEMY_CHAR[enemy.id][0]
+				hue = ABS_ENEMY_CHAR[enemy.id][1] != nil ? ABS_ENEMY_CHAR[enemy.id][1] : 0
+				opcity = ABS_ENEMY_CHAR[enemy.id][2] != nil ? ABS_ENEMY_CHAR[enemy.id][2] : 255
+				
+				if @char_dir.include?(char_name + ".png")
+					event.es_set_graphic(char_name, opcity, hue)
+				end
+			end
+			
 			@enemies[event.id].event = event
 			
 			n = id[1].to_i
@@ -516,6 +543,12 @@ if SDK.state("Mr.Mo's ABS") == true
 					@enemies[event.id].respawn = respawn[1].to_i * 6
 				end
 			end
+			
+			if @enemies[event.id].event.move_type != 3
+				@enemies[event.id].event.move_speed = @enemies[event.id].temp_speed
+				@enemies[event.id].event.move_frequency = @enemies[event.id].temp_frequency
+			end
+			
 			@enemies[event.id].aggro = $is_map_first
 			@enemies[event.id].aggressiveness = (@enemies[event.id].aggressiveness * 45.0 + rand(3) - 2) / 45.0 
 		end
@@ -1179,7 +1212,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				#Return if the enemy is dead
-				return if enemy_dead?(e,@actor)
+				return if enemy_dead?(e, @actor)
 				return if !e.hate_group.include?(0)
 				
 				e.attacking = $game_player
@@ -1799,6 +1832,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					$game_party.actors[0].buff_time[id] = 1 
 				end
 			end
+			
 			$game_party.actors[0].pdef = 0 # 물리방어
 			$game_party.actors[0].mdef = 0 # 마법방어
 			#$scene = Scene_Map.new
@@ -1810,6 +1844,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def treasure(enemy)
 			actor = $game_party.actors[0]
+			return if enemy.event.fade # 중복 방지(이미 몬스터가 죽은 상태에서 보상까지 받은 후)
 			return if actor.cant_get_exp? # 경험치를 얻을 수 없는 상황
 			abs_gain_treasure(enemy)
 			
@@ -1885,29 +1920,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			#$console.write_line(printTxt)
 		end
 		
-		
-		# 간단하게 경험치 바로 얻을 수 있는 함수
-		def simple_exp(id, val = 0)
-			return if $data_enemies[id] == nil
-			enemy = $data_enemies[id]
+		# 경험치 받는 함수
+		def abs_gain_exp(val, hp_per = 0, sp_per = 0)
 			actor = $game_party.actors[0]
-			exp = val
-			
-			if ENEMY_EXP[id] != nil 
-				exp = ENEMY_EXP[id][0]
-				if ENEMY_EXP[id].size > 1 
-					exp += (actor.maxhp * ENEMY_EXP[id][1] + actor.maxsp * ENEMY_EXP[id][2]).to_i
-				end
-			else
-				exp = enemy.exp
-			end
-			# 경험치 이벤트!
-			if $game_switches[1500] == true  
-				exp *= $exp_event
-			end
-			actor.exp += exp
-			$console.write_line("경험치:#{exp} 획득")
+			gainExp = val + (actor.maxhp * hp_per + actor.maxsp * sp_per).to_i
+			actor.exp += gainExp
 		end
+		
 		
 		#--------------------------------------------------------------------------
 		# * Hit Enemy(Enemy) or (Player) 몬스터가 공격할 경우, e가 a에게 공격당함
@@ -1939,7 +1958,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		def jump(object,attacker,plus)
 			return if plus == nil
 			n_plus = plus - (plus * 2)
+			
 			d = attacker.direction
+			
 			# Calculate new pos
 			new_x = (d == 6 ? plus : d == 4 ? n_plus : 0)
 			new_y = (d == 2 ? plus : d == 8 ? n_plus : 0)
@@ -2375,7 +2396,25 @@ if SDK.state("Mr.Mo's ABS") == true
 			@range_skill = $ABS.RANGE_EXPLODE[skill.id]
 			@range = @range_skill[0]
 			@move_speed = @range_skill[1]
-			@character_name = @range_skill[2]
+			
+			char_name = ""
+			hue = 0
+			opcity = 255
+			if @range_skill[2].is_a?(Array)
+				char_name = @range_skill[2][0] if @range_skill[2][0] != nil
+				hue = @range_skill[2][1] if @range_skill[2][1] != nil
+				opcity = @range_skill[2][2] if @range_skill[2][2] != nil
+			else
+				char_name = @range_skill[2]
+			end
+			
+			if char_name != "" and !$ABS.char_dir.include?(char_name + ".png")				
+				char_name = "공격스킬2"
+			end
+			
+			es_set_graphic(char_name, opcity, hue)
+			
+			
 			@skill = skill
 			
 			@explosive = true
@@ -2383,6 +2422,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@dummy = dummy
 			@hit_num = @range_skill[6] == nil ? 1 : [@range_skill[6], 1].max
 			
+			@direction = @move_direction
+			@direction = 2 if @direction <= 1
 			@check_blow = false
 		end
 		
@@ -2564,13 +2605,31 @@ if SDK.state("Mr.Mo's ABS") == true
 			@range_skill = $ABS.RANGE_SKILLS[skill.id]
 			@range = @range_skill[0]
 			@move_speed = @range_skill[1]
-			@character_name = @range_skill[2]
+			
+			char_name = ""
+			hue = 0
+			opcity = 255
+			if @range_skill[2].is_a?(Array)
+				char_name = @range_skill[2][0] if @range_skill[2][0] != nil
+				hue = @range_skill[2][1] if @range_skill[2][1] != nil
+				opcity = @range_skill[2][2] if @range_skill[2][2] != nil
+			else
+				char_name = @range_skill[2]
+			end
+			
+			if char_name != "" and !$ABS.char_dir.include?(char_name + ".png")				
+				char_name = "공격스킬"
+			end
+			
+			es_set_graphic(char_name, opcity, hue)
+			
 			@skill = skill
 			@move_direction = m_dir != 0 ? m_dir : @parent.direction
 			
 			@dummy = dummy
 			@hit_num = @range_skill[5] == nil ? 1 : [@range_skill[5], 1].max
-			
+			@direction = @move_direction
+			@direction = 2 if @direction <= 1
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2666,7 +2725,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			$rpg_skill.skill_cost_custom(enemy, skill_id)
 			
 			should_jump = actor.damage != "Miss" && actor.damage != 0 && @range_skill[4] != 0
-			$ABS.jump(@enani, $game_player, @range_skill[4]) if should_jump
+			$ABS.jump(@enani, self, @range_skill[4]) if should_jump
 			
 			return if $ABS.enemy_dead?(actor, enemy)
 			return unless actor.hate_group.include?(target_id)
@@ -3753,7 +3812,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.hp -= self.damage
 				@damage_array.push(self.damage)
 				@critical_array.push(self.critical)
-					
+				
 				r = rand(100)
 				if r <= [(self.damage * 100 / self.maxhp), 30].max
 					if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
@@ -3833,7 +3892,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# Calculate distance
 				distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus).round
 				# Set jump count
-				@jump_peak = 10 + distance - @move_speed
+				@jump_peak = 1#10 + distance - @move_speed
 				@jump_count = @jump_peak * 1
 				# Clear stop count
 				@stop_count = 0

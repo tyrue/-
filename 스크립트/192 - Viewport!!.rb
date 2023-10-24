@@ -8,7 +8,11 @@ class Viewport
 	end
 	
 	def width
-		return rect.width
+		begin
+			return rect.width
+		rescue
+			
+		end	
 	end
 	
 	def height

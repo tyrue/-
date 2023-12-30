@@ -1,6 +1,7 @@
 class Bitmap
 	alias jingukang_jindow_initialize initialize
 	def initialize(width = nil, height = nil, file = '', type = 0)
+		
 		if width.string?
 			jingukang_jindow_initialize(width)
 		else

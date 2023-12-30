@@ -238,11 +238,6 @@ class Rpg_skill
 			end
 		end
 		
-		if !$state_trans # 투명 풀기
-			$game_party.actors[0].buff_time[131] = 1 if check_buff(131)
-			$game_party.actors[0].buff_time[141] = 1 if check_buff(141)
-			$game_party.actors[0].buff_time[142] = 1 if check_buff(142)
-		end
 	end
 	
 	def check_speed_buff(actor = $game_party.actors[0])
@@ -444,6 +439,10 @@ class Rpg_skill
 					
 				when 140 # 운기
 					$console.write_line("마력을 회복합니다.")
+					
+				when 143 # 기문방술
+					$console.write_line("투명을 유지합니다.")	
+					self.party_buff(142)
 				else
 					
 				end
@@ -556,9 +555,7 @@ class Rpg_skill
 					$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
 					
 				when 131, 141, 142 # 투명, 1, 2성
-					$game_variables[9] = 1
-					Network::Main.send_trans(false)
-					$state_trans = false
+					self.투명해제
 					
 				when 134 # 분신
 					$console.write_line("분신이 사라집니다.")
@@ -630,6 +627,9 @@ class Rpg_skill
 		when 138 # 무형검
 			msg = "#{skill.name}!!"
 		when 139 # 분혼경천
+			msg = "!!#{skill.name}!!"
+			
+		when 143 # 기문방술
 			msg = "!!#{skill.name}!!"
 			
 			# 적 스킬
@@ -747,13 +747,24 @@ class Rpg_skill
 	end
 	
 	def 투명
-		$game_variables[9] = 1
 		$state_trans = true # 현재 자신이 투명상태인걸 뜻함
 		Network::Main.send_trans(true)
 	end
 	
 	def 투명해제
+		if self.check_buff(143) # 기문방술 걸려있을 땐 해제 안함
+			$state_trans = true
+			return 
+		end
+		return if $state_trans == false
 		
+		Network::Main.send_trans(false)
+		$state_trans = false
+		
+		# 투명 버프 해제
+		$game_party.actors[0].buff_time[131] = 1 if self.check_buff(131) # 투명 1성
+		$game_party.actors[0].buff_time[141] = 1 if self.check_buff(141) # 투명 2성
+		$game_party.actors[0].buff_time[142] = 1 if self.check_buff(142) # 투명 3성
 	end
 	
 	def 광량돌격(actor)
@@ -1030,8 +1041,6 @@ class Rpg_skill
 			
 			if $state_trans # 투명 풀기
 				damage *= (6 + $game_variables[10]) # 투명 숙련도
-				$state_trans = false
-				$game_variables[9] = 1
 				id = nil
 				id = 131 if self.check_buff(131) # 투명 1성
 				id = 141 if self.check_buff(141) # 투명 2성

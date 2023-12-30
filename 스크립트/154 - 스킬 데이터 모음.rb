@@ -85,12 +85,13 @@ BUFF_SKILL[76] = [180, false, [["per_str", 1.3, 0]] ] # 팔량분법
 
 # 도적
 BUFF_SKILL[130] = [180, false, [["dex", 50], ["agi", 50]] ] # 무영보법
-BUFF_SKILL[131] = [20, false, [["custom", 1]] ] # 투명
-BUFF_SKILL[141] = [20, false, [["custom", 1]] ] # 투명 1성
-BUFF_SKILL[142] = [30, false, [["custom", 1]] ] # 투명 2성
+BUFF_SKILL[131] = [10, false, [["custom", 1]] ] # 투명
+BUFF_SKILL[141] = [10, false, [["custom", 1]] ] # 투명 1성
+BUFF_SKILL[142] = [20, false, [["custom", 1]] ] # 투명 2성
 BUFF_SKILL[134] = [120, false, [["custom", 1]] ] # 분신
 BUFF_SKILL[136] = [180, true, [["speed", 0.5]] ] # 운상미보
 BUFF_SKILL[140] = [10, false, [["custom", 1]] ] # 운기
+BUFF_SKILL[143] = [20, false, [["custom", 1]] ] # 기문방술
 
 BUFF_SKILL[99] = [360, false, [["speed", 0.5]] ] # 속도시약
 # //////////////////////////end///////////////////////////////#
@@ -140,7 +141,7 @@ RANGE_SKILLS[44] = [10, 10, "(스킬)헬파이어", 4, 0] #헬파이어
 
 RANGE_SKILLS[49] = [10, 10, "(스킬)성려멸주", 4, 0] #성려멸주
 RANGE_SKILLS[52] = [10, 10, ["(스킬)성려멸주", 30], 4, 0] #성려멸주 1성
-RANGE_SKILLS[56] = [10, 10, ["(스킬)이기어검", 180], 4, 0] #성려멸주 2성
+RANGE_SKILLS[56] = [10, 10, ["(스킬)성려멸주", 180], 4, 0] #성려멸주 2성
 
 RANGE_SKILLS[58] = [12, 6, "공격스킬2", 4, 0, 3] #지폭지술
 RANGE_SKILLS[68] = [12, 6, "공격스킬2", 4, 0, 3] #폭류유성
@@ -150,14 +151,14 @@ RANGE_SKILLS[68] = [12, 6, "공격스킬2", 4, 0, 3] #폭류유성
 RANGE_SKILLS[65] = [10, 10, "(스킬)뢰진주", 4, 0] #뢰마도
 RANGE_SKILLS[67] = [0, 5, "(스킬)건곤2", 4, 0] #건곤대나이
 RANGE_SKILLS[73] = [0, 6, "(스킬)백호참", 4, 0] #광량돌격
-RANGE_SKILLS[74] = [1, 5, "(스킬)건곤", 4, 0] #십리건곤
+RANGE_SKILLS[74] = [1, 5, "(스킬)검기", 4, 0] #십리건곤
 RANGE_SKILLS[75] = [10, 10, ["(스킬)뢰진주", 180], 4, 0] #뢰마도 1성
 RANGE_SKILLS[77] = [1, 10, "(스킬)백열장", 4, 7] #유비후타
-RANGE_SKILLS[78] = [1, 5, "(스킬)건곤", 4, 0] #십리건곤 1성
+RANGE_SKILLS[78] = [1, 5, "(스킬)검기", 4, 0] #십리건곤 1성
 RANGE_SKILLS[79] = [0, 5, "(스킬)동귀어진", 4, 0, 10] #동귀어진
-RANGE_SKILLS[80] = [1, 5, ["(스킬)건곤", 100], 4, 0] #십리건곤 2성
+RANGE_SKILLS[80] = [1, 5, "(스킬)검기2", 4, 0] #십리건곤 2성
 RANGE_SKILLS[101] = [0, 5, "(스킬)백호참", 4, 0, 2] #백호참
-RANGE_SKILLS[102] = [2, 10, ["(스킬)건곤", 210], 4, 0] #백리건곤 1성
+RANGE_SKILLS[102] = [2, 10, "(스킬)검기3", 4, 0] #백리건곤 1성
 RANGE_SKILLS[104] = [12, 5, "공격스킬2", 4, 0, 3] #포효검황
 RANGE_SKILLS[105] = [12, 5, "공격스킬2", 4, 0, 3] #혈겁만파
 RANGE_SKILLS[106] = [4, 10, "(스킬)쇄혼비무", 4, -3, 4] #초혼비무
@@ -167,17 +168,17 @@ RANGE_SKILLS[123] = [12, 5, "공격스킬2", 4, 0, 3] #귀염추혼소
 
 # 도적
 RANGE_SKILLS[133] = [0, 5, "(스킬)필살검무", 4, 0] #필살검무
-RANGE_SKILLS[138] = [15, 10, ["(스킬)검", 250], 4, 0, 7] #무형검
+RANGE_SKILLS[138] = [15, 10, ["(스킬)검", 250], 4, 0, 8] #무형검
 RANGE_SKILLS[139] = [12, 5, "", 4, 0, 3] #분혼경천
 
 # 적 스킬
-RANGE_SKILLS[45] = [10, 4.5, ["(스킬)건곤", 50], 4, 0] #산적 건곤
+RANGE_SKILLS[45] = [10, 4.5, ["(스킬)검기", 50], 4, 0] #산적 건곤
 RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
 RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
 RANGE_SKILLS[85] = [4, 3, ["(스킬)필살검무", 150], 4, 0] # 필살검무
 RANGE_SKILLS[151] = [10, 10, ["(몬)(승급)청룡", 90], 4, 7, 3] # 청룡의 포효
 RANGE_SKILLS[152] = [10, 10, ["(몬)(승급)현무", 90], 4, 7, 3] # 현무의 포효
-RANGE_SKILLS[153] = [4, 6, ["(스킬)검", 210], 4, 3, 2] # 백호검무
+RANGE_SKILLS[153] = [4, 6, "(스킬)검기3", 4, 3, 2] # 백호검무
 RANGE_SKILLS[154] = [10, 3, "(몬)(승급)용", 4, 6, 10] # 청룡마령참
 RANGE_SKILLS[155] = [7, 2, "공격스킬", 4, 1, 2] # 암흑진파
 RANGE_SKILLS[156] = [8, 2, "공격스킬", 4, 1, 3] # 흑룡광포
@@ -195,15 +196,15 @@ RANGE_EXPLODE[57] = [10, 10, ["(스킬)헬파이어", 100], 3, 4, 0] #삼매진�
 RANGE_EXPLODE[69] = [10, 10, ["(스킬)헬파이어", 190], 4, 4, 0, 2] # 삼매진화 2성
 
 # 전사
-RANGE_EXPLODE[103] = [1, 6, ["(스킬)이기어검", 150], 3, 4, 0, 2] # 어검술
+RANGE_EXPLODE[103] = [1, 5, ["(스킬)검기3", 150], 3, 4, 0, 2] # 어검술
 
 # 도사
 RANGE_EXPLODE[96] = [7, 10, "(스킬)지진", 2, 4, 0, 5] # 지진
 RANGE_EXPLODE[124] = [7, 6, ["(스킬)지진", 150], 2, 4, 0, 5] # 지진'첨
 
 # 도적
-RANGE_EXPLODE[135] = [0, 6, "(스킬)백호검무", 2, 4, 0] # 백호검무
-RANGE_EXPLODE[137] = [0, 6, "(스킬)이기어검", 4, 4, 0, 3] #이기어검
+RANGE_EXPLODE[135] = [0, 5, "(스킬)백호검무", 2, 4, 0] # 백호검무
+RANGE_EXPLODE[137] = [0, 5, "(스킬)검기", 4, 4, 0, 3] #이기어검
 
 # 기타
 RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
@@ -249,10 +250,10 @@ SKILL_POWER_CUSTOM[124] = [[1, 0.01, 0.1, 100]] # 지진'첨
 # 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
 SKILL_POWER_CUSTOM[137] = [[0, 0.4, 0.4, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 0.09, 0.18, 50]] # 무형검
+SKILL_POWER_CUSTOM[138] = [[0, 0.15, 0.10, 50]] # 무형검
 SKILL_POWER_CUSTOM[139] = [[0, 0.7, 0.7, 100]] # 분혼경천
 
-SKILL_POWER_CUSTOM[135] = [[1, 0.1, 0.15, 20]] # 백호검무
+SKILL_POWER_CUSTOM[135] = [[1, 0.15, 0.10, 70]] # 백호검무
 SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
 SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
 SKILL_POWER_CUSTOM[142] = [[1, 0.02, 0.02, 0]] # 투명3성
@@ -339,7 +340,7 @@ SKILL_MASH_TIME[69] = [3.5 * sec, 0] # 삼매진화 3성
 SKILL_MASH_TIME[65] = [3 * sec, 0] # 뢰마도
 SKILL_MASH_TIME[66] = [180 * sec, 0] # 신수둔각도
 SKILL_MASH_TIME[67] = [2 * sec, 0] # 건곤대나이
-SKILL_MASH_TIME[71] = [90 * sec, 0] # 혼신의힘
+SKILL_MASH_TIME[71] = [120 * sec, 0] # 혼신의힘
 SKILL_MASH_TIME[73] = [5 * sec, 0] # 광량돌격
 SKILL_MASH_TIME[75] = [1 * sec, 0] # 뢰마도 2성
 SKILL_MASH_TIME[77] = [1 * sec, 0] # 유비후타
@@ -365,6 +366,7 @@ SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
 SKILL_MASH_TIME[137] = [18 * sec, 0] # 이기어검
 SKILL_MASH_TIME[138] = [1.5 * sec, 0] # 무형검
 SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
+SKILL_MASH_TIME[143] = [90 * sec, 0] # 기문방술
 
 # 적 스킬
 SKILL_MASH_TIME[85] = [2 * sec, 0] # 필살검무
@@ -421,7 +423,7 @@ DAMAGE_CAL_DEFENSE[121] = [0.5] # 신령지익진
 
 DAMAGE_CAL_SKILL = {}
 DAMAGE_CAL_SKILL[42] = [1.2] # 주술마도
-DAMAGE_CAL_SKILL[71] = [1.5] # 혼신의힘
+DAMAGE_CAL_SKILL[71] = [1.6] # 혼신의힘
 DAMAGE_CAL_SKILL[88] = [1.3] # 분량력법
 DAMAGE_CAL_SKILL[134] = [1.1] # 분신
 DAMAGE_CAL_SKILL[122] = [2.0] # 파력무참진

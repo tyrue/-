@@ -9,7 +9,7 @@ class MrMo_ABS
 			return
 		end
 		
-		$state_trans = false # 투명 풀림
+		$rpg_skill.투명해제
 		Audio.se_play("Audio/SE/줍기", $game_variables[13])
 		Network::Main.ani(Network::Main.id, 198)
 		

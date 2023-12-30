@@ -177,7 +177,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 중국
 	ABS_ENEMY_HP[204] = [150000, 1]# 인묘
-	ABS_ENEMY_HP[207] = [300000, 1]# 염유왕
+	ABS_ENEMY_HP[208] = [300000, 1]# 염유왕
 	ABS_ENEMY_HP[212] = [1000000, 1]# 기린왕
 	ABS_ENEMY_HP[215] = [2000000, 1]# 악어왕
 	
@@ -1209,6 +1209,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 몬스터타격 데미지 계산
 				if e.damage != "Miss" and e.damage != 0
 					Audio.se_play("Audio/SE/타격", $game_variables[13])					
+					$rpg_skill.투명해제
 				end
 				
 				#Return if the enemy is dead
@@ -1234,8 +1235,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 상대방 이름
 				Network::Main.socket.send("<attack_effect>#{player.name}</attack_effect>\n")
 				
-				$state_trans = false
-				$game_variables[9] = 1
+				$rpg_skill.투명해제
 			end
 		end
 		
@@ -1763,6 +1763,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
 			Network::Main.socket.send("<enemy_dead>#{id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
 			event.through = true
+			
+			$game_variables[enemy.id + $mon_val_start] += 1
+			
 			
 			case enemy.trigger[0]
 			when 0
@@ -3753,16 +3756,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage = $rpg_skill.damage_by_skill(self.damage, skill.id, self)
 				
 				# 방어력에 따른 데미지 감소
-				#~ if self.damage > 0
-				#~ if self.is_a?(Game_Actor)
-				#~ limit = 600.0
-				#~ self.damage = (self.damage * [1.0 - ([self.base_pdef + self.base_mdef * 2, limit].min / limit), 0.01].max).to_i
-				#~ else
-				#~ limit = 2000.0
-				#~ self.damage = (self.damage * [1.0 - ([self.pdef + self.mdef * 2, limit].min / limit), 0.1].max).to_i
-				#~ end
-				#~ end
-				
 				if self.damage > 0
 					if self.is_a?(Game_Actor)
 						limit = 200.0
@@ -3781,6 +3774,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				# 최종 데미지 계산
 				self.damage = $rpg_skill.damage_calculation_skill(self.damage, self, user)
+				self.damage /= 5 if user.is_a?(Game_NetPlayer) # pvp라면 1/5
+				
 				temp = $ABS.weapon_skill(user.weapon_id, self)
 				if temp > 0
 					self.critical = true

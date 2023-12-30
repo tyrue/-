@@ -71,6 +71,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				@actor = nil
 			end
 			
+			@old_trans = -2
 			geso_visual_equip_sprite_char_init(viewport, character)
 		end
 		
@@ -112,8 +113,6 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				return false
 			end
 			
-			
-			
 			# 여기까지 왔으면 플레이어라고 생각하고 수행
 			a = false
 			for i in 0..4
@@ -129,7 +128,8 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				return true
 			else
 				# 투명이라면
-				if $game_variables[9] == 1 # 투명 사용시 착용 변경 알림용
+				if @old_trans != $state_trans # 투명 사용시 착용 변경 알림용
+					@old_trans = $state_trans
 					a = true
 				end
 				return a
@@ -218,8 +218,6 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 					@ch = bitmap.height / 4
 					self.ox = @cw / 2
 					self.oy = @ch
-					
-					$game_variables[9] = 0
 				end
 			end
 			# Set visible situationw

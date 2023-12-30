@@ -158,7 +158,14 @@ class Scene_Map
 						@spriteset.toggle_id
 					end	
 					
-					
+					# 퀘스트 창 열기
+					if Key.trigger?(KEY_Q)
+						if not Hwnd.include?("Quest")
+							Jindow_Quest.new
+						else
+							Hwnd.dispose("Quest")
+						end
+					end	
 				end
 			end
 		end

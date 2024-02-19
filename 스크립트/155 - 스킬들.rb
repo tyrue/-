@@ -68,7 +68,7 @@ REQ_SKILL_DATA[1] =
 REQ_SKILL_DATA[2] = 
 [
 	[8, 30, 10, 5, 3, 74], # 누리의기원
-	[10, 20, 20, 1, 5, 6], # 신수마법
+	[10, 10, 10, 1, 5, 6], # 신수마법
 	[12, 5, 10, 46, 7, 8], # 무장
 	[15, 20, 20, 10, 9, 10], # 신수 1성
 	[22, 15, 15, 15, 10, 104], # 공력증강
@@ -121,7 +121,7 @@ REQ_SKILL_DATA[3] =
 REQ_SKILL_DATA[4] = 
 [
 	[8, 30, 10, 5, 3, 74], 			# 누리의기원
-	[13, 15, 15, 26, 5, 6], 		# 누리의힘
+	[13, 10, 10, 26, 5, 6], 		# 누리의힘
 	[15, 15, 15, 1, 9, 10], 		# 신수마법
 	[20, 10, 20, 27, 10, 104], 	# 동해의기원
 	[23, 15, 15, 130, 11, 12],  # 무영보법
@@ -736,6 +736,7 @@ class Rpg_skill
 			return 
 		end
 		battler.hp /= 2
+		battler.hp = 1 if battler.hp <= 0
 		battler.sp += battler.maxsp
 		character.ani_array.push(135)
 		
@@ -916,6 +917,14 @@ class Rpg_skill
 	def has_skill?(type) # 직업
 		return false if REQ_SKILL_DATA[type][$game_variables[38]] == nil
 		s_id = REQ_SKILL_DATA[type][$game_variables[38]][3]
+		
+		if SINSU_SKILL_ID.include?(s_id)
+			temp = 0 if $game_switches[1] # 청룡
+			temp = 1 if $game_switches[2] # 백호
+			temp = 2 if $game_switches[3] # 주작
+			temp = 3 if $game_switches[4] # 현무
+			s_id += temp
+		end
 		
 		return true if $game_party.actors[0].skill_learn?(s_id)
 		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움

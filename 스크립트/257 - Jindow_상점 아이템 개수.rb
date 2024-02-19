@@ -36,7 +36,7 @@ class Jindow_Shop_Num < Jindow
 		@input = J::Type.new(self).refresh(0, 0, self.width - 60, 16)
 		@input.x = 5
 		@input.y = @totalPriceText.y + @totalPriceText.height + 1
-		@input.set("1")
+		@input.set("1") if @type != 0 # 일반 아이템
 		@input.view
 		@input.bluck = true
 		

@@ -53,12 +53,12 @@ MAP_MONSTER_DATA[439] = [[233, 7], [234, 7], [235, 7], [236, 8]] # 도삭산 정
 
 class MrMo_ABS
 	def getMapMonsterData
-		if MAP_MONSTER_DATA[$game_map.map_id] != nil
-			for data in MAP_MONSTER_DATA[$game_map.map_id]
-				id = data[0] if data[0] != nil
-				num = data[1] if data[1] != nil
-				create_abs_monsters(id, num)
-			end
+		return if MAP_MONSTER_DATA[$game_map.map_id] == nil
+		
+		for data in MAP_MONSTER_DATA[$game_map.map_id]
+			id = data[0] if data[0] != nil
+			num = data[1] if data[1] != nil
+			create_abs_monsters(id, num)
 		end
 	end
 end

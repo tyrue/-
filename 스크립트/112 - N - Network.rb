@@ -1153,32 +1153,33 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
+					
+					id = data[1].to_i
+					return if $ABS.enemies[id] == nil
 					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
-					if $ABS.enemies[data[1].to_i] != nil
-						$ABS.enemies[data[1].to_i].aggro = false if $ABS.enemies[data[1].to_i].aggro and !$is_map_first
-						x = data[3].to_i
-						y = data[4].to_i
-						
-						if $ABS.enemies[data[1].to_i].event.x == x and $ABS.enemies[data[1].to_i].event.y == y
-							return
-						end
-						
-						# 몹 이동
-						case data[2].to_i
-						when 2
-							$ABS.enemies[data[1].to_i].event.move_down(true, true)
-						when 4
-							$ABS.enemies[data[1].to_i].event.move_left(true, true)
-						when 6
-							$ABS.enemies[data[1].to_i].event.move_right(true, true)
-						when 8
-							$ABS.enemies[data[1].to_i].event.move_up(true, true)
-						end
-						if $ABS.enemies[data[1].to_i].event.x != x or $ABS.enemies[data[1].to_i].event.y != y
-							$ABS.enemies[data[1].to_i].event.moveto(x,y)
-						end
+					$ABS.enemies[id].aggro = false if $ABS.enemies[id].aggro and !$is_map_first
+					x = data[3].to_i
+					y = data[4].to_i
+					
+					if $ABS.enemies[id].event.x == x and $ABS.enemies[id].event.y == y
+						return
 					end
-					return true
+					
+					# 몹 이동
+					case data[2].to_i
+					when 2
+						$ABS.enemies[id].event.move_down(true, true)
+					when 4
+						$ABS.enemies[id].event.move_left(true, true)
+					when 6
+						$ABS.enemies[id].event.move_right(true, true)
+					when 8
+						$ABS.enemies[id].event.move_up(true, true)
+					end
+					if $ABS.enemies[id].event.x != x or $ABS.enemies[id].event.y != y
+						$ABS.enemies[id].event.moveto(x,y)
+					end
+					
 					
 					# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
 				when /<mon_damage>(.*)<\/mon_damage>/

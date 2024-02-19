@@ -220,8 +220,8 @@ SKILL_POWER_CUSTOM[57] = [[0, 0, 2.5, 10]] # 삼매진화 1성
 SKILL_POWER_CUSTOM[69] = [[0, 0, 2.0, 10]] # 삼매진화 2성
 
 SKILL_POWER_CUSTOM[49] = [[1, 0, 0.16, 200]] # 성려멸주
-SKILL_POWER_CUSTOM[52] = [[1, 0, 0.22, 200]] # 성려멸주 1성
-SKILL_POWER_CUSTOM[56] = [[1, 0, 0.3, 200]] # 성려멸주 2성
+SKILL_POWER_CUSTOM[52] = [[1, 0, 0.22, 250]] # 성려멸주 1성
+SKILL_POWER_CUSTOM[56] = [[1, 0, 0.3, 300]] # 성려멸주 2성
 
 SKILL_POWER_CUSTOM[58] = [[0, 0, 0.5, 10]] # 지폭지술
 SKILL_POWER_CUSTOM[68] = [[0, 0.7, 0.7, 10]] # 폭류유성
@@ -243,9 +243,9 @@ SKILL_POWER_CUSTOM[80] = [[1, 0.20, 0.01, 40]] # 십리건곤 3성
 SKILL_POWER_CUSTOM[102] = [[1, 0.25, 0.07, 50]] # 백리건곤 1성
 
 # 도사
-SKILL_POWER_CUSTOM[96] = [[1, 0, 0.02, 100]] # 지진
+SKILL_POWER_CUSTOM[96] = [[1, 0, 0.07, 50]] # 지진
 SKILL_POWER_CUSTOM[123] = [[0, 0.6, 1.3, 100]] # 귀염추혼소
-SKILL_POWER_CUSTOM[124] = [[1, 0.01, 0.1, 100]] # 지진'첨
+SKILL_POWER_CUSTOM[124] = [[1, 0.01, 0.1, 150]] # 지진'첨
 
 # 도적
 SKILL_POWER_CUSTOM[133] = [[0, 1.0, 0.5, 20]] # 필살검무
@@ -311,7 +311,7 @@ SKILL_COST_CUSTOM[123] = [[0, 0.3, 0.5]] # 귀염추혼소
 
 SKILL_COST_CUSTOM[118] = [[1, 0, 0.02]] # 신령의희원
 SKILL_COST_CUSTOM[119] = [[1, 0, 0.02]] # 봉황의희원
-SKILL_COST_CUSTOM[96] = [[1, 0, 1.0 / 12.0]] # 지진
+SKILL_COST_CUSTOM[96] = [[1, 0, 1.0 / 10.0]] # 지진
 SKILL_COST_CUSTOM[124] = [[1, 0.01, 0.5]] # 지진'첨
 
 # 도적

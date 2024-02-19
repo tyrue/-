@@ -10,7 +10,7 @@ class Jindow_Inventory < Jindow
 	def initialize
 		자동저장
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 260, 240)
+		super(0, 0, 260, 300)
 		self.name = "아이템"
 		@head = true
 		@mark = true
@@ -97,6 +97,7 @@ class Jindow_Inventory < Jindow
 		@item.push(@gold_drop_button) if !@item.include?(@gold_drop_button)
 		@item.push(@sort_button) if !@item.include?(@sort_button)
 		
+		# 현재 아이템 개수에 따라 보여질지 없앨지 정함
 		for d in @data
 			for item in d[1]
 				next if item == nil
@@ -109,13 +110,30 @@ class Jindow_Inventory < Jindow
 			end
 		end
 		
-		count = 0
+		temp_item = []
+		temp_item[0] = []
+		temp_item[1] = []
+		temp_item[2] = []
+		
 		for i in @item
 			i.visible = @tog
 			if i.is_a?(J::Item)
+				temp_item[i.type].push(i)
+			end
+		end
+		
+		count = 0
+		for temp in temp_item
+			old_c = count
+			for i in temp				
 				i.x = (count % @line_count) * (i.width + @item_margin)
 				i.y = (count / @line_count) * (i.height + @item_margin) + @gold_drop_button.y + @gold_drop_button.height + 5
 				count += 1
+			end
+			
+			if old_c != count
+				count += @line_count * 2
+				count -= count % @line_count
 			end
 		end
 	end	

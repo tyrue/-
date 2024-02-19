@@ -209,14 +209,19 @@ class Window_Map < Window_Base
 				
 				txt_size = 0
 				txt = nil
-				if event.list[0].code == 201 # 맵 이동 이벤트
-					if event.list[0].parameters != nil and map_infos[event.list[0].parameters[1]] != nil
-						txt = map_infos[event.list[0].parameters[1]].name.to_s
-					end
-					bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
-				else
-					txt = event.sprite_id if event.sprite_id != nil
+				if event.sprite_id != nil
+					txt = event.sprite_id
 					bitmap.fill_rect(bitmap.rect, Color.new(0, 255, 0)) # 꽉찬 네모  
+				else 
+					for i in 0...event.list.size
+						if event.list[i].code == 201 # 맵 이동 이벤트
+							if event.list[i].parameters != nil and map_infos[event.list[i].parameters[1]] != nil
+								txt = map_infos[event.list[i].parameters[1]].name.to_s
+							end
+							bitmap.fill_rect(bitmap.rect, Color.new(100, 100, 255)) # 꽉찬 네모  	
+							break
+						end
+					end
 				end
 				
 				one_tile_size = 32 / $zoom

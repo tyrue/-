@@ -133,6 +133,7 @@ def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
 	end
 	
 	event.id = no
+	event.event.id = no
 	event.moveto(x, y)
 	event.direction = dir
 	event.refresh_set_page

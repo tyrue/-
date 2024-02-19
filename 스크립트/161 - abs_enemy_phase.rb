@@ -20,6 +20,8 @@ ABS_ENEMY_CHAR[9]	= ["(부여)병든쥐"] # 병든쥐
 ABS_ENEMY_CHAR[10]	= ["(부여)시궁창쥐"]  # 시궁창쥐
 ABS_ENEMY_CHAR[11]	= ["(부여)박쥐"]  # 박쥐
 ABS_ENEMY_CHAR[12]	= ["(부여)보라박쥐"]  # 보라박쥐
+ABS_ENEMY_CHAR[19]	= ["(부여)다람쥐"]# 초보자다람쥐
+ABS_ENEMY_CHAR[20]	= ["(부여)토끼"]# 초보자토끼
 ABS_ENEMY_CHAR[40]	= ["(부여)자생원"] # 자생원
 
 # 뱀굴

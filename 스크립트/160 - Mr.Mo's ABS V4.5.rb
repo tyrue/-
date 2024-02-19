@@ -933,9 +933,10 @@ if SDK.state("Mr.Mo's ABS") == true
 							
 							# 범위 이펙트 보여주기
 							if skill.scope == 2 and RANGE_SKILLS.has_key?(skill.id)
-								
 								make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], $data_skills[200], true)
 							end
+							
+							e.event.animation_id = 145
 							return
 						end
 					end
@@ -3615,8 +3616,10 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage = 1 if self.damage <= 0
 				
 				if self.damage > 0  # If damage value is strictly positive
-					if rand(100) < 5.0 * attacker.dex / self.agi  # Critical correction
-						self.damage *= 2
+					critical_rate = [(5.0 * attacker.dex / self.agi), 1].max 
+					
+					if rand(100) < critical_rate  # Critical correction
+						self.damage *= 3
 						self.critical = true
 					end
 					
@@ -3749,8 +3752,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage /= 100
 				self.damage = self.damage.to_i
 				
-				if self.damage > 0 && self.guarding?
-					self.damage /= 2
+				
+				if self.damage > 0  # If damage value is strictly positive
+					critical_rate = [(1.1 * user.int / self.agi), 1].max 
+					
+					if rand(100) < critical_rate  # Critical correction
+						self.damage *= 1.5
+						self.critical = true
+					end
+					
+					self.damage /= 2 if self.guarding?
 				end
 				
 				self.damage = $rpg_skill.damage_by_skill(self.damage, skill.id, self)
@@ -3966,7 +3977,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				# If impassable
 				# 이때 계속 몹 정보 보내주면?
 				
+				#p 1 if self.is_a?(Game_Event)
+				#p 2 if $ABS.enemies[self.event.id] != nil
+				#p 3 if $ABS.enemies[self.event.id].aggro
+				
 				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
+					
 					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
 					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 				end

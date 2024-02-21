@@ -732,6 +732,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				# 적 체력에 따른 페이즈 관리
 				update_enemy_phase(enemy)
 				
+				update_enemy_aggro(enemy) # 어그로 상태 확인
+				
 				# 전투중이아니고 공격성 ai가 false면 무시
 				if !enemy.in_battle and !update_enemy_ai(enemy)
 					next 
@@ -780,6 +782,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if enemy == nil
 			return if update_enemy_casting(enemy)
 			return update_enemy_attack(enemy, enemy.attacking) if enemy.casting_action != nil
+			
 			# 만약 적의 시야에 들어오지 않거나 목표로 설정한 적이 죽었거나 어그로가 풀리면 원래대로 돌아옴
 			if enemy.attacking == nil or update_enemy_battle_check(enemy)	
 				# 원래 움직임으로 돌아옴
@@ -800,6 +803,40 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy.event.move_to(enemy.attacking.event) if !in_range?(enemy.event, enemy.attacking.event, 1)
 			enemy.event.turn_to(enemy.attacking.event) if !in_direction?(enemy.event, enemy.attacking.event) and in_range?(enemy.event, enemy.attacking.event, 1)
 		end
+		
+		def update_enemy_aggro(enemy)
+			return if !enemy.hate_group.include?(0)
+			return if !enemy.aggro
+			
+			enemy.aggro_mash -= 1 if enemy.aggro_mash > 0
+			return if enemy.aggro_mash > 0	
+			
+			aggro_user = []
+			if in_range?(enemy.event, $game_player, enemy.see_range)
+				aggro_user.push($game_party.actors[0].name)
+			end
+			
+			for player in Network::Main.mapplayers.values
+				next if player == nil
+				if in_range?(enemy.event, player, enemy.see_range)
+					aggro_user.push(player.name)
+				end
+			end
+			return if aggro_user.size <= 0
+			
+			rand_idx = rand(aggro_user.size)
+			aggro_name = aggro_user[rand_idx]
+				
+			Network::Main.socket.send("<aggro>#{enemy.event.id},#{aggro_name}</aggro>\n")
+			if aggro_name == $game_party.actors[0].name
+				enemy.aggro = true
+				enemy.aggro_mash = 5 * 60
+			else
+				enemy.aggro = false
+			end
+			
+		end
+		
 		
 		#--------------------------------------------------------------------------
 		# * 적 캐릭터의 공격성
@@ -975,6 +1012,9 @@ if SDK.state("Mr.Mo's ABS") == true
 									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 								end	
 							end
+							
+						else # 기타 적 한명 타겟팅 스킬
+							$rpg_skill.active_skill(skill.id, e.event, e)
 						end
 						
 					when 2 #All Emenies 적 전체
@@ -2163,6 +2203,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * In Range?(Element, Object, Range) - Near Fantastica
 		#--------------------------------------------------------------------------
 		def in_range?(element, object, range)
+			
 			x = (element.x - object.x) * (element.x - object.x)
 			y = (element.y - object.y) * (element.y - object.y)
 			r = x + y
@@ -3188,9 +3229,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				if critical.to_s == "heal" 
 					bitmap.font.color.set(102, 255, 102) # 연두색
-				elsif !critical 
+				elsif critical.to_s == "player_hit"
+					bitmap.font.color.set(255, 142, 165) # 분홍색
+				elsif critical.to_s == "skill_cri"
+					bitmap.font.bold = true
+					bitmap.font.color.set(70, 113, 255) # 파란색
+				elsif !critical # 일반적 표시
 					bitmap.font.color.set(255, 255, 255) # 흰색	
-				elsif critical
+				elsif critical # 크리티컬 표시
 					bitmap.font.bold = true
 					bitmap.font.color.set(255, 0, 51) # 빨간색 
 				end
@@ -3616,11 +3662,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage = 1 if self.damage <= 0
 				
 				if self.damage > 0  # If damage value is strictly positive
-					critical_rate = [(5.0 * attacker.dex / self.agi), 1].max 
+					critical_data = $rpg_skill.critical_rate(self)
 					
+					critical_rate = [(3.0 * attacker.dex / self.agi), 1].max
+					critical_rate += critical_data[0]
+					
+					self.critical = "player_hit" if self.is_a?(Game_Actor)
 					if rand(100) < critical_rate  # Critical correction
-						self.damage *= 3
-						self.critical = true
+						self.damage *= (3 + critical_data[1])
+						self.critical = true 
 					end
 					
 					self.damage /= 2 if self.guarding?  # Guard correction
@@ -3655,7 +3705,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if r <= (self.damage * 100 / self.maxhp) || r <= 40
 					if !self.is_a?(Game_Actor)
 						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
-						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
+						Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
 					end
 				end
 				
@@ -3752,13 +3802,15 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage /= 100
 				self.damage = self.damage.to_i
 				
-				
 				if self.damage > 0  # If damage value is strictly positive
-					critical_rate = [(1.1 * user.int / self.agi), 1].max 
+					critical_data = $rpg_skill.critical_skill_rate(self)
+					
+					critical_rate = [(1.1 * user.int / self.agi), 1].max
+					critical_rate += critical_data[0]
 					
 					if rand(100) < critical_rate  # Critical correction
-						self.damage *= 1.5
-						self.critical = true
+						self.damage *= (1.5 + critical_data[1])
+						self.critical = "skill_cri"
 					end
 					
 					self.damage /= 2 if self.guarding?
@@ -3794,8 +3846,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				end
 				
 				# Second hit detection
-				eva = [(8 * self.agi / user.dex + self.eva), 100].min
-				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 15].max
+				eva = [(4 * self.agi / user.dex + self.eva), 100].min
+				hit = self.damage < 0 ? 100 : [(100 - eva * skill.eva_f / 100), 10].max
 				hit = self.cant_evade? ? 100 : hit
 				hit_result = rand(100) < hit
 				
@@ -3824,7 +3876,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
 						
 						self.aggro = true
-						Network::Main.socket.send("<aggro>#{$game_map.map_id},#{self.event.id}</aggro>\n")
+						Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
 					end
 				end
 				
@@ -4334,7 +4386,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :temp_frequency
 		attr_accessor :actor
 		attr_accessor :respawn
+		
 		attr_accessor :aggro
+		attr_accessor :aggro_mash # 어그로 유지 시간
+		
 		attr_accessor :send_damage
 		attr_accessor :skill_mash # 적 스킬 딜레이 넣기
 		
@@ -4369,6 +4424,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@actor = self
 			@respawn = 0
 			@aggro = $is_map_first
+			@aggro_mash = 0 # 어그로 유지 시간
 			@send_damage = true
 			@skill_mash = {}
 			# 캐스팅

@@ -1139,15 +1139,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true	
 					
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
-					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
+					# 몬스터 id, 유저 이름
+					id = data[0].to_i
+					name = data[1].to_s
 					
-					if $ABS.enemies[data[1].to_i] != nil
-						# 어그로 해제
-						$ABS.enemies[data[1].to_i].aggro = false
+					return if $ABS.enemies[id] == nil
+					
+					if name == $game_party.actors[0].name
+						$ABS.enemies[id].aggro = true
+						$ABS.enemies[id].aggro_mash = 5 * 60
+					else
+						$ABS.enemies[id].aggro = false
 					end
-					return true	
+					
 					
 				when /<mon_move>(.*)<\/mon_move>/ # 몹 이동 공유
 					# 같은 맵이 아니면 무시

@@ -150,7 +150,7 @@ REQ_SKILL_DATA[4] =
 ABS_ENEMY_SKILL_CASTING = {}
 ABS_ENEMY_SKILL_CASTING[151] = [[1, "멀리 날려주마!!!!"]] # 청룡의 포효
 ABS_ENEMY_SKILL_CASTING[152] = [[1, "물러나라..!"]] # 현무의 포효
-ABS_ENEMY_SKILL_CASTING[153] = [[0.5, "백호검무!!!!"]] # 백호검무
+ABS_ENEMY_SKILL_CASTING[153] = [[0.5, "!백호검무!!!!"]] # 백호검무
 ABS_ENEMY_SKILL_CASTING[154] = [[1.3, "여의주의 힘을 받은 용이여..."], [1.3, "그대 이름은 청룡일지다..."], [1.3, "네 주인 이름으로 명하노니"], [1, "네 분노를 적에게 발산하라!"]] # 청룡마령참
 ABS_ENEMY_SKILL_CASTING[155] = [[3, "암흑에 물들어라.."]] # 암흑진파
 ABS_ENEMY_SKILL_CASTING[156] = [[2, "명계의 검은 용이여...!"], [1, "지금, 계약에 따라 소환될지어다!!"]] # 흑룡광포
@@ -158,6 +158,7 @@ ABS_ENEMY_SKILL_CASTING[158] = [[4, "지옥에서 불타버려라!!"]] # 지옥�
 ABS_ENEMY_SKILL_CASTING[159] = [[2, "미천한 필멸자여.."], [1, "하늘 높은 줄 모르고 날뛰는구나.."], [0.5, "너의 나약함을 깨닫게 하리라!!"]] # 혈겁만파
 ABS_ENEMY_SKILL_CASTING[160] = [[1.5, "바람처럼 나타나 그림자처럼 사라지리라..."], [1.5, "이 순간, 모든 것을 내 검 아래 휩쓸테니...!"], [0.5, "압도적인 힘에 절망하라!!"]] # 분혼경천
 ABS_ENEMY_SKILL_CASTING[161] = [[1.5, "영원한 공허의 무수한 파편들이여.."], [1.3, "대지와 하늘의 연결을 허용하노니..."], [1, "지금 이 땅의 운명을 새로 써내려라!!!"]] # 폭류유성
+ABS_ENEMY_SKILL_CASTING[162] = [[0.5, "나에게 벗어날 수 없다!!"]] # 추격
 # -------------END----------------- #
 
 # ----------------------------------#
@@ -668,6 +669,42 @@ class Rpg_skill
 		end
 	end
 	
+	def critical_rate(actor = $game_party.actors[0])
+		rate = 0
+		power = 0
+		for data in actor.buff_time
+			id = data[0]
+			next if CRITICAL_BUFF_NORMAL[id] == nil
+			next if data[1] <= 0
+			
+			buff_data = CRITICAL_BUFF_NORMAL[id]
+			next if buff_data == nil
+			
+			rate += buff_data[0] if buff_data[0] != nil
+			power += buff_data[1] if buff_data[1] != nil
+		end
+		
+		return [rate, power]
+	end
+	
+	def critical_skill_rate(actor = $game_party.actors[0])
+		rate = 0
+		power = 0
+		for data in actor.buff_time
+			id = data[0]
+			next if CRITICAL_BUFF_SKILL[id] == nil
+			next if data[1] <= 0
+			
+			buff_data = CRITICAL_BUFF_SKILL[id]
+			next if buff_data == nil
+			
+			rate += buff_data[0] if buff_data[0] != nil
+			power += buff_data[1] if buff_data[1] != nil
+		end
+		
+		return [rate, power]
+	end
+	
 	#[(파워 계산량)[타입(현재(0), 전체(1)), 체력, 마력, 기본값], (자원 소모량)[타입(현재(0), 전체(1)), 체력, 마력]]
 	def skill_power_custom(user, id, power)
 		return power if SKILL_POWER_CUSTOM[id] == nil
@@ -720,6 +757,8 @@ class Rpg_skill
 			광량돌격(character)
 		when 132
 			비영승보(character)
+		when 162
+			추격(character, battler)
 		end		
 	end
 	
@@ -735,6 +774,7 @@ class Rpg_skill
 			end
 			return 
 		end
+		
 		battler.hp /= 2
 		battler.hp = 1 if battler.hp <= 0
 		battler.sp += battler.maxsp
@@ -912,6 +952,16 @@ class Rpg_skill
 		return
 	end
 	# 비영_passable2 end
+	
+	def 추격(actor, battler)
+		return if actor == nil
+		if battler.is_a?(Game_Actor)
+			
+		elsif battler.is_a?(ABS_Enemy)
+			return if !battler.aggro
+			actor.moveto($game_player.x, $game_player.y)
+		end
+	end
 	
 	# 이미 가지고 있던 스킬인가?
 	def has_skill?(type) # 직업

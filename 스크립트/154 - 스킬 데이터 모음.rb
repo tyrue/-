@@ -72,8 +72,8 @@ BUFF_SKILL[91] = [60, false, [["com", 129]] ] # 석화기탄
 BUFF_SKILL[46] = [180, true, [["mdef", 10], ["pdef", 10]] ] # 무장
 BUFF_SKILL[47] = [180, true, [["mdef", 15], ["pdef", 15]] ] # 보호
 BUFF_SKILL[94] = [5, false] # 금강불체
-BUFF_SKILL[121] = [10, true] # 신령지익진
-BUFF_SKILL[122] = [10, true] # 파력무참진
+BUFF_SKILL[121] = [2, true] # 신령지익진
+BUFF_SKILL[122] = [2, true] # 파력무참진
 
 # 전사
 BUFF_SKILL[62] = [180, false, [["dex", 50]] ] # 수심각도
@@ -317,7 +317,7 @@ SKILL_COST_CUSTOM[102] = [[1, 1.0 / 20.0, 0.01]] # 백리건곤 1성
 # 도사
 # [[타입(현재(0), 전체(1)), 체력, 마력]]
 SKILL_COST_CUSTOM[43] = [[0, 0, 1.0]] # 위태응기
-SKILL_COST_CUSTOM[92] = [[0, 0, 1.0]] # 공력주입
+SKILL_COST_CUSTOM[92] = [[0, 0, 0.99]] # 공력주입
 SKILL_COST_CUSTOM[117] = [[0, 0, 1.0]] # 백호의희원
 SKILL_COST_CUSTOM[123] = [[0, 0.3, 0.5]] # 귀염추혼소
 
@@ -366,8 +366,8 @@ SKILL_MASH_TIME[106] = [30 * sec, 0] # 초혼비무
 # 도사
 SKILL_MASH_TIME[94] = [10 * sec, 0] # 금강불체
 SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
-SKILL_MASH_TIME[121] = [30 * sec, 0] # 신령지익진
-SKILL_MASH_TIME[122] = [30 * sec, 0] # 파력무참진
+SKILL_MASH_TIME[121] = [2 * sec, 0] # 신령지익진
+SKILL_MASH_TIME[122] = [2 * sec, 0] # 파력무참진
 SKILL_MASH_TIME[123] = [90 * sec, 0] # 귀염추혼소
 SKILL_MASH_TIME[124] = [20 * sec, 0] # 지진'첨
 

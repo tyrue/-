@@ -87,7 +87,13 @@ class Jindow_Quest_Detail < Jindow
 					@monster_data[i] = Sprite.new(self)
 					@monster_data[i].bitmap = Bitmap.new(self.width, font_size)
 					@monster_data[i].bitmap.font.size = font_size
+					
+					rate = @mon_now_num[i] * 100 / num
 					@monster_data[i].bitmap.font.color.set(0, 0, 0, 255)
+					@monster_data[i].bitmap.font.color.set(88, 44, 146, 255) if rate >= 50
+					@monster_data[i].bitmap.font.color.set(255, 176, 37, 255) if rate >= 80
+					@monster_data[i].bitmap.font.color.set(61, 255, 61, 255) if rate >= 100
+					
 					@monster_data[i].bitmap.draw_text(0, 0, @monster_data[i].width, font_size, mon_name + " : " + @mon_now_num[i].to_s + " / " + num.to_s, 0)
 					i += 1
 				end
@@ -188,7 +194,7 @@ class Jindow_Quest_Detail < Jindow
 				i += 1
 			end
 			
-			@start_x = @monster_data.x
+			@start_x = @monster_data[@monster_data.size - 1].x
 			@start_y = @monster_data[@monster_data.size - 1].y + @monster_data[@monster_data.size - 1].height + 20
 		end
 		
@@ -220,7 +226,12 @@ class Jindow_Quest_Detail < Jindow
 					@monster_data[i].bitmap.clear
 					@monster_data[i].bitmap = Bitmap.new(self.width, font_size)
 					@monster_data[i].bitmap.font.size = font_size
+					
+					rate = @mon_now_num[i] * 100 / num
 					@monster_data[i].bitmap.font.color.set(0, 0, 0, 255)
+					@monster_data[i].bitmap.font.color.set(88, 44, 146, 255) if rate >= 49
+					@monster_data[i].bitmap.font.color.set(255, 176, 37, 255) if rate >= 79
+					@monster_data[i].bitmap.font.color.set(61, 255, 61, 255) if rate >= 99
 					
 					mon_name = $data_enemies[id].name
 					@mon_now_num[i] = $game_variables[id + $mon_val_start]

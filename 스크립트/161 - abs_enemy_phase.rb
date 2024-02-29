@@ -44,6 +44,7 @@ ABS_ENEMY_CHAR[77] = ["(부여)숲돼지", 270] # 청산숲돼지
 # 사슴굴                
 ABS_ENEMY_CHAR[23] = ["(부여)청사슴"]# 청사슴
 ABS_ENEMY_CHAR[24] = ["(부여)주홍사슴"]# 주홍사슴
+ABS_ENEMY_CHAR[18] = ["(부여)백순록"]# 흑백순록
 ABS_ENEMY_CHAR[25] = ["(부여)흑순록"]# 흑백순록
 ABS_ENEMY_CHAR[76] = ["(부여)숫사슴", 180] # 청순록
                      

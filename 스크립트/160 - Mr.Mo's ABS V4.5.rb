@@ -610,6 +610,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				y = rand(h)
 				if $game_map.passable?(x, y, d)
 					e.moveto(x, y)
+					if @enemies[e.event.id].aggro
+						Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{e.event.id},#{d},#{x},#{y}</mon_move>\n")
+					end
 					return
 				end
 			end
@@ -826,7 +829,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			rand_idx = rand(aggro_user.size)
 			aggro_name = aggro_user[rand_idx]
-				
+			
 			Network::Main.socket.send("<aggro>#{enemy.event.id},#{aggro_name}</aggro>\n")
 			if aggro_name == $game_party.actors[0].name
 				enemy.aggro = true
@@ -3662,7 +3665,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage = 1 if self.damage <= 0
 				
 				if self.damage > 0  # If damage value is strictly positive
-					critical_data = $rpg_skill.critical_rate(self)
+					critical_data = $rpg_skill.critical_rate(attacker)
 					
 					critical_rate = [(3.0 * attacker.dex / self.agi), 1].max
 					critical_rate += critical_data[0]
@@ -3803,9 +3806,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage = self.damage.to_i
 				
 				if self.damage > 0  # If damage value is strictly positive
-					critical_data = $rpg_skill.critical_skill_rate(self)
+					critical_data = $rpg_skill.critical_skill_rate(user)
 					
-					critical_rate = [(1.1 * user.int / self.agi), 1].max
+					critical_rate = [(1.2 * user.int / self.agi), 1].max
 					critical_rate += critical_data[0]
 					
 					if rand(100) < critical_rate  # Critical correction

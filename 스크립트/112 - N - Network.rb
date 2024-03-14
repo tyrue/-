@@ -1905,6 +1905,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					enemy.hp = 0
 					
 					return if npt != $npt # 같은 파티가 아니라면
+					
+					$game_variables[enemy.id + $mon_val_start] += 1
+					
 					case enemy.trigger[0]
 					when 1 # 스위치
 						$game_switches[enemy.trigger[1]] = true

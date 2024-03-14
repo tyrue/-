@@ -45,6 +45,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		Input::Numberkeys[7] => 0,
 		Input::Numberkeys[8] => 0,
 		Input::Numberkeys[9] => 0,
+		
+		Input::Underscore => 0,
+		Input::Equal => 0,
+		Input::Letters["Z"] => 0,
+		Input::Letters["X"] => 0,
 	}
 	# 위 숫자로 아이템 지정
 	ITEM_KEYS =  {
@@ -69,6 +74,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		Input::Numberkeys[7] => 0,
 		Input::Numberkeys[8] => 0,
 		Input::Numberkeys[9] => 0,
+		
+		Input::Underscore => 0,
+		Input::Equal => 0,
+		Input::Letters["Z"] => 0,
+		Input::Letters["X"] => 0,
 	}
 	#--------------------------------------------------------------------------
 	SNEAK_KEY = Input::Letters["Z"]
@@ -807,6 +817,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy.event.turn_to(enemy.attacking.event) if !in_direction?(enemy.event, enemy.attacking.event) and in_range?(enemy.event, enemy.attacking.event, 1)
 		end
 		
+		# 몬스터 어그로 설정
 		def update_enemy_aggro(enemy)
 			return if !enemy.hate_group.include?(0)
 			return if !enemy.aggro
@@ -829,6 +840,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			rand_idx = rand(aggro_user.size)
 			aggro_name = aggro_user[rand_idx]
+			return if aggro_name == nil
 			
 			Network::Main.socket.send("<aggro>#{enemy.event.id},#{aggro_name}</aggro>\n")
 			if aggro_name == $game_party.actors[0].name
@@ -1788,7 +1800,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def enemy_dead?(e, a)
 			# e가 유저라면 유저 죽을 때 함수 반환
-			return player_dead?(e,a) if e.is_a?(Game_Actor)
+			return player_dead?(e, a) if e.is_a?(Game_Actor)
 			#Return false if enemy dead
 			return false if !e.dead?
 			enemy = e
@@ -1850,8 +1862,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if $game_party.actors[0].hp > 0
 			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
-			if e != nil and !e.is_a?(Game_NetPlayer)
-				e.attacking = nil if e != nil and !e.is_a?(Game_Actor)
+			if e.is_a?(ABS_Enemy) and @enemies[e.event.id] != nil
+				e.attacking = nil 
+				# 원래 움직임으로 돌아옴
+				e.in_battle = false
+				restore_movement(e)
 			end
 			
 			return true if $game_switches[296] # 죽음 표시 스위치
@@ -2087,18 +2102,22 @@ if SDK.state("Mr.Mo's ABS") == true
 			#Set Move Type
 			e.temp_move_type = e.event.move_type
 			e.event.move_type = 0 if e.behavior != 0
+			e.temp_restore_sw = false
 		end
 		#--------------------------------------------------------------------------
 		# * Restore the Movement Type(Enemy)
 		#--------------------------------------------------------------------------
 		def restore_movement(e)
+			return if e.temp_restore_sw
 			#Restore Speed
 			e.temp_speed = e.event.move_speed
 			#Restore Frequency
 			e.temp_frequency = e.event.move_frequency
 			#Restore Move Type
 			e.event.move_type = e.temp_move_type
+			
 			e.temp_move_type = 0
+			e.temp_restore_sw = true
 		end
 		#--------------------------------------------------------------------------
 		# * Can Enemy Hear(Enemy)
@@ -3648,11 +3667,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				#~ self.damage = (atk * (20 + attacker.str) / 20.0)  # Calculate basic damage
 				
 				
-				atk = (attacker.atk + attacker.str / 100.0)
+				atk = (attacker.atk + attacker.str / 20.0)
 				if self.is_a?(Game_Actor)
-					self.damage = (atk * (20 + attacker.str) / 20.0) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
+					self.damage = (atk * (1.0 + attacker.str / 20.0)) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
 				else
-					self.damage = (atk * (20 + attacker.str) / 20.0) * (100.0 / (100 + self.base_pdef)) # Calculate basic damage
+					self.damage = (atk * (1.0 + attacker.str / 20.0)) * (100.0 / (100 + self.base_pdef)) # Calculate basic damage
 				end
 				
 				
@@ -3786,7 +3805,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if hit_result
 				power = skill.power + user.atk / 2
 				power = $rpg_skill.skill_power_custom(user, skill.id, power)
-				power *= (1.0 + user.atk / 100.0)
+				power *= (1.0 + user.atk / 20.0)
 				
 				if power > 0
 					power -= self.pdef * [skill.pdef_f, 10].max / 200
@@ -3794,13 +3813,13 @@ if SDK.state("Mr.Mo's ABS") == true
 					power = [power, 1].max
 				end
 				
-				rate = 20
+				rate = 30
 				rate += user.str * skill.str_f / 100.0
 				rate += user.dex * skill.dex_f / 100.0
 				rate += user.agi * skill.agi_f / 100.0
 				rate += user.int * skill.int_f / 100.0
 				
-				self.damage = (power * rate / 20.0)
+				self.damage = (power * rate / 30.0)
 				self.damage *= elements_correct(skill.element_set)
 				self.damage /= 100
 				self.damage = self.damage.to_i
@@ -3808,10 +3827,12 @@ if SDK.state("Mr.Mo's ABS") == true
 				if self.damage > 0  # If damage value is strictly positive
 					critical_data = $rpg_skill.critical_skill_rate(user)
 					
-					critical_rate = [(1.2 * user.int / self.agi), 1].max
+					critical_rate = 1.0 + (1.2 * user.int / 200)
 					critical_rate += critical_data[0]
+					critical_rate *= 100
+					r = rand(10000)
 					
-					if rand(100) < critical_rate  # Critical correction
+					if r <= critical_rate.to_i  # Critical correction
 						self.damage *= (1.5 + critical_data[1])
 						self.critical = "skill_cri"
 					end
@@ -3940,24 +3961,28 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     y_plus : y-coordinate plus value
 		#--------------------------------------------------------------------------
 		def jump_nt(x_plus, y_plus)
-			# Calculate new coordinates
 			new_x = @x + x_plus
 			new_y = @y + y_plus
-			# If plus value is (0,0) or jump destination is passable
-			if (x_plus == 0 and y_plus == 0) or passable?(new_x, new_y, 0)
-				# Straighten position
-				straighten
-				# Update coordinates
-				@x = new_x
-				@y = new_y
-				# Calculate distance
-				distance = Math.sqrt(x_plus * x_plus + y_plus * y_plus).round
-				# Set jump count
-				@jump_peak = 1#10 + distance - @move_speed
-				@jump_count = @jump_peak * 1
-				# Clear stop count
-				@stop_count = 0
+			
+			if x_plus != 0
+				count = x_plus.abs
+				for i in 0...count
+					x = x_plus > 0 ? @x + 1 : @x - 1
+					break if !passable?(x, @y, 0)
+					@x = x
+				end
+				
+			elsif y_plus != 0
+				count = y_plus.abs
+				for i in 0...count
+					y = y_plus > 0 ? @y + 1 : @y - 1
+					break if !passable?(@x, y, 0)
+					@y = y
+				end
+				
 			end
+			@jump_count = 1
+			
 		end
 		#--------------------------------------------------------------------------
 		# * Set Animation
@@ -4387,6 +4412,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :temp_move_type
 		attr_accessor :temp_speed
 		attr_accessor :temp_frequency
+		attr_accessor :temp_restore_sw
+		
 		attr_accessor :actor
 		attr_accessor :respawn
 		
@@ -4421,9 +4448,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			@hate_group = []
 			@event = nil
 			@attacking = nil
+			
 			@temp_move_type = 0 
 			@temp_speed = 0
 			@temp_frequency = 0 
+			@temp_restore_sw = false
+			
 			@actor = self
 			@respawn = 0
 			@aggro = $is_map_first

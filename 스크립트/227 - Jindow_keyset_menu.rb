@@ -32,10 +32,10 @@ class Jindow_Keyset_menu < Jindow
 		
 		@description = []
 		@description_v = [
-			"단축키는 키보드의 숫자 또는",
-			"키패드의 숫자만 가능합니다.(0~9)",
+			"단축키는 키보드, 키패드 숫자(0~9) 또는",
+			"'-', '=', 'z', 'x'가 가능합니다.",
 			"#{@id_value.name}의 단축키 지정",
-			"숫자를 입력해 주세요"
+			"단축키를 입력해 주세요"
 		]
 		@description_size = [
 			12,
@@ -93,6 +93,21 @@ class Jindow_Keyset_menu < Jindow
 			elsif (Input::Numberpad.values.include? key) 	
 				@description[len].bitmap.font.color.set(0, 0, 255, 255)
 				@description[len].bitmap.draw_text(0, 0, @description[len].width, @description[len].height, "키패드 숫자 : #{key - 96}", 0)
+				@select_k = key
+			else
+				@description[len].bitmap.font.color.set(0, 0, 255, 255)
+				key_s = ""
+				case key
+				when Input::Underscore
+					key_s = "-"
+				when Input::Equal
+					key_s = "="
+				when Input::Letters["Z"]
+					key_s = "z"
+				when Input::Letters["X"]
+					key_s = "x"
+				end
+				@description[len].bitmap.draw_text(0, 0, @description[len].width, @description[len].height, "단축키 : #{key_s}", 0)
 				@select_k = key
 			end
 		end

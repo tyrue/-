@@ -66,8 +66,7 @@ class Bitmap
 			jingukang_jindow_draw_text(x + font.beta * 2, y + font.beta, width, height, str, align)
 			jingukang_jindow_draw_text(x, y + font.beta * 2, width, height, str, align)
 			jingukang_jindow_draw_text(x + font.beta, y + font.beta * 2, width, height, str, align)
-			jingukang_jindow_draw_text(x + font.beta * 2, y + font.beta * 2, width, height, str,
-				align)
+			jingukang_jindow_draw_text(x + font.beta * 2, y + font.beta * 2, width, height, str, align)
 			font.color = c
 			jingukang_jindow_draw_text(x + font.beta, y + font.beta, width, height, str, align)
 		end

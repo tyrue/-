@@ -25,7 +25,7 @@ class Jindow_Inventory < Jindow
 		@margin = 10
 		
 		@line_count = 7
-		@item_margin = 7
+		@item_margin = 10
 		
 		@sort_button = J::Button.new(self).refresh(60, "정렬하기")
 		@gold_drop_button = J::Button.new(self).refresh(60, "금전 버리기")
@@ -115,26 +115,49 @@ class Jindow_Inventory < Jindow
 		temp_item[1] = []
 		temp_item[2] = []
 		
+		for i in 0..4
+			temp_item[2].push([])
+		end
+		
 		for i in @item
 			i.visible = @tog
 			if i.is_a?(J::Item)
-				temp_item[i.type].push(i)
+				if i.type != 2
+					temp_item[i.type].push(i)
+				else
+					temp_item[i.type][i.item.kind].push(i)
+				end
 			end
 		end
 		
 		count = 0
+		idx = 0
 		for temp in temp_item
 			old_c = count
+			tempY = @gold_drop_button.y + @gold_drop_button.height + 5
+			
 			for i in temp				
-				i.x = (count % @line_count) * (i.width + @item_margin)
-				i.y = (count / @line_count) * (i.height + @item_margin) + @gold_drop_button.y + @gold_drop_button.height + 5
-				count += 1
+				if idx == 2 
+					for ii in i
+						ii.x = (count % @line_count) * (ii.width + @item_margin)
+						ii.y = (count / @line_count) * (ii.height + @item_margin) + tempY
+						count += 1
+					end
+					count += (count % @line_count) != 0 ? @line_count : 0
+					count -= count % @line_count
+					
+				else
+					i.x = (count % @line_count) * (i.width + @item_margin)
+					i.y = (count / @line_count) * (i.height + @item_margin) + tempY
+					count += 1
+				end				
 			end
 			
 			if old_c != count
-				count += @line_count * 2
+				count += (count % @line_count) != 0 ? @line_count * 2 : @line_count
 				count -= count % @line_count
 			end
+			idx += 1
 		end
 	end	
 	
@@ -158,7 +181,6 @@ class Jindow_Inventory < Jindow
 			@temp_sw = true
 		end
 	end
-	
 	
 	def update
 		return if !@tog

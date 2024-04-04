@@ -143,26 +143,44 @@ def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
 end
 
 
-#drop 번호, 아이템 타입1, 아이템 타입2, 아이템 id, 맵 아이디, x좌표, y좌표
-def create_drops(type, id, x, y, num = 1)
+#drop 번호, 아이템 타입, 아이템 id, x좌표, y좌표, sw
+def create_drops(type, id, x, y, num = 1, sw = nil)
 	d_id = check_drop_id
-	Network::Main.socket.send "<Drop>#{d_id},1,#{type},#{id},#{$game_map.map_id},#{x},#{y},#{num}</Drop>\n" # 나를 포함한 전체 방송
+	msg = "#{d_id},#{type},#{id},#{x},#{y},#{num}"
+	msg += ",#{sw}" if sw != nil
+	Network::Main.socket.send "<Drop>#{msg}</Drop>\n" # 나를 포함한 전체 방송
 end
 
-def create_drops2(no, mob_id, map_id, x, y, image, name = "", num = 0)
+def create_drops2(no, x, y, type, id, num)
 	return if num == 0
-	$game_map.events[no] = Game_Event.new(map_id ,load_data("Data/Map022.rxdata").events[mob_id])
+	$game_map.events[no] = Game_Event.new($game_map.map_id, load_data("Data/Map022.rxdata").events[138])
 	event = $game_map.events[no]
 	return if not event
+	
+	item = nil
+	if type == 0
+		item = $data_items[id]
+	elsif type == 1
+		item = $data_weapons[id]
+	elsif type == 2
+		item = $data_armors[id]
+	end
+	
+	$Drop[no] = Drop.new
+	$Drop[no].id = id
+	$Drop[no].type = type
+	$Drop[no].type2 = 1
+	$Drop[no].amount = num #아이템 개수
+	
 	event.id = no
 	event.moveto(x, y)
-	event.es_set_graphic("../Icons/" + image, 255, 0)
+	event.es_set_graphic("../Icons/" + item.icon_name, 255, 0)
 	create_sprite(event, true)
 	
 	if num <= 1
-		event.name = "[id#{name}]"
+		event.name = "[id#{item.name}]"
 	else
-		event.name = "[id#{name} #{num}개]"
+		event.name = "[id#{item.name} #{num}개]"
 	end
 	
 	event.refresh
@@ -170,15 +188,21 @@ end
 
 def create_moneys(money, x, y)
 	d_id = check_drop_id
-	Network::Main.socket.send "<Drop>#{d_id},0,0,0,#{$game_map.map_id},#{x},#{y},#{money}</Drop>\n"
+	Network::Main.socket.send "<Drop>#{d_id},3,0,#{x},#{y},#{money}</Drop>\n"
 end
 
-def create_moneys2(no, mob_id, map_id, x, y, money)
-	$game_map.events[no] = Game_Event.new(map_id ,load_data("Data/Map022.rxdata").events[mob_id])
+def create_moneys2(no, x, y, money)
+	$game_map.events[no] = Game_Event.new($game_map.map_id, load_data("Data/Map022.rxdata").events[138])
 	event = $game_map.events[no]
 	return if not event
+	
 	event.id = no
 	event.moveto(x, y)
+	
+	$Drop[no] = Drop.new
+	$Drop[no].type2 = 0
+	$Drop[no].amount = money #아이템 개수
+	
 	if 0 < money and money < 10
 		event.es_set_graphic("../Icons/[기타]1전", 255, 0)
 	elsif 10 <= money and money < 100

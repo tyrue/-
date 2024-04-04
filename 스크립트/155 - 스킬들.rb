@@ -456,6 +456,7 @@ class Rpg_skill
 		buff_data = BUFF_SKILL[id][2]
 		return if buff_data == nil
 		
+		$game_party.actors[0].buff_time[id] = 0
 		for data in buff_data
 			n = data[1]
 			case data[0].to_s
@@ -568,7 +569,78 @@ class Rpg_skill
 	end
 	
 	def buff_enemy(id, battler)
+		return if BUFF_SKILL[id] == nil
+		# 아직 버프가 지속중이면 무시
+		buff_data = BUFF_SKILL[id]
+		time_now = battler.buff_time[id] # 현재 남은 버프 시간
+		buff_time = buff_data[0] * Graphics.frame_rate
+		battler.buff_time[id] = buff_time
+		return true if time_now != nil and time_now > 0 # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
 		
+		
+		buff_val = buff_data[2]
+		return true if buff_val == nil
+		
+		for data in buff_val
+			type = data[0].to_s
+			val = data[1].to_f
+			
+			case type
+			when "str" # 힘
+				battler.str += val
+			when "dex" # 손재주
+				battler.dex += val
+			when "int" # 지력
+				battler.int += val
+			when "agi" # 민첩
+				battler.agi += val
+			when "mdef" # 마법 방어
+				battler.mdef += val
+			when "pdef" # 물리 방어
+				battler.pdef += val
+				
+			when "speed" # 속도 변경
+				battler.event.move_speed += val
+			when "custom" # 자체 수정
+				
+			end
+		end
+		return true
+	end
+	
+	def buff_del_enemy(id, battler)
+		return if BUFF_SKILL[id] == nil
+		
+		buff_val = BUFF_SKILL[id][2]
+		return true if buff_val == nil
+		
+		battler.buff_time[id] = 0
+		for data in buff_val
+			type = data[0].to_s
+			val = data[1].to_f
+			
+			case type
+			when "str" # 힘
+				battler.str -= val
+			when "dex" # 손재주
+				battler.dex -= val
+			when "int" # 지력
+				battler.int -= val
+			when "agi" # 민첩
+				battler.agi -= val
+			when "mdef" # 마법 방어
+				battler.mdef -= val
+			when "pdef" # 물리 방어
+				battler.pdef -= val
+				
+			when "speed" # 속도 변경
+				battler.event.move_speed -= val
+				
+			when "custom" # 자체 수정
+				
+			end
+		end
+		return true
 	end
 	
 	def casting_chat(data, user = $game_player)
@@ -1089,16 +1161,15 @@ class Rpg_skill
 	# 평타 공격시 버프, 디버프에 대한 데미지 계산
 	def damage_calculation_attack(damage, actor, attacker)
 		# 가해자 입장
+		for data in attacker.buff_time
+			id = data[0]
+			next if DAMAGE_CAL_ATTACK[id] == nil
+			next if !self.check_buff(id, attacker)
+			damage *= DAMAGE_CAL_ATTACK[id][0] 
+		end
+		
 		if attacker.is_a?(Game_Actor) # 플레이어
-			for data in $game_party.actors[0].buff_time
-				id = data[0]
-				next if DAMAGE_CAL_ATTACK[id] == nil
-				next if !self.check_buff(id)
-				damage *= DAMAGE_CAL_ATTACK[id][0] 
-			end
-			
-			if $state_trans # 투명 풀기
-				damage *= (6 + $game_variables[10]) # 투명 숙련도
+			if $state_trans # 투명
 				id = nil
 				id = 131 if self.check_buff(131) # 투명 1성
 				id = 141 if self.check_buff(141) # 투명 2성
@@ -1113,14 +1184,15 @@ class Rpg_skill
 		end
 		
 		# 피해자 입장
+		for data in actor.buff_time
+			id = data[0]
+			next if DAMAGE_CAL_DEFENSE[id] == nil
+			next if !self.check_buff(id, actor)
+			damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
+		end
+		
 		# 플레이어
 		if actor.is_a?(Game_Actor) 
-			for data in $game_party.actors[0].buff_time
-				id = data[0]
-				next if DAMAGE_CAL_DEFENSE[id] == nil
-				next if !self.check_buff(id)
-				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
-			end
 			# 몬스터
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
@@ -1131,25 +1203,29 @@ class Rpg_skill
 	# 스킬 공격시 버프, 디버프에 대한 데미지 계산
 	def damage_calculation_skill(damage, actor, attacker)
 		# 가해자 입장
+		for data in attacker.buff_time
+			id = data[0]
+			next if DAMAGE_CAL_SKILL[id] == nil
+			next if !self.check_buff(id, attacker)
+			damage *= DAMAGE_CAL_SKILL[id][0] 
+		end
+		
 		if attacker.is_a?(Game_Actor)
-			for data in $game_party.actors[0].buff_time
-				id = data[0]
-				next if DAMAGE_CAL_SKILL[id] == nil
-				next if !self.check_buff(id)
-				damage *= DAMAGE_CAL_SKILL[id][0] 
-			end
+			
 		elsif attacker.is_a?(ABS_Enemy)
 			
 		end
 		
 		# 피해자 입장
+		for data in actor.buff_time
+			id = data[0]
+			next if DAMAGE_CAL_DEFENSE[id] == nil
+			next if !self.check_buff(id, actor)
+			damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
+		end
+		
 		if actor.is_a?(Game_Actor)
-			for data in $game_party.actors[0].buff_time
-				id = data[0]
-				next if DAMAGE_CAL_DEFENSE[id] == nil
-				next if !self.check_buff(id)
-				damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
-			end
+			
 		elsif actor.is_a?(ABS_Enemy)
 			damage = 1 if actor.id == 41 # 청자다람쥐
 		end

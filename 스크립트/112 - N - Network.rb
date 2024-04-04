@@ -1924,38 +1924,24 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.refresh	
 					
 					# 템 드랍 
-					#drop 번호, 아이템 타입1, 아이템 타입2, 아이템 id, 맵 아이디, x좌표, y좌표, 개수
+					#drop 번호, 아이템 타입, 아이템 id, x좌표, y좌표, 개수, (필요 스위치)
 				when /<Drop>(.*)<\/Drop>/
 					data = $1.split(',')
 					index = data[0].to_i
-					map_id = data[4].to_i
+					type = data[1].to_i
+					id = data[2].to_i
+					x = data[3].to_i
+					y = data[4].to_i
+					amount = data[5].to_i
+					sw = data[6] != nil ? data[6].to_i : nil
+					return if sw != nil and !$game_switches[sw]
 					
-					if map_id == $game_map.map_id
-						$Drop[index] = Drop.new
-						$Drop[index].id = data[3].to_i
-						$Drop[index].type = data[2].to_i
-						$Drop[index].type2 = data[1].to_i
-						$Drop[index].amount = data[7].to_i #아이템 개수
-						x = data[5].to_i
-						y = data[6].to_i
-						
-						if $Drop[index].type2 == 1 # 일반 아이템
-							name = ""
-							if $Drop[index].type == 0
-								image = $data_items[$Drop[index].id].icon_name
-								name = $data_items[$Drop[index].id].name
-							elsif $Drop[index].type == 1
-								image = $data_weapons[$Drop[index].id].icon_name
-								name = $data_weapons[$Drop[index].id].name
-							elsif $Drop[index].type == 2
-								image = $data_armors[$Drop[index].id].icon_name
-								name = $data_armors[$Drop[index].id].name
-							end
-							create_drops2(index, 138, map_id, x, y, image, name, $Drop[index].amount)
-						elsif $Drop[index].type2 == 0 # 돈
-							create_moneys2(index, 138, map_id, x, y, $Drop[index].amount)
-						end
+					if type == 3 # 돈
+						create_moneys2(index, x, y, amount)
+					else # 일반 아이템
+						create_drops2(index, x, y, type, id, amount)
 					end
+					
 					
 				when /<Drop_Get>(.*)<\/Drop_Get>/
 					data = $1.split(',')

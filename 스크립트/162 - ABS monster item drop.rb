@@ -85,11 +85,7 @@ class MrMo_ABS
 				sw = d[4] # 드랍 조건 스위치 번호
 				
 				if r <= chance
-					if sw != nil and $game_switches[sw] == true
-						temp.push([type, id, take_num]) 
-					elsif sw == nil
-						temp.push([type, id, take_num]) 
-					end
+					temp.push([type, id, take_num, sw])
 				end
 			end
 			
@@ -108,10 +104,15 @@ class MrMo_ABS
 			
 			for item in i_id
 				next if item == nil
-				if item[0] == 3 # 돈 드랍
-					create_moneys(item[1], e.event.x, e.event.y)
+				type = item[0]
+				id = item[1]
+				amount = item[2]
+				sw = item[3]
+				
+				if type == 3 # 돈 드랍
+					create_moneys(id, e.event.x, e.event.y)
 				else
-					create_drops(item[0], item[1], e.event.x, e.event.y, item[2])
+					create_drops(type, id, e.event.x, e.event.y, amount, sw)
 				end
 			end
 		end
@@ -146,12 +147,12 @@ class MrMo_ABS
 	ITEM_DROP_DATA[15] = [[-1], [0, 12, 1, 50]] # 호랑이 : 호랑이고기
 	ITEM_DROP_DATA[16] = [[-1], [0, 12, 1, 60]] # 평호 : 호랑이고기
 	ITEM_DROP_DATA[17] = [[-1], [0, 12, 1, 40], [2, 2, 1, 50]] # 진호 : 호랑이고기, 지력의투구1
-	ITEM_DROP_DATA[75] = [[-1], [2, 2, 1, 50], [1, 118, 1, 20]] # 청진웅 : 지력의투구1, 철단도
+	ITEM_DROP_DATA[75] = [[-1], [2, 2, 1, 50], [1, 118, 1, 10]] # 청진웅 : 지력의투구1, 철단도
 	
 	# 돼지굴
 	ITEM_DROP_DATA[21] = [[-1], [0, 19, 1, 40], [0, 28, 1, 15]] # 산돼지 : 산돼지고기, 돼지의뿔
 	ITEM_DROP_DATA[22] = [[-1], [0, 20, 1, 40], [0, 28, 1, 15]] # 숲돼지 : 숲돼지고기, 돼지의뿔
-	ITEM_DROP_DATA[77] = [[-1], [0, 59, 1, 70], [1, 23, 1, 20]] # 청산숲돼지: 청산돼지뿔, 철도
+	ITEM_DROP_DATA[77] = [[-1], [0, 59, 1, 70], [1, 23, 1, 10]] # 청산숲돼지: 청산돼지뿔, 철도
 	
 	# 사슴굴
 	ITEM_DROP_DATA[23] = [[-1], [0, 5, 3, 80]] # 주홍사슴 : 사슴고기
@@ -205,8 +206,8 @@ class MrMo_ABS
 	ITEM_DROP_DATA[52] = [[-1], [0, 50, 1, 60], [3, 100, 1, 20]] # 서여우 : 여우고기
 	ITEM_DROP_DATA[53] = [[-1], [0, 50, 1, 60], [3, 100, 1, 20]] # 백여우 : 여우고기
 	ITEM_DROP_DATA[54] = [[-1], [0, 50, 1, 60]] # 불여우 : 여우고기
-	ITEM_DROP_DATA[82] = [[-1], [0, 60, 2, 60], [1, 118, 1, 10]] # 구미호 : 쇠조각, 철도
-	ITEM_DROP_DATA[83] = [[-1], [0, 61, 2, 60], [1, 23, 1, 10]] # 불구미호 : 수정의조각, 철도
+	ITEM_DROP_DATA[82] = [[-1], [0, 60, 2, 60], [1, 118, 1, 10]] # 구미호 : 쇠조각, 철단도
+	ITEM_DROP_DATA[83] = [[-1], [0, 61, 2, 60], [1, 23, 1, 5]] # 불구미호 : 수정의조각, 철도
 	
 	# 전갈굴
 	ITEM_DROP_DATA[55] = [[-1], [0, 29, 1, 20]] # 전갈 : 호박
@@ -294,6 +295,7 @@ class MrMo_ABS
 	ITEM_DROP_DATA[160] = [[-1], [0, 129, 1, 2]] # 수괴 : 수괴의 심장
 	
 	# 일본
+	ITEM_DROP_DATA[171] = [[-1], [0, 29, 1, 40], [0, 30, 1, 40]] # 신로 : 호박, 진호박
 	ITEM_DROP_DATA[172] = [[-1], [0, 161, 1, 30], [0, 148, 1, 15]] # 아귀 : 희귀호박, 참나무조각
 	
 	ITEM_DROP_DATA[173] = [[-1], [0, 29, 1, 30], [0, 30, 1, 30], [0, 148, 1, 0.5]] # 백발귀 : 호박, 진호박, 참나무조각

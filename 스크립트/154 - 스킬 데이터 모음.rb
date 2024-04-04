@@ -70,7 +70,7 @@ BUFF_SKILL[88] = [60, true, [["per_str", 1.2, 0]] ] # 분량력법
 BUFF_SKILL[90] = [60, true, [["per_agi", 1.2, 0]] ] # 분량방법
 BUFF_SKILL[91] = [60, false, [["com", 129]] ] # 석화기탄
 BUFF_SKILL[46] = [180, true, [["mdef", 10], ["pdef", 10]] ] # 무장
-BUFF_SKILL[47] = [180, true, [["mdef", 15], ["pdef", 15]] ] # 보호
+BUFF_SKILL[47] = [180, true] # 보호
 BUFF_SKILL[94] = [5, false] # 금강불체
 BUFF_SKILL[121] = [2, true] # 신령지익진
 BUFF_SKILL[122] = [2, true] # 파력무참진
@@ -231,9 +231,9 @@ SKILL_POWER_CUSTOM[53] = [[0, 0, 1.1, 10]] # 삼매진화
 SKILL_POWER_CUSTOM[57] = [[0, 0, 1.2, 10]] # 삼매진화 1성
 SKILL_POWER_CUSTOM[69] = [[0, 0, 1.3, 10]] # 삼매진화 2성
 
-SKILL_POWER_CUSTOM[49] = [[1, 0, 0.03, 250]] # 성려멸주
-SKILL_POWER_CUSTOM[52] = [[1, 0, 0.04, 300]] # 성려멸주 1성
-SKILL_POWER_CUSTOM[56] = [[1, 0, 0.06, 350]] # 성려멸주 2성
+SKILL_POWER_CUSTOM[49] = [[1, 0, 0.03, 700]] # 성려멸주 1성
+SKILL_POWER_CUSTOM[52] = [[1, 0, 0.04, 1000]] # 성려멸주 2성
+SKILL_POWER_CUSTOM[56] = [[1, 0, 0.06, 1500]] # 성려멸주 3성
 
 SKILL_POWER_CUSTOM[58] = [[0, 0, 0.75, 10]] # 지폭지술
 SKILL_POWER_CUSTOM[68] = [[0, 0.5, 1.0, 10]] # 폭류유성
@@ -430,9 +430,13 @@ DAMAGE_CAL_ATTACK[76] = [1.4] # 팔량분법
 DAMAGE_CAL_ATTACK[88] = [1.3] # 분량력법
 DAMAGE_CAL_ATTACK[134] = [3] # 분신
 DAMAGE_CAL_ATTACK[122] = [1.5] # 파력무참진
+DAMAGE_CAL_ATTACK[131] = [6] # 투명 1성
+DAMAGE_CAL_ATTACK[141] = [7] # 투명 2성
+DAMAGE_CAL_ATTACK[142] = [8] # 투명 3성
+
 
 DAMAGE_CAL_DEFENSE = {}
-DAMAGE_CAL_DEFENSE[47] = [0.25] # 보호
+DAMAGE_CAL_DEFENSE[47] = [0.3] # 보호
 DAMAGE_CAL_DEFENSE[90] = [0.2] # 분량방법
 DAMAGE_CAL_DEFENSE[94] = [0.99] # 금강불체
 DAMAGE_CAL_DEFENSE[121] = [0.4] # 신령지익진

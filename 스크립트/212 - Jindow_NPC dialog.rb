@@ -4,7 +4,7 @@
 #   NPC 대화
 #------------------------------------------------------------------------------
 class Jindow_N < Jindow
-	def initialize(text = "", name = "", select_num = 0, type = 0) # 텍스트, npc 이름, 메뉴들, 타입
+	def initialize(text = "", name = "", select_num = 0, type = 0, is_end = false) # 텍스트, npc 이름, 메뉴들, 타입
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 105)
 		name = "" if name.include?("EV")		
@@ -19,6 +19,7 @@ class Jindow_N < Jindow
 		@drag = true
 		@close = true
 		@type = type
+		@is_end = is_end
 		self.x = (640 - self.width) / 2
 		self.y = 255 - self.height
 		
@@ -40,7 +41,7 @@ class Jindow_N < Jindow
 				@text.bitmap.draw_text(0, i * 18, self.width, 32, @texts[i])
 			end
 			
-			#@close_ok = true
+			@close_ok = true if @is_end
 			if select_num > 0
 				@close_ok = true
 				for i in 0...select_num
@@ -196,6 +197,7 @@ class Jindow_N < Jindow
 		if Key.trigger?(KEY_ENTER) #엔터
 			if @input_num == nil
 				@a.click = true if Hwnd.highlight? == self and !@a.disposed?
+				@b.click = true if Hwnd.highlight? == self and !@b.disposed? and @is_end
 			else
 				if @input_num.result.to_i > 0
 					$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
@@ -213,9 +215,11 @@ class Jindow_N < Jindow
 		
 		if Key.trigger?(KEY_SPACE) #space
 			@a.click = true if Hwnd.highlight? == self and !@a.disposed?
+			@b.click = true if Hwnd.highlight? == self and !@b.disposed? and @is_end
 		end
 		
 		if Key.trigger?(KEY_ESC) #esc
+			@a.click = true if Hwnd.highlight? == self and !@a.disposed?
 			@b.click = true if Hwnd.highlight? == self and !@b.disposed?
 		end
 		
@@ -267,6 +271,7 @@ class Interpreter
 			else
 				# 선택지가 있는 명령어거나 명령어 끝
 				@m_count = 0
+				is_end = false
 				
 				if @list[@index + 1].code == 102
 					# 만약 선택지를 한번에 넣을 수 있으면 넣음
@@ -290,15 +295,15 @@ class Interpreter
 						$game_temp.num_input_variable_id = @list[@index].parameters[0]
 						$game_temp.num_input_digits_max = @list[@index].parameters[1]
 					end
+				elsif @list[@index + 1].code == 0
+					is_end = true
 				end
 				
 				# Continue
-				if $game_map.events[@event_id] != nil
-					# npc대화창 생성
-					Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, @m_count, 0)
-				else
-					Jindow_N.new($game_temp.message_text, "", @m_count, 0)
-				end
+				e_name = ""
+				e_name = $game_map.events[@event_id].name if $game_map.events[@event_id] != nil
+				
+				Jindow_N.new($game_temp.message_text, e_name, @m_count, 0)
 				$game_temp.message_text = nil
 				return true
 			end

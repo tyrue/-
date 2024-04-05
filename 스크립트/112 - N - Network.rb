@@ -1382,211 +1382,167 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@send_conf = true
 					return true if $1.to_s ==  "'Confirmed'"
 					
-				when /<dataload>(.*)<\/dataload>/
-					$global_x += 1
-					#이름
-					$name = $1.to_s if $global_x == 2
-					#직업
-					$game_party.actors[0].class_id = $1.to_i if $global_x == 3
-					#레벨
-					$game_party.actors[0].level = $1.to_i if $global_x == 4
-					#경험치
-					$game_party.actors[0].exp = $1.to_i if $global_x == 5
-					#스텟
-					$str = $1.to_i if $global_x == 6
-					$dex = $1.to_i if $global_x == 7
-					$agi = $1.to_i if $global_x == 8
-					$int = $1.to_i if $global_x == 9
-					#최대체력/마력
-					$game_party.actors[0].maxhp = $1.to_i if $global_x == 10
-					$game_party.actors[0].maxsp = $1.to_i if $global_x == 11
-					#맵아이디 ,좌표, 방향
-					$new_id = $1.to_i if $global_x == 12
-					$new_x = $1.to_i if $global_x == 13
-					$new_y = $1.to_i if $global_x == 14
-					$new_d = $1.to_i if $global_x == 15
-					$charp = $1.to_s if $global_x == 16
 					
-					#착용 장비
-					$armedweapon = $1 if $global_x == 17
-					$armedarmor1 = $1 if $global_x == 18
-					$armedarmor2 = $1 if $global_x == 19
-					$armedarmor3 = $1 if $global_x == 20
-					$armedarmor4 = $1 if $global_x == 21
+				when /<dataload>(.*):(.*)<\/dataload>/
+					key = $1.to_s
+					val = $2.to_s
 					
-					# 아이템
-					if $global_x == 22
-						item = []
-						item = $1.split('.')
-						for data in item
-							info = data.split(',')
-							if info[0].to_i != nil and info[0].to_i != 0 and info[0].to_i != ""
-								$game_party.gain_item(info[0].to_i, info[1].to_i)
-							end
+					case key
+					when "nickname" # 이름
+						$game_party.actors[0].name = val
+					when "class_id" # 직업
+						$game_party.actors[0].class_id = val.to_i
+					when "level" # 레벨
+						$game_party.actors[0].level = val.to_i
+					when "exp" # 경험치
+						$game_party.actors[0].exp = val.to_i
+					when "a_str" # 스탯
+						$game_party.actors[0].str = val.to_i
+					when "a_dex"
+						$game_party.actors[0].dex = val.to_i
+					when "a_agi"
+						$game_party.actors[0].agi = val.to_i
+					when "a_int"
+						$game_party.actors[0].int = val.to_i
+					when "max_hp" # 최대 체력/마력
+						$game_party.actors[0].maxhp = val.to_i
+					when "max_sp"
+						$game_party.actors[0].maxsp = val.to_i
+					when "map_id" # 맵아이디 ,좌표, 방향
+						$game_map.setup(val.to_i)
+					when "player_x" # 맵아이디 ,좌표, 방향
+						$new_x = val.to_i
+					when "player_y" # 맵아이디 ,좌표, 방향
+						$new_y = val.to_i
+					when "player_direction" # 맵아이디 ,좌표, 방향
+						$game_player.direction = val.to_i
+					when "character_image"
+						$game_party.actors[0].set_graphic(val, 0, 0, 0) # 캐릭터 칩 설정
+					when "weapon_id" # 착용 장비
+						$game_party.gain_weapon(val.to_i, 1)
+						$game_party.actors[0].equip(0, val.to_i)
+					when "armor1_id"
+						$game_party.gain_armor(val.to_i, 1)
+						$game_party.actors[0].equip(1, val.to_i)
+					when "armor2_id"
+						$game_party.gain_armor(val.to_i, 1)
+						$game_party.actors[0].equip(2, val.to_i)
+					when "armor3_id"
+						$game_party.gain_armor(val.to_i, 1)
+						$game_party.actors[0].equip(3, val.to_i)
+					when "armor4_id"
+						$game_party.gain_armor(val.to_i, 1)
+						$game_party.actors[0].equip(4, val.to_i)
+					when "item_list" # 아이템
+						items = val.split('.')
+						items.each do |item|
+							info = item.split(',')
+							$game_party.gain_item(info[0].to_i, info[1].to_i) if info[0].to_i != 0
 						end
-					end
-					
-					#무기
-					if $global_x == 23
-						weapon = []
-						weapon = $1.split('.')
-						for data2 in weapon
-							info1 = data2.split(',')
-							if info1[0].to_i != nil and info1[0].to_i != 0 and info1[0].to_i != ""
-								$game_party.gain_weapon(info1[0].to_i, info1[1].to_i)
-							end
+					when "weapon_list" # 무기
+						weapons = val.split('.')
+						weapons.each do |weapon|
+							info = weapon.split(',')
+							$game_party.gain_weapon(info[0].to_i, info[1].to_i) if info[0].to_i != 0
 						end
-					end    
-					
-					# 방어구
-					if $global_x == 24
-						armor = []
-						armor = $1.split('.')
-						for data3 in armor
-							info2 = data3.split(',')
-							if info2[0].to_i != nil and info2[0].to_i != 0 and info2[0].to_i != ""
-								$game_party.gain_armor(info2[0].to_i, info2[1].to_i)
-							end
-						end
-					end
-					
-					
-					#스킬 리스트				
-					if $global_x == 25						
-						skill = []						
-						skill = $1.split(',')					
+					when "armor_list" # 방어구
+						armors = val.split('.')
+						armors.each do |armor|
+							info = armor.split(',')
+							$game_party.gain_armor(info[0].to_i, info[1].to_i) if info[0].to_i != 0
+						end	
+					when "skill_list" #스킬 리스트				
+						skill = val.split(',')					
 						for skill_code in skill													
-							if skill_code.to_i > 0				
-								$game_party.actors[0].learn_skill(skill_code.to_i)				
-							end							
+							$game_party.actors[0].learn_skill(skill_code.to_i) if skill_code.to_i > 0
 						end						
-					end
-					
-					# 금전
-					$game_party.gain_gold($1.to_i) if $global_x == 26
-					
-					#현재 체력
-					$game_party.actors[0].hp = $1.to_i if $global_x == 27
-					
-					#현재 마력
-					$game_party.actors[0].sp = $1.to_i if $global_x == 28  
-					
-					# 스위치
-					if $global_x == 29
-						sw = []
-						sw = $1.split ","
-						for i in 0..sw.size
-							if sw[i] == "1"
-								$game_switches[i] = true
-							elsif sw[i] == "0"
-								$game_switches[i] = false
+					when "gold" # 금전
+						$game_party.gain_gold(val.to_i) 
+					when "hp" #현재 체력
+						$game_party.actors[0].hp = val.to_i 
+					when "sp" #현재 마력
+						$game_party.actors[0].sp = val.to_i 
+					when "switch_list" # 스위치 리스트
+						switches = val.split(",")
+						if switches.include?("0")
+							for i in 0..switches.size
+								$game_switches[i] = switches[i] == "1" ? true : false
 							end
+						else
+							switches.each { |sw| $game_switches[sw.to_i] = true }
 						end
-					end
-					
-					# 변수
-					if $global_x == 30
-						va = []
-						va = $1.split ","
-						for i in 0..va.size
-							$game_variables[i] = va[i].to_i
-						end
-					end
-					
-					# 스킬 핫키
-					if $global_x == 31
-						hk = [] # 핫키 리스트 배열
-						hk = $1.split ","
-						i = 0
-						for key in $ABS.skill_keys.keys
-							$ABS.skill_keys[key] = hk[i].to_i
-							i += 1
-						end
-					end
-					
-					# 아이템 핫키
-					if $global_x == 32
-						hk = [] # 핫키 리스트 배열
-						hk = $1.split ","
-						i = 0
-						for key in $ABS.item_keys.keys
-							$ABS.item_keys[key] = hk[i].to_i
-							i += 1
-						end
-					end
-					
-					# pdef
-					$game_party.actors[0].pdef = $1.to_i if $global_x == 33
-					
-					# mdef
-					if $global_x == 34
-						$game_party.actors[0].mdef = $1.to_i 
-					end
-					
-					# 스킬 딜레이 갱신
-					if $global_x == 35
-						return if $1.to_s == "*null*"
-						data = []
-						data = $1.split "."
-						for d in data
-							break if d == "*null*"
-							i = []
-							i = d.split ","
-							id = i[0].to_i
-							
-							if i[1] != nil and SKILL_MASH_TIME[id] != nil
-								SKILL_MASH_TIME[id][1] = i[1].to_i 
-								$skill_Delay_Console.write_line(id)
+					when "variable_list" # 변수 리스트
+						if val.include?(".")
+							val.split(".").each do |va|
+								info = va.split(",")
+								$game_variables[info[0].to_i] = info[1].to_i
 							end
+						else
+							val.split(",").each_with_index { |value, index| $game_variables[index] = value.to_i }
 						end
-					end
-					
-					# 버프 지속시간 갱신
-					if $global_x == 36
-						return if $1.to_s == "*null*"
-						data = []
-						data = $1.split "."
+					when "hotkey_list" # 스킬 핫키
+						if val.include?(".")
+							val.split(".").each do |hk|
+								info = hk.split(",")
+								$ABS.skill_keys[info[0].to_i] = info[1].to_i
+							end
+						else
+							hk = val.split(",")
+							$ABS.skill_keys.keys.each_with_index { |k, i| $ABS.skill_keys[k] = hk[i].to_i }
+						end
+						
+						
+					when "itemkey_list" # 아이템 핫키
+						if val.include?(".")
+							val.split(".").each do |hk|
+								info = hk.split(",")
+								$ABS.item_keys[info[0].to_i] = info[1].to_i
+							end
+						else
+							hk = val.split "," # 핫키 리스트 배열
+							$ABS.item_keys.keys.each_with_index { |k, i| $ABS.item_keys[k] = hk[i].to_i }
+						end
+						
+					when "physical_defense" # pdef
+						$game_party.actors[0].pdef = val.to_i 
+						
+					when "magical_defense" # mdef
+						$game_party.actors[0].mdef = val.to_i 
+						
+					when "skill_mash_list" # 스킬 딜레이 갱신
+						return if !val.include?(".")
+						data = val.split "."
+						
 						for d in data
-							break if d == "*null*"
-							i = []
-							i = d.split ","
-							id = i[0].to_i
+							next if !d.include?(",")
+							id, time = d.split(",").map(&:to_i)
 							
-							$game_party.actors[0].buff_time[id] = i[1].to_i
+							next if SKILL_MASH_TIME[id] == nil							
+							SKILL_MASH_TIME[id][1] = time 
 							$skill_Delay_Console.write_line(id)
 						end
+						
+					when "buff_mash_list" # 버프 지속시간 갱신
+						return if !val.include?(".")
+						data = val.split "."
+						
+						for d in data
+							next if !d.include?(",")
+							id, time = d.split(",").map(&:to_i)
+							
+							$game_party.actors[0].buff_time[id] = time
+							$skill_Delay_Console.write_line(id)
+						end
+						
+					when "character_name2"
+						$cha_name = val
+						$cha_name = "바람머리" if $cha_name == nil or $cha_name == "*null*"
 					end
 					
-					if $global_x == 37
-						$cha_name = $1.to_s
-					end
 					
 				when /<dataLoadEnd>(.*)<\/dataLoadEnd>/	
-					$cha_name = "바람머리" if $cha_name == nil or $cha_name == "*null*"
-					
 					# 데이터 로드 완료
-					$game_party.actors[0].name = $name
-					$game_map.setup($new_id) 
 					$game_player.moveto($new_x, $new_y) 
-					$game_player.direction = $new_d
-					$game_party.actors[0].set_graphic($charp, 0, 0, 0) # 캐릭터 칩 설정
-					
-					$game_party.gain_weapon($armedweapon.to_i,1)
-					$game_party.gain_armor($armedarmor1.to_i,1)
-					$game_party.gain_armor($armedarmor2.to_i,1)
-					$game_party.gain_armor($armedarmor3.to_i,1)
-					$game_party.gain_armor($armedarmor4.to_i,1)
-					
-					$game_party.actors[0].equip(0, $armedweapon.to_i)
-					$game_party.actors[0].equip(1, $armedarmor1.to_i)
-					$game_party.actors[0].equip(2, $armedarmor2.to_i)
-					$game_party.actors[0].equip(3, $armedarmor3.to_i)
-					$game_party.actors[0].equip(4, $armedarmor4.to_i)
-					
-					$game_party.actors[0].str = $str
-					$game_party.actors[0].dex = $dex
-					$game_party.actors[0].agi = $agi
-					$game_party.actors[0].int = $int
 					$game_player.refresh
 					
 					$rpg_skill.base_str = $game_variables[52]
@@ -1598,16 +1554,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 						exit
 					else
-						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
-						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
-						self.send_start
-						
+						@group = "standard"
 						if $game_switches[54] # 운영자모드
 							p "운영자모드"
 							@group = "admin"
-						else
-							@group = "standard"
 						end
+						
+						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
+						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
+						self.send_start
 						
 						$rpg_skill.job_select
 						

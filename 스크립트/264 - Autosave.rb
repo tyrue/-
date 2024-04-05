@@ -11,6 +11,7 @@ def 자동저장
 	변수_목록_생성()
 	단축키_목록_생성()
 	아이템키_목록_생성()
+	
 	스킬_밀기_목록_생성()
 	버프_밀기_목록_생성()
 	
@@ -23,7 +24,7 @@ def 자동저장_준비가_필요한_상황?
 end
 
 def 초기화_변수
-	@skilllist, @itemlist, @weaponlist, @armorlist, @valist, @swlist, @hotkeylist, @itemKeyList, @skill_mash_list, @buff_mash_list, @self_switches = [""] * 11
+	@skilllist, @itemlist, @weaponlist, @armorlist, @valist, @swlist, @hotKeyList, @itemKeyList, @skill_mash_list, @buff_mash_list, @self_switches = [""] * 11
 	
 	초기화_스킬_지연_콘솔() if 스킬_지연_콘솔_비어있음?
 	초기화_기본_스탯_변수()
@@ -38,10 +39,10 @@ def 스킬_지연_콘솔_비어있음?
 end
 
 def 초기화_기본_스탯_변수
-  $game_variables[52] = $rpg_skill.base_str
-  $game_variables[53] = $rpg_skill.base_agi
-  $game_variables[54] = $rpg_skill.base_int
-  $game_variables[55] = $rpg_skill.base_dex
+	$game_variables[52] = $rpg_skill.base_str
+	$game_variables[53] = $rpg_skill.base_agi
+	$game_variables[54] = $rpg_skill.base_int
+	$game_variables[55] = $rpg_skill.base_dex
 end
 
 
@@ -72,21 +73,20 @@ def 변수_목록_생성
 end
 
 def 단축키_목록_생성
-	생성_키_목록($ABS.skill_keys, 'hot')
+	k = $ABS.skill_keys
+	k.keys.each do |i|
+		next if k[i] == 0
+		@hotKeyList += "#{i},#{k[i]}.".to_s
+	end
 end
 
 def 아이템키_목록_생성
-	생성_키_목록($ABS.item_keys, 'item')
+	k = $ABS.item_keys
+	k.keys.each do |i|
+		next if k[i] == 0
+		@itemKeyList += "#{i},#{k[i]}.".to_s
+	end
 end
-
-def 생성_키_목록(keys, prefix)
-  keys.keys.each do |i|
-    if keys[i] && !keys[i] != nil
-      instance_variable_set("@#{prefix}keylist", "#{keys[i]},".to_s)
-    end
-  end
-end
-
 
 def 스킬_밀기_목록_생성
 	@skill_mash_list = SKILL_MASH_TIME.map { |skill_mash_time| "#{skill_mash_time[0]},#{skill_mash_time[1][1]}." if skill_mash_time[1][1] > 0 }.compact.join
@@ -97,52 +97,53 @@ def 버프_밀기_목록_생성
 end
 
 def 네트워크_데이터_전송
-  actor = $game_party.actors[0]
-  base_hp, base_sp = actor.take_base_maxhp, actor.take_base_maxsp
-  userdata = {
-    #"server_name" => "흑부엉 서버",
-    "nickname" => actor.name,
-    "class_id" => actor.class_id,
-    "level" => actor.level,
-    "exp" => actor.exp,
-    "a_str" => actor.str,
-    "a_dex" => actor.dex,
-    "a_agi" => actor.agi,
-    "a_int" => actor.int,
-    "max_hp" => base_hp,
-    "max_sp" => base_sp,
-    "map_id" => $game_map.map_id,
-    "player_x" => $game_player.x,
-    "player_y" => $game_player.y,
-    "player_direction" => $game_player.direction,
-    "character_image" => actor.character_name,
-    "weapon_id" => actor.weapon_id,
-    "armor1_id" => actor.armor1_id,
-    "armor2_id" => actor.armor2_id,
-    "armor3_id" => actor.armor3_id,
-    "armor4_id" => actor.armor4_id,
-    "item_list" => @itemlist,
-    "weapon_list" => @weaponlist,
-    "armor_list" => @armorlist,
-    "skill_list" => @skilllist,
-    "gold" => $game_party.gold,
-    "hp" => actor.hp,
-    "sp" => actor.sp,
-    "switch_list" => @swlist,
-    "variable_list" => @valist,
-    "hotkey_list" => @hotkeylist,
-    "item_key_list" => @itemKeyList,
-    "physical_defense" => actor.pdef,
-    "magical_defense" => actor.mdef,
-    "skill_mash_list" => @skill_mash_list,
-    "buff_mash_list" => @buff_mash_list,
-    "character_name2" => $cha_name
-  }
-
-  message = "<userdata>"
-  userdata.each { |key, value| message += "#{key}:#{value}|" }
-  message += "</userdata>\n"
+	actor = $game_party.actors[0]
+	base_hp, base_sp = actor.take_base_maxhp, actor.take_base_maxsp
+	userdata = {
+		#"server_name" => "흑부엉 서버",
+		"nickname" => actor.name,
+		"class_id" => actor.class_id,
+		"level" => actor.level,
+		"exp" => actor.exp,
+		"a_str" => actor.str,
+		"a_dex" => actor.dex,
+		"a_agi" => actor.agi,
+		"a_int" => actor.int,
+		"max_hp" => base_hp,
+		"max_sp" => base_sp,
+		"map_id" => $game_map.map_id,
+		"player_x" => $game_player.x,
+		"player_y" => $game_player.y,
+		"player_direction" => $game_player.direction,
+		"character_image" => actor.character_name,
+		"weapon_id" => actor.weapon_id,
+		"armor1_id" => actor.armor1_id,
+		"armor2_id" => actor.armor2_id,
+		"armor3_id" => actor.armor3_id,
+		"armor4_id" => actor.armor4_id,
+		"item_list" => @itemlist,
+		"weapon_list" => @weaponlist,
+		"armor_list" => @armorlist,
+		"skill_list" => @skilllist,
+		"gold" => $game_party.gold,
+		"hp" => actor.hp,
+		"sp" => actor.sp,
+		"switch_list" => @swlist,
+		"variable_list" => @valist,
+		"hotkey_list" => @hotKeyList,
+		"itemkey_list" => @itemKeyList,
+		"physical_defense" => actor.pdef,
+		"magical_defense" => actor.mdef,
+		"skill_mash_list" => @skill_mash_list,
+		"buff_mash_list" => @buff_mash_list,
+		"character_name2" => $cha_name
+	}
 	
-  Network::Main.socket.send(message)
+	
+	message = "<userdata>"
+	userdata.each { |key, value| message += "#{key}:#{value}|" }
+	message += "</userdata>\n"
+	
+	Network::Main.socket.send(message)
 end
 

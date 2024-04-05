@@ -1384,6 +1384,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					
 				when /<dataload>(.*):(.*)<\/dataload>/
+					
 					key = $1.to_s
 					val = $2.to_s
 					
@@ -1569,6 +1570,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_map.autoplay
 						$game_map.update 
 						$scene = Scene_Map.new 
+						$login_check = true
 					end
 					
 				when /<guild_load>(.*)<\/guild_load>/

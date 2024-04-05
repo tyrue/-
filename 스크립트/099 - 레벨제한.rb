@@ -185,7 +185,7 @@ class Game_Actor < Game_Battler
 		# 레벨업（level up）
 		while @exp >= @exp_list[@level+1] and @exp_list[@level+1] > 0
 			@level += 1
-			next if $global_x == 4
+			next if !$login_check
 			
 			자동저장
 			$console.write_line("[정보]:레벨이 올랐습니다!")

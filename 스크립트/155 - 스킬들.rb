@@ -1312,7 +1312,7 @@ class Game_Actor < Game_Battler
 	alias rpg_skill_learn learn_skill
 	def learn_skill(skill_id)
 		rpg_skill_learn(skill_id) # 이전 함수 코드 실행
-		$console.write_line("마법 #{$data_skills[skill_id].name}을(를) 배웠다!") if $global_x >= 26
+		$console.write_line("마법 #{$data_skills[skill_id].name}을(를) 배웠다!") if $login_check
 		
 		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
 		for i in 1..UPGRADE_SKILL_ID.size
@@ -1324,7 +1324,7 @@ class Game_Actor < Game_Battler
 				next if !skill_learn?(j)
 				
 				forget_skill(j) 
-				$console.write_line("이전 마법 #{$data_skills[j].name}은(는) 사라졌다!") if $global_x >= 26				
+				$console.write_line("이전 마법 #{$data_skills[j].name}은(는) 사라졌다!") if $login_check
 			end			
 		end
 		

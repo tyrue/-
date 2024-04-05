@@ -105,11 +105,11 @@ module User_Edit
 	
 	
 	# IP              # Port   # Display
-	#SERVERS          = [["3.37.127.218", 52001, "흑부엉 서버"]] # 외부 아이피
+	SERVERS          = [["3.37.127.218", 52001, "흑부엉 서버"]] # 외부 아이피
 	#TEST							= true
 	
 	TEST							= false
-	SERVERS           = [["127.0.0.1", 52001, "흑부엉 서버"]] # 테스트용 내부 아이피
+	#SERVERS           = [["127.0.0.1", 52001, "흑부엉 서버"]] # 테스트용 내부 아이피
 	
 	
 	#Avialbe Chat Systems;

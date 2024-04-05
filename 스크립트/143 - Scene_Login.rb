@@ -22,6 +22,7 @@ class Scene_Login
 		Graphics.freeze
 		@sprite.dispose
 		JS.dispose
+		$login_check = false
 	end
 	
 	def update

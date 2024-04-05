@@ -22,7 +22,7 @@ end
 begin
 	Graphics.freeze
 	Graphics.frame_rate = 60
-	$global_x = 0  
+	$login_check = false
 	#하우징
 	
 	$scene = Scene_Connect.new

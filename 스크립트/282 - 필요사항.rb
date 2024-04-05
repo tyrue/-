@@ -27,7 +27,7 @@ def 로그아웃
 		Network::Main.socket.send("<nptout>#{$game_party.actors[0].name} #{$npt}</nptout>\n")
 		
 		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
-		$global_x = 0
+		$login_check = false
 	end
 	$scene = Scene_Connect.new
 end
@@ -49,7 +49,7 @@ def 게임종료
 		Network::Main.socket.send("<nptout>#{$game_party.actors[0].name} #{$npt}</nptout>\n")
 		
 		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
-		$global_x = 0
+		$login_check = false
 	end
 	$scene = nil
 end

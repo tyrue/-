@@ -19,12 +19,20 @@ class Jindow_Chat_Input < Jindow
 		self.y = 460
 		self.opacity = 255
 		@active = false
-		@chat_type = "전체"
+		@chat_type = 
+		[
+			"전체",
+			"귓속말",
+			"파티",
+			"길드",
+		]
+		@chat_type_idx = 0
+		
 		@type = J::Type.new(self).refresh(64, 2, self.width - 70, 16)
 		@type.set "(대화하려면 Enter 키를 누르세요)"
 		@type.view
 		
-		@a = J::Button.new(self).refresh(40, @chat_type)
+		@a = J::Button.new(self).refresh(40, @chat_type[@chat_type_idx])
 		@a.x = 2
 		@b = J::Button.new(self).refresh(20, "▶")
 		@b.x = 42
@@ -207,166 +215,184 @@ class Jindow_Chat_Input < Jindow
 			$chat.write ("/귓 (귓속말 상대), /교환 (교환 상대)", COLOR_HELP)    
 			
 		else # 명령어가 아닌 그냥 일반 채팅일때
+			name = $game_party.actors[0].name
 			
-			case @chat_type
-				
+			case @chat_type[@chat_type_idx]
 			when "귓속말"
-				if @whispers != nil
-					if @whispers == $game_party.actors[0].name
-						$console.write_line("자기 자신에게는 귓속말을 할 수 없습니다.")
-					else
-						name = $game_party.actors[0].name 
-						$chat.write("(귓속말) #{@whispers} <<< #{text}", COLOR_WHISPER)
-						Network::Main.socket.send "<whispers>#{@whispers},#{text}</whispers>\n"
-					end
-				else
-					$console.write_line("귓속말 할 상대가 없습니다.")
-				end
-				
-				
+				process_whisper(name, text)
 			when "전체"
-				name = $game_party.actors[0].name
-				$chat.write("(#{@chat_type}) #{name} : #{text}", COLOR_NORMAL)
-				$chat_b.input(name + ": " + text, 1, 4, $game_player)
-				Network::Main.socket.send "<chat1>(전체) #{name} : #{text}</chat1>\n" 
-				Network::Main.socket.send "<map_chat>#{name}&#{text}&#{1}</map_chat>\n"
-				
+				process_global(name, text)
 			when "파티"
-				if not $netparty == []
-					name = $game_party.actors[0].name 
-					name2 = $game_party.actors[0].class_name
-					$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", COLOR_PARTY)
-					$chat_b.input(name + ": " + text, 2, 4, $game_player)
-					Network::Main.socket.send "<partymessage>#{name},#{name2},#{text},#{$npt}</partymessage>\n"  
-					Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"  
-				else
-					$console.write_line("가입된 파티가 없습니다.")   
-				end
-				
+				process_party(name, text)
 			when "길드"
-				if not $guild != nil
-					name = $game_party.actors[0].name 
-					name2 = $game_party.actors[0].class_name
-					$chat.write("(#{@chat_type}) #{$game_party.actors[0].name} : #{text}", COLOR_PARTY)
-					$chat_b.input(name + ": " + text, 2, 4, $game_player)
-					Network::Main.socket.send "<Guild_Message>#{name},#{name2},#{text},#{$npt}</Guild_Message>\n"  
-					Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"  
-				else
-					$console.write_line("가입된 길드가 없습니다.")   
-				end
+				process_guild(name, text)
 			end
 		end
 	end
 	
+	def process_whisper(name, text)
+		if @whispers.nil?
+			$console.write_line("귓속말 할 상대가 없습니다.")
+			return
+		end
+		
+		if @whispers == name
+			$console.write_line("자기 자신에게는 귓속말을 할 수 없습니다.")
+			return
+		end
+		
+		$chat.write("(귓속말) #{@whispers} <<< #{text}", COLOR_WHISPER)
+		Network::Main.socket.send "<whispers>#{@whispers},#{text}</whispers>\n"
+	end
+	
+	def process_global(name, text)
+		$chat.write("(전체) #{name} : #{text}", COLOR_NORMAL)
+		$chat_b.input("#{name}: #{text}", 1, 4, $game_player)
+		Network::Main.socket.send "<chat1>(전체) #{name} : #{text}</chat1>\n"
+		Network::Main.socket.send "<map_chat>#{name}&#{text}&#{1}</map_chat>\n"
+	end
+	
+	def process_party(name, text)
+		if $netparty.empty?
+			$console.write_line("가입된 파티가 없습니다.")
+			return
+		end
+		
+		name2 = $game_party.actors[0].class_name
+		$chat.write("(파티) #{name} : #{text}", COLOR_PARTY)
+		$chat_b.input("#{name}: #{text}", 2, 4, $game_player)
+		Network::Main.socket.send "<partymessage>#{name},#{name2},#{text},#{$npt}</partymessage>\n"
+		Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"
+	end
+	
+	def process_guild(name, text)
+		if $guild.nil?
+			$console.write_line("가입된 길드가 없습니다.")
+			return
+		end
+		
+		name2 = $game_party.actors[0].class_name
+		$chat.write("(길드) #{name} : #{text}", COLOR_GUILD)
+		$chat_b.input("#{name}: #{text}", 2, 4, $game_player)
+		Network::Main.socket.send "<Guild_Message>#{name},#{name2},#{text},#{$npt}</Guild_Message>\n"
+		Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"
+	end
+	
+	# update 시작
 	def update
 		super
-		if @sec > 0
-			@sec -= 1
-			if @ox != $game_player.x
-				if $game_player.x <= 10
-					$m_s.x = ($game_player.x) * 32
-					@ox = $game_player.x
-				elsif $game_map.width - $game_player.x <= 10
-					$m_s.x = ($game_player.x - 2) * 32
-					@ox = $game_player.x
-				end
-			end
-			
-			if @oy != $game_player.y
-				if $game_player.y <= 10
-					$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
-					@oy = $game_player.y
-				elsif $game_map.height - $game_player.y <= 10
-					$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
-					@oy = $game_player.y
-				end
-			end
-			
-			if @sec == 0
-				$m_s.visible = false
-			end
+		
+		update_map_scroll if @sec > 0
+		update_chat_mode_change if chat_mode_change_requested?
+		process_chat_message_sending if chat_message_sending_requested?
+		process_chat_cancellation if chat_cancellation_requested?
+		process_chat_history_browsing if chat_history_browsing_requested?
+	end
+	
+	def update_map_scroll
+		@sec -= 1
+		update_map_scroll_x 
+		update_map_scroll_y 
+		hide_map_scroll_indicator if @sec == 0
+	end
+	
+	def update_map_scroll_x
+		if $game_player.x <= 10
+			$m_s.x = $game_player.x * 32
+			@ox = $game_player.x
+		elsif $game_map.width - $game_player.x <= 10
+			$m_s.x = ($game_player.x - 2) * 32
+			@ox = $game_player.x
+		end
+	end
+	
+	def update_map_scroll_y
+		if $game_player.y <= 10 || $game_map.height - $game_player.y <= 10
+			$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
+			@oy = $game_player.y
+		end
+	end
+	
+	def hide_map_scroll_indicator
+		$m_s.visible = false
+	end
+	
+	def chat_mode_change_requested?
+		return (@b.click || Key.trigger?(KEY_TAB)) && Hwnd.highlight? == self
+	end
+	
+	def update_chat_mode_change
+		@chat_type_idx = (@chat_type_idx + 1) % @chat_type.size
+		@a.refresh(40, @chat_type[@chat_type_idx])
+		chat_on
+	end
+	
+	def chat_message_sending_requested?
+		return Key.trigger?(KEY_ENTER) && (Hwnd.highlight? == self || !($inputKeySwitch || Hwnd.highlight?.to_s.include?("Jindow_N")))
+	end
+	
+	def process_chat_message_sending
+		if Hwnd.highlight? != self
+			Hwnd.highlight = self
+			return 
 		end
 		
-		if @type.bluck
-			if @active == false
-				@type.set ""
-				@active = true	
-			end
+		if !@active
+			chat_on
+		else
+			if @type.result != ""
+				send_chat 
+				@chat_list.delete(@type.result)
+				@chat_list.push(@type.result)
+				@chat_idx = @chat_list.size
+			end	
+			chat_off	
 		end
+	end
+	
+	def chat_cancellation_requested?
+		return Key.trigger?(KEY_ESC)
+	end
+	
+	def process_chat_cancellation
+		chat_off
+		Hwnd.dis_highlight(self)
+	end
+	
+	def chat_history_browsing_requested?
+		return Key.trigger?(KEY_UP) || Key.trigger?(KEY_DOWN)
+	end
+	
+	def process_chat_history_browsing
+		return if @chat_list.nil? || @chat_list.empty?
 		
-		if (@b.click or Key.trigger?(KEY_TAB)) and Hwnd.highlight? == self  # 채팅 모드를 변경
-			case @chat_type
-			when "전체"
-				@chat_type = "귓속말"
-			when "귓속말"
-				@chat_type = "파티"
-			when "파티"
-				@chat_type = "길드"
-			when "길드"
-				@chat_type = "전체"
-			end
-			@a.refresh(40, @chat_type)
-			self.chat_on
-			
-		elsif Key.trigger?(KEY_ENTER) # 채팅 메세지를 전송
-			if Hwnd.highlight? != self
-				return if $inputKeySwitch
-				return if Hwnd.highlight?.to_s.include?("Jindow_N")
-				Hwnd.highlight = self
-				self.chat_on
-			end
-			
-			if @type.bluck
-				if @type.result != ""
-					@chat_list.delete(@type.result)
-					@chat_list.push(@type.result)
-					@chat_idx = @chat_list.size
-					send_chat
-				end
-				
-				self.chat_off
-			else
-				self.chat_on
-			end
-			
-		elsif Key.trigger?(KEY_ESC) # 채팅 취소
-			self.chat_off
-			Hwnd.dis_highlight(self)
-			
-		elsif Key.trigger?(KEY_UP) # 채팅 내역
-			return if @chat_list == nil
-			return if @chat_list.size == 0
-			
+		if Key.trigger?(KEY_UP)
 			@chat_idx -= 1
-			@chat_idx = [@chat_idx, @chat_list.size - 1].min
-			@chat_idx = [0, @chat_idx].max
-			@type.set(@chat_list[@chat_idx]) 
-			
-			
-		elsif Key.trigger?(KEY_DOWN) # 채팅 내역
-			return if @chat_list == nil
-			return if @chat_list.size == 0
-			
+			@chat_idx = [[0, @chat_idx].max, @chat_list.size - 1].min
+			@type.set(@chat_list[@chat_idx])
+		elsif Key.trigger?(KEY_DOWN)
 			@chat_idx += 1
-			@chat_idx = [@chat_idx, @chat_list.size - 1].min
-			@chat_idx = [0, @chat_idx].max
-			@type.set(@chat_list[@chat_idx]) 	
+			@chat_idx = [[0, @chat_idx].max, @chat_list.size - 1].min
+			@type.set(@chat_list[@chat_idx])
 		end
 	end
 	
 	def chat_on
-		@type.set ""
+		@type.set("")
 		@type.view
 		@type.bluck = true
 		@active = true
+		self.show
 	end
 	
 	def chat_off
-		@type.set "(대화하려면 Enter 키를 누르세요)"
+		@type.set("(대화하려면 Enter 키를 누르세요)")
 		@type.view
 		@type.bluck = false
 		@active = false
+		self.hide if $chat.mode == 2
 	end
+	
 end
 
 

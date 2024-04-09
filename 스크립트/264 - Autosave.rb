@@ -20,7 +20,7 @@ end
 
 
 def 자동저장_준비가_필요한_상황?
-	$game_map.map_id == 3 || $rpg_skill.nil? || $game_party.actors[0].name == "/no"
+	$game_map.map_id == 3 || $rpg_skill.nil? || $game_party.actors[0].name == "/no" || !$login_check
 end
 
 def 초기화_변수
@@ -103,6 +103,7 @@ def 네트워크_데이터_전송
 		#"server_name" => "흑부엉 서버",
 		"nickname" => actor.name,
 		"class_id" => actor.class_id,
+		"class_name" => actor.class_name,
 		"level" => actor.level,
 		"exp" => actor.exp,
 		"a_str" => actor.str,

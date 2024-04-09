@@ -1516,7 +1516,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						for d in data
 							next if !d.include?(",")
-							id, time = d.split(",").map(&:to_i)
+							id, time = d.split(",").map { |x| x.to_i }
 							
 							next if SKILL_MASH_TIME[id] == nil							
 							SKILL_MASH_TIME[id][1] = time 
@@ -1529,7 +1529,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						for d in data
 							next if !d.include?(",")
-							id, time = d.split(",").map(&:to_i)
+							id, time = d.split(",").map { |x| x.to_i }
 							
 							$game_party.actors[0].buff_time[id] = time
 							$skill_Delay_Console.write_line(id)
@@ -1541,20 +1541,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 					
-				when /<dataLoadEnd>(.*)<\/dataLoadEnd>/	
-					# 데이터 로드 완료
-					$game_player.moveto($new_x, $new_y) 
-					$game_player.refresh
-					
-					$rpg_skill.base_str = $game_variables[52]
-					$rpg_skill.base_agi = $game_variables[53]
-					$rpg_skill.base_int = $game_variables[54]
-					$rpg_skill.base_dex = $game_variables[55]
-					
+				when /<dataLoadEnd>(.*)<\/dataLoadEnd>/						
 					if $game_party.actors[0].name == "/no"
 						p "데이터 로드에 실패했습니다. 다시 실행해주세요."
 						exit
 					else
+						# 데이터 로드 완료
+						$game_player.moveto($new_x, $new_y) 
+						$game_player.refresh
+						
+						$rpg_skill.base_str = $game_variables[52]
+						$rpg_skill.base_agi = $game_variables[53]
+						$rpg_skill.base_int = $game_variables[54]
+						$rpg_skill.base_dex = $game_variables[55]
+						
 						@group = "standard"
 						if $game_switches[54] # 운영자모드
 							p "운영자모드"
@@ -1600,13 +1600,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<switches>(.*)<\/switches>/
 					switches_data = $1.split('.')
 					for data in switches_data
-						val = data.split(',')
-						if val[1].to_i == 1
-							$game_switches[val[0].to_i] = true 
-						else
-							$game_switches[val[0].to_i] = false
-						end
-						
+						id, val = data.split(",").map { |x| x.to_i }
+						$game_switches[id] = val == 1
 						$game_map.need_refresh = true
 					end
 					
@@ -1618,8 +1613,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<variables>(.*)<\/variables>/
 					variables_data = $1.split('.')
 					for data in variables_data
-						val = data.split(',')
-						$game_variables[val[0].to_i] = val[1].to_i
+						id, val = data.split(',').map { |x| x.to_i }
+						$game_variables[id] = val
 						$game_map.need_refresh = true
 					end
 					
@@ -1649,45 +1644,36 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
-					if $scene.is_a?(Scene_Map)
-						$chat.write($1.to_s, COLOR_WORLD)
-					end
+					$chat.write($1.to_s, COLOR_WORLD) if $scene.is_a?(Scene_Map)
 					
 					# 일반
 				when /<chat1>(.*)<\/chat1>/
-					if $scene.is_a?(Scene_Map)
-						$chat.write($1.to_s, COLOR_NORMAL)
-					end	
+					$chat.write($1.to_s, COLOR_NORMAL) if $scene.is_a?(Scene_Map)
 					
 					# 도움말
 				when /<chat2>(.*)<\/chat2>/
-					if $scene.is_a?(Scene_Map)
-						$chat.write($1.to_s, COLOR_HELP)
-					end		
+					$chat.write($1.to_s, COLOR_HELP) if $scene.is_a?(Scene_Map)
 					
 					# 말풍선
 				when /<map_chat>(.*)&(.*)&(.*)<\/map_chat>/
-					name = $1.to_s
-					msg = $2.to_s
-					type = $3.to_i
-					if $scene.is_a?(Scene_Map)
-						for player in @mapplayers.values
-							next if player == nil
-							if name == player.name
-								msg = name + ": " + msg
-								case type
-								when 1 # 전체
-									$chat_b.input(msg, type, 4, player)
-								when 2 # 파티
-									if $netparty.include?(player.name) 
-										$chat_b.input(msg, type, 4, player)
-									end
-								when 3 # 스킬
-									$chat_b.input(msg, type, 4, player)
-								end
-							end
+					return unless $scene.is_a?(Scene_Map)
+					
+					name, msg, type = $1.to_s, $2.to_s, $3.to_i
+					
+					@mapplayers.each_value do |player|
+						next unless player
+						next if name != player.name
+						
+						msg = "#{name}: #{msg}"
+						
+						case type
+						when 1, 3 # 전체, 스킬
+							$chat_b.input(msg, type, 4, player)
+						when 2 # 파티
+							$chat_b.input(msg, type, 4, player) if $netparty.include?(player.name) 
 						end
-					end		
+					end
+					
 					
 				when /<monster_chat>(.*)&(.*)&(.*)<\/monster_chat>/
 					id = $1.to_i
@@ -1701,41 +1687,50 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
-					if $1.to_i == 1
-						$is_map_first = true
-					else
-						$is_map_first = false
-					end
+					$is_map_first = $1.to_i == 1
 					
 					for e in $ABS.enemies.values
 						e.aggro = $is_map_first
 					end
-					return true
 					
-					# 우편 배송 (id, 아이템 id, 템 종류, 보낸이 id, 개수, 편지 내용)
-				when /<post>(.*),(.*),(.*),(.*),(.*),(.*)<\/post>/
-					if $scene.is_a?(Scene_Map)
-						if $1.to_s == $game_party.actors[0].name
-							case $3.to_i
-							when 0#무기
-								$game_party.gain_weapon($2.to_i, $5.to_i)
-								$console.write_line("◎ 인벤토리에 우편물이 왔습니다.확인하여 주시길 봐랍니다.")
-								$console.write_line("◎ 보낸이 : #{$4.to_s} 보낸 아이템 : #{$data_weapons[$2.to_i].name} x #{$5.to_i}")
-								$console.write_line("◎ 내용 : #{$6.to_s}", Color.new(65,105, 0))
-							when 1#방어구
-								$game_party.gain_armor($2.to_i, $5.to_i)
-								$console.write_line("◎ 인벤토리에 우편물이 왔습니다.확인하여 주시길 봐랍니다.")
-								$console.write_line("◎ 보낸이 : #{$4.to_s} 보낸 아이템 : #{$data_armors[$2.to_i].name} x #{$5.to_i}")
-								$console.write_line("◎ 내용 : #{$6.to_s}", Color.new(65,105, 0))
-							when 2#기타
-								$game_party.gain_item($2.to_i, $5.to_i)
-								$console.write_line("◎ 인벤토리에 우편물이 왔습니다.확인하여 주시길 봐랍니다.")
-								$console.write_line("◎ 보낸이 : #{$4.to_s} 보낸 아이템 : #{$data_items[$2.to_i].name} x #{$5.to_i}")
-								$console.write_line("◎ 내용 : #{$6.to_s}", Color.new(65,105, 0))
-							end
-						end
+					# 우편 배송 (id:|아이템 id|템 종류|보낸이|개수|편지 내용)
+				when /<post>(.*)<\/post>/
+					return unless $scene.is_a?(Scene_Map)
+					
+					data = $1.split("|")
+					data_hash = {}
+					
+					data.each do |d|
+						key, val = d.split(":")
+						data_hash[key] = val
 					end
-					return true
+					
+					begin
+						id = data_hash["id"].to_i
+						type = data_hash["type"].to_i
+						num = data_hash["num"].to_i
+						body = data_hash["body"]
+						send_name = data_hash["send_name"]
+						
+						item_name = case type
+						when 0 # 무기
+							$game_party.gain_weapon(id, num)
+							$data_weapons.fetch(id, "Unknown").name
+						when 1 # 방어구
+							$game_party.gain_armor(id, num)
+							$data_armors.fetch(id, "Unknown").name
+						when 2 # 기타
+							$game_party.gain_item(id, num)
+							$data_items.fetch(id, "Unknown").name
+						end
+						
+						$console.write_line("◎ 인벤토리에 우편물이 왔습니다. 확인하여 주시길 봐랍니다.")
+						$console.write_line("◎ 보낸이 : #{send_name} 보낸 아이템 : #{item_name}#{num}개")
+						$console.write_line("◎ 내용 : #{body}", Color.new(65, 105, 0))
+					rescue => e
+						$console.write_line("우편 물품을 처리하는 도중 오류가 발생했습니다: #{e.message}", Color.new(255, 0, 0))
+					end
+					
 					# 스킬 배우기
 				when /<skill>(.*)<\/skill>/
 					skill_data = $1.split(',')

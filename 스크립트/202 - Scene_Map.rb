@@ -121,13 +121,13 @@ class Scene_Map
 						end
 					end	
 					
-					#~ if Key.trigger?(KEY_T) and Network::Main.group == 'admin' # t
-					#~ if not Hwnd.include?("Post")
-					#~ Jindow_Post.new
-					#~ else
-					#~ Hwnd.dispose("Post")
-					#~ end
-					#~ end
+					if Key.trigger?(KEY_T) and Network::Main.group == 'admin' # t
+						if not Hwnd.include?("Post")
+							Jindow_Post.new
+						else
+							Hwnd.dispose("Post")
+						end
+					end
 					
 					if Key.trigger?(65) # ; 감정표현
 						$game_temp.common_event_id = 9

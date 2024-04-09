@@ -1109,9 +1109,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			for skill_mash in SKILL_MASH_TIME
 				if skill_mash[1][1] > 0
 					skill_mash[1][1] -= 1 
-					if skill_mash[1][1] == 0
-						$console.write_line("#{$data_skills[skill_mash[0]].name} 딜레이 끝")
-					end
+					
+					$console.write_line("#{$data_skills[skill_mash[0]].name} 딜레이 끝") if skill_mash[1][1] == 0
 				end
 			end
 			
@@ -1134,40 +1133,42 @@ if SDK.state("Mr.Mo's ABS") == true
 				@skill_mash[s_mash[0]] -= 1 if s_mash[1] > 0
 			end
 			
-			if active_ok
-				check_item if @item_mash == 0 # 아이템 단축키 눌렸니?
-				@actor = $game_party.actors[0]
-				
-				# 공격키가 눌렸니?
-				if Input.trigger?(@attack_key) and @attack_mash == 0
-					# 만약 죽은 상태면 공격 못함
-					if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
-						$console.write_line("귀신은 할 수 없습니다.")
-						return 
-					end
-					
-					if RANGE_WEAPONS.has_key?(@actor.weapon_id)
-						player_range 
-					else
-						player_melee
-					end
+			return if !active_ok
+			
+			check_item if @item_mash == 0 # 아이템 단축키 눌렸니?
+			
+			@actor = $game_party.actors[0]
+			# 공격키가 눌렸니?
+			if Input.trigger?(@attack_key) and @attack_mash == 0
+				# 만약 죽은 상태면 공격 못함
+				if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
+					$console.write_line("귀신은 할 수 없습니다.")
+					return 
 				end
 				
-				# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
-				# 스킬 단축키가 눌렸니?
-				for key in @skill_keys.keys
-					next if @skill_keys[key] == nil or @skill_keys[key] == 0
-					next if !Input.trigger?(key)
-					id = @skill_keys[key] # 스킬 아이디 가져옴
-					next if @skill_mash[id] != nil and @skill_mash[id] > 0
-					
-					if RANGE_EXPLODE.has_key?(id)
-						return player_explode(id)
-					else
-						return player_skill(id)
-					end
+				if RANGE_WEAPONS.has_key?(@actor.weapon_id)
+					player_range 
+				else
+					player_melee
 				end
 			end
+			
+			# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
+			# 스킬 단축키가 눌렸니?
+			for key in @skill_keys.keys
+				next if @skill_keys[key] == nil or @skill_keys[key] == 0
+				next if !Input.trigger?(key)
+				
+				id = @skill_keys[key] # 스킬 아이디 가져옴
+				next if @skill_mash[id] != nil and @skill_mash[id] > 0
+				
+				if RANGE_EXPLODE.has_key?(id)
+					return player_explode(id)
+				else
+					return player_skill(id)
+				end
+			end
+			
 		end
 		
 		#--------------------------------------------------------------------------

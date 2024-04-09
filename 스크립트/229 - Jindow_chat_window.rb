@@ -1,4 +1,5 @@
 class Jindow_Chat_Window < Jindow
+	attr_accessor :mode
 	
 	def initialize
 		super(0, 362, 500, 98)

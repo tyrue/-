@@ -177,8 +177,8 @@ class Game_Actor < Game_Battler
 			$console.write_line("경험치를 더이상 얻을 수 없습니다.") 
 		else
 			expPer = @level < 99 ? (@exp - @exp_list[@level]) * 100.0 / (@exp_list[@level + 1] - @exp_list[@level]) : @exp * 100.0 / @exp_list[@level + 1]
-			printTxt = "경험치:#{change_number_unit(gainExp)} 획득. (#{'%.2f' % expPer}%)" if gainExp > 0
-			printTxt = "경험치:#{change_number_unit(-gainExp)} 감소. (#{'%.2f' % expPer}%)" if gainExp < 0
+			printTxt = "경험치:#{change_number_unit(gainExp)} 획득. (#{'%.2f' % expPer}%)" if $login_check && gainExp > 0
+			printTxt = "경험치:#{change_number_unit(-gainExp)} 감소. (#{'%.2f' % expPer}%)" if $login_check && gainExp < 0
 			$console.write_line(printTxt) if printTxt != nil
 		end
 		

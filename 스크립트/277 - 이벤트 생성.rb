@@ -89,19 +89,19 @@ def create_abs_monsters(monster_id, num)
 		e = create_events(16, 1, 1, d, id, monster_id)
 		return if e == nil
 		$ABS.rand_spawn(e)
-		Network::Main.socket.send("<monster2>#{$game_map.map_id},#{id},#{monster_id}</monster2>\n")
+		$ABS.send_network_monster($ABS.enemies[id])
 	end
 end
 
 # 운영자가 소환하는 몬스터, 한 번 잡으면 서버에서 삭제시키도록 하자
-def create_abs_monsters_admin(monster_id, num)
+def create_abs_monsters_admin(monster_id, num = 1)
 	x = $game_player.x
 	y = $game_player.y
 	r = 12
 	
 	for i in 0...num
 		count = 0
-		while count < 10000
+		while count < 100
 			count += 1
 			x2 = x + rand(r) - r / 2
 			y2 = y + rand(r) - r / 2
@@ -110,8 +110,7 @@ def create_abs_monsters_admin(monster_id, num)
 			if $game_map.passable?(x2, y2, d)
 				e = create_events(16, x2, y2, d, -1, monster_id)
 				return if e == nil
-				e.list[1].parameters[0] = "ID #{monster_id}"
-				Network::Main.socket.send("<monster2>#{$game_map.map_id},#{e.id},#{monster_id},#{x2},#{y2},-1</monster2>\n")
+				$ABS.send_network_monster($ABS.enemies[e.id], 1)
 				break
 			end
 		end
@@ -142,13 +141,38 @@ def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
 	return event
 end
 
+def make_item_dto(type, item_id, x, y, num = 1, sw = 0)
+	id = check_drop_id
+	
+	item_data = {
+		"id" => id,
+		"map_id" => $game_map.map_id,
+		"x" => x,
+		"y" => y,
+		"num" => num,
+		"type" => type,
+		"item_id" => item_id,
+		"sw" => sw
+	}
+	
+	return item_data
+end
 
-#drop 번호, 아이템 타입, 아이템 id, x좌표, y좌표, sw
-def create_drops(type, id, x, y, num = 1, sw = nil)
-	d_id = check_drop_id
-	msg = "#{d_id},#{type},#{id},#{x},#{y},#{num}"
-	msg += ",#{sw}" if sw != nil
-	Network::Main.socket.send "<Drop>#{msg}</Drop>\n" # 나를 포함한 전체 방송
+def create_drop_message(item_data)
+	message = "<Drop>"
+	item_data.each { |key, value| message += "#{key}:#{value}|" }
+	message += "</Drop>\n"
+	Network::Main.socket.send(message) # 나를 포함한 전체 방송
+end
+
+def create_drops(type, item_id, x, y, num = 1, sw = 0)
+	item_data = make_item_dto(type, item_id, x, y, num, sw)
+	create_drop_message(item_data)
+end
+
+def create_moneys(num, x, y)
+	item_data = make_item_dto(3, 0, x, y, num)
+	create_drop_message(item_data)
 end
 
 def create_drops2(no, x, y, type, id, num)
@@ -157,13 +181,11 @@ def create_drops2(no, x, y, type, id, num)
 	event = $game_map.events[no]
 	return if not event
 	
-	item = nil
-	if type == 0
-		item = $data_items[id]
-	elsif type == 1
-		item = $data_weapons[id]
-	elsif type == 2
-		item = $data_armors[id]
+	item = case type
+	when 0 then $data_items[id]
+	when 1 then $data_weapons[id]
+	when 2 then $data_armors[id]
+	else nil
 	end
 	
 	$Drop[no] = Drop.new
@@ -177,18 +199,8 @@ def create_drops2(no, x, y, type, id, num)
 	event.es_set_graphic("../Icons/" + item.icon_name, 255, 0)
 	create_sprite(event, true)
 	
-	if num <= 1
-		event.name = "[id#{item.name}]"
-	else
-		event.name = "[id#{item.name} #{num}개]"
-	end
-	
+	event.name = num <= 1 ? "[id#{item.name}]" : "[id#{item.name} #{num}개]"
 	event.refresh
-end
-
-def create_moneys(money, x, y)
-	d_id = check_drop_id
-	Network::Main.socket.send "<Drop>#{d_id},3,0,#{x},#{y},#{money}</Drop>\n"
 end
 
 def create_moneys2(no, x, y, money)
@@ -202,24 +214,22 @@ def create_moneys2(no, x, y, money)
 	$Drop[no] = Drop.new
 	$Drop[no].type2 = 0
 	$Drop[no].amount = money #아이템 개수
-	
-	if 0 < money and money < 10
-		event.es_set_graphic("../Icons/[기타]1전", 255, 0)
-	elsif 10 <= money and money < 100
-		event.es_set_graphic("../Icons/[기타]10전", 255, 0)
-	elsif 100 <= money and money < 500
-		event.es_set_graphic("../Icons/[기타]100전", 255, 0)
-	elsif 500 <= money and money < 1000
-		event.es_set_graphic("../Icons/[기타]500전", 255, 0)
-	elsif 1000 <= money and money < 5000
-		event.es_set_graphic("../Icons/[기타]1000전", 255, 0)
-	else
-		event.es_set_graphic("../Icons/[기타]10000전", 255, 0)
-	end
-	
+		
+	event.es_set_graphic(choose_money_icon(money), 255, 0)
 	event.name = "[id#{money}전]"
 	create_sprite(event, true) 
 	event.refresh	
+end
+
+def choose_money_icon(money)
+  case money
+  when 1...10      then "../Icons/[기타]1전"
+  when 10...100    then "../Icons/[기타]10전"
+  when 100...500   then "../Icons/[기타]100전"
+  when 500...1000  then "../Icons/[기타]500전"
+  when 1000...5000 then "../Icons/[기타]1000전"
+  else                   "../Icons/[기타]10000전"
+  end
 end
 
 def delete_events(id)

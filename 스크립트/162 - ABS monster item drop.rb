@@ -107,7 +107,7 @@ class MrMo_ABS
 				type = item[0]
 				id = item[1]
 				amount = item[2]
-				sw = item[3]
+				sw = item[3] != nil ? item[3] : 0
 				
 				if type == 3 # 돈 드랍
 					create_moneys(id, e.event.x, e.event.y)

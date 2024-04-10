@@ -827,6 +827,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				$scene = nil
 			end
 			
+			# 우편 배송 (id:|아이템 id|템 종류|보낸이|개수|편지 내용)
+			# 데이터 구분해서 해쉬로 만들어주는 함수
+			def self.parseKeyValueData(str)
+				data = str.split("|")
+				data_hash = {}
+				
+				data.each do |d|
+					key, val = d.split(":")
+					data_hash[key] = val != "" ? val : nil
+				end
+				return data_hash
+			end
+			
+			
 			# 리붓 또는 강퇴
 			def self.update_admmod(line)
 				case line
@@ -1035,40 +1049,47 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update
 					return true
 					
-				when /<monster2>(.*)<\/monster2>/ # 서버로부터 몬스터 생성 명령어 받음
+				when /<monster_save>(.*)<\/monster_save>/ # 서버로부터 몬스터 생성 명령어 받음
 					# 맵 id, 이벤트 id, 몹 id, x, y
-					data = $1.split(',')
-					id = data[1].to_i
-					mon_id = 0
-					mon_id = data[2].to_i if data[2] != nil
-					x = 1
-					y = 1
-					x = data[3].to_i if data[3] != nil
-					y = data[4].to_i if data[4] != nil
+					data_hash = parseKeyValueData($1)
+					
+					id = data_hash["id"].to_i 
+					hp = data_hash["hp"].to_i 
+					sp = data_hash["sp"].to_i 
+					x = data_hash["x"].to_i 
+					y = data_hash["y"].to_i 
+					d = data_hash["direction"].to_i 
+					res = data_hash["respawn"].to_i
+					mon_id = data_hash["mon_id"].to_i 
 					
 					if $ABS.enemies[id] == nil and mon_id != 0
-						create_events(16, x, y, 2, id, mon_id)
+						create_events(16, x, y, d, id, mon_id)
 					end
+					
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					return if $ABS.enemies[id] == nil
+					enemy = $ABS.enemies[id]
+					enemy.respawn = res
+					enemy.hp = hp
+					enemy.sp = sp
 					
 				when /<req_monster>(.*)<\/req_monster>/ # 서버로부터 저장된 몬스터 정보를 받아옴
 					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
-					# 같은 맵이 아니면 무시
-					data = $1.split(',')
-					map_id = data[0].to_i if data[0] != nil
-					id = data[1].to_i if data[1] != nil
-					hp = data[2].to_i if data[2] != nil
-					x = data[3].to_i if data[3] != nil
-					y = data[4].to_i if data[4] != nil
-					d = data[5].to_i if data[5] != nil
-					res = data[6].to_i if data[6] != nil
-					mon_id = data[7].to_i if data[7] != nil
+					data_hash = parseKeyValueData($1)
 					
-					return true if $game_map.map_id != map_id
-					
-					if data.size <= 1 # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
+					if data_hash.size <= 1 # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
 						$ABS.getMapMonsterData if $is_map_first # 몬스터 데이터 생성
 						return
 					end
+					
+					id = data_hash["id"].to_i 
+					hp = data_hash["hp"].to_i 
+					sp = data_hash["sp"].to_i 
+					x = data_hash["x"].to_i 
+					y = data_hash["y"].to_i 
+					d = data_hash["direction"].to_i 
+					res = data_hash["respawn"].to_i
+					mon_id = data_hash["mon_id"].to_i 
 					
 					if $ABS.enemies[id] == nil and mon_id != nil and mon_id != 0
 						create_events(16, x, y, d, id, mon_id)
@@ -1094,50 +1115,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end
 					end
 					
-					# 몹 체력 적용
-					if enemy.hp != hp
-						enemy.hp = hp
-						if enemy.hp <= 0 # 체력이 0이면 죽은거지
-							event.erase
-							return
-						end
+					enemy.hp = hp
+					if enemy.hp <= 0 # 체력이 0이면 죽은거지
+						event.erase
+						return
 					end
+					enemy.sp = sp
 					
 					# 몹 방향과 좌표 적용
-					ex = event.x
-					ey = event.y
-					event.moveto(x, y) if ex != x and ey != y
-					event.direction = d if event.direction != d
+					event.moveto(x, y)
+					event.direction = d
 					
 					enemy.aggro = $is_map_first ? true : false
-					return true
-					
-				when /<hp>(.*)<\/hp>/ # 체력 공유
-					# 같은 맵이 아니면 무시
-					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
-					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
-					if $ABS.enemies[data[1].to_i] != nil
-						# 몹 체력 적용
-						if $ABS.enemies[data[1].to_i].hp != data[2].to_i
-							$ABS.enemies[data[1].to_i].hp = data[2].to_i
-						end
-					end
-					return true
-					
-				when /<monster_sp>(.*)<\/monster_sp>/ # 몬스터 마력 공유
-					# 같은 맵이 아니면 무시
-					data = $1.split(',')
-					e_id = data[0].to_i
-					val = data[1].to_i
-					if $ABS.enemies[e_id] != nil
-						# 몹 마력 적용
-						if $ABS.enemies[e_id].sp != val
-							$ABS.enemies[e_id].sp = val
-						end
-					end
-					return true	
-					
+						
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					data = $1.split(',')
 					# 몬스터 id, 유저 이름
@@ -1157,21 +1147,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<mon_move>(.*)<\/mon_move>/ # 몹 이동 공유
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
+					id = data[0].to_i
+					d = data[1].to_i
+					x = data[2].to_i
+					y = data[3].to_i
 					
-					id = data[1].to_i
 					return if $ABS.enemies[id] == nil
-					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
-					$ABS.enemies[id].aggro = false if $ABS.enemies[id].aggro and !$is_map_first
-					x = data[3].to_i
-					y = data[4].to_i
 					
-					if $ABS.enemies[id].event.x == x and $ABS.enemies[id].event.y == y
-						return
-					end
+					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
+					$ABS.enemies[id].aggro = false if !$is_map_first
+					
+					return if $ABS.enemies[id].event.x == x and $ABS.enemies[id].event.y == y
 					
 					# 몹 이동
-					case data[2].to_i
+					case d
 					when 2
 						$ABS.enemies[id].event.move_down(true, true)
 					when 4
@@ -1464,14 +1453,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					when "sp" #현재 마력
 						$game_party.actors[0].sp = val.to_i 
 					when "switch_list" # 스위치 리스트
-						switches = val.split(",")
-						if switches.include?("0")
+						switches = val.split(",").map { |x| x.to_i }
+						if switches.include?(0)
 							for i in 0..switches.size
-								$game_switches[i] = switches[i] == "1" ? true : false
+								$game_switches[i] = switches[i] == 1 ? true : false
 							end
 						else
-							switches.each { |sw| $game_switches[sw.to_i] = true }
+							switches.each { |sw| $game_switches[sw] = true }
 						end
+						
+						
 					when "variable_list" # 변수 리스트
 						if val.include?(".")
 							val.split(".").each do |va|
@@ -1697,14 +1688,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<post>(.*)<\/post>/
 					return unless $scene.is_a?(Scene_Map)
 					
-					data = $1.split("|")
-					data_hash = {}
-					
-					data.each do |d|
-						key, val = d.split(":")
-						data_hash[key] = val
-					end
-					
+					data_hash = parseKeyValueData($1)
 					begin
 						id = data_hash["id"].to_i
 						type = data_hash["type"].to_i
@@ -1851,15 +1835,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return if $ABS.enemies[id].event == nil
 					
 					enemy = $ABS.enemies[id]
-					event = enemy.event
-					
-					event.fade = true
 					enemy.hp = 0
+					
+					event = enemy.event
+					event.fade = true
 					
 					return if npt != $npt # 같은 파티가 아니라면
 					
 					$game_variables[enemy.id + $mon_val_start] += 1
-					
 					case enemy.trigger[0]
 					when 1 # 스위치
 						$game_switches[enemy.trigger[1]] = true
@@ -1878,20 +1861,21 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 템 드랍 
 					#drop 번호, 아이템 타입, 아이템 id, x좌표, y좌표, 개수, (필요 스위치)
 				when /<Drop>(.*)<\/Drop>/
-					data = $1.split(',')
-					index = data[0].to_i
-					type = data[1].to_i
-					id = data[2].to_i
-					x = data[3].to_i
-					y = data[4].to_i
-					amount = data[5].to_i
-					sw = data[6] != nil ? data[6].to_i : nil
-					return if sw != nil and !$game_switches[sw]
+					data_hash = parseKeyValueData($1)
+					
+					id =  data_hash["id"].to_i
+					type = data_hash["type"].to_i
+					item_id = data_hash["item_id"].to_i
+					x = data_hash["x"].to_i
+					y = data_hash["y"].to_i
+					num = data_hash["num"].to_i
+					sw = data_hash["sw"].to_i
+					return if sw > 0 and !$game_switches[sw]
 					
 					if type == 3 # 돈
-						create_moneys2(index, x, y, amount)
+						create_moneys2(id, x, y, num)
 					else # 일반 아이템
-						create_drops2(index, x, y, type, id, amount)
+						create_drops2(id, x, y, type, item_id, num)
 					end
 					
 					

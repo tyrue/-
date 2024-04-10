@@ -621,7 +621,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				if $game_map.passable?(x, y, d)
 					e.moveto(x, y)
 					if @enemies[e.event.id].aggro
-						Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{e.event.id},#{d},#{x},#{y}</mon_move>\n")
+						Network::Main.socket.send("<mon_move>#{e.event.id},#{d},#{x},#{y}</mon_move>\n")
 					end
 					return
 				end
@@ -1092,8 +1092,8 @@ if SDK.state("Mr.Mo's ABS") == true
 					Network::Main.ani(e.event.id, skill.animation1_id, 1)
 					
 					e.sp = [e.sp - skill.sp_cost, 0].max
-					Network::Main.socket.send("<monster_sp>#{e.event.id},#{e.sp}</monster_sp>\n")
-					Network::Main.socket.send("<hp>#{$game_map.map_id},#{e.event.id},#{e.hp}</hp>\n")
+					
+					send_network_monster(e)
 					$rpg_skill.skill_chat(skill, e.event)
 					return
 				end
@@ -1759,60 +1759,43 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		#--------------------------------------------------------------------------
 		# * 적이 죽었니? (몹 또는 유저), e가 a에 의해 죽었음
-		#--------------------------------------------------------------------------
+		#--------------------------------------------------------------------------	
 		def enemy_dead?(e, a)
-			# e가 유저라면 유저 죽을 때 함수 반환
 			return player_dead?(e, a) if e.is_a?(Game_Actor)
-			#Return false if enemy dead
-			return false if !e.dead?
-			enemy = e
+			return false unless e.dead?
 			
-			treasure(enemy) if a != nil and a.is_a?(Game_Actor)
-			# 적 유닛이 적을 죽이면 평상시로 돌아옴
-			if a != nil and !a.is_a?(Game_Actor)
-				a.attacking = nil 
-			end
+			treasure(e) if a && a.is_a?(Game_Actor)
+			a.attacking = nil if a && !a.is_a?(Game_Actor)
 			
-			id = enemy.event_id
-			#Remove from list 리스폰이 없으면 아예 지워버림
-			@enemies.delete(id) if (@enemies[id] != nil and (@enemies[id].respawn == 0 or @enemies[id].respawn == nil))
-			event = enemy.event
-			#여기다가 이 이벤트를 없애는 명령하기
-			Network::Main.socket.send("<monster>#{$game_map.map_id},#{event.id},#{0},#{event.x},#{event.y},#{event.direction},#{enemy.respawn}</monster>\n")
+			id = e.event_id
+			@enemies.delete(id) if @enemies[id] && ([0, nil].include?(enemies[id].respawn))
+			
+			send_network_monster(e)
 			Network::Main.socket.send("<enemy_dead>#{id},#{$game_map.map_id},#{$npt}</enemy_dead>\n")
+			
+			event = e.event
 			event.through = true
+			event.fade = true 
+			$game_variables[e.id + $mon_val_start] += 1
 			
-			$game_variables[enemy.id + $mon_val_start] += 1
-			
-			case enemy.trigger[0]
-			when 0
-				event.fade = true if FADE_DEAD
-				if !FADE_DEAD
-					event.character_name = ""
-					event.erase
+			case e.trigger[0]
+			when 1 # 스위치
+				$game_switches[e.trigger[1]] = true
+			when 2 # 변수 조작
+				$game_variables[e.trigger[1]] += 1
+			when 3
+				value = case e.trigger[1]
+				when 1 then "A"
+				when 2 then "B"
+				when 3 then "C"
+				when 4 then "D"
 				end
-			when 1
-				event.fade = true if FADE_DEAD
-				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
-				$game_switches[enemy.trigger[1]] = true
-				$game_map.need_refresh = true
-			when 2
-				event.fade = true if FADE_DEAD
-				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if enemy.trigger[1] == 0
-				$game_variables[enemy.trigger[1]] += 1
-				$game_map.need_refresh = true
-			when 3 
-				event.fade = true if FADE_DEAD
-				value = "A" if enemy.trigger[1] == 1
-				value = "B" if enemy.trigger[1] == 2
-				value = "C" if enemy.trigger[1] == 3
-				value = "D" if enemy.trigger[1] == 4
-				print "EVENT " + event.id.to_s + "Trigger Not Set Right ~!" if value == 0
+				
 				key = [$game_map.map_id, event.id, value]
 				$game_self_switches[key] = true
-				$game_map.need_refresh = true
 			end
-			#Return true if the e is dead
+			
+			$game_map.need_refresh = true
 			return true
 		end
 		
@@ -1821,39 +1804,35 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def player_dead?(a, e)
 			return false if $game_party.actors[0].hp > 0
-			
 			# 플레이어가 죽으면 몹들 다가가는거 멈춤
 			if e.is_a?(ABS_Enemy) and @enemies[e.event.id] != nil
 				e.attacking = nil 
-				# 원래 움직임으로 돌아옴
 				e.in_battle = false
 				restore_movement(e)
 			end
-			
 			return true if $game_switches[296] # 죽음 표시 스위치
+			
 			#If the player is dead;
 			Audio.se_play("Audio/SE/죽음", $game_variables[13])
 			Network::Main.ani(Network::Main.id, 199)
 			
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
 			$cha_name = $game_party.actors[0].character_name
-			$game_party.actors[0].equip(0, 0)
-			$game_party.actors[0].equip(1, 0)
-			$game_party.actors[0].equip(2, 0)
-			$game_party.actors[0].equip(3, 0)
-			$game_party.actors[0].equip(4, 0)
+			
+			for i in 0..4
+				$game_party.actors[0].equip(i, 0)
+			end
+			
 			$game_party.actors[0].set_graphic("죽음", 0, 0, 0)
 			$game_player.refresh
 			
 			$game_switches[50] = false if $game_switches[50] != false # 유저 살음 스위치 오프
-			$game_switches[296] = true if $game_switches[296] != true# 유저 죽음 스위치 온
+			$game_switches[296] = true if $game_switches[296] != true # 유저 죽음 스위치 온
 			
 			# 이때 모든 버프들을 지우자
 			for buff_data in $game_party.actors[0].buff_time
 				id = buff_data[0]
-				if buff_data[1] > 0
-					$game_party.actors[0].buff_time[id] = 1 
-				end
+				$game_party.actors[0].buff_time[id] = 1  if buff_data[1] > 0
 			end
 			
 			$game_party.actors[0].pdef = 0 # 물리방어
@@ -1862,6 +1841,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			Network::Main.send_map
 			return true
 		end
+		
 		#--------------------------------------------------------------------------
 		# * 몬스터를 잡았을 경우 주는것
 		#--------------------------------------------------------------------------
@@ -2264,6 +2244,27 @@ if SDK.state("Mr.Mo's ABS") == true
 			$scene.spriteset.make_range_sprite(element, range, skill, sw)
 		end
 		
+		
+		def send_network_monster(monster, delete_sw = 0)
+			data = {
+				"map_id" => $game_map.map_id,
+				"id" => monster.event.id,
+				"x" => monster.event.x,
+				"y" => monster.event.y,
+				"hp" => monster.hp,
+				"sp" => monster.sp,
+				"direction" => monster.event.direction,
+				"respawn" => monster.respawn,
+				"mon_id" => monster.enemy_id,
+				"delete_sw" => delete_sw,
+			}
+			
+			message = "<monster_save>"
+			data.each { |key, value| message += "#{key}:#{value}|" }
+			message += "</monster_save>\n"
+			
+			Network::Main.socket.send(message)
+		end
 		#--------------------------------------------------------------------------
 		# * End of class
 		#--------------------------------------------------------------------------
@@ -3618,59 +3619,48 @@ if SDK.state("Mr.Mo's ABS") == true
 			self.critical = false  # Clear critical flag
 			hit_result = true  # First hit detection
 			
-			if hit_result
-				#~ if self.is_a?(Game_Actor)
-				#~ atk = [(attacker.atk + attacker.str / 100.0) - (self.base_pdef * 0.4), (attacker.atk / 10.0)].max
-				#~ else
-				#~ atk = [(attacker.atk + attacker.str / 100.0) - (self.pdef * 0.4), (attacker.atk / 10.0)].max
-				#~ end
-				#~ self.damage = (atk * (20 + attacker.str) / 20.0)  # Calculate basic damage
-				
-				
-				atk = (attacker.atk + attacker.str / 20.0)
-				if self.is_a?(Game_Actor)
-					self.damage = (atk * (1.0 + attacker.str / 20.0)) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
-				else
-					self.damage = (atk * (1.0 + attacker.str / 20.0)) * (100.0 / (100 + self.base_pdef)) # Calculate basic damage
-				end
-				
-				
-				if !attacker.is_a?(Game_NetPlayer)
-					self.damage *= elements_correct(attacker.element_set)  # Element correction
-					self.damage /= 100
-				end
-				
-				self.damage = self.damage.to_i
-				self.damage = 1 if self.damage <= 0
-				
-				if self.damage > 0  # If damage value is strictly positive
-					critical_data = $rpg_skill.critical_rate(attacker)
-					
-					critical_rate = [(3.0 * attacker.dex / self.agi), 1].max
-					critical_rate += critical_data[0]
-					
-					self.critical = "player_hit" if self.is_a?(Game_Actor)
-					if rand(100) < critical_rate  # Critical correction
-						self.damage *= (3 + critical_data[1])
-						self.critical = true 
-					end
-					
-					self.damage /= 2 if self.guarding?  # Guard correction
-				end
-				
-				if self.damage.abs > 0  # Dispersion
-					amp = [self.damage.abs * 15 / 100, 1].max
-					self.damage += rand(amp + 1) + rand(amp + 1) - amp
-				end
-				
-				a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
-				eva = [(8.0 * self.agi / a_dex).to_i, 100].min  # Second hit detection
-				
-				hit = [100 - eva, 5].max  # Hit probability
-				hit = 100 if self.cant_evade?  # If evasion is impossible, set hit probability to 100
-				
-				hit_result = (rand(100) < hit)
+			atk = (attacker.atk + attacker.str / 20.0)
+			if self.is_a?(Game_Actor)
+				self.damage = (atk * (1.0 + attacker.str / 20.0)) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
+			else
+				self.damage = (atk * (1.0 + attacker.str / 20.0)) * (100.0 / (100 + self.base_pdef)) # Calculate basic damage
 			end
+			
+			if !attacker.is_a?(Game_NetPlayer)
+				self.damage *= elements_correct(attacker.element_set)  # Element correction
+				self.damage /= 100
+			end
+			
+			self.damage = self.damage.to_i
+			self.damage = 1 if self.damage <= 0
+			
+			if self.damage > 0  # If damage value is strictly positive
+				critical_data = $rpg_skill.critical_rate(attacker)
+				
+				critical_rate = [(3.0 * attacker.dex / self.agi), 1].max
+				critical_rate += critical_data[0]
+				
+				self.critical = "player_hit" if self.is_a?(Game_Actor)
+				if rand(100) < critical_rate  # Critical correction
+					self.damage *= (3 + critical_data[1])
+					self.critical = true 
+				end
+				
+				self.damage /= 2 if self.guarding?  # Guard correction
+			end
+			
+			if self.damage.abs > 0  # Dispersion
+				amp = [self.damage.abs * 15 / 100, 1].max
+				self.damage += rand(amp + 1) + rand(amp + 1) - amp
+			end
+			
+			a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
+			eva = [(8.0 * self.agi / a_dex).to_i, 100].min  # Second hit detection
+			
+			hit = [100 - eva, 5].max  # Hit probability
+			hit = 100 if self.cant_evade?  # If evasion is impossible, set hit probability to 100
+			
+			hit_result = (rand(100) < hit)
 			
 			if hit_result
 				remove_states_shock  # State Removed by Shock
@@ -3682,33 +3672,30 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				self.damage = $rpg_skill.damage_calculation_attack(self.damage, self, attacker)  # 최종 데미지 계산
 				self.damage += $ABS.weapon_skill(attacker.weapon_id, self)  # 특정 무기를 착용하면 추가 격 데미지가 있음
-				
-				r = rand(100)
-				if r <= (self.damage * 100 / self.maxhp) || r <= 40
-					if !self.is_a?(Game_Actor)
-						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
-						Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
-					end
-				end
-				
 				self.hp -= self.damage
+				
 				@damage_array.push(self.damage)
 				@critical_array.push(self.critical)
 				
 				return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, attacker)
 				return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] == nil
 				
-				if !self.is_a?(Game_Actor)
-					# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
+				r = rand(100)
+				if r <= (self.damage * 100 / self.maxhp) || r <= 40
+					if self.is_a?(ABS_Enemy)
+						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
+						Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
+					end
 				end
+				
+				$ABS.send_network_monster(self) if self.is_a?(ABS_Enemy)
 				
 				@state_changed = false  # State change
 				if !attacker.is_a?(Game_NetPlayer)
 					states_plus(attacker.plus_state_set)
 					states_minus(attacker.minus_state_set)
 				end
+				
 			else
 				self.damage = "Miss!"  # Set damage to "Miss"
 				self.critical = false  # Clear critical flag
@@ -3857,7 +3844,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				r = rand(100)
 				if r <= [(self.damage * 100 / self.maxhp), 30].max
-					if !self.is_a?(Game_Actor) and $ABS.enemies[self.event.id] != nil
+					if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] != nil
 						
 						self.aggro = true
 						Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
@@ -3869,11 +3856,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				
 				# 맵 id, 몹id, 몹 hp, x, y, 방향, 딜레이 시간
-				if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] != nil
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{self.hp},#{self.event.x},#{self.event.y},#{self.event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<hp>#{$game_map.map_id},#{self.event.id},#{self.hp}</hp>\n")
-					
-				end
+				$ABS.send_network_monster(self) if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] != nil
+				
 				effective |= self.hp != last_hp
 				# State change
 				@state_changed = false
@@ -3882,9 +3866,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				if skill.power == 0
 					self.damage = 1
-					unless @state_changed
-						self.damage = "Miss"
-					end
+					self.damage = "Miss" unless @state_changed
 				end
 			else
 				self.damage = "Miss"
@@ -3982,6 +3964,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			update_jump if jumping?
 		end
+		
 		#--------------------------------------------------------------------------
 		# * End Animate
 		#--------------------------------------------------------------------------
@@ -3989,6 +3972,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			@animating = false
 			@character_name = @old_char
 			@direction_fix = false
+		end
+		
+		def enemy_move
+			return if !self.is_a?(Game_Event)
+			return if $ABS.enemies[self.event.id] == nil 
+			return if !$ABS.enemies[self.event.id].aggro
+			
+			$ABS.send_network_monster($ABS.enemies[self.event.id])
+			Network::Main.socket.send("<mon_move>#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 		end
 		
 		#--------------------------------------------------------------------------
@@ -4008,24 +4000,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			# If passable
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			if passable?(@x, @y, 2)
-				# Turn down
 				turn_down
-				# Update coordinates
 				@y += 1
-				# Increase steps
+				
 				increase_steps
-				# If impassable
-				# 이때 계속 몹 정보 보내주면?
-				
-				#p 1 if self.is_a?(Game_Event)
-				#p 2 if $ABS.enemies[self.event.id] != nil
-				#p 3 if $ABS.enemies[self.event.id].aggro
-				
-				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
-					
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
-				end
+				enemy_move
 			else
 				# Determine if touch event is triggered
 				check_event_trigger_touch(@x, @y+1)
@@ -4049,18 +4028,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			# If passable
 			if passable?(@x, @y, 4)
-				# Turn left
 				turn_left
-				# Update coordinates
+				
 				@x -= 1
-				# Increase steps
 				increase_steps
-				# If impassable
-				# 이때 계속 몹 정보 보내주면?
-				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
-				end
+				enemy_move
 			else
 				# Determine if touch event is triggered
 				check_event_trigger_touch(@x-1, @y)
@@ -4085,19 +4057,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			# If passable
 			if passable?(@x, @y, 6)
-				# Turn right
-				turn_right
+				turn_right # Turn right
 				
-				# Update coordinates
 				@x += 1
-				# Increase steps
 				increase_steps
-				# If impassable
-				# 이때 계속 몹 정보 보내주면?
-				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
-				end
+				enemy_move
 			else
 				# Determine if touch event is triggered
 				check_event_trigger_touch(@x+1, @y)
@@ -4122,19 +4086,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			# If passable
 			if passable?(@x, @y, 8)
-				# Turn up
-				turn_up
+				turn_up # Turn up
 				
-				# Update coordinates
 				@y -= 1
-				# Increase steps
 				increase_steps
-				# If impassable
-				# 이때 계속 몹 정보 보내주면?
-				if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
-					Network::Main.socket.send("<monster>#{$game_map.map_id},#{self.event.id},#{$ABS.enemies[self.event.id].hp},#{self.x},#{self.y},#{$ABS.enemies[self.event.id].event.direction},#{$ABS.enemies[self.event.id].respawn}</monster>\n")
-					Network::Main.socket.send("<mon_move>#{$game_map.map_id},#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
-				end
+				enemy_move
 			else
 				# Determine if touch event is triggered
 				check_event_trigger_touch(@x, @y-1)

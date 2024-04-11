@@ -20,6 +20,7 @@ class Jindow_Item_Info < Jindow
 		@item_data = nil
 		@item_hwnd = item_hwnd
 		check = nil
+		
 		case type
 		when 0
 			@item_data = $data_items[item_id]
@@ -119,29 +120,26 @@ class Jindow_Item_Info < Jindow
 		@description.y = @equip.y + @equip.height
 		
 		if @item_data.description != ""
-			height += 10
 			bitmap = Bitmap.new(self.width, 480)
 			bitmap.font.size = 14
 			w = 0
-			h = 0
+			h = bitmap.font.size * 2
 			for i in @item_data.description.scan(/./)
 				rect = bitmap.text_size(i)
-				if w + rect.width > self.width
-					w = 0
-					h += rect.height
-				else
-					w += rect.width
+				w += rect.width
+				if w > self.width
+					w = 0	
+					h += bitmap.font.size
 				end
 			end
 			
-			@description.bitmap = Bitmap.new(self.width, h + bitmap.font.size * 3)
+			@description.bitmap = Bitmap.new(self.width, h)
 			@description.bitmap.font.color.set(255, 255, 255, 255)
 			@description.bitmap.font.alpha = 3
 			@description.bitmap.font.beta = 1
 			@description.bitmap.font.gamma.set(0, 0, 0, 255)
 			@description.bitmap.font.size = 14
 			
-			height += h + bitmap.font.size + 5
 			w = 0
 			h = 0
 			for i in @item_data.description.scan(/./)
@@ -149,45 +147,40 @@ class Jindow_Item_Info < Jindow
 				if w + rect.width > self.width
 					h += rect.height
 					w = 0
-					@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
-					w += rect.width
-				else
-					@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
-					w += rect.width
 				end
+				@description.bitmap.draw_text(w, h, rect.width, rect.height, i)
+				w += rect.width
 			end
 		end
 		
 		@detail = Sprite.new(self)
 		@detail.y = @description.y + @description.height
 		
+		item_attributes = [
+			{ :name => "체력", :value => (@item_data.recover_hp rescue nil), :rate => false, :recover => true},
+			{ :name => "마력", :value => (@item_data.recover_sp rescue nil), :rate => false, :recover => true},
+			{ :name => "체력", :value => (@item_data.recover_hp_rate rescue nil), :rate => true, :recover => true},
+			{ :name => "마력", :value => (@item_data.recover_sp_rate rescue nil), :rate => true, :recover => true},
+			
+			{ :name => "공격력", :value => (@item_data.atk rescue nil), :rate => false },
+			{ :name => "물리방어력", :value => (@item_data.pdef rescue nil), :rate => false },
+			{ :name => "마법방어력", :value => (@item_data.mdef rescue nil), :rate => false },
+			{ :name => "힘", :value => (@item_data.str_plus rescue nil), :rate => false },
+			{ :name => "손재주", :value => (@item_data.dex_plus rescue nil), :rate => false },
+			{ :name => "민첩", :value => (@item_data.agi_plus rescue nil), :rate => false },
+			{ :name => "지력", :value => (@item_data.int_plus rescue nil), :rate => false },
+			{ :name => "체력", :value => (@item_data.hp_plus rescue nil), :rate => false },
+			{ :name => "마력", :value => (@item_data.sp_plus rescue nil), :rate => false },
+			{ :name => "회피력", :value => (@item_data.eva rescue nil), :rate => false }
+		]
+		
 		h = 0
-		case type
-		when 0
-			@item_data.recover_hp != 0 ? (h += bitmap.text_size(@item_data.recover_hp.to_s).height) : 0
-			@item_data.recover_sp != 0 ? (h += bitmap.text_size(@item_data.recover_sp.to_s).height) : 0
-			@item_data.recover_hp_rate != 0 ? (h += bitmap.text_size(@item_data.recover_hp_rate.to_s).height) : 0
-			@item_data.recover_sp_rate != 0 ? (h += bitmap.text_size(@item_data.recover_sp_rate.to_s).height) : 0
-		when 1
-			@item_data.atk != 0 ? (h += bitmap.text_size(@item_data.atk.to_s).height) : 0
-			@item_data.pdef != 0 ? (h += bitmap.text_size(@item_data.pdef.to_s).height) : 0
-			@item_data.mdef != 0 ? (h += bitmap.text_size(@item_data.mdef.to_s).height) : 0
-			@item_data.str_plus != 0 ? (h += bitmap.text_size(@item_data.str_plus.to_s).height) : 0
-			@item_data.dex_plus != 0 ? (h += bitmap.text_size(@item_data.dex_plus.to_s).height) : 0
-			@item_data.agi_plus != 0 ? (h += bitmap.text_size(@item_data.agi_plus.to_s).height) : 0
-			@item_data.int_plus != 0 ? (h += bitmap.text_size(@item_data.int_plus.to_s).height) : 0
-			@item_data.hp_plus != 0 ? (h += bitmap.text_size(@item_data.hp_plus.to_s).height) : 0
-			@item_data.sp_plus != 0 ? (h += bitmap.text_size(@item_data.sp_plus.to_s).height) : 0
-		when 2
-			@item_data.pdef != 0 ? (h += bitmap.text_size(@item_data.pdef.to_s).height) : 0
-			@item_data.mdef != 0 ? (h += bitmap.text_size(@item_data.mdef.to_s).height) : 0
-			@item_data.eva != 0 ? (h += bitmap.text_size(@item_data.eva.to_s).height) : 0
-			@item_data.str_plus != 0 ? (h += bitmap.text_size(@item_data.str_plus.to_s).height) : 0
-			@item_data.dex_plus != 0 ? (h += bitmap.text_size(@item_data.dex_plus.to_s).height) : 0
-			@item_data.agi_plus != 0 ? (h += bitmap.text_size(@item_data.agi_plus.to_s).height) : 0
-			@item_data.int_plus != 0 ? (h += bitmap.text_size(@item_data.int_plus.to_s).height) : 0
-			@item_data.hp_plus != 0 ? (h += bitmap.text_size(@item_data.hp_plus.to_s).height) : 0
-			@item_data.sp_plus != 0 ? (h += bitmap.text_size(@item_data.sp_plus.to_s).height) : 0
+		margin = 3
+		item_attributes.each do |attr|
+			next if attr[:value] == nil
+			next if attr[:value] == 0
+			
+			h += bitmap.text_size(attr[:value].to_s).height + margin
 		end
 		
 		@detail.bitmap = Bitmap.new(self.width, (h == 0 ? 1 : h))
@@ -195,134 +188,53 @@ class Jindow_Item_Info < Jindow
 		@detail.bitmap.font.alpha = 2
 		@detail.bitmap.font.color.set(128, 128, 128, 255)
 		@detail.bitmap.font.gamma.set(0, 0, 0, 255)
-		height += (h == 0 ? 1 : h)
-		h = 0
 		
-		case type # 일반 아이템
-		when 0
-			if @item_data.recover_hp != 0
-				rect = @detail.bitmap.text_size(@item_data.recover_hp.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 " + @item_data.recover_hp.to_s + "회복")
-				h += rect.height
-			end
-			if @item_data.recover_sp != 0
-				rect = @detail.bitmap.text_size(@item_data.recover_sp.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 " + @item_data.recover_sp.to_s + "회복")
-				h += rect.height
-			end
-			if @item_data.recover_hp_rate != 0
-				rect = @detail.bitmap.text_size(@item_data.recover_hp_rate.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 " + @item_data.recover_hp_rate.to_s + "%회복")
-				h += rect.height
-			end
-			if @item_data.recover_sp_rate != 0
-				rect = @detail.bitmap.text_size(@item_data.recover_sp_rate.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 " + @item_data.recover_sp_rate.to_s + "%회복")
-				h += rect.height
-			end
+		h = 0
+		item_attributes.each do |attr|
+			next if attr[:value] == nil
+			next if attr[:value] == 0
 			
-		when 1 # 무기
-			if @item_data.atk != 0
-				rect = @detail.bitmap.text_size(@item_data.atk.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "공격력 + " + @item_data.atk.to_s)
-				h += rect.height
-			end
-			if @item_data.pdef != 0
-				rect = @detail.bitmap.text_size(@item_data.pdef.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "물리방어력 + " + @item_data.pdef.to_s)
-				h += rect.height
-			end
-			if @item_data.mdef != 0
-				rect = @detail.bitmap.text_size(@item_data.mdef.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마법방어력 + " + @item_data.mdef.to_s)
-				h += rect.height
-			end      
-			if @item_data.str_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.str_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "힘 + " + @item_data.str_plus.to_s)
-				h += rect.height
-			end
-			if @item_data.dex_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.dex_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "손재주 + " + @item_data.dex_plus.to_s)
-				h += rect.height
-			end
-			if @item_data.agi_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.agi_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "민첩 + " + @item_data.agi_plus.to_s)
-				h += rect.height
-			end
-			if @item_data.int_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.int_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지력 + " + @item_data.int_plus.to_s)
-				h += rect.height
-			end
+			label = "#{attr[:name]} +#{attr[:value]}"
+			label += "%" if attr[:rate]
+			label += " 회복" if attr[:recover]
 			
-			if @item_data.hp_plus != 0 and @item_data.hp_plus != nil
-				rect = @detail.bitmap.text_size(@item_data.hp_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 + " + @item_data.hp_plus.to_s)
-				h += rect.height
-			end
-			
-			if @item_data.sp_plus != 0 and @item_data.sp_plus != nil
-				rect = @detail.bitmap.text_size(@item_data.sp_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 + " + @item_data.sp_plus.to_s)
-				h += rect.height
-			end
-			
-		when 2 # 방어구
-			if @item_data.pdef != 0
-				rect = @detail.bitmap.text_size(@item_data.pdef.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "물리방어력 + " + @item_data.pdef.to_s)
-				h += rect.height
-			end
-			if @item_data.mdef != 0
-				rect = @detail.bitmap.text_size(@item_data.mdef.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마법방어력 + " + @item_data.mdef.to_s)
-				h += rect.height
-			end
-			if @item_data.eva != 0
-				rect = @detail.bitmap.text_size(@item_data.eva.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "회피력 + " + @item_data.eva.to_s)
-				h += rect.height
-			end
-			if @item_data.str_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.str_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "힘 + " + @item_data.str_plus.to_s)
-				h += rect.height
-			end
-			if @item_data.dex_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.dex_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "손재주 + " + @item_data.dex_plus.to_s)
-				h += rect.height
-			end
-			if @item_data.agi_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.agi_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "민첩 + " + @item_data.agi_plus.to_s)
-				h += rect.height
-			end
-			if @item_data.int_plus != 0
-				rect = @detail.bitmap.text_size(@item_data.int_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "지력 + " + @item_data.int_plus.to_s)
-				h += rect.height
-			end
-			
-			if @item_data.hp_plus != 0 and @item_data.hp_plus != nil
-				rect = @detail.bitmap.text_size(@item_data.hp_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "체력 + " + @item_data.hp_plus.to_s)
-				h += rect.height
-			end
-			
-			if @item_data.sp_plus != 0 and @item_data.sp_plus != nil
-				rect = @detail.bitmap.text_size(@item_data.sp_plus.to_s)
-				@detail.bitmap.draw_text(0, h, self.width, rect.height, "마력 + " + @item_data.sp_plus.to_s)
-				h += rect.height
-			end
+			rect = @detail.bitmap.text_size(label)
+			@detail.bitmap.draw_text(0, h, self.width, rect.height, label)
+			h += rect.height + margin
 		end
 		
 		self.height = @detail.y + @detail.height + 10
 		self.window_ini
 		self.refresh("Item_Info")
+	end
+	
+	def check_item_num_zero
+		case @type
+		when 0
+			@item_num = $game_party.item_number(@item_id)
+		when 1
+			@item_num = $game_party.weapon_number(@item_id)
+		when 2
+			@item_num = $game_party.armor_number(@item_id)
+		end
+		return @item_num <= 0
+	end
+	
+	def drop_one_item
+		x = $game_player.x
+		y = $game_player.y
+		if @type == 0
+			$game_party.lose_item(@item_id, 1)
+		elsif @type == 1
+			$game_party.lose_weapon(@item_id, 1)
+		else
+			$game_party.lose_armor(@item_id, 1)
+		end 
+		
+		$console.write_line("#{@item_data.name}를 버렸습니다.")
+		create_drops(@type, @item_id, x, y, 1)
+		Audio.se_play("Audio/SE/줍기", $game_variables[13])
+		Network::Main.ani(Network::Main.id, 198)
 	end
 	
 	def update
@@ -333,40 +245,9 @@ class Jindow_Item_Info < Jindow
 				return
 			end
 			
-			case @type
-			when 0
-				@item_num = $game_party.item_number(@item_id)
-			when 1
-				@item_num = $game_party.weapon_number(@item_id)
-			when 2
-				@item_num = $game_party.armor_number(@item_id)
-			end
-			Hwnd.dispose(self) if @item_num <= 0
-			
-			x = $game_player.x
-			y = $game_player.y
-			if @type == 0
-				$game_party.lose_item(@item_id, 1)
-			elsif @type == 1
-				$game_party.lose_weapon(@item_id, 1)
-			else
-				$game_party.lose_armor(@item_id, 1)
-			end 
-			
-			$console.write_line("#{@item_data.name}를 버렸습니다.")
-			create_drops(@type, @item_id, x, y, 1)
-			Audio.se_play("Audio/SE/줍기", $game_variables[13])
-			Network::Main.ani(Network::Main.id, 198)
-			
-			case @type
-			when 0
-				@item_num = $game_party.item_number(@item_id)
-			when 1
-				@item_num = $game_party.weapon_number(@item_id)
-			when 2
-				@item_num = $game_party.armor_number(@item_id)
-			end
-			Hwnd.dispose(self) if @item_num <= 0
+			Hwnd.dispose(self) if check_item_num_zero
+			drop_one_item
+			Hwnd.dispose(self) if check_item_num_zero
 			return
 		end
 		
@@ -376,54 +257,22 @@ class Jindow_Item_Info < Jindow
 				return
 			end
 			
-			case @type
-			when 0
-				@item_num = $game_party.item_number(@item_id)
-			when 1
-				@item_num = $game_party.weapon_number(@item_id)
-			when 2
-				@item_num = $game_party.armor_number(@item_id)
-			end
-			Hwnd.dispose(self) if @item_num <= 0
-			
-			x = $game_player.x
-			y = $game_player.y
+			Hwnd.dispose(self) if check_item_num_zero
 			
 			if @item_num == 1
-				if @type == 0
-					$game_party.lose_item(@item_id, 1)
-				elsif @type == 1
-					$game_party.lose_weapon(@item_id, 1)
-				else
-					$game_party.lose_armor(@item_id, 1)
-				end 
-				
-				$console.write_line("#{@item_data.name}를 버렸습니다.")
-				create_drops(@type, @item_id, x, y, 1)
-				Audio.se_play("Audio/SE/줍기", $game_variables[13])
-				Network::Main.ani(Network::Main.id, 198)
-				Hwnd.dispose(self)
-				return
+				drop_one_item
+			else
+				Hwnd.dispose("Item_Drop") if Hwnd.include?("Item_Drop")
+				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
 			end
 			
-			if not Hwnd.include?("Item_Drop")
-				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
-				Hwnd.dispose(self)
-			else
-				Hwnd.dispose("Item_Drop")
-				Jindow_Drop.new(1, @type, @item_id) # 아이템 버림
-				Hwnd.dispose(self)
-			end
+			Hwnd.dispose(self)
 			return
 		end
 		
 		if @button_key != nil and @button_key.click
-			if not Hwnd.include?("Keyset_menu")
-				Jindow_Keyset_menu.new(@item_id, @type)
-			else
-				Hwnd.dispose("Keyset_menu")
-				Jindow_Keyset_menu.new(@item_id, @type)
-			end
+			Hwnd.dispose("Keyset_menu") if Hwnd.include?("Keyset_menu")
+			Jindow_Keyset_menu.new(@item_id, @type)
 		end
 	end
 end

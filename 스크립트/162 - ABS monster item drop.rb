@@ -9,58 +9,53 @@ class MrMo_ABS
 			return
 		end
 		
+		drop = $Drop[item_index]
+		return if drop == nil
+		
 		$rpg_skill.투명해제
 		Audio.se_play("Audio/SE/줍기", $game_variables[13])
 		Network::Main.ani(Network::Main.id, 198)
 		
-		if $Drop[item_index] != nil
-			id = $Drop[item_index].id
-			type = $Drop[item_index].type
-			type2 = $Drop[item_index].type2
-			num = $Drop[item_index].amount
-			
-			if type2 == 1 # 일반 아이템
-				if type == 0 # 아이템
-					n = $game_party.item_number(id)
-					if n >= $item_maximum
-						$console.write_line("더 이상 가질 수 없습니다.")
-						return
-					end
-					
-					$game_party.gain_item(id, num)
-				elsif type == 1 # 무기
-					n = $game_party.weapon_number(id)
-					if n >= $item_maximum
-						$console.write_line("더 이상 가질 수 없습니다.")
-						return
-					end
-					
-					$game_party.gain_weapon(id, num)
-				elsif type == 2 # 장비
-					n = $game_party.armor_number(id)
-					if n >= $item_maximum
-						$console.write_line("더 이상 가질 수 없습니다.")
-						return
-					end
-					
-					$game_party.gain_armor(id, num)
-				end
-				
-			elsif type2 == 0 # 돈
-				$game_party.gain_gold($Drop[item_index].amount)
-				$console.write_line("#{$Drop[item_index].amount}전 획득 ")
-			end
-			
-			event = $game_map.events[item_index]
-			$game_map.events.delete(event)
-			event.erase # 이벤트 삭제
-			event = nil
-			
-			Network::Main.socket.send "<Drop_Get>#{item_index},#{$game_map.map_id}</Drop_Get>\n"
-			자동저장
-			$Drop[item_index] = nil
-			
+		id = drop.id
+		type = drop.type
+		type2 = drop.type2
+		num = drop.amount
+		
+		case type2
+		when 1 # 아이템 또는 장비
+			check_and_gain_item(type, id, num) # 아이템
+		when 0 # 돈
+			$game_party.gain_gold(drop.amount)
+			$console.write_line("#{drop.amount}전 획득 ")
 		end
+		
+		remove_event(item_index)
+		Network::Main.socket.send "<Drop_Get>#{item_index},#{$game_map.map_id}</Drop_Get>\n"
+		자동저장
+		$Drop[item_index] = nil		
+	end
+	
+	def check_and_gain_item(type, id, num)
+		method = case type
+		when 0 then :item
+		when 1 then :weapon
+		when 2 then :armor
+		end
+		
+		n = $game_party.send("#{method.to_s}_number", id)
+		if n >= $item_maximum
+			$console.write_line("더 이상 가질 수 없습니다.")
+			return
+		end
+		
+		$game_party.send("gain_#{method.to_s}", id, num)
+	end
+	
+	def remove_event(item_index)
+		event = $game_map.events[item_index]
+		$game_map.events.delete(event)
+		event.erase # 이벤트 삭제
+		event = nil
 	end
 	
 	#--------------------------------------------------------------------------
@@ -68,54 +63,52 @@ class MrMo_ABS
 	#--------------------------------------------------------------------------
 	def drop_enemy(e)
 		id = e.id.to_i
+		return if ITEM_DROP_DATA[id] == nil
 		
-		if ITEM_DROP_DATA[id] != nil
-			r = rand(1000) # 0~999
-			i_id = []
-			temp = []
-			num = ITEM_DROP_DATA[id][0][0].to_i
+		r = rand(1000) # 0~999
+		i_id = []
+		temp = []
+		num = ITEM_DROP_DATA[id][0][0].to_i
+		
+		# 확률에 맞는 아이템 id를 넣는다.
+		for d in ITEM_DROP_DATA[id]
+			next if d.size == 1
+			type = d[0]
+			id = d[1]
+			take_num = rand(d[2]) + 1
+			chance = d[3] * $drop_event * 10.0
+			sw = d[4] # 드랍 조건 스위치 번호
 			
-			# 확률에 맞는 아이템 id를 넣는다.
-			for d in ITEM_DROP_DATA[id]
-				next if d.size == 1
-				type = d[0]
-				id = d[1]
-				take_num = rand(d[2]) + 1
-				chance = d[3] * $drop_event * 10.0
-				sw = d[4] # 드랍 조건 스위치 번호
-				
-				if r <= chance
-					temp.push([type, id, take_num, sw])
-				end
-			end
+			temp.push([type, id, take_num, sw]) if r <= chance
+		end
+		
+		return if temp.size == 0 
+		
+		# 최대 드랍될 아이템 종류 개수 랜덤 생성
+		pick_num = num
+		pick_num = temp.size if num == -1
+		
+		# 랜덤으로 temp에 있는 것 중에 num개를 추출한다.
+		pick_num.times do
+			r = rand(temp.size).to_i
+			i_id.push(temp[r])
+			temp.delete_at(r)
+		end
+		
+		for item in i_id
+			next if item == nil
+			type = item[0]
+			id = item[1]
+			amount = item[2]
+			sw = item[3] != nil ? item[3] : 0
 			
-			return if temp.size == 0 
-			
-			# 최대 드랍될 아이템 종류 개수 랜덤 생성
-			pick_num = num
-			pick_num = temp.size if num == -1
-			
-			# 랜덤으로 temp에 있는 것 중에 num개를 추출한다.
-			for i in 0...pick_num
-				r = rand(temp.size).to_i
-				i_id.push(temp[r])
-				temp.delete_at(r)
-			end
-			
-			for item in i_id
-				next if item == nil
-				type = item[0]
-				id = item[1]
-				amount = item[2]
-				sw = item[3] != nil ? item[3] : 0
-				
-				if type == 3 # 돈 드랍
-					create_moneys(id, e.event.x, e.event.y)
-				else
-					create_drops(type, id, e.event.x, e.event.y, amount, sw)
-				end
+			if type == 3 # 돈 드랍
+				create_moneys(id, e.event.x, e.event.y)
+			else
+				create_drops(type, id, e.event.x, e.event.y, amount, sw)
 			end
 		end
+		
 	end
 	
 	# 드랍율 이벤트

@@ -8,7 +8,7 @@ class Jindow_Drop < Jindow
 		$game_system.se_play($data_system.decision_se)
 		자동저장
 		super(0, 0, 150, 50)
-		self.name = "버리기"
+		self.name = ""
 		@head = true
 		@mark = true
 		@drag = true
@@ -26,22 +26,20 @@ class Jindow_Drop < Jindow
 		@text.bitmap = Bitmap.new(40, 32)
 		@text.bitmap.font.color.set(0, 0, 0, 255)
 		
+		@item_name = ""
 		if type1 == 0 # 돈
 			@text.bitmap.draw_text(0, 0, 40, 32, "액수 : ")
-			self.name = "금전 버리기"
+			@item_name = "금전"
 		else
 			@text.bitmap.draw_text(0, 0, 40, 32, "개수 : ")
-			temp = ""
-			if @type2 == 0 # 일반 아이템
-				temp = $data_items[@item_id].name
-			elsif @type2 == 1 # 무기
-				temp = $data_weapons[@item_id].name
-			else # 장비
-				temp = $data_armors[@item_id].name
+			@item_name = case @type2
+			when 0 then $data_items[@item_id].name
+			when 1 then $data_weapons[@item_id].name
+			when 2 then $data_armors[@item_id].name
 			end
-			self.name = "#{temp} 버리기"
 		end
 		
+		self.name = "#{@item_name} 버리기"
 		@input = J::Type.new(self).refresh(40, 7, self.width - 40, 16)
 		@input.set("1")
 		@input.view
@@ -70,42 +68,30 @@ class Jindow_Drop < Jindow
 				num = [num, $game_party.gold.to_i].min
 				$game_party.lose_gold(num)
 				create_moneys(num, x, y)
-				$console.write_line("금전 #{num}전을 버렸습니다.")
-				
-				Audio.se_play("Audio/SE/줍기", $game_variables[13])
-				Network::Main.ani(Network::Main.id, 198)
-				Hwnd.dispose(self) if $game_party.gold <= 0
-				
+				$console.write_line("#{@item_name} #{num}전을 버렸습니다.")
+				num = $game_party.gold
 			else
 				if !$Abs_item_data.is_trade_ok(@item_id, @type2)
 					$console.write_line("버릴 수 없는 물건입니다.")
 					return
 				end
 				
-				if @type2 == 0 # 일반 아이템
-					num = [num, $game_party.item_number(@item_id)].min
-					$game_party.lose_item(@item_id, num)
-					$console.write_line("#{$data_items[@item_id].name} #{num}개를 버렸습니다.")
-					
-					Hwnd.dispose(self) if $game_party.item_number(@item_id) <= 0
-				elsif @type2 == 1 # 무기
-					num = [num, $game_party.weapon_number(@item_id)].min
-					$game_party.lose_weapon(@item_id, num)
-					$console.write_line("#{$data_weapons[@item_id].name} #{num}개를 버렸습니다.")
-					
-					Hwnd.dispose(self) if $game_party.weapon_number(@item_id) <= 0
-				else # 장비
-					num = [num, $game_party.armor_number(@item_id)].min
-					$game_party.lose_armor(@item_id, num)
-					$console.write_line("#{$data_armors[@item_id].name} #{num}개를 버렸습니다.")
-					
-					Hwnd.dispose(self) if $game_party.armor_number(@item_id) <= 0
+				method = case @type2
+				when 0 then :item
+				when 1 then :weapon
+				when 2 then :armor
 				end
 				
+				num = [num, $game_party.send("#{method.to_s}_number", @item_id)].min 
+				$game_party.send("lose_#{method.to_s}", @item_id, num)
 				create_drops(@type2, @item_id, x, y, num)
-				Audio.se_play("Audio/SE/줍기", $game_variables[13])
-				Network::Main.ani(Network::Main.id, 198)
+				$console.write_line("#{@item_name} #{num}개를 버렸습니다.")
+				num = $game_party.send("#{method.to_s}_number", @item_id)
 			end
+			
+			Audio.se_play("Audio/SE/줍기", $game_variables[13])
+			Network::Main.ani(Network::Main.id, 198)
+			Hwnd.dispose(self) if num <= 0
 		end
 	end
 end

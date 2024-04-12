@@ -45,10 +45,27 @@ class Jindow_Chat_Input < Jindow
 		@map_infos = load_data("Data/MapInfos.rxdata")
 		@chat_list = []
 		@chat_idx = -1
+		
+	end
+	
+	def is_command(text)
+		return !!(text =~ /^\//)
 	end
 	
 	def send_chat
 		text = @type.result
+		name = $game_party.actors[0].name
+		
+		if !is_command(text) # 명령어가 아닌 그냥 일반 채팅일때
+			case @chat_type[@chat_type_idx]
+			when "귓속말" then process_whisper(name, text)
+			when "전체" then process_global(name, text)
+			when "파티" then process_party(name, text)
+			when "길드" then process_guild(name, text)
+			end
+			return
+		end
+		
 		
 		# 명령어를 식별
 		case text		
@@ -85,56 +102,49 @@ class Jindow_Chat_Input < Jindow
 			end
 			
 			# 운영자 전용 명령어 
-			
 		when /\/소환 (.*)/ #소환 명령어
-			if Network::Main.group == 'admin'
-				mapid = $game_map.map_id
-				x = $game_player.x
-				y = $game_player.y
-				Network::Main.socket.send "<summon>#{$1.to_s},#{mapid},#{x},#{y}</summon>\n"
-			end     
+			return if Network::Main.group != 'admin'
+			mapid = $game_map.map_id
+			x = $game_player.x
+			y = $game_player.y
+			Network::Main.socket.send "<summon>#{$1.to_s},#{mapid},#{x},#{y}</summon>\n"
+			
 			
 		when /\/출두 (.*)/ #출두 명령어
-			if Network::Main.group == 'admin'		
-				for player in Network::Main.players.values
-					if player.name == $1.to_s 
-						if player.map_id == $game_map.map_id
-							$game_player.moveto(player.x, player.y)
-						else
-							$game_temp.player_transferring = true # 이동 가능
-							$game_temp.player_new_map_id = player.map_id
-							$game_temp.player_new_x = player.x
-							$game_temp.player_new_y = player.y
-						end
-						break
-					end
-				end	
-			end 	
+			return if Network::Main.group != 'admin'
+			for player in Network::Main.players.values
+				next if player.name != $1.to_s 
+				if player.map_id == $game_map.map_id
+					$game_player.moveto(player.x, player.y)
+				else
+					$game_temp.player_transferring = true # 이동 가능
+					$game_temp.player_new_map_id = player.map_id
+					$game_temp.player_new_x = player.x
+					$game_temp.player_new_y = player.y
+				end
+				break
+			end	
 			
 		when /\/강퇴 (.*) (.*)/ #강퇴
-			if Network::Main.group == 'admin'
-				Network::Main.socket.send "<ki>#{$1.to_s},#{$2.to_s},#{$game_party.actors[0].name}</ki>\n"
-			end
+			return if Network::Main.group != 'admin'
+			Network::Main.socket.send "<ki>#{$1.to_s},#{$2.to_s},#{$game_party.actors[0].name}</ki>\n"
 			
 		when /\/골드 (.*)/ #골드 명령어
-			if Network::Main.group == 'admin'
-				$game_party.gain_gold($1.to_i)
-			end
+			return if Network::Main.group != 'admin'
+			$game_party.gain_gold($1.to_i)
 			
 		when /\/회복/ #회복 명령어
-			if Network::Main.group == 'admin'
-				$game_party.actors[0].hp += $game_party.actors[0].maxhp
-				$game_party.actors[0].sp += $game_party.actors[0].maxsp
-				$game_player.animation_id = 151
-			end
+			return if Network::Main.group != 'admin'
+			$game_party.actors[0].hp += $game_party.actors[0].maxhp
+			$game_party.actors[0].sp += $game_party.actors[0].maxsp
+			$game_player.animation_id = 151
 			
 		when /\/집합/ #서버 안에 있는 유저들 전부 소환 명령어
-			if Network::Main.group == 'admin'
-				mapid = $game_map.map_id
-				x = $game_player.x
-				y = $game_player.y
-				Network::Main.socket.send "<all_summon>#{mapid},#{x},#{y}</all_summon>\n"
-			end 
+			return if Network::Main.group != 'admin'
+			mapid = $game_map.map_id
+			x = $game_player.x
+			y = $game_player.y
+			Network::Main.socket.send "<all_summon>#{mapid},#{x},#{y}</all_summon>\n"
 			
 		when /\/공지 (.*)/
 			if Network::Main.group == 'admin'
@@ -204,29 +214,10 @@ class Jindow_Chat_Input < Jindow
 			end 	
 			
 		when /^\/운영자모드 (.*)/
-			if $1.to_i == 1367
-				Network::Main.set_admin
-			end
-			
-		when /^\/운영자모드/
-			$console.write_line(" ")	
+			Network::Main.set_admin if $1.to_i == 1367
 			
 		when /^\/(.*?)/	
 			$chat.write ("/귓 (귓속말 상대), /교환 (교환 상대)", COLOR_HELP)    
-			
-		else # 명령어가 아닌 그냥 일반 채팅일때
-			name = $game_party.actors[0].name
-			
-			case @chat_type[@chat_type_idx]
-			when "귓속말"
-				process_whisper(name, text)
-			when "전체"
-				process_global(name, text)
-			when "파티"
-				process_party(name, text)
-			when "길드"
-				process_guild(name, text)
-			end
 		end
 	end
 	
@@ -293,17 +284,16 @@ class Jindow_Chat_Input < Jindow
 		@sec -= 1
 		update_map_scroll_x 
 		update_map_scroll_y 
-		hide_map_scroll_indicator if @sec == 0
+		$m_s.visible = false if @sec == 0
 	end
 	
 	def update_map_scroll_x
 		if $game_player.x <= 10
 			$m_s.x = $game_player.x * 32
-			@ox = $game_player.x
 		elsif $game_map.width - $game_player.x <= 10
 			$m_s.x = ($game_player.x - 2) * 32
-			@ox = $game_player.x
 		end
+		@ox = $game_player.x
 	end
 	
 	def update_map_scroll_y
@@ -311,10 +301,6 @@ class Jindow_Chat_Input < Jindow
 			$m_s.y = ($game_player.y - $game_map.display_y / 128) * 32 - 55
 			@oy = $game_player.y
 		end
-	end
-	
-	def hide_map_scroll_indicator
-		$m_s.visible = false
 	end
 	
 	def chat_mode_change_requested?

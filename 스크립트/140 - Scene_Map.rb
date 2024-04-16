@@ -37,9 +37,9 @@ class Scene_Map
 		# 현재 맵의 몬스터 정보를 요청
 		if PARTY_MAP[$game_map.map_id] == nil # 파티퀘 맵 제외
 			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
-			# 현재 맵의 아이템을 요청
-			Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n"
 		end
+		
+		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n" # 현재 맵의 아이템을 요청
 		$game_temp.spriteset_refresh == true
 		$chat_b.refresh
 		

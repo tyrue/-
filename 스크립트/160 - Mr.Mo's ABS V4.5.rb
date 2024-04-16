@@ -424,7 +424,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			enemy = $data_enemies[id] 
 			return if enemy == nil
-			
 			@enemies[event.id] = ABS_Enemy.new(enemy.id)
 			@enemies[event.id].event_id = event.id
 			event.name = "[id#{@enemies[event.id].name}]" if @enemies[event.id].name != ""
@@ -650,7 +649,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			return true if enemy.attacking == nil
 			return true if enemy.attacking.actor.dead?
 			return true if !enemy.hate_group.include?(enemy.attacking.enemy_id)
-			return true if !(in_range?(enemy.event, enemy.attacking.event, enemy.see_range) or in_range?(enemy.event, enemy.attacking.event, enemy.hear_range))
+			return true if !in_range?(enemy.event, enemy.attacking.event, enemy.see_range)
+			return true if !in_range?(enemy.event, enemy.attacking.event, enemy.hear_range)
 			return true if !enemy.aggro
 			return false 
 		end
@@ -670,8 +670,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				return
 			end      
 			
-			# Skip this if the attack killed the enemy
-			#return if enemy.event.moving?
 			# 공격주기마다 행동 시작
 			update_enemy_attack(enemy, enemy.attacking) if Graphics.frame_count % (enemy.aggressiveness * 45.0).to_i == 0
 			return if enemy == nil
@@ -690,15 +688,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if enemy.aggro_mash > 0	
 			
 			aggro_user = []
-			if in_range?(enemy.event, $game_player, enemy.see_range)
-				aggro_user.push($game_party.actors[0].name)
-			end
+			aggro_user.push($game_party.actors[0].name) if in_range?(enemy.event, $game_player, enemy.see_range)
 			
 			for player in Network::Main.mapplayers.values
 				next if player == nil
-				if in_range?(enemy.event, player, enemy.see_range)
-					aggro_user.push(player.name)
-				end
+				aggro_user.push(player.name) if in_range?(enemy.event, player, enemy.see_range)
 			end
 			return if aggro_user.size <= 0
 			
@@ -706,14 +700,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			aggro_name = aggro_user[rand_idx]
 			return if aggro_name == nil
 			
+			enemy.aggro = false
 			Network::Main.socket.send("<aggro>#{enemy.event.id},#{aggro_name}</aggro>\n")
 			if aggro_name == $game_party.actors[0].name
 				enemy.aggro = true
-				enemy.aggro_mash = 5 * 60
-			else
-				enemy.aggro = false
+				enemy.aggro_mash = 5 * 60	
 			end
-			
 		end
 		
 		
@@ -721,20 +713,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * 적 캐릭터의 공격성
 		#--------------------------------------------------------------------------
 		def update_enemy_ai(enemy)
-			#Get the enemy behavior
 			b = enemy.behavior
 			return true if b == 0 # Dummy
-			#Next enemy if this enemy can't see the player
 			return true if b == 1 and !can_enemy_see(enemy)
-			#Next enemy if this enemy can't hear the player
 			return true if b == 2 and !can_enemy_hear(enemy)
-			#Next enemy if this enemy can't see or hear the player
 			return true if b == 3 and !can_enemy_see(enemy) and !can_enemy_hear(enemy)
-			#Next if its not
 			return true if b == 4 and !enemy_ally_in_battle?(enemy)
-			#Next enemy if this enemy can't see or hear the player
 			return true if b == 5 and !can_enemy_see(enemy) and !can_enemy_hear(enemy) and !enemy_ally_in_battle?(enemy)
-			#Return false
 			return false
 		end
 		
@@ -744,19 +729,16 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_enemy_casting(enemy)
 			if enemy.casting_mash > 0
 				enemy.casting_mash -= 1 
+				return true if enemy.casting_mash > 0
 				
-				if enemy.casting_mash <= 0
-					enemy.casting_idx += 1
-					data = ABS_ENEMY_SKILL_CASTING[enemy.casting_action.skill_id]
-					if data[enemy.casting_idx] == nil
-						enemy.casting_idx = 0
-						return false
-					else
-						enemy.casting_mash = data[enemy.casting_idx][0] * Graphics.frame_rate
-						$rpg_skill.casting_chat(data[enemy.casting_idx], enemy.event)
-						return true
-					end
+				enemy.casting_idx += 1
+				data = ABS_ENEMY_SKILL_CASTING[enemy.casting_action.skill_id]
+				if data[enemy.casting_idx] == nil
+					enemy.casting_idx = 0
+					return false
 				else
+					enemy.casting_mash = data[enemy.casting_idx][0] * Graphics.frame_rate
+					$rpg_skill.casting_chat(data[enemy.casting_idx], enemy.event)
 					return true
 				end
 			end
@@ -766,75 +748,59 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
 		def update_enemy_attack(e, actor)
-			# 만약 행동 리스트가 없으면 무시함
 			return if e.actions == nil or e.actions == [] or e == nil
 			
-			# 행동 리스트 얻음
 			for action in e.actions
-				# 공격 행동이 아니면 무시
 				if e.casting_action != nil
 					action = e.casting_action
-					#next if action != e.casting_action
 				else
 					next if enemy_pre_attack(e, action)
 				end
 				
-				# 행동의 타입
 				case action.kind
 				when 0 # 기본공격
-					#Get the action 기본 액션 가져옴
 					case action.basic
 					when 0 #Attack
 						next if e.event.moving?
-						next if !in_range?(e.event, actor.event, 1) or !in_direction?(e.event, actor.event)
-						# 공격 당할 대상 정하기
+						next if !in_range?(e.event, actor.event, 1)
+						next if !in_direction?(e.event, actor.event)
+						
 						a = actor if actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하면 적
 						a = $game_party.actors[0] if !actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하지 않으면 플레이어
-						# 기본 공격 데미지 계산
-						a.attack_effect(e)
+						
+						a.attack_effect(e) # 기본 공격 데미지 계산
 						
 						# 애니메이션 실행
 						animation_melee(e.event.direction, e.event)
 						hit_enemy(actor, e) if a.damage != "Miss" and a.damage != 0
 						
-						#Check if enemy's enemy is dead, 적의 적이 죽었니? 플레이어도 포함 될 수 있음
 						return if enemy_dead?(a, e)
-						#Make enemy
 						return if !a.is_a?(ABS_Enemy) # a가 플레이어면 무시
 						return if a.attacking == e and a.in_battle # a가 적 캐릭이면 e를 쫒아감
 						
-						# a가 적캐릭터일 경우 e를 적대하게 됨
-						a.attacking = e
-						#The enemy is now in battle
+						a.attacking = e # a가 적캐릭터일 경우 e를 적대하게 됨
 						a.in_battle = true
-						#Setup movement
 						setup_movement(e)
-						
 						return
 					when 1..3 #Nothing
 						return
 					end
 					
 				when 1..2 #Skill 적 캐릭의 스킬 사용
-					#Get the skill
 					skill = $data_skills[action.skill_id]
-					#Return if the skill is NIL
 					
-					next if skill == nil
+					next if skill == nil #Return if the skill is NIL
 					if e.casting_action == nil # 미리 예약된 스킬이 없다면
 						next if !e.can_use_skill?(skill)
 						range = nil
 						range = RANGE_SKILLS[skill.id][0] if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
 						range = RANGE_EXPLODE[skill.id][0] if RANGE_EXPLODE.has_key?(skill.id) # 만약 폭발 스킬이라면
-						if range != nil
-							next if !in_range?(e.event, actor.event, range + 1) 
-						end
+						
+						next if !in_range?(e.event, actor.event, range + 1) if range != nil
 					end
 					
 					# 스킬 쿨타임 갱신
-					if SKILL_MASH_TIME[skill.id] != nil 
-						e.skill_mash[skill.id] = SKILL_MASH_TIME[skill.id][0] 
-					end
+					e.skill_mash[skill.id] = SKILL_MASH_TIME[skill.id][0] if SKILL_MASH_TIME[skill.id] != nil 
 					
 					# 캐스팅 갱신
 					if e.casting_mash <= 0 and e.casting_action == nil
@@ -844,7 +810,6 @@ if SDK.state("Mr.Mo's ABS") == true
 							e.casting_mash = cast_data[0][0] * Graphics.frame_rate
 							e.casting_action = action
 							$rpg_skill.casting_chat(cast_data[0], e.event)
-							# 여기에 범위 미리 보여주는 이펙트 하면 좋을듯
 							
 							# 범위 이펙트 보여주기
 							if skill.scope == 2 and RANGE_SKILLS.has_key?(skill.id)
@@ -879,7 +844,6 @@ if SDK.state("Mr.Mo's ABS") == true
 							end
 							
 						elsif RANGE_EXPLODE.has_key?(skill.id) # 폭발 스킬
-							
 							@range.push(Game_Ranged_Explode.new(e.event, e, skill))
 							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
 							
@@ -898,19 +862,18 @@ if SDK.state("Mr.Mo's ABS") == true
 					when 2 #All Emenies 적 전체
 						next if !RANGE_SKILLS.has_key?(skill.id)
 						
-						# 스킬 범위내 있는 모든 적 추가
-						enemies = get_all_range(e.event, RANGE_SKILLS[skill.id][0])
-						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, RANGE_SKILLS[skill.id][0])
-						enemies_net = get_all_range_net(e.event, RANGE_SKILLS[skill.id][0]) if e.hate_group.include?(0)
+						range = RANGE_SKILLS[skill.id][0]
+						
+						enemies = get_all_range(e.event, range) # 스킬 범위내 있는 모든 적 추가
+						enemies.push($game_player) if e.hate_group.include?(0) and in_range?($game_player, e.event, range)
+						enemies_net = get_all_range_net(e.event, range) if e.hate_group.include?(0)
 						
 						# 범위 이펙트 보여주기
-						make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], skill, true)
+						make_range_sprite(e.event, range, skill, true)
 						
 						for enemy in enemies
-							# 나한테 적이 아니면 공격 안하게 함
 							next if !e.hate_group.include?(enemy.id)
-							#Skip NIL values
-							next if enemy == nil
+							next if enemy == nil #Skip NIL values
 							next if !enemy.is_a?(Game_Player) and enemy.dead? 
 							
 							hit_num = RANGE_SKILLS[skill.id][5] != nil ? RANGE_SKILLS[skill.id][5] : 1
@@ -920,14 +883,11 @@ if SDK.state("Mr.Mo's ABS") == true
 							}
 							
 							next if enemy_dead?(enemy.actor, e)
-							#Skip this enemy if its dead
 							next if enemy.is_a?(Game_Player)
 							next if enemy.attacking == e and enemy.in_battle
-							#If its alive, put it in battle
+							
 							enemy.in_battle = true
-							#Make it attack the player
 							enemy.attacking = e
-							#Setup movement
 							setup_movement(e)
 						end
 						
@@ -936,19 +896,17 @@ if SDK.state("Mr.Mo's ABS") == true
 								Network::Main.socket.send("<e_skill_effect>#{player.name},#{e.event.id},#{skill.id}</e_skill_effect>\n")	# 몬스터 스킬 맞음
 							end
 						end
-						
 					end
+					
 					$rpg_skill.heal(skill.id, e) # 이게 회복 스킬인지 확인
 					$rpg_skill.buff_enemy(skill.id, e) # 이게 버프 스킬인지 확인
 					
-					# Animate the enemy
-					e.event.animation_id = skill.animation1_id
+					e.event.animation_id = skill.animation1_id # Animate the enemy
 					Network::Main.ani(e.event.id, skill.animation1_id, 1)
 					
 					e.sp = [e.sp - skill.sp_cost, 0].max
-					
 					send_network_monster(e)
-					$rpg_skill.skill_chat(skill, e.event)
+					$rpg_skill.skill_chat(skill, e.event) 
 					return
 				end
 			end
@@ -990,7 +948,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if !active_ok
 			
 			check_item if @item_mash == 0 # 아이템 단축키 눌렸니?
-			
 			@actor = $game_party.actors[0]
 			# 공격키가 눌렸니?
 			if Input.trigger?(@attack_key) and @attack_mash == 0
@@ -1022,7 +979,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					return player_skill(id)
 				end
 			end
-			
 		end
 		
 		#--------------------------------------------------------------------------
@@ -1052,25 +1008,20 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * 캐릭터의 범위 무기
 		#--------------------------------------------------------------------------
 		def player_range
-			#Get the weapon
 			w = RANGE_WEAPONS[@actor.weapon_id]
-			#Return if the ammo isn't there
 			return if w[3] != 0 and $game_party.item_number(w[3]) == 0
 			$game_player.animation_id = $data_weapons[@actor.weapon_id].animation1_id
-			#Add mash time
-			@attack_mash = (w[5] == nil ? MASH_TIME*10 : w[5]*10)
-			#Delete an ammo
-			$game_party.lose_item(w[3], 1) if w[3] != 0
+			@attack_mash = (w[5] == nil ? MASH_TIME * 10 : w[5] * 10)
 			
+			$game_party.lose_item(w[3], 1) #Delete an ammo
 			$Abs_item_data.weapon_se(@actor.weapon_id)
 			
 			#Make the attack
 			@range.push(Game_Ranged_Weapon.new($game_player, @actor, @actor.weapon_id))
 			Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{@actor.weapon_id},#{2}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-			#Animate
-			return if w[7] == nil
+			
+			return if w[7] == nil #Animate
 			animate($game_player, $game_player.character_name+w[7].to_s) if @player_ani
-			return
 		end
 		
 		def animation_melee(dir, c = $game_player)
@@ -1121,7 +1072,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					$rpg_skill.투명해제
 				end
 				
-				#Return if the enemy is dead
 				return if enemy_dead?(e, @actor)
 				return if !e.hate_group.include?(0)
 				
@@ -1161,6 +1111,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			dmg = WEAPON_SKILL[id][0]
 			ani = WEAPON_SKILL[id][1]
 			ra = WEAPON_SKILL[id][2] # 발동 확률
+			
 			return 0 if r > ra
 			return 0 unless dmg
 			return 0 unless ani
@@ -1219,32 +1170,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		def skill_sung
 			x = 11
 			y = 8
-			m_id = 17
-			case $game_variables[8]
-			when 0 # 부여성
-				m_id = 17
-			when 1, 2 # 국내성
-				m_id = 135
-			when 3 # 용궁
-				m_id = 204
-			when 4 # 고균도
-				m_id = 85
-			when 5 # 일본
-				m_id = 234
-			when 6 # 대방성
-				m_id = 298
-			when 7 # 현도성
-				m_id = 326
-			when 8 # 장안성
-				m_id = 369
-			when 9 # 가릉도
-				m_id = 384
-			when 10 # 폭염도
-				m_id = 392
-			end
+			m_id = SEONG_HWANG[$game_variables[8]][0] || 17
 			map_m(m_id, x, y)
+			$console.write_line("성황당으로 갑니다")
 		end
-		
 		
 		#=============================#
 		#=====비영사천문 - 크랩훕흐===========#
@@ -1254,165 +1183,22 @@ if SDK.state("Mr.Mo's ABS") == true
 				$console.write_line("귀신은 할 수 없습니다.")
 				return 
 			end
+			return if d > 4
 			
-			r = 3
-			case $game_variables[8] # 맵 번호
-			when 0 # 부여성
-				id = 1
-				case d
-				when 0
-					map_m(id, 66 + rand(r), 33 + rand(r))
-				when 1
-					map_m(id, 5 + rand(r), 30 + rand(r))
-				when 2
-					map_m(id, 34 + rand(r), 68 + rand(r))
-				when 3
-					map_m(id, 34 + rand(r), 2 + rand(r))
-				end
-				
-			when 1 # 국내성
-				id = 123
-				case d
-				when 0
-					map_m(id, 118 + rand(r), 60 + rand(r))
-				when 1
-					map_m(id, 7 + rand(r), 60 + rand(r))
-				when 2
-					map_m(id, 63 + rand(r), 109 + rand(r))
-				when 3
-					map_m(id, 63 + rand(r), 12 + rand(r))
-				end
-				
-			when 2 # 12지신
-				id = 110
-				case d
-				when 0
-					map_m(id, 35 + rand(r), 16 + rand(r))
-				when 1
-					map_m(id, 1 + rand(r), 16 + rand(r))
-				when 2
-					map_m(id, 17 + rand(r), 33 + rand(r))
-				when 3
-					map_m(id, 17 + rand(r), 2 + rand(r))
-				end
-				
-			when 3 # 용궁
-				id = 203
-				case d
-				when 0
-					map_m(id, 52, 23)
-				when 1
-					map_m(id, 4, 24)
-				when 2
-					map_m(id, 27, 43)
-				when 3
-					map_m(id, 29, 8)
-				end
-				
-			when 4 # 고균도
-				id = 60
-				case d
-				when 0
-					map_m(id, 56 + rand(r), 33 + rand(r))
-				when 1
-					map_m(id, 4 + rand(r), 32 + rand(r))
-				when 2
-					map_m(id, 39 + rand(r), 57 + rand(r))
-				when 3
-					map_m(id, 29 + rand(r), 10 + rand(r))
-				end
-				
-			when 5 # 일본
-				id = 230
-				case d
-				when 0
-					map_m(id, 114 + rand(r), 30 + rand(r))
-				when 1
-					map_m(id, 5 + rand(r), 31 + rand(r))
-				when 2
-					map_m(id, 64 + rand(r), 90 + rand(r))
-				when 3
-					map_m(id, 55 + rand(r), 2 + rand(r))
-				end
-				
-			when 6 # 대방성
-				id = 276
-				case d
-				when 0
-					map_m(id, 113 + rand(r), 61 + rand(r))
-				when 1
-					map_m(id, 8 + rand(r), 61 + rand(r))
-				when 2
-					map_m(id, 61 + rand(r), 108 + rand(r))
-				when 3
-					map_m(id, 61 + rand(r), 10 + rand(r))
-				end
-				
-			when 7 # 현도성
-				id = 301
-				case d
-				when 0
-					map_m(id, 113 + rand(r), 61 + rand(r))
-				when 1
-					map_m(id, 8 + rand(r), 61 + rand(r))
-				when 2
-					map_m(id, 61 + rand(r), 108 + rand(r))
-				when 3
-					map_m(id, 61 + rand(r), 10 + rand(r))
-				end
-				
-			when 8 # 장안성
-				id = 303
-				case d
-				when 0
-					map_m(id, 113 + rand(r), 61 + rand(r))
-				when 1
-					map_m(id, 8 + rand(r), 61 + rand(r))
-				when 2
-					map_m(id, 61 + rand(r), 108 + rand(r))
-				when 3
-					map_m(id, 61 + rand(r), 10 + rand(r))
-				end
-				
-				# 동서남북
-			when 9 # 가릉도
-				id = 374
-				case d
-				when 0
-					map_m(id, 58 + rand(r), 20 + rand(r))
-				when 1
-					map_m(id, 12 + rand(r), 17 + rand(r))
-				when 2
-					map_m(id, 28 + rand(r), 33 + rand(r))
-				when 3
-					map_m(id, 27 + rand(r), 9 + rand(r))
-				end
-				
-			when 10 # 폭염도
-				id = 391
-				case d
-				when 0
-					map_m(id, 43 + rand(r), 29 + rand(r))
-				when 1
-					map_m(id, 7 + rand(r), 25 + rand(r))
-				when 2
-					map_m(id, 24 + rand(r), 37 + rand(r))
-				when 3
-					map_m(id, 26 + rand(r), 9 + rand(r))
-				end
-				
-			when -1
-				
-			end
+			id = $game_variables[8] # 맵 번호
+			return unless BIYEONG[id]
+			
+			m_id = BIYEONG[id][0]
+			x = BIYEONG[id][d][0]
+			y = BIYEONG[id][d][1]
+			r = rand(3)
+			map_m(m_id, x + r, y + r)
+			
 			case d
-			when 0
-				$console.write_line("동쪽에 이르렀으니... ")
-			when 1
-				$console.write_line("서쪽에 이르렀으니... ")
-			when 2
-				$console.write_line("남쪽에 이르렀으니... ")
-			when 3
-				$console.write_line("북쪽에 이르렀으니... ")
+			when 1 then $console.write_line("동쪽에 이르렀으니... ")
+			when 2 then $console.write_line("서쪽에 이르렀으니... ")
+			when 3 then $console.write_line("남쪽에 이르렀으니... ")
+			when 4 then $console.write_line("북쪽에 이르렀으니... ")
 			end
 			Network::Main.ani(Network::Main.id, 129)
 		end
@@ -1477,11 +1263,11 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if !RANGE_SKILLS.has_key?(id)
 				
 				w = RANGE_SKILLS[id]
-				hit_num = 1
 				enemies = get_all_range($game_player, w[0])
 				return if enemies.size == 0
 				
 				@skill_mash[id] = (w[3] == nil ? MASH_TIME * 10 : w[3] * 10) 
+				hit_num = 1
 				hit_num = w[5] == nil ? 1 : [w[5], 1].max
 				
 				target_enemies = []
@@ -1834,7 +1620,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemies.sort! {|a,b| get_range(e.event,a.event) - get_range(e.event,b.event) }
 			end
 			
-			
 			#Add to enemy attack list
 			e.attacking = enemies[0]
 			#Enemy is now in battle
@@ -1849,12 +1634,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Setup the Movement Type to 0(Enemy)
 		#--------------------------------------------------------------------------
 		def setup_movement(e)
-			#Set Speed
-			e.event.move_speed = e.temp_speed
-			#Set Frequency
-			e.event.move_frequency = e.temp_frequency
-			#Set Move Type
-			e.temp_move_type = e.event.move_type
+			e.event.move_speed = e.temp_speed #Set Speed
+			e.event.move_frequency = e.temp_frequency #Set Frequency
+			e.temp_move_type = e.event.move_type #Set Move Type
 			e.event.move_type = 0 if e.behavior != 0
 			e.temp_restore_sw = false
 		end
@@ -1863,13 +1645,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def restore_movement(e)
 			return if e.temp_restore_sw
-			#Restore Speed
-			e.temp_speed = e.event.move_speed
-			#Restore Frequency
-			e.temp_frequency = e.event.move_frequency
-			#Restore Move Type
-			e.event.move_type = e.temp_move_type
-			
+			e.temp_speed = e.event.move_speed #Restore Speed
+			e.temp_frequency = e.event.move_frequency #Restore Frequency
+			e.event.move_type = e.temp_move_type #Restore Move Type
 			e.temp_move_type = 0
 			e.temp_restore_sw = true
 		end
@@ -1917,28 +1695,17 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Enemy Ally in_battle?(Enemy)
 		#--------------------------------------------------------------------------
 		def enemy_ally_in_battle?(enemy) # 동료가 전투중인가?
-			#Start list
 			allies = []
-			#Get all allies
 			for ally in @enemies.values
-				#Skip NIL Value or value is in hate group
 				next if ally == nil or enemy.hate_group.include?(ally.enemy_id)
-				#Skip if the ally is not in_battle or the enemy can't see ally
 				next if !ally.in_battle or !in_range?(enemy.event, ally.event, enemy.see_range)
-				#Skip if the enemy can't hear ally
 				next if !in_range?(enemy.event, ally.event, enemy.hear_range)
-				#Skip if is player and can't be player
 				next if ally.attacking == $game_player and !enemy.hate_group.include?(0)
-				#Add to enemy attack list
 				enemy.attacking = ally.attacking
-				#Enemy is now in battle
 				enemy.in_battle = true
-				#Setup the movement
 				setup_movement(enemy)
-				#Return True
 				return true
 			end
-			#Return False
 			return false
 		end
 		
@@ -1974,7 +1741,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * In Range?(Element, Object, Range) - Near Fantastica
 		#--------------------------------------------------------------------------
 		def in_range?(element, object, range)
-			
 			x = (element.x - object.x) * (element.x - object.x)
 			y = (element.y - object.y) * (element.y - object.y)
 			r = x + y
@@ -2053,7 +1819,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			$scene.spriteset.make_range_sprite(element, range, skill, sw)
 		end
 		
-		
 		def send_network_monster(monster, delete_sw = 0)
 			data = {
 				"map_id" => $game_map.map_id,
@@ -2071,7 +1836,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			message = "<monster_save>"
 			data.each { |key, value| message += "#{key}:#{value}|" }
 			message += "</monster_save>\n"
-			
 			Network::Main.socket.send(message)
 		end
 		#--------------------------------------------------------------------------
@@ -2135,19 +1899,12 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update
 			super
 			return if @stop
-			#Return if moving
 			return if moving?
-			#Check if something is still here
+			
 			if @parent == nil or @actor == nil
 				@stop = true
 				return
 			end
-			
-			#~ @stop = true if @step > @range
-			#~ #Increase step
-			#~ @step += 1
-			#~ #return if !no_one?
-			#~ return force_movement if no_one?
 			
 			no_one?
 			#Stop if it came to range
@@ -2250,7 +2007,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			es_set_graphic(char_name, opcity, hue)
-			
 			
 			@skill = skill
 			
@@ -3396,16 +3152,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		def can_use_skill?(skill)
 			# 여기다가 스킬 딜레이가 남아있으면 무시하도록 만들어보자
 			return false if @skill_mash != nil and @skill_mash[skill.id] != nil and @skill_mash[skill.id] > 0
-			
-			# If there's not enough SP, the skill cannot be used.
 			return false if skill.sp_cost > self.sp
-			
-			# Unusable if incapacitated
 			return false if dead?
-			
-			# If silent, only physical skills can be used
 			return false if skill.atk_f == 0 and self.restriction == 1
-			
 			
 			# Get usable time
 			occasion = skill.occasion
@@ -3519,8 +3268,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     skill : skill
 		#--------------------------------------------------------------------------
 		def effect_skill(user, skill)
-			# 공격 대상 확인
-			if self.is_a?(ABS_Enemy) && user.is_a?(Game_Actor)
+			if self.is_a?(ABS_Enemy) && user.is_a?(Game_Actor) # 공격 대상 확인
 				return if !self.hate_group.include?(0)
 			end
 			
@@ -3528,7 +3276,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if self.id != user.id && !self.hate_group.include?(user.id)
 			end
 			
-			# Clear critical flag
 			self.critical = false
 			
 			# 스킬 범위에 따른 처리
@@ -3537,25 +3284,16 @@ if SDK.state("Mr.Mo's ABS") == true
 				return false
 			end
 			
-			# Clear effective flag
-			effective = false
+			effective = false # Clear effective flag
+			effective |= skill.common_event_id > 0 # 스킬이 효과를 가지는 경우
 			
-			# 스킬이 효과를 가지는 경우
-			effective |= skill.common_event_id > 0
-			
-			# 첫 번째 명중 판정
-			hit = skill.hit
-			
-			# 스킬 사용자의 명중률 계산
-			if skill.atk_f > 0
+			hit = skill.hit # 첫 번째 명중 판정
+			if skill.atk_f > 0 # 스킬 사용자의 명중률 계산
 				hit *= user.hit / 100 if !user.is_a?(Game_NetPlayer)
 			end
 			
-			# 명중 판정
-			hit_result = rand(10) < hit
-			
-			# 불확실한 명중률인 경우 효과가 있다고 설정
-			effective |= hit < 100
+			hit_result = rand(10) < hit # 명중 판정
+			effective |= hit < 100 # 불확실한 명중률인 경우 효과가 있다고 설정
 			
 			# 명중 시
 			if hit_result
@@ -3802,11 +3540,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			# Turn down
 			if turn_enabled
-				if @direction != 2
-					turn_down
-				end
+				turn_down if @direction != 2
 			end
-			# If passable
+			
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
 			if passable?(@x, @y, 2)
 				turn_down
@@ -3815,8 +3551,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				increase_steps
 				enemy_move
 			else
-				# Determine if touch event is triggered
-				check_event_trigger_touch(@x, @y+1)
+				check_event_trigger_touch(@x, @y+1) # Determine if touch event is triggered
 			end
 		end
 		#--------------------------------------------------------------------------

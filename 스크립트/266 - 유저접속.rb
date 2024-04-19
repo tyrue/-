@@ -4,8 +4,8 @@ def 유저접속
 		$game_party.actors[0].name = $nickname
 	end
 	Network::Main.update
-	$ABS = MrMo_ABS.new
-	$rpg_skill = Rpg_skill.new # 스킬 사용에 대한 클래스
+	$ABS = MrMo_ABS.new unless $ABS
+	$rpg_skill = Rpg_skill.new unless $rpg_skill # 스킬 사용에 대한 클래스
 	$game_party.setup_starting_members
 	
 	Network::Main.socket.send("<dtloadreq>'req'</dtloadreq>\n")
@@ -24,8 +24,8 @@ def 유저접속
 	$cbig = 0
 	$nowtrade = 0
 	$game_player.move_speed = $rpg_skill.player_base_move_speed
-	$scene = Scene_Reinit.new
-	$Abs_item_data = Item_data.new
+	$scene = Scene_Reinit.new 
+	$Abs_item_data = Item_data.new unless $Abs_item_data
 	
 	$console = nil
 	$chat = nil

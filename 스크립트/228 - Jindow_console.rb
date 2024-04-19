@@ -75,6 +75,7 @@ class Jindow_Console < Jindow
 			@console_log.shift 
 			clear_and_write
 		end
+		
 		@console_log[@console_log.size - 1].x = 0
 		@console_log[@console_log.size - 1].y = (@console_log.size - 1) * (@font_size + @margin)
 		@console_log[@console_log.size - 1].bitmap = Bitmap.new(self.width + 5, @font_size)

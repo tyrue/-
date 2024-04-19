@@ -2,11 +2,12 @@
 
 # Modifies the error message raised to show the full traceback path.
 def traceback_report
-	backtrace = $!.backtrace.clone
-	backtrace.each{ |bt|
-		bt.sub!(/{(\d+)}/) {"[#{$1}]#{$RGSS_SCRIPTS[$1.to_i][1]}"}
-	}
-	return $!.message + "\n\n" + backtrace.join("\n")
+  backtrace = $!.backtrace.clone
+  backtrace.each do |bt|
+    bt.sub!(/(\d+)/) { "[#{$1}]#{$RGSS_SCRIPTS[$1.to_i][1]}" }
+  end
+  
+  return $!.message + "\n\n" + backtrace.join("\n")
 end
 
 def raise_traceback_error
@@ -36,12 +37,15 @@ begin
 	Network::Main.close_socket 
 	Graphics.transition(25)
 	exit!
+	
+rescue
+  $!.message.sub!($!.message, traceback_report)
+  raise_traceback_error	
+	
 rescue SyntaxError
   $!.message.sub!($!.message, traceback_report)
   raise_traceback_error
-rescue
-  $!.message.sub!($!.message, traceback_report)
-  raise_traceback_error
+
 rescue Errno::ENOENT
 	$!.message.sub!($!.message, traceback_report)
 	raise_traceback_error

@@ -533,15 +533,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			buff_data = actor.buff_time
 			buff_data.each do |buff|
 				id = buff[0]
-				actor.buff_time[id] = 0 if buff[1] > 0
-				$rpg_skill.buff_del(id) if buff[1] > 0
+				$rpg_skill.buff_del(id)
 			end
 			
-			if actor == $game_party.actors[0] and $skill_Delay_Console != nil
-				$skill_Delay_Console.refresh
-				$skill_Delay_Console.refresh
-				$skill_Delay_Console.dispose
-			end
+			return if actor != $game_party.actors[0]
+			return if $skill_Delay_Console == nil
+			
+			$skill_Delay_Console.refresh
+			$skill_Delay_Console.refresh
+			$skill_Delay_Console.dispose
 		end
 		
 		#--------------------------------------------------------------------------
@@ -626,11 +626,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				next unless remaining_turns > 0
 				
 				enemy.buff_time[id] -= 1 
-				if enemy.buff_time[id] == 0
-					skill_name = $data_skills[id].name
-					$console.write_line("#{skill_name} 끝")
-					$rpg_skill.buff_del_enemy(id, enemy) # 버프 끝 표시
-				end
+				$rpg_skill.buff_del(id, enemy) if enemy.buff_time[id] == 0
 			end
 		end
 		
@@ -899,7 +895,7 @@ if SDK.state("Mr.Mo's ABS") == true
 					end
 					
 					$rpg_skill.heal(skill.id, e) # 이게 회복 스킬인지 확인
-					$rpg_skill.buff_enemy(skill.id, e) # 이게 버프 스킬인지 확인
+					$rpg_skill.buff(skill.id, e) # 이게 버프 스킬인지 확인
 					
 					e.event.animation_id = skill.animation1_id # Animate the enemy
 					Network::Main.ani(e.event.id, skill.animation1_id, 1)
@@ -919,23 +915,23 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_player
 			# 스킬 딜레이 갱신
 			for skill_mash in SKILL_MASH_TIME
-				if skill_mash[1][1] > 0
-					skill_mash[1][1] -= 1 
-					
-					$console.write_line("#{$data_skills[skill_mash[0]].name} 딜레이 끝") if skill_mash[1][1] == 0
-				end
+				id, val = skill_mash
+				next if val[1] <= 0
+				
+				val[1] -= 1 	
+				$console.write_line("#{$data_skills[id].name} 딜레이 끝") if val[1] == 0
 			end
 			
 			# 버프 지속시간 갱신
 			for buff_data in $game_party.actors[0].buff_time
-				id = buff_data[0]
-				if buff_data[1] > 0
-					$game_party.actors[0].buff_time[id] -= 1 
-					if $game_party.actors[0].buff_time[id] == 0
-						$console.write_line("#{$data_skills[id].name} 끝")
-						$rpg_skill.buff_del(id) # 버프 끝 표시
-					end
-				end
+				id, time = buff_data
+				next if time <= 0
+				
+				$game_party.actors[0].buff_time[id] -= 1
+				next if $game_party.actors[0].buff_time[id] > 0
+				
+				$console.write_line("#{$data_skills[id].name} 끝")
+				$rpg_skill.buff_del(id) # 버프 끝 표시
 			end
 			
 			# 후 딜레이 처리
@@ -949,19 +945,15 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			check_item if @item_mash == 0 # 아이템 단축키 눌렸니?
 			@actor = $game_party.actors[0]
-			# 공격키가 눌렸니?
-			if Input.trigger?(@attack_key) and @attack_mash == 0
+			
+			if Input.trigger?(@attack_key) and @attack_mash == 0 # 공격키가 눌렸니?
 				# 만약 죽은 상태면 공격 못함
 				if $game_switches[296]# 유저 죽음 스위치가 켜져있다면 패스
 					$console.write_line("귀신은 할 수 없습니다.")
 					return 
 				end
 				
-				if RANGE_WEAPONS.has_key?(@actor.weapon_id)
-					player_range 
-				else
-					player_melee
-				end
+				RANGE_WEAPONS.has_key?(@actor.weapon_id) ? player_range : player_melee
 			end
 			
 			# 만약 스킬 사용 불가 지역이면 콘솔로 말하고 무시
@@ -1223,7 +1215,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			$game_player.animation_id = skill.animation1_id
 			Network::Main.ani(Network::Main.id, skill.animation1_id)
 			
-			check = nil
 			check = $rpg_skill.buff(id) # 이게 버프 스킬인지 확인
 			$rpg_skill.heal(id) # 이게 회복 스킬인지 확인
 			$rpg_skill.party_heal(id) # 이게 파티 회복 스킬인지 확인

@@ -311,6 +311,7 @@ class Jindow < Viewport
 	end
 	
 	def hide # 창 숨기기
+		
 		self.opacity = 0
 		for i in item
 			i.visible = false

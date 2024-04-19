@@ -359,8 +359,8 @@ class Rpg_skill
 	end
 	
 	# 버프 사용
-	def buff_active(id)
-		buff(id) # 이게 버프 스킬인지 확인
+	def buff_active(id, battler = $game_party.actors[0])
+		buff(id, battler) # 이게 버프 스킬인지 확인
 		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 		if ani_id != nil
 			$game_player.animation_id = ani_id
@@ -368,314 +368,124 @@ class Rpg_skill
 		end
 	end
 	
-	def buff(id, sw = true)
-		return if BUFF_SKILL[id] == nil
-		# 아직 버프가 지속중이면 무시
+	# 버프
+	def buff(id, battler = $game_party.actors[0], my_buff = true, is_close = false)
 		buff_data = BUFF_SKILL[id]
-		time_now = $game_party.actors[0].buff_time[id] # 현재 남은 버프 시간
-		buff_time = buff_data[0] * Graphics.frame_rate
-		$game_party.actors[0].buff_time[id] = buff_time
-		$ABS.skill_console(id)   # 스킬 딜레이 표시
+		return unless buff_data
 		
+		buff_time_set = buff_data[0] * Graphics.frame_rate
 		is_party = buff_data[1]
-		self.party_buff(id) if is_party and sw # 파티버프라면 파티로 버프 sw는 자신이 버프를 실행한 건지 
-		return true if time_now != nil and time_now > 0 # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
-		
 		buff_val = buff_data[2]
-		return true if buff_val == nil
-		for data in buff_val
-			case data[0].to_s
-			when "str" # 힘
-				$game_party.actors[0].str += data[1].to_i
-				@base_str += data[1].to_i
-			when "dex" # 손재주
-				$game_party.actors[0].dex += data[1].to_i
-				@base_dex += data[1].to_i
-			when "int" # 지력
-				@base_int += data[1].to_i
-				$game_party.actors[0].int += data[1].to_i
-			when "agi" # 민첩
-				$game_party.actors[0].agi += data[1].to_i
-				@base_agi += data[1].to_i
-			when "mdef" # 마법 방어
-				$game_party.actors[0].mdef += data[1].to_i
-			when "pdef" # 물리 방어
-				$game_party.actors[0].pdef += data[1].to_i
-				
-				# 퍼센트
-			when "per_str" # 힘
-				base = $game_party.actors[0].take_base_str
-				n = (base * (data[1].to_f - 1.0)).to_i
-				data[2] = n
-				$game_party.actors[0].str += n
-				@base_str += n
-			when "per_dex" # 손재주
-				base = $game_party.actors[0].take_base_dex
-				n = (base * (data[1].to_f - 1.0)).to_i
-				data[2] = n
-				$game_party.actors[0].dex += n
-				@base_dex += n
-			when "per_int" # 지력
-				base = $game_party.actors[0].take_base_int
-				n = (base * (data[1].to_f - 1.0)).to_i
-				data[2] = n
-				$game_party.actors[0].int += n
-				@base_int += n
-			when "per_agi" # 민첩
-				base = $game_party.actors[0].take_base_agi
-				n = (base * (data[1].to_f - 1.0)).to_i
-				data[2] = n
-				$game_party.actors[0].agi += n
-				@base_agi += n
-			when "per_mdef" # 마법 방어
-				$game_party.actors[0].mdef *= data[1].to_f
-			when "per_pdef" # 물리 방어
-				$game_party.actors[0].pdef *= data[1].to_f
-				
-			when "com" # 커먼 이벤트
-				$game_temp.common_event_id = data[1].to_i
-				
-			when "speed" # 속도 변경
-				$game_player.move_speed += data[1]
-				Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-				
-			when "custom" # 자체 수정
-				case id
-				when 66  # 신수둔각도
-					$game_variables[41] = $game_party.actors[0].weapon_id # 대충 현재 착용 했던 무기 아이디 저장
-					if $game_switches[1] == true # 청룡
-						$game_party.gain_weapon(4, 1)
-						$game_party.actors[0].equip(0, 4)
-						
-					elsif $game_switches[2] == true # 백호
-						$game_party.gain_weapon(2, 1)
-						$game_party.actors[0].equip(0, 2)
-						
-					elsif $game_switches[3] == true # 주작
-						$game_party.gain_weapon(1, 1)
-						$game_party.actors[0].equip(0, 1)
-						
-					elsif $game_switches[4] == true # 현무
-						$game_party.gain_weapon(3, 1)
-						$game_party.actors[0].equip(0, 3)
-					end
-					
-				when 131, 141, 142 # 투명
-					self.투명
-					
-				when 134 # 분신
-					$console.write_line("분신을 생성합니다.")
-					
-				when 140 # 운기
-					$console.write_line("마력을 회복합니다.")
-					
-				when 143 # 기문방술
-					$console.write_line("투명을 유지합니다.")	
-					self.party_buff(142)
-				else
-					
-				end
-			end
-		end
-		return true
-	end
-	
-	def buff_del(id)
-		return if BUFF_SKILL[id] == nil
-		buff_data = BUFF_SKILL[id][2]
-		return if buff_data == nil
 		
-		$game_party.actors[0].buff_time[id] = 0
-		for data in buff_data
-			n = data[1]
-			case data[0].to_s
-			when "str" # 힘
-				$game_party.actors[0].str -= n.to_i
-				@base_str = [0, @base_str - n].max
-			when "dex" # 손재주
-				$game_party.actors[0].dex -= n.to_i
-				@base_dex = [0, @base_dex - n].max
-			when "int" # 지력
-				$game_party.actors[0].int -= n.to_i
-				@base_int = [0, @base_int - n].max
-			when "agi" # 민첩
-				$game_party.actors[0].agi -= n.to_i
-				@base_agi = [0, @base_agi - n].max
-			when "mdef" # 마법 방어
-				$game_party.actors[0].mdef -= n.to_i
-				$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
-			when "pdef" # 물리 방어
-				$game_party.actors[0].pdef -= n.to_i
-				$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
-				# 퍼센트
-			when "per_str" # 힘
-				n = 0
-				if(data[2] != nil and data[2] != 0)
-					n = data[2]
-				else
-					r = (data[1].to_f - 1.0)
-					base = $game_party.actors[0].take_base_str
-					n = base * (r / (1 + r))
-				end
-				$game_party.actors[0].str -= n
-				@base_str = [0, @base_str - n].max
-				
-			when "per_dex" # 손재주
-				n = 0
-				if(data[2] != nil and data[2] != 0)
-					n = data[2]
-				else
-					r = (data[1].to_f - 1.0)
-					base = $game_party.actors[0].take_base_dex
-					n = base * (r / (1 + r))
-				end
-				$game_party.actors[0].dex -= n
-				@base_dex = [0, @base_dex - n].max
-				
-			when "per_int" # 지력
-				n = 0
-				if(data[2] != nil and data[2] != 0)
-					n = data[2]
-				else
-					base = $game_party.actors[0].take_base_int
-					r = (data[1].to_f - 1.0)
-					n = base * (r / (1 + r))
-				end
-				$game_party.actors[0].int -= n 
-				@base_int = [0, @base_int - n].max
-				
-			when "per_agi" # 민첩
-				n = 0
-				if(data[2] != nil and data[2] != 0)
-					n = data[2]
-				else
-					base = $game_party.actors[0].take_base_agi
-					r = (data[1].to_f - 1.0)
-					n = base * (r / (1 + r))
-				end
-				$game_party.actors[0].agi -= n
-				@base_agi = [0, @base_agi - n].max
-				
-			when "per_mdef" # 마법 방어
-				$game_party.actors[0].mdef /= n
-				$game_party.actors[0].mdef = 0 if $game_party.actors[0].mdef < 0
-			when "per_pdef" # 물리 방어
-				$game_party.actors[0].pdef /= n
-				$game_party.actors[0].pdef = 0 if $game_party.actors[0].pdef < 0
-			when "speed"	
-				$game_player.move_speed -= n
-				Network::Main.socket.send("<5>@move_speed = #{$game_player.move_speed};</5>\n")
-				
+		check_time = battler.buff_time[id]
+		battler.buff_time[id] = is_close ? 0 : buff_time_set
+		
+		if battler.is_a?(Game_Actor) && !is_close
+			$ABS.skill_console(id)   # 스킬 딜레이 표시	
+			self.party_buff(id) if is_party && my_buff # 파티버프라면 파티로 버프 sw는 자신이 버프를 실행한 건지 
+			return true if check_time != nil && check_time > 0# 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
+		end
+		return true if buff_val == nil
+		
+		character = battler.is_a?(ABS_Enemy) ? battler.event : $game_player		
+		for data in buff_val
+			type, val = data
+			case type.to_s
+			when "str", "dex", "int", "agi", "mdef", "pdef"
+				apply_stat_effect(data, battler, is_close)
+			when "per_str", "per_dex", "per_int", "per_agi", "per_mdef", "per_pdef"
+				apply_percentage_effect(data, battler, is_close)
+			when "speed"
+				change_move_speed(val, character, is_close)
 			else
-				case id
-				when 28 # 야수
-					$game_temp.common_event_id = 41
-				when 35 # 비호
-					$game_temp.common_event_id = 41
-				when 50 # 야수금술
-					$game_temp.common_event_id = 41
-				when 66  # 신수둔각도
-					$game_party.actors[0].equip(0, 0)
-					$game_party.lose_weapon(1, 999)
-					$game_party.lose_weapon(2, 999)
-					$game_party.lose_weapon(3, 999)
-					$game_party.lose_weapon(4, 999)
-					Audio.se_play("Audio/SE/장비", $game_variables[13])
-					
-					$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
-					
-				when 131, 141, 142 # 투명, 1, 2성
-					self.투명해제
-					
-				when 134 # 분신
-					$console.write_line("분신이 사라집니다.")
-					
-				when 140 # 운기
-					$console.write_line("운기가 종료 됩니다.")	
-				end
-			end
-		end
-	end
-	
-	def buff_enemy(id, battler)
-		return if BUFF_SKILL[id] == nil
-		# 아직 버프가 지속중이면 무시
-		buff_data = BUFF_SKILL[id]
-		time_now = battler.buff_time[id] # 현재 남은 버프 시간
-		buff_time = buff_data[0] * Graphics.frame_rate
-		battler.buff_time[id] = buff_time
-		return true if time_now != nil and time_now > 0 # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
-		
-		
-		buff_val = buff_data[2]
-		return true if buff_val == nil
-		
-		for data in buff_val
-			type = data[0].to_s
-			val = data[1].to_f
-			
-			case type
-			when "str" # 힘
-				battler.str += val
-			when "dex" # 손재주
-				battler.dex += val
-			when "int" # 지력
-				battler.int += val
-			when "agi" # 민첩
-				battler.agi += val
-			when "mdef" # 마법 방어
-				battler.mdef += val
-			when "pdef" # 물리 방어
-				battler.pdef += val
-				
-			when "speed" # 속도 변경
-				battler.event.move_speed += val
-			when "custom" # 자체 수정
-				
+				next if !battler.is_a?(Game_Actor)
+				apply_custom_effect(id, data, is_close)
 			end
 		end
 		return true
 	end
 	
-	def buff_del_enemy(id, battler)
-		return if BUFF_SKILL[id] == nil
+	# 버프 끄기
+	def buff_del(id, battler = $game_party.actors[0])
+		self.buff(id, battler, true, true)
+	end
+	
+	def apply_stat_effect(data, battler = $game_party.actors[0], is_close = false)
+		stat = data[0].to_sym
+		value = data[1].to_i
+		value *= -1 if is_close
+		battler.send("#{stat}=", battler.send(stat) + value)
 		
-		buff_val = BUFF_SKILL[id][2]
-		return true if buff_val == nil
+		return if battler == $game_party.actors[0]
+		return if eval("@base_#{stat}") == nil
+		instance_variable_set("@base_#{stat}", [instance_variable_get("@base_#{stat}") + value, 0].max) 		
+	end
+	
+	def apply_percentage_effect(data, battler = $game_party.actors[0], is_close = false)
+		stat = data[0].sub("per_", "").to_sym
+		base = battler.take_base_stat(stat)
+		n = (base * (data[1].to_f - 1.0)).to_i
+		n *= -1 if is_close
+		battler.send("#{stat}=", battler.send(stat) + n)
 		
-		battler.buff_time[id] = 0
-		for data in buff_val
-			type = data[0].to_s
-			val = data[1].to_f
-			
-			case type
-			when "str" # 힘
-				battler.str -= val
-			when "dex" # 손재주
-				battler.dex -= val
-			when "int" # 지력
-				battler.int -= val
-			when "agi" # 민첩
-				battler.agi -= val
-			when "mdef" # 마법 방어
-				battler.mdef -= val
-			when "pdef" # 물리 방어
-				battler.pdef -= val
+		return if battler != $game_party.actors[0]
+		return if eval("@base_#{stat}") == nil
+		instance_variable_set("@base_#{stat}", [instance_variable_get("@base_#{stat}") + n, 0].max)
+	end
+	
+	def change_move_speed(value, character = $game_player, is_close = false)
+		value *= -1 if is_close
+		character.move_speed += value
+		Network::Main.socket.send("<5>@move_speed = #{character.move_speed};</5>\n") if character == $game_player
+	end
+	
+	def apply_custom_effect(id, data, is_close = false)
+		type, val = data
+		case id
+		when 28, 35, 50 # 둔갑
+			$game_temp.common_event_id = !is_close ? val.to_i : 41
+		when 66  # 신수둔각도
+			if is_close
+				$game_party.actors[0].equip(0, 0)
+				$game_party.lose_weapon(1, 999)
+				$game_party.lose_weapon(2, 999)
+				$game_party.lose_weapon(3, 999)
+				$game_party.lose_weapon(4, 999)
+				Audio.se_play("Audio/SE/장비", $game_variables[13])
 				
-			when "speed" # 속도 변경
-				battler.event.move_speed -= val
-				
-			when "custom" # 자체 수정
-				
+				$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
+				return
 			end
+			
+			$game_variables[41] = $game_party.actors[0].weapon_id if $game_party.actors[0].weapon_id > 4 # 대충 현재 착용 했던 무기 아이디 저장
+			w_id = 1
+			w_id = 4 if $game_switches[1] # 청룡
+			w_id = 2 if $game_switches[2] # 백호
+			w_id = 1 if $game_switches[3] # 주작
+			w_id = 3 if $game_switches[4] # 현무
+			
+			$game_party.gain_weapon(w_id, 1)
+			$game_party.actors[0].equip(0, w_id)
+		when 131, 141, 142
+			!is_close ? self.투명 : self.투명해제
+		when 134
+			str = !is_close ? "분신을 생성합니다." : "분신이 사라집니다."
+			$console.write_line(str)
+		when 140
+			str = !is_close ? "마력을 회복합니다." : "운기가 종료 됩니다."
+			$console.write_line(str)
+		when 143
+			$console.write_line("투명을 유지합니다.")  
+			self.party_buff(142)
+		else
+			# 처리할 게 없을 때
 		end
-		return true
 	end
 	
 	def casting_chat(data, user = $game_player)
 		sec = data[0]
 		msg = data[1]
-		type = data[2] != nil ? data[2] : 3
+		type = data[2] || 3
 		
 		if msg != nil
 			$chat_b.input(msg, type, sec, user)
@@ -686,7 +496,8 @@ class Rpg_skill
 			end
 		end
 	end
-	
+		
+	# 스킬에 따른 대화를 생성하고 채팅을 보내는 함수
 	def skill_chat(skill, user = $game_player)
 		id = skill.id
 		name = $game_party.actors[0].name
@@ -694,78 +505,24 @@ class Rpg_skill
 		type = 3
 		sec = 4
 		
-		case id
-		when 44 # 헬파이어
-			msg = "#{skill.name}!!"
-		when 53, 57, 69 # 삼매진화
-			msg = "삼매진화!!"
-		when 58 # 지폭지술
-			msg = "!!#{skill.name}!!"
-		when 67 # 건곤대나이
-			msg = "#{skill.name}!!"
-		when 68 # 폭류유성
-			msg = "!!#{skill.name}!!"
-		when 79 # 동귀어진
-			msg = "!!#{skill.name}!!"
-		when 101 # 백호참
-			msg = "#{skill.name}!!"
-		when 103 # 어검술
-			msg = "#{skill.name}!!"
-		when 104 # 포효검황
-			msg = "!!#{skill.name}!!"
-		when 105 # 혈겁만파
-			msg = "!!#{skill.name}!!"
-		when 106 # 초혼비무
-			msg = "#{skill.name}!!"			
-		when 123 # 귀염추혼소
-			msg = "!!#{skill.name}!!"
-		when 133 # 필살검무
-			msg = "#{skill.name}!!"
-		when 135 # 백호검무
-			msg = "#{skill.name}!!"
-		when 137 # 이기어검
-			msg = "#{skill.name}!!"
-		when 138 # 무형검
-			msg = "#{skill.name}!!"
-		when 139 # 분혼경천
-			msg = "!!#{skill.name}!!"
-			
-		when 143 # 기문방술
-			msg = "!!#{skill.name}!!"
-			
-			# 적 스킬
-		when 85 # 필살검무
-			msg = "필살검무!"
-		when 151 # 청룡 포효
-			msg = "크롸롸롸롸!"
-		when 152 # 현무 포효
-			msg = "크롸롸롸롸!"
-		when 154 # 청룡마령참
-			msg = "!!#{skill.name}!!"
-		when 155 # 암흑진파
-			msg = "#{skill.name}!!"
-		when 156 # 흑룡광포
-			msg = "#{skill.name}!!"
-		when 157 # 회복
-			type = 4
-			msg = "가소롭다!!"
-		when 158 # 지옥겁화
-			msg = "!!지옥겁화!!"
-		when 159 # 혈겁만파
-			msg = "!!혈겁만파!!"
-		when 160 # 분혼경천
-			msg = "!!분혼경천!!"
-		when 161 # 폭류유성
-			msg = "!!폭류유성!!"
+		# 각 스킬에 대한 메시지 생성
+		msg = case id
+		when 44 then "#{skill.name}!!" # 헬파이어
+		when 53, 57, 69 then "삼매진화!!" # 삼매진화
+		when 58, 67, 101, 103, 106, 123, 133, 135, 137, 138 then "!!#{skill.name}!!" # 지정된 스킬
+		when 79 then "!!#{skill.name}!!" # 동귀어진
+		when 143 then "!!#{skill.name}!!" # 기문방술
+		when 151, 152 then "크롸롸롸롸!" # 청룡 포효, 현무 포효
+		when 154 then "!!#{skill.name}!!" # 청룡마령참
+		when 155, 156 then "#{skill.name}!!" # 암흑진파, 흑룡광포
+		when 157 then type = 4; "가소롭다!!" # 회복
+		when 158, 159, 160, 161 then "!!#{skill.name}!!" # 지정된 스킬
 		end
 		
-		if msg != nil
+		if msg
 			$chat_b.input(msg, type, sec, user)
-			if user == $game_player
-				Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
-			else
-				Network::Main.socket.send "<monster_chat>#{user.id}&#{msg}&#{type}</monster_chat>\n" 
-			end
+			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n" if user == $game_player
+			Network::Main.socket.send "<monster_chat>#{user.id}&#{msg}&#{type}</monster_chat>\n" if user != $game_player
 		end
 	end
 	

@@ -1,11 +1,9 @@
 if User_Edit::VISUAL_EQUIP_ACTIVE
 	
 	class Sprite_NetCharacter < RPG::Sprite
-		
 		@@body = "Nada"
 		
 		alias global_ve_initialize initialize
-		
 		def initialize(viewport, id, character = nil)
 			@equips_id = [0, 0, 0, 0, 0]
 			global_ve_initialize(viewport, id, character)
@@ -30,8 +28,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 			@character_name = @character.character_name
 			@character_hue = @character.character_hue
 			if @tile_id >= 384
-				self.bitmap = RPG::Cache.tile($game_map.tileset_name,
-					@tile_id, @character.character_hue)
+				self.bitmap = RPG::Cache.tile($game_map.tileset_name, @tile_id, @character.character_hue)
 				self.src_rect.set(0, 0, 32, 32)
 				self.ox = 16
 				self.oy = 32
@@ -39,44 +36,32 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				equips = []
 				equips = equip_char_array
 				
-				# destruir o velho bitmap
 				self.bitmap.dispose unless self.bitmap == nil
-				# desenhar o bitmap do char
 				bmp = RPG::Cache.character(@character_name, @character_hue)
 				self.bitmap = Bitmap.new(bmp.width, bmp.height)
 				src_rect = Rect.new(0, 0, bmp.width, bmp.height)
-				# condição do tamanho
 				if equips.size > 0 and bmp.width == 236 and bmp.height == 236 # 사람 캐릭터
 					size = equips.size -1
 					for i in 0..size
 						next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
 						bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
 						
+						t_val = 255
 						if @character.is_transparency # 투명임
 							ok = $netparty.include? @character.name.to_s
-							
-							if ok # 파티원
-								self.bitmap.blt(0, 0, bmp2, src_rect, 125)
-							else
-								self.bitmap.blt(0, 0, bmp2, src_rect, 0)
-							end
-						else # 투명 아님
-							self.bitmap.blt(0, 0, bmp2, src_rect, 255)
+							t_val = ok ? 125 : 0
 						end
+						self.bitmap.blt(0, 0, bmp2, src_rect, t_val)
 					end
 				else # 둔갑임
-					src_rect = Rect.new(0, 0, bmp.width, bmp.height)
+					t_val = 255
 					if @character.is_transparency # 투명?
-							ok = $netparty.include? @character.name.to_s
-							if ok 
-								self.bitmap.blt(0, 0, bmp, src_rect, 125)
-							else
-								self.bitmap.blt(0, 0, bmp, src_rect, 0)
-						end
-					else
-						self.bitmap.blt(0, 0, bmp, src_rect, 255)
+						ok = $netparty.include? @character.name.to_s
+						t_val = ok ? 125 : 0
 					end
+					self.bitmap.blt(0, 0, bmp, src_rect, t_val)
 				end
+				
 				@cw = bitmap.width / 4
 				@ch = bitmap.height / 4
 				self.ox = @cw / 2

@@ -98,7 +98,9 @@ end
 
 def 네트워크_데이터_전송
 	actor = $game_party.actors[0]
-	base_hp, base_sp = actor.take_base_maxhp, actor.take_base_maxsp
+	base_str, base_dex = actor.take_base_stat("str"), actor.take_base_stat("dex")
+	base_agi, base_int = actor.take_base_stat("agi"), actor.take_base_stat("int") 
+	base_hp, base_sp = actor.take_base_max_stat("hp"), actor.take_base_max_stat("sp") 
 	userdata = {
 		#"server_name" => "흑부엉 서버",
 		"nickname" => actor.name,
@@ -106,10 +108,10 @@ def 네트워크_데이터_전송
 		"class_name" => actor.class_name,
 		"level" => actor.level,
 		"exp" => actor.exp,
-		"a_str" => actor.str,
-		"a_dex" => actor.dex,
-		"a_agi" => actor.agi,
-		"a_int" => actor.int,
+		"a_str" => base_str,
+		"a_dex" => base_dex,
+		"a_agi" => base_agi,
+		"a_int" => base_int,
 		"max_hp" => base_hp,
 		"max_sp" => base_sp,
 		"map_id" => $game_map.map_id,
@@ -133,13 +135,12 @@ def 네트워크_데이터_전송
 		"variable_list" => @valist,
 		"hotkey_list" => @hotKeyList,
 		"itemkey_list" => @itemKeyList,
-		"physical_defense" => actor.pdef,
-		"magical_defense" => actor.mdef,
+		"physical_defense" => 0,
+		"magical_defense" => 0,
 		"skill_mash_list" => @skill_mash_list,
 		"buff_mash_list" => @buff_mash_list,
 		"character_name2" => $cha_name
 	}
-	
 	
 	message = "<userdata>"
 	userdata.each { |key, value| message += "#{key}:#{value}|" }

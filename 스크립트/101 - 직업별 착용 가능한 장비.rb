@@ -215,82 +215,58 @@ end
 
 class Game_Actor < Game_Battler
 	# 직업별 착용 가능한 장비 설정
-	def equippable?(item)
-		check = Equip_Job_Type::EQUIP_JOB_WEAPON[item.id]
-		check2 = Equip_Job_Type::EQUIP_JOB_ARMOR[item.id]
+	def equippable?(item)		
+		job_type = determine_job_type
+    job_degree = determine_job_degree
 		
-		$job_degree = 0
+		equip_data = item.is_a?(RPG::Weapon) ? Equip_Job_Type::EQUIP_JOB_WEAPON[item.id] : Equip_Job_Type::EQUIP_JOB_ARMOR[item.id]
+
+    return false if equip_data.nil? 
+		return false if equip_data[1] > job_degree 
+		return false if !equip_data[0].include?(job_type) && !equip_data[0].include?(0)
+    return false if level < item_level(item)
+		
+		return true
+	end
+	
+	def determine_job_type
+		return 1 if $game_switches[6] # 주술사
+		return 2 if $game_switches[156] # 전사
+		return 3 if $game_switches[144] # 도사
+		return 4 if $game_switches[426] # 도적
+		return 0 # Default: 평민
+	end
+	
+	def determine_job_degree
 		n = $game_party.actors[0].class_id
-		
-		# 승급차수
-		$job_degree = 1 if (n == 3 or n == 8 or n == 11 or n == 18)
-		$job_degree = 2 if (n == 5 or n == 9 or n == 12 or n == 19)		
-		$job_degree = 3	if (n == 6 or n == 10 or n == 13 or n == 20)
-		$job_degree = 4 if (n == 14 or n == 15 or n == 16 or n == 21)
-		
-		job_type = 0
-		if $game_switches[6] # 주술사
-			job_type = 1	
-		elsif $game_switches[156] # 전사
-			job_type = 2
-		elsif $game_switches[144] # 도사
-			job_type = 3
-		elsif $game_switches[426] # 도적
-			job_type = 4
-		else # 평민
-			
+		case n
+		when 3, 8, 11, 18 then 1
+		when 5, 9, 12, 19 then 2
+		when 6, 10, 13, 20 then 3
+		when 14, 15, 16, 21 then 4
+		else 0
 		end
-		
-		if item.is_a?(RPG::Weapon)
-			return false if check == nil
-			return false if check[1] > $job_degree
-			return false if !(check[0].include?(job_type) or check[0].include?(0))
-			return false if level < item_level(item)
-			return true
-		end
-		
-		if item.is_a?(RPG::Armor)
-			return false if check2 == nil
-			return false if check2[1] > $job_degree
-			return false if !(check2[0].include?(job_type) or check2[0].include?(0))
-			return false if level < item_level(item)
-			return true
-		end
-		return false
 	end
 	
 	def item_level(item)
 		return 0 if item == nil
 		text = item.description.dup 
+		check = item.is_a?(RPG::Weapon) ? Equip_Job_Type::EQUIP_JOB_WEAPON[item.id] : Equip_Job_Type::EQUIP_JOB_ARMOR[item.id]
 		
-		check = nil
-		if item.is_a?(RPG::Weapon)
-			check = Equip_Job_Type::EQUIP_JOB_WEAPON[item.id]
-		elsif item.is_a?(RPG::Armor)
-			check = Equip_Job_Type::EQUIP_JOB_ARMOR[item.id]
-		end
+		return 0 if check.nil?
+		return 0 if check[1] < 1 && check[2].nil?
 		
-		if check != nil and (check[1] >= 1 or check[2] != nil)
-			findTxt = text.scan(/\[[제재][한][레래][벨밸]:([0-9]+)\]/)
-			reqLevel = check[1] >= 1 ? 99 : check[2]
-			
-			if findTxt.size == 0
-				item.description += "[제한레벨:" + reqLevel.to_s + "]"
-			else
-				findLevel = findTxt[0][0].to_i
-				if(findLevel != reqLevel)
-					item.description.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) do
-						|s| s = "[제한레벨:" + reqLevel.to_s + "]"
-					end
-				end
-			end
-			return reqLevel
-		end
-		
-		
-		text.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) do
-			return $1.to_i
-		end
-		return 0
+		description = item.description.dup
+    find_txt = description.scan(/\[[제재][한][레래][벨밸]:([0-9]+)\]/)
+    req_level = check[1] >= 1 ? 99 : check[2] # 차수가 1차 승급 이상이라면 레벨 제한 99
+
+    if find_txt.empty?
+      item.description += "[제한레벨:#{req_level}]"
+    else
+      find_level = find_txt[0][0].to_i
+      item.description.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) { |s| s = "[제한레벨:#{req_level}]" } if find_level != req_level
+    end
+
+    req_level
 	end
 end

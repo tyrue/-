@@ -109,14 +109,12 @@ class Set_Weapon_plus
 		@data[129] = [300, 200]    	# 도깨비방망이
 		@data[130] = [1400, 1400]    	# 산적왕의 칼
 		
-		
-		for d in @data
-			id = d[0]
-			hp = d[1][0]
-			sp = d[1][1]
-			
-			$data_weapons[id].hp_plus = hp if hp != nil 
-			$data_weapons[id].sp_plus = sp if sp != nil
+		for w in $data_weapons
+			next unless w
+			d = @data[w.id]
+			next unless d
+			$data_weapons[w.id].hp_plus = d[0] || 0 
+			$data_weapons[w.id].sp_plus = d[1] || 0
 		end
 	end
 end
@@ -173,241 +171,93 @@ class Set_Armor_plus
 		# 방패
 		@data[39] = [300, 200]		# 정화의방패
 		@data[40] = [500, 400]		# 여신의방패
-		
-		
-		for d in @data
-			id = d[0]
-			hp = d[1][0]
-			sp = d[1][1]
-			hp_per = d[1][2]
-			sp_per = d[1][3]
-			
-			$data_armors[id].hp_plus = hp if hp != nil 
-			$data_armors[id].sp_plus = sp if sp != nil
-			$data_armors[id].hp_plus_per = hp_per if hp_per != nil 
-			$data_armors[id].sp_plus_per = sp_per if sp_per != nil
+				
+		for a in $data_armors
+			next unless a
+			d = @data[a.id]
+			next unless d
+			$data_armors[a.id].hp_plus = d[0] || 0 
+			$data_armors[a.id].sp_plus = d[1] || 0
 		end
 	end
 end
 
 
 class Game_Actor
+	EQUIP_TYPES = {
+		0 => :weapon,
+		1 => :armor1,
+		2 => :armor2,
+		3 => :armor3,
+		4 => :armor4
+	}
+	
 	# 장비 착용할 때 체력, 마력 추가 하기
-	def change_hsp(base_equip = 0, change_equip = 0, type = -1)
-		return if type == -1 
-		case type
-		when 0
-			temp_hp = maxhp
-			temp_sp = maxsp
-			
-			temp_hp -= $data_weapons[base_equip].hp_plus if $data_weapons[base_equip] != nil and $data_weapons[base_equip].hp_plus != nil
-			temp_sp -= $data_weapons[base_equip].sp_plus if $data_weapons[base_equip] != nil and $data_weapons[base_equip].sp_plus != nil
-			
-			temp_hp += $data_weapons[change_equip].hp_plus if $data_weapons[change_equip] != nil and $data_weapons[change_equip].hp_plus != nil
-			temp_sp += $data_weapons[change_equip].sp_plus if $data_weapons[change_equip] != nil and $data_weapons[change_equip].sp_plus != nil
-			
-			self.maxhp = temp_hp
-			self.maxsp = temp_sp
-		else
-			temp_hp = maxhp
-			temp_sp = maxsp
-			
-			temp_hp -= $data_armors[base_equip].hp_plus if $data_armors[base_equip] != nil and $data_armors[base_equip].hp_plus != nil
-			temp_sp -= $data_armors[base_equip].sp_plus if $data_armors[base_equip] != nil and $data_armors[base_equip].sp_plus != nil
-			
-			temp_hp += $data_armors[change_equip].hp_plus if $data_armors[change_equip] != nil and $data_armors[change_equip].hp_plus != nil
-			temp_sp += $data_armors[change_equip].sp_plus if $data_armors[change_equip] != nil and $data_armors[change_equip].sp_plus != nil
-			
-			self.maxhp = temp_hp
-			self.maxsp = temp_sp
+	def change_hsp(base_equip, change_equip, type)
+		equip_data = type.zero? ? $data_weapons : $data_armors
+		temp_hp = maxhp
+		temp_sp = maxsp
+		
+		if equip_data[base_equip]
+			temp_hp -= equip_data[base_equip].hp_plus || 0
+			temp_sp -= equip_data[base_equip].sp_plus || 0
 		end
+		
+		if equip_data[change_equip]
+			temp_hp += equip_data[change_equip].hp_plus || 0
+			temp_sp += equip_data[change_equip].sp_plus || 0
+		end
+		
+		self.maxhp = temp_hp
+		self.maxsp = temp_sp
 	end
 	
 	alias edit_equip equip
 	def equip(equip_type, id)
+		equip_id = eval("@#{EQUIP_TYPES[equip_type]}_id")
 		case equip_type
-		when 0  # Weapon
-			if id == 0 or $game_party.weapon_number(id) > 0
-				change_hsp(@weapon_id, id, equip_type)
-				$game_party.gain_weapon(@weapon_id, 1)
-				@weapon_id = id
-				$game_party.lose_weapon(id, 1)
-			end
-		when 1  # Shield
-			if id == 0 or $game_party.armor_number(id) > 0
-				update_auto_state($data_armors[@armor1_id], $data_armors[id])
-				change_hsp(@armor1_id, id, equip_type)
-				$game_party.gain_armor(@armor1_id, 1)
-				@armor1_id = id
-				$game_party.lose_armor(id, 1)
-			end
-		when 2  # Head
-			if id == 0 or $game_party.armor_number(id) > 0
-				update_auto_state($data_armors[@armor2_id], $data_armors[id])
-				change_hsp(@armor2_id, id, equip_type)
-				$game_party.gain_armor(@armor2_id, 1)
-				@armor2_id = id
-				$game_party.lose_armor(id, 1)
-			end
-		when 3  # Body
-			if id == 0 or $game_party.armor_number(id) > 0
-				update_auto_state($data_armors[@armor3_id], $data_armors[id])
-				change_hsp(@armor3_id, id, equip_type)
-				$game_party.gain_armor(@armor3_id, 1)
-				@armor3_id = id
-				$game_party.lose_armor(id, 1)
-			end
-		when 4  # Accessory
-			if id == 0 or $game_party.armor_number(id) > 0
-				update_auto_state($data_armors[@armor4_id], $data_armors[id])
-				change_hsp(@armor4_id, id, equip_type)
-				$game_party.gain_armor(@armor4_id, 1)
-				@armor4_id = id
-				$game_party.lose_armor(id, 1)
-			end
+		when 0
+			return if !id.zero? && $game_party.weapon_number(id).zero?
+			change_hsp(equip_id, id, equip_type)
+			$game_party.gain_weapon(equip_id, 1)
+			$game_party.lose_weapon(id, 1)
+		when 1..5
+			return if !id.zero? && $game_party.armor_number(id).zero?
+			update_auto_state($data_armors[equip_id], $data_armors[id])
+			change_hsp(equip_id, id, equip_type)
+			$game_party.gain_armor(equip_id, 1)
+			$game_party.lose_armor(id, 1)
 		end
+		instance_variable_set("@#{EQUIP_TYPES[equip_type]}_id", id)
 	end
 	
-	def take_base_str
-		n = str
-		weapon = $data_weapons[@weapon_id]
-		armor1 = $data_armors[@armor1_id]
-		armor2 = $data_armors[@armor2_id]
-		armor3 = $data_armors[@armor3_id]
-		armor4 = $data_armors[@armor4_id]
-		n -= weapon != nil ? weapon.str_plus : 0
-		n -= armor1 != nil ? armor1.str_plus : 0
-		n -= armor2 != nil ? armor2.str_plus : 0
-		n -= armor3 != nil ? armor3.str_plus : 0
-		n -= armor4 != nil ? armor4.str_plus : 0
-		n -= $rpg_skill.base_str
-		return n.to_i
-	end
-	
-	def take_base_dex
-		n = dex
-		weapon = $data_weapons[@weapon_id]
-		armor1 = $data_armors[@armor1_id]
-		armor2 = $data_armors[@armor2_id]
-		armor3 = $data_armors[@armor3_id]
-		armor4 = $data_armors[@armor4_id]
-		n -= weapon != nil ? weapon.dex_plus : 0
-		n -= armor1 != nil ? armor1.dex_plus : 0
-		n -= armor2 != nil ? armor2.dex_plus : 0
-		n -= armor3 != nil ? armor3.dex_plus : 0
-		n -= armor4 != nil ? armor4.dex_plus : 0
-		n -= $rpg_skill.base_dex
-		return n.to_i
-	end
-	#--------------------------------------------------------------------------
-	# ● 기본 신속함의 취득
-	#--------------------------------------------------------------------------
-	def take_base_agi
-		n = agi
-		weapon = $data_weapons[@weapon_id]
-		armor1 = $data_armors[@armor1_id]
-		armor2 = $data_armors[@armor2_id]
-		armor3 = $data_armors[@armor3_id]
-		armor4 = $data_armors[@armor4_id]
-		n -= weapon != nil ? weapon.agi_plus : 0
-		n -= armor1 != nil ? armor1.agi_plus : 0
-		n -= armor2 != nil ? armor2.agi_plus : 0
-		n -= armor3 != nil ? armor3.agi_plus : 0
-		n -= armor4 != nil ? armor4.agi_plus : 0
-		n -= $rpg_skill.base_agi
-		return n.to_i
-	end
-	#--------------------------------------------------------------------------
-	# ● 기본 마력의 취득
-	#--------------------------------------------------------------------------
-	def take_base_int
-		n = int
-		weapon = $data_weapons[@weapon_id]
-		armor1 = $data_armors[@armor1_id]
-		armor2 = $data_armors[@armor2_id]
-		armor3 = $data_armors[@armor3_id]
-		armor4 = $data_armors[@armor4_id]
-		n -= weapon != nil ? weapon.int_plus : 0
-		n -= armor1 != nil ? armor1.int_plus : 0
-		n -= armor2 != nil ? armor2.int_plus : 0
-		n -= armor3 != nil ? armor3.int_plus : 0
-		n -= armor4 != nil ? armor4.int_plus : 0
-		n -= $rpg_skill.base_int
-		return n.to_i
-	end
-	
-	
-	def take_base_maxhp
-		base_hp = maxhp
-		
-		id = weapon_id
-		base_hp -= $data_weapons[id].hp_plus if id != 0 and $data_weapons[id].hp_plus != nil
-		
-		id = armor1_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		
-		id = armor2_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		
-		id = armor3_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		
-		id = armor4_id
-		base_hp -= $data_armors[id].hp_plus if id != 0 and $data_armors[id].hp_plus != nil
-		
-		return base_hp
-	end
-	
-	def take_base_maxsp
-		base_sp = maxsp
-		
-		id = weapon_id
-		base_sp -= $data_weapons[id].sp_plus if id != 0 and $data_weapons[id].sp_plus != nil
-		
-		id = armor1_id
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		id = armor2_id
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		id = armor3_id
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		id = armor4_id
-		base_sp -= $data_armors[id].sp_plus if id != 0 and $data_armors[id].sp_plus != nil
-		
-		return base_sp
-	end
-	
-	# 기본 물리방어력
-	def take_base_pdef
-		n = @pdef
-		weapon = $data_weapons[@weapon_id]
-		armor1 = $data_armors[@armor1_id]
-		armor2 = $data_armors[@armor2_id]
-		armor3 = $data_armors[@armor3_id]
-		armor4 = $data_armors[@armor4_id]
-		n -= weapon != nil ? weapon.pdef : 0
-		n -= armor1 != nil ? armor1.pdef : 0
-		n -= armor2 != nil ? armor2.pdef : 0
-		n -= armor3 != nil ? armor3.pdef : 0
-		n -= armor4 != nil ? armor4.pdef : 0
+	def take_base_stat(stat)
+		n = send(stat)
+		n -= take_equipment_stat(stat)
+		n -= $rpg_skill.send("base_#{stat}") if $rpg_skill.respond_to?("base_#{stat}")
 		return n
 	end
 	
-	# 기본 마법방어력
-	def take_base_mdef
-		n = @mdef
-		weapon = $data_weapons[@weapon_id]
-		armor1 = $data_armors[@armor1_id]
-		armor2 = $data_armors[@armor2_id]
-		armor3 = $data_armors[@armor3_id]
-		armor4 = $data_armors[@armor4_id]
-		n -= weapon != nil ? weapon.mdef : 0
-		n -= armor1 != nil ? armor1.mdef : 0
-		n -= armor2 != nil ? armor2.mdef : 0
-		n -= armor3 != nil ? armor3.mdef : 0
-		n -= armor4 != nil ? armor4.mdef : 0
-		return n
+	def take_base_max_stat(stat)
+		base_stat = send("max#{stat}")
+		EQUIP_TYPES.values.each { |equip_type|
+			equip_id = eval("@#{equip_type}_id")
+			armor = equip_type.to_sym == :weapon ? $data_weapons[equip_id] : $data_armors[equip_id]
+			next unless armor
+			base_stat -= (armor.send("#{stat}_plus") || 0) if armor.respond_to?("#{stat}_plus")
+		}
+		return base_stat
+	end
+	
+	def take_equipment_stat(stat)
+		result = 0
+		EQUIP_TYPES.values.each { |equip_type|
+			equip_id = eval("@#{equip_type}_id")
+			armor = equip_type.to_sym == :weapon ? $data_weapons[equip_id] : $data_armors[equip_id]
+			next unless armor
+			result += (armor.send("#{stat}_plus") || 0) if armor.respond_to?("#{stat}_plus")
+			result += (armor.send("#{stat}") || 0) if armor.respond_to?("#{stat}")
+		}
+		return result
 	end
 end

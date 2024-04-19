@@ -1089,45 +1089,34 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					y = data_hash["y"].to_i 
 					d = data_hash["direction"].to_i 
 					res = data_hash["respawn"].to_i
-					mon_id = data_hash["mon_id"].to_i 
+					mon_id = data_hash["mon_id"].to_i
+					dead = data_hash["dead"].downcase == "true"
 					
 					if $ABS.enemies[id] == nil and mon_id != nil and mon_id != 0
 						create_events(16, x, y, d, id, mon_id)
 					end
 					
-					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
-					return if $ABS.enemies[id] == nil
 					enemy = $ABS.enemies[id]
 					event = enemy.event
 					
-					# 몹 죽었을때 리스폰 시간 적용
-					if res != nil 
-						if res > 0  
-							enemy.respawn = res
-						else # 몹 리스폰 시간 됐음
-							# hp가 0이었던 경우에만 다시 리스폰
-							if hp <= 0
-								event.erased = false
-								$ABS.rand_spawn(event) # 랜덤 위치 스폰
-								event.refresh
-								return
-							end
+					if hp <= 0 # 체력이 0이면 죽은거지
+						if dead
+							event.erase
+						else
+							event.erased = false
+							$ABS.rand_spawn(event) # 랜덤 위치 스폰
+							event.refresh
 						end
-					end
-					
-					enemy.hp = hp
-					if enemy.hp <= 0 # 체력이 0이면 죽은거지
-						event.erase
 						return
 					end
+					
+					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+					enemy.hp = hp
 					enemy.sp = sp
-					
-					# 몹 방향과 좌표 적용
-					event.moveto(x, y)
+					event.moveto(x, y) # 몹 방향과 좌표 적용
 					event.direction = d
+					enemy.aggro = $is_map_first
 					
-					enemy.aggro = $is_map_first ? true : false
-						
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					data = $1.split(',')
 					# 몬스터 id, 유저 이름
@@ -1136,11 +1125,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					return if $ABS.enemies[id] == nil
 					
+					$ABS.enemies[id].aggro = false
 					if name == $game_party.actors[0].name
 						$ABS.enemies[id].aggro = true
-						$ABS.enemies[id].aggro_mash = 5 * 60
-					else
-						$ABS.enemies[id].aggro = false
+						$ABS.enemies[id].aggro_mash = 5 * 60	
 					end
 					
 					
@@ -1153,27 +1141,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					y = data[3].to_i
 					
 					return if $ABS.enemies[id] == nil
+					return if $ABS.enemies[id].event.x == x and $ABS.enemies[id].event.y == y
 					
 					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
 					$ABS.enemies[id].aggro = false if !$is_map_first
-					
-					return if $ABS.enemies[id].event.x == x and $ABS.enemies[id].event.y == y
-					
 					# 몹 이동
 					case d
-					when 2
-						$ABS.enemies[id].event.move_down(true, true)
-					when 4
-						$ABS.enemies[id].event.move_left(true, true)
-					when 6
-						$ABS.enemies[id].event.move_right(true, true)
-					when 8
-						$ABS.enemies[id].event.move_up(true, true)
-					end
-					if $ABS.enemies[id].event.x != x or $ABS.enemies[id].event.y != y
-						$ABS.enemies[id].event.moveto(x,y)
+					when 2 then $ABS.enemies[id].event.move_down(true, true)
+					when 4 then $ABS.enemies[id].event.move_left(true, true)
+					when 6 then $ABS.enemies[id].event.move_right(true, true)
+					when 8 then $ABS.enemies[id].event.move_up(true, true)
 					end
 					
+					$ABS.enemies[id].event.moveto(x,y) if $ABS.enemies[id].event.x != x or $ABS.enemies[id].event.y != y
 					
 					# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
 				when /<mon_damage>(.*)<\/mon_damage>/
@@ -1508,7 +1488,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						for d in data
 							next if !d.include?(",")
 							id, time = d.split(",").map { |x| x.to_i }
-							
 							next if SKILL_MASH_TIME[id] == nil							
 							SKILL_MASH_TIME[id][1] = time 
 							$skill_Delay_Console.write_line(id)
@@ -1521,7 +1500,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						for d in data
 							next if !d.include?(",")
 							id, time = d.split(",").map { |x| x.to_i }
-							
+							$rpg_skill.buff(id)
 							$game_party.actors[0].buff_time[id] = time
 							$skill_Delay_Console.write_line(id)
 						end
@@ -1540,11 +1519,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						# 데이터 로드 완료
 						$game_player.moveto($new_x, $new_y) 
 						$game_player.refresh
-						
-						$rpg_skill.base_str = $game_variables[52]
-						$rpg_skill.base_agi = $game_variables[53]
-						$rpg_skill.base_int = $game_variables[54]
-						$rpg_skill.base_dex = $game_variables[55]
 						
 						@group = "standard"
 						if $game_switches[54] # 운영자모드
@@ -1796,7 +1770,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<cashgive>(.*),(.*)<\/cashgive>/
 					if $1.to_s == $game_party.actors[0].name
 						$game_variables[213] += $2.to_i
-						$console.write_line("#{$2.to_i}Cash 가 충전되었습니다.")
+						$console.write_line("#{$2.to_i}마일리지가 추가 되었습니다.")
 					end
 					
 				when /<bigsay>(.*),(.*)<\/bigsay>/
@@ -1809,18 +1783,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					return true if $game_map.map_id != data[0].to_i
-					if $ABS.enemies[data[1].to_i] != nil 
-						# 몹 죽었을때 리스폰 시간 적용
-						event = $ABS.enemies[data[1].to_i].event
-						if event != nil
-							event.erased = false
-							event.moveto(data[2].to_i, data[3].to_i)
-							event.direction = data[4].to_i
-							$ABS.rand_spawn(event) # 랜덤 위치 스폰
-							event.refresh
-							$game_map.refresh
-						end
-					end
+					return unless $ABS.enemies[data[1].to_i]
+					# 몹 죽었을때 리스폰 시간 적용
+					event = $ABS.enemies[data[1].to_i].event
+					return unless event
+					event.erased = false
+					event.moveto(data[2].to_i, data[3].to_i)
+					event.direction = data[4].to_i
+					$ABS.rand_spawn(event) # 랜덤 위치 스폰
+					event.refresh
+					$game_map.refresh
 					
 				when /<enemy_dead>(.*)<\/enemy_dead>/	
 					data = $1.split(',')
@@ -1860,7 +1832,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#drop 번호, 아이템 타입, 아이템 id, x좌표, y좌표, 개수, (필요 스위치)
 				when /<Drop>(.*)<\/Drop>/
 					data_hash = parseKeyValueData($1)
-					
 					id =  data_hash["id"].to_i
 					type = data_hash["type"].to_i
 					item_id = data_hash["item_id"].to_i
@@ -2144,7 +2115,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					sw = false
 					if not $game_party.actors[0].hp == 0 # 회복 스킬
 						sw = true
-						$rpg_skill.buff(skill_id, false)
+						$rpg_skill.buff(skill_id, $game_party.actors[0], false)
 						case skill_id
 						when 92 # 공력주입
 							$game_party.actors[0].sp += heal_v

@@ -54,7 +54,6 @@ class Scene_Connect
 		@login_window = Jindow_Server.new
 		Graphics.transition
 		
-		
 		$game_system.bgm_play($data_system.title_bgm)
 		loop do
 			Graphics.update

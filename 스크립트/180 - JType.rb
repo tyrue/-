@@ -475,16 +475,10 @@ module J
 		end
 		
 		def view
-			command = ""
-			for i in @text
-				command += i
-			end
+			command = @text.join
+			return if @o_text == command
 			
-			if @o_text != command
-				@o_text = command
-			elsif @o_text == command
-				return
-			end
+			@o_text = command
 			
 			if self.bitmap.text_size(command).width > self.bitmap.width
 				@text.delete_at(@text.size - 1)
@@ -499,22 +493,14 @@ module J
 				if @hide
 					command = "*" * command.scan(/./).size
 				end
-				self.bitmap.draw_text(self.bitmap.rect, command + "|", 0)
 				
-				if @input_hangul
-					self.bitmap.draw_text(self.bitmap.rect, "한", 2)
-				else
-					self.bitmap.draw_text(self.bitmap.rect, "영", 2)
-				end
+				self.bitmap.draw_text(self.bitmap.rect, "#{command}|", 0)
+				self.bitmap.draw_text(self.bitmap.rect, @input_hangul ? "한" : "영", 2)
 			end
 		end
 		
 		def result
-			command = ""
-			for i in @text
-				command += i
-			end
-			return command
+			return @text.join
 		end
 		
 		def bluck?
@@ -522,16 +508,15 @@ module J
 		end
 		
 		def bluck=(val)
-			if val and not @bluck
+			if val && !@bluck
 				@bluck = true
 				$inputKeySwitch = true
 				self.tone.set(-64, -64, 64)
-				for i in self.viewport.item
-					i == self ? next : 0
-					i.JS? ? 0 : next
+				@viewport.item.each do |i|
+					next if i == self || !i.respond_to?(:JS?) || !i.JS?
 					i.bluck = false
 				end
-			elsif not val and @bluck
+			elsif !val && @bluck
 				@bluck = false
 				$inputKeySwitch = false
 				self.tone.set(0, 0, 0)
@@ -551,6 +536,7 @@ module J
 			self.x = x
 			self.y = y
 			self.bitmap = Bitmap.new(width, height)
+			
 			ul = Sprite.new
 			um = Sprite.new
 			ur = Sprite.new
@@ -598,9 +584,9 @@ module J
 		#---- update 시작 ----#
 		def update
 			super
-			self.refresh? ? 0 : return
+			return unless refresh?
 			
-			@click ? (@click = false) : 0
+			@click = false if @click
 			if not @viewport.hudle
 				if Input.mouse_lbutton
 					if not @push and Mouse.arrive_sprite_rect?(self) and @viewport.base?
@@ -618,9 +604,10 @@ module J
 				@click = true
 			end
 			
-			self.bluck? ? 0 : return
-			Hwnd.highlight? == @viewport ? 0 : return
-			update_key if @edit == true
+			return unless bluck?
+			return unless Hwnd.highlight? == @viewport
+			
+			update_key if @edit
 			
 			if @piece[3] == nil
 				@piece[0] = nil
@@ -639,6 +626,10 @@ module J
 			end
 		end
 		#---- update 끝 ----#
+		
+		def reset_pieces
+			@piece.fill(nil)
+		end
 		
 		def click=(value)
 			@click = value

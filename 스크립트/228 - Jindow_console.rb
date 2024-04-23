@@ -66,7 +66,7 @@ class Jindow_Console < Jindow
 		end
 	end
 	
-	def write_line(text)
+	def write_line(text, color = Color.new(255, 255, 255))
 		@console_log.push(Sprite.new(self))
 		if @console_log.size == @max_size
 			@console_log[0].bitmap.clear
@@ -82,7 +82,7 @@ class Jindow_Console < Jindow
 		@console_log[@console_log.size - 1].bitmap.font.size = @font_size
 		@console_log[@console_log.size - 1].bitmap.font.color.set(0, 0, 0)
 		@console_log[@console_log.size - 1].bitmap.draw_text(1, 1, self.width + 5, @font_size, text, 0)
-		@console_log[@console_log.size - 1].bitmap.font.color.set(255, 255, 255)
+		@console_log[@console_log.size - 1].bitmap.font.color = color
 		@console_log[@console_log.size - 1].bitmap.draw_text(0, 0, self.width + 5, @font_size, text, 0)
 		#@console_log[@console_log.size - 1].bitmap.draw_frame_text(0, 0, self.width + 5, @font_size, text, 0)
 		@console_log[@console_log.size - 1].visible = @tog

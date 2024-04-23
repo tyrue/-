@@ -69,13 +69,10 @@ class Jindow_Shop < Jindow
 			rect = @helloText.bitmap.text_size(i)
 			if w + rect.width > @helloText.width
 				h += rect.height
-				w = 0
-				@helloText.bitmap.draw_text(w, h, rect.width, rect.height, i)
-				w += rect.width
-			else
-				@helloText.bitmap.draw_text(w, h, rect.width, rect.height, i)
-				w += rect.width
+				w = 0	
 			end
+			@helloText.bitmap.draw_text(w, h, rect.width, rect.height, i)
+			w += rect.width
 		end
 		
 		
@@ -113,7 +110,6 @@ class Jindow_Shop < Jindow
 		end
 		super
 	end
-	
 	
 	def update
 		super

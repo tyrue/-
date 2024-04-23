@@ -4,7 +4,7 @@
 def traceback_report
   backtrace = $!.backtrace.clone
   backtrace.each do |bt|
-    bt.sub!(/(\d+)/) { "[#{$1}]#{$RGSS_SCRIPTS[$1.to_i][1]}" }
+    bt.sub!(/(\d+)/) { "[#{$1}] #{$RGSS_SCRIPTS[$1.to_i][1]} " if $RGSS_SCRIPTS[$1.to_i] != nil} 
   end
   
   return $!.message + "\n\n" + backtrace.join("\n")
@@ -28,7 +28,6 @@ begin
 	
 	$scene = Scene_Connect.new
 	
-	
 	while $scene != nil
 		$scene.main
 	end
@@ -37,10 +36,6 @@ begin
 	Network::Main.close_socket 
 	Graphics.transition(25)
 	exit!
-	
-rescue
-  $!.message.sub!($!.message, traceback_report)
-  raise_traceback_error	
 	
 rescue SyntaxError
   $!.message.sub!($!.message, traceback_report)
@@ -57,8 +52,13 @@ rescue Errno::ENOENT
 	time = Time.now
 	time = time.strftime("%a %d %b %Y, %X") 
 	File.open("ErrorLog.rxdata","a+"){ |fh| fh.puts("On <<#{time}>> the file <<#{filename}>> was missing." )}
+	
+rescue
+  $!.message.sub!($!.message, traceback_report)
+  raise_traceback_error		
+	
 ensure
-	게임종료 #if $scene.is_a?(Scene_Map)
 	$!.message.sub!($!.message, traceback_report)
 	raise_traceback_error
+	게임종료
 end

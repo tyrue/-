@@ -1671,20 +1671,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						send_name = data_hash["send_name"]
 						
 						item_name = case type
-						when 0 # 무기
-							$game_party.gain_weapon(id, num)
-							$data_weapons.fetch(id, "Unknown").name
-						when 1 # 방어구
-							$game_party.gain_armor(id, num)
-							$data_armors.fetch(id, "Unknown").name
-						when 2 # 기타
+						when 0 # 아이템
 							$game_party.gain_item(id, num)
 							$data_items.fetch(id, "Unknown").name
+						when 1 # 무기
+							$game_party.gain_weapon(id, num)
+							$data_weapons.fetch(id, "Unknown").name
+						when 2 # 방어구
+							$game_party.gain_armor(id, num)
+							$data_armors.fetch(id, "Unknown").name
 						end
 						
-						$console.write_line("◎ 인벤토리에 우편물이 왔습니다. 확인하여 주시길 봐랍니다.")
-						$console.write_line("◎ 보낸이 : #{send_name} 보낸 아이템 : #{item_name}#{num}개")
-						$console.write_line("◎ 내용 : #{body}", Color.new(65, 105, 0))
+						$console.write_line("◎ #{send_name}님으로부터 편지가 왔습니다.")
+						$console.write_line("◎ 물품: #{item_name} #{num}개")
+						$console.write_line("◎ 편지 내용: #{body}", Color.new(65, 105, 0))
 					rescue => e
 						$console.write_line("우편 물품을 처리하는 도중 오류가 발생했습니다: #{e.message}", Color.new(255, 0, 0))
 					end

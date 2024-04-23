@@ -26,7 +26,7 @@ module Hwnd
 	def size
 		return @data.size
 	end
-	
+		
 	def include?(value, type = 0)
 		if value.string?
 			for i in @data

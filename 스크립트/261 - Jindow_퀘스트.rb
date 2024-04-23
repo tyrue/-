@@ -4,7 +4,7 @@
 QUEST_DATA = {}
 # id는 퀘스트 스위치 : 클라이언트에서 직접 확인해서 넣기
 # 부여성
-QUEST_DATA[0] = {
+QUEST_DATA[-1] = {
 	"title" => "나무꾼에게 짚 건네주기", 						# 퀘스트 제목
 	"region" => "부여성",						# 퀘스트 위치
 	"requester" => "나무꾼", 				# 의뢰자 이름
@@ -16,7 +16,18 @@ QUEST_DATA[0] = {
 	"close_switch" => 117
 }
 
-QUEST_DATA[0] = {
+QUEST_DATA[-3] = {
+	"title" => "고통속의 사슴을 구해주기", 						# 퀘스트 제목
+	"region" => "부여성 사슴굴5",						# 퀘스트 위치
+	"requester" => "고통속의사슴", 				# 의뢰자 이름
+	"body" => [
+		"고통속의 사슴을 고통에서 해방시켜주자",
+	],			# 퀘스트 내용
+	"item_data" => [[0, 43, 1]],
+	"close_switch" => 122
+}
+
+QUEST_DATA[-2] = {
 	"title" => "나무꾼에게 나무 해주기", 						# 퀘스트 제목
 	"region" => "부여성 강가",						# 퀘스트 위치
 	"requester" => "나무꾼", 				# 의뢰자 이름
@@ -36,17 +47,6 @@ QUEST_DATA[118] = {
 	],			# 퀘스트 내용
 	
 	"close_switch" => 120
-}
-
-QUEST_DATA[0] = {
-	"title" => "고통속의 사슴을 구해주기", 						# 퀘스트 제목
-	"region" => "부여성 사슴굴5",						# 퀘스트 위치
-	"requester" => "고통속의사슴", 				# 의뢰자 이름
-	"body" => [
-		"고통속의 사슴을 고통에서 해방시켜주자",
-	],			# 퀘스트 내용
-	"item_data" => [[0, 43, 1]],
-	"close_switch" => 122
 }
 
 QUEST_DATA[275] = {
@@ -528,6 +528,18 @@ QUEST_DATA[408] = {
 
 
 # 중국
+QUEST_DATA[255] = {
+	"title" => "압록강 정화하기", 						# 퀘스트 제목
+	"region" => "압록강",						# 퀘스트 위치
+	"requester" => "수선도사", 				# 의뢰자 이름
+	"body" => [
+		"악어로 더럽혀진 압록강을 악어의피로 정화하자",
+	],			# 퀘스트 내용
+	
+	"item_data" => [[0, 190, 3]],			# [[필요한 아이템 타입, id, 필요개수], ...]
+	"close_switch" => 256
+}
+
 QUEST_DATA[458] = {
 	"title" => "수집가의 의뢰", 						# 퀘스트 제목
 	"region" => "대방성",						# 퀘스트 위치
@@ -621,19 +633,19 @@ class Jindow_Quest < Jindow
 		@quest_data = {}
 		
 		for quest_d in QUEST_DATA
-			sw_id = quest_d[0]
+			sw_id = quest_d[0].to_i
 			q_data = quest_d[1]
 			
-			next if sw_id != 0 and !$game_switches[sw_id]
+			next if sw_id > 1 and !$game_switches[sw_id]
 			
 			if q_data["close_switch"] != nil
 				next if $game_switches[q_data["close_switch"]]
 			end
 			
-			region = q_data["region"] != nil ? q_data["region"] : "기타"
+			region = q_data["region"] || "기타"
 			@quest_data[region] = [] if @quest_data[region] == nil
 			
-			title = q_data["title"] != nil ? q_data["title"] : "없음"
+			title = q_data["title"] || "없음"
 			@quest_data[region].push([J::Button.new(self).refresh(120, title), q_data])
 		end
 		

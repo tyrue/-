@@ -30,6 +30,15 @@ module J
 			@double_wait = 0
 			@bluck = false
 			@start = false
+			
+			@not_view_hwnd = [
+				"Status",
+				"NetPlayer_Info",
+				"Shop_Window",
+				"Shop_Window_Coin",
+				"Trade",
+				"Post"
+			]
 			return self
 		end
 		
@@ -111,16 +120,9 @@ module J
 				
 			end
 			
-			@viewport.hwnd == "Status" ? (return self) : 0
-			@viewport.hwnd == "Trade" ? (return self) : 0
-			@viewport.hwnd == "NetPlayer_Info" ? (return self) : 0
-			@viewport.hwnd == "Shop_Window" ? (return self) : 0
-			@viewport.hwnd == "Shop_Window_Coin" ? (return self) : 0
+			return self if !viewNum?
 			
 			@num = self.num
-			#@num == 0 ? (return nil) : 0
-			#@num > 1 ? 0 : (return self)
-			
 			# 아이템 개수 쓰기
 			self.bitmap.font = @font
 			self.bitmap.font.alpha = @font.alpha
@@ -209,10 +211,7 @@ module J
 				end
 			end
 			
-			@viewport.hwnd == "Status" ? (return) : 0
-			@viewport.hwnd == "NetPlayer_Info" ? (return) : 0
-			@viewport.hwnd == "Shop_Window" ? (return) : 0
-			@viewport.hwnd == "Shop_Window_Coin" ? (return) : 0
+			return if !viewNum?
 			
 			cnum = self.num
 			if cnum == 0
@@ -239,6 +238,11 @@ module J
 					self.bitmap.draw_text(0, self.height - rect.height, self.width, rect.height, @num.to_s, 2)
 				end
 			end
+		end
+		
+		def viewNum?
+			return false if @not_view_hwnd.include?(@viewport.hwnd)
+			return true
 		end
 		
 		def offName

@@ -121,20 +121,20 @@ class Jindow_Inventory < Jindow
 		
 		for i in @item
 			i.visible = @tog
-			if i.is_a?(J::Item)
-				if i.type != 2
-					temp_item[i.type].push(i)
-				else
-					temp_item[i.type][i.item.kind].push(i)
-				end
+			next if !i.is_a?(J::Item)
+			
+			if i.type != 2
+				temp_item[i.type].push(i)
+			else
+				temp_item[i.type][i.item.kind].push(i)
 			end
 		end
 		
 		count = 0
 		idx = 0
+		tempY = @gold_drop_button.y + @gold_drop_button.height + 5
 		for temp in temp_item
 			old_c = count
-			tempY = @gold_drop_button.y + @gold_drop_button.height + 5
 			
 			for i in temp				
 				if idx == 2 
@@ -197,12 +197,9 @@ class Jindow_Inventory < Jindow
 				$console.write_line("귀신은 할 수 없습니다.")
 				return
 			end
-			if not Hwnd.include?("Item_Drop")
-				Jindow_Drop.new(0, 0, 0) # 돈을 버림
-			else
-				Hwnd.dispose("Item_Drop")
-				Jindow_Drop.new(0, 0, 0) # 돈을 버림
-			end
+			
+			Hwnd.dispose("Item_Drop") if Hwnd.include?("Item_Drop")
+			Jindow_Drop.new(0, 0, 0) # 돈을 버림
 		end
 		
 		for i in @item
@@ -213,59 +210,50 @@ class Jindow_Inventory < Jindow
 			
 			case @mode
 			when 0
-				case i.type
-				when 0 # 아이템
-					next if !$game_party.actors[0].item_effect(i.item)
-					
-					$game_player.animation_id = i.item.animation1_id
-					Network::Main.ani(Network::Main.id, i.item.animation1_id) 
-					$game_party.lose_item(i.item.id, 1) if i.item.consumable
-					$game_system.se_play(i.item.menu_se)
-					$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0
-					
-				when 1 # 무기
-					if $game_switches[296]
-						$console.write_line("귀신은 할 수 없습니다.")
-						return
-					end
-					
-					if $game_party.actors[0].equippable?(i.item)
-						$game_party.actors[0].equip(0, i.item.id)
-						Audio.se_play("Audio/SE/장비", $game_variables[13])
-					end
-					
-				when 2 # 방어구
-					if $game_switches[296]
-						$console.write_line("귀신은 할 수 없습니다.")
-						return
-					end
-					
-					if $game_party.actors[0].equippable?(i.item)
-						$game_party.actors[0].equip(i.item.kind + 1, i.item.id)
-						Audio.se_play("Audio/SE/장비", $game_variables[13])
-					end
-				end
-				
-			when 1
-				check(i)
-			when 2
+				itemUse(i)
+			when 1 # 교환
+				tradeCheck(i)
+			when 2 # 상점
 				shopSellItem(i)
+			when 3 # 편지 보내기
+				postItem(i)
 			end
 		end	
-		
 		super
 	end	
 	
-	def shopSellItem(i)
-		if i.item.price > 0
-			Hwnd.include?("Shop_Num_Window") ? Hwnd.dispose("Shop_Num_Window") : 0
-			Jindow_Shop_Num.new(i.item, i.type, 1) # 판매모드로 열기
-		else
-			$console.write_line("판매 불가 아이템입니다.")
+	#-------#
+	#아이템 사용#
+	#-------#
+	def itemUse(i)
+		case i.type
+		when 0 # 아이템
+			return if !$game_party.actors[0].item_effect(i.item)
+			
+			$game_player.animation_id = i.item.animation1_id
+			Network::Main.ani(Network::Main.id, i.item.animation1_id) 
+			$game_party.lose_item(i.item.id, 1) if i.item.consumable
+			$game_system.se_play(i.item.menu_se)
+			$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0
+			
+		when 1, 2 # 무기, 장비
+			if $game_switches[296]
+				$console.write_line("귀신은 할 수 없습니다.")
+				return
+			end
+			
+			if $game_party.actors[0].equippable?(i.item)
+				kind = i.type == 1 ? 0 : i.item.kind + 1
+				$game_party.actors[0].equip(kind, i.item.id)
+				Audio.se_play("Audio/SE/장비", $game_variables[13])
+			end
 		end
 	end
 	
-	def check(i)
+	#-------#
+	#아이템 교환#
+	#-------#
+	def tradeCheck(i)
 		if $trade_num <= $MAX_TRADE
 			if $Abs_item_data.is_trade_ok(i.item.id, i.type)
 				Jindow_Trade2.new(i.item.id, i.type, $trade_num) 
@@ -276,6 +264,34 @@ class Jindow_Inventory < Jindow
 			Hwnd.dispose("Trade2")
 			$console.write_line("[교환]: 더이상 아이템을 올릴수 없습니다.")
 		end		
+	end
+	
+	#----------#
+	#상점 아이템 판매#
+	#----------#
+	def shopSellItem(i)
+		if i.item.price > 0
+			Hwnd.include?("Shop_Num_Window") ? Hwnd.dispose("Shop_Num_Window") : 0
+			Jindow_Shop_Num.new(i.item, i.type, 1) # 판매모드로 열기
+		else
+			$console.write_line("판매 불가 아이템입니다.")
+		end
+	end
+	
+	#--------#
+	#아이템 보내기#
+	#--------#
+	def postItem(i)
+		if $Abs_item_data.is_trade_ok(i.item.id, i.type)
+			post_jin = Hwnd.include?("Post", 1)
+			data = Jindow_Trade_Data.new
+			data.id = i.item.id
+			data.type = i.type
+			data.amount = 1
+			post_jin.set_data(data)
+		else
+			$console.write_line("[편지]: 교환 불가 아이템입니다.")
+		end
 	end
 	
 	def dispose2

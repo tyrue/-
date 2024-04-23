@@ -59,12 +59,14 @@ module Mouse
 	end
 	
 	def arrive_sprite_rect?(sprite)
+		return false unless sprite
 		x = sprite.viewport.x + sprite.x - sprite.viewport.ox
 		y = sprite.viewport.y + sprite.y - sprite.viewport.oy
 		return self.arrive_rect?(x, y, sprite.bitmap.width, sprite.bitmap.height)
 	end
 	
 	def arrive_sprite?(sprite, size = 0)
+		return false unless sprite
 		x = sprite.viewport.x + sprite.x - sprite.viewport.ox
 		y = sprite.viewport.y + sprite.y - sprite.viewport.oy
 		return self.arrive_rect?(x, y, sprite.bitmap.width, sprite.bitmap.height, size)

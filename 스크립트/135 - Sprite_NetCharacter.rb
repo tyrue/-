@@ -107,18 +107,13 @@ class Sprite_NetCharacter < RPG::Sprite
 		end
 		# update_tile
 		# Set visible situation
-		ok = $netparty.include? @character.name.to_s
+		self.visible = true
+		@_text_display.visible = true
+		
+		ok = $net_party_manager.party_members.include? @character.name
 		if @character.is_transparency
-			if ok
-				self.visible = true
-				@_text_display.visible = true
-			else
-				self.visible = false
-				@_text_display.visible = false
-			end
-		else
-			self.visible = true
-			@_text_display.visible = true
+			self.visible = ok
+			@_text_display.visible = ok
 		end
 		
 		# If graphic is character

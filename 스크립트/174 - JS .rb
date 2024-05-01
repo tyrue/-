@@ -133,21 +133,26 @@ module JS
 	end
 	
 	def game_title
-		Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 200,
-			["정말로 게임을 끝낼까요?"], ["예", "아니오"],
-			["로그아웃", "Hwnd.dispose(self)"], "알림")
+		Jindow_Dialog.new("알림",
+			["정말로 게임을 끝낼까요?"], 
+			[
+				["예", "로그아웃"], 
+				["아니오", "Hwnd.dispose(self)"]
+			])
 	end
 	
 	def game_end
-		Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 200,
-			["정말로 게임을 끝낼까요?"], ["예", "아니오"],
-			["게임종료",
-				"Hwnd.dispose(self)"], "알림")
+		Jindow_Dialog.new("알림", 
+			["정말로 게임을 끝낼까요?"], 
+			[
+				["예", "게임종료"],
+				["아니오", "Hwnd.dispose(self)"]
+			])
 	end
 	
 	def game_ver
-		Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2, 270,
+		Jindow_Dialog.new("버젼확인",
 			["버젼이 다릅니다. 최신버젼을 다운로드해 주세요"],
-			["확인"], ["Hwnd.dispose(self); $scene = nil"], "버젼확인", true ,true ,true ,false)
+			[["확인", "Hwnd.dispose(self); $scene = nil"]])
 	end
 end

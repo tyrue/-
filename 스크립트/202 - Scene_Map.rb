@@ -107,7 +107,7 @@ class Scene_Map
 					
 					if Key.trigger?(39) # p
 						if not Hwnd.include?("NetParty")
-							Jindow_NetParty.new
+							Jindow_NetParty.new($net_party_manager)
 						else
 							Hwnd.dispose("NetParty")
 						end

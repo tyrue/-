@@ -31,6 +31,7 @@ def 유저접속
 	$chat = nil
 	$map_chat_input = nil
 	$j_inven = nil
+	$net_party_manager = PartyManager.new
 	
 	# 장비 아이템 체력, 마력 옵션 
 	Set_Weapon_plus.new 

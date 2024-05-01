@@ -14,7 +14,6 @@ class Game_Actor < Game_Battler
 		level = [[level, $data_actors[@actor_id].final_level].min, 1].max
 		# Change EXP
 		self.exp = @exp_list[level]
-		Network::Main.send_newstats if Network::Main.socket != nil
 	end
 	#--------------------------------------------------------------------------
 	# * Refresh Stats

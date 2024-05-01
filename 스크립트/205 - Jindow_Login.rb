@@ -44,14 +44,14 @@ class Jindow_Login < Jindow
 		super
 		if @a.click or Key.trigger?(KEY_ENTER)  # 확인
 			if @type_username.result.to_s == "" 
-				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+				Jindow_Dialog.new("오류",
 					["아이디를 잘못 입력하셨습니다."],
-					["확인"], ["Hwnd.dispose(self)"], "오류")
+					[["확인", "Hwnd.dispose(self)"]])
 				return
 			elsif @type_password.result.to_s == ""
-				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+				Jindow_Dialog.new("오류",
 					["비밀번호를 잘못 입력하셨습니다."],
-					["확인"], ["Hwnd.dispose(self)"], "오류")
+					[["확인", "Hwnd.dispose(self)"]])
 				return
 			end
 			

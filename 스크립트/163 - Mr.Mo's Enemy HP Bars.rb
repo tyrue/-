@@ -162,11 +162,7 @@ if SDK.state("Mr.Mo's ABS")
 				return dispose 
 			end
 			
-			if (!@netPlayer.is_transparency) or ($netparty.include?(@netPlayer.name.to_s))
-				self.visible = true 
-			else
-				self.visible = false
-			end
+			self.visible = (!@netPlayer.is_transparency) or ($net_party_manager.party_members.include?(@netPlayer.name.to_s))
 			
 			return true if @old_hp != @netPlayer.hp.to_i
 			return true if @old_x != @netPlayer.event.screen_x - 15
@@ -257,12 +253,7 @@ if SDK.state("Mr.Mo's ABS")
 				return dispose 
 			end
 			
-			if (!@netPlayer.is_transparency) or ($netparty.include?(@netPlayer.name.to_s))
-				self.visible = true 
-			else
-				self.visible = false
-			end
-			
+			self.visible = (!@netPlayer.is_transparency) or ($net_party_manager.party_members.include?(@netPlayer.name.to_s))			
 			return true if @old_hp != @netPlayer.sp.to_i
 			return true if @old_x != @netPlayer.event.screen_x - 15
 			return true if @old_y != @netPlayer.event.screen_y + HP_HEIGHT

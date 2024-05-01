@@ -219,10 +219,17 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@socket.send("<mod>'request'</mod>\n")
 			end
 			#--------------------------------------------------------------------------
+			# * Asks for Message of the day 날짜 요청
+			#-------------------------------------------------------------------------- 
+			def self.send_with_tag(tag, msg = "")
+				@socket.send("<#{tag}>#{msg}</#{tag}>\n")
+			end
+			
+			#--------------------------------------------------------------------------
 			# * Asks for Login (and confirmation)로그인 요청
 			#-------------------------------------------------------------------------- 
 			def self.send_login(user,pass)
-				@socket.send("<login #{user}>#{pass}</login>\n")
+				@socket.send("<login>#{user}|#{pass}</login>\n")
 			end
 			#--------------------------------------------------------------------------
 			# * Send Errors
@@ -240,33 +247,23 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Authenfication 인증
 			#-------------------------------------------------------------------------- 
 			def self.amnet_auth
-				# Send Authenfication
-				@socket.send("<0>'e'</0>\n")
+				@socket.send("<0>'e'</0>\n") # Send Authenfication
 				@auth = false
-				# Set Try to 0, then start Loop
-				try = 0
+				try = 0 # Set Try to 0, then start Loop
 				loop do
-					# Add 1 to Try
-					try += 1
+					try += 1 # Add 1 to Try
 					loop = 0
-					# Start Loop for Retrieval
 					loop do
 						loop += 1
 						self.update
-						# Break if Authenficated
-						break if @auth
-						# Break if loop reaches 20000
-						break if loop == 20000
+						break if @auth # Break if Authenficated
+						break if loop == 20000 # Break if loop reaches 20000
 					end
-					# If the loop was breaked because it reached 10000, display message
 					p "#{User_Edit::NOTAUTH}, Try #{try} of #{User_Edit::CONNFAILTRY}" if loop == 20000
-					# Stop everything if try mets the maximum try's
 					break if try == User_Edit::CONNFAILTRY
-					# Break loop if Authenficated
 					break if @auth
 				end
-				# Go to Scene Login if Authenficated
-				$scene = Scene_Login.new if @auth
+				$scene = Scene_Login.new if @auth # Go to Scene Login if Authenficated
 			end
 			
 			#--------------------------------------------------------------------------
@@ -353,96 +350,83 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			end
 			
 			#--------------------------------------------------------------------------
-			# * Send start
+			# * 캐릭터 정보 수집 메서드
 			#-------------------------------------------------------------------------- 
-			def self.send_start
-				send = ""
-				# Send Username And character's Graphic Name
-				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
-				# Sends Map ID, X and Y positions
-				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
-				# Sends Name
-				send += "@name = '#{$game_party.actors[0].name}'; " if User_Edit::Bandwith >= 1
-				# Sends Direction
-				send += "@direction = #{$game_player.direction}; " if User_Edit::Bandwith >= 2
-				# Sends Move Speed
-				send += "@move_speed = #{$game_player.move_speed};" if User_Edit::Bandwith >= 3 
-				send += "@weapon_id = #{$game_party.actors[0].weapon_id};"
-				send += "@armor1_id = #{$game_party.actors[0].armor1_id};"
-				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
-				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
-				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
-				send += "@guild = '#{$guild}';"
-				
-				if $state_trans # 투명
-					send += "@is_transparency = true;"
-				else
-					send += "@is_transparency = false;"
-				end
-				send += "start(#{self.id});"
-				@socket.send("<5>#{send}</5>\n")
-				self.send_start_newstats
+			def self.collect_character_info(actor)
+				{
+					"str" => actor.str,
+					"dex" => actor.dex,
+					"class_name" => "'#{actor.class_name}'",
+					"hp" => actor.hp,
+					"sp" => actor.sp,
+					"agi" => actor.agi,
+					"eva" => actor.eva,
+					"pdef" => actor.base_pdef,
+					"mdef" => actor.base_mdef,
+					"level" => actor.level,
+					"maxhp" => actor.maxhp,
+					"maxsp" => actor.maxsp
+				}
 			end
 			
 			#--------------------------------------------------------------------------
-			# * Send Requested Data
+			# * 공통 문자열 생성 메서드
 			#-------------------------------------------------------------------------- 
-			def self.send_start_request(id)
-				send = ""
-				# Send Username And character's Graphic Name
-				send += "@username = '#{self.name}'; @character_name = '#{$game_player.character_name}'; "
-				# Sends Map ID, X and Y positions
-				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
-				# Sends Name
-				send += "@name = '#{$game_party.actors[0].name}'; " if User_Edit::Bandwith >= 1
-				# Sends Direction
-				send += "@direction = #{$game_player.direction}; " if User_Edit::Bandwith >= 2
-				# Sends Move Speed
-				send += "@move_speed = #{$game_player.move_speed};" if User_Edit::Bandwith >= 3 
-				send += "@weapon_id = #{$game_party.actors[0].weapon_id};"
-				send += "@armor1_id = #{$game_party.actors[0].armor1_id};"
-				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
-				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
-				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
-				send += "@guild = '#{$guild}';"
+			def self.build_send_message
+				# 캐릭터 정보 수집
+				character_info = collect_character_info($game_party.actors[0])
 				
-				if $state_trans # 투명
-					send += "@is_transparency = true;"
-				else
-					send += "@is_transparency = false;"
+				# 기본 문자열 파트 구성
+				send_parts = []
+				send_parts << "@username = '#{self.name}';"
+				send_parts << "@character_name = '#{$game_player.character_name}';"
+				send_parts << "@map_id = #{$game_map.map_id};"
+				send_parts << "@x = #{$game_player.x}; @y = #{$game_player.y};"
+				send_parts << "@name = '#{$game_party.actors[0].name}';"
+				send_parts << "@direction = #{$game_player.direction};"
+				send_parts << "@move_speed = #{$game_player.move_speed};"
+				send_parts << "@weapon_id = #{$game_party.actors[0].weapon_id};"
+				send_parts << "@armor1_id = #{$game_party.actors[0].armor1_id};"
+				send_parts << "@armor2_id = #{$game_party.actors[0].armor2_id};"
+				send_parts << "@armor3_id = #{$game_party.actors[0].armor3_id};"
+				send_parts << "@armor4_id = #{$game_party.actors[0].armor4_id};"
+				send_parts << "@guild = '#{$guild}';"
+				send_parts << "@bar_showing = false;"
+				send_parts << "@trans_v = #{$game_variables[10]};"
+				
+				# 캐릭터 상태 정보 추가
+				character_info.each do |key, value|
+					send_parts << "@#{key} = #{value};" if value != nil
 				end
-				@socket.send("<5>#{send}</5>\n")
-				self.send_start_newstats
+				
+				# 투명 상태 처리
+				send_parts << "@is_transparency = #{$state_trans ? 'true' : 'false'};"
+				
+				send_parts.join(" ")
+			end
+			
+			#--------------------------------------------------------------------------
+			# * Send Start
+			#-------------------------------------------------------------------------- 
+			def self.send_start
+				message = build_send_message
+				@socket.send("<5>#{message} start(#{self.id});</5>\n")
+			end
+			
+			#--------------------------------------------------------------------------
+			# * Send Start Request
+			#-------------------------------------------------------------------------- 
+			def self.send_start_request(id = 1)
+				message = build_send_message
+				@socket.send("<5>#{message}</5>\n")
 			end
 			
 			#--------------------------------------------------------------------------
 			# * Send Map Id data
 			#-------------------------------------------------------------------------- 
 			def self.send_map
-				send = ""
-				# Sends Map ID, X and Y positions
-				send += "@username = '#{self.name}';"
-				send += "@character_name = '#{$game_player.character_name}';"
-				send += "@map_id = #{$game_map.map_id}; @x = #{$game_player.x}; @y = #{$game_player.y}; "
-				# Sends Direction
-				send += "@direction = #{$game_player.direction};" if User_Edit::Bandwith >= 2
-				send += "@move_speed = #{$game_player.move_speed};" if User_Edit::Bandwith >= 3 
-				send += "@weapon_id = #{$game_party.actors[0].weapon_id};"
-				send += "@armor1_id = #{$game_party.actors[0].armor1_id};"
-				send += "@armor2_id = #{$game_party.actors[0].armor2_id};"
-				send += "@armor3_id = #{$game_party.actors[0].armor3_id};"
-				send += "@armor4_id = #{$game_party.actors[0].armor4_id};"
-				send += "@level = #{$game_party.actors[0].level};"
-				send += "@bar_showing = false;" 
-				
-				if $state_trans # 투명
-					send += "@is_transparency = true;"
-				else
-					send += "@is_transparency = false;"
-				end
-				@socket.send("<m5>#{send}</m5>\n")
-				
-				self.send_newstats
+				message = build_send_message
+				@socket.send("<m5>#{message}</m5>\n")
 			end
 			
 			def self.send_trans(sw)
@@ -453,115 +437,26 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@socket.send("<5>#{send}</5>\n")
 			end
 			
-			
-			#--------------------------------------------------------------------------
-			# * 방향 보냄
-			#-------------------------------------------------------------------------- 
-			def self.send_direction
-				return if @oldd == $game_player.direction
-				return if @mapplayers.size == 0
-				send = ""
-				# Increase Steps if the oldx or the oldy do not match the new ones
-				if User_Edit::Bandwith >= 1
-					send += "ic;"  if @oldx != $game_player.x or @oldy != $game_player.y
-				end
-				if @oldd != $game_player.direction 
-					send += "@direction = #{$game_player.direction};"  
-					@oldd = $game_player.direction
-				end
-				# Send everything that needs to be sended
-				@socket.send("<m5>#{send}</m5>\n")
-			end
 			#--------------------------------------------------------------------------
 			# * Send Move Update
 			#-------------------------------------------------------------------------- 
 			def self.send_move_change
-				
-				return if @oldx == $game_player.x and @oldy == $game_player.y
+				return if @oldx == $game_player.x && @oldy == $game_player.y && @oldd == $game_player.direction
 				return if @mapplayers == {}
+				
 				send = ""
-				# Increase Steps if the oldx or the oldy do not match the new ones
-				if User_Edit::Bandwith >= 1
-					send += "ic;"  if @oldx != $game_player.x or @oldy != $game_player.y
-				end
-				# New x if x does not mathc the old one
-				if @oldx != $game_player.x
-					send += "@x = #{$game_player.x}; @tile_id = #{$game_player.tile_id};"
-					@oldx = $game_player.x
-				end
-				# New y if y does not match the old one
-				if @oldy != $game_player.y
-					send += "@y = #{$game_player.y}; @tile_id = #{$game_player.tile_id};"
-					@oldy = $game_player.y
-				end
-				# Send the Direction if it is different then before
-				if User_Edit::Bandwith >= 2
-					if @oldd != $game_player.direction 
-						send += "@direction = #{$game_player.direction};"  
-						@oldd = $game_player.direction
-					end
-				end
-				# Send everything that needs to be sended
+				send += "@x = #{$game_player.x};"
+				send += "@y = #{$game_player.y};"
+				send += "@tile_id = #{$game_player.tile_id};"
+				send += "@direction = #{$game_player.direction};"  
+				
+				@oldx = $game_player.x
+				@oldy = $game_player.y
+				@oldd = $game_player.direction
+				
 				@socket.send("<m5>#{send}</m5>\n") if send != ""
 			end
 			
-			#--------------------------------------------------------------------------
-			# * Send start Stats
-			#-------------------------------------------------------------------------- 
-			def self.send_start_newstats
-				a = $game_party.actors[0]
-				hp = a.hp
-				sp = a.sp
-				agi = a.agi
-				eva = a.eva
-				pdef = a.base_pdef
-				mdef = a.base_mdef
-				level = a.level
-				maxhp = a.maxhp
-				maxsp = a.maxsp
-				pci = a.class_name
-				
-				stats = "@str = #{a.str}; @dex = #{a.dex}; @pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
-				stats += "@character_name = '#{$game_player.character_name}';"
-				stats += "@trans_v = #{$game_variables[10]};"
-				if $state_trans # 투명
-					stats += "@is_transparency = true;"
-				else
-					stats += "@is_transparency = false;"
-				end
-				
-				@socket.send("<5>#{stats}</5>\n")
-			end
-			
-			#--------------------------------------------------------------------------
-			# * Send Stats
-			#-------------------------------------------------------------------------- 
-			def self.send_newstats
-				return if @mapplayers == {}
-				
-				a = $game_party.actors[0]
-				hp = a.hp
-				sp = a.sp
-				agi = a.agi
-				eva = a.eva
-				pdef = a.base_pdef
-				mdef = a.base_mdef
-				level = a.level
-				maxhp = a.maxhp
-				maxsp = a.maxsp
-				pci = a.class_name
-				
-				stats = "@str = #{a.str}; @dex = #{a.dex}; @pci = '#{pci}'; @hp = #{hp}; @sp = #{sp}; @agi = #{agi}; @eva = #{eva}; @pdef = #{pdef}; @mdef = #{mdef}; @level = #{level}; @maxhp = #{maxhp}; @maxsp = #{maxsp};"
-				stats += "@character_name = '#{$game_player.character_name}';"
-				stats += "@trans_v = #{$game_variables[10]};"
-				if $state_trans # 투명
-					stats += "@is_transparency = true;"
-				else
-					stats += "@is_transparency = false;"
-				end
-				
-				@socket.send("<m5>#{stats}</m5>\n")
-			end
 			#--------------------------------------------------------------------------
 			# *게임을 종료 할경우
 			#-------------------------------------------------------------------------- 
@@ -571,7 +466,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@socket.send("<9>#{self.id}</9>\n")
 				@socket.close
 				@socket = nil
-				
 			end
 			#--------------------------------------------------------------------------
 			# * Change Messgae of the Day
@@ -640,27 +534,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Update Net Players
 			#-------------------------------------------------------------------------- 
 			def self.update_net_player(id, data)
-				# Return if the Id is Yourself
 				return if id.to_i == self.id.to_i
-				# Return if you are not yet on a Map
 				return if $game_map == nil
 				
-				# Turn Id in Hash into Netplayer (if not yet)
 				@players[id] ||= Game_NetPlayer.new 
-				# Set the Global NetId if it is not Set yet
 				@players[id].do_id(id) if @players[id].netid == -1
-				# Refresh -> Change data to new data
 				@players[id].refresh(data)      
 				
-				# If the Player is on the same map...
-				if @players[id].map_id == $game_map.map_id
-					# Update Map Players
+				if @players[id].map_id == $game_map.map_id # If the Player is on the same map...
 					self.update_map_player(id, data)
 				else
-					if @mapplayers[id] != nil
-						# Remove from Map Players
-						self.update_map_player(id, data, true)
-					end
+					return unless @mapplayers[id]
+					self.update_map_player(id, data, true)
 				end
 			end
 			
@@ -668,76 +553,66 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Update Map Players
 			#-------------------------------------------------------------------------- 
 			def self.update_map_player(id, data, kill=false)
-				# Return if the Id is Yourself
-				return if id.to_i == self.id.to_i
-				# If Kill (remove) is true...
+				return if id.to_i == self.id.to_i # Return if the Id is Yourself
+				
 				if kill and @mapplayers[id] != nil
-					# Delete Map Player
 					@mapplayers.delete(id) rescue nil
-					if $scene.is_a?(Scene_Map)
-						$scene.spriteset.delete(id) rescue nil
-					end
+					$scene.spriteset.delete(id) rescue nil if $scene.is_a?(Scene_Map)
 					$game_temp.spriteset_refresh = true
 					return
 				end
 				
-				if @players[id] != nil
-					if @mapplayers[id] == nil
-						@mapplayers[id] = @players[id] 
-						$game_temp.spriteset_refresh = true 
-					end
-				else
-					if @mapplayers[id] == nil
-						@mapplayers[id] = Game_NetPlayer.new
-						$game_temp.spriteset_refresh = true
-					end
-				end
-				# Set the Global NetId if it is not Set yet
-				if @mapplayers[id].netid == -1
-					@mapplayers[id].netid = id 
-				end
-				# Refresh -> Change data to new data
+				@mapplayers[id] = @players[id] || Game_NetPlayer.new if @mapplayers[id] == nil
+				$game_temp.spriteset_refresh = true
+				@mapplayers[id].netid = id if @mapplayers[id].netid == -1
 				@mapplayers[id].refresh(data)
-				#Send the player's new stats
 			end
-			#--------------------------------------------------------------------------
-			# * Update Net Actors
-			#-------------------------------------------------------------------------- 
-			def self.update_net_actor(id,data,actor_id)
-				return
-				return if id.to_i == self.id.to_i
-				# Turn Id in Hash into Netplayer (if not yet)
-				@netactors[id] ||= Game_NetActor.new(actor_id)
-				# Set the Global NetId if it is not Set yet
-				@netactors[id].netid = id if @netactors[id].netid == -1
-				# Refresh -> Change data to new data
-				@netactors[id].refresh(data)
-			end
+			
 			#--------------------------------------------------------------------------
 			# * Update
 			#-------------------------------------------------------------------------- 
 			def self.update
-				# If Socket got lines, continue
-				return unless @socket.ready?
+				return unless @socket.ready? # If Socket got lines, continue
+				
+				lines = @socket.recv(0xffff).split("\n")
 				# 소켓으로 받은 데이터
-				for line in @socket.recv(0xffff).split("\n")
-					@nooprec += 1 if line.include?("\000\000\000\000") 
-					return if line.include?("\000\000\000\000")
-					p "#{line}" unless line.include?("<5>") or line.include?("<6>")or not $DEBUG or not User_Edit::PRINTLINES
-					# Set Used line to false
-					updatebool = false
-					#Update Walking
-					updatebool = self.update_walking(line) if @login and $game_map != nil
-					# Update Ingame Protocol, if LogedIn and Map loaded
-					updatebool = self.update_ingame(line)  if updatebool == false and @login and $game_map != nil
-					# Update System Protocol, if command is not Ingame
-					updatebool = self.update_system(line)  if updatebool == false 
-					# Update Admin/Mod Protocol, if command is not System
-					updatebool = self.update_admmod(line)  if updatebool == false
-					# Update Outgame Protocol, if command is not Admin/Mod
-					updatebool = self.update_outgame(line) if updatebool == false
+				lines.each do |line|
+					# Skip null characters and count them
+					if line.include?("\000\000\000\000")
+						@nooprec += 1
+						next
+					end
+					
+					# Debugging output
+					if $DEBUG && User_Edit::PRINTLINES && !(line.include?("<5>") || line.include?("<6>"))
+						puts line
+					end
+					
+					# Update based on context
+					if @login && $game_map  # 로그인 상태이고 맵이 로드된 경우
+						update_if_needed(line, :update_walking) ||
+						update_if_needed(line, :update_ingame) ||
+						update_if_needed(line, :update_system) ||
+						update_if_needed(line, :update_admmod) ||
+						update_if_needed(line, :update_outgame)
+					else
+						update_if_needed(line, :update_system) ||
+						update_if_needed(line, :update_admmod) ||
+						update_if_needed(line, :update_outgame)
+					end
 				end
 			end
+			
+			#--------------------------------------------------------------------------
+			# * Update If Needed
+			#-------------------------------------------------------------------------- 
+			def self.update_if_needed(line, method)
+				# 메서드를 동적으로 호출하고, 참/거짓 반환
+				return false unless respond_to?(method)  # 메서드가 있는지 확인
+				send(method, line)  # 메서드 호출
+			end
+			
+			
 			#--------------------------------------------------------------------------
 			# * Send Message
 			#-------------------------------------------------------------------------- 
@@ -784,47 +659,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@socket.send("<monster_cooltime_reset>#{map_id},#{mon_id}</monster_cooltime_reset>\n")
 			end
 			
-			
-			#--------------------------------------------------------------------------
-			# * 길드 시스템
-			#-------------------------------------------------------------------------- 
-			def self.guild_message(guild_name, message)
-				@socket.send("<Guild_Message>#{guild_name},#{message}</Guild_Message>\n")
-			end
-			def self.guild_system(guild_name, invite_name)
-				@socket.send("<Guild_system>#{guild_name},#{invite_name}</Guild_system>\n")
-			end
-			#--------------------------------------------------------------------------
-			# * 파티 시스템
-			#-------------------------------------------------------------------------- 
-			def self.party_system(party_name, message, party, invite_name)
-				@socket.send("<party_system>#{party_name},#{message},#{party},#{invite_name}</party_system>\n")
-			end
-			#--------------------------------------------------------------------------
-			# * 파티 추방 시스템
-			#-------------------------------------------------------------------------- 
-			def self.party_delete(party_name, name, message)
-				@socket.send("<party_system2>#{party_name},#{name},#{message}</party_system2>\n")
-			end
-			#--------------------------------------------------------------------------
-			# * 교환 시스템
-			#-------------------------------------------------------------------------- 
-			def self.trade_system(trade_invite, player)
-				@socket.send("<trade_system>#{trade_invite},#{player}</trade_system>\n")
-			end
-			
-			#--------------------------------------------------------------------------
-			# * Update Admin and Mod Command Recievals -> 18
-			#  운영자 명령어
-			#-------------------------------------------------------------------------- 
-			
-			def self.over
-				Audio.bgm_fade(800); 
-				Audio.bgs_fade(800); 
-				Audio.me_fade(800); 
+			def self.over 
 				게임종료; 
-				self.close_socket; 
-				$scene = nil
 			end
 			
 			# 우편 배송 (id:|아이템 id|템 종류|보낸이|개수|편지 내용)
@@ -839,7 +675,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				end
 				return data_hash
 			end
-			
 			
 			# 리붓 또는 강퇴
 			def self.update_admmod(line)
@@ -865,26 +700,21 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@socket.send("<timer_v>ok</timer_v>\n")
 					
 					
-				when /<ki>(.*),(.*),(.*)<\/ki>/
+				when /<ki>(.*),(.*)<\/ki>/
 					# Kick All Command
-					if $1.to_s == "모두"
-						if $3.to_s != $game_party.actors[0].name
-							p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다."
-							p $2.to_s
-							self.over
-							
-						end
+					target = $1.to_s
+					msg = $2.to_s
+					if target == "모두"
+						p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다.\n #{msg}"
+						self.over
 						return true
 						# Kick Command
-					elsif $1.to_s == $game_party.actors[0].name
-						p $2.to_s
+					elsif target == $game_party.actors[0].name
+						p msg
 						self.over
-						
 						return true
 					end
-					return false
 				end
-				return false
 			end
 			
 			#--------------------------------------------------------------------------
@@ -892,15 +722,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# 서버에서 보낸 메시지 받는 처리
 			#-------------------------------------------------------------------------- 
 			def self.update_outgame(line)
-				
 				case line
 					# 제한 처리
 				when /<server_msg>(.*)<\/server_msg>/
-					p $1
+					$chat.write($1.to_s, COLOR_WORLD) if $chat != nil
 					return true
 					
+				when /<console_msg>(.*)<\/console_msg>/
+					$console.write_line($1.to_s) if $console != nil
+					return true	
+					
 					# 인증
-				when /<0 (.*)>(.*) n=(.*)<\/0>/ 
+				when /<0>(.*) (.*) n=(.*)<\/0>/ 
 					a = self.authenficate($1,$2)
 					@servername = $3.to_s
 					return true if a
@@ -908,59 +741,47 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 회원가입 처리
 				when /<regist>(.*)<\/regist>/
 					if $1 == "wi" # 아이디 에러
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+						Jindow_Dialog.new("에러",
 							["이미 아이디가 있습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "에러")
+							[["확인", "Hwnd.dispose(self)"]])
 					elsif $1 == "wn" # 닉네임 에러
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+						Jindow_Dialog.new("에러",
 							["이미 이 닉네임은 누군가 사용하고 있습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "에러")
+							[["확인", "Hwnd.dispose(self)"]])
 					else # 회원가입 성공
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+						Jindow_Dialog.new("성공",
 							["회원가입에 성공 하셨습니다."],
-							["확인"], ["Hwnd.dispose(self)"], "성공")
+							[["확인", "Hwnd.dispose(self)"]])
 						
 					end
-					return true
 					
 					# 로그인 결과
 				when /<login>(.*),(.*)<\/login>/
-					if not @user_test
-						if $1 == "allow" and not @user_test
+					if !@user_test
+						if $1 == "allow" 
 							@login = true
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
-								["로그인에 성공 하셨습니다."],
-								["확인"], ["Hwnd.dispose(self)"], "성공")
-							self.get_name
-							loop = 0
-							loop do
-								self.update
-								loop += 1
-								break if loop == 10000
-								break if self.name != "" and self.name != nil and self.id != -1
-							end
 							self.get_group
 							$nickname = $2
 							$cha_name = "바람머리"
 							유저접속
 							
-							return true
-						elsif $1 == "wu" and not @user_test
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+						elsif $1 == "wu"
+							Jindow_Dialog.new("오류",
 								["아이디를 잘못 입력하셨습니다."],
-								["확인"], ["Hwnd.dispose(self)"], "오류")
+								[["확인", "Hwnd.dispose(self)"]])
 							$scene.set_status(@status) if $scene.is_a?(Jindow_Login)
-							return true
-						elsif $1 == "wp" and not @user_test
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+							
+						elsif $1 == "wp"
+							Jindow_Dialog.new("오류",
 								["비밀번호를 잘못 입력하셨습니다."],
-								["확인"], ["Hwnd.dispose(self)"], "오류")
+								[["확인", "Hwnd.dispose(self)"]])
 							$scene.set_status(@status) if $scene.is_a?(Jindow_Login)
-						elsif $1 == "al" and not @user_test == true
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 200,
+							
+						elsif $1 == "al"
+							Jindow_Dialog.new("오류",
 								["이미 로그인 되어 있습니다."],
-								["확인"], ["Hwnd.dispose(self)"], "오류")
-							return true
+								[["확인", "Hwnd.dispose(self)"]])
+							
 						end
 					else
 						# 유저 존재  x
@@ -972,11 +793,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							@user_exist = true
 							@user_test = false
 						end
-						return true
 					end
-					return false
 				end
-				return false
 			end
 			
 			
@@ -1013,6 +831,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<3>(.*)<\/3>/
 					@group = $1.to_s
 					return true
+					
 				when /<check>(.*)<\/check>/
 					@group = $1.to_s
 					return true
@@ -1264,29 +1083,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Player Processing
 					
 					# 서버에서 방송한 데이터
-				when /<5 (.*)>(.*)</
-					# Update Player
-					self.update_net_player($1, $2)
-					# If it is first time connected...
-					return true if !$2.include?("start")
-					# ... and it is not yourself ...
-					return true if $1.to_i == self.id.to_i
-					# ... and it is on the same map...
-					return true if @players[$1].map_id != $game_map.map_id and !$2.include?("start")
-					# ...  Return the Requested Information
-					self.send_start_request($1.to_i) 
+				when /<5>(.*),(.*)</
+					self.update_net_player($1, $2) # Update Player
+					
+					return true if !$2.include?("start") # If it is first time connected...
+					return true if $1.to_i == self.id.to_i # ... and it is not yourself ...
+					return true if @players[$1].map_id != $game_map.map_id # ... and it is on the same map...
+					
+					self.send_start_request($1.to_i)  # ...  Return the Requested Information
 					
 					$game_temp.spriteset_refresh = true
 					return true
 					# Map PLayer Processing
-					
-					
-				when /<netact (.*)>data=(.*) id=(.*)<\/netact>/
-					# Return if it is yourself
-					return true if $1.to_i == self.id.to_i
-					# Update Map Player
-					self.update_net_actor($1, $2, $3)
-					return true
 					
 				when /<state>(.*)<\/state>/
 					$game_party.actors[0].refresh_states($1)
@@ -1351,9 +1159,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@send_conf = true
 					return true if $1.to_s ==  "'Confirmed'"
 					
-					
-				when /<dataload>(.*):(.*)<\/dataload>/
-					
+				when /<dataload>(.*):(.*)<\/dataload>/	
 					key = $1.to_s
 					val = $2.to_s
 					
@@ -1522,7 +1328,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						@group = "standard"
 						if $game_switches[54] # 운영자모드
-							p "운영자모드"
+							$chat.write("운영자모드") if $chat != nil
 							@group = "admin"
 						end
 						
@@ -1630,13 +1436,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						next if name != player.name
 						
 						msg = "#{name}: #{msg}"
-						
-						case type
-						when 1, 3 # 전체, 스킬
-							$chat_b.input(msg, type, 4, player)
-						when 2 # 파티
-							$chat_b.input(msg, type, 4, player) if $netparty.include?(player.name) 
-						end
+						$chat_b.input(msg, type, 4, player)
 					end
 					
 					
@@ -1810,7 +1610,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					event = enemy.event
 					event.fade = true
 					
-					return if npt != $npt # 같은 파티가 아니라면
+					return if npt != $net_party_manager.leader # 같은 파티가 아니라면
 					
 					$game_variables[enemy.id + $mon_val_start] += 1
 					case enemy.trigger[0]
@@ -1851,21 +1651,21 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<Drop_Get>(.*)<\/Drop_Get>/
 					data = $1.split(',')
 					id = data[0].to_i
-					if data[1].to_i == $game_map.map_id
-						if $Drop[id] != nil
-							$Drop[id] = nil
-							event = $game_map.events[id]
-							event.erase
-							event = nil
-							$game_map.events.delete(event)
-						end
-					end
+					map_id = data[1].to_i
+					
+					return if map_id != $game_map.map_id
+					return if $Drop[id] == nil
+					
+					$Drop[id] = nil
+					event = $game_map.events[id]
+					event.erase
+					event = nil
+					$game_map.events.delete(event)
 					
 					# 효과음 실행
 				when /<se_play>(.*)<\/se_play>/
 					file_name = $1.to_s
 					Audio.se_play(file_name, $game_variables[13])
-					
 					
 					# 파티퀘스트 입장 여부 확인 : 스위치 번호, 1/0
 				when /<party_quest_check>(.*)<\/party_quest_check>/
@@ -1883,7 +1683,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					when 0
 						$game_switches[34] = true # 일본 
 					when 1
-						$game_switches[33] = true # 일본 
+						$game_switches[33] = true # 고균도 
 					end
 					
 				when /^<make_range_sprite>(.*)<\/make_range_sprite>/	
@@ -1967,40 +1767,55 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 				when /<whispers>(.*)<\/whispers>/ 
-					$chat.write("(귓속말) #{$1.to_s}", COLOR_WHISPER)
+					$chat.write($1.to_s, COLOR_WHISPER)
 					
-				when /<partymessage>(.*),(.*),(.*),(.*)<\/partymessage>/ 
-					if $npt == $4.to_s
-						$chat.write("(파티말) #{$1.to_s}(#{$2.to_s}) : #{$3.to_s}", COLOR_PARTY)
-					end
+				when /<party_message>(.*)<\/party_message>/ 
+					$chat.write($1.to_s, COLOR_PARTY)
 					
 				when /<event_animation>(.*),(.*),(.*)<\/event_animation>/
-					if $3.to_i == $game_map.map_id
-						$game_map.events[$1.to_i].animation_id = $2.to_i
-					end
-					return true
-					
+					return if $3.to_i != $game_map.map_id
+					$game_map.events[$1.to_i].animation_id = $2.to_i
 					
 					#-------------------------------------------------------------  
 					#---------------------------교환 시스템---------------------------  
 					#-------------------------------------------------------------      		
 					
 				when /<trade_invite>(.*),(.*)<\/trade_invite>/
-					if $1.to_s == $game_party.actors[0].name
-						Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 350,
-							["'#{$2.to_s}'님께서 교환 신청을 하셨습니다.수락 하시겠습니까?"], ["예", "아니오"],
-							["$trade_player = '#{$2.to_s}'; Network::Main.trade_system('#{$1.to_s}', '#{$2.to_s}'); Jindow_Trade.new; $chat.write '#{$2.to_s}님의 교환 신청을 수락 하셨습니다.'; Hwnd.dispose(self)" ,
-								"Network::Main.socket.send \"<trade_fail>#{$2.to_s}</trade_fail>\n\"; $chat.write '#{$2.to_s}님의 교환 신청을 거절 하셨습니다.'; Hwnd.dispose(self)"], "교환 신청")
-					end
-					return true
+					inviter = $2.to_s
+					invitee = $1.to_s
+					
+					return unless invitee == $game_party.actors[0].name
+					
+					dialog_text = ["'#{inviter}'님께서 교환 신청을 하셨습니다. 수락 하시겠습니까?"]
+					
+					accept_script = <<-SCRIPT
+					$trade_player = '#{inviter}';
+					Network::Main.trade_system('#{invitee}', '#{inviter}');
+					Jindow_Trade.new;
+					$chat.write '#{inviter}님의 교환 신청을 수락 하셨습니다.';
+					Hwnd.dispose(self);
+					SCRIPT
+					
+					decline_script = <<-SCRIPT
+					Network::Main.socket.send("<trade_fail>#{inviter}</trade_fail>\\n");
+					$chat.write '#{inviter}님의 교환 신청을 거절 하셨습니다.';
+					Hwnd.dispose(self);
+					SCRIPT
+					
+					Jindow_Dialog.new(
+						"교환 신청",
+						dialog_text,
+						[["예", accept_script], ["아니오", decline_script]]
+					)
+					
 				when /<trade_system>(.*),(.*)<\/trade_system>/
-					if $2.to_s == $game_party.actors[0].name
-						$trade_player = $1.to_s
+					my_name = $game_party.actors[0].name
+					
+					if $1.to_s == my_name || $2.to_s == my_name
 						Jindow_Trade.new
-					elsif $1.to_s == $game_party.actors[0].name
-						Jindow_Trade.new
+						$trade_player = $1.to_s if $2.to_s == my_name
 					end
-					return true
+					
 				when /<trade_item>(.*),(.*),(.*),(.*),(.*)<\/trade_item>/ # 교환자, 아이템 id, 개수, 타입, 번호
 					if $1.to_s == $game_party.actors[0].name
 						id = $2.to_i
@@ -2034,86 +1849,49 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#-------------------------------------------------------------  
 					#---------------------------파티 시스템---------------------------  
 					#-------------------------------------------------------------      
-				when /<nptreq>(.*) (.*) (.*) (.*)<\/nptreq>/ # 내 이름, 파티원 목록, 초대한 사람, 파티장
-					$n_data = $2
-					$n_name = $3
+				when /<party_add>(.*)<\/party_add>/ # 파티원 추가
+					data_hash = parseKeyValueData($1)
+					member = data_hash["member"]
+					$net_party_manager.add_member(member)
 					
-					if $game_party.actors[0].name == $1.to_s
-						if $netparty.size == 0
-							Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 82 / 2, 130,
-								["파티 요청 : #{$3.to_s}"], ["예", "아니오"],
-								["nptreq($n_name, $n_data); Hwnd.dispose(self)",
-									"nptnot($n_name); Hwnd.dispose(self)"], "파티 초대")
-						else
-							Network::Main.socket.send("<nptno>#{$n_name}</nptno>\n")
-						end
-					end
-					return true
+				when /<party_remove>(.*)<\/party_remove>/ # 파티원 삭제
+					data_hash = parseKeyValueData($1)
+					member = data_hash["member"]
+					$net_party_manager.remove_member(member)	
+						
+				when /<party_req>(.*)<\/party_req>/ # 초대한 사람
+					data_hash = parseKeyValueData($1)
+					inv_name = data_hash["name"]
+					$net_party_manager.decide_party(inv_name)
 					
-				when /<nptno>(.*)<\/nptno>/
-					if $game_party.actors[0].name == $1.to_s
-						$console.write_line("[파티]:상대방이 파티에 참가할 수 없습니다.")
-					end
-					return true
+					# 파티 퀘스트 장소로 이동 (이동할 map_id, x, y)
+				when /<party_move>(.*)<\/party_move>/
+					data_hash = parseKeyValueData($1)
+					target_id = data_hash["target_id"].to_i
+					x = data_hash["x"].to_i
+					y = data_hash["y"].to_i
 					
-				when /<nptyes>(.*) (.*)<\/nptyes>/
-					if $npt == $1.to_s
-						nptyes($2.to_s)
-						$console.write_line("[파티]:'#{$2.to_s}'님과 파티가 되었습니다.")
-					end
-					return true
-					
-				when /<nptout>(.*) (.*)<\/nptout>/
-					return if $npt != $2.to_s
-					out_mem = $1.to_s
-					
-					for netparty in $netparty
-						if netparty == out_mem
-							if $npt == netparty
-								$npt = ""
-								$netparty.clear
-								nptout
-								$console.write_line("[파티]:파티장이 탈퇴하여 파티가 해체되었습니다.")
-							else
-								$netparty.delete(out_mem)
-								nptout
-								$console.write_line("[파티]:'#{out_mem}' 님이 파티를 나가셨습니다.")
-							end
-						end
-					end
-					return true
-					
-					# 파티 퀘스트 장소로 이동 (npt, 현재 map_id, 이동할 map_id, x, y)
-				when /<npt_move>(.*) (.*) (.*) (.*) (.*)<\/npt_move>/
-					return if $npt != $1.to_s
-					return if $game_map.map_id != $2.to_i
-					$game_temp.player_new_map_id = $3.to_i
-					$game_temp.player_new_x = $4.to_i
-					$game_temp.player_new_y = $5.to_i
+					$game_temp.player_new_map_id = target_id
+					$game_temp.player_new_x = x
+					$game_temp.player_new_y = y
 					$game_temp.player_new_direction = 1
 					$game_temp.player_transferring = true
 					
-				when /<nptgain>(.*) (.*)<\/nptgain>/ # 파티장, 몬스터 아이디
-					return if $npt != $1.to_s
+				when /<party_gain>(.*)<\/party_gain>/ # 파티장, 몬스터 아이디
 					return if $game_party.actors[0].hp <= 0
-					id = $2.to_i
+					id = $1.to_i
 					enemy = $ABS.enemies[id]
 					return if enemy == nil
-					$ABS.abs_gain_treasure(enemy, 1)
+					$ABS.abs_gain_treasure(enemy)
 					
-				when /<partyhill>(.*) (.*) (.*) (.*) (.*)<\/partyhill>/  # 시전자이름, 마법번호, 파티크기, 맵번호, 체력/마력(0이면 버프라고 생각)
-					map_id = $4.to_i
-					return if $npt != $3.to_s
-					return if $game_map.map_id != map_id
-					return if $netparty.size <= 1 # 파티에 가입한 경우에만
-					
+				when /<party_heal>(.*) (.*) (.*)<\/party_heal>/  # 시전자이름, 마법번호, 체력/마력(0이면 버프라고 생각)
 					name = $1.to_s
 					skill_id = $2.to_i
-					heal_v = $5.to_i
+					heal_v = $3.to_i
 					ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
 					
 					sw = false
-					if not $game_party.actors[0].hp == 0 # 회복 스킬
+					if $game_party.actors[0].hp > 0 # 회복 스킬
 						sw = true
 						$rpg_skill.buff(skill_id, $game_party.actors[0], false)
 						case skill_id
@@ -2130,45 +1908,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						end	
 					end
 					
-					if sw
-						$game_player.animation_id = ani_id
-						self.ani(@id, ani_id)
-						$game_party.actors[0].critical = "heal"
-						$game_party.actors[0].damage = heal_v
-						$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")
-					end
+					return if !sw
 					
-					return true
-					
+					$game_player.animation_id = ani_id
+					self.ani(@id, ani_id)
+					$game_party.actors[0].critical = "heal"
+					$game_party.actors[0].damage = heal_v
+					$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")
 					#-----------------------------------------------------------------    
 					
-					#맵아이디, 이벤트 아이디, x좌표, y좌표               
-					
-				when /<drop_create>(.*)<\/drop_create>/
-					data = $1.split(",")
-					if data[0].to_i == $game_map.map_id
-						보관이벤트(data[1].to_i).moveto(data[2].to_i, data[3].to_i)
-					end
-					
-					
-				when /<drop_del>(.*)<\/drop_del>/    #맵아이디, 이벤트 아이디
-					data = $1.split(",")
-					if data[0].to_i == $game_map.map_id
-						for e in $game_map.events.values
-							if e.x == data[2].to_i and e.y == data[3].to_i
-								e.erase
-							end
-						end
-					end
-					
-					#-----------------------------------------------------------------      
 					return true  
-				when /<System_Message>(.*)<\/System_Message>/
-					$console.writeline("#{$1.to_s}",Color.new(155, 20, 150))
-					
-					return true       
-					# Chat Recieval
-					
 					
 				when /<27>(.*)<\/27>/
 					#@ani_id = #{id}; @ani_number = #{number}; count = #{count} # 유저 이펙트				
@@ -2195,7 +1944,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 					@ani_id = -1; @ani_number = -1; @ani_event = -1
-					#Network::Main.send_newstats
 					return true
 					
 					# Remove Player ( Disconnected )

@@ -309,24 +309,27 @@ class Rpg_skill
 		user.critical = "heal"
 		user.hp += heal_v
 		
-		if $netparty.size >= 2 # 파티가 2인 이상이라면
-			name = user.name
-			Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{heal_v}</partyhill>\n")	
-		end
+		data = {
+			"id" => id,
+			"value" => heal_v
+		}
+		message = data.map { |key, value| "#{key}:#{value}" }.join("|")
+		Network::Main.send_with_tag("party_heal", message)
 	end
 	
 	# 파티 버프
 	def party_buff(id, character = $game_player)
 		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 		character.ani_array.push(ani_id)
+		Network::Main.ani(Network::Main.id, ani_id)
+		
 		if character == $game_player
-			Network::Main.ani(Network::Main.id, ani_id)
-			if $netparty.size >= 2 # 파티가 2인 이상이라면
-				name = $game_party.actors[0].name
-				Network::Main.socket.send("<partyhill>#{name} #{id.to_i} #{$npt} #{$game_map.map_id} #{0}</partyhill>\n")	
-			end
-		else
-			Network::Main.ani(Network::Main.id, ani_id)
+			data = {
+				"id" => id,
+				"value" => 0
+			}
+			message = data.map { |key, value| "#{key}:#{value}" }.join("|")
+			Network::Main.send_with_tag("party_heal", message)
 		end
 	end
 	
@@ -496,7 +499,7 @@ class Rpg_skill
 			end
 		end
 	end
-		
+	
 	# 스킬에 따른 대화를 생성하고 채팅을 보내는 함수
 	def skill_chat(skill, user = $game_player)
 		id = skill.id

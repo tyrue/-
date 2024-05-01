@@ -3,8 +3,11 @@
 # Modifies the error message raised to show the full traceback path.
 def traceback_report
   backtrace = $!.backtrace.clone
+	
   backtrace.each do |bt|
-    bt.sub!(/(\d+)/) { "[#{$1}] #{$RGSS_SCRIPTS[$1.to_i][1]} " if $RGSS_SCRIPTS[$1.to_i] != nil} 
+    bt.sub!(/(\d+)/) { 
+			"[#{$1}] #{$RGSS_SCRIPTS[$1.to_i][1]}" if $RGSS_SCRIPTS[$1.to_i] != nil
+		} 
   end
   
   return $!.message + "\n\n" + backtrace.join("\n")
@@ -44,6 +47,7 @@ rescue SyntaxError
 rescue Errno::ENOENT
 	$!.message.sub!($!.message, traceback_report)
 	raise_traceback_error
+	
 	Network::Main.close_socket 
 	# Supplement Errno::ENOENT exception
 	# If unable to open file, display message and end
@@ -59,6 +63,6 @@ rescue
 	
 ensure
 	$!.message.sub!($!.message, traceback_report)
-	raise_traceback_error
 	게임종료
+	raise_traceback_error
 end

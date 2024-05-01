@@ -258,7 +258,7 @@ if SDK.state("Mr.Mo's ABS")
 			
 			if something_changed?
 				refresh 
-				Network::Main.send_newstats
+				Network::Main.send_map if Network::Main.socket != nil
 			end
 		end
 		#--------------------------------------------------------------------------

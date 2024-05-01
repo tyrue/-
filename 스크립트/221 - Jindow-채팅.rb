@@ -41,6 +41,8 @@ class Jindow_Chat_Input < Jindow
 		@ox = 0
 		@oy = 0
 		
+		@player_name = $game_party.actors[0].name
+		
 		#맵이름의 표시
 		@map_infos = load_data("Data/MapInfos.rxdata")
 		@chat_list = []
@@ -54,19 +56,18 @@ class Jindow_Chat_Input < Jindow
 	
 	def send_chat
 		text = @type.result
-		name = $game_party.actors[0].name
+		return process_command(text) if is_command(text) # 명령어 수행
 		
-		if !is_command(text) # 명령어가 아닌 그냥 일반 채팅일때
-			case @chat_type[@chat_type_idx]
-			when "귓속말" then process_whisper(name, text)
-			when "전체" then process_global(name, text)
-			when "파티" then process_party(name, text)
-			when "길드" then process_guild(name, text)
-			end
-			return
+		# 명령어가 아닌 그냥 일반 채팅일때
+		case @chat_type[@chat_type_idx]
+		when "귓속말" then process_whisper(text)
+		when "전체" then process_global(text)
+		when "파티" then process_party(text)
+		when "길드" then process_guild(text)
 		end
-		
-		
+	end
+	
+	def process_command(text)
 		# 명령어를 식별
 		case text		
 		when /\/도움말/
@@ -79,27 +80,20 @@ class Jindow_Chat_Input < Jindow
 			$console.write_line("(귓속말 상대 변경):#{$1.to_s}")
 			
 		when /\/교환 (.*)/ #교환
-			if $1.to_s != $game_party.actors[0].name
-				if not Hwnd.include?("Trade")
-					$console.write_line("'#{$1.to_s}'님에게 교환 신청을 하셨습니다.")
-					Network::Main.socket.send "<trade_invite>#{$1.to_s},#{$game_party.actors[0].name}</trade_invite>\n"
-				else
-					$console.write_line("이미 교환 중 이십니다.")
-				end
-			else
-				$console.write_line("자기 자신에게 교환 신청을 할 수 없습니다.")
-			end      
+			return $console.write_line("자기 자신에게 교환 신청을 할 수 없습니다.") if $1.to_s == @player_name
+			return $console.write_line("이미 교환 중 입니다.") if Hwnd.include?("Trade")
+			
+			$console.write_line("'#{$1.to_s}'님에게 교환 신청을 하셨습니다.")
+			Network::Main.socket.send "<trade_invite>#{$1.to_s},#{$game_party.actors[0].name}</trade_invite>\n"
 			
 		when /\/세계후 (.*)/
-			if  $game_party.item_number(91) > 0
-				간단메세지("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}")
-				$chat.write("[세계후] #{$game_party.actors[0].name} : #{$1.to_s}", COLOR_BIGSAY)
-				Network::Main.socket.send("<bigsay>#{$game_party.actors[0].name},#{$1.to_s}</bigsay>\n")
-				$game_party.lose_item(91, 1)
-				$chat.write ("세계후두루마리 남은 보유량: #{$game_party.item_number(91)}", COLOR_BIGSAY)  
-			else
-				$chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", COLOR_BIGSAY)        
-			end
+			return $chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", COLOR_BIGSAY) if $game_party.item_number(91) <= 0
+			
+			간단메세지("[세계후] #{@player_name} : #{$1.to_s}")
+			$chat.write("[세계후] #{@player_name} : #{$1.to_s}", COLOR_BIGSAY)
+			Network::Main.socket.send("<bigsay>#{$game_party.actors[0].name},#{$1.to_s}</bigsay>\n")
+			$game_party.lose_item(91, 1)
+			$chat.write ("세계후두루마리 남은 보유량: #{$game_party.item_number(91)}", COLOR_BIGSAY)  
 			
 			# 운영자 전용 명령어 
 		when /\/소환 (.*)/ #소환 명령어
@@ -108,7 +102,6 @@ class Jindow_Chat_Input < Jindow
 			x = $game_player.x
 			y = $game_player.y
 			Network::Main.socket.send "<summon>#{$1.to_s},#{mapid},#{x},#{y}</summon>\n"
-			
 			
 		when /\/출두 (.*)/ #출두 명령어
 			return if Network::Main.group != 'admin'
@@ -147,71 +140,60 @@ class Jindow_Chat_Input < Jindow
 			Network::Main.socket.send "<all_summon>#{mapid},#{x},#{y}</all_summon>\n"
 			
 		when /\/공지 (.*)/
-			if Network::Main.group == 'admin'
-				Network::Main.socket.send "<chat>(공지): #{$1.to_s}</chat>\n"
-			end 
+			return if Network::Main.group != 'admin'
+			Network::Main.socket.send "<chat>(공지): #{$1.to_s}</chat>\n"
 			
 		when /\/감옥 (.*)/ # 감옥으로 보내는 명령어
-			if Network::Main.group == 'admin'
-				Network::Main.socket.send "<prison>#{$1.to_s}</prison>\n"
-			end
+			return if Network::Main.group != 'admin'
+			Network::Main.socket.send "<prison>#{$1.to_s}</prison>\n"
 			
 		when /\/석방 (.*)/ # 감옥에 있는 유저 석방 명령어
-			if Network::Main.group == 'admin'
-				Network::Main.socket.send "<emancipation>#{$1.to_s}</emancipation>\n"
-			end
+			return if Network::Main.group != 'admin'
+			Network::Main.socket.send "<emancipation>#{$1.to_s}</emancipation>\n"
 			
 		when /\/캐시 (.*) (.*)/ 
-			if Network::Main.group == 'admin'
-				Network::Main.socket.send "<cashgive>#{$1.to_s},#{$2.to_s}</cashgive>\n"
-				$console.write_line("#{$2.to_s}마일리지를 유저에게 지급하였습니다.")
-			end
-			
+			return if Network::Main.group != 'admin'
+			Network::Main.socket.send "<cashgive>#{$1.to_s},#{$2.to_s}</cashgive>\n"
+			$console.write_line("#{$2.to_s}마일리지를 유저에게 지급하였습니다.")
 			
 		when /^\/이벤트\s?고래\s?(\d*)$/ 
-			if Network::Main.group == 'admin'
-				n = ($1 == nil or $1 == "") ? 10 : $1.to_i
-				if create_abs_monsters_admin(49, n) != nil
-					$console.write_line("고래를 #{n}마리 소환합니다.")
-					
-					mapname = ""
-					if $game_map.map_id != nil
-						mapname = @map_infos[$game_map.map_id].name.to_s if @map_infos[$game_map.map_id] != nil
-					end
-					
-					Network::Main.socket.send "<chat>(이벤트)고래가 #{mapname}에 출몰하였습니다!!</chat>\n"
-				else
-					$console.write_line("오류 발생 (id 없음)")
-				end
-			end	
+			return if Network::Main.group != 'admin'
+			
+			n = ($1 == nil or $1 == "") ? 10 : $1.to_i
+			return $console.write_line("오류 발생 (id 없음)") unless create_abs_monsters_admin(49, n)
+			
+			$console.write_line("고래를 #{n}마리 소환합니다.")
+			mapname = ""
+			if $game_map.map_id != nil
+				mapname = @map_infos[$game_map.map_id].name.to_s if @map_infos[$game_map.map_id] != nil
+			end
+			Network::Main.socket.send "<chat>(이벤트)고래가 #{mapname}에 출몰하였습니다!!</chat>\n"
 			
 		when /^\/몬스터\s?소환\s?(\d*)\s?(\d*)$/ 
-			if Network::Main.group == 'admin'
-				return if ($1 == nil or $1 == "")
-				id = $1.to_i
-				n = ($2 == nil or $2 == "") ? 1 : $2.to_i
-				return if $data_enemies[id] == nil
-				name = $data_enemies[id].name
-				mapname = ""
-				if $game_map.map_id != nil
-					mapname = @map_infos[$game_map.map_id].name.to_s if @map_infos[$game_map.map_id] != nil
-				end
-				
-				if create_abs_monsters_admin(id, n) != nil
-					$console.write_line("#{name}를 #{n}마리 소환합니다.") 
-					Network::Main.socket.send "<chat>#{name}(이)가 #{mapname}에 출몰하였습니다!!</chat>\n"
-				else
-					$console.write_line("오류 발생 (id 없음)")
-				end
-			end			
+			return if Network::Main.group != 'admin'	
+			return if ($1 == nil or $1 == "")
+			
+			id = $1.to_i
+			n = ($2 == nil or $2 == "") ? 1 : $2.to_i
+			return if $data_enemies[id] == nil
+			
+			name = $data_enemies[id].name
+			mapname = ""
+			if $game_map.map_id != nil
+				mapname = @map_infos[$game_map.map_id].name.to_s if @map_infos[$game_map.map_id] != nil
+			end
+			
+			return $console.write_line("오류 발생 (id 없음)") unless create_abs_monsters_admin(id, n)
+			$console.write_line("#{name}를 #{n}마리 소환합니다.") 
+			Network::Main.socket.send "<chat>#{name}(이)가 #{mapname}에 출몰하였습니다!!</chat>\n"
 			
 		when /\/테스트/
-			if Network::Main.group == 'admin'		
-				$game_temp.player_transferring = true # 이동 가능
-				$game_temp.player_new_map_id = 306
-				$game_temp.player_new_x = 21
-				$game_temp.player_new_y = 36
-			end 	
+			return if Network::Main.group != 'admin'	
+			
+			$game_temp.player_transferring = true # 이동 가능
+			$game_temp.player_new_map_id = 306
+			$game_temp.player_new_x = 21
+			$game_temp.player_new_y = 36
 			
 		when /^\/운영자모드 (.*)/
 			Network::Main.set_admin if $1.to_i == 1367
@@ -221,52 +203,48 @@ class Jindow_Chat_Input < Jindow
 		end
 	end
 	
-	def process_whisper(name, text)
-		if @whispers.nil?
-			$console.write_line("귓속말 할 상대가 없습니다.")
-			return
-		end
-		
-		if @whispers == name
-			$console.write_line("자기 자신에게는 귓속말을 할 수 없습니다.")
-			return
-		end
+	def process_whisper(text)
+		return $console.write_line("귓속말 할 상대가 없습니다.") if @whispers.nil?
+		return $console.write_line("자기 자신에게는 귓속말을 할 수 없습니다.") if @whispers == @player_name
 		
 		$chat.write("(귓속말) #{@whispers} <<< #{text}", COLOR_WHISPER)
 		Network::Main.socket.send "<whispers>#{@whispers},#{text}</whispers>\n"
 	end
 	
-	def process_global(name, text)
-		$chat.write("(전체) #{name} : #{text}", COLOR_NORMAL)
-		$chat_b.input("#{name}: #{text}", 1, 4, $game_player)
-		Network::Main.socket.send "<chat1>(전체) #{name} : #{text}</chat1>\n"
-		Network::Main.socket.send "<map_chat>#{name}&#{text}&#{1}</map_chat>\n"
+	def process_global(text)
+		$chat.write("(전체) #{@player_name} : #{text}", COLOR_NORMAL)
+		$chat_b.input("#{text}", 1, 4)
+		Network::Main.socket.send "<chat1>(전체) #{@player_name} : #{text}</chat1>\n"
+		Network::Main.socket.send "<map_chat>#{@player_name}&#{text}&#{1}</map_chat>\n"
 	end
 	
-	def process_party(name, text)
-		if $netparty.empty?
-			$console.write_line("가입된 파티가 없습니다.")
-			return
+	def process_party(text)
+		if $net_party_manager.party_empty?
+			return $console.write_line("가입된 파티가 없습니다.")
 		end
 		
-		name2 = $game_party.actors[0].class_name
-		$chat.write("(파티) #{name} : #{text}", COLOR_PARTY)
-		$chat_b.input("#{name}: #{text}", 2, 4, $game_player)
-		Network::Main.socket.send "<partymessage>#{name},#{name2},#{text},#{$npt}</partymessage>\n"
-		Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"
+		data = {
+			"class" => $game_party.actors[0].class_name,
+			"text" => text
+		}
+		message = data.map { |key, value| "#{key}:#{value}" }.join("|")
+		Network::Main.send_with_tag("party_message", message)
+		Network::Main.send_with_tag("map_chat", "#{@player_name}&#{text}&#{2}")
+		$chat.write("(파티) #{@player_name} : #{text}", COLOR_PARTY)
+		$chat_b.input("#{text}", 2, 4)
 	end
 	
-	def process_guild(name, text)
+	def process_guild(text)
 		if $guild.nil?
 			$console.write_line("가입된 길드가 없습니다.")
 			return
 		end
 		
 		name2 = $game_party.actors[0].class_name
-		$chat.write("(길드) #{name} : #{text}", COLOR_GUILD)
-		$chat_b.input("#{name}: #{text}", 2, 4, $game_player)
-		Network::Main.socket.send "<Guild_Message>#{name},#{name2},#{text},#{$npt}</Guild_Message>\n"
-		Network::Main.socket.send "<map_chat>#{name}&#{text}&#{2}</map_chat>\n"
+		$chat.write("(길드) #{@player_name} : #{text}", COLOR_GUILD)
+		$chat_b.input("#{text}", 2, 4)
+		Network::Main.socket.send "<Guild_Message>#{@player_name},#{name2},#{text}</Guild_Message>\n"
+		Network::Main.socket.send "<map_chat>#{@player_name}&#{text}&#{2}</map_chat>\n"
 	end
 	
 	# update 시작

@@ -112,7 +112,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@oldy = @y
 			@tran = @is_transparency
 		
-			eval(data) unless data == nil
+			eval(data) if data != nil
 			if new_equip? or (@tran != @is_transparency)
 				@equip_change = true
 			end
@@ -152,6 +152,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			# Get difference in player coordinates
 			sx = @oldx - @x 
 			sy = @oldy - @y
+			self.ic
 			# If coordinates are equal
 			return if sx == 0 and sy == 0
 			# Get absolute value of difference

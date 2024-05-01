@@ -1458,27 +1458,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		def treasure(enemy)
 			actor = $game_party.actors[0]
 			return if enemy.event.fade # 중복 방지(이미 몬스터가 죽은 상태에서 보상까지 받은 후)
-			return if actor.cant_get_exp? # 경험치를 얻을 수 없는 상황
 			abs_gain_treasure(enemy)
 			
-			in_map_player = 1
-			if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
-				# 여기서 파티원이 맵에 있는지 확인			
-				for player in Network::Main.mapplayers.values
-					next if player == nil
-					if $netparty.include?(player.name) and player.name != $game_party.actors[0].name
-						in_map_player = in_map_player + 1 # 같은 맵에 파티원이 있으면 추가
-					end
-				end
-			end
-			
-			if in_map_player >= 2
-				Network::Main.socket.send("<nptgain>#{$npt} #{enemy.event.id}</nptgain>\n")
-			end
+			Network::Main.socket.send("<party_gain>#{enemy.event.id}</party_gain>\n")
 			drop_enemy(enemy) # ABS monster item drop 파일 참조
 		end
 		
-		def abs_gain_treasure(enemy, type = 0)
+		def abs_gain_treasure(enemy)
 			actor = $game_party.actors[0]
 			return if actor.cant_get_exp? # 경험치를 얻을 수 없는 상황
 			
@@ -1488,25 +1474,24 @@ if SDK.state("Mr.Mo's ABS") == true
 			unless enemy.hidden
 				exp = ENEMY_EXP[enemy.id] || enemy.exp
 				if exp.is_a?(Array) && exp.size > 1
-					hp_per = exp[1].to_f || 0
-					sp_per = exp[2].to_f || 0
-					exp = actor.maxhp * hp_per + actor.maxsp * sp_per
+					exp = (actor.maxhp * (exp[1] || 0).to_f) + (actor.maxsp * (exp[2] || 0).to_f)
 				end
 				exp = exp.to_i
 				gold += enemy.gold
 			end
 			
 			in_map_player = 1
-			if $netparty.size >= 2   # 파티중일경우 경험치, 돈의 습득
+			if !$net_party_manager.party_empty?   # 파티중일경우 경험치, 돈의 습득
 				# 여기서 파티원이 맵에 있는지 확인			
 				for player in Network::Main.mapplayers.values
 					next if player == nil
 					next if player.name == $game_party.actors[0].name
-					in_map_player += 1 if $netparty.include?(player.name)
+					
+					in_map_player += 1 if $net_party_manager.is_party_member?(player.name)
 				end
 			end
 			
-			nextExp = actor.level < 99 ? actor.exp_list[actor.level + 1] - actor.exp_list[actor.level] : actor.exp_list[100]
+			nextExp = actor.level < 99 ? (actor.exp_list[actor.level + 1] - actor.exp_list[actor.level]) : actor.exp_list[100]
 			limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
 			gainExp = actor.level < 99 ? [exp, limitExp].min : exp
 			gainExp *= $exp_event if $game_switches[1500]  # 경험치 이벤트!
@@ -1516,16 +1501,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				gold = (gold * 1.5 / in_map_player).to_i
 			end
 			
-			$game_party.gain_gold(gold)
-			expPer = actor.level < 99 ? (actor.exp + gainExp - actor.exp_list[actor.level]) * 100.0 / nextExp : (actor.exp + gainExp) * 100.0 / nextExp
 			actor.exp += gainExp
-			
-			printTxt = ""
-			case type
-			when 1
-				printTxt += "[파티]"
-			end
-			printTxt += "경험치:#{change_number_unit(gainExp)} 금전:#{change_number_unit(gold)} 획득. (#{'%.2f' % expPer}%)"
+			$game_party.gain_gold(gold)
 		end
 		
 		# 경험치 받는 함수

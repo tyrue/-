@@ -77,17 +77,17 @@ class Jindow_Register < Jindow
 			nick = @type_nickname.result.gsub(/\s+/, "")
 			
 			if id == "" or nick == ""
-				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
+				Jindow_Dialog.new("오류",
 					["빈 문자열 사용 불가"],
-					["확인"], ["Hwnd.dispose(self); $now_dialog = false"], "오류")
+					[["확인", "Hwnd.dispose(self)"]])
 				return
 			end
 			
 			size = @type_username.result.scan(/[A-z]/).size
 			if @type_username.result.size != size
-				Jindow_Dialog.new(640 / 2 - 224 / 2, 480 / 2 - 100 / 2 + 50, 180,
+				Jindow_Dialog.new("오류",
 					["아이디/비밀번호에 한글 사용 불가"],
-					["확인"], ["Hwnd.dispose(self); $now_dialog = false"], "오류")
+					[["확인", "Hwnd.dispose(self)"]])
 				sw = true
 			else
 				$game_system.se_play($data_system.decision_se)

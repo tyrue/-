@@ -1,95 +1,80 @@
 #==============================================================================
 # * 팝업 메뉴
 #------------------------------------------------------------------------------
-#  - 유저를 클릭하면 해당 유저의 상세 정보를 표시합니다.
+# - 유저를 클릭하면 해당 유저의 상세 정보를 표시합니다.
 #==============================================================================
 class Jindow_P_Status < Jindow
-	def initialize(usrname, netid)
-		super(0, 0, 70, 110)
-		self.name = usrname
-		@usrname = usrname
-		@head = true
-		@mark = true
-		@drag = true
-		@close = true
-		@netid = netid
-		@netPlayer = Network::Main.players[@netid]
-		self.refresh("P_Status")
-		self.x = Mouse::x
-		self.y = Mouse::y
-		
-		@a = J::Button.new(self).refresh(50, "파티 초대")
-		@a.x = 10
-		@a.y = 10
-		
-		@b = J::Button.new(self).refresh(50, "문파 초대")
-		@b.x = 10
-		@b.y = 35
-		
-		@c = J::Button.new(self).refresh(50, "교환 신청")
-		@c.x = 10
-		@c.y = 60
-		
-		@d = J::Button.new(self).refresh(50, "유저 정보")
-		@d.x = 10
-		@d.y = 85
-	end
-	
-	def update
-		super
-		
-		if @a.click # 파초
-			if $netparty.size < $MAX_PARTY
-				if $netparty.size == 0
-					$npt = $game_party.actors[0].name
-					$console.write_line("[파티]:파티가 생성되었습니다.")
-					$netparty.push($game_party.actors[0].name)
-				end
-				
-				party_mem = $netparty[0]
-				for i in 1...$netparty.size
-					party_mem = party_mem.to_s + ",#{$netparty[i]}"
-				end
-				
-				Network::Main.socket.send("<nptreq>#{@usrname} #{party_mem} #{$game_party.actors[0].name} #{$npt}</nptreq>\n")
-				$console.write_line("[파티]: '#{@usrname}' 님을 파티에 초대했습니다.")
-				if Hwnd.include?("NetParty")
-					Hwnd.dispose("NetParty")
-					Jindow_NetParty.new
-				end
-				Hwnd.dispose(self)
-			else
-				$console.write_line("[파티]:파티는 최대 #{$MAX_PARTY}인까지 가능합니다.")
-			end
-		end
-		
-		if @b.click # 길초
-			guild = @usrname
-			if $guild_group == "문파장" or $guild_group == "부문파장"
-				$console.write_line("#{@usrname}님에게 문파 초대를 하셨습니다.")
-				Network::Main.socket.send "<Guild_Invite>#{guild},#{$guild},#{$guild_master}</Guild_Invite>\n"
-				Hwnd.dispose(self)
-			else
-				$console.write_line("문파장 혹은 부문파장만 쓸 수 있는 기능 입니다.")
-			end
-		end
-		
-		
-		if @c.click # 교환
-			if $nowtrade == 0
-				$nowtrade = 1
-				Network::Main.socket.send("<trade_invite>#{@usrname},#{$game_party.actors[0].name}</trade_invite>\n")
-				$console.write_line("[교환]:'#{@usrname}'님에게 교환을 요청했습니다.")
-				Hwnd.dispose(self)
-			else
-				$console.write_line("[교환]:이미 요청중입니다.")
-			end
-		end
-		
-		
-		if @d.click # 정보
-			Jindow_NetPlayer_Info.new(@netPlayer.netid, @netPlayer.name)
-			Hwnd.dispose(self)
-		end
-	end
+  def initialize(usrname, netid)
+    super(0, 0, 70, 110)
+    setup_properties(usrname, netid)
+    setup_buttons
+  end
+
+  def setup_properties(usrname, netid)
+    self.name = usrname
+    @usrname = usrname
+    @netid = netid
+    @netPlayer = Network::Main.players[@netid]
+    @head = @drag = @close = @mark = true
+    self.refresh("P_Status")
+    self.x = Mouse.x
+    self.y = Mouse.y
+  end
+
+  def setup_buttons
+    @buttons = {
+      :party_invite => J::Button.new(self).refresh(50, "파티 초대"),
+      :guild_invite => J::Button.new(self).refresh(50, "문파 초대"),
+      :trade_request => J::Button.new(self).refresh(50, "교환 신청"),
+      :user_info => J::Button.new(self).refresh(50, "유저 정보")
+    }
+
+    @buttons.each_with_index do |(key, button), index|
+      button.x = 10
+      button.y = 10 + (index * 25)
+    end
+  end
+
+  def update
+    super
+    handle_party_invite if @buttons[:party_invite].click
+    handle_guild_invite if @buttons[:guild_invite].click
+    handle_trade_request if @buttons[:trade_request].click
+    handle_user_info if @buttons[:user_info].click
+  end
+
+  def handle_party_invite
+		$net_party_manager.invite_party(@usrname)
+		Hwnd.dispose(self)
+  end
+  
+  def handle_guild_invite
+    if %w[문파장 부문파장].include?($guild_group)
+      Network::Main.socket.send(
+        "<Guild_Invite>#{@usrname},#{$guild},#{$guild_master}</Guild_Invite>\\n"
+      )
+      $console.write_line("[문파]: '#{@usrname}'님에게 문파 초대를 하셨습니다.")
+    else
+      $console.write_line("문파장 혹은 부문파장만 쓸 수 있는 기능입니다.")
+    end
+    Hwnd.dispose(self)
+  end
+
+  def handle_trade_request
+    if $nowtrade == 0
+      $nowtrade = 1
+      Network::Main.socket.send(
+        "<trade_invite>#{@usrname},#{$game_party.actors[0].name}</trade_invite>\\n"
+      )
+      $console.write_line("[교환]: '#{@usrname}'님에게 교환을 요청했습니다.")
+    else
+      $console.write_line("[교환]: 이미 요청 중입니다.")
+    end
+    Hwnd.dispose(self)
+  end
+
+  def handle_user_info
+    Jindow_NetPlayer_Info.new(@netPlayer.netid, @netPlayer.name)
+    Hwnd.dispose(self)
+  end
 end

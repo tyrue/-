@@ -6,7 +6,7 @@ class Chat_balloon_net
 		@chat_b = {}
 		@width = 150
 		@height = 100
-		@font_size = 20
+		@font_size = 16
 		@font_name = "메이플스토리"
 		@font_name_default = "맑은 고딕"
 	end
@@ -17,10 +17,14 @@ class Chat_balloon_net
 	
 	def input(txt = "테스트", type = 1, sec = 4, ch = $game_player)
 		return if txt == nil or txt == ""
+		
+		txt = "#{$game_party.actors[0].name} : #{txt}" if ch == $game_player
 		bitmap = Bitmap.new(@width, @height)
 		
-		@font_size = 18
 		@font_name = Font.exist?("메이플스토리") ? "메이플스토리" : @font_name_default
+		bitmap.font.name = @font_name
+		bitmap.font.size = @font_size
+		
 		case type
 		when 1 # 일반
 			bitmap.font.color = COLOR_NORMAL
@@ -28,15 +32,13 @@ class Chat_balloon_net
 			bitmap.font.color = COLOR_PARTY
 		when 3 # 스킬
 			bitmap.font.color = COLOR_EVENT
-			@font_size = 20
+			bitmap.font.size = 20
 		when 4 # 귓속말
 			bitmap.font.color = COLOR_WHISPER
 		else # 기타
 			bitmap.font.color = COLOR_NORMAL
 		end
 		
-		bitmap.font.name = @font_name
-		bitmap.font.size = @font_size
 		w = 0
 		h = 0
 		@now_w = 0
@@ -47,13 +49,10 @@ class Chat_balloon_net
 			if w + rect.width > @width
 				h += rect.height
 				w = 0
-				bitmap.draw_frame_text(w, h, rect.width, rect.height, i)
-				w += rect.width
-			else
-				bitmap.draw_frame_text(w, h, rect.width, rect.height, i)
-				w += rect.width
-				@now_w = w if @now_w <= w
 			end
+			bitmap.draw_frame_text(w, h, rect.width, rect.height, i)
+			w += rect.width
+			@now_w = w if @now_w <= w
 		end
 		
 		@now_h += h
@@ -107,20 +106,20 @@ class Chat_balloon_net
 			id = cb[0]
 			balloon = cb[1]
 			
-			if balloon.sec > 0
-				balloon.sec -= 1
-				char = balloon.ch
-				
-				cx = char.screen_x - balloon.ox
-				cy = char.screen_y - balloon.oy
-				
-				$chat_s[id].x = cx 
-				$chat_s[id].y = cy 
-				
-				if balloon.sec <= 0
-					$chat_s[id].visible = false
-					$chat_s[id].dispose
-				end
+			next if balloon.sec <= 0
+			
+			balloon.sec -= 1
+			char = balloon.ch
+			
+			cx = char.screen_x - balloon.ox
+			cy = char.screen_y - balloon.oy
+			
+			$chat_s[id].x = cx 
+			$chat_s[id].y = cy 
+			
+			if balloon.sec <= 0
+				$chat_s[id].visible = false
+				$chat_s[id].dispose
 			end
 		end
 	end

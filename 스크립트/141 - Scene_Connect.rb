@@ -7,8 +7,7 @@ class Scene_Connect
 		$loading.dispose if $loading != nil
 		$trade_item = []
 		$item_number = []
-		$party_name = ""
-		$party_reader = ""
+		
 		$switches = []
 		$variables = []
 		$variables1 = []
@@ -21,7 +20,7 @@ class Scene_Connect
 		$mob_id = []
 		$saybul = ""
 		$Drop = []
-		$netparty = []
+
 		$data_actors        = load_data("Data/Actors.rxdata")
 		$data_classes       = load_data("Data/Classes.rxdata")
 		$data_skills        = load_data("Data/Skills.rxdata")

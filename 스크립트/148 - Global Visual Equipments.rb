@@ -48,7 +48,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 						
 						t_val = 255
 						if @character.is_transparency # 투명임
-							ok = $netparty.include? @character.name.to_s
+							ok = $net_party_manager.party_members.include? @character.name.to_s
 							t_val = ok ? 125 : 0
 						end
 						self.bitmap.blt(0, 0, bmp2, src_rect, t_val)
@@ -56,7 +56,7 @@ if User_Edit::VISUAL_EQUIP_ACTIVE
 				else # 둔갑임
 					t_val = 255
 					if @character.is_transparency # 투명?
-						ok = $netparty.include? @character.name.to_s
+						ok = $net_party_manager.party_members.include? @character.name.to_s
 						t_val = ok ? 125 : 0
 					end
 					self.bitmap.blt(0, 0, bmp, src_rect, t_val)

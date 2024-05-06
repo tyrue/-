@@ -1779,72 +1779,30 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#-------------------------------------------------------------  
 					#---------------------------교환 시스템---------------------------  
 					#-------------------------------------------------------------      		
+				when /<trade_invite>(.*)<\/trade_invite>/
+					$trade_manager.trade_decide($1.to_s)
 					
-				when /<trade_invite>(.*),(.*)<\/trade_invite>/
-					inviter = $2.to_s
-					invitee = $1.to_s
+				when /<trade_start><\/trade_start>/	
+					Jindow_Trade.new()
 					
-					return unless invitee == $game_party.actors[0].name
+				when /<trade_cancel>(.*)<\/trade_cancel>/	
+					$trade_manager.trade_end()
 					
-					dialog_text = ["'#{inviter}'님께서 교환 신청을 하셨습니다. 수락 하시겠습니까?"]
+				when /<trade_add>(.*)<\/trade_add>/	
+					data_hash = parseKeyValueData($1)
+					$trade_manager.addItem_trader(data_hash)
 					
-					accept_script = <<-SCRIPT
-					$trade_player = '#{inviter}';
-					Network::Main.trade_system('#{invitee}', '#{inviter}');
-					Jindow_Trade.new;
-					$chat.write '#{inviter}님의 교환 신청을 수락 하셨습니다.';
-					Hwnd.dispose(self);
-					SCRIPT
+				when /<trade_remove>(.*)<\/trade_remove>/	
+					$trade_manager.removeItem_trader()
 					
-					decline_script = <<-SCRIPT
-					Network::Main.socket.send("<trade_fail>#{inviter}</trade_fail>\\n");
-					$chat.write '#{inviter}님의 교환 신청을 거절 하셨습니다.';
-					Hwnd.dispose(self);
-					SCRIPT
-					
-					Jindow_Dialog.new(
-						"교환 신청",
-						dialog_text,
-						[["예", accept_script], ["아니오", decline_script]]
-					)
-					
-				when /<trade_system>(.*),(.*)<\/trade_system>/
-					my_name = $game_party.actors[0].name
-					
-					if $1.to_s == my_name || $2.to_s == my_name
-						Jindow_Trade.new
-						$trade_player = $1.to_s if $2.to_s == my_name
+				when /<trade_success>(.*)<\/trade_success>/	
+					list = $1.split(',')
+					data = []
+					for d in list
+						data_hash = parseKeyValueData(d)
+						data << data_hash
 					end
-					
-				when /<trade_item>(.*),(.*),(.*),(.*),(.*)<\/trade_item>/ # 교환자, 아이템 id, 개수, 타입, 번호
-					if $1.to_s == $game_party.actors[0].name
-						id = $2.to_i
-						amount = $3.to_i
-						type = $4.to_i
-						num = $5.to_i
-						
-						$item_number2[num] = Jindow_Trade_Data.new
-						$item_number2[num].id = id
-						$item_number2[num].type = type
-						$item_number2[num].amount = amount
-					end
-					return true
-				when /<trade_money>(.*),(.*)<\/trade_money>/
-					if $1.to_s == $game_party.actors[0].name
-						$trade_player_money = $2.to_i
-					end
-					return true
-				when /<trade_okay>(.*)<\/trade_okay>/
-					if $1.to_s == $game_party.actors[0].name
-						$trade2_ok = 1
-						$console.write_line("상대방이 교환 준비 완료 상태입니다.")
-					end
-				when /<trade_fail>(.*)<\/trade_fail>/
-					if $1.to_s == $game_party.actors[0].name
-						Jindow_Trade.trade_fail
-					end
-					return true  
-					
+					$trade_manager.trade_success(data)
 					
 					#-------------------------------------------------------------  
 					#---------------------------파티 시스템---------------------------  
@@ -1858,7 +1816,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					data_hash = parseKeyValueData($1)
 					member = data_hash["member"]
 					$net_party_manager.remove_member(member)	
-						
+					
 				when /<party_req>(.*)<\/party_req>/ # 초대한 사람
 					data_hash = parseKeyValueData($1)
 					inv_name = data_hash["name"]

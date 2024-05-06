@@ -80,11 +80,7 @@ class Jindow_Chat_Input < Jindow
 			$console.write_line("(귓속말 상대 변경):#{$1.to_s}")
 			
 		when /\/교환 (.*)/ #교환
-			return $console.write_line("자기 자신에게 교환 신청을 할 수 없습니다.") if $1.to_s == @player_name
-			return $console.write_line("이미 교환 중 입니다.") if Hwnd.include?("Trade")
-			
-			$console.write_line("'#{$1.to_s}'님에게 교환 신청을 하셨습니다.")
-			Network::Main.socket.send "<trade_invite>#{$1.to_s},#{$game_party.actors[0].name}</trade_invite>\n"
+			$trade_manager.trade_invite($1.to_s)
 			
 		when /\/세계후 (.*)/
 			return $chat.write ("세계후두루마리 아이템을 소지하셔야 합니다.", COLOR_BIGSAY) if $game_party.item_number(91) <= 0

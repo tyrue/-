@@ -61,15 +61,7 @@ class Jindow_P_Status < Jindow
   end
 
   def handle_trade_request
-    if $nowtrade == 0
-      $nowtrade = 1
-      Network::Main.socket.send(
-        "<trade_invite>#{@usrname},#{$game_party.actors[0].name}</trade_invite>\\n"
-      )
-      $console.write_line("[교환]: '#{@usrname}'님에게 교환을 요청했습니다.")
-    else
-      $console.write_line("[교환]: 이미 요청 중입니다.")
-    end
+		$trade_manager.trade_invite(@usrname)
     Hwnd.dispose(self)
   end
 

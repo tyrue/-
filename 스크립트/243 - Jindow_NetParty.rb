@@ -56,12 +56,12 @@ class PartyManager
 		@inv_name = inv_name
 		
 		accept_script = <<-SCRIPT
-		$net_party_manager.accept_party("#{inv_name}");
+		$net_party_manager.accept_party();
 		Hwnd.dispose(self)
 		SCRIPT
 		
 		decline_script = <<-SCRIPT
-		$net_party_manager.refuse_party("#{inv_name}"); 
+		$net_party_manager.refuse_party(); 
 		Hwnd.dispose(self)
 		SCRIPT
 		
@@ -76,13 +76,13 @@ class PartyManager
 	end
 	
 	# 파티에 초대 수락
-	def accept_party(name)
-		Network::Main.send_with_tag("party_accept", name)
+	def accept_party()
+		Network::Main.send_with_tag("party_accept")
 	end
 	
 	# 파티 거절	
-	def refuse_party(name)
-		Network::Main.send_with_tag("party_refuse", name)
+	def refuse_party()
+		Network::Main.send_with_tag("party_refuse")
 	end
 	
 	# 파티원 이동

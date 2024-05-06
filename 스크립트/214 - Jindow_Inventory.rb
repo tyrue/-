@@ -254,16 +254,8 @@ class Jindow_Inventory < Jindow
 	#아이템 교환#
 	#-------#
 	def tradeCheck(i)
-		if $trade_num <= $MAX_TRADE
-			if $Abs_item_data.is_trade_ok(i.item.id, i.type)
-				Jindow_Trade2.new(i.item.id, i.type, $trade_num) 
-			else
-				$console.write_line("[교환]: 교환 불가 아이템입니다.")
-			end
-		else
-			Hwnd.dispose("Trade2")
-			$console.write_line("[교환]: 더이상 아이템을 올릴수 없습니다.")
-		end		
+		return $console.write_line("[교환]: 교환 불가 아이템입니다.") if !$Abs_item_data.is_trade_ok(i.item.id, i.type)
+		Jindow_Trade2.new(i.item.id, i.type)
 	end
 	
 	#----------#

@@ -62,7 +62,7 @@ rescue
   raise_traceback_error		
 	
 ensure
+	close_network
 	$!.message.sub!($!.message, traceback_report)
-	게임종료
 	raise_traceback_error
 end

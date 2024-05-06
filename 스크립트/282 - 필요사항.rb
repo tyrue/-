@@ -1,14 +1,7 @@
-
-
 #Request Cancle by Mu
 def 맵이동
-	if $nowpartyreq == 1
-		$net_party_manager.refuse_party()
-		$nowpartyreq = 0
-	end
-	if Hwnd.include?("Trade")
-		Network::Main.socket.send "<trade_fail>#{$trade_player},#{$game_party.actors[0].name}</trade_fail>\n"
-	end
+	$net_party_manager.refuse_party()
+	$trade_manager.trade_refuse()
 end
 
 def close_game
@@ -17,17 +10,20 @@ def close_game
 	Audio.bgs_fade(800)
 	Audio.me_fade(800)
 	
-	if Network::Main.socket != nil
-		자동저장 if $game_party.actors[0].name != "\no"
-		$login_check = false
-		Network::Main.socket.send "<trade_fail>#{$trade_player},#{$game_party.actors[0].name}</trade_fail>\n" #거래를 종료한다
-		$net_party_manager.end_party()
-		Network::Main.socket.send("<9>#{Network::Main.id}</9>\n")
-		#Network::Main.close_socket 
-		$ABS.close_buff if $ABS != nil
-	end
+	close_network
 	
+	$ABS.close_buff if $ABS != nil
 	JS.dispose 
+end
+
+def close_network
+	if Network::Main.socket != nil
+		자동저장 
+		$login_check = false
+		$trade_manager.trade_refuse()
+		$net_party_manager.end_party()
+		Network::Main.send_with_tag("9", "#{Network::Main.id}")
+	end
 end
 
 def 로그아웃

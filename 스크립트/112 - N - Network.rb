@@ -1375,11 +1375,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_switches[id] = val == 1
 						$game_map.need_refresh = true
 					end
-					
-					# id를 600번 변수에 저장 왜?
-				when /<idsave>(.*)<\/idsave>/
-					$game_variables[600] = $1.to_s
-					
+										
 					# 변수 공유
 				when /<variables>(.*)<\/variables>/
 					variables_data = $1.split('.')
@@ -1793,16 +1789,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$trade_manager.addItem_trader(data_hash)
 					
 				when /<trade_remove>(.*)<\/trade_remove>/	
-					$trade_manager.removeItem_trader()
+					$trade_manager.removeItem_trader($1.to_i)
 					
 				when /<trade_success>(.*)<\/trade_success>/	
-					list = $1.split(',')
-					data = []
-					for d in list
-						data_hash = parseKeyValueData(d)
-						data << data_hash
-					end
-					$trade_manager.trade_success(data)
+					$trade_manager.trade_success()
 					
 					#-------------------------------------------------------------  
 					#---------------------------파티 시스템---------------------------  

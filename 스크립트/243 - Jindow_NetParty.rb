@@ -30,10 +30,12 @@ class PartyManager
 	
 	def add_member(member)
 		@party_members << member 
+		Jindow_NetParty.new() if !Hwnd.include?("NetParty")
 	end
 	
 	def remove_member(member)
 		@party_members.delete(member)
+		Jindow_NetParty.new() if !Hwnd.include?("NetParty")
 	end
 	
 	# 파티를 끝낸다
@@ -106,11 +108,11 @@ end
 #==============================================================================
 
 class Jindow_NetParty < Jindow
-	def initialize(party_manager)
+	def initialize()
 		super(0, 0, 120, 175)
 		self.name = "파티원 목록"
 		configure_window
-		@party_manager = party_manager
+		@party_manager = $net_party_manager
 		@party_list = Marshal.load(Marshal.dump(@party_manager.party_members))
 		
 		create_buttons

@@ -20,6 +20,8 @@ class Jindow_Trade < Jindow
 		@icon = "Graphics/Icons/"
 		@trade_manager = $trade_manager
 		@check_trade_success = false
+		@my_money = 0
+		@trader_money = 0
 		
 		setup_item_lists
 		setup_item_slots
@@ -28,47 +30,29 @@ class Jindow_Trade < Jindow
 	end
 	
 	def setup_item_lists
-		@my_items = []
-		@trader_items = []
-		
-		@my_items_sprite = []
-		@trader_items_sprite = []
-		
-		@check_my_list = []
-		@check_trader_list = []
-		
-		@my_pos = [self.width / 2, 20]
-		@trader_pos = [0, 20]
-		
+		@my_items = Array.new(@trade_manager.max_size)
 		@my_items_slot = []
-		@trader_items_slot = []
+		@my_items_sprite = Array.new(@trade_manager.max_size)
+		@my_slot_text = Array.new(@trade_manager.max_size)
+		@my_pos = [self.width / 2, 20]
 		
-		@my_slot_text = []
-		@trader_slot_text = []
+		@trader_items = Array.new(@trade_manager.max_size)
+		@trader_items_slot = []
+		@trader_items_sprite = Array.new(@trade_manager.max_size)
+		@trader_slot_text = Array.new(@trade_manager.max_size)
+		@trader_pos = [0, 20]
 	end
 	
 	def setup_item_slots
 		(0...@trade_manager.max_size).each do |i|
 			@my_items_slot << create_item_slot(@my_pos[0], @my_pos[1] + 27 * (i + 1))
 			@trader_items_slot << create_item_slot(@trader_pos[0], @trader_pos[1] + 27 * (i + 1))
-			
-			@my_slot_text << create_slot_text(@my_pos[0], @my_pos[1] + 27 * (i + 1))
-			@trader_slot_text << create_slot_text(@trader_pos[0], @trader_pos[1] + 27 * (i + 1))
 		end
 	end
 	
 	def create_item_slot(x, y)
 		sprite = Sprite.new(self)
 		sprite.bitmap = Bitmap.new(@route + "item_win")
-		sprite.x = x
-		sprite.y = y
-		sprite
-	end
-	
-	def create_slot_text(x, y)
-		sprite = Sprite.new(self)
-		sprite.bitmap = Bitmap.new(self.width, self.height)
-		sprite.bitmap.font.color = Color.new(0, 0, 0, 255)
 		sprite.x = x
 		sprite.y = y
 		sprite
@@ -105,15 +89,15 @@ class Jindow_Trade < Jindow
 	end
 	
 	def setup_trade_buttons
-		@a = J::Button.new(self).refresh(40, "교환")
-		@a.x = self.width / 2 - @a.width
-		@a.y = @money.y + 30
+		@trade_button = J::Button.new(self).refresh(40, "교환")
+		@trade_button.x = self.width / 2 - @trade_button.width
+		@trade_button.y = @money.y + 30
 		
-		@b = J::Button.new(self).refresh(40, "취소")
-		@b.x = @a.x + @a.width + 10
-		@b.y = @a.y
+		@cancel_button = J::Button.new(self).refresh(40, "취소")
+		@cancel_button.x = @trade_button.x + @trade_button.width + 10
+		@cancel_button.y = @trade_button.y
 		
-		self.height = @b.y + 40
+		self.height = @cancel_button.y + 40
 		self.refresh("Trade")
 	end
 	
@@ -124,37 +108,74 @@ class Jindow_Trade < Jindow
 		$j_inven.setMode(1)
 	end
 	
-	def add_item(item, type = 0) # 타입이 0이면 내거 아니면 상대방거
+	# 아이템 추가
+	def add_item(item, type = 0)
 		case type
-		when 0
-			@my_items << item
+		when 0  # 내 아이템 추가
 			if item.type == 3
-				@money.visible = false
-				@player_money.visible = false
-				@dialog.bitmap.draw_text(@player_money.x, @player_money.y, 200, 30, "#{item.num}전")
+				draw_money_text(item.num, type)
 			else
-				@my_items_sprite << J::Item.new(self).refresh(item.id, item.type)
+				add_item_to_list(@my_items, @my_items_sprite, @my_slot_text, item, @my_items_slot)
 			end
-		when 1
-			@trader_items << item
+		when 1  # 상대 아이템 추가
 			if item.type == 3
-				@dialog.bitmap.draw_text(@trader_pos[0], @player_money.y, 200, 30, "#{item.num}전")
+				draw_money_text(item.num, type)
 			else
-				@trader_items_sprite << J::Item.new(self).refresh(item.id, item.type)
+				add_item_to_list(@trader_items, @trader_items_sprite, @trader_slot_text, item, @trader_items_slot)
 			end
 		end
 	end
 	
-	def remove_item(index, type = 0) # 타입이 0이면 내거 아니면 상대방거
-		case type
-		when 0
-			@my_items.delete_at(index)
-			@my_items_sprite[index].dispose
-			@my_items_sprite.delete_at(index) 
-		when 1
-			@trader_items.delete_at(index)
-			@trader_items_sprite[index].dispose
-			@trader_items_sprite.delete_at(index) 
+	# 아이템을 리스트에 추가
+	def add_item_to_list(item_list, sprite_list, text_list, item, slot_list)
+		i = item_list.index(nil)
+		item_list[i] = item
+		
+		sprite_list[i] = J::Item.new(self).refresh(item.id, item.type)
+		sprite_list[i].x = slot_list[i].x
+		sprite_list[i].y = slot_list[i].y
+		
+		text = "#{sprite_list[i].item.name} #{item.num}개"
+		text_list[i] = create_text_sprite(text)
+		text_list[i].x = sprite_list[i].x + sprite_list[i].width
+		text_list[i].y = sprite_list[i].y
+	end
+	
+	# 금전 텍스트 그리기
+	def draw_money_text(money, type)
+		x = @trader_pos[0]
+		y = @player_money.y
+		if type == 0
+			@player_money.visible = false
+			@money.visible = false
+			
+			x = @player_money.x
+			@my_money = money
+		else
+			@trader_money = money
+		end
+		@dialog.bitmap.draw_text(x, y, 200, 30, "#{money}전")
+	end
+	
+	# 아이템 제거
+	def remove_item(index, type = 0)
+		item_lists = {
+			0 => [@my_items, @my_items_sprite, @my_slot_text],
+			1 => [@trader_items, @trader_items_sprite, @trader_slot_text]
+		}
+		
+		item_list, sprite_list, text_list = item_lists[type]
+		item_list[index] = nil
+		
+		if sprite_list[index]
+			sprite_list[index].dispose
+			sprite_list[index] = nil
+		end
+		
+		if text_list[index]
+			text_list[index].bitmap.clear
+			text_list[index].dispose
+			text_list[index] = nil
 		end
 	end
 	
@@ -167,40 +188,34 @@ class Jindow_Trade < Jindow
 	
 	def gain_traded_items
 		@trader_items.each do |item|
+			next unless item
 			id = item.id.to_i
 			type = item.type.to_i
 			num  = item.num.to_i
 			
 			case type
-			when 0
-				$game_party.gain_item(id, num)
-			when 1
-				$game_party.gain_weapon(id, num)
-			when 2
-				$game_party.gain_armor(id, num)
-			when 3
-				$game_party.gain_gold(num)
+			when 0 then $game_party.gain_item(id, num)
+			when 1 then $game_party.gain_weapon(id, num)
+			when 2 then $game_party.gain_armor(id, num)
 			end
 		end
+		$game_party.gain_gold(@trader_money) if @trader_money > 0
 	end
 	
 	def lose_my_items
 		@my_items.each do |item|
+			next unless item
 			id = item.id.to_i
 			type = item.type.to_i
 			num  = item.num.to_i
 			
 			case type
-			when 0
-				$game_party.lose_item(id, num)
-			when 1
-				$game_party.lose_weapon(id, num)
-			when 2
-				$game_party.lose_armor(id, num)
-			when 3
-				$game_party.lose_gold(num)
+			when 0 then $game_party.lose_item(id, num)
+			when 1 then $game_party.lose_weapon(id, num)
+			when 2 then $game_party.lose_armor(id, num)
 			end
 		end
+		$game_party.lose_gold(@my_money) if @my_money > 0
 	end
 	
 	def dispose
@@ -215,36 +230,32 @@ class Jindow_Trade < Jindow
 	
 	def update
 		super
-		handle_check_change
-		handle_trade_ready if @a.click
-		handle_money_transaction if @money.click
-		Hwnd.dispose(self) if @b.click
+		handle_item_remove
+		handle_trade_ready 
+		handle_money_transaction 
+		
+		Hwnd.dispose(self) if @cancel_button.click
 	end
 	
-	def handle_check_change
-		return if (@my_items == @check_my_list) && (@trader_items == @check_trader_list)
-		
-		@check_my_list = Marshal.load(Marshal.dump(@my_items))
-		@check_trader_list = Marshal.load(Marshal.dump(@trader_items))
-		
+	def handle_item_remove
 		@my_items_sprite.each_with_index do |item, i|
-			item.x = @my_items_slot[i].x
-			item.y = @my_items_slot[i].y
-			@my_slot_text[i].bitmap.draw_text(30, 0, 200, 30, "#{item.item.name} #{@my_items[i].num}개") 
-		end
-		
-		@trader_items_sprite.each_with_index do |item, i|
-			item.x = @trader_items_slot[i].x
-			item.y = @trader_items_slot[i].y
-			@trader_slot_text[i].bitmap.draw_text(30, 0, 200, 30, "#{item.item.name} #{@trader_items[i].num}개") 
+			next unless item.item?
+			next unless item.double_click
+			
+			item.double_click = false
+			@trade_manager.removeItem(i)
 		end
 	end
 	
 	def handle_trade_ready
-		@trade_manager.trade_ready()
+		return unless @trade_button.click
+		
+		@trade_manager.trade_ready() 
 	end
 	
 	def handle_money_transaction
+		return unless @money.click
+		
 		money = @player_money.result.to_i
 		return $console.write_line("1 이상의 금전을 입력하세요.") if money <= 0
 		return $console.write_line("가지고 계신 금전이 부족합니다.") if $game_party.gold < money

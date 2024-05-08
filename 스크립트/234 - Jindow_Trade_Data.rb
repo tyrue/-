@@ -97,7 +97,7 @@ class TradeManager
 		self.initial_set
 	end
 	
-	def trade_success(data)
+	def trade_success()
 		trade_window = Hwnd.include?("Trade", 1)
 		return unless trade_window
 		trade_window.trade_success()

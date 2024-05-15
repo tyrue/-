@@ -744,9 +744,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
 		def update_enemy_attack(e, actor)
-			return if e.actions == nil or e.actions == [] or e == nil
+			return unless e
+			return unless e.actions
+			return if e.actions.empty?
 			
-			for action in e.actions
+			e.actions.each do |action|
 				if e.casting_action != nil
 					action = e.casting_action
 				else
@@ -761,10 +763,8 @@ if SDK.state("Mr.Mo's ABS") == true
 						next if !in_range?(e.event, actor.event, 1)
 						next if !in_direction?(e.event, actor.event)
 						
-						a = actor if actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하면 적
-						a = $game_party.actors[0] if !actor.is_a?(ABS_Enemy) # ABS_Enemy클래스에 속하지 않으면 플레이어
-						
-						a.attack_effect(e) # 기본 공격 데미지 계산
+						a = actor.is_a?(ABS_Enemy) ? actor : $game_party.actors[0]
+						a.attack_effect(e)
 						
 						# 애니메이션 실행
 						animation_melee(e.event.direction, e.event)
@@ -784,38 +784,16 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 				when 1..2 #Skill 적 캐릭의 스킬 사용
 					skill = $data_skills[action.skill_id]
+					next if skill.nil? || (!e.casting_action && !e.can_use_skill?(skill))
 					
-					next if skill == nil #Return if the skill is NIL
-					if e.casting_action == nil # 미리 예약된 스킬이 없다면
-						next if !e.can_use_skill?(skill)
-						range = nil
-						range = RANGE_SKILLS[skill.id][0] if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
-						range = RANGE_EXPLODE[skill.id][0] if RANGE_EXPLODE.has_key?(skill.id) # 만약 폭발 스킬이라면
-						
-						next if !in_range?(e.event, actor.event, range + 1) if range != nil
-					end
+					range = nil
+					range = RANGE_SKILLS[skill.id][0] if RANGE_SKILLS.has_key?(skill.id)
+					range = RANGE_EXPLODE[skill.id][0] if RANGE_EXPLODE.has_key?(skill.id)
+					next if range && !in_range?(e.event, actor.event, range + 1)
 					
 					# 스킬 쿨타임 갱신
 					e.skill_mash[skill.id] = SKILL_MASH_TIME[skill.id][0] if SKILL_MASH_TIME[skill.id] != nil 
-					
-					# 캐스팅 갱신
-					if e.casting_mash <= 0 and e.casting_action == nil
-						cast_data = ABS_ENEMY_SKILL_CASTING[skill.id]
-						if cast_data != nil 
-							e.casting_idx = 0
-							e.casting_mash = cast_data[0][0] * Graphics.frame_rate
-							e.casting_action = action
-							$rpg_skill.casting_chat(cast_data[0], e.event)
-							
-							# 범위 이펙트 보여주기
-							if skill.scope == 2 and RANGE_SKILLS.has_key?(skill.id)
-								make_range_sprite(e.event, RANGE_SKILLS[skill.id][0], $data_skills[200], true)
-							end
-							
-							e.event.animation_id = 145
-							return
-						end
-					end
+					return if enemy_casting_action(e, action, skill)
 					
 					# 캐스팅 초기화
 					if e.casting_action != nil
@@ -826,33 +804,27 @@ if SDK.state("Mr.Mo's ABS") == true
 					
 					# 스킬을 받는 타입
 					case skill.scope
-					when 1 # One Enemy 적 한놈만 					
-						if RANGE_SKILLS.has_key?(skill.id) # 만약 원거리 스킬이라면
-							@range.push(Game_Ranged_Skill.new(e.event, e, skill)) # e가 날리는 스킬을 구현해줌
-							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-							
-							if SKILL_DIRECTION.has_key?(skill.id)
-								for dir in SKILL_DIRECTION[skill.id]
-									next if dir == e.event.direction
-									@range.push(Game_Ranged_Skill.new(e.event, e, skill, dir)) # e가 날리는 스킬을 구현해줌
-									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{0},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-								end
-							end
-							
-						elsif RANGE_EXPLODE.has_key?(skill.id) # 폭발 스킬
-							@range.push(Game_Ranged_Explode.new(e.event, e, skill))
-							Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{e.event.direction}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-							
-							if SKILL_DIRECTION.has_key?(skill.id)
-								for dir in SKILL_DIRECTION[skill.id]
-									next if dir == e.event.direction
-									@range.push(Game_Ranged_Explode.new(e.event, e, skill, dir))
-									Network::Main.socket.send("<show_range_skill>#{0},#{e.event.id},#{skill.id},#{1},#{dir}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-								end	
-							end
-							
-						else # 기타 적 한명 타겟팅 스킬
+					when 1 # One Enemy 적 한놈만 				
+						target_type = 0
+						target_type = 1	if RANGE_SKILLS.has_key?(skill.id)
+						target_type = 2	if RANGE_EXPLODE.has_key?(skill.id)
+						
+						dir_arr = SKILL_DIRECTION.has_key?(skill.id) ? Marshal.load(Marshal.dump(SKILL_DIRECTION[skill.id])) : []
+						dir_arr << e.event.direction if !dir_arr.include?(e.event.direction)
+						
+						case target_type
+						when 0 # 원거리 스킬이 아닌것
 							$rpg_skill.active_skill(skill.id, e.event, e)
+						when 1 # 원거리
+							for dir in dir_arr
+								@range.push(Game_Ranged_Skill.new(e.event, e, skill, dir)) # e가 날리는 스킬을 구현해줌
+								Network::Main.send_with_tag("show_range_skill", "#{0},#{e.event.id},#{skill.id},#{0},#{dir}")
+							end
+						when 2 # 폭발
+							for dir in dir_arr
+								@range.push(Game_Ranged_Explode.new(e.event, e, skill, dir))
+								Network::Main.send_with_tag("show_range_skill", "#{0},#{e.event.id},#{skill.id},#{1},#{dir}")
+							end
 						end
 						
 					when 2 #All Emenies 적 전체
@@ -872,7 +844,7 @@ if SDK.state("Mr.Mo's ABS") == true
 							next if enemy == nil #Skip NIL values
 							next if !enemy.is_a?(Game_Player) and enemy.dead? 
 							
-							hit_num = RANGE_SKILLS[skill.id][5] != nil ? RANGE_SKILLS[skill.id][5] : 1
+							hit_num = RANGE_SKILLS[skill.id][5] || 1
 							hit_num.times{
 								enemy.actor.effect_skill(e, skill)
 								hit_enemy(enemy, e, skill.animation2_id) if enemy.actor.damage != "Miss" and enemy.actor.damage != 0
@@ -908,6 +880,26 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
+		def enemy_casting_action(e, action, skill)
+			return false if e.casting_action
+			
+			id = skill.id
+			cast_data = ABS_ENEMY_SKILL_CASTING[id] # 캐스팅 갱신
+			return false unless cast_data
+			
+			e.casting_idx = 0
+			e.casting_mash = cast_data[0][0] * Graphics.frame_rate
+			e.casting_action = action
+			$rpg_skill.casting_chat(cast_data[0], e.event)
+			
+			# 범위 이펙트 보여주기
+			if skill.scope == 2 and RANGE_SKILLS.has_key?(id)
+				make_range_sprite(e.event, RANGE_SKILLS[id][0], $data_skills[200], true)
+			end
+			
+			e.event.animation_id = 145
+			return true
+		end
 		
 		#--------------------------------------------------------------------------
 		# * Update Player  실시간 반영 되는 함수
@@ -1030,7 +1022,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				Network::Main.ani(c.id, ani_id, 1)
 			end
 		end
-		
 		
 		#--------------------------------------------------------------------------
 		# * 플레이어의 기본공격
@@ -1800,11 +1791,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				"mon_id" => monster.enemy_id,
 				"delete_sw" => delete_sw,
 			}
-			
-			message = "<monster_save>"
-			data.each { |key, value| message += "#{key}:#{value}|" }
-			message += "</monster_save>\n"
-			Network::Main.socket.send(message)
+			message = data.map { |key, value| "#{key}:#{value}" }.join("|")
+			Network::Main.send_with_tag("monster_save", message)
 		end
 		#--------------------------------------------------------------------------
 		# * End of class
@@ -1849,7 +1837,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Force Movement
 		#--------------------------------------------------------------------------
 		def force_movement
-			
 			m = @move_direction
 			@y += 1 if m == 1; @x -= 1 if m == 1
 			@y += 1 if m == 2
@@ -1859,7 +1846,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			@y -= 1 if m == 7; @x -= 1 if m == 7
 			@y -= 1 if m == 8
 			@y -= 1 if m == 9; @x += 1 if m == 9
-			
 		end
 		#--------------------------------------------------------------------------
 		# * Update
@@ -2805,145 +2791,175 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Dispose
 		#--------------------------------------------------------------------------
 		def dispose
-			# End every animation and update
-			if @_collapse_erase_duration > 0
-				@collapse_character.character_name = ""
-				self.opacity = @character.opacity
-				self.blend_type = @character.blend_type
-				self.bush_depth = @character.bush_depth
-				self.color.set(0, 0, 0, 0)
-				@collapse_character.erase
-				@_collapse_erase_duration = 0
-			end
+			dispose_collapse_erase_duration
 			dispose_loop_animation
-			
-			if @_animation_overlap != nil and @_animation_overlap.size > 0
-				for ani in @_animation_overlap
-					dispose_animation2(ani)
-				end
-			end
+			dispose_animation_overlap
 			super
 		end
+		
+		def dispose_collapse_erase_duration
+			return if @_collapse_erase_duration <= 0
+			
+			@collapse_character.character_name = ""
+			self.opacity = @character.opacity
+			self.blend_type = @character.blend_type
+			self.bush_depth = @character.bush_depth
+			self.color.set(0, 0, 0, 0)
+			@collapse_character.erase
+			@_collapse_erase_duration = 0
+		end
+		
+		def dispose_animation_overlap
+			return unless @_animation_overlap.any?
+			
+			@_animation_overlap.each do |ani|
+				dispose_animation2(ani)
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Update
 		#--------------------------------------------------------------------------
 		def update
-			for sprite in @_damage_sprite
-				if sprite != nil and !sprite.disposed? and sprite._damage_duration >= sprite._damage_duration_max
-					dispose_damage(sprite)
-				end
-			end
-			
-			if @character.animation_id != 0
-				@character.ani_array = [] if @character.ani_array == nil
-				@character.ani_array.push(@character.animation_id) if !@character.ani_array.include?(@character.animation_id)
-				@character.animation_id = 0
-			end
+			update_damage_sprites
+			update_animation_id
 			mrmo_abs_sc_update
+			update_state_animation
+			update_fade
+			update_damage_display
+			update_ani_array
+			check_event_deletion
+		end
+		
+		def update_damage_sprites
+			return unless @_damage_sprite
 			
-			#Skip if no demage or dead;
-			if !@character.is_a?(Game_Player) and $ABS.enemies[@character.id] != nil
-				#Show State Animation 상태 애니메이션
-				id = @character.id
-				if $ABS.enemies[id].damage == nil and $ABS.enemies[id].state_animation_id != @state_animation_id
-					@state_animation_id = $ABS.enemies[id].state_animation_id
-					loop_animation($data_animations[@state_animation_id])
-				end
-			elsif @character.is_a?(Game_Player)
-				a = $game_party.actors[0]
-				#Show State Animation
-				if a.damage == nil and a.state_animation_id != @state_animation_id
-					@state_animation_id = a.state_animation_id
-					loop_animation($data_animations[@state_animation_id])
-				end
+			@_damage_sprite.each do |sprite|
+				next unless sprite
+				next if sprite.disposed?
+				next if sprite._damage_duration < sprite._damage_duration_max
+				
+				dispose_damage(sprite)
 			end
+		end
+		
+		def update_animation_id
+			return unless @character.animation_id != 0
 			
-			#Check fade
-			if @character.fade
-				if @character.is_a?(Game_Event) and @character.page != @page
-					@page = @character.page
-				elsif @character.is_a?(Game_Event) or @character.is_a?(Game_Player)
-					collapse_erase(@character)
-				end
-				@character.fade = false
-			end
+			@character.ani_array ||= []
+			@character.ani_array.push(@character.animation_id) unless @character.ani_array.include?(@character.animation_id)
+			@character.animation_id = 0
+		end
+		
+		def update_state_animation
+			a = @character.is_a?(Game_Player) ? $game_party.actors[0] : $ABS.enemies[@character.id]
+			return unless a 
+			return if a.damage
+			return if a.state_animation_id == @state_animation_id
 			
-			if @character.is_a?(Game_Event) and @character.page != @page
+			@state_animation_id = a.state_animation_id
+			loop_animation($data_animations[@state_animation_id])
+		end
+		
+		def update_fade
+			if @character.is_a?(Game_Event) && @character.page != @page
 				@page = @character.page
 			end
+			return unless @character.fade
 			
-			id = @character.id
-			#if demage not displayed
-			if $ABS.damage_display
-				#Skip if no demage or dead;
-				if !@character.is_a?(Game_Player) and $ABS.enemies[id] != nil
-					dmg_array = $ABS.enemies[id].damage_array
-					cri_array = $ABS.enemies[id].critical_array
-					if dmg_array != nil and dmg_array.size > 0
-						sw = dmg_array.size > 1 ? true : false
-						dmg = ""
-						for i in 0...dmg_array.size
-							next if dmg_array[i] == nil
-							damage(dmg_array[i], cri_array[i], sw) 
-							dmg += dmg_array[i].to_s + "|"
-							# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-						end
-						Network::Main.socket.send("<mon_damage>#{id},#{dmg},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage
-					elsif $ABS.enemies[id].damage != nil
-						damage($ABS.enemies[id].damage, $ABS.enemies[id].critical) 
-						# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<mon_damage>#{id},#{$ABS.enemies[id].damage},#{$ABS.enemies[id].critical}</mon_damage>\n")	if $ABS.enemies[id].send_damage						
-					end
-					
-					#Make Damage nil
-					$ABS.enemies[id].damage = nil
-					$ABS.enemies[id].damage_array.clear
-					$ABS.enemies[id].critical_array.clear
-					$ABS.enemies[id].send_damage = true
-					
-				elsif @character.is_a?(Game_Player)					
-					a = $game_party.actors[0]
-					dmg_array = a.damage_array
-					cri_array = a.critical_array
-					
-					if dmg_array != nil and dmg_array.size > 0
-						sw = dmg_array.size > 1 ? true : false
-						dmg = ""
-						for i in 0...dmg_array.size
-							next if dmg_array[i] == nil
-							damage(dmg_array[i], cri_array[i], sw) 
-							dmg += dmg_array[i].to_s + "|"
-						end
-						# 사람 데미지 표시(네트워크 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<player_damage>#{Network::Main.id},#{dmg},#{a.critical}</player_damage>\n")	
-						#Display damage
-					elsif a.damage != nil
-						damage(a.damage, a.critical) 
-						# 사람 데미지 표시(네트워크 id, 데미지, 크리티컬)
-						Network::Main.socket.send("<player_damage>#{Network::Main.id},#{a.damage},#{a.critical}</player_damage>\n")	
-					end
-					#Make Damage nil
-					a.damage = nil
-					a.damage_array.clear
-					a.critical_array.clear
-				end
-				@_damage_idx = 0
+			if @character.is_a?(Game_Event) || @character.is_a?(Game_Player)
+				collapse_erase(@character)
+			end
+			@character.fade = false
+		end
+		
+		def update_damage_display
+			return unless $ABS.damage_display
+			return unless @character.is_a?(Game_Player) || $ABS.enemies[@character.id]
+			
+			display_monster_damage if $ABS.enemies[@character.id]
+			display_player_damage if @character.is_a?(Game_Player)
+			@_damage_idx = 0
+		end
+		
+		def display_monster_damage
+			return unless $ABS.enemies[@character.id].damage || ($ABS.enemies[@character.id].damage_array && $ABS.enemies[@character.id].damage_array.size > 0)
+			
+			process_monster_damage
+			clear_monster_damage_arrays
+		end
+		
+		def process_monster_damage
+			dmg_array = $ABS.enemies[@character.id].damage_array
+			cri_array = $ABS.enemies[@character.id].critical_array
+			dmg = ""
+			
+			sw = dmg_array.size > 1 ? true : false
+			dmg_array.each_with_index do |dmg_val, i|
+				next unless dmg_val
+				
+				damage(dmg_val, cri_array[i], sw)
+				dmg += "#{dmg_val}|"
+			end 
+			Network::Main.socket.send("<mon_damage>#{id},#{dmg},#{$ABS.enemies[@character.id].critical}</mon_damage>\n") if $ABS.enemies[@character.id].send_damage
+		end
+		
+		def clear_monster_damage_arrays
+			$ABS.enemies[@character.id].damage = nil
+			$ABS.enemies[@character.id].damage_array.clear
+			$ABS.enemies[@character.id].critical_array.clear
+			$ABS.enemies[@character.id].send_damage = true
+		end
+		
+		def display_player_damage
+			a = $game_party.actors[0]
+			return unless a.damage || (a.damage_array && a.damage_array.size > 0)
+			
+			process_player_damage(a)
+			clear_player_damage_arrays(a)
+		end
+		
+		def process_player_damage(a)
+			sw = dmg_array.size > 1 ? true : false
+			unless sw
+				a.damage_array << a.damage
+				a.critical_array << a.critical
 			end
 			
-			if @character.ani_array != nil and @character.ani_array.size >= 1
-				for ani in @character.ani_array
-					animation = $data_animations[ani]
-					animation2(animation, true)
-				end
+			dmg_array = a.damage_array
+			cri_array = a.critical_array
+			dmg = ""
+			
+			dmg_array.each_with_index do |dmg_val, i|
+				next unless dmg_val
+				
+				damage(dmg_val, cri_array[i], sw)
+				dmg += "#{dmg_val}|"
+			end
+			Network::Main.socket.send("<player_damage>#{Network::Main.id},#{dmg},#{a.critical}</player_damage>\n")
+		end
+		
+		def clear_player_damage_arrays(a)
+			a.damage = nil
+			a.damage_array.clear
+			a.critical_array.clear
+		end
+		
+		def update_ani_array
+			return unless @character.ani_array && @character.ani_array.size >= 1
+			
+			@character.ani_array.each do |ani|
+				animation = $data_animations[ani]
+				animation2(animation, true)
 			end
 			@character.ani_array.clear
+		end
+		
+		def check_event_deletion
+			return unless @_animation_overlap && @_animation_overlap.size == 0
+			return unless @character.is_a?(Game_Event) && @character.one_use
 			
-			if @_animation_overlap != nil and @_animation_overlap.size == 0
-				if @character.is_a?(Game_Event) and @character.one_use
-					delete_events(@character.id)
-					return
-				end
-			end
+			delete_events(@character.id)
 		end
 	end
 	#==============================================================================
@@ -2957,13 +2973,40 @@ if SDK.state("Mr.Mo's ABS") == true
 		alias mrmo_spriteset_map_init_characters init_characters
 		alias mrmo_spriteset_map_update_character_sprites update_character_sprites
 		alias mrmo_spriteset_map_dispose dispose
-		
-		
+		#--------------------------------------------------------------------------
+		def init_characters
+			mrmo_spriteset_map_init_characters
+			@ranged_sprites = []
+			@ranged_sprites2 = []
+			for range in $ABS.range.compact
+				sprite = Sprite_Character.new(@viewport1, range)
+				@ranged_sprites.push(sprite)
+			end
+		end
+		#--------------------------------------------------------------------------
+		def dispose
+			for range in @ranged_sprites.compact
+				range.dispose
+			end
+			mrmo_spriteset_map_dispose
+		end
+		#--------------------------------------------------------------------------
+		def update_character_sprites
+			mrmo_spriteset_map_update_character_sprites
+			update_range_sprite
+			update_range_sprite2
+			for range in $ABS.range.compact
+				next if !range.draw
+				
+				sprite = Sprite_Character.new(@viewport1, range)
+				@ranged_sprites.push(sprite)
+				range.draw = false
+			end
+		end
+		#--------------------------------------------------------------------------
 		# 범위안에 이벤트 만들고 이펙트 내보기
 		def make_range_sprite(element, range, skill, sw = false) 
-			if sw
-				Network::Main.socket.send("<make_range_sprite>#{element.id},#{range},#{skill.id}</make_range_sprite>\n")	# range 스킬 사용했다고 네트워크 알리기
-			end
+			Network::Main.send_with_tag("make_range_sprite", "#{element.id},#{range},#{skill.id}") if sw
 			
 			for i in 0..range * 2 # y 
 				for j in 0..range * 2 # x
@@ -2973,17 +3016,15 @@ if SDK.state("Mr.Mo's ABS") == true
 					ry = (nowY) * (nowY)
 					rx = (nowX) * (nowX)
 					r = ry + rx
+					
 					if r <= range * range
 						sprite = RPG::Sprite.new(@viewport1)
 						sprite.visible = true
 						sprite.opacity = 255
 						sprite.one_use = true
-						
 						sprite.animation2($data_animations[skill.animation2_id], true)
-						
 						sprite.ox = 0
 						sprite.oy = 0
-						
 						@ranged_sprites2.push([sprite, element, nowX, nowY])
 					end
 				end
@@ -2991,13 +3032,25 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def update_range_sprite
+			for range in @ranged_sprites # Update ranged sprites
+				next if range == nil #Skip NIL Values
+				range.update
+				next if !range.character.stop
+				
+				range.character.character_name = ""
+				@ranged_sprites.delete(range)
+				range.dispose
+				$ABS.range.delete(range.character)				
+			end
+		end
+		
+		def update_range_sprite2
 			for data in @ranged_sprites2
 				range = data[0]
 				element = data[1]
 				ox = data[2]
 				oy = data[3]
 				
-				#Skip NIL Values
 				if range == nil or range.disposed?
 					@ranged_sprites2.delete(data)
 					next
@@ -3006,69 +3059,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				range.x = element.screen_x + ox * 32
 				range.y = element.screen_y + oy * 32 - 32
 				range.update
-			end
-		end
-		
-		#--------------------------------------------------------------------------
-		# * Character Sprite Initialization
-		#--------------------------------------------------------------------------
-		def init_characters
-			mrmo_spriteset_map_init_characters
-			# Make character sprites
-			@ranged_sprites = []
-			for range in $ABS.range
-				#Skip NIL Values
-				next if range == nil and !range.draw
-				sprite = Sprite_Character.new(@viewport1, range)
-				@ranged_sprites.push(sprite)
-			end
-			
-			@ranged_sprites2 = []
-			
-		end
-		#--------------------------------------------------------------------------
-		# * Dispose
-		#--------------------------------------------------------------------------
-		def dispose
-			# Dispose ranged sprites
-			for range in @ranged_sprites
-				#Skip NIL Values
-				next if range == nil
-				range.dispose
-			end
-			mrmo_spriteset_map_dispose
-		end
-		#--------------------------------------------------------------------------
-		# * Update Character Sprites
-		#--------------------------------------------------------------------------
-		def update_character_sprites
-			mrmo_spriteset_map_update_character_sprites
-			# Update ranged sprites
-			for range in @ranged_sprites
-				#Skip NIL Values
-				next if range == nil
-				range.update
-				#If its stop
-				if range.character.stop and range.stop_animation?
-					@ranged_sprites.delete(range)
-					range.dispose
-					$ABS.range.delete(range.character)
-				elsif range.character.stop 
-					range.character.character_name = ""
-				end
-			end
-			
-			update_range_sprite
-			
-			# Draw Sprite
-			for range in $ABS.range
-				#Skip NIL Values
-				next if range == nil or !range.draw
-				
-				#If its draw
-				sprite = Sprite_Character.new(@viewport1, range)
-				@ranged_sprites.push(sprite)
-				range.draw = false
 			end
 		end
 	end
@@ -3380,8 +3370,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				effective |= states_minus(skill.minus_state_set)
 				
 				if skill.power == 0
-					self.damage = 1
-					self.damage = "Miss" unless @state_changed
+					self.damage = @state_changed ? 1 : "Miss"
 				end
 			else
 				self.damage = "Miss"
@@ -3389,6 +3378,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return effective
 		end
 	end
+	
 	#==============================================================================
 	# ** Game_Character (part 1)
 	#------------------------------------------------------------------------------
@@ -3422,25 +3412,34 @@ if SDK.state("Mr.Mo's ABS") == true
 			new_y = @y + y_plus
 			
 			if x_plus != 0
-				count = x_plus.abs
-				for i in 0...count
-					x = x_plus > 0 ? @x + 1 : @x - 1
-					break if !passable?(x, @y, 0)
-					@x = x
-				end
-				
+				move_horizontally(x_plus)
 			elsif y_plus != 0
-				count = y_plus.abs
-				for i in 0...count
-					y = y_plus > 0 ? @y + 1 : @y - 1
-					break if !passable?(@x, y, 0)
-					@y = y
-				end
-				
+				move_vertically(y_plus)
 			end
-			@jump_count = 1
 			
+			@jump_count = 1
 		end
+		
+		def move_horizontally(x_plus)
+			count = x_plus.abs
+			step = x_plus > 0 ? 1 : -1
+			count.times do
+				x = @x + step
+				break unless passable?(x, @y, 0)
+				@x = x
+			end
+		end
+		
+		def move_vertically(y_plus)
+			count = y_plus.abs
+			step = y_plus > 0 ? 1 : -1
+			count.times do
+				y = @y + step
+				break unless passable?(@x, y, 0)
+				@y = y
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Set Animation
 		#--------------------------------------------------------------------------
@@ -3472,6 +3471,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				@frame -= 1
 				@anim_wait = 0
 			end
+			
 			@anim_wait += 1 if @anim_wait < 18 - @move_speed * 2
 			if @frame == 0
 				end_animate
@@ -3489,7 +3489,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@direction_fix = false
 		end
 		
-		def enemy_move
+		def send_enemy_move
 			return if !self.is_a?(Game_Event)
 			return if $ABS.enemies[self.event.id] == nil 
 			return if !$ABS.enemies[self.event.id].aggro
@@ -3498,114 +3498,68 @@ if SDK.state("Mr.Mo's ABS") == true
 			Network::Main.socket.send("<mon_move>#{self.event.id},#{@direction},#{self.x},#{self.y}</mon_move>\n")
 		end
 		
-		#--------------------------------------------------------------------------
-		# * Move Down
-		#     turn_enabled : a flag permits direction change on that spot
-		#--------------------------------------------------------------------------
-		def move_down(turn_enabled = true, is_ok = false) # is_ok : 이동 가능
-			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
-				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
-			end
-			# Turn down
-			if turn_enabled
-				turn_down if @direction != 2
-			end
+		def check_enemy_movable(is_ok)
+			return true if !self.is_a?(Game_Event)
 			
+			enemy = $ABS.enemies[self.event.id]
+			return true unless enemy
+			return true if is_ok
+			return enemy.aggro 
+		end
+		
+		def move_down(turn_enabled = true, is_ok = false) # is_ok : 이동 가능
+			return if !check_enemy_movable(is_ok)
+			turn_down if turn_enabled # Turn down
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
+			
 			if passable?(@x, @y, 2)
-				turn_down
 				@y += 1
-				
 				increase_steps
-				enemy_move
+				send_enemy_move
 			else
-				check_event_trigger_touch(@x, @y+1) # Determine if touch event is triggered
+				check_event_trigger_touch(@x, @y + 1) # Determine if touch event is triggered
 			end
 		end
-		#--------------------------------------------------------------------------
-		# * Move Left
-		#     turn_enabled : a flag permits direction change on that spot
-		#--------------------------------------------------------------------------
+		
 		def move_left(turn_enabled = true, is_ok = false) # is_ok는 외부요인으로 옮기는거		
-			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
-				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
-			end
-			
-			# Turn left
-			if turn_enabled
-				if @direction != 4
-					turn_left
-				end
-			end
+			return if !check_enemy_movable(is_ok)
+			turn_left if turn_enabled
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
-			# If passable
+			
 			if passable?(@x, @y, 4)
-				turn_left
-				
 				@x -= 1
 				increase_steps
-				enemy_move
+				send_enemy_move
 			else
-				# Determine if touch event is triggered
-				check_event_trigger_touch(@x-1, @y)
+				check_event_trigger_touch(@x - 1, @y)
 			end
 		end
-		#--------------------------------------------------------------------------
-		# * Move Right
-		#     turn_enabled : a flag permits direction change on that spot
-		#--------------------------------------------------------------------------
+		
 		def move_right(turn_enabled = true, is_ok = false)
-			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
-				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
-			end
-			
-			# Turn left
-			if turn_enabled
-				if @direction != 6
-					turn_right
-				end
-			end
-			
+			return if !check_enemy_movable(is_ok)
+			turn_right if turn_enabled
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
-			# If passable
-			if passable?(@x, @y, 6)
-				turn_right # Turn right
-				
+			
+			if passable?(@x, @y, 6)	
 				@x += 1
 				increase_steps
-				enemy_move
+				send_enemy_move
 			else
-				# Determine if touch event is triggered
-				check_event_trigger_touch(@x+1, @y)
+				check_event_trigger_touch(@x + 1, @y)
 			end
 		end
-		#--------------------------------------------------------------------------
-		# * Move up
-		#     turn_enabled : a flag permits direction change on that spot
-		#--------------------------------------------------------------------------
+		
 		def move_up(turn_enabled = true, is_ok = false)
-			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil
-				return if !is_ok and !$ABS.enemies[self.event.id].aggro # 내 어그로가 아니고 외부요인도 없으면 움직이지 않음
-			end
-			
-			# Turn up
-			if turn_enabled
-				if @direction != 8
-					turn_up
-				end
-			end
-			
+			return if !check_enemy_movable(is_ok)
+			turn_up if turn_enabled
 			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
-			# If passable
+			
 			if passable?(@x, @y, 8)
-				turn_up # Turn up
-				
 				@y -= 1
 				increase_steps
-				enemy_move
+				send_enemy_move
 			else
-				# Determine if touch event is triggered
-				check_event_trigger_touch(@x, @y-1)
+				check_event_trigger_touch(@x, @y - 1)
 			end
 		end
 		
@@ -3703,6 +3657,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
 				return true if !$is_map_first
 			end
+			
 			case rand(4)
 			when 0  # Move down
 				move_down()
@@ -3888,6 +3843,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@aggro_mash = 0 # 어그로 유지 시간
 			@send_damage = true
 			@skill_mash = {}
+			
 			# 캐스팅
 			@casting_mash = 0
 			@casting_action = nil

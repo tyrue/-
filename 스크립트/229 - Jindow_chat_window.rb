@@ -90,15 +90,6 @@ class Jindow_Chat_Window < Jindow
 			$game_switches[60] = false
 			hide
 		end
-		
-		
-		#~ if @tog
-			#~ $game_switches[60] = false
-			#~ hide
-		#~ else
-			#~ $game_switches[60] = true
-			#~ show(@opacity)
-		#~ end
 	end
 	
 	def scroll_end		

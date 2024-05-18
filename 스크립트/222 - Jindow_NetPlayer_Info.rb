@@ -3,7 +3,7 @@ class Jindow_NetPlayer_Info < Jindow
 	ARMOR_TYPE_MAP = { 0 => 1, 1 => 2, 2 => 2, 3 => 2, 4 => 2 }.freeze
 	
 	def initialize(myid, name)
-		super(0, 0, 200, 180)
+		super(0, 0, 260, 180)
 		setup_window("#{name} 상태 정보")
 		@netPlayer = Network::Main.players[myid]
 		self.x = Mouse.x - self.max_width / 2
@@ -107,8 +107,8 @@ class Jindow_NetPlayer_Info < Jindow
 			"이름: #{@netPlayer.name}",
 			"레벨: #{@netPlayer.level}",
 			"직업: #{@netPlayer.pci}",
-			"체력: #{@netPlayer.hp}/#{@netPlayer.maxhp}",
-			"마력: #{@netPlayer.sp}/#{@netPlayer.maxsp}"
+			"체력: #{change_number_unit(@netPlayer.hp)}/#{change_number_unit(@netPlayer.maxhp)}",
+			"마력: #{change_number_unit(@netPlayer.sp)}/#{change_number_unit(@netPlayer.maxsp)}"
 		]
 		
 		@state_sprites = []
@@ -148,8 +148,8 @@ class Jindow_NetPlayer_Info < Jindow
 			"이름: #{@netPlayer.name}",
 			"레벨: #{@netPlayer.level}",
 			"직업: #{@netPlayer.pci}",
-			"체력: #{@netPlayer.hp}/#{@netPlayer.maxhp}",
-			"마력: #{@netPlayer.sp}/#{@netPlayer.maxsp}"
+			"체력: #{change_number_unit(@netPlayer.hp)}/#{change_number_unit(@netPlayer.maxhp)}",
+			"마력: #{change_number_unit(@netPlayer.sp)}/#{change_number_unit(@netPlayer.maxsp)}"
 		]
 		
 		new_labels.each_with_index do |label, index|

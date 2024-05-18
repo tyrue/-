@@ -25,16 +25,6 @@ class Game_Character
 	#--------------------------------------------------------------------------
 	def initialize
 		mr_mo_pvp_gc_initialize
-		@damage_show = nil
-		@show_critical = false
-	end
-	#--------------------------------------------------------------------------
-	# * Show Demage
-	#--------------------------------------------------------------------------
-	def show_demage(n,c)
-		
-		@damage_show = n
-		@show_critical = c
 	end
 	#--------------------------------------------------------------------------
 	# * Determine if Passable

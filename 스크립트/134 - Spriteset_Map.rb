@@ -41,16 +41,22 @@ class Spriteset_Map
 	def update
 		if $game_temp.spriteset_refresh == true
 			$game_temp.spriteset_refresh = false
+			
 			# Network Sprites
 			for nsprite in @network_sprites.values
-				nsprite.dispose if nsprite != nil and not nsprite.disposed?
+				if !Network::Main.mapplayers.has_key?(nsprite.netid.to_s)
+					nsprite.dispose 
+					@network_sprites.delete(nsprite.netid)
+				end
 			end
-			@network_sprites = {}
+			
 			for sprite in Network::Main.mapplayers.values
 				next if sprite == nil
 				next if sprite.netid.to_i ==  Network::Main.id.to_i
 				next if sprite.character_name == nil or sprite.character_name == ""
 				next if sprite.map_id != $game_map.map_id
+				next if @network_sprites.has_key?(sprite.netid.to_i)
+				
 				nsprite = Sprite_NetCharacter.new(@viewport1, sprite.netid.to_i, sprite)
 				@network_sprites[sprite.netid.to_i] = nsprite
 			end

@@ -1017,11 +1017,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 					if cri == "true"
-						@mapplayers[id].show_critical = true
+						@mapplayers[id].critical = true
 					elsif cri == "false"
-						@mapplayers[id].show_critical = false
+						@mapplayers[id].critical = false
 					else
-						@mapplayers[id].show_critical = cri
+						@mapplayers[id].critical = cri
 					end
 					
 					return true
@@ -1876,14 +1876,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					if @ani_event >= 0
 						if $game_map.events[@ani_event] != nil
 							count.times do
-								$game_map.events[@ani_event].ani_array.push(@ani_number)  # 이벤트 애니 공유
+								$game_map.events[@ani_event].ani_array << (@ani_number)  # 이벤트 애니 공유
 							end
 						end
 					end
 					
 					if @ani_id.to_i != @id.to_i
 						if $ani_character[@ani_id.to_i] != nil # 다른 유저 애니 공유
-							$ani_character[@ani_id.to_i].animation_id = @ani_number
+							$ani_character[@ani_id.to_i].ani_array << @ani_number
 						end
 					else
 						count.times do

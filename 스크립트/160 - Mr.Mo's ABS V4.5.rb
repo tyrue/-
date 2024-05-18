@@ -2625,7 +2625,6 @@ if SDK.state("Mr.Mo's ABS") == true
 					next unless sprite
 					sprite._damage_duration += 1
 					next if sprite._damage_duration < 0
-					
 					sprite.visible = true if sprite._damage_duration >= 0
 					dispose_damage(sprite) if sprite._damage_duration == sprite._damage_duration_max
 					update_sprite_position(sprite)
@@ -2692,7 +2691,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			def format_damage_string(value)
 				type = $game_variables[60] # 데미지 표시 타입
 				value.is_a?(Numeric) ? value.abs.to_s : value.to_s
-				value = change_number_unit(value, type) if value.to_i > 0
+				value = change_number_unit(value, type) if value.to_i >= 0
 				return value
 			end
 			
@@ -2870,7 +2869,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				next unless sprite
 				next if sprite.disposed?
 				next if sprite._damage_duration < sprite._damage_duration_max
-				
 				dispose_damage(sprite)
 			end
 		end

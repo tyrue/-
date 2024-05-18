@@ -40,64 +40,42 @@ class Sprite_NetCharacter < Sprite_Character #RPG::Sprite
 		update
 	end
 	
-	#--------------------------------------------------------------------------
-	def update
-		super
-		update_character_bitmap if character_graphics_changed?
-		update_sprite_properties
-	end
-	
-	#--------------------------------------------------------------------------
-	# * Frame Update
-	#--------------------------------------------------------------------------
-	def update
-		super
-		update_moving if @tile_id == 0
-		update_ani if $ani_character[@netid.to_i].animation_id != 0
-		update_damage_display
-	end
-	
-	#--------------------------------------------------------------------------
-	# * Update Player movement
-	#--------------------------------------------------------------------------
-	def update_moving
-		# Set rectangular transfer
-		sx = @character.pattern * @cw
-		sy = (@character.direction - 2) / 2 * @ch
-		self.src_rect.set(sx, sy, @cw, @ch)
-	end
-	
-	#--------------------------------------------------------------------------
-	# * Updates Animation
-	#--------------------------------------------------------------------------
-	def update_ani
-		animation = $data_animations[@character.animation_id]
-		animation(animation, true)
-		$ani_character[@netid].animation_id = 0
-	end
-	
-	#--------------------------------------------------------------------------
-	# * Updates Damage Display
-	#--------------------------------------------------------------------------
+	# 재정의
 	def update_damage_display
-		dmg_array = @character.damage_array
-		return unless dmg_array
+		return unless $ABS.damage_display
 		
-		sw = dmg_array.size > 1 ? true : false
-		dmg_array.each do |dmg|
-			next unless dmg
-			
-			damage(dmg, @character.show_critical, sw)
-		end
-		clear_damage_data
+		display_net_player_damage 
+		@_damage_idx = 0
 	end
 	
-	#--------------------------------------------------------------------------
-	# * Clears damage data
-	#--------------------------------------------------------------------------
-	def clear_damage_data
-		@character.damage = nil
-		@character.damage_array.clear
-		@_damage_idx = 0
+	def display_net_player_damage
+		a = @character
+		return unless a.damage || (a.damage_array && a.damage_array.size > 0)
+		
+		process_net_player_damage(a)
+		clear_net_player_damage_arrays(a)
+	end
+	
+	def process_net_player_damage(a)
+		dmg_array = a.damage_array
+		cri_array = a.critical_array
+			
+		sw = dmg_array.size > 1 ? true : false
+		unless sw
+			dmg_array << a.damage
+			cri_array << a.critical
+		end
+		
+		dmg_array.each_with_index do |dmg_val, i|
+			next unless dmg_val
+			
+			damage(dmg_val, cri_array[i], sw)
+		end
+	end
+	
+	def clear_net_player_damage_arrays(a)
+		a.damage = nil
+		a.damage_array.clear
+		a.critical_array.clear
 	end
 end

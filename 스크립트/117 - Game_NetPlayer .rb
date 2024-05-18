@@ -36,6 +36,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :mdef
 		attr_accessor :states
 		attr_accessor :damage
+		attr_accessor :critical
 		attr_accessor :gold
 		attr_accessor :maxhp
 		attr_accessor :message
@@ -54,7 +55,8 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			attr_accessor :equips
 			attr_accessor :equip_change
 			attr_accessor :is_transparency # 스킬 투명 썼는지 여부
-			attr_accessor :damage_array # 스킬 투명 썼는지 여부
+			attr_accessor :damage_array # 
+			attr_accessor :critical_array # 
 		end  
 		#--------------------------------------------------------------------------
 		# * Initializes a network player.
@@ -80,6 +82,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@mdef = 0
 			@states = []
 			@damage = 0
+			@critical = false
 			@gold = 0
 			@guild = ""
 			@maxhp = $game_party.actors[0].maxhp
@@ -90,6 +93,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@is_transparency = false
 			@trans_v = 0
 			@damage_array = []
+			@critical_array = []
 			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false

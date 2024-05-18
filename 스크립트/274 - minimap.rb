@@ -207,8 +207,8 @@ class Window_Map < Window_Base
 				
 				txt_size = 0
 				txt = nil
-				if event.sprite_id != nil
-					txt = event.sprite_id
+				if event.text_display != nil
+					txt = event.text_display[0]
 					bitmap.fill_rect(bitmap.rect, Color.new(0, 255, 0)) # 꽉찬 네모  
 				else 
 					for i in 0...event.list.size

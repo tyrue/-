@@ -397,25 +397,19 @@ class Jindow_Status < Jindow
 	def draw_actor(actor, character)
 		@s.dispose if @s != nil
 		@s = Sprite.new(self)
+		
 		bmp = RPG::Cache.character(actor.character_name, actor.character_hue)
 		bitmap = Bitmap.new(bmp.width, bmp.height)
 		src_rect = Rect.new(0, 0, bmp.width, bmp.height)
 		
 		# Setup actor equipment
-		equips = actor.equip_char_array
-		
+		equips = equip_char_array(actor)
+		bitmap.blt(0, 0, bmp, src_rect, 255)
 		# If character fits the size
-		if equips.size > 0 and bmp.width == 236 and bmp.height == 236
-			size = equips.size -1
-			for i in 0..size
-				next if equips[i] == false or equips[i][0] == false or equips[i][0] == nil
-				bmp2 = RPG::Cache.character(equips[i][0], equips[i][1].to_i)
-				bitmap.blt(0, 0, bmp2, src_rect, 255)
-			end
-		else
-			bitmap.blt(0, 0, bmp, src_rect, 255)
+		if equips.size > 0 && bmp.width == 236 && bmp.height == 236
+			blit_equipment(equips, src_rect, bitmap)
 		end
-		
+			
 		cw = bitmap.width / 4
 		ch = bitmap.height / 4
 		src_rect = Rect.new(0, 0, cw, ch)
@@ -424,5 +418,13 @@ class Jindow_Status < Jindow
 		@s.bitmap.blt(0, 0, bitmap, src_rect)
 		@s.x = (character.width - @s.width) / 2
 		@s.y = character.height - @s.height - 10 + character.y
+	end
+	
+	def blit_equipment(equips, src_rect, bitmap)
+		equips.each do |equip|
+			next if equip.nil? || equip[0].nil?
+			bmp2 = RPG::Cache.character(equip[0], equip[1].to_i)
+			bitmap.blt(0, 0, bmp2, src_rect, 255)
+		end
 	end
 end

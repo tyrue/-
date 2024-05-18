@@ -6,7 +6,7 @@
 # Author    Me™ and Mr.Mo
 # Idea      Destined
 #==============================================================================
-class Sprite_NetCharacter < RPG::Sprite
+class Sprite_NetCharacter < Sprite_Character #RPG::Sprite 
 	#--------------------------------------------------------------------------
 	# * Public Instance Variables
 	#--------------------------------------------------------------------------
@@ -22,174 +22,82 @@ class Sprite_NetCharacter < RPG::Sprite
 	#     character : character (Game_Character)
 	#--------------------------------------------------------------------------
 	def initialize(viewport, id, character = nil)
-		super(viewport)
+		#super(viewport)
 		@character = character
 		@netid = id
-		@level = level
-		@hp = hp
-		@maxhp = maxhp
+		@level = @character.level
+		@hp = @character.hp
+		@maxhp = @character.maxhp
+		@name = @character.name
 		@message1 = ""
-		@name = name
-		$ani_character[@netid.to_i] = @character
 		@test = false
+		$ani_character[@netid.to_i] = @character
+		super(viewport, character)
 		
 		# Creates Display Text Sprite
 		self.visible = true #true
 		self.opacity = 255
-		@_text_display = Sprite.new(self.viewport)
-		display_level
 		update
 	end
 	
-	def display_level
-		@level = @character.level
-		
-		@_text_display.dispose
-		# Creates Display Bitmap
-		bitmap = Bitmap.new(160, 100)
-		# Draws Text Shadow
-		bitmap.font.draw_shadow = false if bitmap.font.respond_to?(:draw_shadow)
-		bitmap.font.color = Color.new(0, 0, 0)
-		bitmap.font.size = 13
-		bitmap.draw_text(1, 1, 160, 24, "Lv: " + @character.level.to_s, 1)
-		
-		# Changes Font Color
-		bitmap.font.color = Color.new(255, 255, 255)
-		# Draws Text
-		bitmap.font.size = 13
-		bitmap.draw_text(0, 0, 160, 24, "Lv: " + @character.level.to_s, 1)
-		
-		bitmap.font.draw_shadow = false if bitmap.font.respond_to?(:draw_shadow)
-		bitmap.font.color = Color.new(-204, 0, 204)
-		bitmap.font.size = 13
-		bitmap.draw_text(0, 0, 160, 150,@character.guild.to_s, 1)
-		
-		# Changes Font Color
-		bitmap.font.color = Color.new(255, 255, 255)
-		# Draws Text
-		bitmap.font.name = "굴림"
-		bitmap.font.size = 12
-		bitmap.draw_frame_text(0, 0, 160, 47, @character.name.to_s, 1)
-		
-		@_text_display = Sprite.new(self.viewport)
-		@_text_display.bitmap = bitmap
-		@_text_display.ox = 80
-		@_text_display.oy = 24
-		@_text_display.x = self.x
-		@_text_display.y = self.y - self.oy / 2 - 24
-		@_text_display.z = 30000
-		@_text_display.visible = self.visible
+	#--------------------------------------------------------------------------
+	def update
+		super
+		update_character_bitmap if character_graphics_changed?
+		update_sprite_properties
 	end
 	
-	#--------------------------------------------------------------------------
-	# * Disposes Text
-	#--------------------------------------------------------------------------
-	def dispose
-		@_text_display.dispose
-		super
-	end
 	#--------------------------------------------------------------------------
 	# * Frame Update
 	#--------------------------------------------------------------------------
 	def update
 		super
-		# If tile ID, file name, or hue are different from current ones
-		if @tile_id != @character.tile_id or
-			@character_name != @character.character_name or
-			@character_hue != @character.character_hue or
-			@character.equip_change or 
-			@level != @character.level
-			
-			#Updates tile info
-			update_tile
-			display_level
-			@character.equip_change = false
-		end
-		# update_tile
-		# Set visible situation
-		self.visible = true
-		@_text_display.visible = true
-		
-		ok = $net_party_manager.party_members.include? @character.name
-		if @character.is_transparency
-			self.visible = ok
-			@_text_display.visible = ok
-		end
-		
-		# If graphic is character
-		animate_player if @tile_id == 0
-		# Set sprite coordinates
-		self.x = @character.screen_x
-		self.y = @character.screen_y
-		self.z = @character.screen_z(@ch)
-		# Set opacity level, blend method, and bush depth
-		self.opacity = @character.opacity
-		self.blend_type = @character.blend_type
-		self.bush_depth = @character.bush_depth
-		# Animation
+		update_moving if @tile_id == 0
 		update_ani if $ani_character[@netid.to_i].animation_id != 0
-		
-		dmg_array = @character.damage_array
-		if dmg_array != nil and dmg_array.size > 0
-			sw = dmg_array.size > 1 ? true : false
-			for i in 0...dmg_array.size
-				next if dmg_array[i] == nil
-				damage(dmg_array[i], @character.show_critical, sw) 
-			end
-		elsif @character.damage_show != nil
-			damage(@character.damage_show, @character.show_critical)
-		end
-		
-		#Make Damage nil
-		@character.damage = nil
-		@character.damage_array.clear
-		@_damage_idx = 0
-		
-		# Name Sprite
-		@_text_display.x = self.x
-		@_text_display.y = self.y - self.oy / 2 - 24
+		update_damage_display
 	end
-	#--------------------------------------------------------------------------
-	# * Update Tile
-	#--------------------------------------------------------------------------
-	def update_tile
-		# Remember tile ID, file name, and hue
-		@tile_id = @character.tile_id
-		@character_name = @character.character_name
-		@character_hue = @character.character_hue
-		
-		# If tile ID value is valid
-		if @tile_id >= 384
-			self.bitmap = RPG::Cache.tile($game_map.tileset_name,
-				@tile_id, @character.character_hue)
-			self.src_rect.set(0, 0, 32, 32)
-			self.ox = 16
-			self.oy = 32
-			# If tile ID value is invalid
-		else
-			self.bitmap = RPG::Cache.character(@character.character_name,
-				@character.character_hue)
-			@cw = bitmap.width / 4
-			@ch = bitmap.height / 4
-			self.ox = @cw / 2
-			self.oy = @ch
-		end
-	end
+	
 	#--------------------------------------------------------------------------
 	# * Update Player movement
 	#--------------------------------------------------------------------------
-	def animate_player
+	def update_moving
 		# Set rectangular transfer
 		sx = @character.pattern * @cw
 		sy = (@character.direction - 2) / 2 * @ch
 		self.src_rect.set(sx, sy, @cw, @ch)
 	end
+	
 	#--------------------------------------------------------------------------
-	# * Update Animation
+	# * Updates Animation
 	#--------------------------------------------------------------------------
 	def update_ani
 		animation = $data_animations[@character.animation_id]
 		animation(animation, true)
 		$ani_character[@netid].animation_id = 0
+	end
+	
+	#--------------------------------------------------------------------------
+	# * Updates Damage Display
+	#--------------------------------------------------------------------------
+	def update_damage_display
+		dmg_array = @character.damage_array
+		return unless dmg_array
+		
+		sw = dmg_array.size > 1 ? true : false
+		dmg_array.each do |dmg|
+			next unless dmg
+			
+			damage(dmg, @character.show_critical, sw)
+		end
+		clear_damage_data
+	end
+	
+	#--------------------------------------------------------------------------
+	# * Clears damage data
+	#--------------------------------------------------------------------------
+	def clear_damage_data
+		@character.damage = nil
+		@character.damage_array.clear
+		@_damage_idx = 0
 	end
 end

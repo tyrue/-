@@ -98,8 +98,6 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 				@armor2_id = 0
 				@armor3_id = 0
 				@armor4_id = 0
-				@capelli = 0
-				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]
 			end
 			$game_temp.spriteset_refresh = true
 		end
@@ -110,17 +108,8 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			return if @netid == Network::Main.id
 			@oldx = @x
 			@oldy = @y
-			@tran = @is_transparency
-		
 			eval(data) if data != nil
-			if new_equip? or (@tran != @is_transparency)
-				@equip_change = true
-			end
-			if User_Edit::VISUAL_EQUIP_ACTIVE
-				@ove = [@weapon_id, @armor1_id, @armor2_id, @armor3_id, @armor4_id]
-			end
 			
-			@transparent = (not $game_map.map_id == @map_id) rescue @transparent =false
 			net_move if @oldx != @x or @oldy != @y 
 			@move_tom = false
 		end

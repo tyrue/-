@@ -1,34 +1,3 @@
-#==============================================================================
-# ** Event Text Display
-#==============================================================================
-# Created By: ÁØµ¹
-# Modified By: SephirothSpawn
-# Modified By: Me™
-# Version 2.1
-# 2006-03-04
-#==============================================================================
-# * Instructions :
-#
-#  ~ Creating Event With Test Display
-#   - Put a Comment on the Page With
-#   [CD____]
-#   - Place Text to Be Displayed in the Blank
-#------------------------------------------------------------------------------
-# * Customization :
-#
-#  ~ NPC Event Colors
-#   - Event_Color = Color
-#
-#  ~ Player Event Color
-#   - Player_Color = Color
-#
-#  ~ Player Text
-#   - Player_Text = text_display *
-#
-#  ~ text_display
-#   - 'Name', 'Class', 'Level', 'Hp', 'Sp'
-#==============================================================================
-
 #------------------------------------------------------------------------------
 # * SDK Log Script
 #------------------------------------------------------------------------------
@@ -44,8 +13,11 @@ if SDK.state('Event Text Display') == true
 		#--------------------------------------------------------------------------
 		# * Dispaly Text Color (Event & Player)
 		#--------------------------------------------------------------------------
-		Event_Color = Color.new(0, 200, 0)
+		Event_Color = Color.new(200, 255, 200)
+		Enemy_Color = Color.new(255, 87, 87)
+		Item_Color = Color.new(126, 167, 247)
 		Player_Color = Color.new(255, 255, 255)
+		NetPlayer_Color = Color.new(255, 241, 209)
 		#--------------------------------------------------------------------------
 		# * Display Choices
 		# ~ 'Name', 'Class', 'Level', 'Hp', 'Sp'
@@ -56,35 +28,29 @@ if SDK.state('Event Text Display') == true
 		#--------------------------------------------------------------------------
 		attr_accessor :text_display
 	end
+	
 	#==============================================================================
 	# ** Game_Event
 	#==============================================================================
-	
-	class Game_Event < Game_Character
-		#--------------------------------------------------------------------------
-		# * Alias Listings
-		#--------------------------------------------------------------------------
+	class Game_Event < Game_Character 
 		alias seph_characterdisplay_gevent_refresh refresh
-		#--------------------------------------------------------------------------
-		# * Refresh
-		#--------------------------------------------------------------------------
-		def refresh
-			# Original Refresh Method
-			seph_characterdisplay_gevent_refresh
-			# Checks to see if display text
-			# If the name contains CD, it takes the rest of the name as the text
-			unless @list.nil?
-				for i in 0...@list.size
-					if @list[i].code == 108
-						@list[i].parameters[0].dup.gsub!(/\[[Cc][Dd](.+?)\]/) do
-							@text_display = [$1, Event_Color]
-						end
-					end
-				end
-			end
-			@text_display = nil if @erased
+		def name=(name)
+			@event.name = name
 		end
-	end
+		
+		def refresh 
+			seph_characterdisplay_gevent_refresh 
+			text = @event.name.dup 
+			text.gsub!(/\[[Ii][Dd](.+?)\]/) do 
+				@text_display = [$1, Event_Color]
+				@text_display = [$1, Enemy_Color] if $ABS.enemies[event.id] != nil
+				@text_display = [$1, Item_Color] if $Drop[id] != nil
+			end 
+			@text_display = nil if @erased 
+			@text_display = nil if @character_name == "" 
+		end 
+	end 
+	
 	#==============================================================================
 	# ** Game_Player
 	#==============================================================================
@@ -122,6 +88,17 @@ if SDK.state('Event Text Display') == true
 			@text_display = [txt, Player_Color]
 		end
 	end
+	
+	class Game_NetPlayer < Game_Character
+		alias seph_character_display_netplayer_refresh refresh
+		
+		def refresh(data)
+			seph_character_display_netplayer_refresh(data)
+			@text_display = [@name, NetPlayer_Color]
+		end
+	end
+	
+	
 	#==============================================================================
 	# ** Sprite_Character
 	#==============================================================================
@@ -140,27 +117,44 @@ if SDK.state('Event Text Display') == true
 			update_display_text
 		end
 		#--------------------------------------------------------------------------
+		# * Update Display Sprite
+		#--------------------------------------------------------------------------
+		def update_display_text
+			unless @character.text_display.nil?
+				create_display_sprite(@character.text_display) if @_text_display.nil?
+				@_text_display.x = self.x
+				@_text_display.y = self.y - self.oy / 2 - 20
+			else
+				dispose_display_text unless @_text_display.nil?
+			end
+		end
+		
+		def toggle_id
+			return if @_text_display == nil or @_text_display.disposed?
+			if $game_variables[11] == 0
+				@_text_display.visible = false 
+			else
+				@_text_display.visible = true
+			end
+		end
+		
+		#--------------------------------------------------------------------------
 		# * Create Display Sprite
 		#--------------------------------------------------------------------------
 		def create_display_sprite(args)
-			# Creates Display Bitmap
-			bitmap = Bitmap.new(160, 24)
-			# Draws Text Shadow
-			bitmap.font.draw_shadow = false  if bitmap.font.respond_to?(:draw_shadow)
-			bitmap.font.color = Color.new(0, 0, 0)
-			bitmap.draw_text(1, 1, 160, 24, args[0], 1)
-			# Changes Font Color
+			bitmap = Bitmap.new(160, 20)
+			bitmap.font.name = "맑은 고딕"
+			bitmap.font.size = 15
 			bitmap.font.color = args[1]
-			# Draws Text
-			bitmap.draw_frame_text(0, 0, 160, 24, args[0], 1)
+			bitmap.draw_frame_text(0, 0, 160, 20, args[0], 1)
 			
 			# Creates Display Text Sprite
 			@_text_display = Sprite.new(self.viewport)
 			@_text_display.bitmap = bitmap
 			@_text_display.ox = 80
-			@_text_display.oy = 24
+			@_text_display.oy = 20
 			@_text_display.x = self.x
-			@_text_display.y = self.y - self.oy / 2 - 24
+			@_text_display.y = self.y - self.oy / 2 - 20
 			@_text_display.z = 1000
 			@_text_display.visible = self.visible #true
 		end
@@ -170,20 +164,87 @@ if SDK.state('Event Text Display') == true
 		def dispose_display_text
 			@_text_display.dispose unless @_text_display.nil?
 		end
+	end
+	
+	class Sprite_NetCharacter < Sprite_Character #RPG::Sprite 
+		#--------------------------------------------------------------------------
+		# * Disposes Text
+		#--------------------------------------------------------------------------
+		def dispose
+			@_text_display.dispose
+			super
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Creates Display Text Sprite
+		#--------------------------------------------------------------------------
+		def create_display_sprite(args)
+			bitmap = Bitmap.new(160, 100)
+			draw_text(bitmap)
+			
+			@_text_display = Sprite.new(self.viewport)
+			@_text_display.bitmap = bitmap
+			@_text_display.ox = 80
+			@_text_display.oy = 24
+			@_text_display.z = 30000
+			@_text_display.visible = self.visible
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Draws Text on Bitmap
+		#--------------------------------------------------------------------------
+		def draw_text(bitmap)
+			bitmap.font.name = "맑은 고딕"
+			bitmap.font.size = 13
+			bitmap.font.color = Color.new(0, 0, 0)
+			bitmap.draw_text(1, 1, 160, 24, "Lv: #{@level}", 1)
+			
+			bitmap.font.color = Color.new(255, 255, 255)
+			bitmap.draw_text(0, 0, 160, 24, "Lv: #{@level}", 1)
+			
+			bitmap.font.color = Color.new(-204, 0, 204)
+			bitmap.draw_text(0, 0, 160, 150, @character.guild.to_s, 1)
+			
+			bitmap.font.color = Color.new(255, 255, 255)
+			bitmap.draw_frame_text(0, 0, 160, 47, @name.to_s, 1)
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Update Display Sprite
 		#--------------------------------------------------------------------------
 		def update_display_text
 			unless @character.text_display.nil?
 				create_display_sprite(@character.text_display) if @_text_display.nil?
+				update_visibility
 				@_text_display.x = self.x
 				@_text_display.y = self.y - self.oy / 2 - 24
 			else
 				dispose_display_text unless @_text_display.nil?
 			end
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Updates visibility based on transparency
+		#--------------------------------------------------------------------------
+		def update_visibility
+			ok = $net_party_manager.is_party_member?(@character.name)
+			self.visible = @character.is_transparency ? ok : true
+			@_text_display.visible = @character.is_transparency ? ok : true
+		end
 	end
+	
 	#--------------------------------------------------------------------------
 	# * End SDK Enable Test
 	#--------------------------------------------------------------------------
+	class Spriteset_Map
+		def toggle_id
+			$game_variables[11] = $game_variables[11] == 0 ? 1 : 0
+			
+			for sprite in @character_sprites
+				sprite.toggle_id
+			end
+		end
+	end
 end
+
+

@@ -35,8 +35,8 @@ module RPG
 		end
 		
 		def update
-			
 			mrmo_abs_sprite_update
+			
 			if @_animation_overlap != nil and @_animation_overlap.size > 0
 				for ani in @_animation_overlap
 					if ani.pause_duration > 0
@@ -52,7 +52,6 @@ module RPG
 			end
 			
 			if @_animation_overlap != nil and @_animation_overlap.size == 0 and @one_use
-				
 				self.dispose
 			end
 		end
@@ -87,7 +86,7 @@ module RPG
 					@@_animations.push(animation)
 				end
 			end
-						
+			
 			@_animation_overlap.push(ani)
 			if @_animation_overlap.size > 10
 				dispose_animation2(@_animation_overlap[0])
@@ -97,38 +96,34 @@ module RPG
 		end
 		
 		def update_animation2(ani)
-			if ani.duration > 0
-				frame_index = ani.animation.frame_max - ani.duration
-				cell_data = ani.animation.frames[frame_index].cell_data
-				position = ani.animation.position
-				animation_set_sprites(ani.sprites, cell_data, position)
-				
-				for timing in ani.animation.timings
-					if timing.frame == frame_index
-						animation_process_timing(timing, ani.hit)
-					end
-				end
-			else
-				dispose_animation2(ani)
+			return dispose_animation2(ani) if ani.duration <= 0
+			
+			frame_index = ani.animation.frame_max - ani.duration
+			cell_data = ani.animation.frames[frame_index].cell_data
+			position = ani.animation.position
+			animation_set_sprites(ani.sprites, cell_data, position)
+			
+			ani.animation.timings.each do |timing|
+				animation_process_timing(timing, ani.hit) if timing.frame == frame_index
 			end
 		end
 		
 		def dispose_animation2(ani)
-			if ani.sprites != nil
-				sprite = ani.sprites[0]
-				if sprite != nil
-					@@_reference_count[sprite.bitmap] -= 1
-					if @@_reference_count[sprite.bitmap] == 0
-						sprite.bitmap.dispose
-					end
-				end
-				for sprite in ani.sprites
-					sprite.dispose
-				end
-				ani.sprites = nil
-				ani.animation = nil
-				@_animation_overlap.delete(ani)
+			return if ani.sprites.nil?
+			
+			sprite = ani.sprites[0]
+			if sprite != nil
+				@@_reference_count[sprite.bitmap] -= 1
+				sprite.bitmap.dispose if @@_reference_count[sprite.bitmap] == 0
 			end
+			
+			for sprite in ani.sprites
+				sprite.dispose
+			end
+			
+			ani.sprites = nil
+			ani.animation = nil
+			@_animation_overlap.delete(ani)
 		end
 		
 		# ------------------

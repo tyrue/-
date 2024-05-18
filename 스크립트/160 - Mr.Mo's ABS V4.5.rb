@@ -2542,123 +2542,211 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			def initialize(viewport = nil)
 				super(viewport)
-				@_whiten_duration = 0
-				@_appear_duration = 0
-				@_escape_duration = 0
-				@_collapse_duration = 0
-				@_collapse_erase_duration = 0
-				
+				initialize_damage_variables
+				initialize_animation_variables
+			end
+			
+			def initialize_damage_variables
 				@_damage_max_height = 0
 				@_damage_duration = 0
 				@_damage_duration_max = 60
 				@_damage_idx = 0
 				@_damage_muti = false
 				@_damage_sprite = []
-				
+				@_damage_string = ""
+			end
+			
+			def initialize_animation_variables
+				@_whiten_duration = 0
+				@_appear_duration = 0
+				@_escape_duration = 0
+				@_collapse_duration = 0
+				@_collapse_erase_duration = 0
 				@_animation_duration = 0
 				@_blink = false
 				@force_opacity = false
 				@stop_animation = true
-				
-				@_damage_string = ""
 			end
 			
 			def stop_animation?
 				return @stop_animation 
 			end
 			
-			#-------------------------------------------------------------------------
-			# update
-			#-------------------------------------------------------------------------
 			def update
 				super
-				if @_whiten_duration > 0
-					@_whiten_duration -= 1
-					self.color.alpha = 128 - (16 - @_whiten_duration) * 10
+				update_color_effects
+				update_damage_view
+				update_animations
+				update_blink_effect
+				@@_animations.clear
+				if @_animation != nil and (Graphics.frame_count % 10 == 0)
+					@_animation_duration += 1
 				end
-				if @_appear_duration > 0
-					@_appear_duration -= 1
-					self.opacity = (16 - @_appear_duration) * 16
-				end
-				if @_escape_duration > 0
-					@_escape_duration -= 1
-					self.opacity = 256 - (32 - @_escape_duration) * 10
-				end
-				if @_collapse_duration > 0
-					@_collapse_duration -= 1
-					self.opacity = 256 - (48 - @_collapse_duration) * 6
-				end
+				update_collapse_erase
+			end
+			
+			def update_color_effects
+				update_whiten_duration
+				update_appear_duration
+				update_escape_duration
+				update_collapse_duration
+			end
+			
+			def update_whiten_duration
+				return unless @_whiten_duration > 0
 				
-				update_damage_view if @_damage_sprite.size > 0
+				@_whiten_duration -= 1
+				self.color.alpha = 128 - (16 - @_whiten_duration) * 10
+			end
+			
+			def update_appear_duration
+				return unless @_appear_duration > 0
 				
+				@_appear_duration -= 1
+				self.opacity = (16 - @_appear_duration) * 16
+			end
+			
+			def update_escape_duration
+				return unless @_escape_duration > 0
+				
+				@_escape_duration -= 1
+				self.opacity = 256 - (32 - @_escape_duration) * 10
+			end
+			
+			def update_collapse_duration
+				return unless @_collapse_duration > 0
+				
+				@_collapse_duration -= 1
+				self.opacity = 256 - (48 - @_collapse_duration) * 6
+			end
+			
+			def update_damage_view
+				@_damage_sprite.each do |sprite|
+					next unless sprite
+					sprite._damage_duration += 1
+					next if sprite._damage_duration < 0
+					
+					sprite.visible = true if sprite._damage_duration >= 0
+					dispose_damage(sprite) if sprite._damage_duration == sprite._damage_duration_max
+					update_sprite_position(sprite)
+				end
+			end
+			
+			def update_sprite_position(sprite)
+				return unless sprite
+				return if sprite.disposed?
+				
+				temp_y = self.y + self.height / 4 - (30 + sprite._damage_idx * 13)
+				temp_y -= 50 if sprite._damage_muti
+				time = sprite._damage_duration
+				
+				sprite.x = self.x - sprite.ox
+				sprite.y = [temp_y - time * 4, temp_y - sprite._damage_max_height].max if @collapse_character.nil? || @collapse_character.character_name != ""
+			end
+			
+			def update_animations
 				if @_animation != nil and (Graphics.frame_count % 2 == 0)
 					@_animation_duration -= 1
 					update_animation
 				end
+				
 				if @_loop_animation != nil and (Graphics.frame_count % 2 == 0)
 					update_loop_animation
 					@_loop_animation_index += 1
 					@_loop_animation_index %= @_loop_animation.frame_max
 				end
-				
-				if @_blink
-					@_blink_count = (@_blink_count + 1) % 32
-					if @_blink_count < 16
-						alpha = (16 - @_blink_count) * 6
-					else
-						alpha = (@_blink_count - 16) * 6
-					end
-					self.color.set(255, 255, 255, alpha)
-				end
-				@@_animations.clear
-				
-				if @_animation != nil and (Graphics.frame_count % 10 == 0)
-					@_animation_duration += 1
-				end
-				
-				#Update Duration
-				if @_collapse_erase_duration > 0
-					@_collapse_erase_duration -= 1
-					@force_opacity = true
-					# 불투명도 조절
-					self.opacity = 256 - (36 - @_collapse_erase_duration) * 10
-					@force_opacity = false
-					if @_collapse_erase_duration == 0
-						@collapse_character.character_name = ""
-						self.opacity = 256
-						self.color.set(0, 0, 0, 0) # 검은색으로 만듦
-						self.blend_type = 0
-						@collapse_character.erase # 이벤트 삭제
-					end
-				end
 			end
 			
-			#--------------------------------------------------------------------------
-			# * update damage view, 데미지 표시 효과 설정
-			#--------------------------------------------------------------------------
-			def update_damage_view
-				count = 0
-				if @_damage_sprite.size > 50
-					dispose_damage(@_damage_sprite.first)
-				end
+			def update_blink_effect
+				return unless @_blink
 				
-				for sprite in @_damage_sprite
-					sprite._damage_duration += 1
-					next if sprite._damage_duration < 0
-					sprite.visible = true if sprite._damage_duration >= 0
-					
-					if sprite._damage_duration == sprite._damage_duration_max
-						dispose_damage(sprite)
-						next
-					end
-					
-					tempY = self.y + self.height / 4 - (30 + sprite._damage_idx * 13)
-					tempY -= 50 if sprite._damage_muti
-					time = sprite._damage_duration
-					
-					sprite.x = self.x - sprite.ox
-					#sprite.y = tempY if @collapse_character == nil or @collapse_character.character_name != ""
-					sprite.y = [tempY - time * 4, tempY - sprite._damage_max_height].max if @collapse_character == nil or @collapse_character.character_name != ""
+				@_blink_count = (@_blink_count + 1) % 32
+				alpha = (16 - @_blink_count).abs * 6
+				self.color.set(255, 255, 255, alpha)
+			end
+			
+			def update_collapse_erase
+				return unless @_collapse_erase_duration > 0
+				
+				@_collapse_erase_duration -= 1
+				@force_opacity = true
+				self.opacity = 256 - (36 - @_collapse_erase_duration) * 10 
+				@force_opacity = false
+				dispose_collapse_character if @_collapse_erase_duration.zero?
+			end
+			
+			def dispose_collapse_character
+				@collapse_character.character_name = ""
+				self.opacity = 256
+				self.color.set(0, 0, 0, 0)
+				self.blend_type = 0
+				@collapse_character.erase
+			end
+			
+			def damage(value, critical, multi = false)
+				damage_string = format_damage_string(value)
+				bitmap = create_damage_bitmap(damage_string, critical)
+				create_damage_sprite(bitmap, damage_string, multi)
+			end
+			
+			def format_damage_string(value)
+				type = $game_variables[60] # 데미지 표시 타입
+				value.is_a?(Numeric) ? value.abs.to_s : value.to_s
+				value = change_number_unit(value, type) if value.to_i > 0
+				return value
+			end
+			
+			def create_damage_bitmap(damage_string, critical)
+				bitmap = Bitmap.new(self.width, 30)
+				font_name = Font.exist?($ABS.DAMAGE_FONT_NAME) ? $ABS.DAMAGE_FONT_NAME : DAMAGE_FONT_NAME2
+				font_size = critical ? DAMAGE_CRI_FONT_SIZE : $ABS.DAMAGE_FONT_SIZE
+				font_color, bold = get_font_color_bold(critical)
+				bold ||= false
+				
+				bitmap.font.name = font_name
+				bitmap.font.size = font_size
+				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
+				bitmap.draw_text(+1, +1, 200, 36, damage_string, 0)
+				bitmap.font.color = font_color
+				bitmap.font.bold = bold
+				bitmap.draw_text(0, 0, 200, 36, damage_string, 0)
+				return bitmap
+			end
+			
+			def create_damage_sprite(bitmap, damage_string, multi)
+				sprite = Sprite.new(self.viewport)
+				sprite.bitmap = bitmap
+				sprite._damage_string = damage_string
+				
+				sprite.oy = self.oy
+				sprite.ox = sprite.bitmap.text_size(damage_string).width / 4
+				sprite.x = self.x - sprite.ox
+				sprite.y = self.y
+				sprite.z = 3000
+				
+				sprite.opacity = 255
+				sprite._damage_idx = @_damage_idx
+				sprite._damage_duration = 0 - @_damage_idx * 5
+				sprite._damage_max_height = multi ? 0 : 60
+				sprite._damage_muti = multi
+				sprite.visible = false
+				
+				@_damage_sprite.push(sprite)
+				@_damage_idx += 1
+			end
+			
+			def get_font_color_bold(critical)
+				case critical
+				when "heal" 
+					return Color.new(102, 255, 102), false
+				when "player_hit"
+					return Color.new(255, 142, 165), false
+				when "skill_cri"
+					return Color.new(70, 113, 255), true
+				when true 
+					return Color.new(255, 0, 51), true
+				when false
+					return Color.new(255, 255, 255), false
 				end
 			end
 			
@@ -2667,22 +2755,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			#--------------------------------------------------------------------------
 			def dispose_damage(sprite = nil)
 				if sprite != nil
-					@_damage_sprite.delete(sprite)
-					sprite.visible = false
-					sprite.bitmap.dispose
-					sprite.dispose
-					sprite = nil
-				else
-					if @_damage_sprite != nil
-						for sprite in @_damage_sprite
-							@_damage_sprite.delete(sprite)
-							sprite.visible = false
-							sprite.bitmap.dispose
-							sprite.dispose
-							sprite = nil
-						end
+					dispose_sprite(sprite)
+				elsif @_damage_sprite != nil
+					for s in @_damage_sprite
+						dispose_sprite(s)
 					end
 				end
+			end
+			
+			def dispose_sprite(sprite)
+				@_damage_sprite.delete(sprite)
+				sprite.visible = false
+				sprite.bitmap.dispose
+				sprite.dispose
+				sprite = nil
 			end
 			
 			#--------------------------------------------------------------------------
@@ -2692,6 +2778,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.blend_type = 1
 				self.color.set(255, 64, 64, 255)
 				self.opacity = 255
+				
 				@collapse_character = character
 				@_collapse_erase_duration = 36
 				@_collapse_duration = 0
@@ -2708,64 +2795,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				return if @_collapse_erase_duration > 0 and !@force_opacity
 				super(o)
 			end
-			#--------------------------------------------------------------------------
-			# * Damage  데미지를 표시하는 부분
-			#--------------------------------------------------------------------------
-			def damage(value, critical, multi = false)
-				type = $game_variables[60] # 데미지 표시 타입
-				#dispose_damage
-				if value.is_a?(Numeric)
-					damage_string = value.abs.to_s
-				else
-					damage_string = value.to_s
-				end
-				damage_string = change_number_unit(damage_string, type) if damage_string.to_i > 0
-				
-				bitmap = Bitmap.new(self.width, 30)
-				bitmap.font.name = Font.exist?($ABS.DAMAGE_FONT_NAME) ? $ABS.DAMAGE_FONT_NAME : DAMAGE_FONT_NAME2
-				
-				bitmap.font.size = critical ? DAMAGE_CRI_FONT_SIZE : $ABS.DAMAGE_FONT_SIZE 
-				bitmap.font.color = $ABS.DAMAGE_FONT_COLOR
-				
-				bitmap.draw_text(+1, +1, 200, 36, damage_string, 0)
-				
-				if critical.to_s == "heal" 
-					bitmap.font.color.set(102, 255, 102) # 연두색
-				elsif critical.to_s == "player_hit"
-					bitmap.font.color.set(255, 142, 165) # 분홍색
-				elsif critical.to_s == "skill_cri"
-					bitmap.font.bold = true
-					bitmap.font.color.set(70, 113, 255) # 파란색
-				elsif !critical # 일반적 표시
-					bitmap.font.color.set(255, 255, 255) # 흰색	
-				elsif critical # 크리티컬 표시
-					bitmap.font.bold = true
-					bitmap.font.color.set(255, 0, 51) # 빨간색 
-				end
-				
-				
-				bitmap.draw_text(0, 0, 200, 36, damage_string, 0)
-				
-				sprite = Sprite.new(self.viewport)
-				sprite.bitmap = bitmap
-				sprite.oy = self.oy
-				sprite.ox = sprite.bitmap.text_size(damage_string).width / 4
-				sprite.x = self.x - sprite.ox
-				sprite._damage_string = damage_string
-				sprite.y = self.y# + self.height / 4 #self.oy
-				sprite.z = 3000
-				sprite.opacity = 255
-				sprite._damage_idx = @_damage_idx
-				sprite._damage_duration = 0 - @_damage_idx * 5
-				sprite.visible = false
-				#sprite._damage_max_height = 11 * @_damage_sprite.size + 60
-				sprite._damage_max_height = multi ? 0 : 60
-				sprite._damage_muti = multi
-				@_damage_sprite.push(sprite)
-				@_damage_idx += 1
-			end
 		end
 	end
+	
 	#==============================================================================
 	# ** Sprite_Character
 	#------------------------------------------------------------------------------
@@ -2920,15 +2952,15 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def process_player_damage(a)
-			sw = dmg_array.size > 1 ? true : false
-			unless sw
-				a.damage_array << a.damage
-				a.critical_array << a.critical
-			end
-			
 			dmg_array = a.damage_array
 			cri_array = a.critical_array
 			dmg = ""
+			
+			sw = dmg_array.size > 1 ? true : false
+			unless sw
+				dmg_array << a.damage
+				cri_array << a.critical
+			end
 			
 			dmg_array.each_with_index do |dmg_val, i|
 				next unless dmg_val
@@ -2947,7 +2979,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def update_ani_array
 			return unless @character.ani_array && @character.ani_array.size >= 1
-			
 			@character.ani_array.each do |ani|
 				animation = $data_animations[ani]
 				animation2(animation, true)

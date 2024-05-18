@@ -77,13 +77,15 @@ class Jindow_NetPlayer_Info < Jindow
 		
 		@actor = Sprite.new(self)
 		character_name = @netPlayer.character_name
-		equips = @netPlayer.equip_char_array
+		equips = equip_char_array(@netPlayer)
 		bitmap = Bitmap.new("Graphics/Characters/#{character_name}")
 		bmp = RPG::Cache.character(character_name, @netPlayer.character_hue)
 		
 		cw = bitmap.width / 4
 		ch = bitmap.height / 4
 		src_rect = Rect.new(0, 0, cw, ch)
+		bitmap.blt(0, 0, bmp, src_rect, 255)
+		
 		if equips.size > 0 and bmp.width == 236 and bmp.height == 236
 			for equip in equips
 				next unless equip
@@ -91,9 +93,7 @@ class Jindow_NetPlayer_Info < Jindow
 				
 				bmp2 = RPG::Cache.character(equip[0], equip[1].to_i)
 				bitmap.blt(0, 0, bmp2, src_rect, 255)
-			end
-		else
-			bitmap.blt(0, 0, bmp, src_rect, 255)
+			end	
 		end
 		
 		@actor.bitmap = Bitmap.new(cw, ch)

@@ -20,8 +20,8 @@ def close_network
 	if Network::Main.socket != nil
 		자동저장 
 		$login_check = false
-		$trade_manager.trade_refuse()
-		$net_party_manager.end_party()
+		$trade_manager.trade_refuse() if $trade_manager
+		$net_party_manager.end_party() if $net_party_manager
 		Network::Main.send_with_tag("9", "#{Network::Main.id}")
 	end
 end

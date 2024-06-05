@@ -1,6 +1,6 @@
 def 자동저장
 	return if 자동저장_준비가_필요한_상황?
-	
+	@rpg = $game_party.actors[0].rpg_skill
 	초기화_변수()
 	
 	기본_스킬_목록_생성()
@@ -20,7 +20,7 @@ end
 
 
 def 자동저장_준비가_필요한_상황?
-	$game_map.map_id == 3 || $rpg_skill.nil? || $game_party.actors[0].name == "/no" || !$login_check
+	$game_map.map_id == 3 || $game_party.actors[0].name == "/no" || !$login_check
 end
 
 def 초기화_변수
@@ -31,18 +31,18 @@ def 초기화_변수
 end
 
 def 초기화_스킬_지연_콘솔
-	$rpg_skill.base_str = $rpg_skill.base_agi = $rpg_skill.base_int = $rpg_skill.base_dex = 0
+	@rpg.base_str = @rpg.base_agi = @rpg.base_int = @rpg.base_dex = 0
 end
 
 def 스킬_지연_콘솔_비어있음?
-	($skill_Delay_Console ? $skill_Delay_Console.console_log2 : nil).empty?
+	return $skill_Delay_Console.buff_time_log.empty?
 end
 
 def 초기화_기본_스탯_변수
-	$game_variables[52] = $rpg_skill.base_str
-	$game_variables[53] = $rpg_skill.base_agi
-	$game_variables[54] = $rpg_skill.base_int
-	$game_variables[55] = $rpg_skill.base_dex
+	$game_variables[52] = @rpg.base_str
+	$game_variables[53] = @rpg.base_agi
+	$game_variables[54] = @rpg.base_int
+	$game_variables[55] = @rpg.base_dex
 end
 
 
@@ -89,11 +89,11 @@ def 아이템키_목록_생성
 end
 
 def 스킬_밀기_목록_생성
-	@skill_mash_list = SKILL_MASH_TIME.map { |skill_mash_time| "#{skill_mash_time[0]},#{skill_mash_time[1][1]}." if skill_mash_time[1][1] > 0 }.compact.join
+	@skill_mash_list = $game_party.actors[0].skill_mash.map { |id, time| "#{id},#{time}." if time > 0 }.compact.join
 end
 
 def 버프_밀기_목록_생성
-	@buff_mash_list = $game_party.actors[0].buff_time.map { |buff_time| "#{buff_time[0]},#{buff_time[1]}." if buff_time[1] > 0 }.compact.join
+	@buff_mash_list = $game_party.actors[0].buff_time.map { |id, time| "#{id},#{time}." if time > 0 }.compact.join
 end
 
 def 네트워크_데이터_전송

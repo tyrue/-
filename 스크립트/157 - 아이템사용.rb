@@ -1,5 +1,7 @@
 class MrMo_ABS
 	def item_event(id)
+		rpg = $game_party.actors[0].rpg_skill
+		
 		case id
 		when 4 # 소환비서
 			x = $game_player.x 
@@ -15,11 +17,11 @@ class MrMo_ABS
 			end
 		
 		when 67 # 갈색시약
-			$rpg_skill.buff_active(46) # 무장
+			rpg.buff_active(46) # 무장
 		when 68 # 초록시약
-			$rpg_skill.buff_active(47) # 보호
+			rpg.buff_active(47) # 보호
 		when 81 # 속도시약
-			$rpg_skill.buff_active(99) # 속도시약 스킬 사용
+			rpg.buff_active(99) # 속도시약 스킬 사용
 		end
 	end
 	

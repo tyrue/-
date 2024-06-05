@@ -230,178 +230,185 @@ class Rpg_skill
 	attr_accessor :base_dex
 	attr_accessor :player_base_move_speed
 	
-	def initialize
+	def initialize(battler = nil)
 		@base_str = 0
 		@base_agi = 0
 		@base_int = 0
 		@base_dex = 0
-		@player_base_move_speed = 3
+		@base_move_speed = 3
+		
+		@battler = battler
+		@character = $game_player if @battler.is_a?(Game_Actor)
+		@character = @battler.event if @battler.is_a?(ABS_Enemy)
 	end
 	
-	def update_buff # 버프 지속 효과 (일정 주기마다 해야하는 것 등)
+	def process_skill(id, enemy = nil)
+		skill = $data_skills[id]
+		self.buff(id) # 이게 버프 스킬인지 확인
+		self.heal(id) # 이게 회복 스킬인지 확인
+		self.active_skill(id, enemy) # 액티브 스킬 행동 커스텀 확인
+		self.skill_chat(skill) # 스킬 사용시 말하는 것
+	end
+	
+	def update
+		self.update_buff
+	end
+	
+	def update_buff() # 버프 지속 효과 (일정 주기마다 해야하는 것 등)
 		sec = Graphics.frame_rate
 		
-		if check_buff(140) # 운기 중
-			if !$game_player.moving?
-				if (Graphics.frame_count % (sec) == 0)
-					$game_party.actors[0].sp += $game_party.actors[0].maxsp * 0.12
-					$game_player.ani_array.push(4)  
-					Network::Main.ani(Network::Main.id, 4) #애니메이션 공유
+		for buff in @battler.buff_time
+			next if buff[1] <= 0 # 버프가 끝난상태면 무시
+			id = buff[0]
+			data = $rpg_skill_data[id]
+			
+			next unless data.cycle_time
+			next unless data.cycle_action
+			
+			if data.is_move_stop
+				if @character.moving?
+					@battler.buff_time[id] = 1
+					next
 				end
-			else
-				$game_party.actors[0].buff_time[140] = 1 # 운기 취소
 			end
+			
+			next unless (Graphics.frame_count % (sec * data.cycle_time) == 0)
+			
+			ani_id = data.cycle_animation || data.skill_data.animation1_id
+			@character.ani_array.push(ani_id) 
+			
+			data.cycle_action.each do |action|
+				heal(id) if action == "heal"
+			end 
 		end
-		
-		if check_buff(121) # 신령지익진
-			if (Graphics.frame_count % (sec * 2) == 0)
-				$game_player.ani_array.push(7)
-				Network::Main.ani(Network::Main.id, 7) #애니메이션 공유
-			end
-		end	
-		
-		if check_buff(122) # 신령지익진
-			if (Graphics.frame_count % (sec * 2) == 0)
-				$game_player.ani_array.push(8)
-				Network::Main.ani(Network::Main.id, 8) #애니메이션 공유
-			end
-		end
-		
 	end
 	
-	def check_speed_buff(actor = $game_party.actors[0])
+	def check_speed_buff()
 		speed = 0
-		for data in actor.buff_time
-			next if data[1] <= 0
+		for data in @battler.buff_time
+			next if data[1] <= 0 # 버프가 끝난상태면 무시
 			id = data[0]
-			next if BUFF_SKILL[id][2] == nil
-			buff_data = BUFF_SKILL[id][2][0]
-			if buff_data[0] == "speed"
-				speed += buff_data[1] 
+			next if $rpg_skill_data[id].buff_data == nil
+			
+			buff_data = $rpg_skill_data[id].buff_data
+			buff_data.each do |d|
+				speed += d[1] if d[0] == "speed"
 			end
 		end
 		return speed
 	end
 	
-	
-	# 파티 힐
-	def party_heal(id, user = $game_party.actors[0])
-		return if PARTY_HEAL_SKILL[id] == nil
-		heal_v = 1
-		heal_v = PARTY_HEAL_SKILL[id][0].to_i 
+	# 파티 버프
+	def party_buff(id)
+		return unless @character == $game_player
 		
-		# 커스텀
-		case id
-		when 92 # 공력주입
-			heal_v = user.sp * 1.5
-		when 117 # 백호의희원
-			heal_v = user.sp * 4
-		when 120 # 부활
-			$game_temp.common_event_id = 24
-		end
-		
-		heal_v += (user.maxsp * 0.001) * (1.0 + user.atk / 100.0)
-		heal_v = ((heal_v) * (1 + (user.int / 1000.0) + (user.maxsp / 100000.0))).to_i
-		
-		skill_cost_custom(user, id)
-		
-		user.damage = heal_v.to_s
-		user.critical = "heal"
-		user.hp += heal_v
+		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
+		@character.ani_array.push(ani_id)
 		
 		data = {
 			"id" => id,
-			"value" => heal_v
+			"value" => 0
 		}
 		message = data.map { |key, value| "#{key}:#{value}" }.join("|")
 		Network::Main.send_with_tag("party_heal", message)
 	end
 	
-	# 파티 버프
-	def party_buff(id, character = $game_player)
-		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
-		character.ani_array.push(ani_id)
-		Network::Main.ani(Network::Main.id, ani_id)
-		
-		if character == $game_player
-			data = {
-				"id" => id,
-				"value" => 0
-			}
-			message = data.map { |key, value| "#{key}:#{value}" }.join("|")
-			Network::Main.send_with_tag("party_heal", message)
-		end
-	end
-	
 	# 자기 힐
-	def heal(id, user = $game_party.actors[0])
-		return if HEAL_SKILL[id] == nil
-		heal_v = HEAL_SKILL[id][0].to_i 
+	def heal(id, my_heal = true, value = 1)
+		data = $rpg_skill_data[id]
+		return unless data.type.include?("heal")
 		
-		# 커스텀
-		case id
-		when 43 # 위태응기
-			heal_v = user.sp * 2.1
+		type = data.heal_type
+		heal_v = data.heal_value
+		heal_arr = data.heal_value_per # [타입, hp, sp]
+		
+		if my_heal
+			if heal_arr
+				case heal_arr[0]
+				when 0 # 현재
+					heal_v += @battler.hp * heal_arr[1] + @battler.sp * heal_arr[2]
+				when 1 # 전체
+					heal_v += @battler.maxhp * heal_arr[1] + @battler.maxsp * heal_arr[2]
+				end
+			end
 			
-			# 적 유닛 스킬
-		when 157 # n퍼 회복
-			heal_v = user.maxhp * 0.3
+			heal_v += ((@battler.maxhp + @battler.maxsp) * 0.005).to_i
+			if data.is_party
+				heal_v *= (1.0 + @battler.atk / 100.0) * (1 + (@battler.int / 1000.0) + (@battler.maxsp / 100000.0))
+			end
+			heal_v = heal_v.to_i
+			skill_cost_custom(id)
+		else
+			heal_v = value.to_i
 		end
 		
-		skill_cost_custom(user, id)
-		heal_v += (user.maxhp * 0.005).to_i
-		user.critical = "heal"
-		user.damage = heal_v.to_s
-		user.hp += heal_v
-		return heal_v
+		case type
+		when "hp"	
+			@battler.hp += heal_v
+			@battler.critical = "heal"
+		when "sp"
+			@battler.sp += heal_v
+			@battler.critical = "heal_sp"
+		when "com"
+			$game_temp.common_event_id = data.heal_value
+		end
+		@battler.damage = heal_v.to_s
+		
+		return unless my_heal
+		return unless data.is_party
+		
+		m_data = {
+			"id" => id,
+			"value" => heal_v
+		}
+		message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
+		Network::Main.send_with_tag("party_heal", message)
 	end
 	
 	# 이미 버프가 걸려있는지 확인
-	def check_buff(id, actor = $game_party.actors[0])
-		return (actor.buff_time[id] != nil and actor.buff_time[id] > 0)
+	def check_buff(id)
+		return (@battler.buff_time[id] != nil and @battler.buff_time[id] > 0)
 	end
 	
 	# 버프 사용
-	def buff_active(id, battler = $game_party.actors[0])
-		buff(id, battler) # 이게 버프 스킬인지 확인
+	def buff_active(id)
+		buff(id) # 이게 버프 스킬인지 확인
 		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
 		if ani_id != nil
 			$game_player.animation_id = ani_id
-			Network::Main.ani(Network::Main.id, ani_id)
 		end
 	end
 	
 	# 버프
-	def buff(id, battler = $game_party.actors[0], my_buff = true, is_close = false)
-		buff_data = BUFF_SKILL[id]
-		return unless buff_data
+	def buff(id, my_buff = true, is_close = false)
+		skill_data = $rpg_skill_data[id]
+		return unless (skill_data.type.include?("buff") || skill_data.type.include?("debuff"))
+		buff_time_set = skill_data.buff_time * Graphics.frame_rate
+		is_party = skill_data.is_party
+		buff_val = skill_data.buff_data
 		
-		buff_time_set = buff_data[0] * Graphics.frame_rate
-		is_party = buff_data[1]
-		buff_val = buff_data[2]
+		check_buff = check_buff(id) && !is_close
+		@battler.buff_time[id] = is_close ? 0 : buff_time_set # 버프 시간 초기화
 		
-		check_time = battler.buff_time[id]
-		battler.buff_time[id] = is_close ? 0 : buff_time_set
-		
-		if battler.is_a?(Game_Actor) && !is_close
+		if @battler.is_a?(Game_Actor) && !is_close
 			$ABS.skill_console(id)   # 스킬 딜레이 표시	
 			self.party_buff(id) if is_party && my_buff # 파티버프라면 파티로 버프 sw는 자신이 버프를 실행한 건지 
-			return true if check_time != nil && check_time > 0# 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
 		end
+		
+		return true if check_buff # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
 		return true if buff_val == nil
 		
-		character = battler.is_a?(ABS_Enemy) ? battler.event : $game_player		
 		for data in buff_val
 			type, val = data
 			case type.to_s
 			when "str", "dex", "int", "agi", "mdef", "pdef"
-				apply_stat_effect(data, battler, is_close)
+				apply_stat_effect(data, is_close)
 			when "per_str", "per_dex", "per_int", "per_agi", "per_mdef", "per_pdef"
-				apply_percentage_effect(data, battler, is_close)
+				apply_percentage_effect(data, is_close)
 			when "speed"
-				change_move_speed(val, character, is_close)
+				change_move_speed(val, is_close)
 			else
-				next if !battler.is_a?(Game_Actor)
+				next unless @battler.is_a?(Game_Actor)
 				apply_custom_effect(id, data, is_close)
 			end
 		end
@@ -409,37 +416,37 @@ class Rpg_skill
 	end
 	
 	# 버프 끄기
-	def buff_del(id, battler = $game_party.actors[0])
-		self.buff(id, battler, true, true)
+	def buff_del(id)
+		self.buff(id, true, true)
 	end
 	
-	def apply_stat_effect(data, battler = $game_party.actors[0], is_close = false)
+	def apply_stat_effect(data, is_close = false)
 		stat = data[0].to_sym
 		value = data[1].to_i
 		value *= -1 if is_close
-		battler.send("#{stat}=", battler.send(stat) + value)
+		@battler.send("#{stat}=", @battler.send(stat) + value)
 		
-		return if battler == $game_party.actors[0]
+		return if @battler == $game_party.actors[0]
 		return if eval("@base_#{stat}") == nil
-		instance_variable_set("@base_#{stat}", [instance_variable_get("@base_#{stat}") + value, 0].max) 		
+		instance_variable_set("@base_#{stat}", instance_variable_get("@base_#{stat}") + value) 		
 	end
 	
-	def apply_percentage_effect(data, battler = $game_party.actors[0], is_close = false)
+	def apply_percentage_effect(data, is_close = false)
 		stat = data[0].sub("per_", "").to_sym
-		base = battler.take_base_stat(stat)
+		base = @battler.take_base_stat(stat)
 		n = (base * (data[1].to_f - 1.0)).to_i
 		n *= -1 if is_close
-		battler.send("#{stat}=", battler.send(stat) + n)
+		@battler.send("#{stat}=", @battler.send(stat) + n)
 		
-		return if battler != $game_party.actors[0]
+		return if @battler != $game_party.actors[0]
 		return if eval("@base_#{stat}") == nil
-		instance_variable_set("@base_#{stat}", [instance_variable_get("@base_#{stat}") + n, 0].max)
+		instance_variable_set("@base_#{stat}", instance_variable_get("@base_#{stat}") + n)
 	end
 	
-	def change_move_speed(value, character = $game_player, is_close = false)
+	def change_move_speed(value, is_close = false)
 		value *= -1 if is_close
-		character.move_speed += value
-		Network::Main.socket.send("<5>@move_speed = #{character.move_speed};</5>\n") if character == $game_player
+		@character.move_speed += value
+		Network::Main.socket.send("<5>@move_speed = #{@character.move_speed};</5>\n") if @character == $game_player
 	end
 	
 	def apply_custom_effect(id, data, is_close = false)
@@ -454,8 +461,8 @@ class Rpg_skill
 				$game_party.lose_weapon(2, 999)
 				$game_party.lose_weapon(3, 999)
 				$game_party.lose_weapon(4, 999)
-				Audio.se_play("Audio/SE/장비", $game_variables[13])
 				
+				$game_system.se_play("장비")
 				$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
 				return
 			end
@@ -485,25 +492,26 @@ class Rpg_skill
 		end
 	end
 	
-	def casting_chat(data, user = $game_player)
+	def casting_chat(data)
+		return unless @character
 		sec = data[0]
 		msg = data[1]
 		type = data[2] || 3
 		
 		if msg != nil
-			$chat_b.input(msg, type, sec, user)
-			if user == $game_player
+			$chat_b.input(msg, type, sec, @character)
+			if @character == $game_player
 				Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
 			else
-				Network::Main.socket.send "<monster_chat>#{user.id}&#{msg}&#{type}</monster_chat>\n" 
+				Network::Main.socket.send "<monster_chat>#{@character.id}&#{msg}&#{type}</monster_chat>\n" 
 			end
 		end
 	end
 	
 	# 스킬에 따른 대화를 생성하고 채팅을 보내는 함수
-	def skill_chat(skill, user = $game_player)
+	def skill_chat(skill)
 		id = skill.id
-		name = $game_party.actors[0].name
+		name = @battler.name
 		msg = nil
 		type = 3
 		sec = 4
@@ -523,128 +531,139 @@ class Rpg_skill
 		end
 		
 		if msg
-			$chat_b.input(msg, type, sec, user)
-			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n" if user == $game_player
-			Network::Main.socket.send "<monster_chat>#{user.id}&#{msg}&#{type}</monster_chat>\n" if user != $game_player
+			$chat_b.input(msg, type, sec, @character)
+			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n" if @character == $game_player
+			Network::Main.socket.send "<monster_chat>#{@character.id}&#{msg}&#{type}</monster_chat>\n" if @character != $game_player
 		end
 	end
 	
-	def critical_rate(actor = $game_party.actors[0])
+	def calculate_critical(attribute)
 		rate = 0
 		power = 0
-		for data in actor.buff_time
-			id = data[0]
-			next if CRITICAL_BUFF_NORMAL[id] == nil
-			next if data[1] <= 0
+		@battler.buff_time.each do |id, time|
+			next if time <= 0
 			
-			buff_data = CRITICAL_BUFF_NORMAL[id]
-			next if buff_data == nil
+			skill_data = $rpg_skill_data[id]
+			buff_data = skill_data.send(attribute)
+			next unless buff_data
 			
-			rate += buff_data[0] if buff_data[0] != nil
-			power += buff_data[1] if buff_data[1] != nil
+			rate += buff_data[0] || 0
+			power += buff_data[1] || 0
 		end
-		
-		return [rate, power]
+		[rate, power]
 	end
 	
-	def critical_skill_rate(actor = $game_party.actors[0])
-		rate = 0
-		power = 0
-		for data in actor.buff_time
-			id = data[0]
-			next if CRITICAL_BUFF_SKILL[id] == nil
-			next if data[1] <= 0
-			
-			buff_data = CRITICAL_BUFF_SKILL[id]
-			next if buff_data == nil
-			
-			rate += buff_data[0] if buff_data[0] != nil
-			power += buff_data[1] if buff_data[1] != nil
-		end
-		
-		return [rate, power]
+	def critical_rate()
+		calculate_critical(:attack_critical)
 	end
+	
+	def critical_skill_rate()
+		calculate_critical(:skill_critical)
+	end
+	
 	
 	#[(파워 계산량)[타입(현재(0), 전체(1)), 체력, 마력, 기본값], (자원 소모량)[타입(현재(0), 전체(1)), 체력, 마력]]
-	def skill_power_custom(user, id, power)
-		return power if SKILL_POWER_CUSTOM[id] == nil
-		data = SKILL_POWER_CUSTOM[id][0]
+	def skill_power_custom(id, power)
+		case id
+		when 6 # 도토리 던지기
+			return 1
+		end
+		
+		skill_data = $rpg_skill_data[id]
+		return power unless skill_data.power_arr 
+		
+		data = skill_data.power_arr
 		
 		# 0 : 현재, 1 : 전체
-		type = data[0] != nil ? data[0] : -1
-		p_hp = data[1] != nil ? data[1].to_f : 0
-		p_sp = data[2] != nil ? data[2].to_f : 0
-		val = data[3] != nil ? data[3].to_f : 0
+		type = data[0] || -1
+		p_hp = data[1] ||  0
+		p_sp = data[2] || 0
+		val = data[3] || 0
+		return power if type == -1
 		
 		power = power.to_f
 		case type
 		when 0 # 현재 
-			power += (user.hp * p_hp) + (user.sp * p_sp)
+			power += (@battler.hp * p_hp) + (@battler.sp * p_sp)
 		when 1 # 전체
-			power += (user.maxhp * p_hp) + (user.maxsp * p_sp)
+			power += (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp)
 		end
 		power += val
 		return power.to_i
 	end
 	
-	def skill_cost_custom(user, id)
-		return if SKILL_COST_CUSTOM[id] == nil
-		data = SKILL_COST_CUSTOM[id][0]
-		type = data[0] != nil ? data[0] : -1
-		c_hp = data[1] != nil ? data[1] : 0
-		c_sp = data[2] != nil ? data[2] : 0
+	# 비례 데미지 스킬
+	def damage_by_skill(damage, id)
+		skill_data = $rpg_skill_data[id]
+		data = skill_data.power_arr
+		
+		return damage unless data
+		
+		# 2 : 비례데미지
+		type = data[0] || -1
+		p_hp = data[1] || 0
+		p_sp = data[2] || 0
+		val = data[3] || 0
+		return damage unless type == 2
+		
+		damage = damage.to_f
+		damage += (@battler.maxhp * p_hp) + val
+		@battler.sp -= @battler.maxsp * p_sp # 마력 깎기
+		return damage.to_i
+	end
+	
+	def skill_cost_custom(id)
+		skill_data = $rpg_skill_data[id]
+		return unless skill_data.cost_arr 
+		
+		data = skill_data.cost_arr 
+		type = data[0] || -1
+		c_hp = data[1] || 0
+		c_sp = data[2] || 0
+		return if type == -1
 		
 		case type
 		when 0 # 현재 
-			user.hp -= user.hp * c_hp
-			user.sp -= user.sp * c_sp
+			@battler.hp -= @battler.hp * c_hp
+			@battler.sp -= @battler.sp * c_sp
 		when 1 # 전체
-			user.hp -= user.maxhp * c_hp
-			user.sp -= user.maxsp * c_sp
+			@battler.hp -= @battler.maxhp * c_hp
+			@battler.sp -= @battler.maxsp * c_sp
 		end
-		user.hp = [user.hp.to_i, 1].max
-		user.sp = user.sp.to_i
+		@battler.hp = [@battler.hp.to_i, 1].max
+		@battler.sp = @battler.sp.to_i
 	end
 	
 	# 액티브 스킬 커스텀
-	def active_skill(id, character = $game_player, battler = $game_party.actors[0])
-		return if ACTIVE_SKILL[id] == nil
+	def active_skill(id, enemy)
+		skill_data = $rpg_skill_data[id]
+		return unless skill_data.is_active
 		
 		case id
 		when 15 # 공력증강
-			공력증강(character, battler)
+			공력증강
 		when 73 # 광량돌격
-			광량돌격(character)
+			광량돌격
 		when 132
-			비영승보(character)
+			비영승보(enemy)
 		when 162
-			추격(character, battler)
+			추격(enemy)
 		end		
 	end
 	
-	def 공력증강(character, battler)
+	def 공력증강
+		ch_id = @character == $game_player ? Network::Main.id : @character.id
 		r = rand(100)
 		if(r <= 40)			
-			character.ani_array.push(158)
-			if character == $game_player
-				$console.write_line("실패했습니다.")
-				Network::Main.ani(Network::Main.id, 158)
-			else
-				Network::Main.ani(character.id, 158, 1)
-			end
+			$console.write_line("실패했습니다.") if @character == $game_player
+			@character.ani_array.push(158)
 			return 
 		end
 		
-		battler.hp /= 2
-		battler.hp = 1 if battler.hp <= 0
-		battler.sp += battler.maxsp
-		character.ani_array.push(135)
-		
-		if character == $game_player
-			Network::Main.ani(Network::Main.id, 135)
-		else
-			Network::Main.ani(character.id, 135, 1)
-		end
+		@battler.hp /= 2
+		@battler.hp = 1 if @battler.hp <= 0
+		@battler.sp += @battler.maxsp
+		@character.ani_array.push(135)
 	end
 	
 	def 투명
@@ -668,159 +687,106 @@ class Rpg_skill
 		$game_party.actors[0].buff_time[142] = 1 if self.check_buff(142) # 투명 3성
 	end
 	
-	def 광량돌격(actor)
+	def 광량돌격
 		move_num = 10 # 스킬 범위만큼
-		x = actor.x
-		y = actor.y
-		d = actor.direction
+		x = @character.x
+		y = @character.y
+		d = @character.direction
 		for i in 0...move_num
-			break if !actor.passable?(x, y, d)			
+			break unless @character.passable?(x, y, d)			
 			x += (d == 6 ? 1 : d == 4 ? -1 : 0)
 			y += (d == 2 ? 1 : d == 8 ? -1 : 0)
 		end
-		actor.moveto(x, y)
+		@character.moveto(x, y)
 	end
 	
-	def 비영승보(actor = $game_player, enemy = nil)
-		return if actor == nil
-		x = actor.x
-		y = actor.y
-		d = actor.direction
+	def 비영승보(enemy = nil)
+		return if @character == nil
+		x = @character.x
+		y = @character.y
+		d = @character.direction
 		
-		if(enemy == nil)
-			enemy = 비영_passable2?(x, y, d)
-			return if enemy == nil	
-		end
+		enemy = 비영_passable2?(x, y, d) unless enemy
+		return unless enemy
+		
 		data = 비영_passable?(enemy, d) # [x, y, d]
 		if data != nil
-			actor.moveto(data[0], data[1]) 
-			actor.direction = data[2]
+			@character.moveto(data[0], data[1]) 
+			@character.direction = data[2]
 		end
-		$ABS.player_melee(true) if actor == $game_player
+		$ABS.player_melee(true) if @character == $game_player
 	end
 	
-	# 비영_passable 시작
-	def 비영_passable?(enemy, d) # 해당 위치로 이동할 수 있는가?
-		# Get new coordinates
-		x = enemy.x
-		y = enemy.y
-		check_point = []
-		
-		n_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-		n_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
-		
-		n_x2 = x + ((d == 2 or d == 8) ? -1 : 0)
-		n_y2 = y + ((d == 4 or d == 6) ? -1 : 0)
-		
-		n_x3 = x + ((d == 2 or d == 8) ? 1 : 0)
-		n_y3 = y + ((d == 4 or d == 6) ? 1 : 0)
-		
-		check_point.push([n_x, n_y])
-		check_point.push([n_x2, n_y2])
-		check_point.push([n_x3, n_y3])
-		
-		for check in check_point
-			new_x = check[0]
-			new_y = check[1]
+	def move_coordinates(x, y, direction)
+		case direction
+		when 2 then [x, y + 1]
+		when 4 then [x - 1, y]
+		when 6 then [x + 1, y]
+		when 8 then [x, y - 1]
+		else [x, y]
+		end
+	end
+	
+	def check_points(enemy, direction)
+		x, y = enemy.x, enemy.y
+		n_x, n_y = move_coordinates(x, y, direction)
+		n_x2, n_y2 = move_coordinates(x, y, (direction == 2 || direction == 8) ? 4 : 2)
+		n_x3, n_y3 = move_coordinates(x, y, (direction == 2 || direction == 8) ? 6 : 8)
+		[[n_x, n_y], [n_x2, n_y2], [n_x3, n_y3]]
+	end
+	
+	def object_check(objects, new_x, new_y)
+		objects.each do |obj|
+			next if obj.through 
+			next if obj.character_name.empty?
+			next if obj == @character
 			
-			sx = new_x - x
-			sy = new_y - y
+			return obj if obj.x == new_x && obj.y == new_y
+		end
+		nil
+	end
+	
+	def map_object_check(new_x, new_y)
+		objects = $game_map.events.values + Network::Main.mapplayers.values + [$game_player]
+		object_check(objects, new_x, new_y)
+	end
+	
+	def 비영_passable?(enemy, direction)
+		check_points = check_points(enemy, direction)
+		
+		check_points.each do |new_x, new_y|
+			next unless $game_map.valid?(new_x, new_y) && $game_map.passable?(new_x, new_y, 10 - direction)
 			
-			if sx.abs > 0
-				d = sx > 0 ? 4 : 6
+			next if map_object_check(new_x, new_y)
+			
+			sx = new_x - enemy.x
+			sy = new_y - enemy.y
+			
+			new_direction = if sx.abs > 0
+				sx > 0 ? 4 : 6
 			elsif sy.abs > 0
-				d = sy > 0 ? 8 : 2
+				sy > 0 ? 8 : 2
+			else
+				direction
 			end
 			
-			data = [new_x, new_y, d]
-			
-			# If coordinates are outside of map; impassable
-			next unless $game_map.valid?(new_x, new_y)
-			next unless $game_map.passable?(new_x, new_y, 10 - d)
-			# If through is ON; passable
-			return data if @through
-			
-			object = []
-			# Loop all events
-			for event in $game_map.events.values
-				# If event coordinates are consistent with move destination
-				if event.x == new_x and event.y == new_y
-					unless event.through
-						# With self as the player and partner graphic as character; impassable
-						object.push(event) if event.character_name != ""
-					end
-				end
-			end
-			
-			# Loop all players
-			for player in Network::Main.mapplayers.values
-				# If player coordinates are consistent with move destination
-				next if player == nil
-				if player.x == new_x and player.y == new_y
-					# If through is OFF
-					unless player.through
-						# If self is player; impassable
-						object.push(player) if self != $game_player or player.character_name != ""
-					end
-				end
-			end
-			
-			# If player coordinates are consistent with move destination
-			if $game_player.x == new_x and $game_player.y == new_y
-				# If through is OFF
-				unless $game_player.through
-					# If your own graphic is the character; impassable
-					object.push($game_player) if @character_name != ""
-				end
-			end
-			next if object.size > 0
-			
-			# passable
-			return data
+			return [new_x, new_y, new_direction]
 		end
-		return
+		nil
 	end
-	# end
 	
-	# 비영_passable2 시작
-	def 비영_passable2?(x, y, d) # 좌표에 이벤트가 있는가?
-		# Get new coordinates
-		new_x = x + (d == 6 ? 1 : d == 4 ? -1 : 0)
-		new_y = y + (d == 2 ? 1 : d == 8 ? -1 : 0)
-		
-		# Loop all events
-		for event in $game_map.events.values
-			# If event coordinates are consistent with move destination
-			if (event.x == new_x and event.y == new_y) or (event.x == x and event.y == y)
-				# If through is OFF
-				next if event.through or event.character_name == ""
-				return event
-			end
-		end
-		
-		# Loop all players
-		for player in Network::Main.mapplayers.values
-			# If player coordinates are consistent with move destination
-			next if player == nil
-			if player.x == new_x and player.y == new_y
-				# If through is OFF
-				next if player.through
-				return player
-			end
-		end
-		
-		return
+	def 비영_passable2?(x, y, direction)
+		new_x, new_y = move_coordinates(x, y, direction)
+		map_object_check(new_x, new_y) || map_object_check(x, y)
 	end
-	# 비영_passable2 end
 	
-	def 추격(actor, battler)
-		return if actor == nil
-		if battler.is_a?(Game_Actor)
-			
-		elsif battler.is_a?(ABS_Enemy)
-			return if !battler.aggro
-			actor.moveto($game_player.x, $game_player.y)
+	def 추격(enemy)
+		return if @character == nil
+		if @battler.is_a?(ABS_Enemy)
+			return unless @battler.aggro
 		end
+		
+		@character.moveto(enemy.x, enemy.y)
 	end
 	
 	# 이미 가지고 있던 스킬인가?
@@ -948,113 +914,63 @@ class Rpg_skill
 	end
 	
 	# 평타 공격시 버프, 디버프에 대한 데미지 계산
-	def damage_calculation_attack(damage, actor, attacker)
+	def damage_calculation_attack(damage)
 		# 가해자 입장
-		for data in attacker.buff_time
-			id = data[0]
-			next if DAMAGE_CAL_ATTACK[id] == nil
-			next if !self.check_buff(id, attacker)
-			damage *= DAMAGE_CAL_ATTACK[id][0] 
-		end
-		
-		if attacker.is_a?(Game_Actor) # 플레이어
-			if $state_trans # 투명
-				id = nil
-				id = 131 if self.check_buff(131) # 투명 1성
-				id = 141 if self.check_buff(141) # 투명 2성
-				id = 142 if self.check_buff(142) # 투명 3성
-				
-				damage = skill_power_custom(attacker, id, damage) if id != nil
-				skill_cost_custom(attacker, id) if id != nil
-			end
+		@battler.buff_time.each do |id, time|
+			data = $rpg_skill_data[id]
+			next if time <= 0
+			next unless data.attack_power_per
 			
-		elsif attacker.is_a?(ABS_Enemy) # 몬스터
-			
+			damage *= data.attack_power_per
+			damage = skill_power_custom(id, damage)
+			skill_cost_custom(id)
 		end
 		
-		# 피해자 입장
-		for data in actor.buff_time
-			id = data[0]
-			next if DAMAGE_CAL_DEFENSE[id] == nil
-			next if !self.check_buff(id, actor)
-			damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
-		end
-		
-		# 플레이어
-		if actor.is_a?(Game_Actor) 
-			# 몬스터
-		elsif actor.is_a?(ABS_Enemy)
-			damage = 1 if actor.id == 41 # 청자다람쥐
-		end
 		return damage.to_i
 	end
 	
 	# 스킬 공격시 버프, 디버프에 대한 데미지 계산
-	def damage_calculation_skill(damage, actor, attacker)
+	def damage_calculation_skill(damage)
 		# 가해자 입장
-		for data in attacker.buff_time
-			id = data[0]
-			next if DAMAGE_CAL_SKILL[id] == nil
-			next if !self.check_buff(id, attacker)
-			damage *= DAMAGE_CAL_SKILL[id][0] 
-		end
-		
-		if attacker.is_a?(Game_Actor)
+		@battler.buff_time.each do |id, time|
+			data = $rpg_skill_data[id]
+			next unless data.skill_power_per
+			next if time <= 0
 			
-		elsif attacker.is_a?(ABS_Enemy)
-			
+			damage *= data.skill_power_per
 		end
-		
-		# 피해자 입장
-		for data in actor.buff_time
-			id = data[0]
-			next if DAMAGE_CAL_DEFENSE[id] == nil
-			next if !self.check_buff(id, actor)
-			damage -= damage * DAMAGE_CAL_DEFENSE[id][0] 
-		end
-		
-		if actor.is_a?(Game_Actor)
-			
-		elsif actor.is_a?(ABS_Enemy)
-			damage = 1 if actor.id == 41 # 청자다람쥐
-		end
-		return damage.to_i
+		return damage
 	end
 	
-	# 비례 데미지 스킬
-	def damage_by_skill(damage, id, victim = nil)
-		case id
-		when 6 # 도토리 던지기
-			return 1
+	def damage_calculation_defense(damage)
+		# 피해자 입장
+		@battler.buff_time.each do |id, time|
+			data = $rpg_skill_data[id]
+			next if time <= 0
+			next unless data.defense_per
+			
+			damage -= damage * data.defense_per
 		end
 		
-		return damage if SKILL_POWER_CUSTOM[id] == nil
-		return damage if victim == nil
-		data = SKILL_POWER_CUSTOM[id][0]
-		return damage if data[0] != 2
-		
-		# 2 : 비례데미지
-		type = data[0] != nil ? data[0] : -1
-		p_hp = data[1] != nil ? data[1].to_f : 0
-		p_sp = data[2] != nil ? data[2].to_f : 0
-		val = data[3] != nil ? data[3].to_f : 0
-		
-		damage = damage.to_f
-		damage += (victim.maxhp * p_hp) + val
-		victim.sp -= victim.maxsp * p_sp # 마력 깎기
-		return damage.to_i
+		if @battler.is_a?(Game_Actor)
+			
+		elsif @battler.is_a?(ABS_Enemy)
+			damage = 1 if @battler.id == 41 # 청자다람쥐
+		end
+		return damage
 	end
+	
+	
 	
 	# 스킬을 사용하기 위한 재료가 준비 됐는지 확인
 	def check_need_skill_item(id)
-		return true if NEED_SKILL_ACTIVE_ITEM[id] == nil
-		for data in NEED_SKILL_ACTIVE_ITEM[id]
-			type = data[0]
-			item_id = data[1]
-			num = data[2]
-			
+		skill_data = $rpg_skill_data[id]
+		return true unless skill_data.need_item
+		
+		skill_data.need_item.each do |type, item_id, num|
 			my_num = 0
 			item_name = ""
+			
 			case type
 			when 0 # 아이템
 				my_num = $game_party.item_number(item_id)
@@ -1074,11 +990,7 @@ class Rpg_skill
 		end
 		
 		# 재료 아이템 소모
-		for data in NEED_SKILL_ACTIVE_ITEM[id]
-			type = data[0]
-			item_id = data[1]
-			num = data[2]
-			
+		skill_data.need_item.each do |type, item_id, num|
 			case type
 			when 0 # 아이템
 				$game_party.lose_item(item_id, num)

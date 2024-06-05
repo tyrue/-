@@ -277,7 +277,7 @@ class Jindow_Status < Jindow
 			next unless @armor_i[i].double_click
 			
 			$game_party.actors[0].equip(arr[i], 0)
-			Audio.se_play("Audio/SE/장", $game_variables[13])
+			$game_system.se_play("장")
 		end
 	end
 	

@@ -125,9 +125,23 @@ class Game_System
 	# * Play Sound Effect
 	#     se : sound effect to be played
 	#--------------------------------------------------------------------------
-	def se_play(se, volume = $game_variables[13])
-		if se != nil and se.name != ""
-			Audio.se_play("Audio/SE/" + se.name, volume, se.pitch)
+	def se_play(se, volume = $game_variables[13], is_net = true)
+		file_name = ""
+		pitch = 100
+		return unless se
+		
+		if se.is_a?(String)
+			file_name = se.to_s 
+		else
+			return if se.name == ""
+			
+			file_name = se.name 
+			pitch = se.pitch
+		end
+		
+		Audio.se_play("Audio/SE/" + file_name, volume, pitch)
+		if Network::Main.socket != nil
+			Network::Main.send_with_tag("se_play", "#{file_name}") if is_net
 		end
 	end
 	#--------------------------------------------------------------------------

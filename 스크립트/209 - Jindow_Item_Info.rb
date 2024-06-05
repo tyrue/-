@@ -233,8 +233,7 @@ class Jindow_Item_Info < Jindow
 		
 		$console.write_line("#{@item_data.name}를 버렸습니다.")
 		create_drops(@type, @item_id, x, y, 1)
-		Audio.se_play("Audio/SE/줍기", $game_variables[13])
-		Network::Main.ani(Network::Main.id, 198)
+		$game_system.se_play("줍기")
 	end
 	
 	def update

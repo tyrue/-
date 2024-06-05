@@ -89,8 +89,7 @@ class Jindow_Drop < Jindow
 				num = $game_party.send("#{method.to_s}_number", @item_id)
 			end
 			
-			Audio.se_play("Audio/SE/줍기", $game_variables[13])
-			Network::Main.ani(Network::Main.id, 198)
+			$game_system.se_play("줍기")
 			Hwnd.dispose(self) if num <= 0
 		end
 	end

@@ -230,8 +230,7 @@ class Jindow_Inventory < Jindow
 		when 0 # 아이템
 			return if !$game_party.actors[0].item_effect(i.item)
 			
-			$game_player.animation_id = i.item.animation1_id
-			Network::Main.ani(Network::Main.id, i.item.animation1_id) 
+			$game_player.animation_id = i.item.animation1_id 
 			$game_party.lose_item(i.item.id, 1) if i.item.consumable
 			$game_system.se_play(i.item.menu_se)
 			$game_temp.common_event_id = i.item.common_event_id if i.item.common_event_id > 0
@@ -245,7 +244,7 @@ class Jindow_Inventory < Jindow
 			if $game_party.actors[0].equippable?(i.item)
 				kind = i.type == 1 ? 0 : i.item.kind + 1
 				$game_party.actors[0].equip(kind, i.item.id)
-				Audio.se_play("Audio/SE/장비", $game_variables[13])
+				$game_system.se_play("장비")
 			end
 		end
 	end

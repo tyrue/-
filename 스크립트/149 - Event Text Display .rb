@@ -13,11 +13,11 @@ if SDK.state('Event Text Display') == true
 		#--------------------------------------------------------------------------
 		# * Dispaly Text Color (Event & Player)
 		#--------------------------------------------------------------------------
-		Event_Color = Color.new(200, 255, 200)
+		Event_Color = Color.new(180, 255, 180)
 		Enemy_Color = Color.new(255, 87, 87)
-		Item_Color = Color.new(126, 167, 247)
+		Item_Color = Color.new(180, 180, 255)
 		Player_Color = Color.new(255, 255, 255)
-		NetPlayer_Color = Color.new(255, 241, 209)
+		NetPlayer_Color = Color.new(250, 219, 150)
 		#--------------------------------------------------------------------------
 		# * Display Choices
 		# ~ 'Name', 'Class', 'Level', 'Hp', 'Sp'
@@ -123,7 +123,8 @@ if SDK.state('Event Text Display') == true
 			unless @character.text_display.nil?
 				create_display_sprite(@character.text_display) if @_text_display.nil?
 				@_text_display.x = self.x
-				@_text_display.y = self.y - self.oy / 2 - 20
+				@_text_display.y = self.y - self.oy
+				@_text_display.y = self.y - self.oy + 10 if @character.is_a?(Game_Player)
 			else
 				dispose_display_text unless @_text_display.nil?
 			end
@@ -146,7 +147,7 @@ if SDK.state('Event Text Display') == true
 			bitmap.font.name = "맑은 고딕"
 			bitmap.font.size = 15
 			bitmap.font.color = args[1]
-			bitmap.draw_frame_text(0, 0, 160, 20, args[0], 1)
+			bitmap.draw_frame_text(0, 0, 160, 15, args[0], 1)
 			
 			# Creates Display Text Sprite
 			@_text_display = Sprite.new(self.viewport)
@@ -154,7 +155,7 @@ if SDK.state('Event Text Display') == true
 			@_text_display.ox = 80
 			@_text_display.oy = 20
 			@_text_display.x = self.x
-			@_text_display.y = self.y - self.oy / 2 - 20
+			@_text_display.y = self.y - self.oy
 			@_text_display.z = 1000
 			@_text_display.visible = self.visible #true
 		end
@@ -162,16 +163,20 @@ if SDK.state('Event Text Display') == true
 		# * Dispose Display Sprite
 		#--------------------------------------------------------------------------
 		def dispose_display_text
-			@_text_display.dispose unless @_text_display.nil?
+			unless @_text_display.nil?
+				@_text_display.dispose
+				@_text_display = nil
+			end
 		end
 	end
 	
-	class Sprite_NetCharacter < Sprite_Character #RPG::Sprite 
+	class Sprite_NetCharacter < Sprite_Character 
 		#--------------------------------------------------------------------------
 		# * Disposes Text
 		#--------------------------------------------------------------------------
 		def dispose
 			@_text_display.dispose
+			@_text_display = nil
 			super
 		end
 		
@@ -180,7 +185,7 @@ if SDK.state('Event Text Display') == true
 		#--------------------------------------------------------------------------
 		def create_display_sprite(args)
 			bitmap = Bitmap.new(160, 100)
-			draw_text(bitmap)
+			draw_text(bitmap, args)
 			
 			@_text_display = Sprite.new(self.viewport)
 			@_text_display.bitmap = bitmap
@@ -193,20 +198,21 @@ if SDK.state('Event Text Display') == true
 		#--------------------------------------------------------------------------
 		# * Draws Text on Bitmap
 		#--------------------------------------------------------------------------
-		def draw_text(bitmap)
+		def draw_text(bitmap, args)
+			font_size = 15
 			bitmap.font.name = "맑은 고딕"
-			bitmap.font.size = 13
+			bitmap.font.size = font_size
 			bitmap.font.color = Color.new(0, 0, 0)
-			bitmap.draw_text(1, 1, 160, 24, "Lv: #{@level}", 1)
+			bitmap.draw_text(1, 1, bitmap.width, font_size, "Lv: #{@level}", 1)
 			
 			bitmap.font.color = Color.new(255, 255, 255)
-			bitmap.draw_text(0, 0, 160, 24, "Lv: #{@level}", 1)
+			bitmap.draw_text(0, 0, bitmap.width, font_size, "Lv: #{@level}", 1)
 			
 			bitmap.font.color = Color.new(-204, 0, 204)
-			bitmap.draw_text(0, 0, 160, 150, @character.guild.to_s, 1)
+			bitmap.draw_text(0, 0, bitmap.width, font_size, @character.guild.to_s, 1)
 			
-			bitmap.font.color = Color.new(255, 255, 255)
-			bitmap.draw_frame_text(0, 0, 160, 47, @name.to_s, 1)
+			bitmap.font.color = args[1]
+			bitmap.draw_frame_text(0, font_size, bitmap.width, font_size, @name.to_s, 1)
 		end
 		
 		#--------------------------------------------------------------------------

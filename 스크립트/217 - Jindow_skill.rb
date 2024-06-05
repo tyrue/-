@@ -12,8 +12,6 @@ class Jindow_Skill < Jindow
 		@drag = true
 		@close = true
 		
-		$rpg_skill.refresh
-		
 		@actor = $game_party.actors[0]
 		@data = []
 		
@@ -128,11 +126,7 @@ class Jindow_Skill < Jindow
 			
 			skill = @data[(@now_page - 1) * @page_n + i]
 			if @page[i].click 
-				if RANGE_EXPLODE.has_key?(skill.id) 
-					$ABS.player_explode(skill.id)
-				else
-					$ABS.player_skill(skill.id)
-				end
+				$ABS.player_skill(skill.id)
 				
 			elsif @page[i].r_click
 				Hwnd.dispose("Skill_Info")

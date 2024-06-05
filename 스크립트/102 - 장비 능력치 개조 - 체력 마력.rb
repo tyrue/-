@@ -232,9 +232,10 @@ class Game_Actor
 	end
 	
 	def take_base_stat(stat)
+		rpg = $game_party.actors[0].rpg_skill
 		n = send(stat)
 		n -= take_equipment_stat(stat)
-		n -= $rpg_skill.send("base_#{stat}") if $rpg_skill.respond_to?("base_#{stat}")
+		n -= rpg.send("base_#{stat}") if rpg.respond_to?("base_#{stat}")
 		return n
 	end
 	

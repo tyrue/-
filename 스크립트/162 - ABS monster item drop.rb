@@ -12,9 +12,9 @@ class MrMo_ABS
 		drop = $Drop[item_index]
 		return if drop == nil
 		
-		$rpg_skill.투명해제
-		Audio.se_play("Audio/SE/줍기", $game_variables[13])
-		Network::Main.ani(Network::Main.id, 198)
+		$game_party.actors[0].rpg_skill.투명해제
+		$game_system.se_play("줍기")
+		$game_player.ani_array << 198
 		
 		id = drop.id
 		type = drop.type

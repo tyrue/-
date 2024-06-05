@@ -17,7 +17,8 @@ class Chat_balloon_net
 	def input(text = "테스트", type = 1, sec = 4, ch = $game_player)
 		return if text.nil? || text.empty?
 		
-		name_prefix = ch == $game_player ? "#{$game_party.actors[0].name} : " : ""
+		name_prefix = ""
+		name_prefix = "#{$game_party.actors[0].name} : " if ch == $game_player && type != 3
 		content = "#{name_prefix}#{text}"
 		
 		bitmap = create_bitmap(content, type)

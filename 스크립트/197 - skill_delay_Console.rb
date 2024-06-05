@@ -1,20 +1,6 @@
-#==============================================================================
-# ■ Console
-#------------------------------------------------------------------------------
-# 　콘솔 표시용의 스프라이트입니다.
-#==============================================================================
-
 class Skill_Delay_Console < Sprite
-	#--------------------------------------------------------------------------
-	# ● 오브젝트 초기화
-	#     x        : 묘화처 X 좌표
-	#     y        : 묘화처 Y 좌표
-	#     width    : 묘화처의 폭
-	#     height   : 묘화처의 높이
-	#     max_line : 최대 줄 수
-	#--------------------------------------------------------------------------
-	attr_accessor :console_log
-	attr_accessor :console_log2
+	attr_accessor :skill_mash_log
+	attr_accessor :buff_time_log
 	attr_accessor :tog
 	
 	def initialize(x, y, width, height, max_line = 8)
@@ -28,189 +14,155 @@ class Skill_Delay_Console < Sprite
 		@console_height = height
 		@console_max_line = max_line
 		
-		@console_log = {}  # 딜레이 기간
-		@console_log2 = {} # 버프 기간
+		@skill_mash_log = {}
+		@buff_time_log = {}
+		
+		@mash_color = Color.new(255, 204, 0)
+		@buff_color = Color.new(0, 255, 0)
+		
+		@log_arr = [
+			[@buff_time_log, @buff_color],
+			[@skill_mash_log, @mash_color],
+		]
 		
 		@font_size = 13
 		@old_height = 0
-		@tog = true # 토글 상태
+		@tog = true
 		
-		# 스킬 딜레이 갱신 id, 배열값
-		for skill_mash in SKILL_MASH_TIME
-			if skill_mash[1][1] > 0
-				sprite = Sprite_Chat.new(@console_viewport)			
-				@console_log[skill_mash[0]] = [sprite]
-			end
-		end
-		
-		# 버프 지속시간 갱신
-		for buff_time in $game_party.actors[0].buff_time
-			id = buff_time[0]
-			time = buff_time[1]
-			if time > 0
-				sprite = Sprite_Chat.new(@console_viewport)
-				@console_log2[id] = [sprite]
-			end
-		end
+		@actor = $game_party.actors[0]
+		initialize_skill_mash
+		initialize_buff_time
 		
 		@back_sprite = Sprite.new(@console_viewport)
 		@back_sprite.visible = true
 		self.refresh
 	end
 	
-	#--------------------------------------------------------------------------
-	# ● 리프레쉬
-	#--------------------------------------------------------------------------
+	def initialize_skill_mash
+		@actor.skill_mash.each do |skill_mash|
+			id, time = skill_mash
+			next if time <= 0
+			
+			sprite = Sprite_Chat.new(@console_viewport)
+			@skill_mash_log[id] = sprite
+		end
+	end
+	
+	def initialize_buff_time
+		@actor.buff_time.each do |buff_time|
+			id, time = buff_time
+			next if time <= 0
+			
+			sprite = Sprite_Chat.new(@console_viewport)
+			@buff_time_log[id] = sprite
+		end
+	end
+	
 	def refresh
-		# 스킬 딜레이 갱신 id, 배열값
-		for skill_mash in SKILL_MASH_TIME
-			id = skill_mash[0]
-			if skill_mash[1][1] > 0 and @console_log[id] == nil
-				sprite = Sprite_Chat.new(@console_viewport)			
-				@console_log[id] = [sprite]
-			elsif skill_mash[1][1] <= 0 and @console_log[id] != nil
-				@console_log[id][0].dispose if !@console_log[id][0].disposed?
-				@console_log.delete(id)
-			end
-		end
+		update_log(@skill_mash_log, @actor.skill_mash)
+		update_log(@buff_time_log, @actor.buff_time)
 		
-		# 버프 지속시간 갱신
-		for buff_time in $game_party.actors[0].buff_time
-			id = buff_time[0]
-			time = buff_time[1]
-			if time > 0 and @console_log2[id] == nil
-				sprite = Sprite_Chat.new(@console_viewport)
-				@console_log2[id] = [sprite]
-			elsif time <= 0 and @console_log2[id] != nil
-				@console_log2[id][0].dispose if !@console_log2[id][0].disposed?
-				@console_log2.delete(id)
-			end
-		end
-		
-		if @console_log.size <= 0 and @console_log2.size <= 0
+		if is_log_empty
 			@back_sprite.visible = false
-			return 
+			return
 		end
-		
 		@back_sprite.visible = true
 		
-		i = 0
-		for log in @console_log2
-			id = log[0]
-			sprite = log[1][0]
-			buff_time = $game_party.actors[0].buff_time[id]
-			next if buff_time == nil
-			
-			sprite = Sprite.new(@console_viewport) if sprite == nil
-			sprite.bitmap.clear if sprite.bitmap != nil
-			sprite.bitmap = Bitmap.new(width, 32)
-			sprite.bitmap.font.size = @font_size
-			sprite.bitmap.font.color.set(0, 255, 0, 255)
-			sprite.x = 0
-			sprite.y = (i) * @font_size + 1
-			sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (buff_time / 60.0)}초")
-			sprite.opacity = 255
-			i += 1
-			
+		update_sprite_logs(@buff_time_log, @actor.buff_time, @buff_color, 0)
+		update_sprite_logs(@skill_mash_log, @actor.skill_mash, @mash_color, @buff_time_log.size + 1)
+		
+		update_back_sprite_height
+	end
+	
+	def is_log_empty
+		@log_arr.each do |log, color|
+			next unless log
+			return false unless log.empty?
 		end
 		
-		for log in @console_log
-			id = log[0]
-			sprite = log[1][0]
-			next if SKILL_MASH_TIME[id] == nil
+		return true
+	end
+	
+	def update_log(log, source)
+		source.each do |id, time|
+			if time > 0 && log[id].nil?
+				sprite = Sprite_Chat.new(@console_viewport)
+				log[id] = sprite
+			elsif time <= 0 && log[id]
+				log[id].dispose unless log[id].disposed?
+				log.delete(id)
+			end
+		end
+	end
+	
+	def update_sprite_logs(log, source, color, i)
+		log.each do |id, sprite|
+			time = source[id]
+			next unless time
 			
-			sprite = Sprite.new(@console_viewport) if sprite == nil
-			sprite.bitmap.clear if sprite.bitmap != nil
-			sprite.bitmap = Bitmap.new(width, 32)
+			sprite = Sprite.new(@console_viewport) if sprite.nil?
+			sprite.bitmap.clear if sprite.bitmap
+			sprite.bitmap = Bitmap.new(@console_width, @font_size + 2)
 			sprite.bitmap.font.size = @font_size
-			sprite.bitmap.font.color.set(255, 204, 0, 255)
-			sprite.x = 0
-			sprite.y = (i) * @font_size + 1
-			sprite.bitmap.draw_text(0, 0, @console_width, 32, "#{$data_skills[id].name} : #{'%.1f' % (SKILL_MASH_TIME[id][1] / 60.0)}초") 	
+			sprite.bitmap.font.color = color
+			sprite.bitmap.draw_text(0, 0, @console_width, @font_size + 2, "#{$data_skills[id].name} : #{'%.1f' % (time / 60.0)}초")
 			sprite.opacity = 255
-			i += 1
 		end
 		
-		@old_height = (@console_log.size + @console_log2.size) * (@font_size + 1) + 14
+		set_sprite_position(log, i)
+	end
+	
+	def set_sprite_position(log, i)
+		log.each do |id, sprite|
+			sprite.x = 0
+			sprite.y = @font_size * i + 5
+			i += 1
+		end
+	end
+	
+	def update_back_sprite_height
+		size = 1
+		@log_arr.each do |log, color|
+			size += log.size if log
+		end
+		
+		@old_height = size * (@font_size + 3)
 		if @old_height != @console_viewport.height
 			@console_viewport.height = @old_height
-			@back_sprite.bitmap.clear if @back_sprite.bitmap != nil
+			@back_sprite.bitmap.clear if @back_sprite.bitmap
 			@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
-			@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100)) # 꽉찬 네모
+			@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100))
 			@back_sprite.visible = true
 		end
 	end
 	
-	#--------------------------------------------------------------------------
-	# ● 텍스트 출력
-	#     text : 출력하는 문자열
-	#--------------------------------------------------------------------------
-	def write_line(id)
-		@console_log[id][0].dispose if @console_log[id] != nil and !@console_log[id][0].disposed?
-		@console_log2[id][0].dispose if @console_log2[id] != nil and !@console_log2[id][0].disposed?
-		
-		buff_time = $game_party.actors[0].buff_time[id]
-		if buff_time != nil and buff_time > 0		
-			sprite = Sprite.new(@console_viewport)
-			@console_log2[id] = [sprite]			
-		end
-		
-		if SKILL_MASH_TIME[id] != nil
-			if SKILL_MASH_TIME[id][1] > 0
-				sprite = Sprite.new(@console_viewport)
-				@console_log[id] = [sprite]
-			end
-		end
-	end
-	#--------------------------------------------------------------------------
-	# ● 보인다
-	#--------------------------------------------------------------------------
 	def show
 		self.opacity = 255
 	end
 	
 	def toggle
-		if @back_sprite.visible 
-			@back_sprite.visible = false
-			@tog = false
-			for sprite in @console_log
-				sprite[1][0].visible = false
-			end
-			for sprite in @console_log2
-				sprite[1][0].visible = false
-			end
-		elsif
-			@back_sprite.visible = true
-			@tog = true
-			for sprite in @console_log
-				sprite[1][0].visible = true
-			end
-			for sprite in @console_log2
-				sprite[1][0].visible = true
-			end
+		@back_sprite.visible = !@back_sprite.visible
+		@tog = !@tog
+		
+		@log_arr.each do |log, color|
+			log.each {|id, sprite| sprite.visible = @back_sprite.visible }   
 		end
 	end
 	
-	#--------------------------------------------------------------------------
-	# ● 숨긴다
-	#--------------------------------------------------------------------------
 	def hide
 		self.opacity = 0
 	end
-	#--------------------------------------------------------------------------
-	# ● 클리어
-	#--------------------------------------------------------------------------
+	
 	def clear
-		# 윈도우 내용을 클리어
 		self.bitmap.clear
 	end
-	#--------------------------------------------------------------------------
-	# ● 해방
-	#--------------------------------------------------------------------------
+	
 	def dispose
-		if self.bitmap != nil
-			self.bitmap.dispose
+		@log_arr.each do |log, color|
+			log.each {|id, sprite| sprite.dispose unless sprite.disposed?}   
 		end
+		
+		self.bitmap.dispose if self.bitmap
 		super
 	end
 end

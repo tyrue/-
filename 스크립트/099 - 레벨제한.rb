@@ -208,7 +208,6 @@ class Game_Actor < Game_Battler
 			actor.hp = actor.maxhp
 			actor.sp = actor.maxsp
 			$game_player.animation_id = 180
-			Network::Main.ani(Network::Main.id, 180)
 			
 			# 숙련（skill） 습득
 			for j in $data_classes[@class_id].learnings

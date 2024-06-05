@@ -172,16 +172,15 @@ class Item_data
 	end
 	
 	def weapon_se(id)
-		default_root = "Audio/SE/무기/"
+		default_root = "무기/"
 		file_name = WEAPON_SE_DATA[id] != nil ? WEAPON_SE_DATA[id][0] : "기본"
 		file_name = default_root + file_name
 		
 		begin
-			Audio.se_play(file_name.to_s, $game_variables[13])
+			$game_system.se_play(file_name.to_s)
 		rescue
 			file_name = default_root + "기본"
-			Audio.se_play(file_name, $game_variables[13])
+			$game_system.se_play(file_name.to_s)
 		end
-		Network::Main.socket.send("<se_play>#{file_name.to_s}</se_play>\n")	# range 스킬 사용했다고 네트워크 알리기
 	end
 end

@@ -627,14 +627,21 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#--------------------------------------------------------------------------
 			# * Send animation
 			#-------------------------------------------------------------------------- 
-			def self.ani(id, number, type = 0, count = 1)
+			def self.ani(character, ani_array)
 				return if @mapplayers.size == 0
-				case type
-				when 0
-					@socket.send("<27>@ani_id = #{id}; @ani_number = #{number}; count = #{count}</27>\n") # 유저 이펙트
-				when 1
-					@socket.send("<27>@ani_event = #{id}; @ani_number = #{number}; count = #{count}</27>\n") # 이벤트 이펙트
-				end
+				id = nil
+				display_monster_damage if $ABS.enemies[character.id]
+				display_player_damage if character.is_a?(Game_Player)
+				return unless id
+				
+				m_data = {
+					"id" => id,
+					"ani_id" => ani_id,
+					"type" => type,
+					"count" => count
+				}
+				message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
+				self.send_with_tag("27", message)
 			end
 			
 			#------------------
@@ -979,52 +986,34 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					id = data[0].to_i
-					dmg = data[1]
-					cri = data[2].to_s
+					dmg = data[1].to_s.split('|')
+					cri = data[2].to_s.split('|')
+					
 					return true if !$scene.is_a?(Scene_Map)
 					return true if $ABS.enemies[id] == nil
 					return true if $scene.spriteset == nil
+					
 					$ABS.enemies[id].send_damage = false
-					
-					dmg_arr = dmg.split('|')
-					for d in dmg_arr
+					dmg.each_with_index do |d, i|
 						$ABS.enemies[id].damage_array.push(d.to_i)
+						$ABS.enemies[id].critical_array.push(cri[i])
 					end
-					
-					if cri == "true"
-						$ABS.enemies[id].critical = true
-					elsif cri == "false"
-						$ABS.enemies[id].critical = false
-					else
-						$ABS.enemies[id].critical = cri
-					end
-					return true
 					
 					# 플레이어 데미지 표시(맵 id, 네트워크 id, 데미지, 크리티컬)
 				when /<player_damage>(.*)<\/player_damage>/
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
 					id = data[0]
-					dmg = data[1]
-					cri = data[2].to_s
+					dmg = data[1].to_s.split('|')
+					cri = data[2].to_s.split('|')
 					
 					return true if !$scene.is_a?(Scene_Map)
 					return true if @mapplayers[id] == nil
 					
-					dmg_arr = dmg.split('|')
-					for d in dmg_arr
+					dmg.each_with_index do |d, i|
 						@mapplayers[id].damage_array.push(d.to_i)
+						@mapplayers[id].critical_array.push(cri[i])
 					end
-					
-					if cri == "true"
-						@mapplayers[id].critical = true
-					elsif cri == "false"
-						@mapplayers[id].critical = false
-					else
-						@mapplayers[id].critical = cri
-					end
-					
-					return true
 					
 					# 같은 맵의 유저 또는 몬스터가 보내는 값
 					# type,id,skill,skill_type,m_dir
@@ -1046,8 +1035,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						case skill_type
 						when 0
 							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill, m_dir))
-						when 1
-							$ABS.range.push(Game_Ranged_Explode.new(e.event, e, skill, m_dir))
 						end
 						
 					when 1 # 사람
@@ -1057,8 +1044,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						case skill_type
 						when 0
 							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, m_dir, hit_sw))
-						when 1
-							$ABS.range.push(Game_Ranged_Explode.new(netplayer, netplayer, skill, m_dir, hit_sw))
 						when 2 # 원거리 무기
 							$ABS.range.push(Game_Ranged_Weapon.new(netplayer, netplayer, data[2].to_i, m_dir, hit_sw))
 						end
@@ -1139,7 +1124,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$ABS.jump($game_player, enemy.event, range_skill[4]) if range_skill != nil and range_skill[4] != 0
 						ani_id = skill.animation2_id # 스킬 사용 측 애니메이션 id	
 						$game_player.animation_id = ani_id
-						self.ani(@id, ani_id)
 					end
 					
 				when /<result_effect>(.*)<\/result_effect>/ 
@@ -1294,9 +1278,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						for d in data
 							next if !d.include?(",")
 							id, time = d.split(",").map { |x| x.to_i }
-							next if SKILL_MASH_TIME[id] == nil							
-							SKILL_MASH_TIME[id][1] = time 
-							$skill_Delay_Console.write_line(id)
+							$game_party.actors[0].skill_mash[id] = time
 						end
 						
 					when "buff_mash_list" # 버프 지속시간 갱신
@@ -1306,9 +1288,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						for d in data
 							next if !d.include?(",")
 							id, time = d.split(",").map { |x| x.to_i }
-							$rpg_skill.buff(id)
+							
+							$game_party.actors[0].rpg_skill.buff(id)
 							$game_party.actors[0].buff_time[id] = time
-							$skill_Delay_Console.write_line(id)
 						end
 						
 					when "character_name2"
@@ -1336,7 +1318,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 						self.send_start
 						
-						$rpg_skill.job_select
+						$game_party.actors[0].rpg_skill.job_select
 						
 						$game_map.autoplay
 						$game_map.update 
@@ -1375,7 +1357,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_switches[id] = val == 1
 						$game_map.need_refresh = true
 					end
-										
+					
 					# 변수 공유
 				when /<variables>(.*)<\/variables>/
 					variables_data = $1.split('.')
@@ -1661,7 +1643,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 효과음 실행
 				when /<se_play>(.*)<\/se_play>/
 					file_name = $1.to_s
-					Audio.se_play(file_name, $game_variables[13])
+					$game_system.se_play(file_name, $game_variables[13], false)
 					
 					# 파티퀘스트 입장 여부 확인 : 스위치 번호, 1/0
 				when /<party_quest_check>(.*)<\/party_quest_check>/
@@ -1834,72 +1816,47 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<party_heal>(.*) (.*) (.*)<\/party_heal>/  # 시전자이름, 마법번호, 체력/마력(0이면 버프라고 생각)
 					name = $1.to_s
-					skill_id = $2.to_i
+					id = $2.to_i
 					heal_v = $3.to_i
-					ani_id = $data_skills[skill_id].animation1_id # 스킬 사용 측 애니메이션 id
 					
-					sw = false
-					if $game_party.actors[0].hp > 0 # 회복 스킬
-						sw = true
-						$rpg_skill.buff(skill_id, $game_party.actors[0], false)
-						case skill_id
-						when 92 # 공력주입
-							$game_party.actors[0].sp += heal_v
-						else
-							$game_party.actors[0].hp += heal_v
-						end								
-					else
-						case skill_id
-						when 120 # 부활
-							$game_temp.common_event_id = 24
-							sw = true
-						end	
+					ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
+					skill_data = $rpg_skill_data[id]
+					
+					if $game_party.actors[0].hp <= 0 # 죽은경우 사용할 수 있는지 확인
+						return if !skill_data.can_use_dead
 					end
 					
-					return if !sw
+					$game_party.actors[0].rpg_skill.buff(id, false)
+					$game_party.actors[0].rpg_skill.heal(id, false, heal_v)
 					
-					$game_player.animation_id = ani_id
-					self.ani(@id, ani_id)
-					$game_party.actors[0].critical = "heal"
-					$game_party.actors[0].damage = heal_v
-					$console.write_line("#{name}님의 #{$data_skills[skill_id].name}")
-					#-----------------------------------------------------------------    
-					
-					return true  
+					$console.write_line("#{name}님의 #{$data_skills[id].name}")
+					$game_player.ani_array << ani_id
 					
 				when /<27>(.*)<\/27>/
-					#@ani_id = #{id}; @ani_number = #{number}; count = #{count} # 유저 이펙트				
-					#@ani_event = #{id}; @ani_number = #{number}; count = #{count} # 이벤트 이펙트
-					count = 1
-					eval($1)
+					data_hash = parseKeyValueData($1)
+					id = data_hash["id"].to_i
+					ani_id = data_hash["ani_id"].to_i
+					type = data_hash["type"].to_i
+					count = data_hash["count"].to_i
 					
-					if @ani_event >= 0
-						if $game_map.events[@ani_event] != nil
-							count.times do
-								$game_map.events[@ani_event].ani_array << (@ani_number)  # 이벤트 애니 공유
-							end
-						end
+					character = nil
+					case type
+					when 0 # 이벤트
+						character = $game_map.events[id]
+					when 1 # 유저
+						character = id != @id.to_i ? $ani_character[id] : $game_player
 					end
+					return unless character
 					
-					if @ani_id.to_i != @id.to_i
-						if $ani_character[@ani_id.to_i] != nil # 다른 유저 애니 공유
-							$ani_character[@ani_id.to_i].ani_array << @ani_number
-						end
-					else
-						count.times do
-							$game_player.ani_array.push(@ani_number) # 각각의 플레이어에게만 보이는 애니메이션 공유.
-						end
+					count.times do
+						character.ani_array << ani_id  
 					end
+					character.ani_show_net = false
 					
-					@ani_id = -1; @ani_number = -1; @ani_event = -1
-					return true
-					
-					# Remove Player ( Disconnected )
+					# Remove Player ( Disconnected )	
 				when /<9>(.*)<\/9>/
-					# Destroy Netplayer and MapPlayer things
-					self.destroy($1.to_i)
-					# Redraw Mapplayer Sprites
-					$game_temp.spriteset_refresh = true
+					self.destroy($1.to_i) # Destroy Netplayer and MapPlayer things
+					$game_temp.spriteset_refresh = true # Redraw Mapplayer Sprites
 					$game_temp.spriteset_renew = true
 				end
 				return false

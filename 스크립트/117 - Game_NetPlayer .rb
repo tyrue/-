@@ -94,6 +94,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@trans_v = 0
 			@damage_array = []
 			@critical_array = []
+			@rpg_skill = Rpg_skill.new(self)
 			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false

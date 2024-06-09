@@ -816,7 +816,6 @@ if SDK.state("Mr.Mo's ABS") == true
 							
 							for dir in dir_arr
 								@range.push(Game_Ranged_Skill.new(e.event, e, skill, dir)) # e가 날리는 스킬을 구현해줌
-								Network::Main.send_with_tag("show_range_skill", "#{0},#{e.event.id},#{skill.id},#{0},#{dir}")
 							end
 						end
 						
@@ -985,8 +984,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			#Make the attack
 			@range.push(Game_Ranged_Weapon.new($game_player, @actor, @actor.weapon_id))
-			Network::Main.socket.send("<show_range_skill>#{1},#{Network::Main.id},#{@actor.weapon_id},#{2}</show_range_skill>\n")	# range 스킬 사용했다고 네트워크 알리기
-			
 			return if w[7] == nil #Animate
 			animate($game_player, $game_player.character_name+w[7].to_s) if @player_ani
 		end
@@ -1188,7 +1185,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				for dir in dir_arr
 					@range.push(Game_Ranged_Skill.new($game_player, @actor, skill, dir))
-					Network::Main.send_with_tag("show_range_skill", "#{1},#{Network::Main.id},#{id},#{0},#{dir}")	# range 스킬 사용했다고 네트워크 알리기
 				end
 				
 				# 스킬 사용 후 딜레이
@@ -1749,6 +1745,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			}
 			@objects = []
 		end
+		
 		#--------------------------------------------------------------------------
 		# * Refresh
 		#--------------------------------------------------------------------------
@@ -1820,6 +1817,25 @@ if SDK.state("Mr.Mo's ABS") == true
 			objects << $game_player if @parent != $game_player
 			objects
 		end
+		
+		#--------------------------------------------------------------------------
+		# * In Range?(Element, Object, Range) - Near Fantastica
+		#--------------------------------------------------------------------------
+		def in_range?(element, object, range)
+			x = (element.x - object.x) ** 2
+			y = (element.y - object.y) ** 2
+			r = x + y
+			r <= (range ** 2)
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Get ALL Range(Element, Range)
+		#--------------------------------------------------------------------------
+		def get_all_range(element, range)
+			@objects += find_objects.select do |o| 
+				!@objects.include?(o) && enemy?(o) && in_range?(element, o, range)
+			end
+		end
 	end
 	
 	#============================================================================
@@ -1835,23 +1851,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@range = @range_skill.range_value
 			@move_speed = @range_skill.move_speed
 			@show_effect = @range_skill.show_effect
-			
-			char_name = ""
-			hue = 0
-			opcity = 255
-			if @range_skill.character_name.is_a?(Array)
-				ch_data = @range_skill.character_name
-				
-				char_name = ch_data[0] if ch_data[0] != nil
-				hue = ch_data[1] if ch_data[1] != nil
-				opcity = ch_data[2] if ch_data[2] != nil
-			else
-				char_name = @range_skill.character_name
-			end
-			
-			char_name = "공격스킬" if char_name != "" && !$ABS.char_dir.include?(char_name + ".png")
-			
-			es_set_graphic(char_name, opcity, hue)
+			set_graphic_and_opacity
 			
 			@skill = skill
 			@move_direction = m_dir != 0 ? m_dir : @parent.direction
@@ -1859,7 +1859,54 @@ if SDK.state("Mr.Mo's ABS") == true
 			@hit_num = @range_skill.hit_num || 1
 			@direction = [@move_direction, 2].max
 			@hit_check = false
+			self.show_net
 		end
+		
+		#--------------------------------------------------------------------------
+		# * Set Graphic and Opacity
+		#--------------------------------------------------------------------------
+		def set_graphic_and_opacity
+			char_name = ""
+			hue = 0
+			opacity = 255
+			
+			if @range_skill.character_name.is_a?(Array)
+				ch_data = @range_skill.character_name
+				char_name = ch_data[0] if ch_data[0]
+				hue = ch_data[1] if ch_data[1]
+				opacity = ch_data[2] if ch_data[2]
+			else
+				char_name = @range_skill.character_name
+			end
+			
+			char_name = "공격스킬" if char_name != "" && !$ABS.char_dir.include?("#{char_name}.png")
+			es_set_graphic(char_name, opacity, hue)
+		end
+		
+		def show_net
+			user_type = nil
+			s_id = nil
+			
+			case @actor
+			when ABS_Enemy 
+				user_type = 0
+				s_id = @parent.id
+			when Game_Actor 
+				user_type = 1
+				s_id = Network::Main.id
+			end
+			
+			m_data = {
+				"user_type" => user_type,
+				"id" => s_id,
+				"skill_id" => @skill.id,
+				"skill_type" => 0,
+				"dir" => @move_direction
+			}
+			message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
+			Network::Main.send_with_tag("show_range_skill", message)
+		end
+		
 		
 		#--------------------------------------------------------------------------
 		# * Update
@@ -1899,33 +1946,36 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			@range_skill.hit_skill_arr.each do |id, type|
 				case type
-				when 0 # 내가 사용하는 것
+				when 0 
+					next if @actor.is_a?(Game_NetPlayer)
 					@actor.rpg_skill.process_skill(id, object)
-				when 1 # 적에게 가하는 것
+				when 1 
+					next if enemy.is_a?(Game_NetPlayer)
 					enemy.rpg_skill.process_skill(id, @parent)
 				end
 			end
-			process_range_skill(object)
+			
+			process_range_skill(object, enemy)
 		end
 		
 		def find_enemy(object)
-			return nil unless object
 			return $game_party.actors[0] if object == $game_player
 			return $ABS.enemies[object.id] if $ABS.enemies[object.id] != nil
+			return object if object.is_a?(Game_NetPlayer)
 		end
 		
-		def process_range_skill(object)
-			return unless object
-			return if @parent == object
-			
-			enemy = find_enemy(object)
-			return unless enemy
-			
-			@hit_num.times { object.ani_array.push(@skill.animation2_id) }
+		def process_range_skill(object, enemy)
 			return if @dummy
+			@hit_num.times { 
+				object.ani_array.push(@skill.animation2_id)
+			}
+			return if enemy.is_a?(Game_NetPlayer)
 			
 			@hit_check = true
-			@hit_num.times { enemy.effect_skill(@actor, @skill) }
+			@hit_num.times { 
+				enemy.effect_skill(@actor, @skill) 
+			}
+			
 			$ABS.jump(object, self, @range_skill.hit_back) if enemy.damage != "Miss"
 			return if $ABS.enemy_dead?(enemy, @actor)
 			
@@ -1934,30 +1984,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				enemy.attacking = @actor
 				$ABS.setup_movement(enemy)
 			end
-		end
-		
-		#--------------------------------------------------------------------------
-		# * In Range?(Element, Object, Range) - Near Fantastica
-		#--------------------------------------------------------------------------
-		def in_range?(element, object, range)
-			x = (element.x - object.x) ** 2
-			y = (element.y - object.y) ** 2
-			r = x + y
-			r <= (range ** 2)
-		end
-		
-		#--------------------------------------------------------------------------
-		# * Get ALL Range(Element, Range)
-		#--------------------------------------------------------------------------
-		def get_all_range(element, range)
-			$ABS.enemies.each do |id, e|
-				next unless e
-				next if e.dead?
-				next if !e.hate_group.include?(0) && @parent.is_a?(Game_Player)
-				next unless in_range?(element, e.event, range)
-				@objects.push(e.event) unless @objects.include?(e.event)
-			end
-			@objects.push($game_player) if in_range?(element, $game_player, range) && !@objects.include?($game_player)
 		end
 	end
 	
@@ -1977,6 +2003,20 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			@move_direction = m_dir != 0 ? m_dir : @parent.direction
 			@dummy = dummy
+			self.show_net
+		end
+		
+		def show_net
+			m_data = {
+				"user_type" => 1,
+				"id" => Network::Main.id,
+				"skill_id" => attack,
+				"skill_type" => 2,
+				"dir" => @move_direction
+			}
+			message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
+			
+			Network::Main.send_with_tag("show_range_skill", message)
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2624,8 +2664,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				tag = "player_damage"
 			end
 			msg = "#{m_id},#{dmg},#{cri}"
-			Network::Main.send_with_tag(tag, msg)
-			
+			Network::Main.send_with_tag(tag, msg) if actor.send_damage
 			clear_damage_arrays(actor)
 		end
 		
@@ -2633,6 +2672,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			actor.damage = nil
 			actor.damage_array.clear
 			actor.critical_array.clear
+			actor.send_damage = true
 		end
 		
 		def update_ani_array
@@ -2643,9 +2683,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				animation2(animation, true)
 			end
 			
-			if @character.ani_show_net
-				Network::Main.ani(@character, @character.ani_array) 
-			end
+			Network::Main.ani(@character, @character.ani_array) if @character.ani_show_net
+			
 			@character.ani_array.clear
 			@character.ani_show_net = true
 		end
@@ -2770,6 +2809,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :buff_time # 버프 남은 시간
 		attr_accessor :skill_mash # 쿨타임 남은 시간
 		attr_accessor :rpg_skill # rpg_skill
+		attr_accessor :send_damage
 		#--------------------------------------------------------------------------
 		alias mrmo_abs_gb_int initialize
 		#--------------------------------------------------------------------------
@@ -2784,6 +2824,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@buff_time = {} # 버프 남은 시간
 			@skill_mash = {} # 쿨타임 남은 시간
 			@rpg_skill = Rpg_skill.new(self)
+			@send_damage = true
 		end
 		
 		#--------------------------------------------------------------------------

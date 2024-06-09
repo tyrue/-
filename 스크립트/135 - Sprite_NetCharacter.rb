@@ -31,7 +31,6 @@ class Sprite_NetCharacter < Sprite_Character #RPG::Sprite
 		@name = @character.name
 		@message1 = ""
 		@test = false
-		$ani_character[@netid.to_i] = @character
 		super(viewport, character)
 		
 		# Creates Display Text Sprite

@@ -238,8 +238,11 @@ class Rpg_skill
 		@base_move_speed = 3
 		
 		@battler = battler
-		@character = $game_player if @battler.is_a?(Game_Actor)
-		@character = @battler.event if @battler.is_a?(ABS_Enemy)
+		@character = case @battler
+		when Game_Actor then $game_player
+		when ABS_Enemy then @battler.event
+		when Game_NetPlayer then @battler
+		end
 	end
 	
 	def process_skill(id, enemy = nil)
@@ -319,7 +322,7 @@ class Rpg_skill
 		return unless data.type.include?("heal")
 		
 		type = data.heal_type
-		heal_v = data.heal_value
+		heal_v = my_heal ? data.heal_value : value
 		heal_arr = data.heal_value_per # [타입, hp, sp]
 		
 		if my_heal
@@ -332,15 +335,12 @@ class Rpg_skill
 				end
 			end
 			
-			heal_v += ((@battler.maxhp + @battler.maxsp) * 0.005).to_i
+			heal_v += ((@battler.maxhp + @battler.maxsp) * 0.001)
 			if data.is_party
-				heal_v *= (1.0 + @battler.atk / 100.0) * (1 + (@battler.int / 1000.0) + (@battler.maxsp / 100000.0))
+				heal_v *= (1.0 + @battler.atk / 100.0) * (1 + (@battler.int / 1000.0))
 			end
-			heal_v = heal_v.to_i
-			skill_cost_custom(id)
-		else
-			heal_v = value.to_i
 		end
+		heal_v = heal_v.to_i
 		
 		case type
 		when "hp"	
@@ -353,8 +353,9 @@ class Rpg_skill
 			$game_temp.common_event_id = data.heal_value
 		end
 		@battler.damage = heal_v.to_s
-		
 		return unless my_heal
+		
+		skill_cost_custom(id)
 		return unless data.is_party
 		
 		m_data = {
@@ -652,7 +653,6 @@ class Rpg_skill
 	end
 	
 	def 공력증강
-		ch_id = @character == $game_player ? Network::Main.id : @character.id
 		r = rand(100)
 		if(r <= 40)			
 			$console.write_line("실패했습니다.") if @character == $game_player

@@ -65,7 +65,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@ani_map = -1
 				@ani_number = 0
 				@ani_event = -1
-				$ani_character = {}
 			end
 			#--------------------------------------------------------------------------
 			# * Returns Servername
@@ -630,15 +629,23 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			def self.ani(character, ani_array)
 				return if @mapplayers.size == 0
 				id = nil
-				display_monster_damage if $ABS.enemies[character.id]
-				display_player_damage if character.is_a?(Game_Player)
+				type = nil
+				if $ABS.enemies[character.id]
+					id = character.id
+					type = 0 
+				elsif character.is_a?(Game_Player)
+					id = @id
+					type = 1
+				elsif character.is_a?(Game_NetPlayer)
+					id = character.netid
+					type = 1
+				end
 				return unless id
 				
 				m_data = {
 					"id" => id,
-					"ani_id" => ani_id,
+					"ani_id" => ani_array.map.join(","),
 					"type" => type,
-					"count" => count
 				}
 				message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
 				self.send_with_tag("27", message)
@@ -1019,42 +1026,43 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# type,id,skill,skill_type,m_dir
 				when /<show_range_skill>(.*)<\/show_range_skill>/	
 					return true if !$scene.is_a?(Scene_Map)
-					data = $1.split(',')
-					# 스킬을 사용하는 타입 (0은 몬스터, 1은 사람), 사용자 id, 스킬 id, 스킬 타입(0은 range, 1은 explode), 스킬 이동 방향
-					type = data[0].to_i
-					id = data[1].to_i
-					skill = $data_skills[data[2].to_i]
-					skill_type = data[3].to_i
-					m_dir = data[4].to_i
-					hit_sw = !$game_switches[302] # pk 여부
+					data_hash = parseKeyValueData($1)
 					
-					case type
-					when 0 # 몬스터
-						e = $ABS.enemies[id]
-						return if e == nil
+					user_type = data_hash["user_type"].to_i 
+					id = data_hash["id"].to_i 
+					skill_id = data_hash["skill_id"].to_i 
+					skill_type = data_hash["skill_type"].to_i
+					dir = data_hash["dir"].to_i 
+					
+					hit_sw = !$game_switches[302] # pk 여부
+					skill = $data_skills[skill_id]
+					
+					case user_type
+					when 0  # 몬스터
+						actor = $ABS.enemies[id]
+						return unless actor
+						event = actor.event
+						
 						case skill_type
 						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(e.event, e, skill, m_dir))
+							$ABS.range.push(Game_Ranged_Skill.new(event, actor, skill, dir))
 						end
-						
 					when 1 # 사람
 						return if @id == id
-						netplayer = @mapplayers[id.to_s]						
-						return if netplayer == nil
+						actor = @mapplayers[id.to_s]
+						return unless actor
+						
 						case skill_type
 						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(netplayer, netplayer, skill, m_dir, hit_sw))
+							$ABS.range.push(Game_Ranged_Skill.new(actor, actor, skill, dir, hit_sw))
 						when 2 # 원거리 무기
-							$ABS.range.push(Game_Ranged_Weapon.new(netplayer, netplayer, data[2].to_i, m_dir, hit_sw))
+							$ABS.range.push(Game_Ranged_Weapon.new(actor, actor, skill_id, dir, hit_sw))
 						end
 					end
-					
 				end
 				
 				return false
 			end
-			
-			
 			
 			#--------------------------------------------------------------------------
 			# * Update Walking
@@ -1835,23 +1843,22 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<27>(.*)<\/27>/
 					data_hash = parseKeyValueData($1)
 					id = data_hash["id"].to_i
-					ani_id = data_hash["ani_id"].to_i
+					ani_id_arr = data_hash["ani_id"].split(',')
 					type = data_hash["type"].to_i
-					count = data_hash["count"].to_i
 					
 					character = nil
 					case type
 					when 0 # 이벤트
 						character = $game_map.events[id]
 					when 1 # 유저
-						character = id != @id.to_i ? $ani_character[id] : $game_player
+						character = id != @id.to_i ? @mapplayers[id.to_s] : $game_player
 					end
 					return unless character
 					
-					count.times do
-						character.ani_array << ani_id  
-					end
 					character.ani_show_net = false
+					ani_id_arr.each do |id|
+						character.ani_array << id.to_i
+					end
 					
 					# Remove Player ( Disconnected )	
 				when /<9>(.*)<\/9>/

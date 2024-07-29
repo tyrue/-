@@ -44,7 +44,7 @@ class PartyManager
 		@party_members.clear()
 		@leader = nil
 	end
-		
+	
 	def invite_party(target_name)
 		data = {
 			"target" => target_name
@@ -98,6 +98,20 @@ class PartyManager
 		
 		message = data.map { |key, value| "#{key}:#{value}" }.join("|")
 		Network::Main.send_with_tag("party_move", message)
+	end
+	
+	def count_in_map_players
+		return 1 if self.party_empty?
+		
+		in_map_player = 1
+		Network::Main.mapplayers.values.each do |player|
+			next if player.nil?
+			next if player.name == $game_party.actors[0].name
+			
+			in_map_player += 1 if self.is_party_member?(player.name)
+		end
+		
+		return in_map_player
 	end
 end
 

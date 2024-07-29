@@ -7,12 +7,7 @@ class Jindow_N < Jindow
 	def initialize(text = "", name = "", select_num = 0, type = 0, is_end = false) # 텍스트, npc 이름, 메뉴들, 타입
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 400, 105)
-		name = "" if name.include?("EV")		
-		
-		name.gsub!(/\[[iI][dD]/) do
-			|s|
-		end
-		name.delete!("]") 
+		name = sanitize_name(name)
 		
 		self.name = name
 		@head = true
@@ -26,212 +21,216 @@ class Jindow_N < Jindow
 		@menu = []
 		
 		text = change_txt(text)
+		@text_size = 18
+		@margin = 10
 		@texts = text.split("\n")
+		@text = Sprite.new(self)
+		@text.bitmap = Bitmap.new(self.width, (@texts.size - select_num + 1) * @text_size)
+		@text.bitmap.font.color.set(0, 0, 0, 255)
 		
-		@close_ok = false
-		case @type
-		when 0 # 일반 대화
-			# npc 대화 추가
-			@text = Sprite.new(self)
-			@text.bitmap = Bitmap.new(self.width, (@texts.size - select_num + 1) * 18)
-			@text.bitmap.font.color.set(0, 0, 0, 255)
-			
-			text_size = @texts.size - select_num
-			for i in 0...text_size
-				@text.bitmap.draw_text(0, i * 18, self.width, 32, @texts[i])
-			end
-			
-			@close_ok = true if @is_end
-			if select_num > 0
-				@close_ok = true
-				for i in 0...select_num
-					@menu.push(J::Button.new(self).refresh(self.width / 2, @texts[text_size + i]))
-					@menu[i].x = (self.width - self.width / 2) / 2 
-					@menu[i].y = @text.height + i * @menu[i].height
-				end	
-			end
-			
-			if $game_temp.num_input_start > 0
-				@close_ok = true
-				@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, @text.height + 10, self.width / 2, 18)	
-				@input_res = 0
-				@input_num.bluck = true
-				
-				@input_help_txt = Sprite.new(self)
-				@input_help_txt.x = @input_num.x + @input_num.width
-				@input_help_txt.y = @input_num.y
-				@input_help_txt.bitmap = Bitmap.new(self.width, 18)
-				@input_help_txt.bitmap.draw_text(0, 0, self.width, 18, "enter키로 입력")
-			end
-			
-		when 1 # 버튼만 있는 경우
-			if select_num > 0
-				@close_ok = true
-				for i in 0...select_num
-					@menu.push(J::Button.new(self).refresh(self.width / 2, @texts[i]))
-					@menu[i].x = (self.width - self.width / 2) / 2 
-					@menu[i].y = i * @menu[i].height + 10
-				end	
-			end
-			
-		when 2 # 입력만 있는 경우
-			@close_ok = true
-			@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, 10, self.width / 2, 18)				
-			@input_res = 0
-			@input_num.bluck = true
-			
-			@input_help_txt = Sprite.new(self)
-			@input_help_txt.x = @input_num.x + @input_num.width
-			@input_help_txt.y = @input_num.y
-			@input_help_txt.bitmap = Bitmap.new(self.width, 18)
-			@input_help_txt.bitmap.draw_text(0, 0, self.width, 18, "enter키로 입력")
-		end
+		@close_ok = @is_end
+		setup_dialog(select_num)
 		
 		@a = J::Button.new(self).refresh(45, "다음")
 		@b = J::Button.new(self).refresh(45, "닫기")
-		@a.x = self.width - @a.width * 2
-		@b.x = @a.x + @a.width
+		@a.x = self.width - (@a.width + @margin) * 2
+		@b.x = @a.x + @a.width + @margin
 		
-		if @input_num != nil
+		setup_positions
+		
+		self.refresh("Npc_dialog")
+	end
+	
+	def sanitize_name(name)
+		name = "" unless name
+		return "" if name.include?("EV")
+		
+		name.gsub!(/\[[iI][dD]/, "")
+		name.delete!("]")
+		name
+	end
+	
+	def change_txt(text)
+		begin
+			last_text = text.clone
+			text.gsub!(/\#\{(.*)\}/) { eval("#{$1}") rescue "" }
+			text.gsub!(/\\[Cc]\[([0-9]+)\]/, "")
+			text.gsub!(/\\[Vv]\[([0-9]+)\]/) { change_number_unit($game_variables[$1.to_i]) rescue "" }
+			text.gsub!(/\\[Ss]\[([0-9]+)\]/) { $data_skills[$1.to_i].name rescue ""} 
+			text.gsub!(/\\[Dd]\[([0-9]+)\]/) { $data_skills[$1.to_i].description rescue "" }
+			text.gsub!(/\\[Ii]\[([0-9]+)\]/) { $data_items[$1.to_i].name rescue "" }
+			text.gsub!(/\\[Ww]\[([0-9]+)\]/) { $data_weapons[$1.to_i].name rescue "" }
+			text.gsub!(/\\[Aa]\[([0-9]+)\]/) { $data_armors[$1.to_i].name rescue "" }
+			text.gsub!(/\\[Nn]\[([0-9]+)\]/) { $game_actors[$1.to_i].name rescue "" }
+		end until text == last_text
+		
+		text
+	end
+	
+	def setup_dialog(select_num)
+		case @type
+		when 0
+			setup_general_dialog(select_num)
+		when 1
+			setup_button_only_dialog(select_num)
+		when 2
+			setup_input_only_dialog
+		end
+	end
+	
+	def setup_general_dialog(select_num)
+		@texts[0...(@texts.size - select_num)].each_with_index do |line, i|
+			@text.bitmap.draw_text(@margin, i * @text_size + @margin, self.width, @text_size, line)
+		end
+		
+		setup_menu(select_num) if select_num > 0
+		setup_input if $game_temp.num_input_start > 0
+	end
+	
+	def setup_button_only_dialog(select_num)
+		setup_menu(select_num) if select_num > 0
+	end
+	
+	def setup_input_only_dialog
+		setup_input
+	end
+	
+	def setup_menu(select_num)
+		@texts.last(select_num).each_with_index do |text, i|
+			button = J::Button.new(self).refresh(self.width / 2, text)
+			button.x = (self.width - self.width / 2) / 2
+			button.y = @text.height + i * button.height
+			@menu << button
+		end
+	end
+	
+	def setup_input
+		@input_num = J::Type.new(self).refresh((self.width - self.width / 2) / 2, @text.height + 10, self.width / 2, 18)
+		@input_res = 0
+		@input_num.bluck = true
+		
+		@input_help_txt = Sprite.new(self)
+		@input_help_txt.x = @input_num.x + @input_num.width
+		@input_help_txt.y = @input_num.y
+		@input_help_txt.bitmap = Bitmap.new(self.width, 18)
+		@input_help_txt.bitmap.draw_text(0, 0, self.width, 18, "enter키로 입력")
+	end
+	
+	def setup_positions
+		if @input_num
 			@a.y = @input_num.y + @input_num.height + 20
 			@input_num.set ""
 			@input_clear = false
+		elsif @menu.size > 0
+			@a.y = @menu.last.y + @menu.last.height + 5
 		else
-			if @menu.size > 0
-				@a.y = @menu[@menu.size - 1].y + @menu[@menu.size - 1].height + 5
-			else
-				@a.y = @text.y + @text.height + 5
-			end
+			@a.y = @text.y + @text.height + 5
 		end
 		
 		@b.y = @a.y
 		self.height = @b.y + @b.height + 30
+		handle_close_button
+	end
+	
+	def handle_close_button
 		if !@close_ok
 			@close = false
 			@b.dispose
 		else
 			@a.dispose 
 		end
-		
-		self.refresh("Npc_dialog")
-	end
-	
-	def change_txt(text)
-		# 제어 문자 처리
-		begin
-			last_text = text.clone
-			
-			# 변수
-			text.gsub!(/\\[Vv]\[([0-9]+)\]/) { change_number_unit($game_variables[$1.to_i]) }
-			# 스킬이름
-			text.gsub!(/\\[Ss]\[([0-9]+)\]/) do 
-				$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].name : ""
-			end
-			# 스킬 설명
-			text.gsub!(/\\[Dd]\[([0-9]+)\]/) do 
-				$data_skills[$1.to_i] != nil ? $data_skills[$1.to_i].description : ""
-			end
-			# 아이템 이름
-			text.gsub!(/\\[Ii]\[([0-9]+)\]/) do
-				$data_items[$1.to_i] != nil ? $data_items[$1.to_i].name : ""
-			end
-			
-			text.gsub!(/\\[Ww]\[([0-9]+)\]/) do
-				$data_weapons[$1.to_i] != nil ? $data_weapons[$1.to_i].name : ""
-			end
-			
-			text.gsub!(/\\[Aa]\[([0-9]+)\]/) do
-				$data_armors[$1.to_i] != nil ? $data_armors[$1.to_i].name : ""
-			end
-			
-			#~ # 변수 처리
-			text.gsub!(/\#\{(.*)\}/) do
-				txt = "txt = #{$1}"
-				begin # try
-					eval(txt)
-				rescue # 예외
-					""
-				end	
-			end
-			
-		end until text == last_text
-		text.gsub!(/\\[Nn]\[([0-9]+)\]/) do
-			$game_actors[$1.to_i] != nil ? $game_actors[$1.to_i].name : ""
-		end
-		# 편의상,"\\\\" 을 "\000" 에 변환
-		text.gsub!(/\\\\/) { "\000" }
-		# "\\C" 를 "\001" 에,"\\G" 를 "\002" 에 변환
-		text.gsub!(/\\[Cc]\[([0-9]+)\]/) { "" }
-		#text.gsub!(/\\[Cc]\[([0-9]+)\]/) { "\001[#{$1}]" }
-		text.gsub!(/\\[Gg]/) { "\002" }
-		return text
 	end
 	
 	def dispose2
-		$game_temp.message_proc.call if $game_temp.message_proc != nil
-		$end_proc.call if $end_proc != nil
+		$game_temp.message_proc.call if $game_temp.message_proc
+		$end_proc.call if $end_proc
 		super
 	end
 	
 	def update
 		super
-		if @input_num != nil
-			if !@input_clear
-				@input_num.set ""
-				@input_clear = true
-				return
-			end
+		clear_input if @input_num && !@input_clear
+		
+		handle_menu_click if @menu.size > 0
+		handle_key_press
+		
+		handle_next_button if @a.click
+		dispose2 if @b.click
+	end
+	
+	def clear_input
+		@input_num.set ""
+		@input_clear = true
+	end
+	
+	def handle_menu_click
+		@menu.each_with_index do |menu_item, i|
+			next unless menu_item.click
+			
+			$game_system.se_play($data_system.decision_se)
+			Hwnd.dispose(self)
+			$game_temp.message_proc.call if $game_temp.message_proc
+			$game_temp.choice_proc.call(i) if $game_temp.choice_proc
 		end
+	end
+	
+	def handle_key_press
+		return unless Hwnd.highlight? == self
+		
+		if Key.trigger?(KEY_ENTER)
+			handle_enter_key
+		elsif Key.trigger?(KEY_SPACE)
+			handle_space_key
+		elsif Key.trigger?(KEY_ESC)
+			handle_esc_key
+		end
+	end
+	
+	def handle_enter_key
+		@a.click = true if !@a.disposed?
+		@b.click = true if !@b.disposed?
+	end
+	
+	def handle_space_key
+		@a.click = true if !@a.disposed?
+	end
+	
+	def handle_esc_key
+		@a.click = true if !@a.disposed?
+		@b.click = true if !@b.disposed?
+	end
+	
+	def handle_next_button	
+		$game_system.se_play($data_system.decision_se)
 		
 		if @menu.size > 0
-			for i in 0...@menu.size
-				if @menu[i].click			
-					$game_system.se_play($data_system.decision_se)
-					Hwnd.dispose(self)
-					$game_temp.message_proc.call if $game_temp.message_proc != nil
-					$game_temp.choice_proc.call(i) if $game_temp.choice_proc != nil
-				end
-			end
-		end
-		
-		if Key.trigger?(KEY_ENTER) #엔터
-			if @input_num == nil
-				@a.click = true if Hwnd.highlight? == self and !@a.disposed?
-				@b.click = true if Hwnd.highlight? == self and !@b.disposed? and @is_end
+			# 캔슬
+			if $game_temp.choice_cancel_type > 0
+				$game_temp.choice_proc.call($game_temp.choice_cancel_type - 1)
 			else
-				if @input_num.result.to_i > 0
-					$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
-					$game_map.need_refresh = true
-					$game_system.se_play($data_system.decision_se)
-					$game_temp.message_proc.call if $game_temp.message_proc != nil
-					$game_temp.num_input_variable_id = 0
-					$game_temp.num_input_digits_max = 0
-					Hwnd.dispose(self)
-				else
-					$console.write_line("1 이상의 수를 입력하세요.")
-				end
+				$console.write_line("선택지를 골라주세요.")
+				return 
 			end
 		end
 		
-		if Key.trigger?(KEY_SPACE) #space
-			@a.click = true if Hwnd.highlight? == self and !@a.disposed?
-			@b.click = true if Hwnd.highlight? == self and !@b.disposed? and @is_end
+		if @input_num
+			if @input_num.result == ""
+				return dispose2
+			end
+			
+			if @input_num.result.to_i <= 0
+				$console.write_line("1 이상의 수를 입력하세요.")
+				return 
+			end
+			
+			$game_map.need_refresh = true
+			$game_variables[$game_temp.num_input_variable_id] = @input_num.result.to_i
+			$game_temp.num_input_variable_id = 0
+			$game_temp.num_input_digits_max = 0					
 		end
 		
-		if Key.trigger?(KEY_ESC) #esc
-			@a.click = true if Hwnd.highlight? == self and !@a.disposed?
-			@b.click = true if Hwnd.highlight? == self and !@b.disposed?
-		end
-		
-		if @a.click# 다음 버튼 클릭
-			$game_system.se_play($data_system.decision_se)
-			$game_temp.message_proc.call if $game_temp.message_proc != nil
-			Hwnd.dispose(self)
-		end
-		
-		if @b.click # 닫기 버튼 클릭
-			dispose2
-		end
+		$game_temp.message_proc.call if $game_temp.message_proc
+		Hwnd.dispose(self)
 	end
 end
 
@@ -241,69 +240,34 @@ class Interpreter
 	#--------------------------------------------------------------------------
 	# * npc 대화
 	#--------------------------------------------------------------------------
+	def make_message_window(text)
+		set_message_end_waiting_flag_and_callback
+		$game_temp.message_text = text + "\n"
+		handle_jindow_message(0, @m_count)
+		$game_temp.message_text = nil
+	end
+	
 	def command_101
-		# If other text has been set to message_text
-		if $game_temp.message_text != nil
-			# End
-			return false
-		end
+		return false if $game_temp.message_text
 		
-		# Set message end waiting flag and callback
-		@message_waiting = true
-		$game_temp.message_proc = Proc.new { @message_waiting = false }
-		$end_proc = Proc.new {self.command_end}
+		set_message_end_waiting_flag_and_callback
 		
 		# Set message text on first line
 		$game_temp.message_text = @list[@index].parameters[0] + "\n"
 		line_count = 1
+		
 		# Loop
 		$game_temp.choice_start = 4
 		$game_temp.num_input_start = 0
 		
-		
 		loop do
-			# 만약 다음 이벤트 명령어가 텍스트라면 추가
 			if @list[@index + 1].code == 401
 				# Add the second line or after to message_text
 				$game_temp.message_text += @list[@index + 1].parameters[0] + "\n"
 				line_count += 1
-				# If event command is not on the second line or after
 			else
-				# 선택지가 있는 명령어거나 명령어 끝
-				@m_count = 0
-				is_end = false
-				
-				if @list[@index + 1].code == 102
-					# 만약 선택지를 한번에 넣을 수 있으면 넣음
-					if @list[@index + 1].parameters[0].size <= 4 - line_count
-						@m_count = @list[@index + 1].parameters[0].size
-						# Advance index
-						@index += 1
-						# Choices setup
-						$game_temp.choice_start = line_count
-						setup_choices(@list[@index].parameters)
-					end
-					
-					# 다음 명령어가 숫자 입력 선택지라면	
-				elsif @list[@index + 1].code == 103
-					# 화면에 넣을 수 있다면
-					if line_count < 4
-						# Advance index
-						@index += 1
-						# Number input setup
-						$game_temp.num_input_start = line_count
-						$game_temp.num_input_variable_id = @list[@index].parameters[0]
-						$game_temp.num_input_digits_max = @list[@index].parameters[1]
-					end
-				elsif @list[@index + 1].code == 0
-					is_end = true
-				end
-				
-				# Continue
-				e_name = ""
-				e_name = $game_map.events[@event_id].name if $game_map.events[@event_id] != nil
-				
-				Jindow_N.new($game_temp.message_text, e_name, @m_count, 0)
+				handle_choices_and_num_input(line_count)
+				handle_jindow_message(0, @m_count)
 				$game_temp.message_text = nil
 				return true
 			end
@@ -312,79 +276,93 @@ class Interpreter
 			@index += 1
 		end
 	end
+	
 	#--------------------------------------------------------------------------
 	# * 선택 메시지
 	#--------------------------------------------------------------------------
 	def command_102
-		# If text has been set to message_text
-		if $game_temp.message_text != nil
-			# End
-			return false
-		end
-		# Set message end waiting flag and callback
-		@message_waiting = true
-		$end_proc = Proc.new {self.command_end}
-		$game_temp.message_proc = Proc.new { @message_waiting = false }
+		return false if $game_temp.message_text
+		
+		set_message_end_waiting_flag_and_callback
+		
 		# Choices setup
 		$game_temp.message_text = ""
 		$game_temp.choice_start = 0
 		setup_choices(@parameters)
 		
 		# Continue
-		if $game_map.events[@event_id] != nil
-			Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, @parameters[0].size, 1)
-		else
-			Jindow_N.new($game_temp.message_text, "", @parameters[0].size, 1)
-		end
+		handle_jindow_message(1, @parameters[0].size)
 		$game_temp.message_text = nil
 		return true
-	end
-	
-	#--------------------------------------------------------------------------
-	# * Setup Choices
-	#--------------------------------------------------------------------------
-	def setup_choices(parameters)
-		# Set choice item count to choice_max
-		$game_temp.choice_max = parameters[0].size
-		# Set choice to message_text
-		for text in parameters[0]
-			$game_temp.message_text += text + "\n"
-		end
-		# Set cancel processing
-		$game_temp.choice_cancel_type = parameters[1]
-		# Set callback
-		current_indent = @list[@index].indent
-		$game_temp.choice_proc = Proc.new { |n| @branch[current_indent] = n }
 	end
 	
 	#--------------------------------------------------------------------------
 	# * Input Number
 	#--------------------------------------------------------------------------
 	def command_103
-		# If text has been set to message_text
-		if $game_temp.message_text != nil
-			# End
-			return false
-		end
-		# Set message end waiting flag and callback
-		@message_waiting = true
-		$game_temp.message_proc = Proc.new { @message_waiting = false }
+		return false if $game_temp.message_text
+		
+		set_message_end_waiting_flag_and_callback
+		
 		# Number input setup
 		$game_temp.message_text = ""
 		$game_temp.num_input_start = 0
 		$game_temp.num_input_variable_id = @parameters[0]
 		$game_temp.num_input_digits_max = @parameters[1]
+		
 		# Continue
-		if $game_map.events[@event_id] != nil
-			Jindow_N.new($game_temp.message_text, $game_map.events[@event_id].name, 0, 2)
-		else	
-			Jindow_N.new($game_temp.message_text, "", 0, 2)
-		end
+		handle_jindow_message(2, 0)
 		$game_temp.message_text = nil
-		# Continue
 		return true
 	end
+	
+	def set_message_end_waiting_flag_and_callback
+		@message_waiting = true
+		$game_temp.message_proc = Proc.new { @message_waiting = false }
+		$end_proc = Proc.new { self.command_end }
+	end
+	
+	def handle_choices_and_num_input(line_count)
+		@m_count = 0
+		next_line = @list[@index + 1]
+		if next_line.code == 102
+			return if next_line.parameters[0].size + line_count > 4 
+			
+			@m_count = next_line.parameters[0].size
+			@index += 1
+			$game_temp.choice_start = line_count
+			setup_choices(@list[@index].parameters)
+			
+		elsif next_line.code == 103
+			return if line_count >= 4
+			
+			@index += 1
+			$game_temp.num_input_start = line_count
+			$game_temp.num_input_variable_id = @list[@index].parameters[0]
+			$game_temp.num_input_digits_max = @list[@index].parameters[1]			
+		end
+	end
+	
+	def handle_jindow_message(type, line_count)
+		e_name = $game_map.events[@event_id].name if $game_map.events[@event_id]
+		next_line = @list[@index + 1]
+		is_end = next_line.code == 0 ? true : false
+		Jindow_N.new($game_temp.message_text, e_name, line_count, type, is_end)
+	end
+	
+	#--------------------------------------------------------------------------
+	# * Setup Choices
+	#--------------------------------------------------------------------------
+	def setup_choices(parameters)
+		$game_temp.choice_max = parameters[0].size
+		$game_temp.message_text ||= ""
+		$game_temp.message_text += parameters[0].join("\n") + "\n"
+		$game_temp.choice_cancel_type = parameters[1]
+		current_indent = @list[@index].indent
+		$game_temp.choice_proc = Proc.new { |n| @branch[current_indent] = n }
+	end
 end
+
 
 #==============================================================================
 # ■ Window_Message

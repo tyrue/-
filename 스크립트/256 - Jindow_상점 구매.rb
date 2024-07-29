@@ -13,7 +13,7 @@ class Jindow_Shop < Jindow
 		@close = true
 		@event = $game_map.events[eventId]
 		
-		self.name = @event.sprite_id != nil ? @event.sprite_id : "상점"
+		self.name = @event.text_display != nil ? @event.text_display[0] : "상점"
 		self.refresh "Shop_Window"
 		self.x = (640 - self.max_width) / 5
 		self.y = (480 - self.max_height) / 2

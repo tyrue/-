@@ -35,6 +35,8 @@ class Skill_Delay_Console < Sprite
 		
 		@back_sprite = Sprite.new(@console_viewport)
 		@back_sprite.visible = true
+		
+		@sec = Graphics.frame_rate
 		self.refresh
 	end
 	
@@ -58,28 +60,31 @@ class Skill_Delay_Console < Sprite
 		end
 	end
 	
+	def update
+		if (Graphics.frame_count % (@sec / 5) == 0)
+			self.refresh 
+		end
+	end
+	
 	def refresh
+		return unless @tog
+			
 		update_log(@skill_mash_log, @actor.skill_mash)
 		update_log(@buff_time_log, @actor.buff_time)
-		
-		if is_log_empty
-			@back_sprite.visible = false
-			return
-		end
-		@back_sprite.visible = true
-		
+		return if check_log_empty
+			
 		update_sprite_logs(@buff_time_log, @actor.buff_time, @buff_color, 0)
 		update_sprite_logs(@skill_mash_log, @actor.skill_mash, @mash_color, @buff_time_log.size + 1)
-		
 		update_back_sprite_height
 	end
 	
-	def is_log_empty
+	def check_log_empty
 		@log_arr.each do |log, color|
 			next unless log
 			return false unless log.empty?
 		end
 		
+		@back_sprite.visible = false
 		return true
 	end
 	
@@ -132,8 +137,8 @@ class Skill_Delay_Console < Sprite
 			@back_sprite.bitmap.clear if @back_sprite.bitmap
 			@back_sprite.bitmap = Bitmap.new(@console_viewport.rect.width, @console_viewport.rect.height)
 			@back_sprite.bitmap.fill_rect(@back_sprite.bitmap.rect, Color.new(0, 0, 0, 100))
-			@back_sprite.visible = true
 		end
+		@back_sprite.visible = true
 	end
 	
 	def show

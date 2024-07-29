@@ -353,18 +353,25 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.collect_character_info(actor)
 				{
-					"str" => actor.str,
-					"dex" => actor.dex,
+					"pci" => "'#{actor.class_name}'",
+					"name" => "'#{actor.name}'",
 					"class_name" => "'#{actor.class_name}'",
 					"hp" => actor.hp,
 					"sp" => actor.sp,
+					"maxhp" => actor.maxhp,
+					"maxsp" => actor.maxsp,
+					"str" => actor.str,
+					"dex" => actor.dex,
 					"agi" => actor.agi,
 					"eva" => actor.eva,
 					"pdef" => actor.base_pdef,
 					"mdef" => actor.base_mdef,
 					"level" => actor.level,
-					"maxhp" => actor.maxhp,
-					"maxsp" => actor.maxsp
+					"weapon_id" => actor.weapon_id,
+					"armor1_id" => actor.armor1_id,
+					"armor2_id" => actor.armor2_id,
+					"armor3_id" => actor.armor3_id,
+					"armor4_id" => actor.armor4_id,
 				}
 			end
 			
@@ -372,8 +379,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * 공통 문자열 생성 메서드
 			#-------------------------------------------------------------------------- 
 			def self.build_send_message
+				actor = $game_party.actors[0]
 				# 캐릭터 정보 수집
-				character_info = collect_character_info($game_party.actors[0])
+				character_info = collect_character_info(actor)
 				
 				# 기본 문자열 파트 구성
 				send_parts = []
@@ -381,14 +389,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send_parts << "@character_name = '#{$game_player.character_name}';"
 				send_parts << "@map_id = #{$game_map.map_id};"
 				send_parts << "@x = #{$game_player.x}; @y = #{$game_player.y};"
-				send_parts << "@name = '#{$game_party.actors[0].name}';"
 				send_parts << "@direction = #{$game_player.direction};"
 				send_parts << "@move_speed = #{$game_player.move_speed};"
-				send_parts << "@weapon_id = #{$game_party.actors[0].weapon_id};"
-				send_parts << "@armor1_id = #{$game_party.actors[0].armor1_id};"
-				send_parts << "@armor2_id = #{$game_party.actors[0].armor2_id};"
-				send_parts << "@armor3_id = #{$game_party.actors[0].armor3_id};"
-				send_parts << "@armor4_id = #{$game_party.actors[0].armor4_id};"
 				send_parts << "@guild = '#{$guild}';"
 				send_parts << "@bar_showing = false;"
 				send_parts << "@trans_v = #{$game_variables[10]};"
@@ -885,26 +887,30 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<monster_save>(.*)<\/monster_save>/ # 서버로부터 몬스터 생성 명령어 받음
 					# 맵 id, 이벤트 id, 몹 id, x, y
 					data_hash = parseKeyValueData($1)
+					id = data_hash["id"].to_i
+					hp = data_hash["hp"].to_i
+					sp = data_hash["sp"].to_i
+					x = data_hash["x"].to_i
+					y = data_hash["y"].to_i
+					direction = data_hash["direction"].to_i
+					respawn = data_hash["respawn"].to_i
+					mon_id = data_hash["mon_id"].to_i
 					
-					id = data_hash["id"].to_i 
-					hp = data_hash["hp"].to_i 
-					sp = data_hash["sp"].to_i 
-					x = data_hash["x"].to_i 
-					y = data_hash["y"].to_i 
-					d = data_hash["direction"].to_i 
-					res = data_hash["respawn"].to_i
-					mon_id = data_hash["mon_id"].to_i 
-					
-					if $ABS.enemies[id] == nil and mon_id != 0
-						create_events(16, x, y, d, id, mon_id)
+					if $ABS.enemies[id].nil? && mon_id != 0
+						create_events(16, x, y, direction, id, mon_id)
 					end
 					
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
-					return if $ABS.enemies[id] == nil
 					enemy = $ABS.enemies[id]
-					enemy.respawn = res
+					event = enemy.event
+					enemy.respawn = respawn
 					enemy.hp = hp
 					enemy.sp = sp
+					
+					if enemy.hp <= 0
+						event.through = true
+						event.fade = true
+					end
 					
 				when /<req_monster>(.*)<\/req_monster>/ # 서버로부터 저장된 몬스터 정보를 받아옴
 					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
@@ -925,7 +931,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					mon_id = data_hash["mon_id"].to_i
 					dead = data_hash["dead"].downcase == "true"
 					
-					if $ABS.enemies[id] == nil and mon_id != nil and mon_id != 0
+					if $ABS.enemies[id].nil? && mon_id != 0
 						create_events(16, x, y, d, id, mon_id)
 					end
 					
@@ -964,7 +970,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$ABS.enemies[id].aggro_mash = 5 * 60	
 					end
 					
-					
 				when /<mon_move>(.*)<\/mon_move>/ # 몹 이동 공유
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
@@ -974,19 +979,22 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					y = data[3].to_i
 					
 					return if $ABS.enemies[id] == nil
-					return if $ABS.enemies[id].event.x == x and $ABS.enemies[id].event.y == y
+					
+					enemy = $ABS.enemies[id]
+					event = enemy.event
+					return if event.x == x and event.y == y
 					
 					# 해당 맵에 있는 몹 id의 x, y, 방향을 갱신
-					$ABS.enemies[id].aggro = false if !$is_map_first
+					enemy.aggro = false if !$is_map_first
 					# 몹 이동
 					case d
-					when 2 then $ABS.enemies[id].event.move_down(true, true)
-					when 4 then $ABS.enemies[id].event.move_left(true, true)
-					when 6 then $ABS.enemies[id].event.move_right(true, true)
-					when 8 then $ABS.enemies[id].event.move_up(true, true)
+					when 2 then event.move_down(true, true)
+					when 4 then event.move_left(true, true)
+					when 6 then event.move_right(true, true)
+					when 8 then event.move_up(true, true)
 					end
 					
-					$ABS.enemies[id].event.moveto(x,y) if $ABS.enemies[id].event.x != x or $ABS.enemies[id].event.y != y
+					event.moveto(x,y) if event.x != x or event.y != y
 					
 					# 몬스터 데미지 표시(맵 id, 몹 id, 데미지, 크리티컬)
 				when /<mon_damage>(.*)<\/mon_damage>/
@@ -1002,7 +1010,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					$ABS.enemies[id].send_damage = false
 					dmg.each_with_index do |d, i|
-						$ABS.enemies[id].damage_array.push(d.to_i)
+						$ABS.enemies[id].damage_array.push(d)
 						$ABS.enemies[id].critical_array.push(cri[i])
 					end
 					
@@ -1018,7 +1026,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					return true if @mapplayers[id] == nil
 					
 					dmg.each_with_index do |d, i|
-						@mapplayers[id].damage_array.push(d.to_i)
+						@mapplayers[id].damage_array.push(d)
 						@mapplayers[id].critical_array.push(cri[i])
 					end
 					
@@ -1034,34 +1042,30 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					skill_type = data_hash["skill_type"].to_i
 					dir = data_hash["dir"].to_i 
 					
-					hit_sw = !$game_switches[302] # pk 여부
+					dummy = !$game_switches[302] # pk 여부
 					skill = $data_skills[skill_id]
 					
+					actor = nil
 					case user_type
-					when 0  # 몬스터
-						actor = $ABS.enemies[id]
-						return unless actor
-						event = actor.event
-						
-						case skill_type
-						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(event, actor, skill, dir))
-						end
-					when 1 # 사람
+					when 0 
+						actor = $ABS.enemies[id] # 몬스터
+						dummy = false
+					when 1 
 						return if @id == id
-						actor = @mapplayers[id.to_s]
-						return unless actor
-						
-						case skill_type
-						when 0
-							$ABS.range.push(Game_Ranged_Skill.new(actor, actor, skill, dir, hit_sw))
-						when 2 # 원거리 무기
-							$ABS.range.push(Game_Ranged_Weapon.new(actor, actor, skill_id, dir, hit_sw))
-						end
+						actor = @mapplayers[id.to_s] # 사람
 					end
+					return unless actor
+					
+					event = actor.is_a?(ABS_Enemy) ? actor.event : actor
+					range = case skill_type
+					when 0
+						Game_Ranged_Skill.new(event, actor, skill, dir, false)
+					when 2
+						Game_Ranged_Weapon.new(event, actor, skill_id, dir, false)
+					end
+					range.dummy = dummy
+					$ABS.range << range
 				end
-				
-				return false
 			end
 			
 			#--------------------------------------------------------------------------
@@ -1573,46 +1577,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 몹 죽었을때 리스폰 시간 적용
 					event = $ABS.enemies[data[1].to_i].event
 					return unless event
+					
 					event.erased = false
-					event.moveto(data[2].to_i, data[3].to_i)
-					event.direction = data[4].to_i
-					$ABS.rand_spawn(event) # 랜덤 위치 스폰
 					event.refresh
+					$ABS.rand_spawn(event) # 랜덤 위치 스폰
 					$game_map.refresh
 					
 				when /<enemy_dead>(.*)<\/enemy_dead>/	
-					data = $1.split(',')
-					id = data[0].to_i
-					map_id = data[1].to_i
-					npt = data[2]
-					
-					return if $game_map.map_id != map_id
-					return if $ABS.enemies[id] == nil
-					return if $ABS.enemies[id].event == nil
-					
+					id = $1.to_i
 					enemy = $ABS.enemies[id]
-					enemy.hp = 0
+					return unless enemy
 					
-					event = enemy.event
-					event.fade = true
-					
-					return if npt != $net_party_manager.leader # 같은 파티가 아니라면
-					
-					$game_variables[enemy.id + $mon_val_start] += 1
-					case enemy.trigger[0]
-					when 1 # 스위치
-						$game_switches[enemy.trigger[1]] = true
-					when 2 # 변수 조작
-						$game_variables[enemy.trigger[1]] += 1
-					when 3  # 셀프 스위치
-						value = "A" if enemy.trigger[1] == 1
-						value = "B" if enemy.trigger[1] == 2
-						value = "C" if enemy.trigger[1] == 3
-						value = "D" if enemy.trigger[1] == 4
-						key = [$game_map.map_id, event.id, value]
-						$game_self_switches[key] = true
-					end						
-					$game_map.refresh	
+					$ABS.enemy_dead_process(enemy, event)
 					
 					# 템 드랍 
 					#drop 번호, 아이템 타입, 아이템 id, x좌표, y좌표, 개수, (필요 스위치)
@@ -1632,7 +1608,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					else # 일반 아이템
 						create_drops2(id, x, y, type, item_id, num)
 					end
-					
 					
 				when /<Drop_Get>(.*)<\/Drop_Get>/
 					data = $1.split(',')

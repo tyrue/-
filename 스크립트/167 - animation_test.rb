@@ -32,67 +32,77 @@ module RPG
 			# 애니메이션 겹치기용 배열들
 			@_animation_overlap = []
 			@one_use = false
+			@max_overlap_size = 20
 		end
 		
 		def update
 			mrmo_abs_sprite_update
+			process_animations
+			self.dispose if @_animation_overlap.empty? && @one_use
+		end
+		
+		def process_animations
+			return unless @_animation_overlap
 			
-			if @_animation_overlap != nil and @_animation_overlap.size > 0
-				for ani in @_animation_overlap
-					if ani.pause_duration > 0
-						ani.pause_duration -= 1
-						next
-					end
-					
-					update_animation2(ani)
-					if ani != nil and ani.animation != nil
-						ani.duration -= 1 if (Graphics.frame_count % 2 == 0) or ani.animation.frame_max == ani.duration
-					end
+			@_animation_overlap.each do |ani|
+				if ani.pause_duration > 0
+					ani.pause_duration -= 1
+					next
 				end
+				
+				update_animation2(ani)
+				reduce_animation_duration(ani)
 			end
+		end
+		
+		def reduce_animation_duration(ani)
+			return unless ani.animation
 			
-			if @_animation_overlap != nil and @_animation_overlap.size == 0 and @one_use
-				self.dispose
+			if (Graphics.frame_count % 2 == 0) || (ani.animation.frame_max == ani.duration)
+				ani.duration -= 1
 			end
 		end
 		
 		def animation2(animation, hit)
-			return if animation == nil
+			return if animation.nil?
 			
+			ani = create_ani_data(animation, hit)
+			cache_animation_bitmap(animation)
+			create_animation_sprites(animation, ani)
+			
+			@_animation_overlap.push(ani)
+			dispose_animation2(@_animation_overlap.shift) if @_animation_overlap.size > @max_overlap_size
+		end
+		
+		def create_ani_data(animation, hit)
 			ani = AniData.new(animation, hit)
 			ani.duration = animation.frame_max
 			ani.pause_duration = @_animation_overlap.size * 6
-			
-			animation_name = animation.animation_name
-			animation_hue = animation.animation_hue
-			bitmap = RPG::Cache.animation(animation_name, animation_hue)
+			ani
+		end
+		
+		def cache_animation_bitmap(animation)
+			bitmap = RPG::Cache.animation(animation.animation_name, animation.animation_hue)
 			
 			if @@_reference_count.include?(bitmap)
 				@@_reference_count[bitmap] += 1
 			else
 				@@_reference_count[bitmap] = 1
 			end
-			
+		end
+		
+		def create_animation_sprites(animation, ani)
+			bitmap = RPG::Cache.animation(animation.animation_name, animation.animation_hue)
 			max_sprite = get_max_sprites(animation)
-			ani.sprites = []
-			if animation.position != 3 or not @@_animations.include?(animation)
-				max_sprite.times {
-					sprite = ::Sprite.new(self.viewport)
-					sprite.bitmap = bitmap
-					sprite.visible = false
-					ani.sprites.push(sprite)
-				}
-				unless @@_animations.include?(animation)
-					@@_animations.push(animation)
-				end
+			
+			ani.sprites = Array.new(max_sprite) do
+				sprite = ::Sprite.new(self.viewport)
+				sprite.bitmap = bitmap
+				sprite.visible = false
+				sprite
 			end
 			
-			@_animation_overlap.push(ani)
-			if @_animation_overlap.size > 10
-				dispose_animation2(@_animation_overlap[0])
-			end
-			
-			#update_animation2(ani)
+			@@_animations.push(animation) unless @@_animations.include?(animation)
 		end
 		
 		def update_animation2(ani)
@@ -101,8 +111,12 @@ module RPG
 			frame_index = ani.animation.frame_max - ani.duration
 			cell_data = ani.animation.frames[frame_index].cell_data
 			position = ani.animation.position
-			animation_set_sprites(ani.sprites, cell_data, position)
 			
+			animation_set_sprites(ani.sprites, cell_data, position)
+			process_animation_timings(ani, frame_index)
+		end
+		
+		def process_animation_timings(ani, frame_index)
 			ani.animation.timings.each do |timing|
 				animation_process_timing(timing, ani.hit) if timing.frame == frame_index
 			end
@@ -111,19 +125,24 @@ module RPG
 		def dispose_animation2(ani)
 			return if ani.sprites.nil?
 			
-			sprite = ani.sprites[0]
-			if sprite != nil
+			dispose_animation_sprites(ani.sprites)
+			reset_animation_references(ani)
+			@_animation_overlap.delete(ani)
+		end
+		
+		def dispose_animation_sprites(sprites)
+			sprites.each do |sprite|
+				next if sprite.nil?
+				
 				@@_reference_count[sprite.bitmap] -= 1
-				sprite.bitmap.dispose if @@_reference_count[sprite.bitmap] == 0
-			end
-			
-			for sprite in ani.sprites
+				sprite.bitmap.dispose if @@_reference_count[sprite.bitmap].zero?
 				sprite.dispose
 			end
-			
+		end
+		
+		def reset_animation_references(ani)
 			ani.sprites = nil
 			ani.animation = nil
-			@_animation_overlap.delete(ani)
 		end
 		
 		# ------------------

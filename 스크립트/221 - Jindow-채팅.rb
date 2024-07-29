@@ -189,7 +189,7 @@ class Jindow_Chat_Input < Jindow
 			$game_temp.player_transferring = true # 이동 가능
 			$game_temp.player_new_map_id = 306
 			$game_temp.player_new_x = 21
-			$game_temp.player_new_y = 36
+			$game_temp.player_new_y = 22
 			
 		when /^\/운영자모드 (.*)/
 			Network::Main.set_admin if $1.to_i == 1367

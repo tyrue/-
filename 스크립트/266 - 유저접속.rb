@@ -47,4 +47,6 @@ def 유저접속
 	$game_player.refresh
 	$game_map.autoplay
 	$game_map.update
+	
+	$rpg_skill = $game_party.actors[0].rpg_skill
 end

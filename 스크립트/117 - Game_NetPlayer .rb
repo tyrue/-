@@ -81,7 +81,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@pdef = 0
 			@mdef = 0
 			@states = []
-			@damage = ""
+			@damage = nil
 			@critical = false
 			@gold = 0
 			@guild = ""

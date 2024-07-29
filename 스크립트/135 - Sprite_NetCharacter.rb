@@ -49,7 +49,7 @@ class Sprite_NetCharacter < Sprite_Character #RPG::Sprite
 	
 	def display_net_player_damage
 		a = @character
-		return unless a.damage || (a.damage_array && a.damage_array.size > 0)
+		return unless a.damage || a.damage_array.size > 0
 		
 		process_net_player_damage(a)
 		clear_net_player_damage_arrays(a)

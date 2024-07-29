@@ -14,7 +14,6 @@ class MrMo_ABS
 		
 		$game_party.actors[0].rpg_skill.투명해제
 		$game_system.se_play("줍기")
-		$game_player.ani_array << 198
 		
 		id = drop.id
 		type = drop.type

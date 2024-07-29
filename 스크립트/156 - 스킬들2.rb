@@ -107,6 +107,8 @@ class Rpg_Skill_Data
 	attr_accessor :heal_value # 회복량  
 	attr_accessor :heal_value_per # 비례 회복량 : [타입(현재, 전체), 체력, 마력]  
 	
+	attr_accessor :not_damage # 피해량 있는가
+	
 	attr_accessor :id # 아이디
 	attr_accessor :can_use_dead # 죽었을떄 사용 가능 여부
 	
@@ -128,6 +130,7 @@ class Rpg_Skill_Data
 		set_heal_attributes if heal_skill_ids.include?(@id)
 		set_active_attributes if active_skill_ids.include?(@id)
 		set_buff_attributes	 if buff_skill_ids.include?(@id)
+		set_debuff_attributes	 if debuff_skill_ids.include?(@id)
 		
 		set_default_attributes
 	end
@@ -148,6 +151,8 @@ class Rpg_Skill_Data
 			
 			58,                  # 지폭지술
 			68,                  # 폭류유성
+			181, 								 # 마비
+			184, 								 # 중독
 			
 			# 전사
 			65,                  # 뢰마도
@@ -169,6 +174,7 @@ class Rpg_Skill_Data
 			96,                  # 지진
 			123,                 # 귀염추혼소
 			124,                 # 지진'첨
+			183,								 # 혼마술
 			
 			# 도적
 			133,                 # 필살검무
@@ -241,7 +247,9 @@ class Rpg_Skill_Data
 			120, # 부활
 			
 			140, # 운기
-			157  # 적 회복 스킬
+			157,  # 적 회복 스킬
+			
+			184, # 중독
 		]
 	end
 	
@@ -295,6 +303,22 @@ class Rpg_Skill_Data
 			
 			# 기타
 			99,  # 속도시약
+		]
+	end
+	
+	def debuff_skill_ids
+		[
+			# 주술사
+			181, # 마비
+			182, # 저주
+			184, # 중독
+			# 전사
+			
+			# 도적
+			
+			# 도사
+			183, # 혼마술
+			# 기타
 		]
 	end
 	
@@ -388,7 +412,6 @@ class Rpg_Skill_Data
 			@power_arr = [1, 0, 0.06, 1500] 
 			@cost_arr = [1, 0, 1.0 / 20.0]
 			
-			
 		when 58 # 지폭지술
 			@hit_num = 3
 			@mash_time = 150
@@ -399,6 +422,13 @@ class Rpg_Skill_Data
 			@mash_time = 150
 			@power_arr = [0, 0.5, 1.0, 10]
 			@cost_arr = [0, 0.5, 1.0]
+			
+		when 181 # 마비
+			@hit_skill_arr = [[181, 1]]
+			
+		when 184 # 중독
+			@hit_skill_arr = [[184, 1]]
+				
 			
 			# 전사 스킬
 		when 65 # 뢰마도
@@ -502,8 +532,9 @@ class Rpg_Skill_Data
 			@move_speed = 5
 			@hit_num = 3
 			@mash_time = 120
-			@power_arr = [0, 0.6, 0.6, 100] 
-			@cost_arr = [0, 0.3, 0.5]
+			@power_arr = [0, 0.2, 0.2, 100] 
+			@cost_arr = [0, 0.2, 1.0]
+			@hit_skill_arr = [[183, 1]]
 		when 124 # 지진'첨
 			@range_value = 7
 			@character_name = ["(스킬)지진", 150]
@@ -513,6 +544,9 @@ class Rpg_Skill_Data
 			@power_arr = [1, 0.01, 0.20, 150] 
 			@cost_arr = [1, 0.01, 0.7]
 			@explode_range = 2
+		when 183 # 혼마술
+			@hit_skill_arr = [[183, 1]]
+			
 			
 			# 도적 스킬
 		when 133 # 필살검무
@@ -634,6 +668,8 @@ class Rpg_Skill_Data
 			@mash_time = 60
 			@show_effect = true
 			@power_arr = [2, 3.00, 3.00, 100] 
+			
+			
 		end
 	end
 	
@@ -717,6 +753,9 @@ class Rpg_Skill_Data
 		when 157 # 적 회복 스킬
 			@heal_value_per = [1, 0.3, 0]
 			@mash_time = 10
+			
+		when 184 # 중독
+			@heal_value_per = [1, -0.01, 0]
 		end
 	end
 	
@@ -858,6 +897,37 @@ class Rpg_Skill_Data
 		when 99 # 속도시약
 			@buff_time = 360
 			@buff_data = [["speed", 0.5]]
+			
+		end
+	end
+	
+	def set_debuff_attributes
+		@type << "debuff"
+		@buff_time = 180
+		@buff_data = []
+		
+		case @id
+		when 181 # 마비
+			@buff_time = 6
+			@buff_data = [["speed", -6]]
+			
+			@cycle_time = 2 # 주기적으로 실행하는 시간
+			@cycle_animation = 162
+			@not_damage = true
+		when 183 # 혼마술
+			@buff_time = 6
+			@buff_data = [["mdef", -30], ["pdef", -30]]
+			
+			@cycle_time = 2 # 주기적으로 실행하는 시간
+			@cycle_animation = 169
+			@not_damage = true
+		when 184 # 중독
+			@buff_time = 20
+			
+			@cycle_time = 3 # 주기적으로 실행하는 시간
+			@cycle_action = ["heal_debuff"] # 주기적으로 실행하는 행동
+			@cycle_animation = 161
+			@not_damage = true
 		end
 	end
 	

@@ -140,7 +140,7 @@ class Game_System
 		end
 		
 		Audio.se_play("Audio/SE/" + file_name, volume, pitch)
-		if Network::Main.socket != nil
+		if $login_check
 			Network::Main.send_with_tag("se_play", "#{file_name}") if is_net
 		end
 	end

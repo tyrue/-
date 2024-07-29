@@ -61,114 +61,103 @@ UPGRADE_SKILL_ID[9] = [49, 52, 56] # 성려멸주
 
 # 3 도토리, 74 토끼고기, 5 사슴고기, 6 녹용
 REQ_SKILL_DATA = {}
-# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
+# data[스킬 아이디] : [스킬 필요레벨, [[재료 타입, 재료 아이디, 재료 개수], [...]]]
 # 전사
-REQ_SKILL_DATA[1] = 
-[
-	[5, 30, 10, 5, 3, 74], 		# 누리의기원
-	[7, 10, 10, 26, 5, 6], 		# 누리의힘
-	[12, 5, 10, 62, 7, 8], 		# 수심각도, 쇠고기, 돼지고기
-	[15, 20, 20, 74, 9, 10], 		# 십리건곤
-	[20, 15, 15, 63, 10, 104], 	# 반영대도
-	[30, 15, 15, 64, 11, 12], 	# 십량분법
-	[34, 10, 10, 65, 12, 50], 	# 뢰마도
-	[38, 10, 10, 27, 19, 20], 	# 동해의기원
-	[46, 20, 15, 66, 19, 20], 	# 신수둔각도
-	
-	[51, 20, 1, 67, 22, 59], 	# 건곤대나이
-	[56, 20, 10, 140, 29, 30],		# 운기
-	[62, 10, 10, 71, 29, 30], 	# 혼신의힘
-	
-	[67, 5, 5, 29, 29, 30], 		# 천공의기원
-	[71, 20, 20, 72, 29, 30], 	# 구량분법
-	[74, 10, 30, 73, 29, 30], 	# 광량돌격
-	[81, 10, 25, 43, 29, 30], 	# 위태응기
-	[84, 15, 15, 78, 29, 30],		# 십리건곤 1성
-	[86, 10, 30, 75, 29, 30],		# 뢰마도 1성
-	[90, 10, 3, 77, 30, 31], 		# 유비후타
-	[94, 10, 3, 76, 30, 31], 		# 팔량분법
-	[97, 3, 1, 80, 31, 37],			# 십리건곤 2성
-	[99, 4, 4, 79, 99, 100],		# 동귀어진
-	
-]
+REQ_SKILL_DATA[1] = {
+	5 => [5, [[0, 3, 30], [0, 74, 10]]],   # 누리의기원
+	26 => [6, [[0, 5, 10], [0, 6, 10]]],   # 누리의힘
+	62 => [10, [[0, 7, 5], [0, 8, 10]]],   # 수심각도, 쇠고기, 돼지고기
+	74 => [12, [[0, 9, 20], [0, 10, 20]]],  # 십리건곤
+	63 => [18, [[0, 10, 15], [0, 104, 15]]],# 반영대도
+	64 => [25, [[0, 11, 15], [0, 12, 15]]], # 십량분법
+	65 => [30, [[0, 12, 10], [0, 50, 10]]], # 뢰마도
+	27 => [35, [[0, 19, 10], [0, 20, 10]]], # 동해의기원
+	66 => [40, [[0, 19, 20], [0, 20, 15]]], # 신수둔각도
+	77 => [45, [[0, 22, 10], [0, 28, 3]]],  # 유비후타
+	67 => [50, [[0, 22, 20], [0, 59, 1]]],  # 건곤대나이
+	140 => [56, [[0, 29, 20], [0, 30, 10]]],# 운기
+	71 => [62, [[0, 29, 10], [0, 30, 10]]], # 혼신의힘
+	73 => [64, [[0, 29, 10], [0, 30, 30]]], # 광량돌격
+	29 => [67, [[0, 29, 5], [0, 30, 5]]],   # 천공의기원
+	72 => [70, [[0, 29, 20], [0, 30, 20]]], # 구량분법
+	43 => [78, [[0, 29, 10], [0, 30, 25]]], # 위태응기
+	78 => [80, [[0, 29, 15], [0, 30, 15]]], # 십리건곤 1성
+	75 => [82, [[0, 29, 10], [0, 30, 30]]], # 뢰마도 1성
+	80 => [89, [[0, 31, 3], [0, 37, 1]]],   # 십리건곤 2성
+	76 => [91, [[0, 30, 10], [0, 31, 3]]],  # 팔량분법
+	79 => [99, [[0, 99, 4], [0, 100, 4]]],  # 동귀어진
+}
 
-# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 # 주술사
-REQ_SKILL_DATA[2] = 
-[
-	[6, 30, 10, 5, 3, 74], # 누리의기원
-	[10, 10, 10, 1, 5, 6], # 신수마법
-	[12, 5, 10, 46, 7, 8], # 무장
-	[15, 20, 20, 10, 9, 10], # 신수 1성
-	[22, 15, 15, 15, 10, 104], # 공력증강
-	[25, 10, 15, 16, 104, 11], # 신수 2성
-	[28, 10, 10, 47, 11, 12], # 보호
-	[32, 10, 10, 21, 11, 50], # 바다의기원
-	[37, 20, 5, 22, 50, 19], # 신수 3성
-	[42, 7, 7, 20, 19, 20], # 마법집중
-	[45, 10, 10, 27, 19, 20], # 동해의기원
-	[52, 10, 10, 28, 20, 22], # 야수
-	[56, 10, 3, 29, 22, 28], # 천공의기원
-	[62, 10, 5, 30, 29, 30], # 신수 4성
-	[65, 5, 5, 34, 29, 30], # 귀환
-	[70, 5, 5, 35, 29, 30], # 비호
-	[78, 15, 15, 36, 29, 30], # 구름의기원
-	[84, 10, 30, 37, 29, 30], # 신수 5성
-	[90, 10, 3, 41, 30, 31], # 체마혈식
-	[94, 10, 3, 42, 30, 31], # 주술마도
-	[99, 4, 4, 44, 99, 100] # 헬파이어
-]
+REQ_SKILL_DATA[2] = {
+	5 => [5, [[0, 3, 30], [0, 74, 10]]],     # 누리의기원
+	1 => [7, [[0, 5, 4], [0, 6, 4]]],     # 신수마법
+	46 => [10, [[0, 7, 5], [0, 8, 10]]],     # 무장
+	10 => [15, [[0, 9, 20], [0, 10, 20]]],   # 신수 1성
+	15 => [20, [[0, 10, 15], [0, 104, 15]]], # 공력증강
+	16 => [23, [[0, 104, 10], [0, 11, 15]]], # 신수 2성
+	47 => [27, [[0, 11, 10], [0, 12, 10]]],  # 보호
+	21 => [30, [[0, 11, 10], [0, 50, 10]]],  # 바다의기원
+	22 => [35, [[0, 50, 20], [0, 19, 5]]],   # 신수 3성
+	20 => [40, [[0, 19, 7], [0, 20, 7]]],    # 마법집중
+	27 => [45, [[0, 19, 10], [0, 20, 10]]],  # 동해의기원
+	28 => [50, [[0, 20, 10], [0, 22, 10]]],  # 야수
+	29 => [54, [[0, 22, 10], [0, 28, 3]]],   # 천공의기원
+	30 => [60, [[0, 29, 10], [0, 30, 5]]],   # 신수 4성
+	34 => [63, [[0, 29, 5], [0, 30, 5]]],    # 귀환
+	35 => [65, [[0, 29, 5], [0, 30, 5]]],    # 비호
+	36 => [70, [[0, 29, 15], [0, 30, 15]]],  # 구름의기원
+	37 => [76, [[0, 29, 10], [0, 30, 30]]],  # 신수 5성
+	41 => [85, [[0, 30, 10], [0, 31, 3]]],   # 체마혈식
+	42 => [90, [[0, 30, 10], [0, 31, 3]]],   # 주술마도
+	44 => [99, [[0, 99, 4], [0, 100, 4]]],   # 헬파이어
+}
 
-# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 # 도사
-REQ_SKILL_DATA[3] = 
-[
-	[5, 30, 10, 5, 3, 74], 			# 누리의기원
-	[10, 10, 10, 1, 5, 6], 			# 신수마법
-	[12, 5, 10, 46, 7, 8], 		# 무장
-	[15, 20, 20, 15, 9, 10], 		# 공력증강
-	[20, 15, 15, 86, 10, 104], 	# 바다의희원
-	[25, 15, 15, 96, 11, 12], 	# 지진
-	[32, 10, 10, 47, 12, 50], 	# 보호
-	[36, 10, 10, 81, 19, 20], 	# 동해의희원
-	
-	[42, 20, 15, 90, 19, 20], 	# 분량방법
-	[48, 2, 10, 50, 28, 22], 		# 야수수금술
-	[54, 20, 1, 83, 22, 59], 		# 천공의희원
-	[61, 10, 10, 88, 29, 30], 	# 분량력법
-	[67, 15, 15, 89, 29, 30], 		# 구름의희원
-	[72, 10, 30, 92, 29, 30], 	# 공력주입
-	[78, 15, 15, 93, 29, 30],		# 태양의희원
-	[85, 30, 3, 95, 30, 31],		# 생명의희원
-	[90, 3, 3, 94, 31, 37], 		# 금강불체 
-	[99, 4, 4, 120, 99, 100] 		# 부활
-]
+REQ_SKILL_DATA[3] = {
+	86 => [5, [[0, 3, 30], [0, 74, 10]]],   # 바다의희원
+	1 => [7, [[0, 5, 5], [0, 6, 5]]],       # 신수마법
+	46 => [8, [[0, 7, 2], [0, 8, 10]]],       # 무장
+	47 => [10, [[0, 9, 3], [0, 10, 3]]],    # 보호
+	15 => [13, [[0, 9, 10], [0, 10, 10]]],     # 공력증강
+	96 => [20, [[0, 11, 15], [0, 12, 15]]],    # 지진
+	81 => [23, [[0, 19, 5], [0, 20, 5]]],    # 동해의희원
+	83 => [30, [[0, 19, 10], [0, 20, 10]]],     # 천공의희원
+	90 => [35, [[0, 19, 20], [0, 20, 15]]],    # 분량방법
+	50 => [40, [[0, 28, 2], [0, 22, 10]]],     # 야수수금술
+	88 => [50, [[0, 29, 10], [0, 30, 10]]],    # 분량력법
+	89 => [55, [[0, 29, 15], [0, 30, 15]]],    # 구름의희원
+	92 => [60, [[0, 29, 10], [0, 30, 30]]],    # 공력주입
+	93 => [67, [[0, 29, 15], [0, 30, 15]]],    # 태양의희원
+	95 => [78, [[0, 30, 30], [0, 31, 3]]],     # 생명의희원
+	94 => [90, [[0, 31, 3], [0, 37, 3]]],      # 금강불체 
+	120 => [99, [[0, 99, 4], [0, 100, 4]]],    # 부활
+}
 
-# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
 # 도적
-REQ_SKILL_DATA[4] = 
-[
-	[8, 30, 10, 5, 3, 74], 			# 누리의기원
-	[13, 10, 10, 26, 5, 6], 		# 누리의힘
-	[15, 15, 15, 1, 9, 10], 		# 신수마법
-	[20, 10, 20, 27, 10, 104], 	# 동해의기원
-	[23, 15, 15, 130, 11, 12],  # 무영보법
-	[27, 10, 20, 131, 11, 12], 	# 투명
-	[30, 10, 10, 10, 12, 50], 	# 신수마법 1성
-	[33, 20, 10, 132, 50, 19], 	# 비영승보
-	[37, 10, 10, 16, 19, 20], 	# 신수마법 2성
-	[45, 5, 15, 29, 28, 22], 	# 천공의기원
-	
-	[50, 20, 10, 140, 29, 30],		# 운기
-	[56, 15, 5, 133, 29, 30], 	# 필살검무
-	[64, 10, 15, 64, 29, 30], 	# 십량분법
-	[70, 5, 5, 34, 29, 30], 		# 귀환
-	[75, 15, 20, 141, 29, 30], 	# 투명 1성
-	[80, 5, 5, 144, 29, 30], 	# 급소타격
-	[81, 10, 25, 43, 29, 30], 		# 위태응기
-	[88, 20, 3, 142, 30, 31], 	# 투명 2성
-	[99, 4, 4, 134, 99, 100],	# 분신
-]
+REQ_SKILL_DATA[4] = {
+	5 => [5, [[0, 3, 30], [0, 74, 10]]],       # 누리의기원
+	26 => [8, [[0, 5, 10], [0, 6, 10]]],      # 누리의힘
+	1 => [10, [[0, 9, 15], [0, 10, 15]]],      # 신수마법
+	27 => [15, [[0, 10, 10], [0, 104, 20]]],   # 동해의기원
+	130 => [20, [[0, 11, 15], [0, 12, 15]]],   # 무영보법
+	131 => [23, [[0, 11, 10], [0, 12, 20]]],   # 투명
+	10 => [27, [[0, 12, 10], [0, 50, 10]]],    # 신수마법 1성
+	132 => [30, [[0, 50, 20], [0, 19, 10]]],   # 비영승보
+	16 => [35, [[0, 19, 10], [0, 20, 10]]],    # 신수마법 2성
+	29 => [40, [[0, 28, 5], [0, 22, 15]]],     # 천공의기원
+	140 => [50, [[0, 29, 20], [0, 30, 10]]],   # 운기
+	133 => [56, [[0, 29, 15], [0, 30, 5]]],    # 필살검무
+	64 => [64, [[0, 29, 10], [0, 30, 15]]],    # 십량분법
+	34 => [70, [[0, 29, 5], [0, 30, 5]]],      # 귀환
+	141 => [75, [[0, 29, 15], [0, 30, 20]]],   # 투명 1성
+	144 => [80, [[0, 29, 5], [0, 30, 5]]],     # 급소타격
+	43 => [81, [[0, 29, 10], [0, 30, 25]]],    # 위태응기
+	142 => [88, [[0, 30, 20], [0, 31, 3]]],    # 투명 2성
+	134 => [99, [[0, 99, 4], [0, 100, 4]]],    # 분신
+}
+
+
 # -------------END----------------- #
 
 # ----------------------------------#
@@ -245,10 +234,11 @@ class Rpg_skill
 		end
 	end
 	
-	def process_skill(id, enemy = nil)
+	def process_skill(id, is_my = true, enemy = nil)
 		skill = $data_skills[id]
-		self.buff(id) # 이게 버프 스킬인지 확인
-		self.heal(id) # 이게 회복 스킬인지 확인
+		self.buff(id, is_my) # 이게 버프 스킬인지 확인
+		self.debuff(id, is_my) # 이게 디버프 스킬인지 확인
+		self.heal(id, is_my) # 이게 회복 스킬인지 확인
 		self.active_skill(id, enemy) # 액티브 스킬 행동 커스텀 확인
 		self.skill_chat(skill) # 스킬 사용시 말하는 것
 	end
@@ -260,28 +250,27 @@ class Rpg_skill
 	def update_buff() # 버프 지속 효과 (일정 주기마다 해야하는 것 등)
 		sec = Graphics.frame_rate
 		
-		for buff in @battler.buff_time
-			next if buff[1] <= 0 # 버프가 끝난상태면 무시
-			id = buff[0]
-			data = $rpg_skill_data[id]
+		@battler.buff_time.each do |id, time|
+			next if time <= 0 # 버프가 끝난상태면 무시
 			
+			data = $rpg_skill_data[id]		
 			next unless data.cycle_time
-			next unless data.cycle_action
 			
-			if data.is_move_stop
-				if @character.moving?
-					@battler.buff_time[id] = 1
-					next
-				end
-			end
-			
+			if data.is_move_stop && @character.moving?
+				@battler.buff_time[id] = 1
+				next
+			end	
 			next unless (Graphics.frame_count % (sec * data.cycle_time) == 0)
 			
-			ani_id = data.cycle_animation || data.skill_data.animation1_id
+			ani_id = data.cycle_animation || data.skill_data.animation1_id 
 			@character.ani_array.push(ani_id) 
+			next unless data.cycle_action
 			
 			data.cycle_action.each do |action|
-				heal(id) if action == "heal"
+				case action
+				when "heal" then heal(id)
+				when "heal_debuff" then heal_debuff(id)
+				end
 			end 
 		end
 	end
@@ -317,29 +306,58 @@ class Rpg_skill
 	end
 	
 	# 자기 힐
-	def heal(id, my_heal = true, value = 1)
+	def heal(id, my_heal = true, value = 0)
 		data = $rpg_skill_data[id]
 		return unless data.type.include?("heal")
+		return if data.type.include?("debuff")
+		return heal_process(data, value) unless my_heal 
 		
-		type = data.heal_type
-		heal_v = my_heal ? data.heal_value : value
+		heal_v = data.heal_value
 		heal_arr = data.heal_value_per # [타입, hp, sp]
 		
-		if my_heal
-			if heal_arr
-				case heal_arr[0]
-				when 0 # 현재
-					heal_v += @battler.hp * heal_arr[1] + @battler.sp * heal_arr[2]
-				when 1 # 전체
-					heal_v += @battler.maxhp * heal_arr[1] + @battler.maxsp * heal_arr[2]
-				end
-			end
-			
-			heal_v += ((@battler.maxhp + @battler.maxsp) * 0.001)
-			if data.is_party
-				heal_v *= (1.0 + @battler.atk / 100.0) * (1 + (@battler.int / 1000.0))
+		if heal_arr
+			t, h, s = heal_arr
+			heal_v += case t
+			when 0 then @battler.hp * h + @battler.sp * s # 현재
+			when 1 then @battler.maxhp * h + @battler.maxsp * s # 전체
 			end
 		end
+		
+		heal_v += ((@battler.maxhp + @battler.maxsp) * 0.001)
+		heal_v *= (1.0 + @battler.atk / 100.0) * (1 + (@battler.int / 1000.0)) if data.is_party
+		
+		heal_process(data, heal_v)
+		skill_cost_custom(id) 
+		
+		return unless data.is_party
+		m_data = {
+			"id" => id,
+			"value" => heal_v
+		}
+		message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
+		Network::Main.send_with_tag("party_heal", message)
+	end
+	
+	def heal_debuff(id)
+		data = $rpg_skill_data[id]
+		return unless (data.type.include?("heal") && data.type.include?("debuff"))
+		
+		heal_v = data.heal_value
+		heal_arr = data.heal_value_per # [타입, hp, sp]
+		
+		if heal_arr
+			t, h, s = heal_arr
+			heal_v += case t
+			when 0 then @battler.hp * h + @battler.sp * s # 현재
+			when 1 then @battler.maxhp * h + @battler.maxsp * s # 전체
+			end
+		end
+		
+		heal_process(data, heal_v)
+	end
+	
+	def heal_process(data, heal_v)
+		type = data.heal_type
 		heal_v = heal_v.to_i
 		
 		case type
@@ -349,21 +367,18 @@ class Rpg_skill
 		when "sp"
 			@battler.sp += heal_v
 			@battler.critical = "heal_sp"
+		when "all"
+			@battler.hp += heal_v
+			@battler.sp += heal_v
+			@battler.critical = "heal"
 		when "com"
 			$game_temp.common_event_id = data.heal_value
 		end
-		@battler.damage = heal_v.to_s
-		return unless my_heal
 		
-		skill_cost_custom(id)
-		return unless data.is_party
-		
-		m_data = {
-			"id" => id,
-			"value" => heal_v
-		}
-		message = m_data.map { |key, value| "#{key}:#{value}" }.join("|")
-		Network::Main.send_with_tag("party_heal", message)
+		@battler.critical = "player_hit" if heal_v < 0
+		@battler.damage = heal_v.abs.to_s
+		@battler.hp = [@battler.hp, 1].max
+		@battler.sp = [@battler.sp, 0].max
 	end
 	
 	# 이미 버프가 걸려있는지 확인
@@ -372,71 +387,93 @@ class Rpg_skill
 	end
 	
 	# 버프 사용
-	def buff_active(id)
-		buff(id) # 이게 버프 스킬인지 확인
-		ani_id = $data_skills[id].animation1_id # 스킬 사용 측 애니메이션 id
-		if ani_id != nil
-			$game_player.animation_id = ani_id
-		end
+	def buff_active(id, my_buff = true)
+		buff(id, my_buff) # 이게 버프 스킬인지 확인
+		debuff(id, my_buff) # 이게 디버프 스킬인지 확인
+		@character.ani_array.push($data_skills[id].animation1_id || 0 )  # 스킬 사용 측 애니메이션 id
 	end
 	
 	# 버프
-	def buff(id, my_buff = true, is_close = false)
+	def buff(id, my_buff = true)
 		skill_data = $rpg_skill_data[id]
-		return unless (skill_data.type.include?("buff") || skill_data.type.include?("debuff"))
+		return unless skill_data.type.include?("buff")
+		return if skill_data.type.include?("debuff")
+		
+		check_time = check_buff(id)
 		buff_time_set = skill_data.buff_time * Graphics.frame_rate
-		is_party = skill_data.is_party
-		buff_val = skill_data.buff_data
+		apply_buff_time(id, buff_time_set)
+		party_buff(id) if skill_data.is_party && my_buff
 		
-		check_buff = check_buff(id) && !is_close
-		@battler.buff_time[id] = is_close ? 0 : buff_time_set # 버프 시간 초기화
+		return if check_time
+		return unless skill_data.buff_data
 		
-		if @battler.is_a?(Game_Actor) && !is_close
-			$ABS.skill_console(id)   # 스킬 딜레이 표시	
-			self.party_buff(id) if is_party && my_buff # 파티버프라면 파티로 버프 sw는 자신이 버프를 실행한 건지 
+		skill_data.buff_data.each do |type, val|
+			process_buff_effect(type.to_s, val, false, id)
 		end
+		true
+	end
+	
+	def debuff(id, my_buff = true)
+		skill_data = $rpg_skill_data[id]
+		return unless skill_data.type.include?("debuff")
+		return if my_buff
 		
-		return true if check_buff # 이미 버프가 있다면 시간만 갱신하고 효과는 냅둠
-		return true if buff_val == nil
+		check_time = check_buff(id)
+		buff_time_set = skill_data.buff_time * Graphics.frame_rate
+		apply_buff_time(id, buff_time_set)
 		
-		for data in buff_val
-			type, val = data
-			case type.to_s
-			when "str", "dex", "int", "agi", "mdef", "pdef"
-				apply_stat_effect(data, is_close)
-			when "per_str", "per_dex", "per_int", "per_agi", "per_mdef", "per_pdef"
-				apply_percentage_effect(data, is_close)
-			when "speed"
-				change_move_speed(val, is_close)
-			else
-				next unless @battler.is_a?(Game_Actor)
-				apply_custom_effect(id, data, is_close)
-			end
+		return if check_time
+		return unless skill_data.buff_data
+		
+		skill_data.buff_data.each do |type, val|
+			process_buff_effect(type.to_s, val, false, id)
 		end
-		return true
+	end
+	
+	def apply_buff_time(id, buff_time_set)
+		@battler.buff_time[id] = buff_time_set
+		$ABS.skill_console(id) if @battler.is_a?(Game_Actor)
+	end
+	
+	def process_buff_effect(type, val, is_close, id)
+		case type
+		when "str", "dex", "int", "agi", "mdef", "pdef"
+			apply_stat_effect([type, val], is_close)
+		when "per_str", "per_dex", "per_int", "per_agi", "per_mdef", "per_pdef"
+			apply_percentage_effect([type, val], is_close)
+		when "speed"
+			change_move_speed(val, is_close)
+		else
+			apply_custom_effect(id, [type, val], is_close) 
+		end
 	end
 	
 	# 버프 끄기
 	def buff_del(id)
-		self.buff(id, true, true)
+		skill_data = $rpg_skill_data[id]
+		@battler.buff_time[id] = 0
+		return unless skill_data.buff_data
+		
+		skill_data.buff_data.each do |type, val|
+			process_buff_effect(type.to_s, val, true, id)
+		end
 	end
 	
 	def apply_stat_effect(data, is_close = false)
 		stat = data[0].to_sym
-		value = data[1].to_i
-		value *= -1 if is_close
+		value = data[1].to_i * (is_close ? -1 : 1)
 		@battler.send("#{stat}=", @battler.send(stat) + value)
 		
 		return if @battler == $game_party.actors[0]
-		return if eval("@base_#{stat}") == nil
+		return unless eval("@base_#{stat}")
+		
 		instance_variable_set("@base_#{stat}", instance_variable_get("@base_#{stat}") + value) 		
 	end
 	
 	def apply_percentage_effect(data, is_close = false)
 		stat = data[0].sub("per_", "").to_sym
 		base = @battler.take_base_stat(stat)
-		n = (base * (data[1].to_f - 1.0)).to_i
-		n *= -1 if is_close
+		n = (base * (data[1].to_f - 1.0)).to_i * (is_close ? -1 : 1)
 		@battler.send("#{stat}=", @battler.send(stat) + n)
 		
 		return if @battler != $game_party.actors[0]
@@ -445,12 +482,15 @@ class Rpg_skill
 	end
 	
 	def change_move_speed(value, is_close = false)
-		value *= -1 if is_close
-		@character.move_speed += value
-		Network::Main.socket.send("<5>@move_speed = #{@character.move_speed};</5>\n") if @character == $game_player
+		@character.move_speed += value * (is_close ? -1 : 1)
+		
+		return unless @character == $game_player
+		Network::Main.send_with_tag("5", "@move_speed = #{@character.move_speed};")
 	end
 	
 	def apply_custom_effect(id, data, is_close = false)
+		return unless @battler.is_a?(Game_Actor)
+		
 		type, val = data
 		case id
 		when 28, 35, 50 # 둔갑
@@ -458,11 +498,7 @@ class Rpg_skill
 		when 66  # 신수둔각도
 			if is_close
 				$game_party.actors[0].equip(0, 0)
-				$game_party.lose_weapon(1, 999)
-				$game_party.lose_weapon(2, 999)
-				$game_party.lose_weapon(3, 999)
-				$game_party.lose_weapon(4, 999)
-				
+				[1, 2, 3, 4].each { |id| $game_party.lose_weapon(id, 999) }
 				$game_system.se_play("장비")
 				$game_party.actors[0].equip(0, $game_variables[41]) if $game_switches[50] and $game_variables[41] > 0
 				return
@@ -480,11 +516,9 @@ class Rpg_skill
 		when 131, 141, 142
 			!is_close ? self.투명 : self.투명해제
 		when 134
-			str = !is_close ? "분신을 생성합니다." : "분신이 사라집니다."
-			$console.write_line(str)
+			$console.write_line(is_close ? "분신이 사라집니다." : "분신을 생성합니다.")
 		when 140
-			str = !is_close ? "마력을 회복합니다." : "운기가 종료 됩니다."
-			$console.write_line(str)
+			$console.write_line(is_close ? "운기가 종료 됩니다." : "마력을 회복합니다.")
 		when 143
 			$console.write_line("투명을 유지합니다.")  
 			self.party_buff(142)
@@ -583,12 +617,11 @@ class Rpg_skill
 		return power if type == -1
 		
 		power = power.to_f
-		case type
-		when 0 # 현재 
-			power += (@battler.hp * p_hp) + (@battler.sp * p_sp)
-		when 1 # 전체
-			power += (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp)
+		power += case type
+		when 0 then (@battler.hp * p_hp) + (@battler.sp * p_sp) # 현재 
+		when 1 then (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp) # 전체
 		end
+		
 		power += val
 		return power.to_i
 	end
@@ -631,6 +664,7 @@ class Rpg_skill
 			@battler.hp -= @battler.maxhp * c_hp
 			@battler.sp -= @battler.maxsp * c_sp
 		end
+		
 		@battler.hp = [@battler.hp.to_i, 1].max
 		@battler.sp = @battler.sp.to_i
 	end
@@ -781,74 +815,100 @@ class Rpg_skill
 	end
 	
 	def 추격(enemy)
-		return if @character == nil
-		if @battler.is_a?(ABS_Enemy)
-			return unless @battler.aggro
-		end
+		return unless @character 
+		return if @battler.is_a?(ABS_Enemy) && !@battler.aggro
 		
 		@character.moveto(enemy.x, enemy.y)
 	end
 	
-	# 이미 가지고 있던 스킬인가?
-	def has_skill?(type) # 직업
-		return false if REQ_SKILL_DATA[type][$game_variables[38]] == nil
-		s_id = REQ_SKILL_DATA[type][$game_variables[38]][3]
+	# 직업별 배울 마법 찾기
+	def find_will_learn_skill(type) # 직업
+		# data[스킬 아이디] : [스킬 필요레벨, [[재료 타입, 재료 아이디, 재료 개수], [...]]]
+		actor = $game_party.actors[0]
+		sorted_skills = REQ_SKILL_DATA[type].sort_by { |_, data| data[0] }
 		
-		if SINSU_SKILL_ID.include?(s_id)
-			temp = 0 if $game_switches[1] # 청룡
-			temp = 1 if $game_switches[2] # 백호
-			temp = 2 if $game_switches[3] # 주작
-			temp = 3 if $game_switches[4] # 현무
-			s_id += temp
+		temp = case
+		when $game_switches[1] then 0
+		when $game_switches[2] then 1
+		when $game_switches[3] then 2
+		when $game_switches[4] then 3
+		else 0
 		end
 		
-		return true if $game_party.actors[0].skill_learn?(s_id)
-		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
-		for i in 1..UPGRADE_SKILL_ID.size
-			u_skill = UPGRADE_SKILL_ID[i]
-			if u_skill.include?(s_id)
-				for j in u_skill
-					return true if $game_party.actors[0].skill_learn?(j) and s_id < j
-				end
-				return false
+		sorted_skills.each do |id, data|
+			s_id = id + (SINSU_SKILL_ID.include?(id) ? temp : 0)
+			
+			# 업그레이드 되는 스킬이면 이전 하위 스킬을 건너뜀
+			next if UPGRADE_SKILL_ID.values.any? do |arr|
+				arr.include?(s_id) && arr.any? { |u_id| 
+					actor.skill_learn?(u_id) && (s_id <= u_id) 
+				}
 			end
+			
+			return id unless actor.skill_learn?(s_id)
 		end
-		return false
+		
+		return nil
 	end
 	
 	# 해당 스킬을 배우는데 필요한 재료
-	def req_skill_item(type, num, s_num) # 직업, 몇 번째 스킬
-		# type : 1 전사, 2 주술사, 3 도사, 4 도적
-		temp = 0
-		temp = 0 if $game_switches[1] # 청룡
-		temp = 1 if $game_switches[2] # 백호
-		temp = 2 if $game_switches[3] # 주작
-		temp = 3 if $game_switches[4] # 현무
+	def req_skill_item(type, id) # 직업, 배우려고하는 아이디
+		return nil unless id
 		
-		# data : 스킬 필요 레벨, 재료1 개수, 재료2 개수, 스킬 아이디, 재료1 아이디, 재료2 아이디
-		data = REQ_SKILL_DATA[type][num]
-		if data != nil
-			$game_variables[26] = data[0]
-			$game_variables[28] = data[1]
-			$game_variables[29] = data[2]
-			$game_variables[32] = data[3]
-			$game_variables[32] += temp if SINSU_SKILL_ID.include?(data[3]) 
-			$game_variables[34] = data[4]
-			$game_variables[35] = data[5]
-			
-			$game_variables[103] = $game_party.item_number(data[4])
-			$game_variables[104] = $game_party.item_number(data[5])
-		else
-			$game_variables[26] = 0
-			$game_variables[28] = 0
-			$game_variables[29] = 0
-			$game_variables[32] = 0
-			$game_variables[34] = 0
-			$game_variables[35] = 0
-			
-			$game_variables[103] = 0
-			$game_variables[104] = 0
+		# data[스킬 아이디] : [스킬 필요레벨, [[재료 타입, 재료 아이디, 재료 개수], [...]]]
+		# type : 1 전사, 2 주술사, 3 도사, 4 도적
+		data = REQ_SKILL_DATA[type][id]
+		return nil unless data 
+		
+		temp = case
+		when $game_switches[1] then 0
+		when $game_switches[2] then 1
+		when $game_switches[3] then 2
+		when $game_switches[4] then 3
+		else 0
 		end
+		
+		id += temp if SINSU_SKILL_ID.include?(id)
+		
+		return {
+			"level" => data[0],
+			"skill_id" => id,
+			"req_data" => data[1]
+		}
+	end
+	
+	def set_learn_skill_data(data)
+		$temp_level = data["level"]
+		$game_variables[32] = data["skill_id"]
+		$temp_req_string = "필요한 재료는 다음과 같다네.\n"
+		
+		data["req_data"].each do |type, id, num|
+			name = case type
+			when 0 then $data_items[id].name
+			when 1 then $data_weapons[id].name
+			when 2 then $data_armors[id].name
+			end
+			$temp_req_string += "[#{name} #{num}개] "
+		end
+		$temp_req_string += "라네.\n"
+	end
+	
+	def check_learn_skill_data(data)
+		actor = $game_party.actors[0]
+		
+		data["req_data"].each do |type, id, num|
+			sw, item, my_num = check_item_num(type, id, num)
+			unless sw
+				$temp_req_string = "#{item.name}(이)가 #{num - my_num}개 부족하다네."
+				return false
+			end
+		end
+		
+		actor.learn_skill(data["skill_id"])
+		data["req_data"].each do |type, id, num|
+			lose_item_num(type, id, num)
+		end
+		return true
 	end
 	
 	# 승급시 필요 체력, 마력 반환하는 함수
@@ -856,15 +916,11 @@ class Rpg_skill
 		self.job_select # 현재 상태 초기화
 		# NEED_ADVANCE_RESOURCE[0] = [[4500, 4500], [10000, 15000], [25000, 40000], [70000, 120000]] # 주술사
 		idx = -1
-		if $game_switches[6] # 주술사
-			idx = 0
-		elsif $game_switches[156] # 전사
-			idx = 1
-		elsif $game_switches[144] # 도사
-			idx = 2
-		elsif $game_switches[426] # 도적	
-			idx = 3
-		end
+		idx = 0 if $game_switches[6] # 주술사
+		idx = 1 if $game_switches[156] # 전사
+		idx = 2 if $game_switches[144] # 도사	
+		idx = 3 if $game_switches[426] # 도적	
+		
 		return if idx == -1
 		return if NEED_ADVANCE_RESOURCE[idx] == nil
 		return if NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i] == nil
@@ -875,38 +931,31 @@ class Rpg_skill
 	
 	# 자기 직업 스위치 온
 	def job_select
-		n = $game_party.actors[0].class_id
-		$game_switches[6] = false
-		$game_switches[156] = false
-		$game_switches[144] = false
-		$game_switches[426] = false
-		case n
-			# 주술사
-		when 2, 3, 5, 6, 14 
-			$game_switches[6] = true
-			# 전사
-		when 7..10, 15
-			$game_switches[156] = true
-			# 도사
-		when 4, 11..13, 16
-			$game_switches[144] = true
-			# 도적
-		when 17..21
-			$game_switches[426] = true
+		job_arr = [6, 156, 144, 426] # 직업 스위치
+		degree_arr = [0, 143, 150, 155, 358] # 승급 차수 스위치
+		
+		job_arr.each {|id| $game_switches[id] = false}
+		degree_arr.each {|id| $game_switches[id] = false}
+		
+		data = []
+		data[0] = [2, 3, 5, 6, 14] # 주술사
+		data[1] = [7, 8, 9, 10, 15] # 전사
+		data[2] = [4, 11, 12, 13, 16] # 도사
+		data[3] = [17, 18, 19, 20, 21] # 도적
+		
+		c_id = $game_party.actors[0].class_id
+		data.each_with_index do |arr, id|
+			sw = false
+			arr.each_with_index do |val, degree|
+				next unless c_id == val
+				
+				$game_switches[job_arr[id]] = true # 직업 스위치
+				$job_degree = degree
+				sw = true
+				break
+			end
+			break if sw
 		end
-		degree_arr = [0, 143, 150, 155, 358]
-		
-		# 승급 차수 확인
-		$game_switches[143] = false # 1차
-		$game_switches[150] = false # 2차
-		$game_switches[155] = false # 3차
-		$game_switches[358] = false # 4차
-		
-		$job_degree = 0
-		$job_degree = 1 if (n == 3 or n == 8 or n == 11 or n == 18)
-		$job_degree = 2 if (n == 5 or n == 9 or n == 12 or n == 19)		
-		$job_degree = 3	if (n == 6 or n == 10 or n == 13 or n == 20)
-		$job_degree = 4 if (n == 14 or n == 15 or n == 16 or n == 21)
 		
 		for i in 1..$job_degree
 			$game_switches[degree_arr[i]] = true
@@ -960,47 +1009,47 @@ class Rpg_skill
 		return damage
 	end
 	
-	
-	
 	# 스킬을 사용하기 위한 재료가 준비 됐는지 확인
 	def check_need_skill_item(id)
 		skill_data = $rpg_skill_data[id]
 		return true unless skill_data.need_item
 		
 		skill_data.need_item.each do |type, item_id, num|
-			my_num = 0
-			item_name = ""
-			
-			case type
-			when 0 # 아이템
-				my_num = $game_party.item_number(item_id)
-				item_name = $data_items[item_id].name
-			when 1 # 무기
-				my_num = $game_party.weapon_number(item_id)
-				item_name = $data_weapons[item_id].name
-			when 2 # 방어구
-				my_num = $game_party.armor_number(item_id)
-				item_name = $data_armors[item_id].name
-			end
-			
-			if my_num < num
-				$console.write_line("#{item_name}(이)가 #{num - my_num}개 부족합니다.")
+			sw, item, my_num = check_item_num(type, id, req_num)
+			if !sw
+				$console.write_line("#{item.name}(이)가 #{num - my_num}개 부족합니다.")
 				return false 
 			end
 		end
 		
 		# 재료 아이템 소모
 		skill_data.need_item.each do |type, item_id, num|
-			case type
-			when 0 # 아이템
-				$game_party.lose_item(item_id, num)
-			when 1 # 무기
-				$game_party.lose_weapon(item_id, num)
-			when 2 # 방어구
-				$game_party.lose_armor(item_id, num)
-			end
+			lose_item_num(type, item_id, num)
 		end
 		return true
+	end
+	
+	def check_item_num(type, id, req_num)
+		item_data = {
+			0 => { "number" => $game_party.item_number(id), "data" => $data_items[id] },
+			1 => { "number" => $game_party.weapon_number(id), "data" => $data_weapons[id] },
+			2 => { "number" => $game_party.armor_number(id), "data" => $data_armors[id] }
+		}
+		
+		item_info = item_data[type]
+		my_num = item_info["number"]
+		item = item_info["data"]
+		
+		[my_num >= req_num, item, my_num]
+	end
+	
+	
+	def lose_item_num(type, id, num)
+		case type
+		when 0 then $game_party.lose_item(id, num) # 아이템
+		when 1 then $game_party.lose_weapon(id, num) # 무기
+		when 2 then $game_party.lose_armor(id, num)# 방어구
+		end
 	end
 end	
 
@@ -1016,27 +1065,23 @@ class Game_Actor < Game_Battler
 		$console.write_line("마법 #{$data_skills[skill_id].name}을(를) 배웠다!") if $login_check
 		
 		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
-		for i in 1..UPGRADE_SKILL_ID.size
-			u_skill = UPGRADE_SKILL_ID[i]
+		UPGRADE_SKILL_ID.values.each do |u_skill|
 			next if !u_skill.include?(skill_id)
 			
-			for j in u_skill
-				return if j == skill_id
-				next if !skill_learn?(j)
+			u_skill.each do |id|
+				return if id == skill_id
+				next if !skill_learn?(id)
 				
-				forget_skill(j) 
-				$console.write_line("이전 마법 #{$data_skills[j].name}은(는) 사라졌다!") if $login_check
+				forget_skill(id) 
+				$console.write_line("이전 마법 #{$data_skills[id].name}은(는) 사라졌다!") if $login_check
 			end			
 		end
 		
 		# 투명 등 숙련도 설정
-		case skill_id
-		when 131
-			$game_variables[10] = 0
-		when 141
-			$game_variables[10] = 1
-		when 142
-			$game_variables[10] = 2
+		$game_variables[10] = case skill_id
+		when 131 then 0
+		when 141 then 1
+		when 142 then 2
 		end
 	end
 end

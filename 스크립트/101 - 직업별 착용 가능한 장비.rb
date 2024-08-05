@@ -1,7 +1,7 @@
 module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON = {}
 	EQUIP_JOB_ARMOR = {}
-	# [[직업 타입], 필요 차수]
+	# [[직업 타입], 필요 차수, 필요 레벨]
 	
 	#----------
 	# 주술사 전용
@@ -75,6 +75,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[22] = [[0], 0] # 비철단도
 	EQUIP_JOB_WEAPON[23] = [[0], 0] # 철도
 	EQUIP_JOB_WEAPON[26] = [[0], 0] # 녹호박별검
+	EQUIP_JOB_WEAPON[27] = [[0], 0] # 철검
 	
 	EQUIP_JOB_WEAPON[31] = [[0], 0] # 활
 	
@@ -249,22 +250,29 @@ class Game_Actor < Game_Battler
 	end
 	
 	def item_level(item)
-		return 0 if item == nil
+		return 0 unless item 
+		
 		text = item.description.dup 
 		check = item.is_a?(RPG::Weapon) ? Equip_Job_Type::EQUIP_JOB_WEAPON[item.id] : Equip_Job_Type::EQUIP_JOB_ARMOR[item.id]
+		return 0 unless check
 		
-		return 0 if check.nil?
-		return 0 if check[1] < 1 && check[2].nil?
+		class_id, degree, req_level = check
+		return 0 if class_id.nil? || degree.nil?
 		
+		req_level = degree >= 1 ? 99 : (req_level || 1)
 		description = item.description.dup
-    find_txt = description.scan(/\[[제재][한][레래][벨밸]:([0-9]+)\]/)
-    req_level = check[1] >= 1 ? 99 : check[2] # 차수가 1차 승급 이상이라면 레벨 제한 99
-
+		find_txt = description.scan(/\[[제재][한][레래][벨밸]:([0-9]+)\]/)
+		
     if find_txt.empty?
       item.description += "[제한레벨:#{req_level}]"
     else
       find_level = find_txt[0][0].to_i
-      item.description.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) { |s| s = "[제한레벨:#{req_level}]" } if find_level != req_level
+      
+			if find_level < req_level
+				item.description.gsub!(/\[[제재][한][레래][벨밸]:([0-9]+)\]/) { |s| s = "[제한레벨:#{req_level}]" } 
+			else
+				req_level = find_level
+			end
     end
 
     req_level

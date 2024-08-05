@@ -87,7 +87,8 @@ def create_abs_monsters(monster_id, num)
 		id = check_create_monster_id
 		d = (rand(4) + 1) * 2
 		e = create_events(16, 1, 1, d, id, monster_id)
-		return if e == nil
+		return unless e
+		
 		$ABS.rand_spawn(e)
 		$ABS.send_network_monster($ABS.enemies[id])
 	end
@@ -119,13 +120,14 @@ end
 
 def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
 	temp = load_data("Data/Map022.rxdata").events[mob_id]
-	return if temp == nil
+	return unless temp
+	
 	no = event_no <= -1 ? check_create_monster_id : event_no
 	map_id = $game_map.map_id
 	
 	$game_map.events[no] = Game_Event.new(map_id, temp)
 	event = $game_map.events[no]
-	return if not event
+	return unless event
 	
 	if monster_id > 0 and event.list[0].parameters[0].include?("ABS")
 		event.list[1].parameters[0] = "ID #{monster_id}" 
@@ -136,8 +138,8 @@ def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
 	event.moveto(x, y)
 	event.direction = dir
 	event.refresh_set_page
-	create_sprite(event) 
 	event.refresh
+	create_sprite(event) 
 	return event
 end
 

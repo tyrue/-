@@ -2,6 +2,7 @@ class Jindow < Viewport
 	attr_reader :skin
 	attr_reader :base_file
 	attr_reader :hudle
+	
 	attr_accessor :item
 	attr_accessor :link
 	attr_accessor :linked
@@ -27,6 +28,7 @@ class Jindow < Viewport
 		
 		Hwnd.push self
 		@id = Hwnd.index self
+		
 		self.z = @id + 10000
 		@back.z = self.z
 		@item = []
@@ -75,27 +77,20 @@ class Jindow < Viewport
 		@start = true
 		# 스프라이트 선언
 		# 위쪽 가장자리
-		@ul = Sprite.new(@back) if @ul == nil
-		@um = Sprite.new(@back) if @um == nil
-		@ur = Sprite.new(@back) if @ur == nil
+		@ul ||= Sprite.new(@back)
+    @um ||= Sprite.new(@back)
+    @ur ||= Sprite.new(@back)
 		
 		# 중간 가장자리
-		@ml = Sprite.new(@back) if @ml == nil
-		@mr = Sprite.new(@back) if @mr == nil
+    @ml ||= Sprite.new(@back)
+    @mr ||= Sprite.new(@back)
 		
 		# 아래쪽 가장자리
-		@dl = Sprite.new(@back) if @dl == nil
-		@dm = Sprite.new(@back) if @dm == nil
-		@dr = Sprite.new(@back) if @dr == nil
+    @dl ||= Sprite.new(@back)
+    @dm ||= Sprite.new(@back)
+    @dr ||= Sprite.new(@back)
 		
-		if @head
-			@mark ? (@mark_s = Sprite.new(@back)) : 0
-			@name ? (@name_s = Sprite.new(@back)) : 0
-			@close ? (@close_s = Sprite.new(@back)) : 0
-		end
 		@base_s = Sprite.new(@back) if @base_s == nil
-		
-		
 		
 		# 비트 맵 선언 (틀 잡기)
 		@ul.bitmap = Bitmap.new(@route + (@head ? "hl" : "ml"))
@@ -108,19 +103,15 @@ class Jindow < Viewport
 		@back.y = y - @ul.bitmap.height
 		@back.width = width + @ul.bitmap.width + @ur.bitmap.width
 		@back.height = height + @ul.bitmap.height + @dl.bitmap.height
+		
 		# 비트 맵 선언 (늘이기, 특수)
 		cw = @back.width - @ul.bitmap.width - @ur.bitmap.width
 		ch = @back.height - @ul.bitmap.height - @dl.bitmap.height
+		
 		@um.bitmap = Bitmap.new(cw, @ul.bitmap.height, @route + (@head ? "hm" : "um"), 1)
 		@ml.bitmap = Bitmap.new(@ul.bitmap.width, ch, @route + "ml", 1)
 		@mr.bitmap = Bitmap.new(@ur.bitmap.width, ch, @route + "mr", 1)
 		@dm.bitmap = Bitmap.new(cw, @dl.bitmap.height, @route + (@bottom ? "dm" : "um"), 1)
-		
-		if @head
-			@mark ? (@mark_s.bitmap = Bitmap.new(@route + "mark")) : 0
-			@head ? (@name_s.bitmap = Bitmap.new(self.width, @um.bitmap.height)) : 0
-			@close ? (@close_s.bitmap = Bitmap.new(@route + "close")) : 0
-		end
 		
 		@base_s.bitmap.clear if @base_s.bitmap != nil
 		case @base_type
@@ -134,31 +125,56 @@ class Jindow < Viewport
 		# 창 배열
 		@um.x = @ul.bitmap.width
 		@ur.x = @back.width - @ur.bitmap.width
+		
 		@ml.y = @ul.bitmap.height
-		@mr.x = @back.width - @mr.bitmap.width; @mr.y = @ur.bitmap.height
+		@mr.x = @back.width - @mr.bitmap.width 
+		@mr.y = @ur.bitmap.height
+		
 		@dl.y = @back.height - @dl.bitmap.height
-		@dm.x = @dl.bitmap.width; @dm.y = @back.height - @dm.bitmap.height
-		@dr.x = @back.width - @dr.bitmap.width; @dr.y = @back.height - @dr.bitmap.height
-		@base_s.x = @ul.x + @ul.bitmap.width; @base_s.y = @ul.y + @ul.bitmap.height;
-		if @head
-			@mark ? (@mark_s.x = (@ul.bitmap.width / 2) - (@mark_s.bitmap.width / 2)) : 0
-			@mark ? (@mark_s.y = (@ul.bitmap.height / 2) - (@mark_s.bitmap.height / 2)) : 0
+		@dm.x = @dl.bitmap.width
+		@dm.y = @back.height - @dm.bitmap.height
+		@dr.x = @back.width - @dr.bitmap.width
+		@dr.y = @back.height - @dr.bitmap.height
+		
+		@base_s.x = @ul.x + @ul.bitmap.width
+		@base_s.y = @ul.y + @ul.bitmap.height
+		
+		setup_header
+		return self
+	end
+	
+	def setup_header		
+    if @mark
+			@mark_s ||= Sprite.new(@back)
+      @mark_s.bitmap = Bitmap.new(@route + "mark")
+			@mark_s.x = (@ul.bitmap.width / 2) - (@mark_s.bitmap.width / 2)
+			@mark_s.y = (@ul.bitmap.height / 2) - (@mark_s.bitmap.height / 2)
+    end
+
+    if @name
+			@name_s ||= Sprite.new(@back)
+      @name_s.bitmap = Bitmap.new(self.width, @um.bitmap.height)
 			@name_s.bitmap.font.size = 12
 			@name_s.bitmap.font.color.set(0, 0, 0, 255)
 			@name_s.bitmap.font.alpha = 2
 			@name_s.bitmap.font.gamma.set(255, 255, 255, 255)
-			@name_s.x = @um.x
+      @name_s.bitmap.draw_text(0, 0, self.width, @um.bitmap.height, @name)
+      @name_s.x = @um.x
 			@name_s.y = @um.y
-			@name_s.bitmap.draw_text(0, 0, self.width, @um.bitmap.height, @name)
-			@close ? (@close_s.x = (@ur.bitmap.width / 2) - (@close_s.bitmap.width / 2) + @ur.x - 1) : 0
-			@close ? (@close_s.y = (@ur.bitmap.height / 2) - (@close_s.bitmap.height / 2)) : 0
-		end
-		return self
-	end
+    end
+
+    if @close
+			@close_s ||= Sprite.new(@back)
+      @close_s.bitmap = Bitmap.new(@route + "close")
+			@close_s.x = (@ur.bitmap.width / 2) - (@close_s.bitmap.width / 2) + @ur.x - 1
+			@close_s.y = (@ur.bitmap.height / 2) - (@close_s.bitmap.height / 2)
+    end
+  end
 	
 	def change_name(name)
 		return if @name_s == nil
 		return if @name_s.bitmap == nil
+		
 		@name_s.bitmap.clear 
 		@name_s.bitmap.draw_text(0, 0, self.width, @um.bitmap.height, name)
 	end
@@ -209,22 +225,12 @@ class Jindow < Viewport
 	
 	def side_width(type = 0)
 		self.refresh? ? 0 : return
-		case type
-		when 0
-			return (@ml.bitmap.width)
-		when 1
-			return (@mr.bitmap.width)
-		end
+		type.zero? ? @ml.bitmap.width : @mr.bitmap.width
 	end
 	
 	def side_height(type = 0)
 		self.refresh? ? 0 : return
-		case type
-		when 0
-			return (@um.bitmap.height)
-		when 1
-			return (@dm.bitmap.height)
-		end
+		type.zero? ? @um.bitmap.height : @dm.bitmap.height
 	end
 	
 	def opacity=(opacity)
@@ -257,7 +263,6 @@ class Jindow < Viewport
 		@scroll0bar_mid.opacity = opacity if @scroll0bar_mid != nil
 		@scroll0bar_up.opacity = opacity if @scroll0bar_up != nil
 		@scroll0bar_down.opacity = opacity if @scroll0bar_down != nil
-		
 	end
 	
 	def arrive?
@@ -272,10 +277,7 @@ class Jindow < Viewport
 	end
 	
 	def push?
-		for i in @item
-			i.JS? ? 0 : next
-			i.push ? (return i) : 0
-		end
+		@item.each { |i| return i if i.JS? && i.push }
 		return false
 	end
 	
@@ -296,11 +298,14 @@ class Jindow < Viewport
 			self.z = cz
 			@back.z = cz
 		end
-		@linked ? return : 0
+		return if @linked
+		
 		@id = Hwnd.index(self)
 		self.z = @id + 5000
 		@back.z = self.z
-		@link.size == 0 ? return : 0
+		
+		return if @link.size == 0
+		
 		for i in @link
 			i.jindow? ? i.highlight(self.z) : 0
 		end
@@ -311,23 +316,20 @@ class Jindow < Viewport
 	end
 	
 	def hide # 창 숨기기
-		
 		self.opacity = 0
-		for i in item
-			i.visible = false
-		end
+		@item.each { |i| i.visible = false }
 	end
 	
 	def show(val = 255) # 창 보이기
 		self.opacity = val
-		for i in item
-			i.visible = true
-		end
+		@item.each { |i| i.visible = true }
 	end
 	
 	def scroll
 		return if @base_s != nil and @base_s.opacity == 0
+		
 		ow, oh = self.scroll?
+		
 		if ow != @wsv and ow > 0
 			@wsv = ow
 			@width_scroll ? scroll_width_dispose : (@width_scroll = true)
@@ -371,21 +373,36 @@ class Jindow < Viewport
 			@scroll0down.bitmap = Bitmap.new(@route + "scroll0down")
 			@scroll0bar_up.bitmap = Bitmap.new(@route + "scroll0bar_up")
 			@scroll0bar_down.bitmap = Bitmap.new(@route + "scroll0bar_down")
-			ch = self.height - @scroll0up.bitmap.height - @scroll0down.bitmap.height
+			
+			ch = self.height - (@scroll0up.bitmap.height + @scroll0down.bitmap.height)
 			@scroll0mid.bitmap = Bitmap.new(@scroll0up.bitmap.width, ch, @route + "scroll0mid", 1)
-			cch = ch / ((self.height + oh) * 1.0)
+			cch = ch / (self.height + oh).to_f
 			
 			h_x = 0
 			@scroll0bar_mid.bitmap = Bitmap.new(@scroll0up.bitmap.width + h_x, (cch * self.height).round, @route + "scroll0bar_mid", 1)
-			@scroll0up.x = @mr.x; @scroll0up.y = @mr.y
-			@scroll0down.x = @mr.x; @scroll0down.y = @dr.y - @scroll0down.bitmap.height
-			@scroll0mid.x = @mr.x; @scroll0mid.y = @scroll0up.y + @scroll0up.bitmap.height
-			@scroll0bar_mid.x = @scroll0mid.x - h_x; @scroll0bar_mid.y = @scroll0mid.y
-			@scroll0bar_up.x = @scroll0mid.x; @scroll0bar_up.y = @scroll0bar_mid.y - @scroll0bar_up.bitmap.height
-			@scroll0bar_down.x = @scroll0mid.x; @scroll0bar_down.y = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height
+			@scroll0up.x = @mr.x
+			@scroll0up.y = @mr.y
+			
+			@scroll0down.x = @mr.x 
+			@scroll0down.y = @dr.y - @scroll0down.bitmap.height
+			
+			@scroll0mid.x = @mr.x
+			@scroll0mid.y = @scroll0up.y + @scroll0up.bitmap.height
+			
+			self.oy = @hsv if self.oy > @hsv
+			@scroll0bar_mid.x = @scroll0mid.x - h_x 
+			#@scroll0bar_mid.y = @scroll0mid.y
+			@scroll0bar_mid.y = (@scroll0mid.bitmap.height - @scroll0bar_mid.bitmap.height) * self.oy / @hsv + @scroll0mid.y
+			
+			@scroll0bar_up.x = @scroll0mid.x 
+			@scroll0bar_up.y = @scroll0bar_mid.y - @scroll0bar_up.bitmap.height
+			
+			@scroll0bar_down.x = @scroll0mid.x 
+			@scroll0bar_down.y = @scroll0bar_mid.y + @scroll0bar_mid.bitmap.height
 		elsif oh == 0
 			@hsv = oh
 			scroll_height_dispose
+			self.oy = 0
 		end
 	end
 	
@@ -419,12 +436,13 @@ class Jindow < Viewport
 		oh = self.height
 		
 		for i in @item
-			i == nil ? next : 0
+			next unless i
+			
 			tw = (i.x + i.width)
-			tw > ow ? (ow = tw) : 0
+			ow = tw if tw > ow
 			
 			th = (i.y + i.height)
-			th > oh ? (oh = th) : 0
+			oh = th if th > oh
 		end
 		
 		pw = ow - self.width
@@ -449,41 +467,33 @@ class Jindow < Viewport
 		if @width_scroll
 			w = (@scroll1mid.bitmap.width - @scroll1bar_mid.bitmap.width) * 1.0
 			nw = (@scroll1bar_mid.x - @scroll1mid.x) * 1.0
-			
 		end
 		if @height_scroll
-			h = (@scroll0mid.bitmap.height - @scroll0bar_mid.bitmap.height) * 1.0
-			nh = (@scroll0bar_mid.y - @scroll0mid.y) * 1.0
+			h = (@scroll0mid.bitmap.height - @scroll0bar_mid.bitmap.height).to_f
+			nh = (@scroll0bar_mid.y - @scroll0mid.y).to_f
 			self.oy = ((@hsv / h) * nh).round
 		end
 	end
 	
 	def bluck?
-		for i in @item
-			i.JS? ? 0 : next
-			i.bluck? ? (return i) : 0
-		end
+		@item.each { |i| return i if i.JS? && i.bluck? }
 		return false
 	end
 	
 	def bluck_update
-		self.jindow? ? 0 : return
-		@item.size == 0 ? return : 0
-		Hwnd.highlight? == self ? 0 : return
+		return unless self.jindow?
+		return unless Hwnd.highlight? == self
+		return if @item.size == 0
+		
 		alpha = 0
-		for i in @item
-			if i.JS?
-				alpha += 1
-			end
-		end
-		alpha > 0 ? 0 : return
+		@item.each {|i| alpha += 1 if i.JS? }
+		return if alpha <= 0
 		
 		if Key.trigger?(12) # tab
 			test = self.bluck?.id + 1
-			unless bluck?
-				test = 0
-			end
+			test = 0 unless bluck?
 			test > (@item.size - 1) ? (test = 0) : 0
+			
 			until @item[test].JS?
 				test > (@item.size - 1) ? (test = 0) : (test += 1)
 			end
@@ -493,8 +503,7 @@ class Jindow < Viewport
 	
 	def update
 		super
-		
-		refresh? ? 0 : return
+		return unless refresh?
 		
 		self.scroll
 		self.bluck_update

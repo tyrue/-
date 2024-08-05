@@ -2,6 +2,16 @@
 # *진도우 단축키 확인 창
 #----------------------------------------------------------------------------------
 class Jindow_Keyset_menu < Jindow
+	DESCRIPTION_TEXTS = [
+		"단축키는 키보드, 키패드 숫자(0~9) 또는",
+		"'-', '=', 'z', 'x'가 가능합니다.",
+		nil,  # Placeholder for dynamic text
+		"단축키를 입력해 주세요"
+	]
+	
+	DESCRIPTION_SIZES = [12, 12, 13]
+	
+	BUTTON_NAMES = ["확인", "취소"]
 	
 	def initialize(id, type)
 		$game_system.se_play($data_system.decision_se)
@@ -11,6 +21,7 @@ class Jindow_Keyset_menu < Jindow
 		@mark = true
 		@drag = true
 		@close = true
+		
 		self.refresh("Keyset_menu") 
 		self.x = 640 / 2 - self.max_width / 2
 		self.y = 480 / 2 - self.max_height / 2
@@ -18,114 +29,108 @@ class Jindow_Keyset_menu < Jindow
 		@select_k = nil
 		@check_id = id
 		@type = type
-		@id_value = nil
+		@id_value = fetch_id_value
+		
+		create_descriptions
+		create_buttons
+	end
+	
+	def fetch_id_value
 		case @type
-		when 0
-			@id_value = $data_items[@check_id]
-		when 1
-			@id_value = $data_weapons[@check_id]
-		when 2
-			@id_value = $data_armors[@check_id]
-		when 3
-			@id_value = $data_skills[@check_id]
+		when 0 then $data_items[@check_id]
+		when 1 then $data_weapons[@check_id]
+		when 2 then $data_armors[@check_id]
+		when 3 then $data_skills[@check_id]
 		end
-		
+	end
+	
+	def create_descriptions
 		@description = []
-		@description_v = [
-			"단축키는 키보드, 키패드 숫자(0~9) 또는",
-			"'-', '=', 'z', 'x'가 가능합니다.",
-			"#{@id_value.name}의 단축키 지정",
-			"단축키를 입력해 주세요"
-		]
-		@description_size = [
-			12,
-			12,
-			13
-		]
-		@d_x = 0
-		@d_y = 0
+		@description_v = DESCRIPTION_TEXTS.dup
+		@description_v[2] = "#{@id_value.name}의 단축키 지정" if @id_value
 		
-		for i in 0...@description_v.length
-			@description[i] = Sprite.new(self)
-			@description[i].bitmap = Bitmap.new(400, 30)
-			if @description_size[i] != nil
-				@description[i].bitmap.font.size = @description_size[i] 
-			else
-				@description[i].bitmap.font.size = 13
-			end
-			@description[i].x = @d_x
-			@description[i].y = @d_y + (@description[i].bitmap.font.size * i)
-			@description[i].bitmap.font.alpha = 3
-			@description[i].bitmap.font.beta = 1
-			@description[i].bitmap.font.color.set(255, 255, 255, 255) 
-			@description[i].bitmap.font.gamma.set(0, 0, 0, 255)
-			if @description_v[i] != nil
-				@description[i].bitmap.draw_text(0, 0, @description[i].width, @description[i].height, @description_v[i], 0)
-			end
+		@description_v.each_with_index do |text, i|
+			sprite = Sprite.new(self)
+			sprite.bitmap = Bitmap.new(400, 30)
+			sprite.bitmap.font.size = DESCRIPTION_SIZES[i] || 13
+			sprite.x = 0 
+			sprite.y = sprite.bitmap.font.size * i
+			
+			sprite.bitmap.font.alpha = 3
+			sprite.bitmap.font.beta = 1
+			sprite.bitmap.font.color.set(255, 255, 255, 255)
+			sprite.bitmap.font.gamma.set(0, 0, 0, 255)
+			sprite.bitmap.draw_text(0, 0, sprite.width, sprite.height, text, 0) if text
+			@description << sprite
 		end
-		
+	end
+	
+	def create_buttons
 		@button = []
-		@button_n = [
-			"확인",
-			"취소"
-		]
-		for i in 0..1
-			@button[i] = J::Button.new(self).refresh(60, @button_n[i])
-			@button[i].x = (@button[i].width + 10) * i 
-			@button[i].y = @description[@description.length - 1].y + @description[@description.length - 1].height
+		BUTTON_NAMES.each_with_index do |name, i|
+			button = J::Button.new(self).refresh(60, name)
+			button.x = (button.width + 10) * i
+			button.y = @description.last.y + @description.last.height
+			@button << button
 		end
-		
 	end
 	
 	def update
 		super
-		len = @description_v.length - 1
+		update_descriptions
+		check_buttons
+	end
+	
+	def update_descriptions
+		key = $ABS.item_keys.keys.find { |k| Input.trigger?(k) }
+		return unless key
 		
-		for key in $ABS.item_keys.keys
-			#Check is the the key is pressed
-			next if !Input.trigger?(key)
-			@description[len].bitmap.clear
-			@description[len].bitmap.font.gamma.set(255, 255, 255, 255) 	
-			if (Input::Numberkeys.values.include? key)
-				@description[len].bitmap.font.color.set(255, 0, 0, 255)
-				@description[len].bitmap.draw_text(0, 0, @description[len].width, @description[len].height, "키보드 숫자 : #{key - 48}", 0)
-				@select_k = key
-			elsif (Input::Numberpad.values.include? key) 	
-				@description[len].bitmap.font.color.set(0, 0, 255, 255)
-				@description[len].bitmap.draw_text(0, 0, @description[len].width, @description[len].height, "키패드 숫자 : #{key - 96}", 0)
-				@select_k = key
-			else
-				@description[len].bitmap.font.color.set(0, 0, 255, 255)
-				key_s = ""
-				case key
-				when Input::Underscore
-					key_s = "-"
-				when Input::Equal
-					key_s = "="
-				when Input::Letters["Z"]
-					key_s = "z"
-				when Input::Letters["X"]
-					key_s = "x"
-				end
-				@description[len].bitmap.draw_text(0, 0, @description[len].width, @description[len].height, "단축키 : #{key_s}", 0)
-				@select_k = key
+		len = @description_v.length - 1
+		sprite = @description[len]
+		sprite.bitmap.clear
+		sprite.bitmap.font.gamma.set(255, 255, 255, 255)
+		
+		case key
+		when *Input::Numberkeys.values
+			set_description_text(sprite, "키보드 숫자 : #{key - 48}", [255, 0, 0, 255])
+		when *Input::Numberpad.values
+			set_description_text(sprite, "키패드 숫자 : #{key - 96}", [0, 0, 255, 255])
+		else
+			key_s = case key
+			when Input::Underscore then "-"
+			when Input::Equal then "="
+			when Input::Letters["Z"] then "z"
+			when Input::Letters["X"] then "x"
+			else ""
 			end
+			set_description_text(sprite, "단축키 : #{key_s}", [0, 0, 255, 255])
 		end
 		
+		@select_k = key
+	end
+	
+	def set_description_text(sprite, text, color)
+		sprite.bitmap.font.color.set(*color)
+		sprite.bitmap.draw_text(0, 0, sprite.width, sprite.height, text, 0)
+	end
+	
+	def check_buttons
 		if @button[0].click
-			if @select_k != nil
-				case @type
-				when 0..2
-					$ABS.item_keys[@select_k] = @check_id
-					$ABS.skill_keys[@select_k] = 0
-				when 3
-					$ABS.skill_keys[@select_k] = @check_id
-					$ABS.item_keys[@select_k] = 0
-				end
-			end
+			assign_key if @select_k
 			Hwnd.dispose("Keyset_menu")
 		elsif @button[1].click
 			Hwnd.dispose("Keyset_menu")
+		end
+	end
+	
+	def assign_key
+		case @type
+		when 0..2
+			$ABS.item_keys[@select_k] = @check_id
+			$ABS.skill_keys[@select_k] = 0
+		when 3
+			$ABS.skill_keys[@select_k] = @check_id
+			$ABS.item_keys[@select_k] = 0
 		end
 	end
 end

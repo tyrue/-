@@ -317,41 +317,48 @@ class Game_Battler
   alias jindow_item_event item_effect
   def item_effect(item)
     return false if handle_special_cases(item)
+		
     jindow_item_event(item)
-    true
+    return true
   end
 
   private
 
   def handle_special_cases(item)
-    return handle_ghost_case(item) if $game_switches[296]
-    handle_full_recovery_case(item) || handle_item_absence_case(item)
+    return true if handle_ghost_case(item)
+    return true if handle_full_recovery_case(item)
+		return true if handle_item_absence_case(item)
+		return false
   end
 
   def handle_ghost_case(item)
+		return false unless $game_switches[296]
     return false if item.id == 63 # 부활시약
+		
     $console.write_line("귀신은 할 수 없습니다.")
-    true
+    return true
   end
 
   def handle_full_recovery_case(item)
-    if (item.recover_hp > 0 || item.recover_hp_rate > 0) && ($game_party.actors[0].hp == $game_party.actors[0].maxhp)
+    if (item.recover_hp > 0 || item.recover_hp_rate > 0) && ($game_party.actors[0].hp >= $game_party.actors[0].maxhp)
       $console.write_line("이미 완전 회복된 상태 입니다.")
-      true
-    elsif (item.recover_sp > 0 || item.recover_sp_rate > 0) && ($game_party.actors[0].sp == $game_party.actors[0].maxsp)
+      return true
+		end
+		
+    if (item.recover_sp > 0 || item.recover_sp_rate > 0) && ($game_party.actors[0].sp >= $game_party.actors[0].maxsp)
       $console.write_line("이미 완전 회복된 상태 입니다.")
-      true
-    else
-      false
-    end
+      return true  
+		end
+		
+		return false
   end
 
   def handle_item_absence_case(item)
     if $game_party.item_number(item.id) <= 0
       $console.write_line("아이템이 없습니다.")
-      true
-    else
-      false
+      return true
     end
+		
+		return false
   end
 end

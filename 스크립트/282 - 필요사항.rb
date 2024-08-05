@@ -4,6 +4,16 @@ def 맵이동
 	$trade_manager.trade_refuse()
 end
 
+def 로그아웃
+	close_game
+	$scene = Scene_Connect.new
+end
+
+def 게임종료
+	close_game
+	$scene = nil
+end
+
 def close_game
 	$game_system.se_play($data_system.decision_se)
 	Audio.bgm_fade(800)
@@ -26,12 +36,4 @@ def close_network
 	end
 end
 
-def 로그아웃
-	close_game
-	$scene = Scene_Connect.new
-end
 
-def 게임종료
-	close_game
-	$scene = nil
-end

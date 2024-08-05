@@ -55,7 +55,7 @@ COIN_SHOP_DATA[3] = [ # 현무 증표 상점
 		[0, 120, 1, 5], # 크리스탈
 		[0, 121, 1, 5], # 수정
 		[0, 122, 1, 3], # 은나무가지
-		[0, 92, 1, 10], # 최고급보물상자
+		[0, 92, 1, 5], # 최고급보물상자
 		
 		[0, 201, 1, 5], # 대지의토템
 		[0, 202, 1, 5], # 바람의토템
@@ -83,7 +83,7 @@ class Jindow_Shop_Coin < Jindow
 		@close = true
 		@event = $game_map.events[eventId]
 		
-		self.name = @event.sprite_id != nil ? @event.sprite_id : "상점"
+		self.name = @event.text_display != nil ? @event.text_display[0] : "상점"
 		self.refresh "Shop_Window_Coin"
 		self.x = (640 - self.max_width) / 5
 		self.y = (480 - self.max_height) / 2

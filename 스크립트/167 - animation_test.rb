@@ -64,7 +64,7 @@ module RPG
 		end
 		
 		def animation2(animation, hit)
-			return if animation.nil?
+			return unless animation
 			
 			ani = create_ani_data(animation, hit)
 			cache_animation_bitmap(animation)
@@ -84,11 +84,7 @@ module RPG
 		def cache_animation_bitmap(animation)
 			bitmap = RPG::Cache.animation(animation.animation_name, animation.animation_hue)
 			
-			if @@_reference_count.include?(bitmap)
-				@@_reference_count[bitmap] += 1
-			else
-				@@_reference_count[bitmap] = 1
-			end
+			@@_reference_count.include?(bitmap) ? @@_reference_count[bitmap] += 1 : @@_reference_count[bitmap] = 1
 		end
 		
 		def create_animation_sprites(animation, ani)
@@ -131,11 +127,13 @@ module RPG
 		end
 		
 		def dispose_animation_sprites(sprites)
-			sprites.each do |sprite|
-				next if sprite.nil?
-				
+			sprite = sprites[0]
+			if sprite
 				@@_reference_count[sprite.bitmap] -= 1
 				sprite.bitmap.dispose if @@_reference_count[sprite.bitmap].zero?
+			end
+			
+			sprites.each do |sprite|
 				sprite.dispose
 			end
 		end
@@ -278,43 +276,62 @@ module RPG
 		end
 		
 		def animation_set_sprites(sprites, cell_data, position)
-			sprites.size.times{ |i|
-				sprite = sprites[i]
+			sprites.each_with_index do |sprite, i|
 				pattern = cell_data[i, 0]
-				if sprite == nil or pattern == nil or pattern == -1
-					sprite.visible = false if sprite != nil
+				
+				if sprite.nil? || pattern.nil? || pattern == -1
+					sprite.visible = false unless sprite.nil?
 					next
 				end
-				sprite.visible = true
-				sprite.src_rect.set(pattern % 5 * 192, pattern / 5 * 192, 192, 192)
-				if position == 3
-					if self.viewport != nil
-						sprite.x = self.viewport.rect.width / 2
-						sprite.y = self.viewport.rect.height - 160
-					else
-						sprite.x = 320
-						sprite.y = 240
-					end
-				else
-					sprite.x = self.x - self.ox + self.src_rect.width / 2
-					sprite.y = self.y - self.oy + self.src_rect.height / 2
-					sprite.y -= self.src_rect.height / 4 if position == 0
-					sprite.y += self.src_rect.height / 4 if position == 2
-				end
-				sprite.x += cell_data[i, 1]
-				sprite.y += cell_data[i, 2]
-				sprite.z = 2000
-				sprite.ox = 96
-				sprite.oy = 96
-				sprite.zoom_x = cell_data[i, 3] / 100.0
-				sprite.zoom_y = cell_data[i, 3] / 100.0
-				sprite.angle = cell_data[i, 4]
-				sprite.mirror = (cell_data[i, 5] == 1)
-				sprite.opacity = 255#cell_data[i, 6] * self.opacity / 255.0
-				sprite.blend_type = cell_data[i, 7]
-			}
+				
+				setup_sprite(sprite, pattern, cell_data, i, position)
+			end
 		end
 		
+		def setup_sprite(sprite, pattern, cell_data, index, position)
+			sprite.visible = true
+			sprite.src_rect.set((pattern % 5) * 192, (pattern / 5) * 192, 192, 192)
+			
+			set_sprite_position(sprite, position)
+			adjust_sprite_position(sprite, cell_data, index)
+			configure_sprite(sprite, cell_data, index)
+		end
+		
+		def set_sprite_position(sprite, position)
+			if position == 3
+				if self.viewport
+					sprite.x = self.viewport.rect.width / 2
+					sprite.y = self.viewport.rect.height - 160
+				else
+					sprite.x = 320
+					sprite.y = 240
+				end
+			else
+				sprite.x = self.x - self.ox + self.src_rect.width / 2
+				sprite.y = self.y - self.oy + self.src_rect.height / 2
+				
+				sprite.y -= self.src_rect.height / 4 if position == 0
+				sprite.y += self.src_rect.height / 4 if position == 2
+			end
+		end
+		
+		def adjust_sprite_position(sprite, cell_data, index)
+			sprite.x += cell_data[index, 1]
+			sprite.y += cell_data[index, 2]
+			sprite.z = 2000
+			sprite.ox = 96
+			sprite.oy = 96
+		end
+		
+		def configure_sprite(sprite, cell_data, index)
+			sprite.zoom_x = cell_data[index, 3] / 100.0
+			sprite.zoom_y = cell_data[index, 3] / 100.0
+			sprite.angle = cell_data[index, 4]
+			sprite.mirror = (cell_data[index, 5] == 1)
+			sprite.opacity = 255 # cell_data[index, 6] * self.opacity / 255.0
+			sprite.blend_type = cell_data[index, 7]
+		end
+			
 		def animation_process_timing(timing, hit)
 			if (timing.condition == 0) or
 				(timing.condition == 1 and hit == true) or

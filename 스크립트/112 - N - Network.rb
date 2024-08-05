@@ -931,10 +931,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					mon_id = data_hash["mon_id"].to_i
 					dead = data_hash["dead"].downcase == "true"
 					
-					if $ABS.enemies[id].nil? && mon_id != 0
-						create_events(16, x, y, d, id, mon_id)
-					end
-					
+					create_events(16, x, y, d, id, mon_id) if $ABS.enemies[id].nil? && mon_id != 0
 					enemy = $ABS.enemies[id]
 					event = enemy.event
 					
@@ -944,7 +941,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						else
 							event.erased = false
 							$ABS.rand_spawn(event) # 랜덤 위치 스폰
-							event.refresh
 						end
 						return
 					end
@@ -955,6 +951,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					event.moveto(x, y) # 몹 방향과 좌표 적용
 					event.direction = d
 					enemy.aggro = $is_map_first
+					#event.refresh
 					
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					data = $1.split(',')
@@ -1244,7 +1241,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 							switches.each { |sw| $game_switches[sw] = true }
 						end
 						
-						
 					when "variable_list" # 변수 리스트
 						if val.include?(".")
 							val.split(".").each do |va|
@@ -1254,23 +1250,25 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						else
 							val.split(",").each_with_index { |value, index| $game_variables[index] = value.to_i }
 						end
+						
 					when "hotkey_list" # 스킬 핫키
 						if val.include?(".")
 							val.split(".").each do |hk|
-								info = hk.split(",")
-								$ABS.skill_keys[info[0].to_i] = info[1].to_i
+								k, v = hk.split(",").map {|x| x.to_i }
+								$ABS.skill_keys[k] = v
+								$ABS.item_keys[k] = 0
 							end
 						else
 							hk = val.split(",")
 							$ABS.skill_keys.keys.each_with_index { |k, i| $ABS.skill_keys[k] = hk[i].to_i }
 						end
 						
-						
 					when "itemkey_list" # 아이템 핫키
 						if val.include?(".")
 							val.split(".").each do |hk|
-								info = hk.split(",")
-								$ABS.item_keys[info[0].to_i] = info[1].to_i
+								k, v = hk.split(",").map {|x| x.to_i }
+								$ABS.skill_keys[k] = 0
+								$ABS.item_keys[k] = v
 							end
 						else
 							hk = val.split "," # 핫키 리스트 배열
@@ -1284,23 +1282,24 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_party.actors[0].mdef = val.to_i 
 						
 					when "skill_mash_list" # 스킬 딜레이 갱신
-						return if !val.include?(".")
-						data = val.split "."
+						return unless val.include?(".")
 						
+						data = val.split "."
 						for d in data
 							next if !d.include?(",")
+							
 							id, time = d.split(",").map { |x| x.to_i }
 							$game_party.actors[0].skill_mash[id] = time
 						end
 						
 					when "buff_mash_list" # 버프 지속시간 갱신
-						return if !val.include?(".")
-						data = val.split "."
+						return unless val.include?(".")
 						
+						data = val.split "."
 						for d in data
 							next if !d.include?(",")
-							id, time = d.split(",").map { |x| x.to_i }
 							
+							id, time = d.split(",").map { |x| x.to_i }
 							$game_party.actors[0].rpg_skill.buff(id)
 							$game_party.actors[0].buff_time[id] = time
 						end
@@ -1610,18 +1609,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 				when /<Drop_Get>(.*)<\/Drop_Get>/
-					data = $1.split(',')
-					id = data[0].to_i
-					map_id = data[1].to_i
-					
-					return if map_id != $game_map.map_id
-					return if $Drop[id] == nil
+					id = $1.to_i
+					return unless $Drop[id]
 					
 					$Drop[id] = nil
 					event = $game_map.events[id]
+					$game_map.events.delete(event)
 					event.erase
 					event = nil
-					$game_map.events.delete(event)
 					
 					# 효과음 실행
 				when /<se_play>(.*)<\/se_play>/

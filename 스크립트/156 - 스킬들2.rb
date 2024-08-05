@@ -680,11 +680,11 @@ class Rpg_Skill_Data
 		
 		case @id
 		when 5 # 누리의기원
-			@heal_value = 75
+			@heal_value = 50
 		when 21 # 바다의기원
 			@heal_value = 100
 		when 27 # 동해의기원
-			@heal_value = 170
+			@heal_value = 160
 		when 29 # 천공의기원
 			@heal_value = 300
 		when 36 # 구름의기원
@@ -703,13 +703,13 @@ class Rpg_Skill_Data
 			@heal_value = 170
 			@is_party = true
 		when 83 # 천공의희원
-			@heal_value = 200
+			@heal_value = 300
 			@is_party = true
 		when 86 # 바다의희원
 			@heal_value = 75
 			@is_party = true
 		when 87 # 천공의희원
-			@heal_value = 200
+			@heal_value = 300
 			@is_party = true
 		when 89 # 구름의희원
 			@heal_value = 500

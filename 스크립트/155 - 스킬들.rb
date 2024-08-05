@@ -529,17 +529,15 @@ class Rpg_skill
 	
 	def casting_chat(data)
 		return unless @character
+		
 		sec = data[0]
 		msg = data[1]
 		type = data[2] || 3
 		
-		if msg != nil
+		if msg 
 			$chat_b.input(msg, type, sec, @character)
-			if @character == $game_player
-				Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n"
-			else
-				Network::Main.socket.send "<monster_chat>#{@character.id}&#{msg}&#{type}</monster_chat>\n" 
-			end
+			Network::Main.socket.send "<map_chat>#{name}&#{msg}&#{type}</map_chat>\n" if @character == $game_player
+			Network::Main.socket.send "<monster_chat>#{@character.id}&#{msg}&#{type}</monster_chat>\n" if @character != $game_player 
 		end
 	end
 	
@@ -619,7 +617,7 @@ class Rpg_skill
 		power = power.to_f
 		power += case type
 		when 0 then (@battler.hp * p_hp) + (@battler.sp * p_sp) # 현재 
-		when 1 then (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp) # 전체
+		when 1, 2 then (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp) # 전체
 		end
 		
 		power += val

@@ -4,7 +4,7 @@ def 유저접속
 		$game_party.actors[0].name = $nickname
 	end
 	Network::Main.update
-	$ABS = MrMo_ABS.new unless $ABS
+	$ABS = MrMo_ABS.new 
 	
 	$rpg_skill_data = Rpg_Skill_Initialize.new.data
 	$game_party.setup_starting_members
@@ -26,7 +26,7 @@ def 유저접속
 	$nowtrade = 0
 	$game_player.move_speed = $game_player.base_speed
 	$scene = Scene_Reinit.new 
-	$Abs_item_data = Item_data.new unless $Abs_item_data
+	$Abs_item_data = Item_data.new 
 	
 	$console = nil
 	$chat = nil

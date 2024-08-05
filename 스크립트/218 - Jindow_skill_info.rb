@@ -263,9 +263,8 @@ class Jindow_Skill_Info < Jindow
 	def update
 		super
 		return unless @button_key.click
-		if Hwnd.include?("Keyset_menu")
-			Hwnd.dispose("Keyset_menu")
-		end
+		
+		Hwnd.dispose("Keyset_menu") if Hwnd.include?("Keyset_menu")
 		Jindow_Keyset_menu.new(@data.id, 3)
 	end
 end

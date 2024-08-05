@@ -1,4 +1,4 @@
-$exp_limit = 45 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_limit = 150 # 한번에 최대 얻을 수 있는 경험치 퍼센트
 $exp_event = 0 # 경험치 이벤트
 
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")
@@ -309,6 +309,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :button_mash
 		attr_accessor :char_dir
 		attr_accessor :damage_bitmap
+		attr_accessor :hate_group
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		# 생성자, 변수 초기화
@@ -335,6 +336,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@damage_bitmap = {}
 			@sec = Graphics.frame_rate
 			
+			@hate_group = {}
+			@hate_group[0] = [@actor]
 			ini_create_damage_bitmap
 		end
 		# 반환 함수들
@@ -460,26 +463,25 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * ABS Refresh(Event, List, Characterset Name) 새로고침
 		#--------------------------------------------------------------------------
 		def refresh(event, list, character_name)
+			return unless list # 이벤트가 없다면 무시
+			
 			if event.character_name != "" and !@char_dir.include?(event.character_name + ".png")
 				event.character_name = "공격스킬2"
 			end
-			
 			@enemies.delete(event.id) #Delete the event from the list
-			return if list == nil # 이벤트가 없다면 무시
 			
 			parameters = SDK.event_comment_input(event, 11, "ABS")
 			return if parameters.nil? 
 			
 			#Get Enemy ID
-			id = parameters[0].split
-			id = id[1].to_i
-			
+			id = parameters[0].split[1].to_i
 			enemy = $data_enemies[id] 
-			return if enemy == nil
+			return unless enemy 
 			
 			@enemies[event.id] = ABS_Enemy.new(enemy.id)
+			@enemies[event.id].event = event
 			@enemies[event.id].event_id = event.id
-			event.name = "[id#{@enemies[event.id].name}]" if @enemies[event.id].name != ""
+			event.name = "[id#{@enemies[event.id].name}]" unless @enemies[event.id].name.empty?
 			
 			sw = event.character_name == "공격스킬2"
 			if ABS_ENEMY_CHAR[enemy.id] && sw
@@ -489,7 +491,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				event.es_set_graphic(char_name, opcity, hue) if @char_dir.include?(char_name + ".png")
 			end
 			
-			@enemies[event.id].event = event
 			n = parameters[0].split[1].to_i
 			if $enemy_spec.spec(n) != nil
 				spec = $enemy_spec.spec(n)
@@ -520,6 +521,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies[event.id].aggro = $is_map_first
 			@enemies[event.id].aggressiveness = (@enemies[event.id].aggressiveness * 45.0 + rand(3) - 2) / 45.0 
 			@enemies[event.id].rpg_skill = Rpg_skill.new(@enemies[event.id])
+			
+			@hate_group[id] = [] unless @hate_group[id]
+			@hate_group[id] << @enemies[event.id] unless @hate_group[id].include?(@enemies[event.id])
 		end
 		
 		#--------------------------------------------------------------------------
@@ -647,6 +651,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Update Enemy Battle(Enemy)
 		#--------------------------------------------------------------------------
 		def check_enemy_battle_reset(enemy)
+			loop = 0
+			loop do
+				loop += 1
+				check_enemy_ai(enemy)
+				break if loop == 1000
+			end
+			
 			return true unless check_enemy_ai(enemy)
 			return true unless enemy.attacking
 			return true if enemy.attacking.actor.dead?
@@ -657,21 +668,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def update_enemy_battle(enemy)
 			return if is_enemy_casting(enemy)
-			
-			if enemy.casting_action
-				handle_enemy_casting_action(enemy, enemy.attacking, enemy.casting_action)
-				return
-			end
-			
-			if check_enemy_battle_reset(enemy)
-				reset_enemy_state(enemy)
-				return
-			end   
+			return handle_enemy_casting_action(enemy, enemy.attacking, enemy.casting_action) if enemy.casting_action
+			return reset_enemy_state(enemy) if check_enemy_battle_reset(enemy)
 			
 			if should_attack?(enemy)
 				update_enemy_attack(enemy, enemy.attacking)
-				return if enemy == nil
-				return if enemy.attacking == nil
+				return unless enemy 
+				return unless enemy.attacking 
 			end
 			
 			move_and_turn_to_target(enemy)
@@ -698,8 +701,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return false if enemy.casting_mash <= 0
 			
 			enemy.casting_mash -= 1
-			return true if enemy.casting_mash > 0
-			return progress_enemy_casting(enemy)	
+			return enemy.casting_mash <= 0 ? progress_enemy_casting(enemy) : true
 		end
 		
 		def progress_enemy_casting(enemy)
@@ -708,7 +710,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			if data[enemy.casting_idx]
 				enemy.casting_mash = data[enemy.casting_idx][0] * @sec
-				enemy.rpg_skill.casting_chat(data[enemy.casting_idx], enemy.event)
+				enemy.rpg_skill.casting_chat(data[enemy.casting_idx])
 				return true	
 			end
 			
@@ -1433,13 +1435,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			@actor.set_graphic("죽음", 0, 0, 0)
 			$game_player.refresh
 			
-			for i in 0..4
-				$game_party.actors[0].equip(i, 0)
-			end
-			
 			# 이때 모든 버프들을 지우자
 			@actor.buff_time.each do |id, time|
-				@actor.buff_time[id] = 1 if time > 0
+				@actor.rpg_skill.buff_del(id) if time > 0
+			end
+			
+			for i in 0..4
+				$game_party.actors[0].equip(i, 0)
 			end
 			
 			@actor.pdef = 0 # 물리방어
@@ -1474,13 +1476,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return [0, 0] if enemy.hidden
 			
 			exp = ENEMY_EXP[enemy.id] || enemy.exp
-			if exp.is_a?(Array) && exp.size > 1
-				exp = (@actor.maxhp * (exp[1] || 0).to_f) + (@actor.maxsp * (exp[2] || 0).to_f)
-			end
+			exp = (exp[0] || 0) + (@actor.maxhp * (exp[1] || 0)) + (@actor.maxsp * (exp[2] || 0)) if exp.is_a?(Array)
 			exp = exp.to_i			
 			gold = enemy.gold
 			
-			[exp, gold]
+			return [exp, gold]
 		end
 		
 		def adjust_exp_and_gold_for_party(exp, gold, in_map_player)
@@ -1506,8 +1506,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Hit Enemy(Enemy) or (Player) 몬스터가 공격할 경우, e가 a에게 공격당함
 		#--------------------------------------------------------------------------
-		def hit_enemy(e, a, animation=nil)
-			return if animation == 0
+		def hit_enemy(e, a, animation = nil)
+			return if animation == 0 
+			
 			if a.is_a?(ABS_Enemy)
 				return if e.is_a?(Game_Player) && !a.hate_group.include?(0)
 				return if e.is_a?(ABS_Enemy) && !a.hate_group.include?(e.id)
@@ -1551,15 +1552,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		def can_enemy_perceive(e, range, type)
 			enemies = []
 			
-			if e.hate_group.include?(0) && in_range?(e.event, $game_player, range)
-				enemies.push($game_player) if $game_party.actors[0].hp > 0
+			e.hate_group.each do |hate_id|
+				next enemies.push($game_player) if hate_id == 0 && $game_party.actors[0].hp > 0
+				
+				@hate_group[hate_id].each do |target|
+					enemies.push(enemy) if check_is_enemy(e, target, range)
+				end
 			end
-			
-			@enemies.values.each do |enemy|
-				next unless check_is_enemy(e, enemy, range)
-				enemies.push(enemy)
-			end
-			
 			return false if enemies.empty?
 			
 			if e.closest_enemy
@@ -1567,7 +1566,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			set_enemy_attacking(e, enemies[0])
-			true
+			return true
 		end
 		
 		#--------------------------------------------------------------------------
@@ -2237,10 +2236,25 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Player Place Move
 		#--------------------------------------------------------------------------
 		def transfer_player
-			$ABS.enemies = {} if $game_map.map_id != $game_temp.player_new_map_id
+			if $game_map.map_id != $game_temp.player_new_map_id
+				$ABS.enemies = {}
+				$ABS.hate_group = {}
+			end
 			mrmo_abs_scene_map_transfer_player
 		end
 	end
+	
+	class Game_Actor < Game_Battler
+		alias mrmo_abs_game_actor_initialize initialize
+		attr_accessor   :event                     
+		
+		def initialize(actor_id)
+			@event = $game_player
+			mrmo_abs_game_actor_initialize(actor_id)
+		end
+	end
+	
+	
 	#============================================================================
 	# * Game Player
 	#============================================================================
@@ -3117,7 +3131,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				critical_rate *= 100
 				r = rand(10000)
 				if r <= critical_rate.to_i
-					self.damage *= (1.5 + critical_data[1])
+					self.damage *= (1.75 + critical_data[1])
 					self.critical = "skill_cri"
 				end
 				self.damage /= 2 if self.guarding?
@@ -3148,7 +3162,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			return damage
 		end
-				
+		
 		def apply_damage(user, skill)
 			last_hp = self.hp
 			self.hp -= self.damage
@@ -3216,34 +3230,25 @@ if SDK.state("Mr.Mo's ABS") == true
 		#     y_plus : y-coordinate plus value
 		#--------------------------------------------------------------------------
 		def jump_nt(x_plus, y_plus)
-			new_x = @x + x_plus
-			new_y = @y + y_plus
-			
-			if x_plus != 0
-				move_horizontally(x_plus)
-			elsif y_plus != 0
-				move_vertically(y_plus)
-			end
-			
+			x_plus != 0 ? move_horizontally(x_plus) : move_vertically(y_plus)
 			@jump_count = 1
 		end
 		
 		def move_horizontally(x_plus)
-			count = x_plus.abs
-			step = x_plus > 0 ? 1 : -1
-			count.times do
-				x = @x + step
-				break unless passable?(x, @y, 0)
-				@x = x
-			end
+			move_in_direction(x_plus, 0, x_plus.abs, x_plus > 0 ? 1 : -1)
 		end
 		
 		def move_vertically(y_plus)
-			count = y_plus.abs
-			step = y_plus > 0 ? 1 : -1
+			move_in_direction(0, y_plus, y_plus.abs, y_plus > 0 ? 1 : -1)
+		end
+		
+		def move_in_direction(x_plus, y_plus, count, step)
 			count.times do
-				y = @y + step
-				break unless passable?(@x, y, 0)
+				x = @x + x_plus * step
+				y = @y + y_plus * step
+				break unless passable?(x, y, 0)
+				
+				@x = x
 				@y = y
 			end
 		end
@@ -3282,10 +3287,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			@anim_wait += 1 if @anim_wait < 18 - @move_speed * 2
-			if @frame == 0
-				end_animate
-				return
-			end
+			
+			return end_animate if @frame == 0
 			update_jump if jumping?
 		end
 		
@@ -3308,7 +3311,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def check_enemy_movable(is_ok)
-			return true if !self.is_a?(Game_Event)
+			return true unless self.is_a?(Game_Event)
 			return true if is_ok
 			
 			enemy = $ABS.enemies[self.event.id]
@@ -3316,170 +3319,106 @@ if SDK.state("Mr.Mo's ABS") == true
 			return enemy.aggro 
 		end
 		
-		def move_down(turn_enabled = true, is_ok = false) # is_ok : 이동 가능
+		def move_in_direction_with_check(x_plus, y_plus, direction, turn_enabled, is_ok)
 			return unless check_enemy_movable(is_ok)
 			
-			turn_down if turn_enabled # Turn down
-			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
+			if turn_enabled
+				turn = case direction
+				when 2 then "down"
+				when 4 then "left"
+				when 6 then "right"
+				when 8 then "up"
+				end
+				send("turn_#{turn}") 
+			end
+			return if self.is_a?(Game_Player) && Key.press?(KEY_CTRL)
 			
-			if passable?(@x, @y, 2)
-				@y += 1
+			if passable?(@x, @y, direction)
+				@x += x_plus
+				@y += y_plus
 				increase_steps
 				send_enemy_move
 			else
-				check_event_trigger_touch(@x, @y + 1) # Determine if touch event is triggered
+				check_event_trigger_touch(@x + x_plus, @y + y_plus)
 			end
 		end
 		
-		def move_left(turn_enabled = true, is_ok = false) # is_ok는 외부요인으로 옮기는거		
-			return if !check_enemy_movable(is_ok)
-			
-			turn_left if turn_enabled
-			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
-			
-			if passable?(@x, @y, 4)
-				@x -= 1
-				increase_steps
-				send_enemy_move
-			else
-				check_event_trigger_touch(@x - 1, @y)
-			end
+		def move_down(turn_enabled = true, is_ok = false)
+			move_in_direction_with_check(0, 1, 2, turn_enabled, is_ok)
+		end
+		
+		def move_left(turn_enabled = true, is_ok = false)
+			move_in_direction_with_check(-1, 0, 4, turn_enabled, is_ok)
 		end
 		
 		def move_right(turn_enabled = true, is_ok = false)
-			return if !check_enemy_movable(is_ok)
-			
-			turn_right if turn_enabled
-			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
-			
-			if passable?(@x, @y, 6)	
-				@x += 1
-				increase_steps
-				send_enemy_move
-			else
-				check_event_trigger_touch(@x + 1, @y)
-			end
+			move_in_direction_with_check(1, 0, 6, turn_enabled, is_ok)
 		end
 		
 		def move_up(turn_enabled = true, is_ok = false)
-			return if !check_enemy_movable(is_ok)
-			
-			turn_up if turn_enabled
-			return if self.is_a?(Game_Player) and Key.press?(KEY_CTRL)
-			
-			if passable?(@x, @y, 8)
-				@y -= 1
-				increase_steps
-				send_enemy_move
-			else
-				check_event_trigger_touch(@x, @y - 1)
-			end
+			move_in_direction_with_check(0, -1, 8, turn_enabled, is_ok)
 		end
 		
 		#--------------------------------------------------------------------------
 		# * 대각선 이동
-		# * Move Lower Left
+		# * Move Diagonally
 		#--------------------------------------------------------------------------
+		def move_diagonally(direction, x_plus, y_plus, d1, d2)
+			adjust_direction(direction)
+			if passable_diagonally?(x_plus, y_plus, d1, d2)
+				@x += x_plus
+				@y += y_plus
+				increase_steps
+			else
+				check_event_trigger_touch(@x + x_plus, @y + y_plus)
+			end
+		end
+		
 		def move_lower_left
-			# If no direction fix
-			unless @direction_fix
-				# Face down is facing right or up
-				@direction = (@direction == 6 ? 4 : @direction == 8 ? 2 : @direction)
-			end
-			# When a down to left or a left to down course is passable
-			if (passable?(@x, @y, 2) and passable?(@x, @y + 1, 4)) or
-				(passable?(@x, @y, 4) and passable?(@x - 1, @y, 2))
-				# Update coordinates
-				@x -= 1
-				@y += 1
-				# Increase steps
-				increase_steps
-			else
-				check_event_trigger_touch(@x - 1, @y + 1)
-			end
+			move_diagonally('lower_left', -1, 1, 2, 4)
 		end
-		#--------------------------------------------------------------------------
-		# * Move Lower Right
-		#--------------------------------------------------------------------------
+		
 		def move_lower_right
-			# If no direction fix
-			unless @direction_fix
-				# Face right if facing left, and face down if facing up
-				@direction = (@direction == 4 ? 6 : @direction == 8 ? 2 : @direction)
-			end
-			# When a down to right or a right to down course is passable
-			if (passable?(@x, @y, 2) and passable?(@x, @y + 1, 6)) or
-				(passable?(@x, @y, 6) and passable?(@x + 1, @y, 2))
-				# Update coordinates
-				@x += 1
-				@y += 1
-				# Increase steps
-				increase_steps
-			else
-				check_event_trigger_touch(@x + 1, @y + 1)
-				
-			end
+			move_diagonally('lower_right', 1, 1, 2, 6)
 		end
-		#--------------------------------------------------------------------------
-		# * Move Upper Left
-		#--------------------------------------------------------------------------
+		
 		def move_upper_left
-			# If no direction fix
-			unless @direction_fix
-				# Face left if facing right, and face up if facing down
-				@direction = (@direction == 6 ? 4 : @direction == 2 ? 8 : @direction)
-			end
-			# When an up to left or a left to up course is passable
-			if (passable?(@x, @y, 8) and passable?(@x, @y - 1, 4)) or
-				(passable?(@x, @y, 4) and passable?(@x - 1, @y, 8))
-				# Update coordinates
-				@x -= 1
-				@y -= 1
-				# Increase steps
-				increase_steps
-			else
-				check_event_trigger_touch(@x - 1, @y - 1)
+			move_diagonally('upper_left', -1, -1, 8, 4)
+		end
+		
+		def move_upper_right
+			move_diagonally('upper_right', 1, -1, 8, 6)
+		end
+		
+		def adjust_direction(direction)
+			return if @direction_fix
+			
+			@direction = case direction
+			when 'lower_left' then @direction == 6 ? 4 : @direction == 8 ? 2 : @direction 
+			when 'lower_right' then @direction == 4 ? 6 : @direction == 8 ? 2 : @direction 
+			when 'upper_left' then @direction == 6 ? 4 : @direction == 2 ? 8 : @direction 
+			when 'upper_right' then @direction == 4 ? 6 : @direction == 2 ? 8 : @direction 
 			end
 		end
-		#--------------------------------------------------------------------------
-		# * Move Upper Right
-		#--------------------------------------------------------------------------
-		def move_upper_right
-			# If no direction fix
-			unless @direction_fix
-				# Face right if facing left, and face up if facing down
-				@direction = (@direction == 4 ? 6 : @direction == 2 ? 8 : @direction)
-			end
-			# When an up to right or a right to up course is passable
-			if (passable?(@x, @y, 8) and passable?(@x, @y - 1, 6)) or
-				(passable?(@x, @y, 6) and passable?(@x + 1, @y, 8))
-				# Update coordinates
-				@x += 1
-				@y -= 1
-				# Increase steps
-				increase_steps
-			else
-				check_event_trigger_touch(@x + 1, @y - 1)
-			end
+		
+		def passable_diagonally?(x_plus, y_plus, d1, d2)
+			(passable?(@x, @y, d1) && passable?(@x, @y + y_plus, d2)) ||
+			(passable?(@x, @y, d2) && passable?(@x + x_plus, @y, d1))
 		end
 		
 		#--------------------------------------------------------------------------
 		# * Move at Random
 		#--------------------------------------------------------------------------
 		def move_random()
-			if self.is_a?(Game_Event) and $ABS.enemies[self.event.id] != nil and $ABS.enemies[self.event.id].aggro
-				return true if !$is_map_first
+			if $ABS.enemies[self.event.id] && $ABS.enemies[self.event.id].aggro
+				return true unless $is_map_first
 			end
 			
 			case rand(4)
-			when 0  # Move down
-				move_down()
-			when 1  # Move left
-				move_left()
-			when 2  # Move right
-				move_right()
-			when 3  # Move up
-				move_up()
+			when 0 then move_down
+			when 1 then move_left
+			when 2 then move_right
+			when 3 then move_up
 			end
 		end
 		
@@ -3488,81 +3427,50 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def move_to(b)
 			return if @stop_count <= (15 - @move_frequency * 2) * (6 - @move_frequency)
-			#~ @stop_count = 0
-			# Get difference in player coordinates
-			sx = @x - b.x
-			sy = @y - b.y
-			# If coordinates are equal
-			if sx == 0 and sy == 0
-				return
-			end
-			# Get absolute value of difference
-			abs_sx = sx > 0 ? sx : -sx
-			abs_sy = sy > 0 ? sy : -sy
-			# Branch by random numbers 0-5
-			case rand(6)
-			when 0..4  # Approach player
-				# If horizontal and vertical distances are equal
-				if abs_sx == abs_sy
-					# Increase one of them randomly by 1
-					rand(2) == 0 ? abs_sx += 1 : abs_sy += 1
-				end
-				# If horizontal distance is longer
-				if abs_sx > abs_sy
-					# Move towards player, prioritize left and right directions
-					if sx > 0
-						move_left()
-					else
-						move_right()
-					end
-					
-					if not moving? and sy != 0
-						if sy > 0
-							move_up()
-						else
-							move_down()
-						end
-					end
-					# If vertical distance is longer
-				else
-					# Move towards player, prioritize up and down directions
-					if sy > 0
-						move_up()
-					else
-						move_down()
-					end
-					if not moving? and sx != 0						
-						if sx > 0
-							move_left()
-						else
-							move_right()
-						end
-					end
-				end
-			when 5  # random
-				move_random
-			end
-			#~ turn_to(b)
+			
+			sx, sy = @x - b.x, @y - b.y
+			return if sx == 0 && sy == 0
+			
+			abs_sx, abs_sy = sx.abs, sy.abs
+			rand(6) < 5 ? move_towards_object(abs_sx, abs_sy, sx, sy) : move_random
 		end
+		
+		def move_towards_object(abs_sx, abs_sy, sx, sy)
+			abs_sx += 1 if abs_sx == abs_sy && rand(2) == 0
+			
+			if abs_sx > abs_sy
+				sx > 0 ? move_left : move_right
+				return if moving?
+				
+				if rand(4) < 3
+					return rand(2) == 0 ? move_up : move_down
+				else
+					return sy > 0 ? move_up : move_down
+				end
+			else
+				sy > 0 ? move_up : move_down
+				return if moving?
+				
+				if rand(4) < 3
+					return rand(2) == 0 ? move_left : move_right 
+				else
+					return sx > 0 ? move_left : move_right
+				end
+			end
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Turn Towards B
 		#--------------------------------------------------------------------------
 		def turn_to(b)
 			return if @stop_count <= (15 - @move_frequency * 2) * (6 - @move_frequency)
-			# Get difference in player coordinates
-			sx = @x - b.x
-			sy = @y - b.y
-			# If coordinates are equal
-			if sx == 0 and sy == 0
-				return
-			end
-			# If horizontal distance is longer
+			
+			sx, sy = @x - b.x, @y - b.y
+			return if sx == 0 && sy == 0
+			
 			if sx.abs > sy.abs
-				# Turn to the right or left towards player
 				sx > 0 ? turn_left : turn_right
-				# If vertical distance is longer
 			else
-				# Turn up or down towards player
 				sy > 0 ? turn_up : turn_down
 			end
 		end

@@ -60,7 +60,7 @@ class Scene_Map
 				run_it = part_of_event_system(event)
 				
 				# Run it if it is
-				if run_it != false and event.trigger == 0
+				if run_it and event.trigger == 0
 					range = get_object_range($game_player, event)
 					if run_it >= range
 						event.refresh

@@ -934,6 +934,11 @@ class Rpg_Skill_Data
 	def set_active_attributes
 		@is_active = true
 		@type << "active"
+		
+		case @id
+		when 162 # 추격
+			@mash_time = 10
+		end
 	end
 	
 	def set_default_attributes

@@ -45,6 +45,12 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :pci
 		attr_accessor :character_name
 		attr_accessor :trans_v
+		
+		attr_accessor :rpg_skill
+		attr_accessor :damage_array # 
+		attr_accessor :critical_array # 
+		attr_accessor :buff_time
+		
 		if User_Edit::VISUAL_EQUIP_ACTIVE
 			attr_accessor :weapon_id
 			attr_accessor :armor1_id
@@ -54,9 +60,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			attr_accessor :capelli
 			attr_accessor :equips
 			attr_accessor :equip_change
-			attr_accessor :is_transparency # 스킬 투명 썼는지 여부
-			attr_accessor :damage_array # 
-			attr_accessor :critical_array # 
+			attr_accessor :is_transparency # 스킬 투명 썼는지 여부	
 		end  
 		#--------------------------------------------------------------------------
 		# * Initializes a network player.
@@ -92,9 +96,12 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@character_name = "바람머리"
 			@is_transparency = false
 			@trans_v = 0
+			
+			# abs_rpg 관련
 			@damage_array = []
 			@critical_array = []
 			@rpg_skill = Rpg_skill.new(self)
+			@buff_time = {}
 			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false
@@ -111,6 +118,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		#-------------------------------------------------------------------------
 		def refresh(data)
 			return if @netid == Network::Main.id
+			
 			@oldx = @x
 			@oldy = @y
 			eval(data) if data != nil

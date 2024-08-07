@@ -22,8 +22,6 @@ def 유저접속
 	$game_switches[61] = true
 	$game_switches[62] = true
 	
-	$cbig = 0
-	$nowtrade = 0
 	$game_player.move_speed = $game_player.base_speed
 	$scene = Scene_Reinit.new 
 	$Abs_item_data = Item_data.new 

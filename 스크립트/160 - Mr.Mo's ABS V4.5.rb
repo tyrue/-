@@ -522,8 +522,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies[event.id].aggressiveness = (@enemies[event.id].aggressiveness * 45.0 + rand(3) - 2) / 45.0 
 			@enemies[event.id].rpg_skill = Rpg_skill.new(@enemies[event.id])
 			
-			@hate_group[id] = [] unless @hate_group[id]
-			@hate_group[id] << @enemies[event.id] unless @hate_group[id].include?(@enemies[event.id])
+			@hate_group[enemy.id] = [] unless @hate_group[enemy.id]
+			@hate_group[enemy.id] << @enemies[event.id] unless @hate_group[enemy.id].include?(@enemies[event.id])
 		end
 		
 		#--------------------------------------------------------------------------
@@ -608,15 +608,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def update_enemy
 			@enemies.values.each do |enemy| # 적 리스트 가져옴
-				next if enemy.nil? || enemy.dead?
+				next if update_enemy_check(enemy)
 				
-				if enemy.event.character_name.empty? # 캐릭터가 없으면 적 제거
-					@enemies.delete(enemy.event.id)
-					next
-				end
-				
-				update_enemy_buff(enemy) # 적 캐릭터의 버프 업데이트
-				update_enemy_skill_mash(enemy) # 적 캐릭터의 스킬 쿨타임 업데이트
+				update_enmey_state_time(enemy)
 				update_enemy_phase(enemy) # 적 체력에 따른 페이즈 관리
 				update_enemy_aggro(enemy) # 어그로 상태 확인
 				update_enemy_battle(enemy) # 적이 전투 중이면 전투 상태 업데이트
@@ -624,9 +618,22 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
+		def update_enemy_check(enemy)
+			return true if enemy.nil? 
+			return true if enemy.dead?
+			return true if enemy.event.character_name.empty? 
+			return false
+		end
+		
 		#--------------------------------------------------------------------------
 		# 적 캐릭터의 상태 업데이트 : 버프, 디버프등 상태 
 		#--------------------------------------------------------------------------
+		def update_enmey_state_time(enemy)
+			update_enemy_buff(enemy) # 적 캐릭터의 버프 업데이트
+			update_enemy_skill_mash(enemy) # 적 캐릭터의 스킬 쿨타임 업데이트
+			update_casting_time(enemy)
+		end
+		
 		def update_enemy_buff(enemy)
 			enemy.buff_time.each do |id, time|
 				next unless time > 0
@@ -647,37 +654,33 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
+		def update_casting_time(enemy)
+			return unless enemy.casting_mash > 0 
+			
+			enemy.casting_mash -= 1
+			progress_enemy_casting(enemy) if enemy.casting_mash <= 0 
+		end
+		
+		def update_enemy_battle(enemy)
+			return unless enemy
+			return if is_enemy_casting(enemy)
+			return handle_enemy_casting_action(enemy, enemy.attacking, enemy.casting_action) if enemy.casting_action
+			return reset_enemy_state(enemy) if check_enemy_battle_reset(enemy)
+			
+			update_enemy_attack(enemy, enemy.attacking) if should_attack?(enemy)
+			move_and_turn_to_target(enemy)
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Update Enemy Battle(Enemy)
 		#--------------------------------------------------------------------------
 		def check_enemy_battle_reset(enemy)
-			loop = 0
-			loop do
-				loop += 1
-				check_enemy_ai(enemy)
-				break if loop == 1000
-			end
-			
 			return true unless check_enemy_ai(enemy)
 			return true unless enemy.attacking
 			return true if enemy.attacking.actor.dead?
 			return true unless in_range?(enemy.event, enemy.attacking.event, enemy.see_range)
 			return true unless enemy.aggro
 			return false 
-		end
-		
-		def update_enemy_battle(enemy)
-			return if is_enemy_casting(enemy)
-			return handle_enemy_casting_action(enemy, enemy.attacking, enemy.casting_action) if enemy.casting_action
-			return reset_enemy_state(enemy) if check_enemy_battle_reset(enemy)
-			
-			if should_attack?(enemy)
-				update_enemy_attack(enemy, enemy.attacking)
-				return unless enemy 
-				return unless enemy.attacking 
-			end
-			
-			move_and_turn_to_target(enemy)
 		end
 		
 		#--------------------------------------------------------------------------
@@ -698,10 +701,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def is_enemy_casting(enemy)
-			return false if enemy.casting_mash <= 0
-			
-			enemy.casting_mash -= 1
-			return enemy.casting_mash <= 0 ? progress_enemy_casting(enemy) : true
+			return enemy.casting_mash > 0
 		end
 		
 		def progress_enemy_casting(enemy)
@@ -711,15 +711,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			if data[enemy.casting_idx]
 				enemy.casting_mash = data[enemy.casting_idx][0] * @sec
 				enemy.rpg_skill.casting_chat(data[enemy.casting_idx])
-				return true	
+				return 
 			end
 			
 			enemy.casting_idx = 0
-			return false
 		end
 		
-		def handle_enemy_casting_action(e, actor, action)
-			process_enemy_action(e, actor, action)
+		def handle_enemy_casting_action(e, target, action)
+			process_enemy_action(e, target, action)
 			reset_casting(e)
 		end
 		
@@ -740,6 +739,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def move_and_turn_to_target(enemy)
+			return unless enemy.attacking
+			
 			target = enemy.attacking.event
 			enemy.event.move_to(target) unless in_range?(enemy.event, target, 1)
 			enemy.event.turn_to(target) if !in_direction?(enemy.event, target) && in_range?(enemy.event, target, 1)
@@ -787,51 +788,45 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 		end
 		
-		
-		
 		#--------------------------------------------------------------------------
 		# * 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
-		def update_enemy_attack(e, actor)
+		def update_enemy_attack(e, target)
 			return unless e && e.actions && !e.actions.empty?
 			
 			e.actions.each do |action|
 				next if enemy_pre_attack(e, action)
-				
-				process_enemy_action(e, actor, action)
+				break if process_enemy_action(e, target, action)
 			end
 		end
 		
-		def process_enemy_action(e, actor, action)
-			case action.kind
-			when 0 then handle_basic_attack(e, actor, action)
-			when 1, 2 then handle_skill_attack(e, actor, action)
+		def process_enemy_action(e, target, action)
+			check = case action.kind
+			when 0 then handle_basic_attack(e, target, action)
+			when 1, 2 then handle_skill_attack(e, target, action)
 			end
+			return check
 		end
 		
-		def handle_basic_attack(e, actor, action)
-			return if !ready_for_basic_attack?(e, actor)
+		def handle_basic_attack(e, target, action)
+			return unless ready_for_basic_attack?(e, target)
 			
 			case action.basic
 			when 0 #Attack
-				a = actor.is_a?(ABS_Enemy) ? actor : @actor
+				a = target.is_a?(ABS_Enemy) ? target : @actor
 				a.attack_effect(e)
 				animation_melee(e.event.direction, e.event)
-				
-				if a.damage != "Miss" && a.damage != 0
-					hit_enemy(actor, e)
-				end
+				hit_enemy(target, e) if a.damage != 0
 				
 				return if enemy_dead?(a, e)
 				return unless a.is_a?(ABS_Enemy) 
 				
 				set_enemy_attacking(a, e)
 			end
+			return true
 		end
 		
 		def set_enemy_attacking(enemy, target)
-			return if enemy.attacking == target
-			
 			enemy.attacking = target
 			return if enemy.in_battle
 			
@@ -839,35 +834,37 @@ if SDK.state("Mr.Mo's ABS") == true
 			setup_movement(enemy)
 		end
 		
-		def ready_for_basic_attack?(e, actor)
-			return true if e.casting_action
-			return !e.event.moving? && in_range?(e.event, actor.event, 1) && in_direction?(e.event, actor.event)
+		def ready_for_basic_attack?(e, target)
+			return !e.event.moving? && in_range?(e.event, target.event, 1) && in_direction?(e.event, target.event)
 		end
 		
-		def handle_skill_attack(e, actor, action)
-			sw = action == e.casting_action
+		def handle_skill_attack(e, target, action)
 			skill = $data_skills[action.skill_id]
-			return unless valid_skill?(e, skill, actor, sw)
+			return unless valid_skill?(e, skill, target, action)
 			
 			skill_data = $rpg_skill_data[skill.id]
 			e.skill_mash[skill.id] = (skill_data.mash_time || 0) * @sec
-			return if enemy_casting_set?(e, action, skill) unless sw
+			return if enemy_casting_set?(e, action, skill) 
 			
-			execute_skill(e, actor, skill, skill_data)
+			execute_skill(e, target, skill, skill_data)
+			return true
 		end
 		
-		def valid_skill?(e, skill, actor, sw)
-			return true if sw
+		def valid_skill?(e, skill, target, action)
+			return true if action == e.casting_action
+			
 			return false unless skill
 			return false unless e.can_use_skill?(skill)
 			
 			skill_data = $rpg_skill_data[skill.id]
 			range = skill_data.range_value
-			return false if (range && !in_range?(e.event, actor.event, range + 1))
+			return false if (range && !in_range?(e.event, target.event, range + 1))
 			return true
 		end
 		
 		def enemy_casting_set?(e, action, skill)
+			return false if action == e.casting_action
+			
 			id = skill.id
 			cast_data = ABS_ENEMY_SKILL_CASTING[id] # 캐스팅 갱신
 			return false unless cast_data
@@ -887,19 +884,19 @@ if SDK.state("Mr.Mo's ABS") == true
 			return true
 		end
 		
-		def execute_skill(e, actor, skill, skill_data)
+		def execute_skill(e, target, skill, skill_data)
 			case skill.scope
-			when 1 then execute_single_target_skill(e, actor, skill, skill_data)
+			when 1 then execute_single_target_skill(e, skill, skill_data)
 			when 2 then execute_aoe_skill(e, skill, skill_data)
 			end
 			
-			e.rpg_skill.process_skill(skill.id)
+			e.rpg_skill.process_skill(skill.id, true, target)
 			e.event.animation_id = skill.animation1_id
 			e.sp = [e.sp - skill.sp_cost, 0].max
 			send_network_monster(e)
 		end
 		
-		def execute_single_target_skill(e, actor, skill, skill_data)
+		def execute_single_target_skill(e, skill, skill_data)
 			return unless skill_data.type.include?("range")
 			
 			dir_arr = skill_data.move_direction ? Marshal.load(Marshal.dump(skill_data.move_direction)) : []
@@ -914,7 +911,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return unless skill_data.type.include?("range")
 			
 			range = skill_data.range_value
-			enemies = get_all_range(e.event, range)
+			enemies = get_all_range(e.event, range, e.hate_group)
 			enemies.push($game_player) if e.hate_group.include?(0) && in_range?($game_player, e.event, range)
 			enemies_net = get_all_range_net(e.event, range) if e.hate_group.include?(0)
 			
@@ -1383,16 +1380,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			event.fade = true 
 			
 			id = event.id
-			@enemies.delete(id) if ([0, nil].include?(e.respawn))
 			enemy_dead_process(e, event, true)
+			@enemies.delete(id) if ([0, nil].include?(e.respawn))
 			return true
 		end
 		
 		def enemy_dead_process(enemy, event, sw = false)
 			enemy_count_add(enemy.id, 1)
-			if sw
-				Network::Main.send_with_tag("enemy_dead", "#{id}") 
-			end
+			Network::Main.send_with_tag("enemy_dead", "#{id}") if sw
 			
 			trigger, id = enemy.trigger
 			case trigger
@@ -1410,6 +1405,8 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				key = [$game_map.map_id, event.id, value]
 				$game_self_switches[key] = true
+			when 4 # 네트워크 스위치 공유
+				Network::Main.party_switch(id, 1)
 			end
 			
 			$game_map.need_refresh = true
@@ -1553,10 +1550,14 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemies = []
 			
 			e.hate_group.each do |hate_id|
-				next enemies.push($game_player) if hate_id == 0 && $game_party.actors[0].hp > 0
+				if hate_id == 0 
+					enemies.push($game_player) if $game_party.actors[0].hp > 0
+					next 
+				end
+				next unless @hate_group[hate_id]
 				
 				@hate_group[hate_id].each do |target|
-					enemies.push(enemy) if check_is_enemy(e, target, range)
+					enemies.push(target) if check_is_enemy(e, target, range)
 				end
 			end
 			return false if enemies.empty?
@@ -1672,10 +1673,20 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		# * Get ALL Range(Element, Range)
 		#--------------------------------------------------------------------------
-		def get_all_range(element, range)
+		def get_all_range(element, range, hate_group = nil)
 			objects = []
-			for e in @enemies.values
-				objects.push(e) if in_range?(element, e.event, range)
+			if hate_group
+				hate_group.each do |id|
+					next unless @hate_group[id]
+					
+					@hate_group[id].each do |target|
+						objects << target if in_range?(element, target.event, range)
+					end
+				end
+			else
+				for e in @enemies.values
+					objects.push(e) if in_range?(element, e.event, range)
+				end
 			end
 			return objects
 		end
@@ -1959,8 +1970,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def hit_object(object) # 히트시 발생하는 이벤트 처리
 			return unless object
-			enemy = find_enemy(object)
 			
+			enemy = find_enemy(object)
 			@range_skill.hit_skill_arr.each do |id, type|
 				case type
 				when 0 
@@ -2950,14 +2961,24 @@ if SDK.state("Mr.Mo's ABS") == true
 			self.critical = false  # Clear critical flag
 			hit_result = true  # First hit detection
 			
-			atk = (attacker.atk + attacker.str / 20.0)
-			if self.is_a?(Game_Actor)
-				self.damage = (atk * (1.0 + attacker.str / 20.0)) * (20.0 / (20 + self.base_pdef))  # Calculate basic damage
-			else
-				self.damage = (atk * (1.0 + attacker.str / 20.0)) * (100.0 / (100 + self.base_pdef)) # Calculate basic damage
+			a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
+			eva = [(5.0 * self.agi / a_dex).to_i, 100].min  # 회피율 계산
+			hit_rate = self.cant_evade? ? 100 : [100 - eva, 3].max # 회피 할 수 없는 상태면 무조건 맞음
+			hit_result = (rand(100) < hit_rate)
+			
+			unless hit_result
+				self.damage = "빗나감!"  # Set damage to "Miss"
+				self.critical = false  # Clear critical flag
+				return true  # End Method		
 			end
 			
-			if !attacker.is_a?(Game_NetPlayer)
+			atk = (attacker.atk + attacker.str / 20.0)
+			temp = self.is_a?(Game_Actor) ? 20.0 : 100.0
+			
+			self.damage = atk * (1.0 + attacker.str / 20.0)
+			self.damage /= (1.0 + self.base_pdef / temp)
+			
+			unless attacker.is_a?(Game_NetPlayer)
 				self.damage *= elements_correct(attacker.element_set)  # Element correction
 				self.damage /= 100
 			end
@@ -2965,19 +2986,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			self.damage = self.damage.to_i
 			self.damage = 1 if self.damage <= 0
 			
-			if self.damage > 0  # If damage value is strictly positive
-				critical_data = attacker.rpg_skill.critical_rate
-				
-				critical_rate = [(3.0 * attacker.dex / self.agi), 1].max
-				critical_rate += critical_data[0]
-				
-				self.critical = "player_hit" if self.is_a?(Game_Actor)
-				if rand(100) < critical_rate  # Critical correction
-					self.damage *= (3 + critical_data[1])
-					self.critical = true 
-				end
-				
-				self.damage /= 2 if self.guarding?  # Guard correction
+			self.critical = "player_hit" if self.is_a?(Game_Actor)
+			plus_rate, plus_power = attacker.rpg_skill.critical_rate
+			critical_rate = [(3.0 * attacker.dex / self.agi), 1].max + plus_rate
+			
+			if rand(100) < critical_rate  # Critical correction
+				self.damage *= (3.0 + plus_power)
+				self.critical = true 
 			end
 			
 			if self.damage.abs > 0  # Dispersion
@@ -2985,55 +3000,43 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage += rand(amp + 1) + rand(amp + 1) - amp
 			end
 			
-			a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
-			eva = [(8.0 * self.agi / a_dex).to_i, 100].min  # Second hit detection
+			remove_states_shock  # 여기서 맞았을 경우 상태이상 해제하는 코드 넣기
+			self_cha = self.rpg_skill.character
+			attacker_cha = attacker.rpg_skill.character
 			
-			hit = [100 - eva, 5].max  # Hit probability
-			hit = 100 if self.cant_evade?  # If evasion is impossible, set hit probability to 100
+			$ABS.weapon_skill(attacker.weapon_id, self)  # 특정 무기를 착용하면 추가 격 데미지가 있음
+			self.damage *= 2 if self_cha.direction == attacker_cha.direction
+			self.damage = attacker.rpg_skill.damage_calculation_attack(self.damage)  # 최종 데미지 계산
+			self.damage = self.rpg_skill.damage_calculation_defense(self.damage)			
+			self.damage = self.damage.to_i
+			self.hp -= self.damage
 			
-			hit_result = (rand(100) < hit)
+			@damage_array.push(self.damage)
+			@critical_array.push(self.critical)
 			
-			if hit_result
-				remove_states_shock  # State Removed by Shock
-				
-				if (self.is_a?(Game_Actor) && attacker.is_a?(ABS_Enemy) && $game_player.direction == attacker.event.direction) ||
-					(attacker.is_a?(Game_Actor) && self.is_a?(ABS_Enemy) && self.event.direction == $game_player.direction)
-					self.damage *= 2
-				end
-				
-				$ABS.weapon_skill(attacker.weapon_id, self)  # 특정 무기를 착용하면 추가 격 데미지가 있음
-				self.damage = attacker.rpg_skill.damage_calculation_attack(self.damage)  # 최종 데미지 계산
-				self.damage = self.rpg_skill.damage_calculation_defense(self.damage)
-				self.hp -= self.damage
-				
-				@damage_array.push(self.damage)
-				@critical_array.push(self.critical)
-				
-				return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, attacker)
-				return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id] == nil
-				
-				r = rand(100)
-				if r <= (self.damage * 100 / self.maxhp) || r <= 40
-					if self.is_a?(ABS_Enemy)
-						$ABS.enemies[self.event.id].aggro = true if $ABS.enemies[self.event.id] != nil
-						Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
-					end
-				end
-				
-				$ABS.send_network_monster(self) if self.is_a?(ABS_Enemy)
-				
-				@state_changed = false  # State change
-				if !attacker.is_a?(Game_NetPlayer)
-					states_plus(attacker.plus_state_set)
-					states_minus(attacker.minus_state_set)
-				end
-				
-			else
-				self.damage = "빗나감!"  # Set damage to "Miss"
-				self.critical = false  # Clear critical flag
+			return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, attacker)
+			return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id].nil?
+			
+			check_enemy_aggro(self.damage)
+			
+			@state_changed = false  # State change
+			unless attacker.is_a?(Game_NetPlayer)
+				states_plus(attacker.plus_state_set)
+				states_minus(attacker.minus_state_set)
 			end
-			
 			return true  # End Method			
+		end
+		
+		def check_enemy_aggro(damage)
+			return unless self.is_a?(ABS_Enemy)
+			return if $ABS.enemies[self.event.id].nil?
+			
+			aggro_chance = (damage * 100 / self.maxhp) || rand(100) <= 40
+			if aggro_chance
+				$ABS.enemies[self.event.id].aggro = true
+				Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
+			end
+			$ABS.send_network_monster(self)
 		end
 		
 		#--------------------------------------------------------------------------
@@ -3081,9 +3084,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def process_common_event(skill)
-			effective = false
-			effective |= skill.common_event_id > 0
-			return effective
+			return skill.common_event_id > 0
 		end
 		
 		def calculate_hit(user, skill)
@@ -3124,18 +3125,17 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def process_critical_hit(user)
-			if self.damage > 0
-				critical_data = user.rpg_skill.critical_skill_rate()
-				critical_rate = 1.0 + (1.2 * user.int / 200)
-				critical_rate += critical_data[0]
-				critical_rate *= 100
-				r = rand(10000)
-				if r <= critical_rate.to_i
-					self.damage *= (1.75 + critical_data[1])
-					self.critical = "skill_cri"
-				end
-				self.damage /= 2 if self.guarding?
+			return unless self.damage > 0
+			
+			plus_rate, plus_power = user.rpg_skill.critical_skill_rate()
+			critical_rate = (1.0 + (1.2 * user.int / 200) + plus_rate) * 100
+			
+			r = rand(10000)
+			if r <= critical_rate.to_i
+				self.damage *= (1.75 + plus_power)
+				self.critical = "skill_cri"
 			end
+			self.damage /= 2 if self.guarding?
 		end
 		
 		def apply_skill_modifiers(damage, user, skill)
@@ -3194,7 +3194,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
 			end
 		end
-		
 	end
 	
 	#==============================================================================

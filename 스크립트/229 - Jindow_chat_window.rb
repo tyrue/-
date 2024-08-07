@@ -47,7 +47,6 @@ class Jindow_Chat_Window < Jindow
 	end
 	
 	def hide2
-		
 		#super
 		@tog = true
 		self.height = (@font_size + @margin) * 2
@@ -62,7 +61,6 @@ class Jindow_Chat_Window < Jindow
 	end
 	
 	def show(val = @opacity)
-		
 		super
 		@tog = true
 		$map_chat_input.show
@@ -93,9 +91,9 @@ class Jindow_Chat_Window < Jindow
 	end
 	
 	def scroll_end		
-		return if @scroll0down == nil
-		cy = @scroll0down.y - @scroll0bar_down.y
+		return unless @scroll0down 
 		
+		cy = @scroll0down.y - @scroll0bar_down.y
 		for i in [@scroll0bar_up, @scroll0bar_mid, @scroll0bar_down]
 			i.y += cy
 		end
@@ -103,28 +101,28 @@ class Jindow_Chat_Window < Jindow
 	end
 	
 	def re_write
-		for i in 0...@chat_log.size
-			return if @chat_log[i] == nil or @chat_log[i].bitmap == nil
-			@chat_log[i].y = i * (@font_size + 3)
+		@chat_log[0].bitmap.clear
+		@chat_log[0].dispose
+		@chat_log.shift 
+		
+		@chat_log.each_with_index do |log, i|
+			return if log.nil? || log.bitmap.nil?
+			
+			log.y = i * (@font_size + @margin)
 		end
 	end
 	
 	def write(text, color = COLOR_NORMAL)
 		@chat_log.push(Sprite.new(self))
-		if @chat_log.size == @max_size
-			@chat_log[0].bitmap.clear
-			@chat_log[0].dispose
-			@chat_log.shift 
-			re_write
-		end
-		
-		@chat_log[@chat_log.size - 1].x = 5
-		@chat_log[@chat_log.size - 1].y = (@chat_log.size - 1) * (@font_size + @margin)
-		@chat_log[@chat_log.size - 1].bitmap = Bitmap.new(self.width, @font_size)
-		@chat_log[@chat_log.size - 1].bitmap.font.size = @font_size
-		@chat_log[@chat_log.size - 1].bitmap.font.color = color
-		@chat_log[@chat_log.size - 1].bitmap.draw_frame_text(0, 0, self.width, @font_size, text, 0) 
-		@chat_log[@chat_log.size - 1].visible = @tog
+		re_write if @chat_log.size == @max_size
+			
+		@chat_log.last.x = 5
+		@chat_log.last.y = (@chat_log.size - 1) * (@font_size + @margin)
+		@chat_log.last.bitmap = Bitmap.new(self.width, @font_size)
+		@chat_log.last.bitmap.font.size = @font_size
+		@chat_log.last.bitmap.font.color = color
+		@chat_log.last.bitmap.draw_frame_text(0, 0, self.width, @font_size, text, 0) 
+		@chat_log.last.visible = @tog
 		@check = true
 	end
 	
@@ -136,6 +134,3 @@ class Jindow_Chat_Window < Jindow
 		end
 	end
 end
-
-
-

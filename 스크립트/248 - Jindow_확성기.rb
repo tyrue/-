@@ -35,8 +35,6 @@ class Jindow_bigsay < Jindow
 		@b = J::Button.new(self).refresh(45, "취소")
 		@b.x = @a.x + 45
 		@b.y = @a.y
-		
-		$cbig = 1
 	end
 	#--------------------------------------------------------------------------
 	# ● 프레임 갱신
@@ -49,7 +47,6 @@ class Jindow_bigsay < Jindow
 			$chat.write("[세계후] #{$game_party.actors[0].name} : #{@type_bigsay.result}", COLOR_BIGSAY)
 			Network::Main.socket.send("<bigsay>#{$game_party.actors[0].name},#{@type_bigsay.result}</bigsay>\n")
 			$game_party.lose_item(91, 1)
-			$cbig = 0
 			Hwnd.dispose(self)
 		elsif @b.click
 			Hwnd.dispose(self)

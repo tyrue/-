@@ -175,7 +175,6 @@ ABS_ENEMY_SKILL_CASTING[158] = [[4, "지옥에서 불타버려라!!"]] # 지옥�
 ABS_ENEMY_SKILL_CASTING[159] = [[2, "미천한 필멸자여.."], [1, "하늘 높은 줄 모르고 날뛰는구나.."], [0.5, "너의 나약함을 깨닫게 하리라!!"]] # 혈겁만파
 ABS_ENEMY_SKILL_CASTING[160] = [[1.5, "바람처럼 나타나 그림자처럼 사라지리라..."], [1.5, "이 순간, 모든 것을 내 검 아래 휩쓸테니...!"], [0.5, "압도적인 힘에 절망하라!!"]] # 분혼경천
 ABS_ENEMY_SKILL_CASTING[161] = [[1.5, "영원한 공허의 무수한 파편들이여.."], [1.3, "대지와 하늘의 연결을 허용하노니..."], [1, "지금 이 땅의 운명을 새로 써내려라!!!"]] # 폭류유성
-ABS_ENEMY_SKILL_CASTING[162] = [[0.5, "나에게 벗어날 수 없다!!"]] # 추격
 # -------------END----------------- #
 
 # ----------------------------------#
@@ -218,6 +217,8 @@ class Rpg_skill
 	attr_accessor :base_agi
 	attr_accessor :base_dex
 	attr_accessor :player_base_move_speed
+	attr_accessor :battler 
+	attr_accessor :character
 	
 	def initialize(battler = nil)
 		@base_str = 0
@@ -561,6 +562,7 @@ class Rpg_skill
 		when 155, 156 then "#{skill.name}!!" # 암흑진파, 흑룡광포
 		when 157 then type = 4; "가소롭다!!" # 회복
 		when 158, 159, 160, 161 then "!!#{skill.name}!!" # 지정된 스킬
+		when 162 then "나에게 벗어날 수 없다!!"
 		end
 		
 		if msg
@@ -734,6 +736,7 @@ class Rpg_skill
 	
 	def 비영승보(enemy = nil)
 		return if @character == nil
+		
 		x = @character.x
 		y = @character.y
 		d = @character.direction
@@ -814,9 +817,11 @@ class Rpg_skill
 	
 	def 추격(enemy)
 		return unless @character 
+		return unless enemy
 		return if @battler.is_a?(ABS_Enemy) && !@battler.aggro
 		
 		@character.moveto(enemy.x, enemy.y)
+		@character.ani_array.push(158)
 	end
 	
 	# 직업별 배울 마법 찾기

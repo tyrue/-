@@ -172,59 +172,54 @@ class Game_Actor < Game_Battler
 	def exp=(exp)
 		gainExp = (exp - @exp).to_f
 		@exp = [exp, 0].max
+		
+		if $login_check && gainExp != 0
+			expPer = @level < 99 ? (@exp - @exp_list[@level]) * 100.0 / (@exp_list[@level + 1] - @exp_list[@level]) : @exp * 100.0 / @exp_list[@level + 1]
+			str_exp = gainExp > 0 ? "#{change_number_unit(gainExp)} 획득." : "#{change_number_unit(-gainExp)} 감소."
+			printTxt = "경험치:#{str_exp} (#{'%.2f' % expPer}%)"
+			$console.write_line(printTxt)
+		end
+		
 		if @exp > MAX_EXP
 			@exp = MAX_EXP
 			$console.write_line("경험치를 더이상 얻을 수 없습니다.") 
-		else
-			expPer = @level < 99 ? (@exp - @exp_list[@level]) * 100.0 / (@exp_list[@level + 1] - @exp_list[@level]) : @exp * 100.0 / @exp_list[@level + 1]
-			printTxt = "경험치:#{change_number_unit(gainExp)} 획득. (#{'%.2f' % expPer}%)" if $login_check && gainExp > 0
-			printTxt = "경험치:#{change_number_unit(-gainExp)} 감소. (#{'%.2f' % expPer}%)" if $login_check && gainExp < 0
-			$console.write_line(printTxt) if printTxt != nil
 		end
 		
 		# 레벨업（level up）
-		while @exp >= @exp_list[@level+1] and @exp_list[@level+1] > 0
+		while @exp >= @exp_list[@level + 1] and @exp_list[@level + 1] > 0
 			@level += 1
 			next if !$login_check
 			
-			자동저장
 			$console.write_line("[정보]:레벨이 올랐습니다!")
 			# 직업에 따라 체력, 마력 증가량 다르게 함
 			actor = $game_party.actors[0]
 			
-			if(actor.class_id == 7) # 전사 99때 체력 4500
-				actor.maxhp += 16
-				actor.str += 4
+			if(actor.class_id == 7) # 전사 99때 체력 4000
+				actor.maxhp += 30
+				actor.str += 2
 			elsif(actor.class_id == 2 or actor.class_id == 4) # 주술사, 도사 99때 마력 2000
-				actor.maxsp += 8
-				actor.int += 4
+				actor.maxsp += 15
+				actor.int += 2
 			elsif(actor.class_id == 17) # 도적
-				actor.maxhp += 16
-				actor.dex += 2 # 손재주(명중률)
-				actor.agi += 2 # 민첩 (회피율)
+				actor.maxhp += 30
+				actor.dex += 1 # 손재주(명중률)
+				actor.agi += 1 # 민첩 (회피율)
 			end
 			
 			# 풀체
 			actor.hp = actor.maxhp
 			actor.sp = actor.maxsp
 			$game_player.animation_id = 180
-			
-			# 숙련（skill） 습득
-			for j in $data_classes[@class_id].learnings
-				if j.level == @level
-					learn_skill(j.skill_id)
-				end
-			end
+			자동저장
 		end
 		
 		# 레벨（level） 다운（down）
 		while @exp < @exp_list[@level]
-			if @level == 100 or @level == 6
-				@level -= 1
-			else 
-				break
-			end
+			break if @level == 99 || @level == 5
+			
+			@level -= 1
 		end
+		
 		# 현재의 HP 라고(와) SP 이(가) 최대치를 초과하고 있다면 수정
 		@hp = [@hp, self.maxhp].min
 		@sp = [@sp, self.maxsp].min

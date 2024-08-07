@@ -27,8 +27,6 @@ class Scene_Map
 		Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
 		Network::Main.send_start
 		
-		$nowtrade = 0 # 교환 상태 초기화
-		$magic1 = 0 # 석화기탄 초기화
 		$game_player.move_speed = $game_player.base_speed
 		$game_player.move_speed += $game_party.actors[0].rpg_skill.check_speed_buff
 		자동저장 

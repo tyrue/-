@@ -108,7 +108,7 @@ module User_Edit
 	SERVERS           = [["3.37.127.218", 52001, "흑부엉 서버"]] # 외부 아이피
 	
 	TEST							= false
-	TEST							= true
+	#TEST							= true
 	
 	
 	

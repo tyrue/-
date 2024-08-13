@@ -50,6 +50,7 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :damage_array # 
 		attr_accessor :critical_array # 
 		attr_accessor :buff_time
+		attr_accessor :hate_group
 		
 		if User_Edit::VISUAL_EQUIP_ACTIVE
 			attr_accessor :weapon_id
@@ -102,6 +103,9 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@critical_array = []
 			@rpg_skill = Rpg_skill.new(self)
 			@buff_time = {}
+			@hate_group = {
+				0 => $game_party.actors[0]
+			}
 			
 			if User_Edit::VISUAL_EQUIP_ACTIVE
 				@equip_change = false

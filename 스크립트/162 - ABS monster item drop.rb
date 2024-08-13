@@ -4,34 +4,30 @@ class MrMo_ABS
 	#--------------------------------------------------------------------------
 	def take_item2(item_index)
 		return if $map_chat_input.active # 채팅이 활성화 되면 먹지 않기
-		if $game_switches[296] # 죽었으면 못 먹음
-			$console.write_line("귀신은 할 수 없습니다.") 
-			return
-		end
-		
+		return $console.write_line("귀신은 할 수 없습니다.") if $game_switches[296] # 죽었으면 못 먹음
+			
 		drop = $Drop[item_index]
-		return if drop == nil
+		return unless drop 
 		
 		$game_party.actors[0].rpg_skill.투명해제
 		$game_system.se_play("줍기")
 		
 		id = drop.id
 		type = drop.type
-		type2 = drop.type2
 		num = drop.amount
 		
-		case type2
-		when 1 # 아이템 또는 장비
+		case type
+		when 0..2 # 아이템 또는 장비
 			check_and_gain_item(type, id, num) # 아이템
-		when 0 # 돈
+		when 3 # 돈
 			$game_party.gain_gold(drop.amount)
-			$console.write_line("#{drop.amount}전 획득 ")
+			$console.write_line("#{drop.amount}전 획득 ")	
 		end
 		
 		remove_event(item_index)
 		Network::Main.socket.send "<Drop_Get>#{item_index}</Drop_Get>\n"
+		$Drop.delete(item_index)
 		자동저장
-		$Drop[item_index] = nil		
 	end
 	
 	def check_and_gain_item(type, id, num)
@@ -42,10 +38,7 @@ class MrMo_ABS
 		end
 		
 		n = $game_party.send("#{method.to_s}_number", id)
-		if n >= $item_maximum
-			$console.write_line("더 이상 가질 수 없습니다.")
-			return
-		end
+		return $console.write_line("더 이상 가질 수 없습니다.") if n >= $item_maximum
 		
 		$game_party.send("gain_#{method.to_s}", id, num)
 	end

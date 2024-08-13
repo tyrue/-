@@ -92,7 +92,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP = {}
 	ABS_ENEMY_HP[37]  = [2000000000, 0] # 무적토끼
 	ABS_ENEMY_HP[269] = [2000000, 0] # 무적다람쥐
-	ABS_ENEMY_HP[260]  = [2000000000, 0] # 테스트
+	ABS_ENEMY_HP[260]  = [20, 0] # 테스트
 	
 	# 기타
 	ABS_ENEMY_HP[58] = [800000, 1] # 수룡
@@ -468,11 +468,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			if event.character_name != "" and !@char_dir.include?(event.character_name + ".png")
 				event.character_name = "공격스킬2"
 			end
-			@enemies.delete(event.id) #Delete the event from the list
 			
 			parameters = SDK.event_comment_input(event, 11, "ABS")
 			return if parameters.nil? 
 			
+			@enemies.delete(event.id) #Delete the event from the list
 			#Get Enemy ID
 			id = parameters[0].split[1].to_i
 			enemy = $data_enemies[id] 
@@ -511,7 +511,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			@enemies[event.id].temp_speed = spec[6].to_i
 			@enemies[event.id].temp_frequency = spec[7].to_i
 			@enemies[event.id].trigger = spec[8]
-			@enemies[event.id].respawn = spec[9].to_i * 6 if spec[9]
+			@enemies[event.id].respawn = spec[9].to_i if spec[9]
 			
 			if @enemies[event.id].event.move_type != 3
 				@enemies[event.id].event.move_speed = @enemies[event.id].temp_speed
@@ -563,7 +563,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				e.moveto(x, y)
 				Network::Main.socket.send("<mon_move>#{e.event.id},#{d},#{x},#{y}</mon_move>\n") if @enemies[e.event.id].aggro
-				return
+				return 
 			end
 		end
 		
@@ -1218,7 +1218,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def skill_sung 
 			x = 11
 			y = 8
-			m_id = SEONG_HWANG[$game_variables[8]][0] || 17
+			m_id = SEONG_HWANG[$game_variables[8]] ? SEONG_HWANG[$game_variables[8]][0] : 17
 			map_m(m_id, x, y)
 			$console.write_line("성황당으로 갑니다")
 		end
@@ -1387,7 +1387,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def enemy_dead_process(enemy, event, sw = false)
 			enemy_count_add(enemy.id, 1)
-			Network::Main.send_with_tag("enemy_dead", "#{id}") if sw
+			Network::Main.send_with_tag("enemy_dead", "#{event.id}") if sw
 			
 			trigger, id = enemy.trigger
 			case trigger
@@ -1418,8 +1418,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		def player_dead?(a, e)
 			return false if @actor.hp > 0
 			
-			if e.is_a?(ABS_Enemy) and @enemies[e.event.id] != nil
-				reset_enemy_state(e)
+			@enemies.values.each do |enemy|
+				next unless enemy
+				
+				reset_enemy_state(enemy)
 			end
 			return true if $game_switches[296] # 죽음 표시 스위치
 			
@@ -1823,26 +1825,38 @@ if SDK.state("Mr.Mo's ABS") == true
 			force_movement 
 		end
 		
-		def enemy?(event)
-			case event
-			when Game_Player
-				return @parent.is_a?(Game_NetPlayer) || @actor.hate_group.include?(0)
-			when Game_NetPlayer
-				return @parent.is_a?(Game_Player) || @actor.hate_group.include?(0)	
-			end
-			
-			e = $ABS.enemies[event.id]
-			return false if e.nil?
-			
-			if @parent.is_a?(Game_Player) || @parent.is_a?(Game_NetPlayer)
-				return e.hate_group.include?(0)
-			else
-				return e.hate_group.include?(@actor.id)
-			end
+		def find_actor(object)
+			return $game_party.actors[0] if object == $game_player
+			return $ABS.enemies[object.id] if $ABS.enemies[object.id]
+			return object if object.is_a?(Game_NetPlayer)
 		end
 		
+		def check_enemy(enemy)
+			case @actor
+			when ABS_Enemy 
+				case enemy
+				when ABS_Enemy then return @is_my && @actor.hate_group.include?(enemy.id)
+				when Game_Actor then return @actor.hate_group.include?(0)
+				when Game_NetPlayer then return @actor.hate_group.include?(0)
+				end
+			when Game_Actor 
+				case enemy
+				when ABS_Enemy then return enemy.hate_group.include?(0)
+				when Game_Actor then return false
+				when Game_NetPlayer then return true
+				end
+			when Game_NetPlayer 
+				case enemy
+				when ABS_Enemy then return enemy.hate_group.include?(0)
+				when Game_Actor then return true
+				when Game_NetPlayer then return true
+				end
+			end
+			return false
+		end
+			
 		def check_collisions
-			@objects = find_objects.select { |o| o.x == @x && o.y == @y && enemy?(o) }
+			@objects = find_objects.select { |o| o.x == @x && o.y == @y && check_enemy(find_actor(o))}
 			@stop = true unless @objects.empty?
 		end
 		
@@ -1971,7 +1985,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def hit_object(object) # 히트시 발생하는 이벤트 처리
 			return unless object
 			
-			enemy = find_enemy(object)
+			enemy = find_actor(object)
 			@range_skill.hit_skill_arr.each do |id, type|
 				case type
 				when 0 
@@ -1986,14 +2000,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			process_range_skill(object, enemy)
 		end
 		
-		def find_enemy(object)
-			return $game_party.actors[0] if object == $game_player
-			return $ABS.enemies[object.id] if $ABS.enemies[object.id]
-			return object if object.is_a?(Game_NetPlayer)
-		end
-		
 		def process_range_skill(object, enemy)
-			return unless process_check_hit(enemy)
+			return if object.is_a?(Game_NetPlayer)
+			return if @actor.is_a?(Game_NetPlayer) && !enemy.is_a?(Game_Actor)
 			
 			@hit_num.times { object.ani_array.push(@skill.animation2_id) }
 			return if @dummy
@@ -2004,29 +2013,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if $ABS.enemy_dead?(enemy, @actor)
 			
 			$ABS.set_enemy_attacking(enemy, @parent) if enemy.is_a?(ABS_Enemy)
-		end
-		
-		def process_check_hit(enemy)
-			case @actor
-			when ABS_Enemy 
-				case enemy
-				when ABS_Enemy then @is_my
-				when Game_Actor then true
-				when Game_NetPlayer then false
-				end
-			when Game_Actor 
-				case enemy
-				when ABS_Enemy then true 
-				when Game_Actor then true
-				when Game_NetPlayer then false
-				end
-			when Game_NetPlayer 
-				case enemy
-				when ABS_Enemy then false
-				when Game_Actor then true
-				when Game_NetPlayer then false
-				end
-			end
 		end
 		
 		def end_process
@@ -2142,11 +2128,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_reader   :event
 		attr_accessor :erased
 		attr_reader   :page
-		
 		attr_accessor :one_use
 		#--------------------------------------------------------------------------
 		# * Alias
 		#--------------------------------------------------------------------------
+		alias mrmo_abs_game_event_refresh_set refresh_reset
 		alias mrmo_abs_game_event_refresh_set_page refresh_set_page
 		#--------------------------------------------------------------------------
 		# * Event Name
@@ -2159,6 +2145,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def id
 			return @id
+		end
+		
+		def refresh_reset
+			mrmo_abs_game_event_refresh_set
+			$ABS.enemies[@id].hp = -1 if $ABS.enemies[@id]
 		end
 		#--------------------------------------------------------------------------
 		# * Refreshes Page
@@ -2590,7 +2581,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.opacity = 255
 				
 				@collapse_character = character
-				@_collapse_erase_duration = 36
+				@_collapse_erase_duration = 40
 				@_collapse_duration = 0
 				@_whiten_duration = 0
 				@_appear_duration = 0

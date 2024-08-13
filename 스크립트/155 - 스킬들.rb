@@ -947,6 +947,7 @@ class Rpg_skill
 		data[3] = [17, 18, 19, 20, 21] # 도적
 		
 		c_id = $game_party.actors[0].class_id
+		$job_degree = 0
 		data.each_with_index do |arr, id|
 			sw = false
 			arr.each_with_index do |val, degree|
@@ -960,6 +961,7 @@ class Rpg_skill
 			break if sw
 		end
 		
+		#return if $job_degree <= 0
 		for i in 1..$job_degree
 			$game_switches[degree_arr[i]] = true
 		end

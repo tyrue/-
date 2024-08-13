@@ -68,86 +68,94 @@ class Game_Event
 	attr_accessor :id
 end
 
+#----------------------------------------------------------------
+# 드롭 아이디 확인 및 생성
+#----------------------------------------------------------------
 def check_drop_id
-	for i in 30001..31000
-		if $Drop[i] == nil
-			$Drop[i] = Drop.new
-			return i
-		end
+	(30001..31000).each do |i|
+		return i unless $Drop[i]
 	end
 end
 
 def check_create_monster_id
-	return $game_map.events.size + 10000
+	(10001..12000).each do |i|
+		return i unless $game_map.events[i]
+	end
 end
 
-def create_abs_monsters(monster_id, num)
-	return if !$is_map_first
-	for i in 0...num
-		id = check_create_monster_id
-		d = (rand(4) + 1) * 2
-		e = create_events(16, 1, 1, d, id, monster_id)
-		return unless e
+def create_abs_monsters(monster_id, num = 1, id = nil)
+	return unless $is_map_first
+	
+	num.times do 
+		e_id = id || check_create_monster_id
+		dir = (rand(4) + 1) * 2
+		event = create_events(16, 1, 1, dir, e_id)
+		return unless event
 		
-		$ABS.rand_spawn(e)
-		$ABS.send_network_monster($ABS.enemies[id])
+		event.list[1].parameters[0] = "ID #{monster_id}"
+		setup_event(event, e_id, 1, 1, dir)
+		
+		$ABS.rand_spawn(event)
+		$ABS.send_network_monster($ABS.enemies[e_id])
 	end
 end
 
 # 운영자가 소환하는 몬스터, 한 번 잡으면 서버에서 삭제시키도록 하자
 def create_abs_monsters_admin(monster_id, num = 1)
-	x = $game_player.x
-	y = $game_player.y
-	r = 12
+	x, y, r = $game_player.x, $game_player.y, 12
 	
-	for i in 0...num
+	num.times do
 		count = 0
 		while count < 100
 			count += 1
 			x2 = x + rand(r) - r / 2
 			y2 = y + rand(r) - r / 2
-			d = (rand(4) + 1) * 2
+			dir = (rand(4) + 1) * 2
+			next unless $game_map.passable?(x2, y2, dir)
 			
-			if $game_map.passable?(x2, y2, d)
-				e = create_events(16, x2, y2, d, -1, monster_id)
-				return if e == nil
-				$ABS.send_network_monster($ABS.enemies[e.id], 1)
-				break
-			end
+			id = check_create_monster_id
+			event = create_events(16, x2, y2, dir, id)
+			return unless event
+			
+			event.list[1].parameters[0] = "ID #{monster_id}"
+			setup_event(event, id, x2, y2, dir)
+			
+			$ABS.send_network_monster($ABS.enemies[id], 1)
+			break
 		end
 	end
 end
 
-def create_events(mob_id, x, y, dir, event_no = -1, monster_id = -1)
-	temp = load_data("Data/Map022.rxdata").events[mob_id]
+def create_events(event_id, x, y, dir = 2, id = nil)
+	temp = load_data("Data/Map022.rxdata").events[event_id]
 	return unless temp
 	
-	no = event_no <= -1 ? check_create_monster_id : event_no
 	map_id = $game_map.map_id
-	
-	$game_map.events[no] = Game_Event.new(map_id, temp)
-	event = $game_map.events[no]
+	event = Game_Event.new(map_id, temp)
 	return unless event
 	
-	if monster_id > 0 and event.list[0].parameters[0].include?("ABS")
-		event.list[1].parameters[0] = "ID #{monster_id}" 
-	end
-	
-	event.id = no
-	event.event.id = no
-	event.moveto(x, y)
-	event.direction = dir
-	event.refresh_set_page
-	event.refresh
+	id ||= check_create_monster_id
+	$game_map.events[id] = event 
+	setup_event(event, id, x, y, dir)
 	create_sprite(event) 
 	return event
 end
 
-def make_item_dto(type, item_id, x, y, num = 1, sw = 0)
-	id = check_drop_id
+def setup_event(event, id, x, y, dir)
+  return unless event
+  
+  event.id = id
+	event.event.id = id
+  event.moveto(x, y)
+  event.direction = dir
 	
-	item_data = {
-		"id" => id,
+  event.refresh_set_page
+  event.refresh
+end
+
+def make_item_dto(type, item_id, x, y, num = 1, sw = 0)
+	{
+		"id" => check_drop_id,
 		"map_id" => $game_map.map_id,
 		"x" => x,
 		"y" => y,
@@ -156,15 +164,11 @@ def make_item_dto(type, item_id, x, y, num = 1, sw = 0)
 		"item_id" => item_id,
 		"sw" => sw
 	}
-	
-	return item_data
 end
 
 def create_drop_message(item_data)
-	message = "<Drop>"
-	item_data.each { |key, value| message += "#{key}:#{value}|" }
-	message += "</Drop>\n"
-	Network::Main.socket.send(message) # 나를 포함한 전체 방송
+	message = item_data.map { |key, value| "#{key}:#{value}|" }.join
+	Network::Main.send_with_tag("Drop", message)
 end
 
 def create_drops(type, item_id, x, y, num = 1, sw = 0)
@@ -179,9 +183,6 @@ end
 
 def create_drops2(no, x, y, type, id, num)
 	return if num == 0
-	$game_map.events[no] = Game_Event.new($game_map.map_id, load_data("Data/Map022.rxdata").events[138])
-	event = $game_map.events[no]
-	return if not event
 	
 	item = case type
 	when 0 then $data_items[id]
@@ -189,38 +190,46 @@ def create_drops2(no, x, y, type, id, num)
 	when 2 then $data_armors[id]
 	else nil
 	end
+	return unless item
 	
-	$Drop[no] = Drop.new
-	$Drop[no].id = id
-	$Drop[no].type = type
-	$Drop[no].type2 = 1
-	$Drop[no].amount = num #아이템 개수
+	event = create_drop_event(no, x, y, type, id, num)
+	return unless event
 	
-	event.id = no
-	event.moveto(x, y)
-	event.es_set_graphic("../Icons/" + item.icon_name, 255, 0)
-	create_sprite(event, true)
-	
+	event.es_set_graphic(choose_item_icon(item), 255, 0)
 	event.name = num <= 1 ? "[id#{item.name}]" : "[id#{item.name} #{num}개]"
 	event.refresh
 end
 
 def create_moneys2(no, x, y, money)
-	$game_map.events[no] = Game_Event.new($game_map.map_id, load_data("Data/Map022.rxdata").events[138])
-	event = $game_map.events[no]
-	return if not event
+	return if money == 0
 	
-	event.id = no
-	event.moveto(x, y)
-	
-	$Drop[no] = Drop.new
-	$Drop[no].type2 = 0
-	$Drop[no].amount = money #아이템 개수
+	event = create_drop_event(no, x, y, 3, money, money)
+	return unless event
 	
 	event.es_set_graphic(choose_money_icon(money), 255, 0)
-	event.name = "[id#{money}전]"
-	create_sprite(event, true) 
+	event.name = "[id#{money}전]" 
 	event.refresh	
+end
+
+def create_drop_event(no, x, y, type, id, amount)
+  event = Game_Event.new($game_map.map_id, load_data("Data/Map022.rxdata").events[1])
+  return unless event
+  
+  $game_map.events[no] = event
+	
+  $Drop[no] = Drop.new
+  $Drop[no].id = id
+  $Drop[no].type = type
+  $Drop[no].amount = amount
+	
+  event.id = no
+  event.moveto(x, y)
+  create_sprite(event, true)
+  event
+end
+
+def choose_item_icon(item)
+	return "../Icons/#{item.icon_name}"
 end
 
 def choose_money_icon(money)
@@ -236,55 +245,40 @@ end
 
 def delete_events(id)
 	event = $game_map.events[id]
-	return if not event
-	remove_sprite(event) 
-	$game_map.events.delete(event.id) 
-end
-
-#=================================================
-# ■ 보관이벤트
-#-------------------------------------------------
-# 　제작자: 비밀소년
-#   p.s 안쓰는부분은 없앴음
-#=================================================
-def event_remove(event)
+	return unless event
+	
 	remove_sprite(event) 
 	$game_map.events.delete(event.id) 
 end
 
 def create_sprite(c, sw = false)
-  return nil unless $scene.is_a?(Scene_Map)
-  
-  $scene.instance_eval do
-    @spriteset.instance_eval do
-      return nil if @character_sprites.nil?
-      
-      sprite = @character_sprites.find { |v| v.character == c }
-      return sprite if sprite
-      
-      sprite = Sprite_Character.new(@viewport1, c, sw)
-      @character_sprites.push(sprite)
-    end
-  end
-
-  return nil
+	return unless $scene.is_a?(Scene_Map)
+	
+	$scene.instance_eval do
+		@spriteset.instance_eval do
+			return if @character_sprites.nil?
+			
+			sprite = @character_sprites.find { |v| v.character == c }
+			return sprite if sprite
+			
+			sprite = Sprite_Character.new(@viewport1, c, sw)
+			@character_sprites.push(sprite)
+		end
+	end
 end
 
-def remove_sprite(c)
-  return nil unless $scene.is_a?(Scene_Map)
-  
-  $scene.instance_eval do
-    @spriteset.instance_eval do
-      delv = @character_sprites.find { |v| v.character == c }
-      
-      if delv
-        delv.dispose
-        @character_sprites.delete(delv)
-      end
-    end
-  end
-
-  return nil
+def remove_sprite(event)
+	return unless $scene.is_a?(Scene_Map)
+	
+	$scene.instance_eval do
+		@spriteset.instance_eval do
+			delv = @character_sprites.find { |v| v.character == event }
+			next unless delv
+			
+			delv.dispose
+			@character_sprites.delete(delv)
+		end
+	end
 end
 
 

@@ -81,9 +81,9 @@ class Game_Event < Game_Character
 			# Check in order of large event pages
 			for page in @event.pages.reverse
 				# Make possible referrence for event condition with c
-				c = page.condition
 				# Switch 1 condition confirmation
 				if c.switch1_valid
+					p c.switch1_valid
 					if $game_switches[c.switch1_id] == false
 						next
 					end

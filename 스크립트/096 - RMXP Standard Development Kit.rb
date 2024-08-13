@@ -352,8 +352,10 @@ module SDK
 		trigger = *args[2]
 		return nil if list == nil
 		return nil unless list.is_a?(Array)
+		
 		for item in list
 			next if item.code != 108
+			
 			if item.parameters[0] == trigger
 				start = list.index(item) + 1
 				finish = start + elements

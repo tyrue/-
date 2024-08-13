@@ -70,11 +70,11 @@ if SDK.state("Mr.Mo's ABS")
 		# * Something Changed?
 		#--------------------------------------------------------------------------
 		def something_changed?
-			return dispose if @enemy == nil
-			return dispose if @enemy.event_id == nil
-			return dispose if @enemy.dead? 
-			return dispose if $ABS.enemies[@enemy.event_id] == nil
-			
+			return dispose unless @enemy 
+			return dispose if @enemy.dead?
+			return dispose unless @enemy.event_id 
+			return dispose unless $ABS.enemies[@enemy.event_id]
+				
 			return true if @old_hp != @enemy.hp
 			return true if @old_x != @enemy.event.screen_x - @cw
 			return true if @old_y != @enemy.event.screen_y - @ch
@@ -328,6 +328,7 @@ if SDK.state("Mr.Mo's ABS")
 				#if in screen
 				if $ABS.in_range?($game_player, e.event, 14)
 					next if e.bar_showing
+					
 					@enemys_hp[e.event.id] = Enemy_Bars.new(e, @spriteset.viewport3)
 					e.bar_showing = true
 					

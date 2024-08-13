@@ -630,17 +630,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.ani(character, ani_array)
 				return if @mapplayers.size == 0
+				return unless ani_array && ani_array.size > 0
+				
 				id = nil
 				type = nil
-				if $ABS.enemies[character.id]
-					id = character.id
-					type = 0 
-				elsif character.is_a?(Game_Player)
+				
+				if character.is_a?(Game_Player)
 					id = @id
 					type = 1
 				elsif character.is_a?(Game_NetPlayer)
 					id = character.netid
 					type = 1
+				elsif $ABS.enemies[character.id]
+					id = character.id
+					type = 0 
 				end
 				return unless id
 				
@@ -887,6 +890,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<monster_save>(.*)<\/monster_save>/ # 서버로부터 몬스터 생성 명령어 받음
 					# 맵 id, 이벤트 id, 몹 id, x, y
 					data_hash = parseKeyValueData($1)
+					map_id = data_hash["map_id"].to_i
+					return unless map_id == $game_map.map_id
+					
 					id = data_hash["id"].to_i
 					hp = data_hash["hp"].to_i
 					sp = data_hash["sp"].to_i
@@ -895,17 +901,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					direction = data_hash["direction"].to_i
 					respawn = data_hash["respawn"].to_i
 					mon_id = data_hash["mon_id"].to_i
+					return if mon_id == 0
 					
-					if $ABS.enemies[id].nil? && mon_id != 0
-						create_events(16, x, y, direction, id, mon_id)
-					end
+					create_abs_monsters(mon_id, 1, id) unless $ABS.enemies[id]
 					
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					enemy = $ABS.enemies[id]
-					event = enemy.event
 					enemy.respawn = respawn
 					enemy.hp = hp
 					enemy.sp = sp
+					
+					event = enemy.event
+					event.moveto(x, y) # 몹 방향과 좌표 적용
+					event.direction = d
 					
 					if enemy.hp <= 0
 						event.through = true
@@ -915,11 +923,10 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<req_monster>(.*)<\/req_monster>/ # 서버로부터 저장된 몬스터 정보를 받아옴
 					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
 					data_hash = parseKeyValueData($1)
+					map_id = data_hash["map_id"].to_i
 					
-					if data_hash.size <= 1 # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
-						$ABS.getMapMonsterData if $is_map_first # 몬스터 데이터 생성
-						return
-					end
+					return unless map_id == $game_map.map_id
+					return $ABS.getMapMonsterData if data_hash.size <= 1 && $is_map_first # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
 					
 					id = data_hash["id"].to_i 
 					hp = data_hash["hp"].to_i 
@@ -930,16 +937,25 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					res = data_hash["respawn"].to_i
 					mon_id = data_hash["mon_id"].to_i
 					dead = data_hash["dead"].downcase == "true"
+					return if mon_id == 0
 					
-					create_events(16, x, y, d, id, mon_id) if $ABS.enemies[id].nil? && mon_id != 0
+					unless $ABS.enemies[id]
+						e = $game_map.events[id]
+						return if e && !e.list 
+						
+						create_abs_monsters(mon_id, 1, id) 
+					end
+					
 					enemy = $ABS.enemies[id]
 					event = enemy.event
 					
 					if hp <= 0 # 체력이 0이면 죽은거지
 						if dead
+							enemy.hp = hp
 							event.erase
 						else
 							event.erased = false
+							event.refresh
 							$ABS.rand_spawn(event) # 랜덤 위치 스폰
 						end
 						return
@@ -951,7 +967,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					event.moveto(x, y) # 몹 방향과 좌표 적용
 					event.direction = d
 					enemy.aggro = $is_map_first
-					#event.refresh
+					event.refresh
 					
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					data = $1.split(',')
@@ -1318,6 +1334,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						# 데이터 로드 완료
 						$game_player.moveto($new_x, $new_y) 
 						$game_player.refresh
+						$game_party.actors[0].rpg_skill.job_select
 						
 						@group = "standard"
 						if $game_switches[54] # 운영자모드
@@ -1329,12 +1346,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 						self.send_start
 						
-						$game_party.actors[0].rpg_skill.job_select
-						
 						$game_map.autoplay
 						$game_map.update 
 						$scene = Scene_Map.new 
 						$login_check = true
+						$game_map.refresh
 					end
 					
 				when /<guild_load>(.*)<\/guild_load>/
@@ -1571,16 +1587,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 맵 id, 몹id, x, y, 방향
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					return true if $game_map.map_id != data[0].to_i
+					return if $game_map.map_id != data[0].to_i
 					return unless $ABS.enemies[data[1].to_i]
-					# 몹 죽었을때 리스폰 시간 적용
-					event = $ABS.enemies[data[1].to_i].event
+					
+					event = $ABS.enemies[data[1].to_i].event # 몹 죽었을때 리스폰 시간 적용
 					return unless event
+					
+					
 					
 					event.erased = false
 					event.refresh
 					$ABS.rand_spawn(event) # 랜덤 위치 스폰
-					$game_map.refresh
+					#$game_map.refresh
 					
 				when /<enemy_dead>(.*)<\/enemy_dead>/	
 					id = $1.to_i
@@ -1813,9 +1831,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<27>(.*)<\/27>/
 					data_hash = parseKeyValueData($1)
 					id = data_hash["id"].to_i
-					ani_id_arr = data_hash["ani_id"].split(',')
+					ani_id_arr = data_hash["ani_id"]
 					type = data_hash["type"].to_i
+					return unless ani_id_arr
 					
+					ani_id_arr = ani_id_arr.split(',')
 					character = nil
 					case type
 					when 0 # 이벤트

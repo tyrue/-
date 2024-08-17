@@ -73,7 +73,10 @@ end
 #----------------------------------------------------------------
 def check_drop_id
 	(30001..31000).each do |i|
-		return i unless $Drop[i]
+		unless $Drop[i]
+			$Drop[i] = Drop.new
+			return i 
+		end
 	end
 end
 

@@ -90,158 +90,157 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	# 백만 넘어가는 체력 설정
 	ABS_ENEMY_HP = {}
-	ABS_ENEMY_HP[37]  = [2000000000, 0] # 무적토끼
-	ABS_ENEMY_HP[269] = [2000000, 0] # 무적다람쥐
+	ABS_ENEMY_HP[37]  = [8_000_000_000, 0] # 무적토끼
+	ABS_ENEMY_HP[269] = [2_000_000, 0] # 무적다람쥐
 	ABS_ENEMY_HP[260]  = [20, 0] # 테스트
 	
 	# 기타
-	ABS_ENEMY_HP[58] = [800000, 1] # 수룡
-	ABS_ENEMY_HP[59] = [800000, 1] # 화룡
+	ABS_ENEMY_HP[58] = [800_000, 1] # 수룡
+	ABS_ENEMY_HP[59] = [800_000, 1] # 화룡
 	
-	ABS_ENEMY_HP[61] = [5000000, 1] # 주작
-	ABS_ENEMY_HP[62] = [5000000, 1] # 백호
+	ABS_ENEMY_HP[61] = [5_000_000, 1] # 주작
+	ABS_ENEMY_HP[62] = [5_000_000, 1] # 백호
 	
-	ABS_ENEMY_HP[98] = [2500000, 1] # 비류장군
+	ABS_ENEMY_HP[98] = [2_500_000, 1] # 비류장군
 	
-	ABS_ENEMY_HP[111] = [600000, 1] # 산적왕
+	ABS_ENEMY_HP[111] = [600_000, 1] # 산적왕
 	
-	ABS_ENEMY_HP[102] = [100000000, 1] # 반고
-	ABS_ENEMY_HP[112] = [20000000, 1] # 청룡
-	ABS_ENEMY_HP[113] = [20000000, 1] # 현무
+	ABS_ENEMY_HP[102] = [400_000_000, 1] # 반고
+	ABS_ENEMY_HP[112] = [50_000_000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [50_000_000, 1] # 현무
 	
 	# 12 지신
-	ABS_ENEMY_HP[119] = [1500000, 1] # 백호왕
-	ABS_ENEMY_HP[123] = [1000000, 1] # 뱀왕
-	ABS_ENEMY_HP[124] = [150000, 1] # 쥐왕
-	ABS_ENEMY_HP[126] = [450000, 1] # 돼지왕
-	ABS_ENEMY_HP[128] = [1700000, 1] # 원숭이왕
-	ABS_ENEMY_HP[132] = [3600000, 1] # 건룡
-	ABS_ENEMY_HP[133] = [3600000, 1] # 감룡
-	ABS_ENEMY_HP[134] = [3600000, 1] # 진룡
+	ABS_ENEMY_HP[119] = [1_500_000, 1] # 백호왕
+	ABS_ENEMY_HP[123] = [1_000_000, 1] # 뱀왕
+	ABS_ENEMY_HP[124] = [150_000, 1] # 쥐왕
+	ABS_ENEMY_HP[126] = [450_000, 1] # 돼지왕
+	ABS_ENEMY_HP[128] = [1_700_000, 1] # 원숭이왕
+	ABS_ENEMY_HP[132] = [3_600_000, 1] # 건룡
+	ABS_ENEMY_HP[133] = [3_600_000, 1] # 감룡
+	ABS_ENEMY_HP[134] = [3_600_000, 1] # 진룡
 	
 	# 용궁
-	ABS_ENEMY_HP[150] = [2000000, 1] # 해마장군
-	ABS_ENEMY_HP[153] = [4000000, 1] # 인어장군
-	ABS_ENEMY_HP[156] = [7000000, 1] # 상어장군
-	ABS_ENEMY_HP[158] = [12000000, 1] # 해파리장군
-	ABS_ENEMY_HP[159] = [20000000, 1] # 거북장군
-	ABS_ENEMY_HP[160] = [1000000, 0] # 수괴
+	ABS_ENEMY_HP[150] = [2_000_000, 1] # 해마장군
+	ABS_ENEMY_HP[153] = [4_000_000, 1] # 인어장군
+	ABS_ENEMY_HP[156] = [7_000_000, 1] # 상어장군
+	ABS_ENEMY_HP[158] = [12_000_000, 1] # 해파리장군
+	ABS_ENEMY_HP[159] = [30_000_000, 1] # 거북장군
+	ABS_ENEMY_HP[160] = [1_000_000, 0] # 수괴
 	
 	# 일본
-	ABS_ENEMY_HP[172] = [300000, 1] # 아귀
-	ABS_ENEMY_HP[176] = [700000, 1] # 백향
-	ABS_ENEMY_HP[180] = [3200000, 1] # 견귀
-	ABS_ENEMY_HP[194] = [7000000, 1] # 문려
+	ABS_ENEMY_HP[172] = [300_000, 1] # 아귀
+	ABS_ENEMY_HP[176] = [700_000, 1] # 백향
+	ABS_ENEMY_HP[180] = [3_200_000, 1] # 견귀
+	ABS_ENEMY_HP[194] = [8_500_000, 1] # 문려
+	ABS_ENEMY_HP[186] = [20_000_000, 1] # 무사
 	
-	ABS_ENEMY_HP[186] = [10000000, 1] # 무사
+	ABS_ENEMY_HP[187] = [1_200_000, 0] # 선월
+	ABS_ENEMY_HP[188] = [1_300_000, 0] # 이광
+	ABS_ENEMY_HP[189] = [30_000_000, 1] # 주마관
 	
-	ABS_ENEMY_HP[187] = [1100000, 0] # 선월
-	ABS_ENEMY_HP[188] = [1200000, 0] # 이광
-	ABS_ENEMY_HP[189] = [20000000, 1] # 주마관
-	
-	ABS_ENEMY_HP[191] = [8000000, 1] # 유성지
-	ABS_ENEMY_HP[192] = [15000000, 1] # 해골왕
-	ABS_ENEMY_HP[193] = [60000000, 1] # 파괴왕
+	ABS_ENEMY_HP[191] = [40_000_000, 1] # 유성지
+	ABS_ENEMY_HP[192] = [50_000_000, 1] # 해골왕
+	ABS_ENEMY_HP[193] = [150_000_000, 1] # 파괴왕
 	
 	# 중국
-	ABS_ENEMY_HP[204] = [150000, 1]# 인묘
-	ABS_ENEMY_HP[208] = [300000, 1]# 염유왕
-	ABS_ENEMY_HP[212] = [1000000, 1]# 기린왕
-	ABS_ENEMY_HP[215] = [2000000, 1]# 악어왕
+	ABS_ENEMY_HP[204] = [150_000, 1] # 인묘
+	ABS_ENEMY_HP[208] = [300_000, 1] # 염유왕
+	ABS_ENEMY_HP[212] = [1_000_000, 1] # 기린왕
+	ABS_ENEMY_HP[215] = [2_000_000, 1] # 악어왕
 	
-	ABS_ENEMY_HP[220] = [3000000, 1]# 산소괴왕
-	ABS_ENEMY_HP[224] = [7000000, 1]# 괴성왕
-	ABS_ENEMY_HP[227] = [1300000, 0]# 뇌신'태
-	ABS_ENEMY_HP[228] = [18000000, 1]# 뇌신왕
+	ABS_ENEMY_HP[220] = [3_000_000, 1] # 산소괴왕
+	ABS_ENEMY_HP[224] = [7_000_000, 1] # 괴성왕
+	ABS_ENEMY_HP[227] = [1_300_000, 0] # 뇌신'태
+	ABS_ENEMY_HP[228] = [18_000_000, 1] # 뇌신왕
 	
-	ABS_ENEMY_HP[229] = [1500000, 0]# 연청천구
-	ABS_ENEMY_HP[230] = [1600000, 0]# 연자천구
-	ABS_ENEMY_HP[231] = [30000000, 1] # 천구왕
+	ABS_ENEMY_HP[229] = [1_500_000, 0] # 연청천구
+	ABS_ENEMY_HP[230] = [1_600_000, 0] # 연자천구
+	ABS_ENEMY_HP[231] = [30_000_000, 1] # 천구왕
 	
-	ABS_ENEMY_HP[232] = [90000000, 1] # 산신대왕
-	ABS_ENEMY_HP[233] = [5000000, 0]# 산신전사
-	ABS_ENEMY_HP[234] = [3000000, 0]# 산신도사
-	ABS_ENEMY_HP[235] = [4000000, 0]# 산신도적
-	ABS_ENEMY_HP[236] = [3000000, 0]# 산신주술사
+	ABS_ENEMY_HP[232] = [150_000_000, 1] # 산신대왕
+	ABS_ENEMY_HP[233] = [5_000_000, 0] # 산신전사
+	ABS_ENEMY_HP[234] = [3_000_000, 0] # 산신도사
+	ABS_ENEMY_HP[235] = [4_000_000, 0] # 산신도적
+	ABS_ENEMY_HP[236] = [3_000_000, 0] # 산신주술사
 	
 	# 환상의섬
-	ABS_ENEMY_HP[246] = [5000000, 1]	# 선장망령
-	ABS_ENEMY_HP[249] = [1500000, 1]	# 야월진랑
+	ABS_ENEMY_HP[246] = [5_000_000, 1] # 선장망령
+	ABS_ENEMY_HP[249] = [1_500_000, 1] # 야월진랑
 	
-	ABS_ENEMY_HP[250] = [1700000, 0]	# 철보장
-	ABS_ENEMY_HP[251] = [1800000, 0]	#	철거인
-	ABS_ENEMY_HP[252] = [60000000, 1]	# 마려
+	ABS_ENEMY_HP[250] = [1_700_000, 0] # 철보장
+	ABS_ENEMY_HP[251] = [1_800_000, 0] # 철거인
+	ABS_ENEMY_HP[252] = [60_000_000, 1] # 마려
 	
-	ABS_ENEMY_HP[253] = [5000000, 1]	# 현무
-	ABS_ENEMY_HP[257] = [2000000, 1]	# 태산
-	ABS_ENEMY_HP[258] = [30000000, 1]	# 길림장군
-	ABS_ENEMY_HP[259] = [500000000, 1]# 가릉빈가
+	ABS_ENEMY_HP[253] = [5_000_000, 1] # 현무
+	ABS_ENEMY_HP[257] = [2_000_000, 1] # 태산
+	ABS_ENEMY_HP[258] = [30_000_000, 1] # 길림장군
+	ABS_ENEMY_HP[259] = [500_000_000, 1] # 가릉빈가
 	
 	# 한두고개
-	ABS_ENEMY_HP[268] = [7777777, 1]# 최강다람쥐
-	ABS_ENEMY_HP[269] = [22222222, 1]# 무적다람쥐
+	ABS_ENEMY_HP[268] = [7_777_777, 1] # 최강다람쥐
+	ABS_ENEMY_HP[269] = [22_222_222, 1] # 무적다람쥐
 	
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [60000, 1.5, 1.5] # 산속군사
+	ENEMY_EXP[45] = [60_000, 1.5, 1.5] # 산속군사
 	
-	ENEMY_EXP[91] = [600000, 5.0, 5.0] # 비류성창병
-	ENEMY_EXP[96] = [1500000, 7.0, 7.0] # 비류성자객
-	ENEMY_EXP[97] = [1500000, 9.0, 9.0] # 비류성수문장
-	ENEMY_EXP[90] = [3000000, 15.0, 15.0] # 비류성정예군
-	ENEMY_EXP[98] = [10000000, 100.0, 100.0] # 비류장군
+	ENEMY_EXP[91] = [600_000, 5.0, 5.0] # 비류성창병
+	ENEMY_EXP[96] = [1_500_000, 7.0, 7.0] # 비류성자객
+	ENEMY_EXP[97] = [1_500_000, 9.0, 9.0] # 비류성수문장
+	ENEMY_EXP[90] = [3_000_000, 15.0, 15.0] # 비류성정예군
+	ENEMY_EXP[98] = [10_000_000, 100.0, 100.0] # 비류장군
 	
-	ENEMY_EXP[254] = [5000000, 10.0, 10.0] # 뇌랑
-	ENEMY_EXP[255] = [6000000, 11.0, 11.0] # 왕가
-	ENEMY_EXP[256] = [10000000, 20.0, 20.0] # 조왕
-	ENEMY_EXP[257] = [50000000, 30.0, 30.0] # 태산
-	ENEMY_EXP[258] = [500000000, 1000.0, 1000.0] # 길림장군
+	ENEMY_EXP[254] = [5_000_000, 10.0, 10.0] # 뇌랑
+	ENEMY_EXP[255] = [6_000_000, 11.0, 11.0] # 왕가
+	ENEMY_EXP[256] = [10_000_000, 20.0, 20.0] # 조왕
+	ENEMY_EXP[257] = [50_000_000, 30.0, 30.0] # 태산
+	ENEMY_EXP[258] = [500_000_000, 300.0, 300.0] # 길림장군
 	
 	# 4차 퀘스트
-	ENEMY_EXP[102] = [160000000] # 반고
+	ENEMY_EXP[102] = [1_600_000_000] # 반고
 	
 	# 12지신
-	ENEMY_EXP[132] = [11600000] # 건룡
-	ENEMY_EXP[133] = [11600000] # 감룡
-	ENEMY_EXP[134] = [11600000] # 진룡
+	ENEMY_EXP[132] = [11_600_000] # 건룡
+	ENEMY_EXP[133] = [11_600_000] # 감룡
+	ENEMY_EXP[134] = [11_600_000] # 진룡
 	
 	# 용궁
-	ENEMY_EXP[150] = [7000000] # 해마장군
-	ENEMY_EXP[153] = [15000000] # 인어장군
-	ENEMY_EXP[156] = [27000000] # 상어장군
-	ENEMY_EXP[158] = [40000000] # 해파리장군
-	ENEMY_EXP[159] = [80000000] # 거북장군
+	ENEMY_EXP[150] = [7_000_000] # 해마장군
+	ENEMY_EXP[153] = [15_000_000] # 인어장군
+	ENEMY_EXP[156] = [27_000_000] # 상어장군
+	ENEMY_EXP[158] = [40_000_000] # 해파리장군
+	ENEMY_EXP[159] = [80_000_000] # 거북장군
 	
 	# 일본
-	ENEMY_EXP[194] = [17000000] # 문려
-	ENEMY_EXP[186] = [27500000] # 무사
-	ENEMY_EXP[189] = [45000000] # 주마관
+	ENEMY_EXP[194] = [20_000_000] # 문려
+	ENEMY_EXP[186] = [57_500_000] # 무사
+	ENEMY_EXP[189] = [75_000_000] # 주마관
 	
-	ENEMY_EXP[191] = [50000000] # 유성지
-	ENEMY_EXP[192] = [70000000] # 해골왕
-	ENEMY_EXP[193] = [350000000] # 파괴왕
-	
+	ENEMY_EXP[191] = [150_000_000] # 유성지
+	ENEMY_EXP[192] = [270_000_000] # 해골왕
+	ENEMY_EXP[193] = [1_350_000_000] # 파괴왕
 	
 	# 중국
-	ENEMY_EXP[224] = [15000000]# 괴성왕
-	ENEMY_EXP[228] = [36000000] # 뇌신왕
-	ENEMY_EXP[231] = [70000000] # 천구왕
+	ENEMY_EXP[224] = [15_000_000] # 괴성왕
+	ENEMY_EXP[228] = [36_000_000] # 뇌신왕
+	ENEMY_EXP[231] = [70_000_000] # 천구왕
 	
-	ENEMY_EXP[232] = [700000000] # 산신대왕
-	ENEMY_EXP[233] = [14500000]# 산신전사
-	ENEMY_EXP[234] = [9000000]# 산신도사
-	ENEMY_EXP[235] = [11500000]# 산신도적
-	ENEMY_EXP[236] = [9500000]# 산신주술사
+	ENEMY_EXP[232] = [1_000_000_000] # 산신대왕
+	ENEMY_EXP[233] = [22_500_000] # 산신전사
+	ENEMY_EXP[234] = [21_000_000] # 산신도사
+	ENEMY_EXP[235] = [22_500_000] # 산신도적
+	ENEMY_EXP[236] = [21_500_000] # 산신주술사
 	
 	# 환상의섬
-	ENEMY_EXP[246] = [15000000]	# 선장망령
-	ENEMY_EXP[252] = [300000000] # 마려
-	ENEMY_EXP[259] = [4000000000] # 가릉빈가
+	ENEMY_EXP[246] = [15_000_000] # 선장망령
+	ENEMY_EXP[252] = [300_000_000] # 마려
+	ENEMY_EXP[259] = [4_000_000_000] # 가릉빈가
 	
 	# 한두고개
-	ENEMY_EXP[268] = [9999999, 0]# 최강다람쥐
-	ENEMY_EXP[269] = [22222222, 0]# 무적다람쥐
+	ENEMY_EXP[268] = [9_999_999, 0] # 최강다람쥐
+	ENEMY_EXP[269] = [22_222_222, 0] # 무적다람쥐
+	
 	#--------------------------------------------------------------------------
 	#데미지 뜨게 할거임?
 	DISPLAY_DAMAGE = true
@@ -1761,6 +1760,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :range
 		attr_accessor :draw
 		attr_accessor :stop
+		
+		@@all_objects = [] # 클래스 변수
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
@@ -1788,6 +1789,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				9 => [1, -1]   # 오른쪽 위
 			}
 			@objects = []
+			make_all_objects 
 		end
 		
 		#--------------------------------------------------------------------------
@@ -1795,6 +1797,10 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def refresh
 			
+		end
+		
+		def self.refresh
+			@@all_objects = []
 		end
 		#--------------------------------------------------------------------------
 		# * Force Movement
@@ -1814,15 +1820,18 @@ if SDK.state("Mr.Mo's ABS") == true
 			super
 			return if @stop
 			return if moving?
-			
-			if @parent.nil? || @actor.nil?
-				@stop = true
-				return
-			end
+			return if update_check_nil
 			
 			check_collisions
 			@stop = true if @step >= @range
 			force_movement 
+		end
+		
+		def update_check_nil
+			return false if @parent && @actor
+			
+			@stop = true
+			return true
 		end
 		
 		def find_actor(object)
@@ -1832,6 +1841,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def check_enemy(enemy)
+			return false unless enemy
+			
 			case @actor
 			when ABS_Enemy 
 				case enemy
@@ -1854,26 +1865,34 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			return false
 		end
-			
+		
 		def check_collisions
-			@objects = find_objects.select { |o| o.x == @x && o.y == @y && check_enemy(find_actor(o))}
+			#@objects = find_objects.select { |o| o.x == @x && o.y == @y}
+			@objects = @@all_objects.select { |o| o.x == @x && o.y == @y && check_enemy(find_actor(o))}
 			@stop = true unless @objects.empty?
 		end
 		
 		def find_objects
 			enemies = $ABS.enemies.values.select do |e| 
-				e != nil && !e.dead? && e != @parent
+				e && !e.dead? && e != @parent
 			end.map { |e| e.event }
 			
 			players = Network::Main.mapplayers.values.select do |p|
-				p != nil && p != @parent
+				p && p != @parent
 			end
 			
 			objects = enemies + players
 			objects << $game_player if @parent != $game_player
-			objects
+			return objects.select {|o| check_enemy(find_actor(o))}
 		end
 		
+		def make_all_objects
+			return unless @@all_objects.empty?
+			
+			@@all_objects = $ABS.enemies.values.map {|e| e.event}
+			@@all_objects += Network::Main.mapplayers.values
+			@@all_objects << $game_player
+		end
 		#--------------------------------------------------------------------------
 		# * In Range?(Element, Object, Range) - Near Fantastica
 		#--------------------------------------------------------------------------
@@ -1888,9 +1907,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Get ALL Range(Element, Range)
 		#--------------------------------------------------------------------------
 		def get_all_range(element, range)
-			@objects += find_objects.select do |o| 
-				!@objects.include?(o) && enemy?(o) && in_range?(element, o, range)
-			end
+			#~ @objects += find_objects.select do |o| 
+				#~ !@objects.include?(o) && in_range?(element, o, range)
+			#~ end
+			
+			@objects += @@all_objects.select { |o| !@objects.include?(o) && in_range?(element, o, range) && check_enemy(find_actor(o))}
 		end
 	end
 	
@@ -2241,6 +2262,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			if $game_map.map_id != $game_temp.player_new_map_id
 				$ABS.enemies = {}
 				$ABS.hate_group = {}
+				Range_Base.refresh
 			end
 			mrmo_abs_scene_map_transfer_player
 		end

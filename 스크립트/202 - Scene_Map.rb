@@ -39,9 +39,7 @@ class Scene_Map
 		scene_map_update
 		JS.update
 		update_game_switches
-		return if $map_chat_input.active
-		
-		handle_key_presses
+		update_key_presses
 	end
 	
 	def update_game_switches
@@ -49,10 +47,19 @@ class Scene_Map
 		$game_switches[296] = $game_party.actors[0].hp <= 0
 	end
 	
-	def handle_key_presses
+	def update_key_presses
+		return unless check_key_active_ready
+		
 		handle_toggle_windows
 		handle_other_key_presses
 		handle_admin_key_presses
+	end
+	
+	def check_key_active_ready
+		#return false if $map_chat_input.active
+		return false if $inputKeySwitch
+		
+		return true
 	end
 	
 	def handle_admin_key_presses
@@ -80,15 +87,15 @@ class Scene_Map
 	end
 	
 	def toggle_help_window
-		if Input.trigger?(Input::Fkeys[1]) # f1
-			Hwnd.include?("help") ? Hwnd.dispose("help") : Jindow_help.new
-		end	
+		return unless Input.trigger?(Input::Fkeys[1]) # f1
+		
+		Hwnd.include?("help") ? Hwnd.dispose("help") : Jindow_help.new
 	end
 	
 	def toggle_inventory_window
-		if Key.trigger?(KEY_I) # i
-			Hwnd.include?("Inventory") ? $j_inven.toggle : $j_inven = Jindow_Inventory.new
-		end
+		return unless Key.trigger?(KEY_I) # i
+		
+		Hwnd.include?("Inventory") ? $j_inven.toggle : $j_inven = Jindow_Inventory.new
 	end
 	
 	def toggle_chat_window

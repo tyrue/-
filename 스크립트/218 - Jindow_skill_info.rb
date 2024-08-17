@@ -88,10 +88,6 @@ class Jindow_Skill_Info < Jindow
 		@draw_y = sprite.y + bitmap.font.size * line + 2
 	end
 	
-	def setup_skill_info
-		@s_info = compile_skill_info
-	end
-	
 	def determine_skill_type
 		arr = []
 		@skill_data.type.each do |type|
@@ -114,90 +110,83 @@ class Jindow_Skill_Info < Jindow
 		arr
 	end
 	
-	def compile_skill_info
-		s_info = []
-		s_info.push(format_skill_power(@skill_data.power_arr)) if @skill_data.power_arr
-		if @txt_power > 0
-			s_info.push("기본 공격력 : #{@txt_power}")
-			s_info.push("")
-		end
-		
-		if @skill_data.heal_type
-			t = case @skill_data.heal_type
-			when "hp" then "체력"
-			when "sp" then "마력"
-			end
+	def setup_skill_info
+		@s_info = []
+		format_skill_power()
+		format_heal_data()
+		format_skill_cost()
+		format_range_skill_data()
+		format_stat_text()
+		format_buff_data()
+		format_time_data()
+	end
+	
+	def format_skill_power()
+		val = @data.power
+		if @skill_data.power_arr
+			type, p_hp, p_sp, val = @skill_data.power_arr
 			
-			s_info.push("회복 타입 : #{t}") 
-			s_info.push(format_heal_data(@skill_data.heal_value_per)) if @skill_data.heal_value_per
-			s_info.push("기본 회복량 : #{@skill_data.heal_value}") if @skill_data.heal_value && @skill_data.heal_value > 0
-			s_info.push("")
+			txt = "공격력 : "
+			txt += type == 0 ? "현재 " : "전체 "
+			txt += "체력 #{(p_hp * 100).to_i}% " if p_hp > 0
+			txt += "마력 #{(p_sp * 100).to_i}%" if p_sp > 0
+			@s_info.push(txt)
 		end
 		
-		s_info.push(format_skill_cost(@skill_data.cost_arr)) if @skill_data.cost_arr
-		if @data.sp_cost > 0
-			s_info.push("기본 소모 : 마력 #{@data.sp_cost}")
-			s_info.push("")
-		end
-		
-		s_info.push("거리 : #{@skill_data.range_value}") if @skill_data.range_value
-		s_info.push("폭발 범위 : #{@skill_data.explode_range}") if @skill_data.explode_range
-		if @skill_data.hit_num
-			s_info.push("타격수 : #{@skill_data.hit_num}") 	
-			s_info.push("")
-		end
-		
-		stat_rate = compile_stat_rate
-		if stat_rate
-			s_info.push("능력치 영향도")
-			s_info.push(format_stat_text(stat_rate))
-			s_info.push("")
-		end
-		
-		if @skill_data.buff_data
-			s_info.push("버프 효과")
-			s_info.push(format_buff_data(@skill_data.buff_data))
-			s_info.push("")
-		end
-		
-		s_info.push("지속 시간 : #{@skill_data.buff_time}초") if @skill_data.buff_time
-		s_info.push("재사용 시간 : #{@skill_data.mash_time}초") if @skill_data.mash_time
-		s_info
+		@s_info.push("기본 공격력 : #{val}") if val > 0
+		@s_info.push("") if @s_info.last && @s_info.last != ""
 	end
 	
-	def format_skill_cost(data)
-		type, p_hp, p_sp = data
-		txt = "소모 : "
-		txt += type == 0 ? "현재 " : "전체 "
-		txt += "체력 #{(p_hp * 100).to_i}% " if p_hp > 0
-		txt += "마력 #{(p_sp * 100).to_i}%" if p_sp > 0
-		txt
-	end
-	
-	def format_skill_power(data)
-		type, p_hp, p_sp, val = data
-		@txt_power = val
+	def format_heal_data()
+		return unless @skill_data.heal_type
 		
-		txt = "공격력 : "
-		txt += type == 0 ? "현재 " : "전체 "
-		txt += "체력 #{(p_hp * 100).to_i}% " if p_hp > 0
-		txt += "마력 #{(p_sp * 100).to_i}%" if p_sp > 0
-		txt
-	end
-	
-	def format_heal_data(data)
-		type, p_hp, p_sp = data
+		t = case @skill_data.heal_type
+		when "hp" then "체력"
+		when "sp" then "마력"
+		end
+		@s_info.push("회복 타입 : #{t}") 
 		
-		txt = "회복량 : "
-		txt += type == 0 ? "현재 " : "전체 "
-		txt += "체력 #{(p_hp * 100).to_i}% " if p_hp > 0
-		txt += "마력 #{(p_sp * 100).to_i}%" if p_sp > 0
-		txt
+		if @skill_data.heal_value_per
+			type, p_hp, p_sp = @skill_data.heal_value_per
+			
+			txt = "회복량 : "
+			txt += type == 0 ? "현재 " : "전체 "
+			txt += "체력 #{(p_hp * 100).to_i}% " if p_hp > 0
+			txt += "마력 #{(p_sp * 100).to_i}%" if p_sp > 0
+			@s_info.push(txt)
+		end
+		
+		@s_info.push("기본 회복량 : #{@skill_data.heal_value}") if @skill_data.heal_value && @skill_data.heal_value > 0
+		@s_info.push("") if @s_info.last && @s_info.last != ""
 	end
 	
-	def format_buff_data(data)
+	def format_skill_cost()
+		if @skill_data.cost_arr
+			type, p_hp, p_sp = @skill_data.cost_arr
+			txt = "소모 : "
+			txt += type == 0 ? "현재 " : "전체 "
+			txt += "체력 #{(p_hp * 100).to_i}% " if p_hp > 0
+			txt += "마력 #{(p_sp * 100).to_i}%" if p_sp > 0
+			@s_info.push(txt)
+		end
+		
+		@s_info.push("기본 소모 : 마력 #{@data.sp_cost}") if @data.sp_cost > 0
+		@s_info.push("") if @s_info.last && @s_info.last != ""	
+	end
+	
+	def format_range_skill_data()
+		@s_info.push("거리 : #{@skill_data.range_value}") if @skill_data.range_value
+		@s_info.push("폭발 범위 : #{@skill_data.explode_range}") if @skill_data.explode_range
+		@s_info.push("타격수 : #{@skill_data.hit_num}") 	if @skill_data.hit_num
+		@s_info.push("") if @s_info.last && @s_info.last != "" 
+	end
+	
+	def format_buff_data()
+		return unless @skill_data.buff_data
+		
+		@s_info.push("버프 효과")
 		txt = ""
-		data.each do |type, val|
+		@skill_data.buff_data.each do |type, val|
 			type_s = case type
 			when "str" then "힘"
 			when "int" then "지력"
@@ -213,26 +202,47 @@ class Jindow_Skill_Info < Jindow
 			else "기타"		
 			end
 			
-			txt += type_s 
-			if type_s != "기타" && val && val != 0
-				txt += val > 0 ? " +" : " "
-				txt += "#{val} "
-			end
+			txt += "[#{type_s}]"
+			next if type_s == "기타"
+			next unless val && val != 0
+			
+			txt += val > 0 ? " +" : " "
+			txt += "#{val} "
 		end
-		txt
+		@s_info.push(txt) if txt != ""	
+		
+		@s_info.push("물리 최종 공격력 X #{@skill_data.attack_power_per}") if @skill_data.attack_power_per
+		@s_info.push("최종 방어력 X #{@skill_data.defense_per}") if @skill_data.defense_per
+		@s_info.push("마법 최종 공격력 X #{@skill_data.skill_power_per}") if @skill_data.skill_power_per
+		
+		@s_info.push("물리 치명 확률 +#{@skill_data.attack_critical}") if @skill_data.attack_critical
+		@s_info.push("마법 치명 확률 +#{@skill_data.skill_critical}") if @skill_data.skill_critical
+		
+		@s_info.push("") if @s_info.last && @s_info.last != ""	
 	end
 	
 	def compile_stat_rate
 		[@data.str_f, @data.dex_f, @data.agi_f, @data.int_f].select { |rate| rate > 0 }.empty? ? nil : [@data.str_f, @data.dex_f, @data.agi_f, @data.int_f]
 	end
 	
-	def format_stat_text(stat_rate)
+	def format_stat_text()
+		stat_rate = compile_stat_rate
+		return unless stat_rate
+		
+		@s_info.push("능력치 영향도")
+		
 		txt = ""
 		txt += "힘 [#{stat_rate[0]}%] " if stat_rate[0] > 0
 		txt += "민첩 [#{stat_rate[1]}%] " if stat_rate[1] > 0
 		txt += "손재주 [#{stat_rate[2]}%] " if stat_rate[2] > 0
 		txt += "지력 [#{stat_rate[3]}%]" if stat_rate[3] > 0
-		txt
+		@s_info.push(txt)
+		@s_info.push("") if @s_info.last && @s_info.last != ""
+	end
+	
+	def format_time_data()
+		@s_info.push("지속 시간 : #{@skill_data.buff_time}초") if @skill_data.buff_time
+		@s_info.push("재사용 시간 : #{@skill_data.mash_time}초") if @skill_data.mash_time
 	end
 	
 	def setup_skill_info_sprites

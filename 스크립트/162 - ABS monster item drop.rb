@@ -64,6 +64,7 @@ class MrMo_ABS
 		# 확률에 맞는 아이템 id를 넣는다.
 		for d in ITEM_DROP_DATA[id]
 			next if d.size == 1
+			
 			type = d[0]
 			id = d[1]
 			take_num = rand(d[2]) + 1
@@ -88,11 +89,12 @@ class MrMo_ABS
 		end
 		
 		for item in i_id
-			next if item == nil
+			next unless item 
+			
 			type = item[0]
 			id = item[1]
 			amount = item[2]
-			sw = item[3] != nil ? item[3] : 0
+			sw = item[3] || 0 
 			
 			if type == 3 # 돈 드랍
 				create_moneys(id, e.event.x, e.event.y)

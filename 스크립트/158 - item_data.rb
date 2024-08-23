@@ -96,91 +96,95 @@ DRAGON_WEAPON_DATA[148] = [10, 3, 149, 154] # 용랑제칠봉
 DRAGON_WEAPON_DATA[149] = [3, 4, 150, 155] # 용랑제팔봉
 
 class Item_data
-	attr_accessor :Trade_ban_item
-
+	attr_accessor :Trade_ban_item, :Trade_ban_weapon, :Trade_ban_armor
 	
 	def initialize
-		@Trade_ban_item = []
-		@Trade_ban_weapon = []
-		@Trade_ban_armor = []
-		# 가격이 0인 아이템들은 교환 불가 아이템
+		@Trade_ban_item = {}
 		
-		if $data_items != nil
-			for item in $data_items
-				if item != nil
-					if item.name != "" and item.price <= 0
-						#p item.name
-						@Trade_ban_item.push(item.id) 
-					end
-				end
-			end
+		add_trade_ban_items($data_items, 0) if $data_items
+		add_trade_ban_items($data_weapons, 1) if $data_weapons
+		add_trade_ban_items($data_armors, 2) if $data_armors
+		
+		add_additional_trade_bans
+	end
+	
+	def add_trade_ban_items(data, type)
+		@Trade_ban_item[type] ||= []
+		
+		data.each do |item|
+			next unless item && item.name != "" && item.price <= 0
+			@Trade_ban_item[type] << item.id
 		end
+	end
+	
+	def add_additional_trade_bans
+		add_bans_item
+		add_bans_weapon
+		add_bans_armor
+	end
+	
+	def add_bans_item
+		type = 0
+		@Trade_ban_item[type] << 46 # 암호수리검
+		@Trade_ban_item[type] << 52 # 청룡의 비늘
+		@Trade_ban_item[type] << 53 # 화룡의 비늘
 		
-		if $data_weapons != nil
-			for item in $data_weapons
-				if item != nil
-					if item.name != "" and item.price <= 0
-						#p item.name
-						@Trade_ban_weapon.push(item.id) 
-					end
-				end
-			end
-		end
+		@Trade_ban_item[type] << 84 # 용왕의 증표
+		@Trade_ban_item[type] << 85 # 주몽의 증표
+		@Trade_ban_item[type] << 86 # 현무의 증표
 		
-		if $data_armors != nil
-			for item in $data_armors
-				if item != nil
-					if item.name != "" and item.price <= 0
-						#p item.name
-						@Trade_ban_armor.push(item.id) 
-					end
-				end
-			end
-		end
-				
-		# 교환불가 아이템 추가
-		@Trade_ban_item.push(46) # 암호수리검
-		@Trade_ban_item.push(52) # 청룡의 비늘
-		@Trade_ban_item.push(53) # 화룡의 비늘
-		@Trade_ban_item.push(114) # 팔괘
-		@Trade_ban_item.push(117) # 청룡 보옥
-		@Trade_ban_item.push(118) # 현무 보옥
-		@Trade_ban_item.push(119) # 반고의 심장
-		@Trade_ban_item.push(163) # 일본주막비서
-		@Trade_ban_item.push(217) # 고균도주막비서
-		
+		@Trade_ban_item[type] << 114 # 팔괘
+		@Trade_ban_item[type] << 117 # 청룡 보옥
+		@Trade_ban_item[type] << 118 # 현무 보옥
+		@Trade_ban_item[type] << 119 # 반고의 심장
+		@Trade_ban_item[type] << 163 # 일본주막비서
+		@Trade_ban_item[type] << 217 # 고균도주막비서
+	end
+	
+	def add_bans_weapon
+		type = 1
 		# 교환 불가 무기 추가
 		# 4차 무기
-		@Trade_ban_weapon.push(6)
-		@Trade_ban_weapon.push(7)
-		@Trade_ban_weapon.push(8)
-		@Trade_ban_weapon.push(9) 
-		
-		# 교환 불가 장비 추가
+		@Trade_ban_item[type] << 6
+		@Trade_ban_item[type] << 7
+		@Trade_ban_item[type] << 8
+		@Trade_ban_item[type] << 9 
+	end
+	
+	def add_bans_armor
+		type = 2
 	end
 	
 	# 교환 가능 아이템인가?
 	def is_trade_ok(id, type)
-		case type
-		when 0 # 아이템
-			return !@Trade_ban_item.include?(id)
-		when 1 # 무기
-			return !@Trade_ban_weapon.include?(id)
-		when 2 # 장비
-			return !@Trade_ban_armor.include?(id)
-		end
+		return if 
+		return !@Trade_ban_item[type].include?(id)
+		return false
 	end
+	
+	def check_trade_switch(id, type)
+		
+		case type
+		when 0 then return $game_switches[id]
+		when 1
+		when 2
+		end
+		return $game_switches[id]
+	end
+	
 	
 	def weapon_se(id)
 		default_root = "무기/"
-		file_name = WEAPON_SE_DATA[id] != nil ? WEAPON_SE_DATA[id][0] : "기본"
+		file_name = WEAPON_SE_DATA[id] ? WEAPON_SE_DATA[id][0] : "기본"
 		file_name = default_root + file_name
 		
-		begin
-			$game_system.se_play(file_name.to_s)
-		rescue
-			file_name = default_root + "기본"
-			$game_system.se_play(file_name.to_s)
-		end
+		play_weapon_se(file_name, default_root)
+	end
+	
+	def play_weapon_se(file_name, default_root)
+		$game_system.se_play(file_name.to_s)
+	rescue
+		$game_system.se_play(default_root + "기본")
 	end
 end
+

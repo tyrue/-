@@ -114,6 +114,7 @@ class Jindow_N < Jindow
 		@input_help_txt.y = @input_num.y
 		@input_help_txt.bitmap = Bitmap.new(self.width, 18)
 		@input_help_txt.bitmap.draw_text(0, 0, self.width, 18, "enter키로 입력")
+		@close_ok = true
 	end
 	
 	def setup_positions
@@ -188,11 +189,12 @@ class Jindow_N < Jindow
 	
 	def handle_enter_key
 		@a.click = true if !@a.disposed?
-		@b.click = true if !@b.disposed?
+		handle_next_button if @input_num
 	end
 	
 	def handle_space_key
 		@a.click = true if !@a.disposed?
+		@b.click = true if !@b.disposed?
 	end
 	
 	def handle_esc_key

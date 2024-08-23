@@ -912,8 +912,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					enemy.sp = sp
 					
 					event = enemy.event
-					event.moveto(x, y) # 몹 방향과 좌표 적용
-					event.direction = d
+					#event.moveto(x, y) # 몹 방향과 좌표 적용
+					event.direction = direction
 					
 					if enemy.hp <= 0
 						event.through = true
@@ -924,9 +924,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
 					data_hash = parseKeyValueData($1)
 					map_id = data_hash["map_id"].to_i
-					
 					return unless map_id == $game_map.map_id
-					return $ABS.getMapMonsterData if data_hash.size <= 1 && $is_map_first # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
+					
+					if data_hash.size <= 1
+						$ABS.getMapMonsterData if $is_map_first # 서버에 저장된 몬스터 데이터가 없을 경우 몬스터를 자체적으로 생성함
+						return 
+					end  
 					
 					id = data_hash["id"].to_i 
 					hp = data_hash["hp"].to_i 
@@ -945,7 +948,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						
 						create_abs_monsters(mon_id, 1, id) 
 					end
-					
 					enemy = $ABS.enemies[id]
 					event = enemy.event
 					
@@ -1587,13 +1589,13 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 맵 id, 몹id, x, y, 방향
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					return if $game_map.map_id != data[0].to_i
-					return unless $ABS.enemies[data[1].to_i]
+					map_id, id = data
+					return if $game_map.map_id != map_id.to_i
+					return unless id
 					
-					event = $ABS.enemies[data[1].to_i].event # 몹 죽었을때 리스폰 시간 적용
+					id = id.to_i
+					event = $ABS.enemies[id] ? $ABS.enemies[id].event : $game_map.events[id] # 몹 죽었을때 리스폰 시간 적용
 					return unless event
-					
-					
 					
 					event.erased = false
 					event.refresh

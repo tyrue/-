@@ -87,8 +87,6 @@ def check_create_monster_id
 end
 
 def create_abs_monsters(monster_id, num = 1, id = nil)
-	return unless $is_map_first
-	
 	num.times do 
 		e_id = id || check_create_monster_id
 		dir = (rand(4) + 1) * 2
@@ -98,13 +96,14 @@ def create_abs_monsters(monster_id, num = 1, id = nil)
 		event.list[1].parameters[0] = "ID #{monster_id}"
 		setup_event(event, e_id, 1, 1, dir)
 		
+		next unless $is_map_first
 		$ABS.rand_spawn(event)
 		$ABS.send_network_monster($ABS.enemies[e_id])
 	end
 end
 
 # 운영자가 소환하는 몬스터, 한 번 잡으면 서버에서 삭제시키도록 하자
-def create_abs_monsters_admin(monster_id, num = 1)
+def create_abs_monsters_admin(monster_id, num = 1, sw = false)
 	x, y, r = $game_player.x, $game_player.y, 12
 	
 	num.times do
@@ -122,14 +121,14 @@ def create_abs_monsters_admin(monster_id, num = 1)
 			
 			event.list[1].parameters[0] = "ID #{monster_id}"
 			setup_event(event, id, x2, y2, dir)
-			
+			$ABS.rand_spawn(event) if sw
 			$ABS.send_network_monster($ABS.enemies[id], 1)
 			break
 		end
 	end
 end
 
-def create_events(event_id, x, y, dir = 2, id = nil)
+def create_events(event_id, x = 1, y = 1, dir = 2, id = nil)
 	temp = load_data("Data/Map022.rxdata").events[event_id]
 	return unless temp
 	

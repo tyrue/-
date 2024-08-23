@@ -72,8 +72,9 @@ class Jindow_hairct < Jindow
     $cha_name = hair_style
     $chat.write("머리가 변경되었습니다.", COLOR_HELP)
     Hwnd.dispose(self)
-    $scene = Scene_Map.new
-    Network::Main.send_map
+		
+    $game_player.refresh
+		Network::Main.send_map
   end
 
   def display_insufficient_gold_message

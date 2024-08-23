@@ -11,6 +11,8 @@ MAP_MONSTER_DATA[33] = [[24, 15]] # 사슴굴3 : 주홍사슴
 MAP_MONSTER_DATA[34] = [[18, 15]] # 사슴굴4 : 백순록
 MAP_MONSTER_DATA[35] = [[18, 15]] # 사슴굴5 : 백순록
 
+MAP_MONSTER_DATA[31] = [[17, 1]] # 곰굴4 : 진호
+
 MAP_MONSTER_DATA[44] = [[63, 15]] # 흑해골굴1 : 황해골
 MAP_MONSTER_DATA[45] = [[63, 15]] # 흑해골굴2 : 황해골
 

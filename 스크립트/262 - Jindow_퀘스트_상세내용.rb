@@ -19,6 +19,7 @@ class Jindow_Quest_Detail < Jindow
 		
 		#~ "monster_data" => [[4, 50]],			# [[잡아야하는 몬스터 id, 수], ...]
 		#~ "item_data" => [[2, 3, 50]]			# [[필요한 아이템 타입, id, 필요개수], ...]
+		#~ "close_or_switch" => [369], #[하나라도 있다면 닫는다.]
 		
 		for d in @data
 			key = d[0]

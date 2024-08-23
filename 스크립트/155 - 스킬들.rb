@@ -65,11 +65,11 @@ REQ_SKILL_DATA = {}
 # 전사
 REQ_SKILL_DATA[1] = {
 	5 => [5, [[0, 3, 30], [0, 74, 10]]],   # 누리의기원
-	26 => [6, [[0, 5, 10], [0, 6, 10]]],   # 누리의힘
-	62 => [10, [[0, 7, 5], [0, 8, 10]]],   # 수심각도, 쇠고기, 돼지고기
-	74 => [12, [[0, 9, 20], [0, 10, 20]]],  # 십리건곤
-	63 => [18, [[0, 10, 15], [0, 104, 15]]],# 반영대도
-	64 => [25, [[0, 11, 15], [0, 12, 15]]], # 십량분법
+	26 => [6, [[0, 5, 5], [0, 6, 5]]],   # 누리의힘
+	62 => [10, [[0, 7, 5], [0, 8, 5]]],   # 수심각도, 쇠고기, 돼지고기
+	74 => [12, [[0, 9, 10], [0, 10, 7]]],  # 십리건곤
+	63 => [18, [[0, 10, 10], [0, 104, 10]]],# 반영대도
+	64 => [25, [[0, 11, 10], [0, 12, 10]]], # 십량분법
 	65 => [30, [[0, 12, 10], [0, 50, 10]]], # 뢰마도
 	27 => [35, [[0, 19, 10], [0, 20, 10]]], # 동해의기원
 	66 => [40, [[0, 19, 20], [0, 20, 15]]], # 신수둔각도
@@ -182,28 +182,37 @@ ABS_ENEMY_SKILL_CASTING[161] = [[1.5, "영원한 공허의 무수한 파편들�
 # ----------------------------------#
 NEED_ADVANCE_RESOURCE = {} # 각 요소는 승급시 필요 체/마
 NEED_ADVANCE_RESOURCE[0] = [
-	[5000, 5000], 
-	[10000, 20000], 
-	[30000, 70000], 
-	[70000, 150000]] # 주술사
+	[5000, 7500], 
+	[15000, 35000], 
+	[45000, 105000], 
+	[105000, 230000]] # 주술사
 
 NEED_ADVANCE_RESOURCE[1] = [
-	[7000, 3000], 
-	[30000, 7000], 
-	[80000, 12000], 
-	[200000, 25000]] # 전사
+	[10500, 4500], 
+	[70000, 7000], 
+	[200000, 15000], 
+	[450000, 35000]] # 전사
 
 NEED_ADVANCE_RESOURCE[2] = [
-	[5000, 5000], 
-	[10000, 10000], 
-	[30000, 50000], 
-	[60000, 100000]] # 도사
+	[5000, 7500], 
+	[10000, 35000], 
+	[45000, 105000], 
+	[105000, 230000]] # 도사
 
 NEED_ADVANCE_RESOURCE[3] = [
-	[7000, 3000], 
-	[30000, 7000], 
-	[80000, 12000], 
-	[200000, 25000]] # 도적
+	[10500, 4500], 
+	[70000, 7000], 
+	[200000, 15000], 
+	[450000, 35000]] # 도적
+
+# 승급 차수당 경험치 판매 단위
+NEED_ADVANCE_EXP = [
+	[300_000, 300_000],
+	[500_000, 500_000],
+	[1_000_000, 1_000_000],
+	[3_000_000, 3_000_000],
+	[300_000, 300_000],
+	]
 # -------------END----------------- #
 
 # $game_variables[19] 플레이어 힘
@@ -630,7 +639,6 @@ class Rpg_skill
 	def damage_by_skill(damage, id)
 		skill_data = $rpg_skill_data[id]
 		data = skill_data.power_arr
-		
 		return damage unless data
 		
 		# 2 : 비례데미지
@@ -843,9 +851,7 @@ class Rpg_skill
 			
 			# 업그레이드 되는 스킬이면 이전 하위 스킬을 건너뜀
 			next if UPGRADE_SKILL_ID.values.any? do |arr|
-				arr.include?(s_id) && arr.any? { |u_id| 
-					actor.skill_learn?(u_id) && (s_id <= u_id) 
-				}
+				arr.include?(s_id) && arr.any? { |u_id| actor.skill_learn?(u_id) && (s_id <= u_id) }
 			end
 			
 			return id unless actor.skill_learn?(s_id)
@@ -878,40 +884,6 @@ class Rpg_skill
 			"skill_id" => id,
 			"req_data" => data[1]
 		}
-	end
-	
-	def set_learn_skill_data(data)
-		$temp_level = data["level"]
-		$game_variables[32] = data["skill_id"]
-		$temp_req_string = "필요한 재료는 다음과 같다네.\n"
-		
-		data["req_data"].each do |type, id, num|
-			name = case type
-			when 0 then $data_items[id].name
-			when 1 then $data_weapons[id].name
-			when 2 then $data_armors[id].name
-			end
-			$temp_req_string += "[#{name} #{num}개] "
-		end
-		$temp_req_string += "라네.\n"
-	end
-	
-	def check_learn_skill_data(data)
-		actor = $game_party.actors[0]
-		
-		data["req_data"].each do |type, id, num|
-			sw, item, my_num = check_item_num(type, id, num)
-			unless sw
-				$temp_req_string = "#{item.name}(이)가 #{num - my_num}개 부족하다네."
-				return false
-			end
-		end
-		
-		actor.learn_skill(data["skill_id"])
-		data["req_data"].each do |type, id, num|
-			lose_item_num(type, id, num)
-		end
-		return true
 	end
 	
 	# 승급시 필요 체력, 마력 반환하는 함수
@@ -1014,46 +986,105 @@ class Rpg_skill
 		return damage
 	end
 	
+	def set_learn_skill_data(data)
+		$temp_level = data["level"]
+		$game_variables[32] = data["skill_id"]
+		$temp_req_string = build_requirements_string(data["req_data"], "다네.", "라네.")
+	end
+	
+	def build_requirements_string(req_data, msg1 = "습니다.", msg2 = "입니다.")
+		req_string_arr = []
+		req_string_arr << "필요한 재료는 다음과 같#{msg1}" # 시작 메시지
+		
+		temp_str = ""
+		i = 1
+		req_data.each do |type, id, num|
+			temp_str += "\n" if i % 3 == 0
+			
+			name = fetch_item_name(type, id)
+			temp_str += case type
+			when 0..2 then "[#{name} #{num}개] "
+			when 3 then "[#{num}전] "
+			end
+			i += 1
+		end
+		
+		req_string_arr << "#{temp_str}#{msg2}"
+		return req_string_arr.join("\n")
+	end
+	
+	def fetch_item_name(type, id)
+		case type
+		when 0 then $data_items[id].name
+		when 1 then $data_weapons[id].name
+		when 2 then $data_armors[id].name
+		when 3 then "금전"
+		end
+	end
+	
+	def check_learn_skill_data(data)
+		actor = $game_party.actors[0]
+		success, msg = check_need_item(data["req_data"])
+		unless success
+			$temp_req_string = msg + "하다네."
+			return false
+		end
+		
+		actor.learn_skill(data["skill_id"])
+		return true
+	end
+	
 	# 스킬을 사용하기 위한 재료가 준비 됐는지 확인
 	def check_need_skill_item(id)
 		skill_data = $rpg_skill_data[id]
 		return true unless skill_data.need_item
 		
-		skill_data.need_item.each do |type, item_id, num|
-			sw, item, my_num = check_item_num(type, id, req_num)
-			if !sw
-				$console.write_line("#{item.name}(이)가 #{num - my_num}개 부족합니다.")
-				return false 
+		success, msg = check_need_item(skill_data.need_item)
+		$console.write_line(msg + "합니다.") unless success
+		return success
+	end
+	
+	# 필효한 재료가 준비 됐는지 확인
+	def check_need_item(need_data)
+		need_data.each do |item_data|
+			sw, item, my_num = check_item_num(item_data)
+			unless sw
+				msg = build_missing_item_message(item_data, item, my_num)
+				return [false, msg]
 			end
 		end
 		
-		# 재료 아이템 소모
-		skill_data.need_item.each do |type, item_id, num|
-			lose_item_num(type, item_id, num)
-		end
-		return true
+		need_data.each { |item_data| lose_item_num(item_data) } # 재료 아이템 소모
+		return [true, ""]
 	end
 	
-	def check_item_num(type, id, req_num)
-		item_data = {
-			0 => { "number" => $game_party.item_number(id), "data" => $data_items[id] },
-			1 => { "number" => $game_party.weapon_number(id), "data" => $data_weapons[id] },
-			2 => { "number" => $game_party.armor_number(id), "data" => $data_armors[id] }
-		}
-		
-		item_info = item_data[type]
-		my_num = item_info["number"]
-		item = item_info["data"]
+	def check_item_num(data)
+		type, id, req_num = data
+		my_num, item = case type
+		when 0 then [$game_party.item_number(id), $data_items[id]]
+		when 1 then [$game_party.weapon_number(id), $data_weapons[id]]
+		when 2 then [$game_party.armor_number(id), $data_armors[id]]
+		when 3 then [$game_party.gold, nil]
+		end
 		
 		[my_num >= req_num, item, my_num]
 	end
 	
-	
-	def lose_item_num(type, id, num)
+	def lose_item_num(data)
+		type, id, num = data
 		case type
 		when 0 then $game_party.lose_item(id, num) # 아이템
 		when 1 then $game_party.lose_weapon(id, num) # 무기
 		when 2 then $game_party.lose_armor(id, num)# 방어구
+		when 3 then $game_party.lose_gold(num) # 금전
+		end
+	end
+	
+	def build_missing_item_message(data, item, my_num)
+		type, _, num = data
+		case type
+		when 0..2 then "#{item.name}(이)가 #{num - my_num}개 부족"
+		when 3 then "금전이 #{num - my_num}전 부족"
 		end
 	end
 end	

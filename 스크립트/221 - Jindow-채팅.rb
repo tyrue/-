@@ -146,17 +146,12 @@ class Jindow_Chat_Input < Jindow
 		when /\/석방 (.*)/ # 감옥에 있는 유저 석방 명령어
 			return if Network::Main.group != 'admin'
 			Network::Main.socket.send "<emancipation>#{$1.to_s}</emancipation>\n"
-			
-		when /\/캐시 (.*) (.*)/ 
-			return if Network::Main.group != 'admin'
-			Network::Main.socket.send "<cashgive>#{$1.to_s},#{$2.to_s}</cashgive>\n"
-			$console.write_line("#{$2.to_s}마일리지를 유저에게 지급하였습니다.")
-			
+				
 		when /^\/이벤트\s?고래\s?(\d*)$/ 
 			return if Network::Main.group != 'admin'
 			
 			n = ($1 == nil or $1 == "") ? 10 : $1.to_i
-			return $console.write_line("오류 발생 (id 없음)") unless create_abs_monsters_admin(49, n)
+			return $console.write_line("오류 발생 (id 없음)") unless create_abs_monsters_admin(49, n, true)
 			
 			$console.write_line("고래를 #{n}마리 소환합니다.")
 			mapname = ""

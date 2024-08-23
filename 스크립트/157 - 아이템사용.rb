@@ -18,6 +18,8 @@ class MrMo_ABS
 			rpg.buff_active(46) # 무장
 		when 68 # 초록시약
 			rpg.buff_active(47) # 보호
+		when 77 # 백억경
+			@actor.exp += 10_000_000_000
 		when 81 # 속도시약
 			rpg.buff_active(99) # 속도시약 스킬 사용
 		end

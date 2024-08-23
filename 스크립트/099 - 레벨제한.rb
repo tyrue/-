@@ -172,6 +172,7 @@ class Game_Actor < Game_Battler
 	def exp=(exp)
 		gainExp = (exp - @exp).to_f
 		@exp = [exp, 0].max
+		actor = $game_party.actors[0]
 		
 		if $login_check && gainExp != 0
 			expPer = @level < 99 ? (@exp - @exp_list[@level]) * 100.0 / (@exp_list[@level + 1] - @exp_list[@level]) : @exp * 100.0 / @exp_list[@level + 1]
@@ -180,9 +181,17 @@ class Game_Actor < Game_Battler
 			$console.write_line(printTxt)
 		end
 		
-		if @exp > MAX_EXP
-			@exp = MAX_EXP
-			$console.write_line("경험치를 더이상 얻을 수 없습니다.") 
+		sw = false
+		sw_num = 0
+		if @exp > MAX_EXP	
+			sw_num = @exp / 10_000_000_000
+			@exp %= 10_000_000_000
+			sw = true
+		end
+		
+		if sw
+			$game_party.gain_item(77, sw_num)
+			$console.write_line("경험치가 제한을 넘어 자동으로 백억경으로 전환합니다.") 
 		end
 		
 		# 레벨업（level up）
@@ -191,9 +200,8 @@ class Game_Actor < Game_Battler
 			next if !$login_check
 			
 			$console.write_line("[정보]:레벨이 올랐습니다!")
-			# 직업에 따라 체력, 마력 증가량 다르게 함
-			actor = $game_party.actors[0]
 			
+			# 직업에 따라 체력, 마력 증가량 다르게 함
 			if(actor.class_id == 7) # 전사 99때 체력 4000
 				actor.maxhp += 30
 				actor.str += 2

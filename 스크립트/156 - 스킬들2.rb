@@ -228,6 +228,7 @@ class Rpg_Skill_Data
 			27,  # 동해의기원
 			29,  # 천공의기원
 			36,  # 구름의기원
+			41,  # 체마혈식
 			43,  # 위태응기
 			48,  # 태양의기원
 			54,  # 태양의기원 2성
@@ -461,17 +462,17 @@ class Rpg_Skill_Data
 		when 74 # 십리건곤
 			@range_value = 1
 			@character_name = "(스킬)검기"
-			@power_arr = [1, 0.01, 0, 30]
+			@power_arr = [1, 0.01, 0, 40]
 			@cost_arr = [1, 1.0 / 20.0, 0]
 		when 78 # 십리건곤 1성
 			@range_value = 1
 			@character_name = "(스킬)검기"
-			@power_arr = [1, 0.02, 0.01, 50]
+			@power_arr = [1, 0.02, 0.01, 60]
 			@cost_arr = [1, 1.0 / 20.0, 0]
 		when 80 # 십리건곤 2성
 			@range_value = 2
 			@character_name = "(스킬)검기2"
-			@power_arr = [1, 0.04, 0.01, 70]
+			@power_arr = [1, 0.04, 0.01, 80]
 			@cost_arr = [1, 1.0 / 20.0, 0]
 		when 102 # 백리건곤 1성
 			@range_value = 3
@@ -601,16 +602,16 @@ class Rpg_Skill_Data
 		when 151 # 청룡의 포효
 			@range_value = 10
 			@character_name = ["(몬)(승급)청룡", 90]
-			@hit_num = 3
-			@hit_back = 8
+			@hit_num = 1
+			@hit_back = 12
 			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
 			@mash_time = 10
 			@power_arr = [2, 0.05, 0.05, 100]
 		when 152 # 현무의 포효
 			@range_value = 10
 			@character_name = ["(몬)(승급)현무", 90]
-			@hit_num = 3
-			@hit_back = 8
+			@hit_num = 1
+			@hit_back = 12
 			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
 			@mash_time = 10
 			@power_arr = [2, 0.05, 0.05, 100]
@@ -689,6 +690,10 @@ class Rpg_Skill_Data
 			@heal_value = 300
 		when 36 # 구름의기원
 			@heal_value = 500
+		when 41 # 체마혈식
+			@heal_type = "sp"
+			@heal_value_per = [1, 0.02, 0]
+			@cost_arr = [1, 0.20, 0]
 		when 43 # 위태응기
 			@heal_value_per = [0, 0, 2.1]
 			@cost_arr = [0, 0, 1.0]

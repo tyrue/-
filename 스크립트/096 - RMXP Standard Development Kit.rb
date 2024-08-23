@@ -797,6 +797,8 @@ class Game_Event < Game_Character
 	#--------------------------------------------------------------------------
 	def refresh_set_page
 		# Set each instance variable
+		return unless @page
+		
 		@tile_id = @page.graphic.tile_id
 		@character_name = @page.graphic.character_name
 		@character_hue = @page.graphic.character_hue

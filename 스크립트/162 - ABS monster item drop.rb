@@ -5,7 +5,7 @@ class MrMo_ABS
 	def take_item2(item_index)
 		return if $map_chat_input.active # 채팅이 활성화 되면 먹지 않기
 		return $console.write_line("귀신은 할 수 없습니다.") if $game_switches[296] # 죽었으면 못 먹음
-			
+		
 		drop = $Drop[item_index]
 		return unless drop 
 		
@@ -55,61 +55,62 @@ class MrMo_ABS
 	#--------------------------------------------------------------------------
 	def drop_enemy(e)
 		id = e.id.to_i
-		return if ITEM_DROP_DATA[id] == nil
+		return unless ITEM_DROP_DATA[id]
 		
-		i_id = []
-		temp = []
-		num = ITEM_DROP_DATA[id][0][0].to_i
+		drop_data = ITEM_DROP_DATA[id]
+		max_drops = drop_data[0][0].to_i
+		valid_drops = filter_valid_drops(drop_data)
+		return if valid_drops.empty?
 		
-		# 확률에 맞는 아이템 id를 넣는다.
-		for d in ITEM_DROP_DATA[id]
+		selected_drops = select_random_drops(valid_drops, max_drops)
+		create_drops_or_money(selected_drops, e)
+	end
+	
+	def filter_valid_drops(drop_data)
+		valid_drops = []
+		
+		drop_data.each do |d|
 			next if d.size == 1
 			
-			type = d[0]
-			id = d[1]
-			take_num = rand(d[2]) + 1
-			chance = d[3] * $drop_event * 10.0
-			sw = d[4] # 드랍 조건 스위치 번호
+			type, id, range, chance_multiplier, sw = d
+			min_num, max_num = 1, 1
 			
-			r = rand(1000) # 0~999
-			temp.push([type, id, take_num, sw]) if r <= chance
+			if range.is_a?(Array)
+				min_num = [range[0], 1].max.to_i
+				max_num = ((range[1] || range[0]) - min_num + 1).to_i
+			else
+				max_num = range
+			end
+			chance = chance_multiplier * $drop_event * 10.0
+			
+			valid_drops << [type, id, rand(max_num) + min_num, sw] if rand(1000) <= chance
 		end
 		
-		return if temp.size == 0 
+		valid_drops
+	end
+	
+	def select_random_drops(valid_drops, max_drops)
+		return valid_drops if max_drops == -1 || valid_drops.size <= max_drops
 		
-		# 최대 드랍될 아이템 종류 개수 랜덤 생성
-		pick_num = num
-		pick_num = temp.size if num == -1
-		
-		# 랜덤으로 temp에 있는 것 중에 num개를 추출한다.
-		pick_num.times do
-			r = rand(temp.size).to_i
-			i_id.push(temp[r])
-			temp.delete_at(r)
-		end
-		
-		for item in i_id
-			next unless item 
-			
-			type = item[0]
-			id = item[1]
-			amount = item[2]
-			sw = item[3] || 0 
-			
+		shuffled_drops = valid_drops.sort_by { rand } # 배열을 무작위로 섞음
+		shuffled_drops[0, max_drops] # 앞에서부터 max_drops만큼 선택
+	end
+	
+	def create_drops_or_money(drops, e)
+		drops.each do |type, id, amount, sw|
 			if type == 3 # 돈 드랍
 				create_moneys(id, e.event.x, e.event.y)
 			else
-				create_drops(type, id, e.event.x, e.event.y, amount, sw)
+				create_drops(type, id, e.event.x, e.event.y, amount, sw || 0)
 			end
 		end
-		
 	end
 	
 	# 드랍율 이벤트
 	$drop_event = 1
 	
 	# 아이템 드랍 데이터
-	# [몬스터 아이디] = [[최대 드랍될 아이템 개수], [타입(아이템 0, 무기 1, 장비 2, 돈 3), 아이템 id or money, 최대 나올 개수, 드랍 확률, (조건스위치)], ...] 
+	# [몬스터 아이디] = [[최대 드랍될 아이템 개수], [타입(아이템 0, 무기 1, 장비 2, 돈 3), 아이템 id or money, [최소개수, 최대 나올 개수], 드랍 확률, (조건스위치)], ...] 
 	ITEM_DROP_DATA = {}
 	# 초보사냥터
 	ITEM_DROP_DATA[1] = [[-1], [0, 74, 1, 80], [2, 10, 1, 1]] # 토끼 : 토끼고기, 토끼화서
@@ -130,11 +131,11 @@ class MrMo_ABS
 	
 	# 곰굴
 	ITEM_DROP_DATA[13] = [[-1], [0, 11, 1, 60]] # 평웅 : 웅담
-	ITEM_DROP_DATA[14] = [[-1], [2, 2, 1, 5]] # 진웅 : 지력의투구1
+	ITEM_DROP_DATA[14] = [[-1], [2, 2, 1, 2], [0, 11, 1, 30]] # 진웅 : 지력의투구1
 	ITEM_DROP_DATA[15] = [[-1], [0, 12, 1, 50]] # 호랑이 : 호랑이고기
 	ITEM_DROP_DATA[16] = [[-1], [0, 12, 1, 60]] # 평호 : 호랑이고기
-	ITEM_DROP_DATA[17] = [[-1], [0, 12, 1, 40], [2, 2, 1, 50]] # 진호 : 호랑이고기, 지력의투구1
-	ITEM_DROP_DATA[75] = [[-1], [2, 2, 1, 50], [1, 118, 1, 10]] # 청진웅 : 지력의투구1, 철단도
+	ITEM_DROP_DATA[17] = [[-1], [0, 12, [3, 10], 40], [2, 2, 1, 30], [1, 118, 1, 10]] # 진호 : 호랑이고기, 지력의투구1, 철단도
+	ITEM_DROP_DATA[75] = [[-1], [0, 11, [3, 10], 60], [2, 2, 1, 30], [1, 118, 1, 10]] # 청진웅 : 웅담, 지력의투구1, 철단도
 	
 	# 돼지굴
 	ITEM_DROP_DATA[21] = [[-1], [0, 19, 1, 40], [0, 28, 1, 15]] # 산돼지 : 산돼지고기, 돼지의뿔
@@ -202,8 +203,8 @@ class MrMo_ABS
 	ITEM_DROP_DATA[81] = [[-1], [1, 27, 1, 50], [1, 105, 1, 30], [1, 106, 1, 30], [1, 133, 1, 30], [1, 24, 1, 30]] # 현랑전갈 : 철검, 영혼마령봉, 현철중검, 해골죽장, 야월도
 	
 	# 2차
-	ITEM_DROP_DATA[58] = [[-1], [0, 90, 3, 100], [0, 52, 1, 1]] # 수룡 : 용의비늘, 수룡의비늘
-	ITEM_DROP_DATA[59] = [[-1], [0, 90, 3, 100], [0, 53, 1, 1]] # 화룡 : 용의비늘, 화룡의비늘
+	ITEM_DROP_DATA[58] = [[-1], [0, 90, [3, 7], 100], [0, 52, 1, 1]] # 수룡 : 용의비늘, 수룡의비늘
+	ITEM_DROP_DATA[59] = [[-1], [0, 90, [3, 7], 100], [0, 53, 1, 1]] # 화룡 : 용의비늘, 화룡의비늘
 	ITEM_DROP_DATA[86] = [[-1], [0, 90, 1, 10]] # 용 : 용의비늘
 	
 	# 산적굴
@@ -278,7 +279,7 @@ class MrMo_ABS
 	ITEM_DROP_DATA[157] = [[-1], [0, 142, 1, 10], [0, 141, 1, 4, 378]] # 해파리수하 : 해파리의심장, 전략문서
 	ITEM_DROP_DATA[158] = [[-1], [0, 142, 3, 100]] # 해파리장군 : 해파리의심장
 	
-	ITEM_DROP_DATA[159] = [[-1], [2, 55, 1, 1], [0, 161, 4, 60], [0, 162, 4, 60], [0, 120, 1, 30], [0, 121, 1, 30], [1, 112, 1, 40]] # 거북장군 : 망또4, 희귀호박, 희귀진호박, 수정, 크리스탈, 양첨목봉
+	ITEM_DROP_DATA[159] = [[-1], [2, 55, 1, 1], [0, 161, 4, 60], [0, 162, 4, 60], [0, 120, 1, 30], [0, 121, 1, 30], [1, 112, 1, 10]] # 거북장군 : 망또4, 희귀호박, 희귀진호박, 수정, 크리스탈, 양첨목봉
 	ITEM_DROP_DATA[160] = [[-1], [0, 129, 1, 2]] # 수괴 : 수괴의 심장
 	
 	# 일본
@@ -313,11 +314,11 @@ class MrMo_ABS
 	ITEM_DROP_DATA[192] = [[-1], [0, 151, 1, 60], [0, 37, 1, 30]] # 해골왕 : 해골왕의뼈, 참나무조각
 	ITEM_DROP_DATA[193] = [[-1], [2, 55, 1, 2], [0, 154, 1, 70], [0, 37, 2, 100]] # 파괴왕 : 망또4, 순수의강철, 참나무조각
 	
-	ITEM_DROP_DATA[195] = [[-1], [0, 157, 1, 2.1]] # 이가닌자병 : 검조각 
-	ITEM_DROP_DATA[196] = [[-1], [0, 159, 1, 2.1]] # 이가닌자수 : 수리검
-	ITEM_DROP_DATA[197] = [[-1], [0, 160, 1, 2.1]] # 이가닌자마 : 이가닌자의 독
-	ITEM_DROP_DATA[198] = [[-1], [0, 158, 1, 2.1]] # 이가닌자영 : 흑룡철심
-	ITEM_DROP_DATA[199] = [[-1], [0, 156, 1, 2.1]] # 이가닌자화 : 이가닌자의 보패
+	ITEM_DROP_DATA[195] = [[-1], [0, 157, 1, 2.2]] # 이가닌자병 : 검조각 
+	ITEM_DROP_DATA[196] = [[-1], [0, 159, 1, 2.2]] # 이가닌자수 : 수리검
+	ITEM_DROP_DATA[197] = [[-1], [0, 160, 1, 2.2]] # 이가닌자마 : 이가닌자의 독
+	ITEM_DROP_DATA[198] = [[-1], [0, 158, 1, 2.2]] # 이가닌자영 : 흑룡철심
+	ITEM_DROP_DATA[199] = [[-1], [0, 156, 1, 2.2]] # 이가닌자화 : 이가닌자의 보패
 	
 	# 중국
 	ITEM_DROP_DATA[202] = [[-1], [0, 170, 1, 20], [0, 196, 1, 40]] # 청인묘 : 청색구슬조각, 인묘의발톱
@@ -360,9 +361,9 @@ class MrMo_ABS
 	
 	# 도삭산
 	ITEM_DROP_DATA[232] = [[-1], [2, 56, 1, 1], [0, 194, 3, 100], [0, 195, 1, 100], [3, 1000000, 1, 0.1], [1, 112, 1, 10]] # 산신대왕 : 망또5, 산신의바늘, 산신의천, 돈, 양첨목봉
-	ITEM_DROP_DATA[233] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 26, 1, 1], [2, 47, 1, 0.1]] # 산신전사 : 산신의바늘, 희귀진호박, 녹호박별검, 망또1
-	ITEM_DROP_DATA[234] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 137, 1, 10], [2, 48, 1, 0.1]] # 산신도사 : 산신의바늘, 희귀진호박, 영혼죽장, 망또2
-	ITEM_DROP_DATA[235] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 130, 1, 1], [2, 49, 1, 0.1]] # 산신도적 : 산신의바늘, 희귀진호박, 산적왕의칼, 망또3
+	ITEM_DROP_DATA[233] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 26, 1, 0.1], [2, 47, 1, 0.1]] # 산신전사 : 산신의바늘, 희귀진호박, 녹호박별검, 망또1
+	ITEM_DROP_DATA[234] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 137, 1, 10], [2, 47, 1, 0.1]] # 산신도사 : 산신의바늘, 희귀진호박, 영혼죽장, 망또1
+	ITEM_DROP_DATA[235] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 130, 1, 0.1], [2, 47, 1, 0.1]] # 산신도적 : 산신의바늘, 희귀진호박, 산적왕의칼, 망또1
 	ITEM_DROP_DATA[236] = [[-1], [0, 194, 1, 2], [0, 162, 1, 10], [1, 107, 1, 10], [2, 47, 1, 0.1]] # 산신주술사 : 산신의바늘, 희귀진호박, 불의영혼봉, 망또1
 	
 	# [몬스터 아이디] = [[최대 드랍될 아이템 개수], [타입(아이템 0, 무기 1, 장비 2, 돈 3), 아이템 id or money, 최대 나올 개수, 드랍 확률, (조건스위치)], ...]

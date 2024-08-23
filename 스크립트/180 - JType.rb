@@ -250,232 +250,224 @@ module J
 		end
 		
 		def make_hangul
-			uni = ""
-			div_piece = []
 			text = @char
 			
-			if @piece[3] == nil
-				if text == nil
-					return
+			if @piece[3].nil?
+				handle_initial_state(text)
+			else
+				handle_combination(text)
+			end
+		end
+		
+		def handle_initial_state(text)
+			return if text.nil?
+			
+			if HANGUL_MID_CHARACTER_TABLE[text]
+				@piece[0], @piece[1], @piece[2] = nil, text, nil
+			else
+				@piece[0], @piece[1], @piece[2] = text, nil, nil
+			end
+			make_p
+		end
+		
+		def handle_combination(text)
+			if HANGUL_MID_CHARACTER_TABLE[text]
+				handle_mid_character(text)
+			else
+				handle_final_or_consonant(text)
+			end
+		end
+		
+		def handle_mid_character(text)
+			sw = true
+			if @piece[0] && @piece[1].nil? && @piece[2].nil?
+				@piece[1] = text
+			elsif @piece[0].nil? && @piece[1] && @piece[2].nil?
+				sw = handle_mid_with_existing_mid(text)
+			elsif @piece[0].nil? && @piece[1].nil? && @piece[2]
+				sw = handle_mid_with_final(text)
+			elsif @piece[0] && @piece[1] && @piece[2].nil?
+				sw = handle_mid_with_first_and_mid(text)
+			elsif @piece[0] && @piece[1] && @piece[2]
+				return handle_mid_with_all(text)
+			end
+			make_p
+			edit_text(@piece[3]) if sw
+		end
+		
+		def handle_final_or_consonant(text)
+			sw = true
+			if @piece[0] && @piece[1].nil? && @piece[2].nil?
+				sw = handle_final_with_first(text)
+			elsif @piece[0].nil? && @piece[1] && @piece[2].nil?
+				@piece[0], @piece[1] = text, nil
+				sw = false
+			elsif @piece[0].nil? && @piece[1].nil? && @piece[2]
+				return handle_final_with_existing_final(text)
+			elsif @piece[0] && @piece[1] && @piece[2].nil?
+				@piece[2] = text
+			elsif @piece[0] && @piece[1] && @piece[2]
+				return handle_final_with_all(text)
+			end
+			make_p
+			edit_text(@piece[3]) if sw
+		end
+		
+		def handle_mid_with_existing_mid(text)
+			uni = get_union(@piece[1], text)
+			@piece[1] = uni || text
+			return !uni.nil?
+		end
+		
+		def handle_mid_with_final(text)
+			div_piece = divide_piece(@piece[2])
+			if div_piece == @piece[2]
+				@piece[0], @piece[1], @piece[2] = @piece[2], text, nil
+				return false
+			else
+				@piece[2] = div_piece[0]
+				@piece[0], @piece[1], @piece[2] = div_piece[1], text, nil
+				return true
+			end
+		end
+		
+		def handle_mid_with_first_and_mid(text)
+			uni = get_union(@piece[1], text)
+			if uni.nil?
+				if %w[ㅝ ㅞ ㅟ ㅘ ㅙ ㅚ ㅢ].include?(@piece[1])
+					return false
 				else
-					if HANGUL_MID_CHARACTER_TABLE[text] != nil
+					if HANGUL_MID_CHARACTER_TABLE[@text[@text.size - 1]] != nil
 						@piece[0] = nil
-						@piece[1] = text
-						@piece[2] = nil
-						make_p
-						return
-					else
-						@piece[0] = text
-						@piece[1] = nil
-						@piece[2] = nil
-						make_p
-						return
 					end
+					@piece[1] = text
+				end
+				return false
+			else
+				@piece[1] = uni
+				return true
+			end
+		end
+		
+		def handle_mid_with_all(text)
+			div_piece = divide_piece(@piece[2])
+			if div_piece == @piece[2]
+				@piece[2] = nil
+				make_p
+				edit_text(@piece[3])
+				@piece[0], @piece[1], @piece[2] = div_piece, text, nil
+			else
+				@piece[2] = div_piece[0]
+				make_p
+				edit_text(@piece[3])
+				@piece[0], @piece[1], @piece[2] = div_piece[1], text, nil
+			end
+			make_p
+			@text.push(@piece[3])
+			return
+		end
+		
+		def handle_final_with_first(text)
+			uni = get_union(@piece[0], text)
+			if uni.nil?
+				@piece[0] = text
+				return false
+			else
+				@piece[0], @piece[2] = nil, uni
+				return true
+			end
+		end
+		
+		def handle_final_with_existing_final(text)
+			div_piece = divide_piece(@piece[2])
+			uni = div_piece == @piece[2] ? get_union(@piece[2], text) : get_union(div_piece[1], text)
+			
+			if uni.nil?
+				if @text.last == text
+					@piece[0], @piece[2] = text, nil
+				end
+				return make_p
+			end
+			
+			if div_piece == @piece[2]
+				@piece[2] = nil
+				@piece[0], @piece[2] = nil, uni
+				return make_p
+			else
+				@piece[2] = div_piece[0]
+				make_p
+				edit_text(@piece[3])
+				@piece[0], @piece[1], @piece[2] = nil, nil, uni
+				make_p
+				@text.push(@piece[3])
+				return
+			end
+		end
+		
+		def handle_final_with_all(text)
+			div_piece = divide_piece(@piece[2])
+			uni = div_piece == @piece[2] ? get_union(@piece[2], text) : get_union(div_piece[1], text)
+			
+			if uni.nil?
+				if @text.last == text
+					@piece[0], @piece[1], @piece[2] = @piece[2], nil, nil
+					return make_p
 				end
 			else
-				if HANGUL_MID_CHARACTER_TABLE[text]!=nil
-					if @piece[0] != nil and @piece[1] == nil and @piece[2] == nil
-						@piece[1] = text
-						make_p
-						edit_text(@piece[3])
-						return
-					elsif @piece[0] == nil and @piece[1] != nil and @piece[2] == nil
-						uni = get_union(@piece[1], text)
-						if uni == nil
-							@piece[1] = text
-							make_p
-							return
-						else
-							@piece[1] = uni
-							make_p
-							edit_text(@piece[3])
-							return
-						end
-					elsif @piece[0] == nil and @piece[1] == nil and @piece[2] != nil
-						div_piece = divide_piece(@piece[2])
-						if div_piece == @piece[2]
-							@piece[0] = @piece[2]
-							@piece[1] = text
-							@piece[2] = nil
-							make_p
-							return
-						else
-							@piece[2] = div_piece[0]
-							make_p
-							edit_text(@piece[3])
-							@piece[0] = div_piece[1]
-							@piece[1] = text
-							@piece[2] = nil
-							make_p
-							@text.push(@piece[3])
-							return
-						end
-					elsif @piece[0] != nil and @piece[1] != nil and @piece[2] == nil
-						uni = get_union(@piece[1], text)
-						if uni == nil
-							if ["ㅝ","ㅞ","ㅟ","ㅘ","ㅙ","ㅚ","ㅢ"].include?(@piece[1])
-								make_p
-								return
-							else
-								if HANGUL_MID_CHARACTER_TABLE[@text[@text.size - 1]]!=nil
-									@piece[0] = nil
-								end
-								@piece[1] = text
-								make_p
-								return
-							end
-						else
-							@piece[1] = uni
-							make_p
-							edit_text(@piece[3])
-							return
-						end
-					elsif @piece[0] != nil and @piece[1] != nil and @piece[2] != nil
-						div_piece = divide_piece(@piece[2])
-						if div_piece == @piece[2]
-							@piece[2] = nil
-							make_p
-							edit_text(@piece[3])
-							@piece[0] = div_piece
-							@piece[1] = text
-							@piece[2] = nil
-							make_p
-							@text.push(@piece[3])
-							return
-						else
-							@piece[2] = div_piece[0]
-							make_p
-							edit_text(@piece[3])
-							@piece[0] = div_piece[1]
-							@piece[1] = text
-							@piece[2] = nil
-							make_p
-							@text.push(@piece[3])
-							return
-						end
-					end
+				if div_piece == @piece[2]
+					@piece[2] = uni
+					make_p
+					return edit_text(@piece[3])
 				else
-					if @piece[0] != nil and @piece[1] == nil and @piece[2] == nil
-						uni = get_union(@piece[0], text)
-						if uni == nil
-							@piece[0] = text
-							make_p
-							return
-						else
-							@piece[0] = nil
-							@piece[2] = uni
-							make_p
-							edit_text(@piece[3])
-							return
-						end
-					elsif @piece[0] == nil and @piece[1] != nil and @piece[2] == nil
-						@piece[0] = text
-						@piece[1] = nil
-						make_p
-						return
-					elsif @piece[0] == nil and @piece[1] == nil and @piece[2] != nil
-						div_piece = divide_piece(@piece[2])
-						if div_piece == @piece[2]
-							uni = get_union(@piece[2], text)
-						else
-							uni = get_union(div_piece[1], text)
-						end
-						if uni == nil
-							if @text[@text.size - 1] == text
-								@piece[0] = text
-								@piece[2] = nil
-							end
-							make_p
-							return
-						else
-							if div_piece == @piece[2]
-								@piece[2] = nil
-								@piece[0] = uni
-								make_p
-								return
-							else
-								@piece[2] = div_piece[0]
-								make_p
-								edit_text(@piece[3])
-								@piece[0] = nil
-								@piece[1] = nil
-								@piece[2] = uni
-								make_p
-								@text.push(@piece[3])
-								return
-							end
-						end
-					elsif @piece[0] != nil and @piece[1] != nil and @piece[2] == nil
-						@piece[2] = text
-						make_p
-						edit_text(@piece[3])
-						return
-					elsif @piece[0] != nil and @piece[1] != nil and @piece[2] != nil
-						div_piece = divide_piece(@piece[2])
-						if div_piece == @piece[2]
-							uni = get_union(@piece[2], text)
-						else
-							uni = get_union(div_piece[1], text)
-						end
-						if uni == nil
-							if @text[@text.size - 1] == text
-								@piece[0] = @piece[2]
-								@piece[1] = nil
-								@piece[2] = nil
-								make_p
-							end
-							return
-						else
-							if div_piece == @piece[2]
-								@piece[2] = uni
-								make_p
-								edit_text(@piece[3])
-								return
-							else
-								@piece[2] = div_piece[0]
-								make_p
-								edit_text(@piece[3])
-								@piece[0] = nil
-								@piece[1] = nil
-								@piece[2] = uni
-								make_p
-								@text.push(@piece[3])
-								return
-							end
-							return
-						end
-					end
+					@piece[2] = div_piece[0]
+					make_p
+					edit_text(@piece[3])
+					@piece[0], @piece[1], @piece[2] = nil, nil, uni
+					make_p
+					return @text.push(@piece[3])
 				end
 			end
 		end
 		
 		def make_p
-			if @piece[0] == nil and @piece[1] == nil and @piece[2] == nil
-				@piece[3] = nil
-				return
-			elsif @piece[0] != nil and @piece[1] == nil and @piece[2] == nil
-				@piece[3] = @piece[0]
-				return
-			elsif @piece[0] == nil and @piece[1] != nil and @piece[2] == nil
-				@piece[3] = @piece[1]
-				return
-			elsif @piece[0] == nil and @piece[1] == nil and @piece[2] != nil
-				@piece[3] = @piece[2]
-				return
-			elsif @piece[0] != nil and @piece[1] != nil 
-				if @piece[2] != nil					
-					if HANGUL_LAST_CHARACTER_TABLE[@piece[2]] != nil
-						@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[@piece[2]]]
-					end
-					return
-				else
-					@piece[3] = HANGUL_CHARACTER_TABLE[HANGUL_FIRST_CHARACTER_TABLE[@piece[0]]][HANGUL_MID_CHARACTER_TABLE[@piece[1]]][HANGUL_LAST_CHARACTER_TABLE[""]]
-					return
-				end
+			first, mid, last = @piece[0], @piece[1], @piece[2]
+			
+			@piece[3] =
+			if first && mid && last
+				combine_hangul_characters(first, mid, last)
+			elsif first && mid
+				combine_hangul_characters(first, mid)
+			elsif first
+				first
+			elsif mid
+				mid
+			elsif last
+				last
+			else
+				nil
 			end
 		end
 		
-		def edit_text(text)  # 입력된 글자를 text 로 바꾼다
+		def combine_hangul_characters(first, mid, last = "")
+			begin
+				first_char = HANGUL_FIRST_CHARACTER_TABLE[first]
+				mid_char = HANGUL_MID_CHARACTER_TABLE[mid]
+				last_char = HANGUL_LAST_CHARACTER_TABLE[last] || 0
+				
+				unless HANGUL_LAST_CHARACTER_TABLE[last]
+					@piece[3] = HANGUL_CHARACTER_TABLE[first_char][mid_char][last_char]
+					@text.push(@piece[3])
+					@piece[0], @piece[1], @piece[2] = @piece[2], nil, nil
+					return @piece[0]
+				end
+				
+				HANGUL_CHARACTER_TABLE[first_char][mid_char][last_char]
+			rescue => e
+				nil
+			end
+		end
+		
+		def edit_text(text)
 			@text = @text[0...-2] + [text]
 		end
 		
@@ -534,15 +526,6 @@ module J
 				end
 			else
 				reset_pieces
-			end
-		end
-		
-		def delete_last_piece
-			div_piece = divide_piece(@piece[2])
-			if @piece[0]
-				delete_last_piece_with_first(div_piece)
-			else
-				delete_last_piece_without_first(div_piece)
 			end
 		end
 		
@@ -682,7 +665,11 @@ module J
 				60 => ",", 61 => ".", 62 => "/", 65 => ";", 66 => "]", 67 => "`",
 				68 => "[", 69 => "-", 70 => "'", 71 => "\\", KEY_0 => 0, KEY_1 => 1, KEY_2 => 2,
 				KEY_3 => 3, KEY_4 => 4, KEY_5 => 5, KEY_6 => 6,
-				KEY_7 => 7, KEY_8 => 8, KEY_9 => 9
+				KEY_7 => 7, KEY_8 => 8, KEY_9 => 9,
+				
+				50 => 0, 51 => 1, 52 => 2,
+				53 => 3, 54 => 4, 55 => 5, 56 => 6,
+				57 => 7, 58 => 8, 59 => 9,
 			}
 			handle_special_keys(number_keys)
 		end

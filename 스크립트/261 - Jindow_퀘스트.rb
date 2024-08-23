@@ -4,7 +4,7 @@
 QUEST_DATA = {}
 # id는 퀘스트 스위치 : 클라이언트에서 직접 확인해서 넣기
 # 부여성
-QUEST_DATA[-1] = {
+QUEST_DATA[10] = {
 	"title" => "나무꾼에게 짚 건네주기", 						# 퀘스트 제목
 	"region" => "부여성",						# 퀘스트 위치
 	"requester" => "나무꾼", 				# 의뢰자 이름
@@ -16,7 +16,7 @@ QUEST_DATA[-1] = {
 	"close_switch" => 117
 }
 
-QUEST_DATA[-3] = {
+QUEST_DATA[11] = {
 	"title" => "고통속의 사슴을 구해주기", 						# 퀘스트 제목
 	"region" => "부여성 사슴굴5",						# 퀘스트 위치
 	"requester" => "고통속의사슴", 				# 의뢰자 이름
@@ -27,19 +27,8 @@ QUEST_DATA[-3] = {
 	"close_switch" => 122
 }
 
-QUEST_DATA[-2] = {
-	"title" => "나무꾼에게 나무 해주기", 						# 퀘스트 제목
-	"region" => "부여성 강가",						# 퀘스트 위치
-	"requester" => "나무꾼", 				# 의뢰자 이름
-	"body" => [
-		"나무꾼에게 쇠도끼를 받아 나무를 해오자",
-	],			# 퀘스트 내용
-	
-	"close_switch" => 118
-}
-
 QUEST_DATA[118] = {
-	"title" => "나무꾼에게 나무 해주기2", 						# 퀘스트 제목
+	"title" => "나무꾼에게 나무 해주기", 						# 퀘스트 제목
 	"region" => "부여성 강가",						# 퀘스트 위치
 	"requester" => "나무꾼", 				# 의뢰자 이름
 	"body" => [
@@ -80,6 +69,20 @@ QUEST_DATA[300] = {
 	"item_data" => [[0, 3, 30]],			# [[필요한 아이템 타입, id, 필요개수], ...]
 	"close_switch" => 301
 }
+
+# 극지방
+QUEST_DATA[56] = {
+	"title" => "청룡의 시련", 						# 퀘스트 제목
+	"region" => "극지방",						# 퀘스트 위치
+	"requester" => "청룡", 				# 의뢰자 이름
+	"body" => [
+		"청룡에게 강함을 증명하기 위해",
+		"청녹용과 얼음검을 제물로 가져오자."
+	],			# 퀘스트 내용
+	"item_data" => [[2, 124, 3], [0, 58, 10]],			# [[필요한 아이템 타입, id, 필요개수], ...]
+	"close_switch" => 57,
+}
+
 
 # 고균도
 QUEST_DATA[328] = {
@@ -356,7 +359,8 @@ QUEST_DATA[368] = {
 	],			# 퀘스트 내용
 	
 	"item_data" => [[0, 132, 1]],			# [[필요한 아이템 타입, id, 필요개수], ...]
-	"close_switch" => 370
+	"close_switch" => 370,
+	"close_or_switch" => [369],
 }
 
 QUEST_DATA[370] = {
@@ -507,7 +511,7 @@ QUEST_DATA[395] = {
 		"심판의낫 재료를 구해서 용왕님께 부탁드리자",
 	],			# 퀘스트 내용
 	
-	"item_data" => [[0, 120, 3], [0, 121, 3]],			# [[필요한 아이템 타입, id, 필요개수], ...]
+	"item_data" => [[0, 120, 5], [0, 121, 5]],			# [[필요한 아이템 타입, id, 필요개수], ...]
 }
 
 
@@ -616,86 +620,100 @@ QUEST_DATA[454] = {
 
 
 class Jindow_Quest < Jindow
-	
-	def initialize()
+	def initialize
 		$game_system.se_play($data_system.decision_se)
 		super(0, 0, 150, 300)
+		setup_window_properties
+		@quest_data = organize_quest_data
+		display_quests
+	end
+	
+	def setup_window_properties
 		self.name = "임무 목록"
 		@head = true
 		@mark = true
 		@drag = true
 		@close = true
-		
 		self.x = 50
 		self.y = 100
 		self.refresh "Quest"
+	end
+	
+	def organize_quest_data
+		quest_data = {}
 		
-		@quest_data = {}
-		
-		for quest_d in QUEST_DATA
-			sw_id = quest_d[0].to_i
-			q_data = quest_d[1]
-			
-			next if sw_id > 1 and !$game_switches[sw_id]
-			
-			if q_data["close_switch"] != nil
-				next if $game_switches[q_data["close_switch"]]
-			end
+		QUEST_DATA.each do |quest_d|
+			sw_id, q_data = quest_d[0].to_i, quest_d[1]
+			next unless $game_switches[sw_id]
+			next if quest_closed?(q_data)
 			
 			region = q_data["region"] || "기타"
-			@quest_data[region] = [] if @quest_data[region] == nil
-			
-			title = q_data["title"] || "없음"
-			@quest_data[region].push([J::Button.new(self).refresh(120, title), q_data])
+			quest_data[region] ||= []
+			title = q_data["title"] || "임무"
+			quest_data[region] << [J::Button.new(self).refresh(120, title), q_data]
 		end
 		
-		start_x = 5
-		start_y = 5
-		margin = 5
-		i = 0
-		@region_txt = []
-		for data in @quest_data
-			region = data[0]
-			q_data = data[1]
-			
-			@region_txt[i] = Sprite.new(self)
-			@region_txt[i].bitmap = Bitmap.new(100, 20)
-			@region_txt[i].x = start_x
-			@region_txt[i].y = start_y
-			@region_txt[i].bitmap.font.size = 12
-			@region_txt[i].bitmap.font.color.set(0, 0, 0, 255)
-			@region_txt[i].bitmap.draw_text(0, 0, @region_txt[i].width, @region_txt[i].height, region, 0)
-			
-			start_y = @region_txt[i].y + @region_txt[i].height + margin
-			
-			for data2 in q_data
-				button = data2[0]
-				button.x = start_x + 10
-				button.y = start_y
-				
-				start_y = button.y + button.height + margin
-			end
-			
-			start_y += 15
-			i += 1
+		quest_data
+	end
+	
+	def quest_closed?(q_data)
+		return true if q_data["close_switch"] && $game_switches[q_data["close_switch"]]
+		
+		if q_data["close_or_switch"]
+			return q_data["close_or_switch"].any? { |sw| $game_switches[sw] }  
 		end
+		return false
+	end
+	
+	def display_quests
+		start_x, start_y, margin = 5, 5, 5
+		
+		@quest_data.each_with_index do |(region, q_data), i|
+			create_region_label(region, start_x, start_y, i)
+			start_y = arrange_quest_buttons(q_data, start_x + 10, start_y + 20, margin)
+			start_y += 15
+		end
+	end
+	
+	def create_region_label(region, start_x, start_y, index)
+		@region_txt ||= []
+		@region_txt[index] = Sprite.new(self)
+		region_label = @region_txt[index]
+		region_label.bitmap = Bitmap.new(100, 20)
+		region_label.x = start_x
+		region_label.y = start_y
+		region_label.bitmap.font.size = 12
+		region_label.bitmap.font.alpha = 3
+		region_label.bitmap.font.beta = 1
+		region_label.bitmap.font.color.set(255, 255, 255, 255)
+		region_label.bitmap.font.gamma.set(0, 0, 0, 255)
+		region_label.bitmap.draw_text(0, 0, region_label.width, region_label.height, region, 0)
+	end
+	
+	def arrange_quest_buttons(q_data, start_x, start_y, margin)
+		q_data.each do |button, _|
+			button.x = start_x
+			button.y = start_y
+			start_y = button.y + button.height + margin
+		end
+		start_y
 	end
 	
 	def update
 		super
-		for data in @quest_data
-			q_data = data[1]
-			for data2 in q_data
-				button = data2[0]
-				datas = data2[1]
-				if button.click					
-					Hwnd.dispose("Quest_Detail")
-					temp = Jindow_Quest_Detail.new(datas)
-					temp.x = self.x + self.width
-					temp.y = self.y
-				end
+		handle_quest_clicks
+	end
+	
+	def handle_quest_clicks
+		@quest_data.each_value do |q_data|
+			q_data.each do |button, datas|
+				next unless button.click
+				
+				Hwnd.dispose("Quest_Detail")
+				temp = Jindow_Quest_Detail.new(datas)
+				temp.x = self.x + self.width
+				temp.y = self.y				
 			end
 		end
 	end
-	
 end

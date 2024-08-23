@@ -89,7 +89,7 @@ class PartyManager
 	
 	# 파티원 이동
 	# 파티 퀘스트 장소로 이동 (이동할 map_id, x, y)
-	def move_party(target_id, x, y)
+	def move_party(target_id, x = 1, y = 1)
 		data = {
 			"target_id" => target_id,
 			"x" => x,

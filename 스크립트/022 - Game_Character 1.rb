@@ -16,7 +16,7 @@ class Game_Character
 	attr_reader   :real_y                   # map y-coordinate (real * 128)
 	attr_reader   :tile_id                  # tile ID (invalid if 0)
 	attr_reader   :character_name           # character file name
-	attr_accessor   :character_hue            # character hue
+	attr_accessor :character_hue            # character hue
 	attr_reader   :opacity                  # opacity level
 	attr_reader   :blend_type               # blending method
 	attr_reader   :direction                # direction

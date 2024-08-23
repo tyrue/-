@@ -1,5 +1,3 @@
-sec = 60 # 1초
-
 # -------------------------무기 격 스킬----------------------------#
 WEAPON_SKILL = {} # 무기 격 스킬 : 데미지, 애니메이션 id, 확률
 
@@ -26,17 +24,19 @@ WEAPON_SKILL[16] = [["dmg", 100000], 125, 70]  # 백사도
 WEAPON_SKILL[17] = [["dmg", 200000], 196, 95]  # 음양도
 
 # 기타 검
-WEAPON_SKILL[114] = [["dmg", 3000], 153, 40]  # 주작의검
+WEAPON_SKILL[26] = [["dmg", 5000], 118, 40]  # 녹호박별검
+WEAPON_SKILL[112] = [["dmg", 500], 2, 30]  # 양첨목봉
+WEAPON_SKILL[114] = [["dmg", 3000], 153, 30]  # 주작의검
 WEAPON_SKILL[115] = [["dmg", 1000000], 194, 5]  # 심판의 낫
 WEAPON_SKILL[117] = [["dmg", 100000], 120, 15]  # 괴력선창
-WEAPON_SKILL[124] = [["buff", 181], 0, 40]  # 얼음검
-WEAPON_SKILL[126] = [["dmg", 7000], 154, 40]  # 참마도
-WEAPON_SKILL[127] = [["dmg", 60000], 184, 40]  # 청룡신검
-WEAPON_SKILL[123] = [["dmg", 100000], 192, 40]  # 현무염도
-WEAPON_SKILL[130] = [["dmg", 9000], 126, 20]  # 산적왕의칼
+WEAPON_SKILL[124] = [["buff", 181], 0, 30]  # 얼음검
+WEAPON_SKILL[126] = [["dmg", 15000], 154, 15]  # 참마도
+WEAPON_SKILL[127] = [["dmg", 60000], 184, 30]  # 청룡신검
+WEAPON_SKILL[123] = [["dmg", 100000], 192, 30]  # 현무염도
+WEAPON_SKILL[130] = [["dmg", 13000], 126, 30]  # 산적왕의칼
 
 # 일본
-WEAPON_SKILL[136] = [["dmg", 15000], 1, 40]  # 이가닌자의검
+WEAPON_SKILL[136] = [["dmg", 20000], 1, 30]  # 이가닌자의검
 WEAPON_SKILL[134] = [["dmg", 400000], 170, 30]  # 일화접선
 WEAPON_SKILL[135] = [["dmg", 400000], 171, 30]  # 진일신검
 WEAPON_SKILL[138] = [["dmg", 400000], 164, 30]  # 청일기창
@@ -57,25 +57,26 @@ WEAPON_SKILL[150] = [["dmg", 4000000], 176, 5]  # 용랑제구봉
 # -------------------------장비 착용시 효과----------------------------#
 EQUIP_EFFECTS = {} # 특정 장비 착용시 효과 : [[효과 주기, 효과, 값(%)], [...], ..]
 # 장신구
-EQUIP_EFFECTS[28] = [[1 * sec, "buff", 46], [1 * sec, "buff", 47]] # 보무의목걸이
-EQUIP_EFFECTS[29] = [[0.5 * sec, "buff", 131]] # 투명구두
-EQUIP_EFFECTS[72] = [[10 * sec, "hp", 2], [10 * sec, "sp", 2]] # 해골목걸이
-EQUIP_EFFECTS[75] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금팔찌
+EQUIP_EFFECTS[28] = [[1, "buff", 46], [1, "buff", 47]] # 보무의목걸이
+EQUIP_EFFECTS[29] = [[0.5, "buff", 131]] # 투명구두
+EQUIP_EFFECTS[72] = [[10, "hp", 2], [10, "sp", 2]] # 해골목걸이
+EQUIP_EFFECTS[75] = [[10, "hp", 4], [10, "sp", 4]] # 황금팔찌
 
 # 방패 
-EQUIP_EFFECTS[36] = [[10 * sec, "sp", 3]] # 기원부
-EQUIP_EFFECTS[25] = [[10 * sec, "hp", 3]] # 강건부
-EQUIP_EFFECTS[33] = [[10 * sec, "hp", 2], [10 * sec, "sp", 2]] # 도깨비부적
-EQUIP_EFFECTS[39] = [[5 * sec, "hp", 1], [5 * sec, "sp", 1]] # 정화의방패
-EQUIP_EFFECTS[40] = [[5 * sec, "hp", 2], [5 * sec, "sp", 2]] # 여신의방패
-EQUIP_EFFECTS[98] = [[3 * sec, "hp", 3], [3 * sec, "sp", 3]] # 재생의부적
+EQUIP_EFFECTS[36] = [[10, "sp", 3]] # 기원부
+EQUIP_EFFECTS[25] = [[10, "hp", 3]] # 강건부
+EQUIP_EFFECTS[33] = [[10, "hp", 2], [10, "sp", 2]] # 도깨비부적
+EQUIP_EFFECTS[39] = [[5, "hp", 1.5], [5, "sp", 1.5]] # 정화의방패
+EQUIP_EFFECTS[40] = [[5, "hp", 2], [5, "sp", 2]] # 여신의방패
+EQUIP_EFFECTS[98] = [[2, "hp", 3], [2, "sp", 3]] # 재생의부적
 
 # 갑옷
-EQUIP_EFFECTS[30] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷
-EQUIP_EFFECTS[73] = [[1 * sec, "buff", 136]] # 가릉빈가의날개옷'진
+EQUIP_EFFECTS[30] = [[1, "buff", 136]] # 가릉빈가의날개옷
+EQUIP_EFFECTS[73] = [[1, "buff", 136]] # 가릉빈가의날개옷'진
 
 # 투구
-EQUIP_EFFECTS[61] = [[10 * sec, "sp", 3]] # 연청투구
-EQUIP_EFFECTS[62] = [[10 * sec, "hp", 3]] # 연홍투구
-EQUIP_EFFECTS[74] = [[10 * sec, "hp", 4], [10 * sec, "sp", 4]] # 황금투구
+EQUIP_EFFECTS[60] = [[10, "hp", 1], [10, "sp", 1]] # 황금호박투구
+EQUIP_EFFECTS[61] = [[10, "sp", 3]] # 연청투구
+EQUIP_EFFECTS[62] = [[10, "hp", 3]] # 연홍투구
+EQUIP_EFFECTS[74] = [[10, "hp", 4], [10, "sp", 4]] # 황금투구
 # //////////////////////////end///////////////////////////////#

@@ -35,5 +35,3 @@ def close_network
 		Network::Main.send_with_tag("9", "#{Network::Main.id}")
 	end
 end
-
-

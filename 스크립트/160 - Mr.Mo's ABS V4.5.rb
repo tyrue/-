@@ -95,13 +95,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[260]  = [20, 0] # 테스트
 	
 	# 기타
-	ABS_ENEMY_HP[58] = [800_000, 1] # 수룡
-	ABS_ENEMY_HP[59] = [800_000, 1] # 화룡
+	ABS_ENEMY_HP[58] = [2_250_000, 1] # 수룡
+	ABS_ENEMY_HP[59] = [2_250_000, 1] # 화룡
 	
-	ABS_ENEMY_HP[61] = [5_000_000, 1] # 주작
-	ABS_ENEMY_HP[62] = [5_000_000, 1] # 백호
+	ABS_ENEMY_HP[61] = [15_000_000, 1] # 주작
+	ABS_ENEMY_HP[62] = [15_000_000, 1] # 백호
 	
-	ABS_ENEMY_HP[98] = [2_500_000, 1] # 비류장군
+	ABS_ENEMY_HP[98] = [10_500_000, 1] # 비류장군
 	
 	ABS_ENEMY_HP[111] = [600_000, 1] # 산적왕
 	
@@ -120,10 +120,13 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[134] = [3_600_000, 1] # 진룡
 	
 	# 용궁
-	ABS_ENEMY_HP[150] = [2_000_000, 1] # 해마장군
-	ABS_ENEMY_HP[153] = [4_000_000, 1] # 인어장군
-	ABS_ENEMY_HP[156] = [7_000_000, 1] # 상어장군
-	ABS_ENEMY_HP[158] = [12_000_000, 1] # 해파리장군
+	ABS_ENEMY_HP[143] = [350_000, 1] # 복어장군
+	ABS_ENEMY_HP[146] = [900_000, 1] # 게장군
+	ABS_ENEMY_HP[147] = [1_500_000, 1] # 문어장군
+	ABS_ENEMY_HP[150] = [3_000_000, 1] # 해마장군
+	ABS_ENEMY_HP[153] = [6_000_000, 1] # 인어장군
+	ABS_ENEMY_HP[156] = [10_000_000, 1] # 상어장군
+	ABS_ENEMY_HP[158] = [18_000_000, 1] # 해파리장군
 	ABS_ENEMY_HP[159] = [30_000_000, 1] # 거북장군
 	ABS_ENEMY_HP[160] = [1_000_000, 0] # 수괴
 	
@@ -172,8 +175,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[252] = [60_000_000, 1] # 마려
 	
 	ABS_ENEMY_HP[253] = [5_000_000, 1] # 현무
-	ABS_ENEMY_HP[257] = [2_000_000, 1] # 태산
-	ABS_ENEMY_HP[258] = [30_000_000, 1] # 길림장군
+	ABS_ENEMY_HP[257] = [5_000_000, 1] # 태산
+	ABS_ENEMY_HP[258] = [100_000_000, 1] # 길림장군
 	ABS_ENEMY_HP[259] = [500_000_000, 1] # 가릉빈가
 	
 	# 한두고개
@@ -183,21 +186,27 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [60_000, 1.5, 1.5] # 산속군사
+	ENEMY_EXP[45] = [10_000, 1.0, 1.0] # 추격산적
 	
-	ENEMY_EXP[91] = [600_000, 5.0, 5.0] # 비류성창병
-	ENEMY_EXP[96] = [1_500_000, 7.0, 7.0] # 비류성자객
-	ENEMY_EXP[97] = [1_500_000, 9.0, 9.0] # 비류성수문장
-	ENEMY_EXP[90] = [3_000_000, 15.0, 15.0] # 비류성정예군
-	ENEMY_EXP[98] = [10_000_000, 100.0, 100.0] # 비류장군
+	ENEMY_EXP[91] = [50_000, 3.0, 3.0] # 비류성창병
+	ENEMY_EXP[96] = [100_000, 4.0, 4.0] # 비류성자객
+	ENEMY_EXP[97] = [150_000, 5.0, 5.0] # 비류성수문장
+	ENEMY_EXP[90] = [200_000, 7.0, 7.0] # 비류성정예군
+	ENEMY_EXP[98] = [10_000_000, 200.0, 200.0] # 비류장군
 	
-	ENEMY_EXP[254] = [5_000_000, 10.0, 10.0] # 뇌랑
-	ENEMY_EXP[255] = [6_000_000, 11.0, 11.0] # 왕가
-	ENEMY_EXP[256] = [10_000_000, 20.0, 20.0] # 조왕
-	ENEMY_EXP[257] = [50_000_000, 30.0, 30.0] # 태산
-	ENEMY_EXP[258] = [500_000_000, 300.0, 300.0] # 길림장군
+	ENEMY_EXP[254] = [200_000, 10.0, 10.0] # 뇌랑
+	ENEMY_EXP[255] = [250_000, 11.0, 11.0] # 왕가
+	ENEMY_EXP[256] = [350_000, 20.0, 20.0] # 조왕
+	ENEMY_EXP[257] = [2_500_000, 30.0, 30.0] # 태산
+	ENEMY_EXP[258] = [80_000_000, 600.0, 600.0] # 길림장군
+	
+	# 3차 퀘스트
+	ENEMY_EXP[61] = [45_000_000] # 주작
+	ENEMY_EXP[62] = [45_000_000] # 백호
 	
 	# 4차 퀘스트
+	ENEMY_EXP[112] = [250_000_000] # 청룡
+	ENEMY_EXP[113] = [250_000_000] # 현무
 	ENEMY_EXP[102] = [1_600_000_000] # 반고
 	
 	# 12지신
@@ -208,8 +217,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 용궁
 	ENEMY_EXP[150] = [7_000_000] # 해마장군
 	ENEMY_EXP[153] = [15_000_000] # 인어장군
-	ENEMY_EXP[156] = [27_000_000] # 상어장군
-	ENEMY_EXP[158] = [40_000_000] # 해파리장군
+	ENEMY_EXP[156] = [30_000_000] # 상어장군
+	ENEMY_EXP[158] = [55_000_000] # 해파리장군
 	ENEMY_EXP[159] = [80_000_000] # 거북장군
 	
 	# 일본
@@ -618,9 +627,12 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def update_enemy_check(enemy)
+			if enemy.event.character_name.empty?
+				@enemies.delete(enemy.event.id)
+				return true 
+			end
 			return true if enemy.nil? 
-			return true if enemy.dead?
-			return true if enemy.event.character_name.empty? 
+			return true if enemy.dead? 
 			return false
 		end
 		
@@ -968,21 +980,18 @@ if SDK.state("Mr.Mo's ABS") == true
 			equip_ids.each do |id|
 				next unless EQUIP_EFFECTS[id]
 				
-				EQUIP_EFFECTS[id].each do |effect|
-					next unless Graphics.frame_count % effect[0] == 0
+				EQUIP_EFFECTS[id].each do |time, type, val|
+					time ||= 0
+					time *= @sec
+					next unless Graphics.frame_count % time == 0
+					next unless type
 					
-					type, val = effect[1], effect[2]
 					case type
-					when "hp"
-						@actor.hp += (@actor.maxhp * val / 100.0).to_i 
-					when "sp"
-						@actor.sp += (@actor.maxsp * val / 100.0).to_i
-					when "com"
-						$game_temp.common_event_id = val
-					when "buff"
-						@actor.rpg_skill.buff_active(val) unless @actor.rpg_skill.check_buff(val)
-					when "custom"	
-						handle_custom_effect(id, val)
+					when "hp" then @actor.hp += (@actor.maxhp * val / 100.0).to_i 
+					when "sp" then @actor.sp += (@actor.maxsp * val / 100.0).to_i
+					when "com" then $game_temp.common_event_id = val
+					when "buff" then @actor.rpg_skill.buff_active(val) unless @actor.rpg_skill.check_buff(val)
+					when "custom"	then handle_custom_effect(id, val)
 					end
 				end
 			end
@@ -1429,7 +1438,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			$game_system.se_play("죽음")
 			$console.write_line("죽었습니다.. 성황당에서 기원하십시오.")
-			$cha_name = @actor.character_name
 			@actor.set_graphic("죽음", 0, 0, 0)
 			$game_player.refresh
 			
@@ -1761,7 +1769,6 @@ if SDK.state("Mr.Mo's ABS") == true
 		attr_accessor :draw
 		attr_accessor :stop
 		
-		@@all_objects = [] # 클래스 변수
 		#--------------------------------------------------------------------------
 		# * Object Initialization
 		#--------------------------------------------------------------------------
@@ -1789,7 +1796,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				9 => [1, -1]   # 오른쪽 위
 			}
 			@objects = []
-			make_all_objects 
 		end
 		
 		#--------------------------------------------------------------------------
@@ -1799,9 +1805,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 		end
 		
-		def self.refresh
-			@@all_objects = []
-		end
 		#--------------------------------------------------------------------------
 		# * Force Movement
 		#--------------------------------------------------------------------------
@@ -1842,23 +1845,24 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def check_enemy(enemy)
 			return false unless enemy
+			return false if enemy == @actor
 			
 			case @actor
 			when ABS_Enemy 
 				case enemy
-				when ABS_Enemy then return @is_my && @actor.hate_group.include?(enemy.id)
+				when ABS_Enemy then return @is_my && @actor.hate_group.include?(enemy.id) && !enemy.dead?
 				when Game_Actor then return @actor.hate_group.include?(0)
 				when Game_NetPlayer then return @actor.hate_group.include?(0)
 				end
 			when Game_Actor 
 				case enemy
-				when ABS_Enemy then return enemy.hate_group.include?(0)
+				when ABS_Enemy then return enemy.hate_group.include?(0) && !enemy.dead?
 				when Game_Actor then return false
 				when Game_NetPlayer then return true
 				end
 			when Game_NetPlayer 
 				case enemy
-				when ABS_Enemy then return enemy.hate_group.include?(0)
+				when ABS_Enemy then return enemy.hate_group.include?(0) && !enemy.dead?
 				when Game_Actor then return true
 				when Game_NetPlayer then return true
 				end
@@ -1867,32 +1871,30 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def check_collisions
-			#@objects = find_objects.select { |o| o.x == @x && o.y == @y}
-			@objects = @@all_objects.select { |o| o.x == @x && o.y == @y && check_enemy(find_actor(o))}
+			@objects = find_objects.select { |o| o.x == @x && o.y == @y && check_enemy(find_actor(o))}
 			@stop = true unless @objects.empty?
 		end
 		
 		def find_objects
-			enemies = $ABS.enemies.values.select do |e| 
-				e && !e.dead? && e != @parent
-			end.map { |e| e.event }
+			enemy_sw = @actor.is_a?(Game_Actor) || @actor.is_a?(Game_NetPlayer)
+			player_sw = @actor.is_a?(Game_Actor) || @actor.is_a?(Game_NetPlayer)
 			
-			players = Network::Main.mapplayers.values.select do |p|
-				p && p != @parent
+			objects = []
+			case @actor
+			when ABS_Enemy 
+				@actor.hate_group.each do |id|
+					next player_sw = true if id == 0
+					next unless $ABS.hate_group[id]
+					
+					objects += $ABS.hate_group[id].map {|e| e.event}
+				end
 			end
 			
-			objects = enemies + players
-			objects << $game_player if @parent != $game_player
-			return objects.select {|o| check_enemy(find_actor(o))}
+			objects += $ABS.enemies.values.map { |e| e.event } if enemy_sw
+			objects += (Network::Main.mapplayers.values + [$game_player]) if player_sw
+			return objects
 		end
 		
-		def make_all_objects
-			return unless @@all_objects.empty?
-			
-			@@all_objects = $ABS.enemies.values.map {|e| e.event}
-			@@all_objects += Network::Main.mapplayers.values
-			@@all_objects << $game_player
-		end
 		#--------------------------------------------------------------------------
 		# * In Range?(Element, Object, Range) - Near Fantastica
 		#--------------------------------------------------------------------------
@@ -1907,11 +1909,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Get ALL Range(Element, Range)
 		#--------------------------------------------------------------------------
 		def get_all_range(element, range)
-			#~ @objects += find_objects.select do |o| 
-				#~ !@objects.include?(o) && in_range?(element, o, range)
-			#~ end
-			
-			@objects += @@all_objects.select { |o| !@objects.include?(o) && in_range?(element, o, range) && check_enemy(find_actor(o))}
+			@objects += find_objects.select do |o| 
+				!@objects.include?(o) && in_range?(element, o, range) && check_enemy(find_actor(o))
+			end
 		end
 	end
 	
@@ -2262,7 +2262,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			if $game_map.map_id != $game_temp.player_new_map_id
 				$ABS.enemies = {}
 				$ABS.hate_group = {}
-				Range_Base.refresh
 			end
 			mrmo_abs_scene_map_transfer_player
 		end
@@ -2860,6 +2859,10 @@ if SDK.state("Mr.Mo's ABS") == true
 					sprite.animation2($data_animations[skill.animation2_id], true)
 					sprite.ox = 0
 					sprite.oy = 0
+					
+					#nowX = element.screen_x + nowX * 32
+					#nowY = element.screen_y + nowY * 32 - 32
+					
 					@ranged_sprites2.push([sprite, element, nowX, nowY])
 				end
 			end
@@ -2868,6 +2871,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def update_range_sprite
 			for range in @ranged_sprites # Update ranged sprites
 				next if range == nil #Skip NIL Values
+				
 				range.update
 				next if !range.character.stop
 				
@@ -3070,7 +3074,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				calculate_damage(user, skill)
 				process_critical_hit(user)
 				self.damage = apply_skill_modifiers(self.damage, user, skill)
-				self.damage /= 5 if user.is_a?(Game_NetPlayer)
+				self.damage /= 10 if user.is_a?(Game_NetPlayer)
 				$ABS.weapon_skill(user.weapon_id, self)
 				
 				effective |= apply_damage(user, skill)
@@ -3109,11 +3113,11 @@ if SDK.state("Mr.Mo's ABS") == true
 		def calculate_damage(user, skill)
 			power = skill.power + user.atk / 2
 			power = user.rpg_skill.skill_power_custom(skill.id, power)
-			power *= (1.0 + user.atk / 20.0)
+			power *= (1.0 + user.atk / 10.0)
 			power = apply_defense_modifiers(power, skill)
 			
 			rate = calculate_rate(user, skill)
-			self.damage = (power * rate / 30.0)
+			self.damage = (power * rate / 40.0)
 			self.damage *= elements_correct(skill.element_set)
 			self.damage /= 100
 			self.damage = self.damage.to_i
@@ -3129,7 +3133,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def calculate_rate(user, skill)
-			rate = 30
+			rate = 40
 			rate += user.str * skill.str_f / 100.0
 			rate += user.dex * skill.dex_f / 100.0
 			rate += user.agi * skill.agi_f / 100.0

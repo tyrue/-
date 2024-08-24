@@ -91,23 +91,26 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 백만 넘어가는 체력 설정
 	ABS_ENEMY_HP = {}
 	ABS_ENEMY_HP[37]  = [8_000_000_000, 0] # 무적토끼
-	ABS_ENEMY_HP[269] = [2_000_000, 0] # 무적다람쥐
+	ABS_ENEMY_HP[268] = [10_000_000, 0] # 최강다람쥐
+	ABS_ENEMY_HP[269] = [60_000_000, 0] # 무적다람쥐
 	ABS_ENEMY_HP[260]  = [20, 0] # 테스트
 	
 	# 기타
-	ABS_ENEMY_HP[58] = [2_250_000, 1] # 수룡
-	ABS_ENEMY_HP[59] = [2_250_000, 1] # 화룡
+	ABS_ENEMY_HP[58] = [5_500_000, 1] # 수룡
+	ABS_ENEMY_HP[59] = [5_500_000, 1] # 화룡
 	
-	ABS_ENEMY_HP[61] = [15_000_000, 1] # 주작
-	ABS_ENEMY_HP[62] = [15_000_000, 1] # 백호
+	ABS_ENEMY_HP[61] = [150_000_000, 1] # 주작
+	ABS_ENEMY_HP[62] = [150_000_000, 1] # 백호
+	
+	ABS_ENEMY_HP[89] = [100_000_000, 1] # 시련의청룡
 	
 	ABS_ENEMY_HP[98] = [10_500_000, 1] # 비류장군
 	
 	ABS_ENEMY_HP[111] = [600_000, 1] # 산적왕
 	
-	ABS_ENEMY_HP[102] = [400_000_000, 1] # 반고
-	ABS_ENEMY_HP[112] = [50_000_000, 1] # 청룡
-	ABS_ENEMY_HP[113] = [50_000_000, 1] # 현무
+	ABS_ENEMY_HP[102] = [4_000_000_000, 1] # 반고
+	ABS_ENEMY_HP[112] = [500_000_000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [500_000_000, 1] # 현무
 	
 	# 12 지신
 	ABS_ENEMY_HP[119] = [1_500_000, 1] # 백호왕
@@ -570,8 +573,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				next unless $game_map.passable?(x, y, d)
 				
 				e.moveto(x, y)
-				Network::Main.socket.send("<mon_move>#{e.event.id},#{d},#{x},#{y}</mon_move>\n") if @enemies[e.event.id].aggro
-				return 
+				return unless @enemies[e.event.id]
+				return unless @enemies[e.event.id].aggro
+				return  Network::Main.socket.send("<mon_move>#{e.event.id},#{d},#{x},#{y}</mon_move>\n") 
 			end
 		end
 		
@@ -2025,11 +2029,11 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if object.is_a?(Game_NetPlayer)
 			return if @actor.is_a?(Game_NetPlayer) && !enemy.is_a?(Game_Actor)
 			
+			$ABS.jump(object, self, @range_skill.hit_back)
 			@hit_num.times { object.ani_array.push(@skill.animation2_id) }
 			return if @dummy
 			
-			@hit_check = true
-			$ABS.jump(object, self, @range_skill.hit_back) 
+			@hit_check = true 
 			@hit_num.times { enemy.effect_skill(@actor, @skill) } unless @range_skill.not_damage 
 			return if $ABS.enemy_dead?(enemy, @actor)
 			
@@ -2976,17 +2980,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if self.is_a?(ABS_Enemy) && attacker.is_a?(Game_Actor) && !self.hate_group.include?(0)
 			
 			self.critical = false  # Clear critical flag
-			hit_result = true  # First hit detection
-			
-			a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
-			eva = [(5.0 * self.agi / a_dex).to_i, 100].min  # 회피율 계산
-			hit_rate = self.cant_evade? ? 100 : [100 - eva, 3].max # 회피 할 수 없는 상태면 무조건 맞음
-			hit_result = (rand(100) < hit_rate)
-			
-			unless hit_result
-				self.damage = "빗나감!"  # Set damage to "Miss"
-				self.critical = false  # Clear critical flag
-				return true  # End Method		
+			unless calculate_hit_result(attacker)
+				self.damage = "빗나감!"
+				return true
 			end
 			
 			atk = (attacker.atk + attacker.str / 20.0)
@@ -2994,14 +2990,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			self.damage = atk * (1.0 + attacker.str / 20.0)
 			self.damage /= (1.0 + self.base_pdef / temp)
-			
-			unless attacker.is_a?(Game_NetPlayer)
-				self.damage *= elements_correct(attacker.element_set)  # Element correction
-				self.damage /= 100
-			end
-			
-			self.damage = self.damage.to_i
-			self.damage = 1 if self.damage <= 0
+			self.damage = [self.damage.to_i, 1].max
 			
 			self.critical = "player_hit" if self.is_a?(Game_Actor)
 			plus_rate, plus_power = attacker.rpg_skill.critical_rate
@@ -3030,23 +3019,23 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			@damage_array.push(self.damage)
 			@critical_array.push(self.critical)
-			
 			return if self.is_a?(Game_Actor) and $ABS.player_dead?(self, attacker)
-			return if self.is_a?(ABS_Enemy) and $ABS.enemies[self.event.id].nil?
 			
 			check_enemy_aggro(self.damage)
-			
-			@state_changed = false  # State change
-			unless attacker.is_a?(Game_NetPlayer)
-				states_plus(attacker.plus_state_set)
-				states_minus(attacker.minus_state_set)
-			end
 			return true  # End Method			
+		end
+		
+		def calculate_hit_result(attacker)
+			a_dex = [attacker.dex * (1.0 - (self.eva / 150.0)), 1.0].max
+			eva = [(5.0 * self.agi / a_dex).to_i, 100].min
+			hit_rate = self.cant_evade? ? 100 : [100 - eva, 3].max
+			rand(100) < hit_rate
 		end
 		
 		def check_enemy_aggro(damage)
 			return unless self.is_a?(ABS_Enemy)
-			return if $ABS.enemies[self.event.id].nil?
+			return unless self.event
+			return unless $ABS.enemies[self.event.id]
 			
 			aggro_chance = (damage * 100 / self.maxhp) || rand(100) <= 40
 			if aggro_chance
@@ -3071,13 +3060,10 @@ if SDK.state("Mr.Mo's ABS") == true
 			hit_result = calculate_hit(user, skill)
 			
 			if hit_result
-				calculate_damage(user, skill)
+				process_damage(user, skill)
 				process_critical_hit(user)
-				self.damage = apply_skill_modifiers(self.damage, user, skill)
-				self.damage /= 10 if user.is_a?(Game_NetPlayer)
-				$ABS.weapon_skill(user.weapon_id, self)
-				
-				effective |= apply_damage(user, skill)
+				apply_damage(user, skill)
+				effective = true
 			else
 				self.damage = "빗나감!"
 			end
@@ -3107,29 +3093,27 @@ if SDK.state("Mr.Mo's ABS") == true
 		def calculate_hit(user, skill)
 			hit = skill.hit
 			hit *= user.hit / 100 if skill.atk_f > 0 && !user.is_a?(Game_NetPlayer)
-			rand(10) < hit
+			return rand(10) < hit
+		end
+		
+		def process_damage(user, skill)
+			calculate_damage(user, skill)
+			apply_skill_modifiers(user, skill)
+			apply_damage_reduction()
+			apply_dispersion(skill)
+			process_critical_hit(user)
+			
+			self.damage /= 10 if user.is_a?(Game_NetPlayer)
+			$ABS.weapon_skill(user.weapon_id, self)
 		end
 		
 		def calculate_damage(user, skill)
 			power = skill.power + user.atk / 2
 			power = user.rpg_skill.skill_power_custom(skill.id, power)
 			power *= (1.0 + user.atk / 10.0)
-			power = apply_defense_modifiers(power, skill)
-			
 			rate = calculate_rate(user, skill)
 			self.damage = (power * rate / 40.0)
-			self.damage *= elements_correct(skill.element_set)
-			self.damage /= 100
 			self.damage = self.damage.to_i
-		end
-		
-		def apply_defense_modifiers(power, skill)
-			if power > 0
-				power -= self.pdef * [skill.pdef_f, 10].max / 200
-				power -= self.mdef * skill.mdef_f / 100
-				power = [power, 1].max
-			end
-			power
 		end
 		
 		def calculate_rate(user, skill)
@@ -3145,7 +3129,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return unless self.damage > 0
 			
 			plus_rate, plus_power = user.rpg_skill.critical_skill_rate()
-			critical_rate = (1.0 + (1.2 * user.int / 200) + plus_rate) * 100
+			critical_rate = (1.0 + (1.0 * user.int / 200) + plus_rate) * 100
 			
 			r = rand(10000)
 			if r <= critical_rate.to_i
@@ -3155,61 +3139,52 @@ if SDK.state("Mr.Mo's ABS") == true
 			self.damage /= 2 if self.guarding?
 		end
 		
-		def apply_skill_modifiers(damage, user, skill)
-			damage = self.rpg_skill.damage_by_skill(damage, skill.id)
-			damage = apply_damage_reduction(damage)
-			damage = apply_dispersion(damage, skill)
-			damage = user.rpg_skill.damage_calculation_skill(damage)
-			damage = self.rpg_skill.damage_calculation_defense(damage)
-			damage
+		def apply_skill_modifiers(user, skill)
+			self.damage = self.rpg_skill.damage_by_skill(self.damage, skill.id)
+			self.damage = user.rpg_skill.damage_calculation_skill(self.damage) # 최종 데미지 
+			self.damage = self.rpg_skill.damage_calculation_defense(self.damage) # 방어력에 따른 데미지 감소
 		end
 		
-		def apply_damage_reduction(damage)
-			if damage > 0
-				limit = self.is_a?(Game_Actor) ? 200.0 : 500.0
-				damage *= limit / (limit + (self.base_pdef + self.base_mdef * 4))
+		def apply_damage_reduction()
+			if self.damage > 0
+				limit = self.is_a?(Game_Actor) ? 100.0 : 400.0
+				self.damage *= limit / (limit + (self.base_pdef + self.base_mdef * 4))
 			end
-			return damage
 		end
 		
-		def apply_dispersion(damage, skill)
-			if skill.variance > 0 && damage.abs > 0
-				amp = [damage.abs * skill.variance / 100, 1].max
-				damage += rand(amp + 1) + rand(amp + 1) - amp
+		def apply_dispersion(skill)
+			if skill.variance > 0 && self.damage.abs > 0
+				amp = [self.damage.abs * skill.variance / 100, 1].max
+				self.damage += rand(amp + 1) + rand(amp + 1) - amp
 			end
-			return damage
 		end
 		
 		def apply_damage(user, skill)
 			last_hp = self.hp
 			self.hp -= self.damage
+			self.damage = "빗나감!" if self.damage == 0
+			
 			@damage_array.push(self.damage)
 			@critical_array.push(self.critical)
 			
-			process_aggro if self.is_a?(ABS_Enemy) && $ABS.enemies[self.event.id]
-			
-			return false if self.is_a?(Game_Actor) && $ABS.player_dead?(self, user)
-			return false if self.is_a?(ABS_Enemy) && $ABS.enemies[self.event.id].nil?
-			
-			$ABS.send_network_monster(self) if self.is_a?(ABS_Enemy) && $ABS.enemies[self.event.id]
-			
-			effective = self.hp != last_hp
-			@state_changed = false
-			effective |= states_plus(skill.plus_state_set)
-			effective |= states_minus(skill.minus_state_set)
-			
-			if skill.power == 0
-				self.damage = @state_changed ? 1 : "빗나감!"
-			end
-			effective
+			process_enemy
+			process_player(user)
 		end
 		
-		def process_aggro
+		def process_enemy
+			return unless self.is_a?(ABS_Enemy)
+			return unless $ABS.enemies[self.event.id]
+			
+			$ABS.send_network_monster(self)
 			r = rand(100)
 			if r <= [(self.damage * 100 / self.maxhp), 30].max
 				self.aggro = true
 				Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
 			end
+		end
+		
+		def process_player(user)
+			return if self.is_a?(Game_Actor) && $ABS.player_dead?(self, user)
 		end
 	end
 	
@@ -3251,21 +3226,25 @@ if SDK.state("Mr.Mo's ABS") == true
 		end
 		
 		def move_horizontally(x_plus)
-			move_in_direction(x_plus, 0, x_plus.abs, x_plus > 0 ? 1 : -1)
+			step = x_plus > 0 ? 1 : -1
+			dir = x_plus > 0 ? 6 : 4
+			move_in_direction(1, 0, x_plus.abs, step, dir)
 		end
 		
 		def move_vertically(y_plus)
-			move_in_direction(0, y_plus, y_plus.abs, y_plus > 0 ? 1 : -1)
+			step = y_plus > 0 ? 1 : -1
+			dir = y_plus > 0 ? 2 : 8
+			move_in_direction(0, 1, y_plus.abs, step, dir)
 		end
 		
-		def move_in_direction(x_plus, y_plus, count, step)
+		def move_in_direction(x_plus, y_plus, count, step, dir)
 			count.times do
 				x = @x + x_plus * step
 				y = @y + y_plus * step
-				break unless passable?(x, y, 0)
 				
 				@x = x
 				@y = y
+				break unless passable?(@x, @y, dir)
 			end
 		end
 		

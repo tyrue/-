@@ -136,6 +136,7 @@ def create_events(event_id, x = 1, y = 1, dir = 2, id = nil)
 	event = Game_Event.new(map_id, temp)
 	return unless event
 	
+	dir = event.direction
 	id ||= check_create_monster_id
 	$game_map.events[id] = event 
 	setup_event(event, id, x, y, dir)
@@ -149,7 +150,7 @@ def setup_event(event, id, x, y, dir)
   event.id = id
 	event.event.id = id
   event.moveto(x, y)
-  event.direction = dir
+  event.direction = dir || 2
 	
   event.refresh_set_page
   event.refresh

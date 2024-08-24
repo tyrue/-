@@ -108,6 +108,15 @@ class Jindow_Trade < Jindow
 		$j_inven.setMode(1)
 	end
 	
+	def check_my_list(type, item_id)
+		@my_items.each do |item|
+			next unless item
+			
+			return true if item.id == item_id && item.type == type
+		end
+		return false
+	end
+	
 	# 아이템 추가
 	def add_item(item, type = 0)
 		case type
@@ -189,6 +198,7 @@ class Jindow_Trade < Jindow
 	def gain_traded_items
 		@trader_items.each do |item|
 			next unless item
+			
 			id = item.id.to_i
 			type = item.type.to_i
 			num  = item.num.to_i
@@ -205,6 +215,7 @@ class Jindow_Trade < Jindow
 	def lose_my_items
 		@my_items.each do |item|
 			next unless item
+			
 			id = item.id.to_i
 			type = item.type.to_i
 			num  = item.num.to_i
@@ -214,6 +225,8 @@ class Jindow_Trade < Jindow
 			when 1 then $game_party.lose_weapon(id, num)
 			when 2 then $game_party.lose_armor(id, num)
 			end
+			
+			$Abs_item_data.process_one_trade_switch(id, type)
 		end
 		$game_party.lose_gold(@my_money) if @my_money > 0
 	end

@@ -72,8 +72,12 @@ class Jindow_Trade2 < Jindow
 		@sell = @type_sells.result.to_i
 		return $console.write_line("개수는 한 개 이상 정할 수 있습니다.") if @sell <= 0
 		
+		@sell = 1 if $Abs_item_data.check_trade_switch(@item_id, @type)
 		@is_ok = item_available?(@type, @item_id, @sell)
 		return $console.write_line("소지하고 있는 것보다 개수가 많습니다.") if !@is_ok
+		
+		trade_window = Hwnd.include?("Trade", 1)
+		return $console.write_line("이미 항목에 있습니다.") if trade_window.check_my_list(@type, @item_id)
 		
 		case @mode
 		when 0 

@@ -25,6 +25,7 @@ class TradeManager
 		
 		trade_window = Hwnd.include?("Trade", 1)
 		return unless trade_window
+		
 		trade_window.add_item(item)
 	end
 	
@@ -100,6 +101,7 @@ class TradeManager
 	def trade_success()
 		trade_window = Hwnd.include?("Trade", 1)
 		return unless trade_window
+		
 		trade_window.trade_success()
 		self.trade_end
 	end

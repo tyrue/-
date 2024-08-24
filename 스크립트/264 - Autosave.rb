@@ -64,12 +64,12 @@ end
 
 def 스위치_목록_생성
 	# 스위치가 켜진것만 넣자
-	@swlist = (0..1800).map { |sw| "#{sw}," if $game_switches[sw]}.compact.join
+	@swlist = (0..2000).map { |sw| "#{sw}," if $game_switches[sw]}.compact.join
 end
 
 def 변수_목록_생성
 	# 값이 있는 것만 넣자
-	@valist = (0..1800).map { |va| "#{va},#{$game_variables[va]}." if $game_variables[va].is_a?(Integer) && $game_variables[va].to_i > 0 }.compact.join
+	@valist = (0..2000).map { |va| "#{va},#{$game_variables[va]}." if $game_variables[va].is_a?(Integer) && $game_variables[va].to_i > 0 }.compact.join
 end
 
 def 단축키_목록_생성

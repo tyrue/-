@@ -143,6 +143,7 @@ ABS_ENEMY_CHAR[88] =	["(승급)어린백호"] # 수호백호
 # 4차 퀘
 ABS_ENEMY_CHAR[102] =	["(승급)반고"] # 반고
 ABS_ENEMY_CHAR[103] =	["(승급)어린현무"] # 수호현무
+ABS_ENEMY_CHAR[89] =	["(승급)청룡"] # 시련의청룡
 ABS_ENEMY_CHAR[112] =	["(승급)청룡"] # 청룡
 ABS_ENEMY_CHAR[113] =	["(승급)현무"] # 현무
 ABS_ENEMY_CHAR[114] =	["(승급)어린청룡"] # 수호청룡

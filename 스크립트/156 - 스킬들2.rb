@@ -375,25 +375,25 @@ class Rpg_Skill_Data
 		when 44 # 헬파이어
 			@character_name = "(스킬)헬파이어"
 			@mash_time = 5
-			@power_arr = [0, 0, 0.9, 10] 
+			@power_arr = [0, 0, 0.7, 10] 
 			@cost_arr = [0, 0, 1.0]
 		when 53 # 삼매진화
 			@character_name = ["(스킬)헬파이어", 20]	
 			@mash_time = 5
-			@power_arr = [0, 0, 1.1, 10]
+			@power_arr = [0, 0, 0.75, 10]
 			@cost_arr = [0, 0, 1.0]
 			@explode_range = 3
 		when 57 # 삼매진화 2성
 			@character_name = ["(스킬)헬파이어", 100]
 			@mash_time = 4
-			@power_arr = [0, 0, 1.2, 10]
+			@power_arr = [0, 0, 0.8, 10]
 			@cost_arr = [0, 0, 1.0]
 			@explode_range = 3
 		when 69 # 삼매진화 3성
 			@character_name = ["(스킬)헬파이어", 190]
 			@hit_num = 2
 			@mash_time = 3.5
-			@power_arr = [0, 0, 1.3, 10]
+			@power_arr = [0, 0, 1.0, 10]
 			@cost_arr = [0, 0, 1.0]
 			@explode_range = 4
 			
@@ -485,7 +485,7 @@ class Rpg_Skill_Data
 			@character_name = "(스킬)동귀어진"
 			@hit_num = 10
 			@mash_time = 180
-			@power_arr = [0, 1.0, 0.01, 100]
+			@power_arr = [0, 0.4, 0.01, 100]
 			@cost_arr = [0, 1.0, 1.0]
 		when 101 # 백호참
 			@range_value = 1
@@ -525,25 +525,25 @@ class Rpg_Skill_Data
 		when 96 # 지진
 			@range_value = 7
 			@character_name = "(스킬)지진"
-			@hit_num = 5
-			@power_arr = [1, 0, 0.03, 20]
+			@hit_num = 2
+			@power_arr = [1, 0, 0.01, 15]
 			@cost_arr = [1, 0, 1.0 / 10.0]
 			@explode_range = 2
 		when 123 # 귀염추혼소
 			@move_speed = 5
 			@hit_num = 3
 			@mash_time = 120
-			@power_arr = [0, 0.2, 0.2, 100] 
+			@power_arr = [0, 0.1, 0.1, 100] 
 			@cost_arr = [0, 0.2, 1.0]
 			@hit_skill_arr = [[183, 1]]
 		when 124 # 지진'첨
 			@range_value = 7
 			@character_name = ["(스킬)지진", 150]
-			@hit_num = 5
+			@hit_num = 3
 			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
-			@mash_time = 20
-			@power_arr = [1, 0.01, 0.20, 150] 
-			@cost_arr = [1, 0.01, 0.7]
+			@mash_time = 25
+			@power_arr = [1, 0.01, 0.10, 150] 
+			@cost_arr = [1, 0.01, 0.8]
 			@explode_range = 2
 		when 183 # 혼마술
 			@hit_skill_arr = [[183, 1]]
@@ -606,7 +606,7 @@ class Rpg_Skill_Data
 			@hit_back = 12
 			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
 			@mash_time = 10
-			@power_arr = [2, 0.05, 0.05, 100]
+			@power_arr = [2, 0.05, 0.7, 100]
 		when 152 # 현무의 포효
 			@range_value = 10
 			@character_name = ["(몬)(승급)현무", 90]
@@ -614,7 +614,7 @@ class Rpg_Skill_Data
 			@hit_back = 12
 			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
 			@mash_time = 10
-			@power_arr = [2, 0.05, 0.05, 100]
+			@power_arr = [2, 0.05, 0.7, 100]
 		when 153 # 백호검무
 			@range_value = 4
 			@character_name = "(스킬)검기3"

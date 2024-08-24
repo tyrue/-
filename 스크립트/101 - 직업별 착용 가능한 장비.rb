@@ -8,7 +8,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	#----------
 	# 무기
 	EQUIP_JOB_WEAPON[6] = [[1], 4] # 현자금봉
-	EQUIP_JOB_WEAPON[13] = [[1], 3] # 영후단봉
+	EQUIP_JOB_WEAPON[13] = [[1], 4] # 영후단봉
 	EQUIP_JOB_WEAPON[105] = [[1], 0] # 영혼마령봉
 	EQUIP_JOB_WEAPON[107] = [[1], 0] # 불의영혼봉
 	
@@ -28,7 +28,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[3] = [[2], 0] # 현무의검 신수
 	EQUIP_JOB_WEAPON[4] = [[2], 0] # 청룡의검 신수
 	EQUIP_JOB_WEAPON[7] = [[2], 4] # 검성기검
-	EQUIP_JOB_WEAPON[12] = [[2], 3] # 구곡검
+	EQUIP_JOB_WEAPON[12] = [[2], 4] # 구곡검
 	EQUIP_JOB_WEAPON[106] = [[2], 0] # 현철중검
 	EQUIP_JOB_WEAPON[120] = [[2], 0] # 흑철중검
 	
@@ -43,7 +43,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	#----------
 	# 무기
 	EQUIP_JOB_WEAPON[8] = [[3], 4] # 진선역봉
-	EQUIP_JOB_WEAPON[11] = [[3], 3] # 대모홍접선
+	EQUIP_JOB_WEAPON[11] = [[3], 4] # 대모홍접선
 	EQUIP_JOB_WEAPON[133] = [[3], 0] # 해골죽장
 	EQUIP_JOB_WEAPON[137] = [[3], 0] # 영혼죽장
 	
@@ -58,7 +58,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	#----------
 	# 무기
 	EQUIP_JOB_WEAPON[9] = [[4], 4] # 태성태도
-	EQUIP_JOB_WEAPON[14] = [[4], 3] # 협가검
+	EQUIP_JOB_WEAPON[14] = [[4], 4] # 협가검
 	EQUIP_JOB_WEAPON[24] = [[4], 0] # 야월도
 	EQUIP_JOB_WEAPON[25] = [[4], 0] # 흑월도
 	
@@ -69,9 +69,9 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	# 전직업
 	#----------
 	# 무기
-	EQUIP_JOB_WEAPON[15] = [[0], 0] # 석단장
-	EQUIP_JOB_WEAPON[16] = [[0], 0] # 백사도
-	EQUIP_JOB_WEAPON[17] = [[0], 2] # 음양도
+	EQUIP_JOB_WEAPON[15] = [[0], 1] # 석단장
+	EQUIP_JOB_WEAPON[16] = [[0], 2] # 백사도
+	EQUIP_JOB_WEAPON[17] = [[0], 3] # 음양도
 	EQUIP_JOB_WEAPON[22] = [[0], 0] # 비철단도
 	EQUIP_JOB_WEAPON[23] = [[0], 0] # 철도
 	EQUIP_JOB_WEAPON[26] = [[0], 0] # 녹호박별검
@@ -84,13 +84,13 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[102] = [[0], 0] # 목검
 	EQUIP_JOB_WEAPON[103] = [[0], 0] # 사두목도
 	EQUIP_JOB_WEAPON[104] = [[0], 0] # 사두목검
-	EQUIP_JOB_WEAPON[108] = [[0], 0] # 백화검
+	EQUIP_JOB_WEAPON[108] = [[0], 0, 85] # 백화검
 	EQUIP_JOB_WEAPON[109] = [[0], 0] # 이벤트백화검
-	EQUIP_JOB_WEAPON[110] = [[0], 0] # 현랑부
+	EQUIP_JOB_WEAPON[110] = [[0], 0, 75] # 현랑부
 	EQUIP_JOB_WEAPON[111] = [[0], 0] # 이벤트현랑부
-	EQUIP_JOB_WEAPON[112] = [[0], 0] # 양첨목봉
+	EQUIP_JOB_WEAPON[112] = [[0], 0, 90] # 양첨목봉
 	EQUIP_JOB_WEAPON[113] = [[0], 0] # 이벤트양첨목봉
-	EQUIP_JOB_WEAPON[114] = [[0], 0] # 주작의검
+	EQUIP_JOB_WEAPON[114] = [[0], 0, 99] # 주작의검
 	EQUIP_JOB_WEAPON[115] = [[0], 3] # 심판의낫
 	EQUIP_JOB_WEAPON[116] = [[0], 0] # 진일신검손상
 	EQUIP_JOB_WEAPON[117] = [[0], 2] # 괴력선창
@@ -99,34 +99,34 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[121] = [[0], 0] # 흑철중검
 	EQUIP_JOB_WEAPON[122] = [[0], 0] # 초심자의목도
 	EQUIP_JOB_WEAPON[123] = [[0], 3] # 현무염도
-	EQUIP_JOB_WEAPON[124] = [[0], 0] # 얼음검
+	EQUIP_JOB_WEAPON[124] = [[0], 0, 99] # 얼음검
 	EQUIP_JOB_WEAPON[125] = [[0], 0] # 일월대도
-	EQUIP_JOB_WEAPON[126] = [[0], 0] # 참마도
-	EQUIP_JOB_WEAPON[127] = [[0], 2] # 청룡신검
+	EQUIP_JOB_WEAPON[126] = [[0], 0, 99] # 참마도
+	EQUIP_JOB_WEAPON[127] = [[0], 3] # 청룡신검
 	EQUIP_JOB_WEAPON[128] = [[0], 0] # 용량제구봉?
-	EQUIP_JOB_WEAPON[129] = [[0], 0] # 도깨비방망이
+	EQUIP_JOB_WEAPON[129] = [[0], 0, 80] # 도깨비방망이
 	EQUIP_JOB_WEAPON[130] = [[0], 0] # 산적왕의칼
-	EQUIP_JOB_WEAPON[131] = [[0], 0] # 다문창
-	EQUIP_JOB_WEAPON[132] = [[0], 0] # 인어장군지팡이
-	EQUIP_JOB_WEAPON[134] = [[0], 2] # 일화접선
-	EQUIP_JOB_WEAPON[135] = [[0], 2] # 진일신검
+	EQUIP_JOB_WEAPON[131] = [[0], 0, 99] # 다문창
+	EQUIP_JOB_WEAPON[132] = [[0], 0, 99] # 인어장군지팡이
+	EQUIP_JOB_WEAPON[134] = [[0], 3] # 일화접선
+	EQUIP_JOB_WEAPON[135] = [[0], 3] # 진일신검
 	EQUIP_JOB_WEAPON[136] = [[0], 1] # 이가닌자의검
-	EQUIP_JOB_WEAPON[138] = [[0], 2] # 청일기창
+	EQUIP_JOB_WEAPON[138] = [[0], 3] # 청일기창
 	
-	EQUIP_JOB_WEAPON[141] = [[0], 0] # 용마제일검
-	EQUIP_JOB_WEAPON[142] = [[0], 0] # 용마제사검
+	EQUIP_JOB_WEAPON[141] = [[0], 1] # 용마제일검
+	EQUIP_JOB_WEAPON[142] = [[0], 1] # 용마제사검
 	EQUIP_JOB_WEAPON[143] = [[0], 2] # 용마제칠검
 	EQUIP_JOB_WEAPON[144] = [[0], 3] # 용마제팔검
 	EQUIP_JOB_WEAPON[145] = [[0], 4] # 용마제구검
-	EQUIP_JOB_WEAPON[146] = [[0], 0] # 용랑제일봉
-	EQUIP_JOB_WEAPON[147] = [[0], 0] # 용랑제사봉
+	EQUIP_JOB_WEAPON[146] = [[0], 1] # 용랑제일봉
+	EQUIP_JOB_WEAPON[147] = [[0], 1] # 용랑제사봉
 	EQUIP_JOB_WEAPON[148] = [[0], 2] # 용랑제칠봉
 	EQUIP_JOB_WEAPON[149] = [[0], 3] # 용랑제팔봉
 	EQUIP_JOB_WEAPON[150] = [[0], 4] # 용랑제구봉
 	
-	EQUIP_JOB_WEAPON[152] = [[0], 1] # 용마제칠검(손상)
+	EQUIP_JOB_WEAPON[152] = [[0], 2] # 용마제칠검(손상)
 	EQUIP_JOB_WEAPON[153] = [[0], 3] # 용마제칠검(손상)
-	EQUIP_JOB_WEAPON[154] = [[0], 1] # 용랑제칠봉(손상)
+	EQUIP_JOB_WEAPON[154] = [[0], 2] # 용랑제칠봉(손상)
 	EQUIP_JOB_WEAPON[155] = [[0], 3] # 용랑제팔봉(손상)
 	
 	# 방어구
@@ -141,17 +141,17 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[10] = [[0], 0] # 토끼화서
 	EQUIP_JOB_ARMOR[11] = [[0], 0] # 죄수복
 	EQUIP_JOB_ARMOR[12] = [[0], 2] # 주술갑옷
-	EQUIP_JOB_ARMOR[13] = [[0], 0] # 남자타라의 옷
+	EQUIP_JOB_ARMOR[13] = [[0], 0, 99] # 남자타라의 옷
 	EQUIP_JOB_ARMOR[14] = [[0], 3] # 해골갑옷
-	EQUIP_JOB_ARMOR[15] = [[0], 0] # 수선도사의머리띠
+	EQUIP_JOB_ARMOR[15] = [[0], 0, 90] # 수선도사의머리띠
 	EQUIP_JOB_ARMOR[16] = [[0], 0] # 수정귀걸이
 	EQUIP_JOB_ARMOR[17] = [[0], 0] # 용왕의반지모조
 	EQUIP_JOB_ARMOR[18] = [[0], 0] # 용왕의투구모조
-	EQUIP_JOB_ARMOR[19] = [[0], 0] # 청선투구
-	EQUIP_JOB_ARMOR[20] = [[0], 0] # 청선팔찌
-	EQUIP_JOB_ARMOR[21] = [[0], 0] # 해골목걸이
-	EQUIP_JOB_ARMOR[22] = [[0], 3] # 황금투구
-	EQUIP_JOB_ARMOR[23] = [[0], 3] # 황금팔찌
+	EQUIP_JOB_ARMOR[19] = [[0], 0, 99] # 청선투구
+	EQUIP_JOB_ARMOR[20] = [[0], 0, 99] # 청선팔찌
+	EQUIP_JOB_ARMOR[21] = [[0], 0, 2] # 해골목걸이
+	EQUIP_JOB_ARMOR[22] = [[0], 4] # 황금투구
+	EQUIP_JOB_ARMOR[23] = [[0], 4] # 황금팔찌
 	EQUIP_JOB_ARMOR[24] = [[0], 0] # 용왕둔갑두루마리
 	EQUIP_JOB_ARMOR[25] = [[0], 0] # 강건부
 	EQUIP_JOB_ARMOR[26] = [[0], 0] # 암사슴화서
@@ -171,9 +171,9 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[44] = [[0], 1] # 황혼의활복
 	EQUIP_JOB_ARMOR[45] = [[0], 0] # 인어반지
 	EQUIP_JOB_ARMOR[46] = [[0], 0] # 진주반지
-	EQUIP_JOB_ARMOR[57] = [[0], 0, 75] # 호박투구
-	EQUIP_JOB_ARMOR[58] = [[0], 0, 80] # 진호박투구
-	EQUIP_JOB_ARMOR[60] = [[0], 0, 99] # 황금호박투구
+	EQUIP_JOB_ARMOR[57] = [[0], 0, 99] # 호박투구
+	EQUIP_JOB_ARMOR[58] = [[0], 1] # 진호박투구
+	EQUIP_JOB_ARMOR[60] = [[0], 2] # 황금호박투구
 	
 	EQUIP_JOB_ARMOR[47] = [[0], 0, 29] # 망또1
 	EQUIP_JOB_ARMOR[48] = [[0], 0, 49] # 망또2
@@ -181,20 +181,20 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[55] = [[0], 0, 79] # 망또4
 	EQUIP_JOB_ARMOR[56] = [[0], 0, 99] # 망또5
 	
-	EQUIP_JOB_ARMOR[50] = [[0], 2] # 용왕의반지'진
-	EQUIP_JOB_ARMOR[51] = [[0], 2] # 용왕의투구'진
+	EQUIP_JOB_ARMOR[50] = [[0], 3] # 용왕의반지'진
+	EQUIP_JOB_ARMOR[51] = [[0], 3] # 용왕의투구'진
 	EQUIP_JOB_ARMOR[53] = [[0], 0] # 힘의투구1
 	
 	EQUIP_JOB_ARMOR[61] = [[0], 2] # 연청투구
 	EQUIP_JOB_ARMOR[62] = [[0], 2] # 연홍투구
 	EQUIP_JOB_ARMOR[63] = [[0], 0] # 비취의목걸이
 	EQUIP_JOB_ARMOR[64] = [[0], 0] # 수정의목걸이
-	EQUIP_JOB_ARMOR[70] = [[0], 1] # 주술투구
-	EQUIP_JOB_ARMOR[71] = [[0], 1] # 주술팔찌
+	EQUIP_JOB_ARMOR[70] = [[0], 2] # 주술투구
+	EQUIP_JOB_ARMOR[71] = [[0], 2] # 주술팔찌
 	EQUIP_JOB_ARMOR[72] = [[0], 1] # 해골목걸이
 	EQUIP_JOB_ARMOR[73] = [[0], 4] # 가릉빈가의날개옷'진
-	EQUIP_JOB_ARMOR[74] = [[0], 3] # 황금투구
-	EQUIP_JOB_ARMOR[75] = [[0], 3] # 황금팔찌
+	EQUIP_JOB_ARMOR[74] = [[0], 4] # 황금투구
+	EQUIP_JOB_ARMOR[75] = [[0], 4] # 황금팔찌
 	
 	EQUIP_JOB_ARMOR[80] = [[0], 0] # 지력의반지1
 	EQUIP_JOB_ARMOR[81] = [[0], 0] # 지력의반지2

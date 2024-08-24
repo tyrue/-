@@ -182,37 +182,37 @@ ABS_ENEMY_SKILL_CASTING[161] = [[1.5, "영원한 공허의 무수한 파편들�
 # ----------------------------------#
 NEED_ADVANCE_RESOURCE = {} # 각 요소는 승급시 필요 체/마
 NEED_ADVANCE_RESOURCE[0] = [
-	[5000, 7500], 
-	[15000, 35000], 
-	[45000, 105000], 
-	[105000, 230000]] # 주술사
+	[15000, 10000], 
+	[50000, 80000], 
+	[150000, 250000], 
+	[300000, 600000]] # 주술사
 
 NEED_ADVANCE_RESOURCE[1] = [
-	[10500, 4500], 
-	[70000, 7000], 
-	[200000, 15000], 
-	[450000, 35000]] # 전사
+	[35000, 2000], 
+	[200000, 5000], 
+	[600000, 10000], 
+	[1400000, 150000]] # 전사
 
 NEED_ADVANCE_RESOURCE[2] = [
-	[5000, 7500], 
-	[10000, 35000], 
-	[45000, 105000], 
-	[105000, 230000]] # 도사
+	[12000, 8000], 
+	[40000, 70000], 
+	[100000, 200000], 
+	[250000, 500000]] # 도사
 
 NEED_ADVANCE_RESOURCE[3] = [
-	[10500, 4500], 
-	[70000, 7000], 
-	[200000, 15000], 
-	[450000, 35000]] # 도적
+	[35000, 2000], 
+	[200000, 5000], 
+	[600000, 10000], 
+	[1400000, 150000]] # 도적
 
 # 승급 차수당 경험치 판매 단위
 NEED_ADVANCE_EXP = [
-	[300_000, 300_000],
-	[500_000, 500_000],
-	[1_000_000, 1_000_000],
-	[3_000_000, 3_000_000],
-	[300_000, 300_000],
-	]
+	[1_000_000, 1_000_000], 		# 0차 
+	[3_000_000, 3_000_000], # 1차 
+	[6_000_000, 6_000_000], # 2차 
+	[10_000_000, 10_000_000], # 3차 
+	[10_000_000, 10_000_000], # 4차
+]
 # -------------END----------------- #
 
 # $game_variables[19] 플레이어 힘
@@ -623,12 +623,12 @@ class Rpg_skill
 		p_hp = data[1] ||  0
 		p_sp = data[2] || 0
 		val = data[3] || 0
-		return power if type == -1
+		return power if type == -1 || type == 2
 		
 		power = power.to_f
 		power += case type
 		when 0 then (@battler.hp * p_hp) + (@battler.sp * p_sp) # 현재 
-		when 1, 2 then (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp) # 전체
+		when 1 then (@battler.maxhp * p_hp) + (@battler.maxsp * p_sp) # 전체
 		end
 		
 		power += val
@@ -906,37 +906,40 @@ class Rpg_skill
 	
 	# 자기 직업 스위치 온
 	def job_select
-		job_arr = [6, 156, 144, 426] # 직업 스위치
-		degree_arr = [0, 143, 150, 155, 358] # 승급 차수 스위치
-		
-		job_arr.each {|id| $game_switches[id] = false}
-		degree_arr.each {|id| $game_switches[id] = false}
-		
-		data = []
-		data[0] = [2, 3, 5, 6, 14] # 주술사
-		data[1] = [7, 8, 9, 10, 15] # 전사
-		data[2] = [4, 11, 12, 13, 16] # 도사
-		data[3] = [17, 18, 19, 20, 21] # 도적
+		# 주술사, 전사, 도사, 도적
+		job_switches = [6, 156, 144, 426]  # 직업 스위치
+		degree_switches = [0, 143, 150, 155, 358]  # 승급 차수 스위치
+		job_data = {
+			0 => [2, 3, 5, 6, 14],    # 주술사
+			1 => [7, 8, 9, 10, 15],   # 전사
+			2 => [4, 11, 12, 13, 16], # 도사
+			3 => [17, 18, 19, 20, 21] # 도적
+		}
+		reset_switches(job_switches + degree_switches)
 		
 		c_id = $game_party.actors[0].class_id
-		$job_degree = 0
-		data.each_with_index do |arr, id|
-			sw = false
-			arr.each_with_index do |val, degree|
-				next unless c_id == val
-				
-				$game_switches[job_arr[id]] = true # 직업 스위치
-				$job_degree = degree
-				sw = true
-				break
-			end
-			break if sw
-		end
+		my_job_type, $job_degree = find_job_and_degree(c_id, job_data)
+		return unless my_job_type
 		
-		#return if $job_degree <= 0
-		for i in 1..$job_degree
-			$game_switches[degree_arr[i]] = true
+		job_switch = job_switches[my_job_type]
+		
+		$game_switches[job_switch] = true 
+		(1..$job_degree).each { |i| $game_switches[degree_switches[i]] = true }
+		
+		[my_job_type, $job_degree]
+	end
+	
+	def reset_switches(switches)
+		switches.each { |id| $game_switches[id] = false }
+	end
+	
+	def find_job_and_degree(c_id, job_data)
+		job_data.each do |type, ids|
+			ids.each_with_index do |val, degree|
+				return [type, degree] if c_id == val
+			end
 		end
+		[nil, 0]  # 기본값으로 반환
 	end
 	
 	# 평타 공격시 버프, 디버프에 대한 데미지 계산
@@ -1086,6 +1089,39 @@ class Rpg_skill
 		when 0..2 then "#{item.name}(이)가 #{num - my_num}개 부족"
 		when 3 then "금전이 #{num - my_num}전 부족"
 		end
+	end
+	
+	def check_advance_resource(buy_type = "")
+		job_type, degree = job_select # 직업 타입과 승급 차수
+		actor = $game_party.actors[0]
+		
+		exp = actor.exp
+		base_hp = actor.take_base_max_stat("hp")
+		base_sp = actor.take_base_max_stat("sp")
+		
+		unit_hp, unit_sp = 100, 50 # 한 번당 오르는 체마 단위
+		limit_hp, limit_sp = MAXHP_LIMIT, MAXSP_LIMIT
+		limit_hp, limit_sp = NEED_ADVANCE_RESOURCE[job_type][degree].map {|val| val + 3000} if degree <= 3
+		unit_hp_exp, unit_sp_exp = NEED_ADVANCE_EXP[degree] # 한번당 필요한 경험치 단위
+		
+		if degree >= 4
+			val = 200000.0
+			unit_hp_exp = (unit_hp_exp * ((base_hp / val) + 1.0)).to_i
+			unit_sp_exp = (unit_sp_exp * ((base_sp / val) + 1.0)).to_i
+		end
+		
+		can_buy_hp = (exp / unit_hp_exp).to_i
+		can_buy_sp = (exp / unit_sp_exp).to_i
+		
+		msg = [
+			"자네의 경험치 #{change_number_unit(unit_hp_exp)}를 희생하여 체력 #{unit_hp} 또는",
+			"경험치 #{change_number_unit(unit_sp_exp)}를 희생하여 마력 #{unit_sp}을 증가 시킬 수 있다네..."
+			]
+		$temp_req_string = msg.join("\n")
+		
+		return [base_hp, unit_hp, limit_hp, unit_hp_exp, can_buy_hp] if buy_type == "hp"
+		return [base_sp, unit_sp, limit_sp, unit_sp_exp, can_buy_sp] if buy_type == "sp"
+		return []
 	end
 end	
 

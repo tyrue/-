@@ -102,13 +102,13 @@ class Jindow_Drop < Jindow
   end
 
   def handle_item_drop(num, x, y)
-    return unless $Abs_item_data.is_trade_ok(@item_id, @type2)
-
     method = get_item_method
     num = [num, $game_party.send("#{method}_number", @item_id)].min
+		
     $game_party.send("lose_#{method}", @item_id, num)
     create_drops(@type2, @item_id, x, y, num)
-    $console.write_line("#{@item_name} #{num}개를 버렸습니다.")
+		$console.write_line("#{@item_name} #{num}개를 버렸습니다.")
+		$Abs_item_data.process_one_trade_switch(@item_id, @type2)
     finalize_drop($game_party.send("#{method}_number", @item_id))
   end
 

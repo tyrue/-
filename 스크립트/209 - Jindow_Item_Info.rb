@@ -84,7 +84,7 @@ class Jindow_Item_Info < Jindow
 	end
 	
 	def trade_status
-		sw = $Abs_item_data.is_trade_ok(@item_id, @type)
+		sw = $Abs_item_data.is_trade_ok?(@item_id, @type)
 		text = sw ? "[교환 가능]" : "[교환 불가]"
 		color = sw ? [102, 255, 102, 255] : [255, 102, 102, 255]
 		draw_text_on_sprite(@equip, 0, 0, text, color)
@@ -121,14 +121,12 @@ class Jindow_Item_Info < Jindow
 	def setup_buttons(item_hwnd)
 		return unless item_hwnd == "Inventory"
 		
-		sw = $Abs_item_data.is_trade_ok(@item_id, @type)
 		@button_key = setup_button(@equip.x, @equip.y, "단축키 지정") if @type == 0 
 		@drop_button = setup_button(@equip.x + @equip.width, @equip.y, "버리기")
 		@drop_button2 = setup_button(@drop_button.x, @drop_button.y + @drop_button.height, "여러개 버리기")
 		
-		unless sw
-			return unless equip_job_type_required?
-			@trade_button = setup_button(@drop_button.x, @drop_button.y - 20, "교환 불가 해제") 
+		if $Abs_item_data.trade_state(@item_id, @type) == 1
+			@trade_button = setup_button(@drop_button.x, @drop_button2.y + @drop_button2.height, "교환 불가 해제") if equip_job_type_required?
 		end
 	end
 	
@@ -140,7 +138,7 @@ class Jindow_Item_Info < Jindow
 	
 	def setup_description
 		@description = Sprite.new(self)
-		@description.y = @equip.y + @equip.height
+		@description.y = @equip.y + @equip.height + 20
 		return if @item_data.description.empty?
 		
 		bitmap = Bitmap.new(self.width, 480)
@@ -256,6 +254,7 @@ class Jindow_Item_Info < Jindow
 		super
 		handle_drop_buttons
 		handle_key_button
+		handle_trade_button
 	end
 	
 	def handle_drop_buttons
@@ -267,7 +266,7 @@ class Jindow_Item_Info < Jindow
 		return unless button
 		return unless button.click
 		
-		unless $Abs_item_data.is_trade_ok(@item_id, @type)
+		unless $Abs_item_data.is_trade_ok?(@item_id, @type)
 			return $console.write_line("버릴 수 없는 물건입니다.")
 		end
 		
@@ -285,10 +284,11 @@ class Jindow_Item_Info < Jindow
 		$console.write_line("#{@item_data.name}를 버렸습니다.")
 		create_drops(@type, @item_id, x, y, 1)
 		$game_system.se_play("줍기")
+		$Abs_item_data.process_one_trade_switch(@item_id, @type)
 	end
 	
 	def drop_multiple_items
-		if @item_num == 1
+		if @item_num == 1 || $Abs_item_data.check_trade_switch(@item_id, @type)
 			drop_one_item
 		else
 			Hwnd.dispose("Item_Drop") if Hwnd.include?("Item_Drop")
@@ -302,5 +302,48 @@ class Jindow_Item_Info < Jindow
 		
 		Hwnd.dispose("Keyset_menu") if Hwnd.include?("Keyset_menu")
 		Jindow_Keyset_menu.new(@item_id, @type)
+	end
+	
+	def handle_trade_button
+		return unless @trade_button
+		return unless @trade_button.click
+		
+		need_gold = change_number_unit(@item_data.price * 10)
+		
+		accept_script = <<-SCRIPT
+		jindow = Hwnd.include?("Item_Info", 1)
+		return unless jindow
+		
+		jindow.process_trade_unlock
+		Hwnd.dispose(self)
+		SCRIPT
+		
+		decline_script = <<-SCRIPT 
+		Hwnd.dispose(self)
+		SCRIPT
+		
+		Jindow_Dialog.new(
+			"교환 불가 해제",
+			
+			[
+				"해제 하시면 1회 교환 및 버리기가 가능합니다.",
+				"해제하려면 #{need_gold}전이 필요합니다.",
+				"해제 하시겠습니까?"
+			],
+			
+			[
+				["예", accept_script], 
+				["아니오", decline_script]
+			]
+		)
+	end
+	
+	def process_trade_unlock
+		need_gold = @item_data.price * 10
+		return $console.write_line("가지고 계신 금전이 부족합니다.") if $game_party.gold < need_gold
+		
+		$game_party.lose_gold(need_gold)
+		$Abs_item_data.trade_switch(@item_id, @type, true)
+		$console.write_line("1회 교환 가능해졌습니다.")
 	end
 end

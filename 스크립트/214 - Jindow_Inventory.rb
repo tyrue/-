@@ -281,7 +281,8 @@ class Jindow_Inventory < Jindow
   end
 
   def trade_check(item)
-    return $console.write_line("[교환]: 교환 불가 아이템입니다.") unless $Abs_item_data.is_trade_ok(item.item.id, item.type)
+    return $console.write_line("[교환]: 교환 불가 아이템입니다.") unless $Abs_item_data.is_trade_ok?(item.item.id, item.type)
+		
     Jindow_Trade2.new(item.item.id, item.type)
   end
 
@@ -295,7 +296,8 @@ class Jindow_Inventory < Jindow
   end
 
   def post_item(item)
-    if $Abs_item_data.is_trade_ok(item.item.id, item.type)
+    if $Abs_item_data.is_trade_ok?(item.item.id, item.type) 
+			$Abs_item_data.process_one_trade_switch(item.item.id, item.type)
       post_jin = Hwnd.include?("Post", 1)
       data = Jindow_Trade_Data.new
       data.id = item.item.id

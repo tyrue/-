@@ -27,7 +27,9 @@ class Jindow_Dialog < Jindow
     @text.bitmap = Bitmap.new(self.width, texts.size * (@font_size + @margin))
     @text.bitmap.font.color.set(0, 0, 0, 255)
     texts.each_with_index do |text, index|
-      @text.bitmap.draw_text(0, index * @font_size + @margin, self.width, texts.size * @font_size + @margin, text)
+			x = 0
+			y = index * @font_size + @margin
+      @text.bitmap.draw_text(0, y, self.width, @font_size + @margin, text)
     end
   end
 

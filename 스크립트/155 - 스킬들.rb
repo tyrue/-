@@ -1002,9 +1002,10 @@ class Rpg_skill
 		temp_str = ""
 		i = 1
 		req_data.each do |type, id, num|
-			temp_str += "\n" if i % 3 == 0
+			temp_str += "\n" if i % 4 == 0
 			
 			name = fetch_item_name(type, id)
+			num = change_number_unit(num)
 			temp_str += case type
 			when 0..2 then "[#{name} #{num}개] "
 			when 3 then "[#{num}전] "
@@ -1027,12 +1028,13 @@ class Rpg_skill
 	
 	def check_learn_skill_data(data)
 		actor = $game_party.actors[0]
-		success, msg = check_need_item(data["req_data"])
+		success, msg = check_need_item(data["req_data"], "하다네.")
 		unless success
-			$temp_req_string = msg + "하다네."
+			$temp_req_string = msg
 			return false
 		end
 		
+		lose_need_item_data(data["req_data"])
 		actor.learn_skill(data["skill_id"])
 		return true
 	end
@@ -1042,23 +1044,34 @@ class Rpg_skill
 		skill_data = $rpg_skill_data[id]
 		return true unless skill_data.need_item
 		
-		success, msg = check_need_item(skill_data.need_item)
-		$console.write_line(msg + "합니다.") unless success
-		return success
+		success, msg = check_need_item(skill_data.need_item) 
+		unless success
+			$console.write_line(msg)
+			return false
+		end
+		
+		lose_need_item_data(skill_data.need_item)
+		return true
 	end
 	
 	# 필효한 재료가 준비 됐는지 확인
-	def check_need_item(need_data)
+	def check_need_item(need_data, suffix = "합니다.")
+		msg = ""
+		return [false, msg] unless need_data
+		
 		need_data.each do |item_data|
 			sw, item, my_num = check_item_num(item_data)
 			unless sw
 				msg = build_missing_item_message(item_data, item, my_num)
+				msg += suffix
 				return [false, msg]
 			end
 		end
-		
+		return [true, msg]
+	end
+	
+	def lose_need_item_data(need_data)
 		need_data.each { |item_data| lose_item_num(item_data) } # 재료 아이템 소모
-		return [true, ""]
 	end
 	
 	def check_item_num(data)
@@ -1085,9 +1098,10 @@ class Rpg_skill
 	
 	def build_missing_item_message(data, item, my_num)
 		type, _, num = data
+		n = change_number_unit(num - my_num)
 		case type
-		when 0..2 then "#{item.name}(이)가 #{num - my_num}개 부족"
-		when 3 then "금전이 #{num - my_num}전 부족"
+		when 0..2 then "#{item.name}(이)가 #{n}개 부족"
+		when 3 then "금전이 #{n}전 부족"
 		end
 	end
 	
@@ -1101,7 +1115,7 @@ class Rpg_skill
 		
 		unit_hp, unit_sp = 100, 50 # 한 번당 오르는 체마 단위
 		limit_hp, limit_sp = MAXHP_LIMIT, MAXSP_LIMIT
-		limit_hp, limit_sp = NEED_ADVANCE_RESOURCE[job_type][degree].map {|val| val + 3000} if degree <= 3
+		limit_hp, limit_sp = NEED_ADVANCE_RESOURCE[job_type][degree].map {|val| val + 10000} if degree <= 3
 		unit_hp_exp, unit_sp_exp = NEED_ADVANCE_EXP[degree] # 한번당 필요한 경험치 단위
 		
 		if degree >= 4

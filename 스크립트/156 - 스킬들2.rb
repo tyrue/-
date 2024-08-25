@@ -525,8 +525,8 @@ class Rpg_Skill_Data
 		when 96 # 지진
 			@range_value = 7
 			@character_name = "(스킬)지진"
-			@hit_num = 2
-			@power_arr = [1, 0, 0.01, 15]
+			@hit_num = 3
+			@power_arr = [1, 0, 0.03, 20]
 			@cost_arr = [1, 0, 1.0 / 10.0]
 			@explode_range = 2
 		when 123 # 귀염추혼소

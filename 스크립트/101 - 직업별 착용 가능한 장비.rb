@@ -105,7 +105,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[127] = [[0], 3] # 청룡신검
 	EQUIP_JOB_WEAPON[128] = [[0], 0] # 용량제구봉?
 	EQUIP_JOB_WEAPON[129] = [[0], 0, 80] # 도깨비방망이
-	EQUIP_JOB_WEAPON[130] = [[0], 0] # 산적왕의칼
+	EQUIP_JOB_WEAPON[130] = [[0], 0, 99] # 뇌령진도
 	EQUIP_JOB_WEAPON[131] = [[0], 0, 99] # 다문창
 	EQUIP_JOB_WEAPON[132] = [[0], 0, 99] # 인어장군지팡이
 	EQUIP_JOB_WEAPON[134] = [[0], 3] # 일화접선
@@ -113,12 +113,12 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[136] = [[0], 1] # 이가닌자의검
 	EQUIP_JOB_WEAPON[138] = [[0], 3] # 청일기창
 	
-	EQUIP_JOB_WEAPON[141] = [[0], 1] # 용마제일검
+	EQUIP_JOB_WEAPON[141] = [[0], 0, 99] # 용마제일검
 	EQUIP_JOB_WEAPON[142] = [[0], 1] # 용마제사검
 	EQUIP_JOB_WEAPON[143] = [[0], 2] # 용마제칠검
 	EQUIP_JOB_WEAPON[144] = [[0], 3] # 용마제팔검
 	EQUIP_JOB_WEAPON[145] = [[0], 4] # 용마제구검
-	EQUIP_JOB_WEAPON[146] = [[0], 1] # 용랑제일봉
+	EQUIP_JOB_WEAPON[146] = [[0], 0, 99] # 용랑제일봉
 	EQUIP_JOB_WEAPON[147] = [[0], 1] # 용랑제사봉
 	EQUIP_JOB_WEAPON[148] = [[0], 2] # 용랑제칠봉
 	EQUIP_JOB_WEAPON[149] = [[0], 3] # 용랑제팔봉

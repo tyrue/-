@@ -771,7 +771,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						Jindow_Dialog.new("성공",
 							["회원가입에 성공 하셨습니다."],
 							[["확인", "Hwnd.dispose(self)"]])
-						
+						temp = Hwnd.include?("Register", 1)
+						Hwnd.dispose(temp)
 					end
 					
 					# 로그인 결과
@@ -1635,7 +1636,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$Drop[id] = nil
 					event = $game_map.events[id]
 					$game_map.events.delete(event)
-					event.erase
+					event.erase if event
 					event = nil
 					
 					# 효과음 실행
@@ -1807,9 +1808,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 				when /<party_gain>(.*)<\/party_gain>/ # 파티장, 몬스터 아이디
 					return if $game_party.actors[0].hp <= 0
+					
 					id = $1.to_i
 					enemy = $ABS.enemies[id]
 					return if enemy == nil
+					
 					$ABS.abs_gain_treasure(enemy)
 					
 				when /<party_heal>(.*) (.*) (.*)<\/party_heal>/  # 시전자이름, 마법번호, 체력/마력(0이면 버프라고 생각)

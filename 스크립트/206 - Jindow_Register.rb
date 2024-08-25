@@ -133,7 +133,7 @@ class Jindow_Register < Jindow
     @type_password.bluck = false
     Network::Main.send_regist(@type_nickname.result.to_s, @type_username.result, @type_password.result)
     $nickname = @type_nickname.result.to_s
-    Hwnd.dispose(self)
+    #Hwnd.dispose(self)
   end
 
   def handle_cancel_click

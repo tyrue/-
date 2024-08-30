@@ -1,5 +1,5 @@
-$exp_limit = 150 # 한번에 최대 얻을 수 있는 경험치 퍼센트
-$exp_event = 0 # 경험치 이벤트
+$exp_limit = 33 # 한번에 최대 얻을 수 있는 경험치 퍼센트
+$exp_event = 1.0 # 경험치 이벤트
 
 SDK.log("Mr.Mo's ABS", "Mr.Mo", 4.5, "01/04/06")
 #--------------------------------------------------------------------------
@@ -99,8 +99,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[58] = [5_500_000, 1] # 수룡
 	ABS_ENEMY_HP[59] = [5_500_000, 1] # 화룡
 	
-	ABS_ENEMY_HP[61] = [150_000_000, 1] # 주작
-	ABS_ENEMY_HP[62] = [150_000_000, 1] # 백호
+	ABS_ENEMY_HP[61] = [550_000_000, 1] # 주작
+	ABS_ENEMY_HP[62] = [550_000_000, 1] # 백호
 	
 	ABS_ENEMY_HP[89] = [100_000_000, 1] # 시련의청룡
 	
@@ -108,9 +108,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[111] = [600_000, 1] # 산적왕
 	
-	ABS_ENEMY_HP[102] = [2_000_000_000, 1] # 반고
-	ABS_ENEMY_HP[112] = [500_000_000, 1] # 청룡
-	ABS_ENEMY_HP[113] = [500_000_000, 1] # 현무
+	ABS_ENEMY_HP[102] = [4_000_000_000, 1] # 반고
+	ABS_ENEMY_HP[112] = [1_500_000_000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [1_500_000_000, 1] # 현무
 	
 	# 12 지신
 	ABS_ENEMY_HP[119] = [1_500_000, 1] # 백호왕
@@ -163,7 +163,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[230] = [1_600_000, 0] # 연자천구
 	ABS_ENEMY_HP[231] = [30_000_000, 1] # 천구왕
 	
-	ABS_ENEMY_HP[232] = [150_000_000, 1] # 산신대왕
+	ABS_ENEMY_HP[232] = [4_500_000_000, 1] # 산신대왕
 	ABS_ENEMY_HP[233] = [5_000_000, 0] # 산신전사
 	ABS_ENEMY_HP[234] = [3_000_000, 0] # 산신도사
 	ABS_ENEMY_HP[235] = [4_000_000, 0] # 산신도적
@@ -179,8 +179,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[253] = [5_000_000, 1] # 현무
 	ABS_ENEMY_HP[257] = [5_000_000, 1] # 태산
-	ABS_ENEMY_HP[258] = [150_000_000, 1] # 길림장군
-	ABS_ENEMY_HP[259] = [3_000_000_000, 1] # 가릉빈가
+	ABS_ENEMY_HP[258] = [850_000_000, 1] # 길림장군
+	ABS_ENEMY_HP[259] = [8_000_000_000, 1] # 가릉빈가
 	
 	# 한두고개
 	ABS_ENEMY_HP[268] = [7_777_777, 1] # 최강다람쥐
@@ -189,19 +189,19 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 몬스터 경험치 설정
 	ENEMY_EXP = {} # [var, (hp_per, sp_per)(배율)]
 	# 파티 퀘스트
-	ENEMY_EXP[45] = [10_000, 1.0, 1.0] # 추격산적
+	ENEMY_EXP[45] = [5_000, 0.5, 0.5] # 추격산적
 	
-	ENEMY_EXP[91] = [50_000, 3.0, 3.0] # 비류성창병
-	ENEMY_EXP[96] = [100_000, 4.0, 4.0] # 비류성자객
-	ENEMY_EXP[97] = [150_000, 5.0, 5.0] # 비류성수문장
-	ENEMY_EXP[90] = [200_000, 7.0, 7.0] # 비류성정예군
-	ENEMY_EXP[98] = [10_000_000, 200.0, 200.0] # 비류장군
+	ENEMY_EXP[91] = [20_000, 0.5, 0.5] # 비류성창병
+	ENEMY_EXP[96] = [50_000, 0.5, 0.5] # 비류성자객
+	ENEMY_EXP[97] = [50_000, 0.5, 0.5] # 비류성수문장
+	ENEMY_EXP[90] = [100_000, 0.5, 0.5] # 비류성정예군
+	ENEMY_EXP[98] = [5_000_000, 5.0, 5.0] # 비류장군
 	
-	ENEMY_EXP[254] = [200_000, 10.0, 10.0] # 뇌랑
-	ENEMY_EXP[255] = [250_000, 11.0, 11.0] # 왕가
-	ENEMY_EXP[256] = [350_000, 20.0, 20.0] # 조왕
-	ENEMY_EXP[257] = [2_500_000, 30.0, 30.0] # 태산
-	ENEMY_EXP[258] = [85_000_000, 600.0, 600.0] # 길림장군
+	ENEMY_EXP[254] = [200_000, 2.5, 2.5] # 뇌랑
+	ENEMY_EXP[255] = [250_000, 2.5, 2.5] # 왕가
+	ENEMY_EXP[256] = [350_000, 5.0, 5.0] # 조왕
+	ENEMY_EXP[257] = [2_500_000, 10.0, 10.0] # 태산
+	ENEMY_EXP[258] = [85_000_000, 50.0, 50.0] # 길림장군
 	
 	# 3차 퀘스트
 	ENEMY_EXP[61] = [45_000_000] # 주작
@@ -1216,9 +1216,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				return 
 			end
 			
-			count = 0
-			while count < 100
-				count += 1
+			100.times do
 				return $game_player.moveto(x, y) if $game_map.passable?(x, y, 2)
 				
 				x += (rand(3) - 1)
@@ -1466,8 +1464,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		def treasure(enemy)
 			return if enemy.event.fade # 중복 방지(이미 몬스터가 죽은 상태에서 보상까지 받은 후)
 			
-			abs_gain_treasure(enemy)
 			drop_enemy(enemy) # ABS monster item drop 파일 참조
+			abs_gain_treasure(enemy)
 			Network::Main.send_with_tag("party_gain", "#{enemy.event.id}")
 		end
 		
@@ -1475,10 +1473,9 @@ if SDK.state("Mr.Mo's ABS") == true
 			return if @actor.cant_get_exp? # 경험치를 얻을 수 없는 상황
 			
 			exp, gold = calculate_exp_and_gold(enemy)
-			in_map_player = $net_party_manager.count_in_map_players
-			gainExp, gold = adjust_exp_and_gold_for_party(exp, gold, in_map_player)
+			exp, gold = adjust_exp_and_gold_for_party(exp, gold)
 			
-			@actor.exp += gainExp
+			@actor.exp += exp
 			$game_party.gain_gold(gold)
 		end
 		
@@ -1493,18 +1490,39 @@ if SDK.state("Mr.Mo's ABS") == true
 			return [exp, gold]
 		end
 		
-		def adjust_exp_and_gold_for_party(exp, gold, in_map_player)
+		def adjust_exp_and_gold_for_party(exp, gold)
 			nextExp = @actor.level < 99 ? (@actor.exp_list[@actor.level + 1] - @actor.exp_list[@actor.level]) : @actor.exp_list[100]
 			limitExp = (nextExp / 100.0 * $exp_limit).to_i # 경험치 한계점
 			gainExp = @actor.level < 99 ? [exp, limitExp].min : exp
-			gainExp *= $exp_event if $game_switches[1500]  # 경험치 이벤트!
+			gainExp *= [$exp_event, 1].max if $game_switches[1500]  # 경험치 이벤트!
 			
-			if in_map_player >= 2
-				gainExp = (gainExp * 1.5 / in_map_player).to_i
-				gold = (gold * 1.5 / in_map_player).to_i
+			my_rate = calculate_my_rate_in_party
+			gainExp *= my_rate
+			gold *= my_rate
+			
+			gainExp = [gainExp, 1].max
+			[gainExp.to_i, gold.to_i]
+		end
+		
+		def calculate_my_rate_in_party
+			player_count = $net_party_manager.count_in_map_players
+			return 1 if player_count <= 1
+			
+			my_degree = $job_degree
+			degree_sum = $job_degree
+			
+			max_degree = 0
+			$net_party_manager.find_in_map_players.each do |player|
+				max_degree = [max_degree, player.degree].max
+				degree_sum += (player.degree)
 			end
 			
-			[gainExp, gold]
+			return 0 if max_degree - my_degree >= 3
+			
+			rate = 1.0 / player_count if degree_sum == 0
+			rate = (my_degree.to_f / degree_sum.to_f) if degree_sum >= 1
+			rate = [rate * 1.1, 1.0].min
+			return rate
 		end
 		
 		# 경험치 받는 함수
@@ -2268,6 +2286,14 @@ if SDK.state("Mr.Mo's ABS") == true
 				$ABS.hate_group = {}
 			end
 			mrmo_abs_scene_map_transfer_player
+			
+			x, y = $game_temp.player_new_x, $game_temp.player_new_y
+			100.times do
+				return $game_player.moveto(x, y) if $game_map.passable?(x, y, 2)
+				
+				x += (rand(3) - 1)
+				y += (rand(3) - 1)
+			end
 		end
 	end
 	
@@ -2986,7 +3012,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			end
 			
 			atk = (attacker.atk + attacker.str / 20.0)
-			temp = self.is_a?(Game_Actor) ? 20.0 : 100.0
+			temp = self.is_a?(Game_Actor) ? 10.0 : 100.0
 			
 			self.damage = atk * (1.0 + attacker.str / 20.0)
 			self.damage /= (1.0 + self.base_pdef / temp)
@@ -3136,7 +3162,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				self.damage *= (1.75 + plus_power)
 				self.critical = "skill_cri"
 			end
-			self.damage /= 2 if self.guarding?
 		end
 		
 		def apply_skill_modifiers(user, skill)
@@ -3148,7 +3173,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def apply_damage_reduction()
 			if self.damage > 0
 				limit = self.is_a?(Game_Actor) ? 100.0 : 400.0
-				self.damage *= limit / (limit + (self.base_pdef + self.base_mdef * 4))
+				self.damage /= 1.0 + (self.base_pdef + self.base_mdef * 4) / limit
 			end
 		end
 		
@@ -3239,12 +3264,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def move_in_direction(x_plus, y_plus, count, step, dir)
 			count.times do
+				break unless passable?(@x, @y, dir)
+				
 				x = @x + x_plus * step
 				y = @y + y_plus * step
 				
 				@x = x
 				@y = y
-				break unless passable?(@x, @y, dir)
 			end
 		end
 		
@@ -3405,9 +3431,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		# * Move at Random
 		#--------------------------------------------------------------------------
 		def move_random()
-			if $ABS.enemies[self.event.id] && $ABS.enemies[self.event.id].aggro
-				return true unless $is_map_first
-			end
+			return unless $ABS.enemies[self.event.id] && $ABS.enemies[self.event.id].aggro 
 			
 			case rand(4)
 			when 0 then move_down

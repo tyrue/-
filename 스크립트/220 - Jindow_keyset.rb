@@ -31,9 +31,7 @@ class Jindow_Keyset < Jindow
   def update
     super
   end
-
-  private
-
+	
   def center_window
     self.x = 640 / 2 - self.max_width / 2
     self.y = 480 / 2 - self.max_height / 2
@@ -69,8 +67,10 @@ class Jindow_Keyset < Jindow
   def merge_key_values(key_hash, data)
     key_hash.sort.each do |k, v|
       next if v.nil? || v == 0
+			next unless data[v]
+			next unless $game_party.actors[0].skill_learn?(v)
 			
-      @k_value[k] = data[v].name if data[v]
+      @k_value[k] = data[v].name 
     end
   end
 

@@ -3,19 +3,19 @@
 #----------------------------------------------------------------------------------
 class Jindow_Keyset_menu < Jindow
 	DESCRIPTION_TEXTS = [
-		"단축키는 키보드, 키패드 숫자(0~9) 또는",
+		"단축키는 키보드 숫자 또는 키패드 숫자(0~9)",
 		"'-', '=', 'z', 'x'가 가능합니다.",
 		nil,  # Placeholder for dynamic text
 		"단축키를 입력해 주세요"
 	]
 	
-	DESCRIPTION_SIZES = [12, 12, 13]
+	DESCRIPTION_SIZES = [14, 14, 15, 14]
 	
 	BUTTON_NAMES = ["확인", "취소"]
 	
 	def initialize(id, type)
 		$game_system.se_play($data_system.decision_se)
-		super(0, 0, 200, 100)
+		super(0, 0, 250, 130)
 		self.name = "⊙ 단축키 지정"
 		@head = true
 		@mark = true
@@ -52,15 +52,16 @@ class Jindow_Keyset_menu < Jindow
 		@description_v.each_with_index do |text, i|
 			sprite = Sprite.new(self)
 			sprite.bitmap = Bitmap.new(400, 30)
-			sprite.bitmap.font.size = DESCRIPTION_SIZES[i] || 13
+			font_size = DESCRIPTION_SIZES[i] || 13
+			sprite.bitmap.font.size = font_size
 			sprite.x = 0 
-			sprite.y = sprite.bitmap.font.size * i
+			sprite.y = (font_size + 1) * i
 			
 			sprite.bitmap.font.alpha = 3
 			sprite.bitmap.font.beta = 1
 			sprite.bitmap.font.color.set(255, 255, 255, 255)
 			sprite.bitmap.font.gamma.set(0, 0, 0, 255)
-			sprite.bitmap.draw_text(0, 0, sprite.width, sprite.height, text, 0) if text
+			sprite.bitmap.draw_text(0, 0, self.width, font_size + 1, text, 0) if text
 			@description << sprite
 		end
 	end

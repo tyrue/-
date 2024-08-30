@@ -232,7 +232,7 @@ if SDK.state('Input')
 			when Input::RIGHT
 				keys.push(Input::RT)
 			when Input::C # 결정 키 설정
-				keys.push(Input::Space, Input::Letters["Z"], Input::N_Dot)
+				keys.push(Input::Space, Input::N_Dot)
 			when Input::B
 				keys.push(Input::Esc)
 			when Input::X

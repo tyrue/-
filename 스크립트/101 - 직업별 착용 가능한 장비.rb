@@ -133,6 +133,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[1] = [[0], 0] # 초심자의갑주
 	EQUIP_JOB_ARMOR[2] = [[0], 0] # 지력의투구1
 	EQUIP_JOB_ARMOR[3] = [[0], 0] # 파란색반지
+	EQUIP_JOB_ARMOR[4] = [[0], 0, 35] # 사각방패
 	EQUIP_JOB_ARMOR[5] = [[0], 0] # 금장투구
 	EQUIP_JOB_ARMOR[6] = [[0], 0] # 연두색투구
 	EQUIP_JOB_ARMOR[7] = [[0], 0] # 초심자의투구
@@ -175,10 +176,10 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[58] = [[0], 1] # 진호박투구
 	EQUIP_JOB_ARMOR[60] = [[0], 2] # 황금호박투구
 	
-	EQUIP_JOB_ARMOR[47] = [[0], 0, 29] # 망또1
-	EQUIP_JOB_ARMOR[48] = [[0], 0, 49] # 망또2
-	EQUIP_JOB_ARMOR[49] = [[0], 0, 59] # 망또3
-	EQUIP_JOB_ARMOR[55] = [[0], 0, 79] # 망또4
+	EQUIP_JOB_ARMOR[47] = [[0], 0, 49] # 망또1
+	EQUIP_JOB_ARMOR[48] = [[0], 0, 59] # 망또2
+	EQUIP_JOB_ARMOR[49] = [[0], 0, 79] # 망또3
+	EQUIP_JOB_ARMOR[55] = [[0], 0, 89] # 망또4
 	EQUIP_JOB_ARMOR[56] = [[0], 0, 99] # 망또5
 	
 	EQUIP_JOB_ARMOR[50] = [[0], 3] # 용왕의반지'진

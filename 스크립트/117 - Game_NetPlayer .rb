@@ -42,7 +42,10 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 		attr_accessor :message
 		attr_accessor :guild
 		attr_accessor :saybal
-		attr_accessor :pci
+		
+		attr_accessor :class_name
+		attr_accessor :degree
+		
 		attr_accessor :character_name
 		attr_accessor :trans_v
 		
@@ -92,7 +95,10 @@ if SDK.state('Netplayer') == true and SDK.state('Network')
 			@guild = ""
 			@maxhp = $game_party.actors[0].maxhp
 			@maxsp = $game_party.actors[0].maxsp
-			@pci = $game_party.actors[0].class_name
+			
+			@degree = 0
+			@class_name = $game_party.actors[0].class_name
+			
 			@message = ""
 			@character_name = "바람머리"
 			@is_transparency = false

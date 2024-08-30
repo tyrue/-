@@ -136,6 +136,7 @@ module VisualEquipData
 	                  
 	# 방패류
 	VISUAL_EQUIP_DATA[3] = {}
+	VISUAL_EQUIP_DATA[3][4] = ['(착용)사각방패'] 		 		#사각방패
 	VISUAL_EQUIP_DATA[3][39] = ['(착용)정화의방패'] 		 		#정화의방패
 	VISUAL_EQUIP_DATA[3][40] = ['(착용)여신의방패'] 		 		#여신의방패
 end

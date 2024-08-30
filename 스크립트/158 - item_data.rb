@@ -141,6 +141,7 @@ class Item_data
 		add_bans(type, 117, 2) # 청룡 보옥
 		add_bans(type, 118, 2) # 현무 보옥
 		add_bans(type, 119, 2) # 반고의 심장
+		add_bans(type, 126, 2) # 청룡의 뿔
 		add_bans(type, 163, 2) # 일본주막비서
 		add_bans(type, 217, 2) # 고균도주막비서
 	end

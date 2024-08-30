@@ -101,7 +101,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			# * Returns Group
 			#-------------------------------------------------------------------------- 
 			def self.group
-				if @group.downcase.include?("adm")
+				if @group.downcase.include?("_adm")
+					group = "vice_admin"
+				elsif @group.downcase.include?("adm")
 					group = "admin"
 				elsif @group.downcase.include?("mod")
 					group = "mod"
@@ -111,7 +113,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				return group
 			end
 			
-			def self.set_admin
+			def self.set_admin(sw = false)
 				if @group == "admin"
 					$console.write_line("운영자모드 off")
 					@group = "standard"
@@ -122,6 +124,23 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_switches[54] = true
 				end
 			end
+			
+			def self.set_vice_admin(sw = false)
+				if sw
+					$console.write_line("부운영자모드 on")
+					@group = "vice_admin"
+					$game_switches[55] = true
+				else
+					$console.write_line("부운영자모드 off")
+					@group = "standard"
+					$game_switches[55] = false
+				end
+			end
+			
+			def self.is_admin
+				return @group == "vice_admin" || @group == "admin"
+			end
+			
 			#--------------------------------------------------------------------------
 			# * Returns Mapplayers
 			#-------------------------------------------------------------------------- 
@@ -248,21 +267,20 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			def self.amnet_auth
 				@socket.send("<0>'e'</0>\n") # Send Authenfication
 				@auth = false
-				try = 0 # Set Try to 0, then start Loop
-				loop do
-					try += 1 # Add 1 to Try
-					loop = 0
-					loop do
-						loop += 1
-						self.update
-						break if @auth # Break if Authenficated
-						break if loop == 20000 # Break if loop reaches 20000
-					end
-					p "#{User_Edit::NOTAUTH}, Try #{try} of #{User_Edit::CONNFAILTRY}" if loop == 20000
-					break if try == User_Edit::CONNFAILTRY
-					break if @auth
+				
+				User_Edit::CONNFAILTRY.times do
+					break if authenticate_or_timeout
 				end
-				$scene = Scene_Login.new if @auth # Go to Scene Login if Authenficated
+				
+				$scene = Scene_Login.new if @auth
+			end
+			
+			def self.authenticate_or_timeout
+				2000.times do
+					self.update
+					return true if @auth # Break if authenticated
+				end
+				false
 			end
 			
 			#--------------------------------------------------------------------------
@@ -353,9 +371,9 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#-------------------------------------------------------------------------- 
 			def self.collect_character_info(actor)
 				{
-					"pci" => "'#{actor.class_name}'",
 					"name" => "'#{actor.name}'",
 					"class_name" => "'#{actor.class_name}'",
+					"degree" => $job_degree,
 					"hp" => actor.hp,
 					"sp" => actor.sp,
 					"maxhp" => actor.maxhp,
@@ -392,7 +410,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				send_parts << "@direction = #{$game_player.direction};"
 				send_parts << "@move_speed = #{$game_player.move_speed};"
 				send_parts << "@guild = '#{$guild}';"
-				send_parts << "@bar_showing = false;"
 				send_parts << "@trans_v = #{$game_variables[10]};"
 				
 				# 캐릭터 상태 정보 추가
@@ -553,20 +570,19 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 			#--------------------------------------------------------------------------
 			# * Update Map Players
 			#-------------------------------------------------------------------------- 
-			def self.update_map_player(id, data, kill=false)
+			def self.update_map_player(id, data, kill = false)
 				return if id.to_i == self.id.to_i # Return if the Id is Yourself
 				
 				if kill and @mapplayers[id] != nil
 					@mapplayers.delete(id) rescue nil
 					$scene.spriteset.delete(id) rescue nil if $scene.is_a?(Scene_Map)
-					$game_temp.spriteset_refresh = true
+					#$game_temp.spriteset_refresh = true
 					return
 				end
 				
-				@mapplayers[id] = @players[id] || Game_NetPlayer.new if @mapplayers[id] == nil
-				$game_temp.spriteset_refresh = true
+				@mapplayers[id] = @players[id]
+				#$game_temp.spriteset_refresh = true
 				@mapplayers[id].netid = id if @mapplayers[id].netid == -1
-				@mapplayers[id].refresh(data)
 			end
 			
 			#--------------------------------------------------------------------------
@@ -707,11 +723,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<timer_v>(.*)<\/timer_v>/
 					t_dir = Dir.entries("./")
 					for s in t_dir
-						break if User_Edit::SERVERS[0][0] == "127.0.0.1"
+						#break if User_Edit::SERVERS[0][0] == "127.0.0.1"
 						break if User_Edit::TEST
+						
 						if(s.include?(".rxproj"))
 							Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
-							p "버전이 다릅니다."
+							p "불법 프로그램 사용으로 종료되었습니다."
 							exit!
 							break
 						end
@@ -724,13 +741,14 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					target = $1.to_s
 					msg = $2.to_s
 					if target == "모두"
-						p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다.\n #{msg}"
-						self.over
+						p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다."
+						p "#{msg}"
+						exit!
 						return true
 						# Kick Command
 					elsif target == $game_party.actors[0].name
 						p msg
-						self.over
+						exit!
 						return true
 					end
 				end
@@ -856,6 +874,18 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					@group = $1.to_s
 					return true
 					
+				when /^<give_admin>(.*)<\/give_admin>/
+					name = $1.to_s
+					
+					return if $game_party.actors[0].name != name
+					self.set_vice_admin(true)	
+					
+				when /^<remove_admin>(.*)<\/remove_admin>/
+					name = $1.to_s
+					
+					return if $game_party.actors[0].name != name
+					self.set_vice_admin(false)	
+					
 					# System Update
 				when /<10>(.*)<\/10>/
 					eval($1) # 문자열을 코드로 인식하게하는 함수
@@ -942,25 +972,21 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					mon_id = data_hash["mon_id"].to_i
 					dead = data_hash["dead"].downcase == "true"
 					return if mon_id == 0
+					return if dead 
 					
 					unless $ABS.enemies[id]
 						e = $game_map.events[id]
-						return if e && !e.list 
+						return if e && !e.list # 이벤트는 있지만 스위치등 무언가로 꺼져있는 상태
 						
 						create_abs_monsters(mon_id, 1, id) 
 					end
 					enemy = $ABS.enemies[id]
 					event = enemy.event
 					
-					if hp <= 0 # 체력이 0이면 죽은거지
-						if dead
-							enemy.hp = hp
-							event.erase
-						else
-							event.erased = false
-							event.refresh
-							$ABS.rand_spawn(event) # 랜덤 위치 스폰
-						end
+					if hp <= 0 # 체력이 0이지만 dead가 아니라면 새로 리스폰된 상황
+						event.erased = false
+						event.refresh
+						$ABS.rand_spawn(event) # 랜덤 위치 스폰
 						return
 					end
 					
@@ -1099,15 +1125,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				when /<5>(.*),(.*)</
 					self.update_net_player($1, $2) # Update Player
 					
-					return true if !$2.include?("start") # If it is first time connected...
-					return true if $1.to_i == self.id.to_i # ... and it is not yourself ...
-					return true if @players[$1].map_id != $game_map.map_id # ... and it is on the same map...
+					return if $1.to_i == self.id.to_i # ... and it is not yourself ...
+					return self.send_start_request($1.to_i) if $2.include?("start")
+					return if (@players[$1].map_id != $game_map.map_id)
 					
-					self.send_start_request($1.to_i)  # ...  Return the Requested Information
-					
-					$game_temp.spriteset_refresh = true
-					return true
-					# Map PLayer Processing
+					#$game_temp.spriteset_refresh = true
 					
 				when /<state>(.*)<\/state>/
 					$game_party.actors[0].refresh_states($1)
@@ -1343,9 +1365,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						if $game_switches[54] # 운영자모드
 							$chat.write("운영자모드") if $chat != nil
 							@group = "admin"
+						elsif $game_switches[55] # 부운영자모드
+							$chat.write("운영자모드") if $chat != nil
+							@group = "vice_admin"
 						end
 						
-						$chat.write ("[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.", COLOR_WORLD)        
 						Network::Main.socket.send("<chat1>[알림]:'#{$game_party.actors[0].name}'님께서 접속 하셨습니다.</chat1>\n")
 						self.send_start
 						
@@ -1399,7 +1423,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 경험치 이벤트 확인
 				when /<exp_event>(.*)<\/exp_event>/
-					n = $1.to_i
+					n = $1.to_f
 					if n > 1
 						$chat.write ("<현재 경험치 #{n}배 이벤트가 진행중 입니다.>", COLOR_EVENT) 
 						$game_switches[1500] = true
@@ -1461,7 +1485,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# 현재 맵에 내가 기준인지 확인
 				when /<map_player>(.*)<\/map_player>/
 					$is_map_first = $1.to_i == 1
-					
 					for e in $ABS.enemies.values
 						e.aggro = $is_map_first
 					end
@@ -1575,28 +1598,27 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 						$game_temp.player_transferring = true
 					end
 					
-				when /<cashgive>(.*),(.*)<\/cashgive>/
-					if $1.to_s == $game_party.actors[0].name
-						$game_variables[213] += $2.to_i
-						$console.write_line("#{$2.to_i}마일리지가 추가 되었습니다.")
-					end
-					
 				when /<bigsay>(.*),(.*)<\/bigsay>/
 					간단메세지("[세계후] #{$1.to_s} : #{$2.to_s}")
 					$chat.write("[세계후] #{$1.to_s} : #{$2.to_s}", COLOR_BIGSAY)
 					
 					
 				when /<respawn>(.*)<\/respawn>/		
-					# 맵 id, 몹id, x, y, 방향
+					# 맵 id, event_id, mon_id
 					# 같은 맵이 아니면 무시
 					data = $1.split(',')
-					map_id, id = data
+					map_id, id, mon_id = data
 					return if $game_map.map_id != map_id.to_i
 					return unless id
 					
 					id = id.to_i
+					mon_id = mon_id.to_i
 					event = $ABS.enemies[id] ? $ABS.enemies[id].event : $game_map.events[id] # 몹 죽었을때 리스폰 시간 적용
-					return unless event
+					 
+					unless event
+						create_abs_monsters(mon_id, 1, id)
+						event = $ABS.enemies[id].event
+					end
 					
 					event.erased = false
 					event.refresh

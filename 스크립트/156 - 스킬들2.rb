@@ -660,7 +660,7 @@ class Rpg_Skill_Data
 		when 160 # 분혼경천
 			@hit_num = 10
 			@hit_back = 3
-			@mash_time = 60
+			@mash_time = 0#60
 			@show_effect = true
 			@power_arr = [2, 3.00, 3.00, 100] 
 		when 161 # 폭류유성
@@ -832,9 +832,9 @@ class Rpg_Skill_Data
 			
 			# 전사
 		when 62 # 수심각도
-			@buff_data = [["dex", 50]]
-		when 63 # 반영대도
 			@buff_data = [["agi", 50]]
+		when 63 # 반영대도
+			@buff_data = [["dex", 50]]
 		when 64 # 십량분법
 			@buff_data = [["per_str", 1.1]]
 			@attack_power_per = 1.1

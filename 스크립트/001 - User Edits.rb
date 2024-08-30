@@ -63,7 +63,7 @@ module User_Edit
 	VER_ERROR         = "Error: Version not available!"
 	MOD_ERROR         = "Error: Message of the Day Not availeble!"
 	UNEXPECTLOGERR    = "Unexpected Login Error"
-	NOTAUTH           = "서버에러"
+	NOTAUTH           = "접속 시도"
 	USERTFAIL         = "User test Failed."
 	
 	LOGIN_TITLE       = "방향키를 이용하세요"
@@ -104,11 +104,15 @@ module User_Edit
 	
 	
 	# IP              # Port   # Display
-	SERVERS           = [["127.0.0.1", 52001, "흑부엉 서버"]] # 테스트용 내부 아이피
-	SERVERS           = [["3.37.127.218", 52001, "흑부엉 서버"]] # 외부 아이피
+	#SERVERS           = [["127.0.0.1", 52001, "흑부엉 서버"]] # 테스트용 내부 아이피
+	SERVERS           = [
+		["3.37.127.218", 52001, "흑부엉"], # 외부 아이피
+		["183.107.174.160", 52001, "테스트"] # 테스트용 내부 아이피
+	] 
 	
 	TEST							= false
-	#TEST							= true
+	TEST							= true
+	
 	
 	
 	#Avialbe Chat Systems;
@@ -159,4 +163,8 @@ module User_Edit
 	ADMKICK           = "당신은 강퇴당하였습니다."
 	PVPMAPS           = [100, 101, 102, 103, 104, 105]
 	
+	def isTest(server)
+		return server == "테스트"
+	end
+	module_function :isTest
 end

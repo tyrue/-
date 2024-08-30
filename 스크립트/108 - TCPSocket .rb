@@ -51,7 +51,7 @@ if SDK.state('TCPSocket') == true
 			if not Network::Test.testing
 				# Raise the Error, by retrieving the error using the constant IF it exists
 				#raise ("서버가 닫혀있습니다.서버 여는 시간대는 홈페이지를 참조해주세요.
-				print "현재 서버가 닫혀있습니다. 잠시만 기다려주세요."
+				print "서버와 연결이 끊어졌습니다."
 				exit
 			elsif errno != 0
 				# If there is an Error (Testing)

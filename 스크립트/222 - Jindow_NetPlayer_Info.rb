@@ -106,7 +106,7 @@ class Jindow_NetPlayer_Info < Jindow
 		@state_labels = [
 			"이름: #{@netPlayer.name}",
 			"레벨: #{@netPlayer.level}",
-			"직업: #{@netPlayer.pci}",
+			"직업: #{@netPlayer.class_name}",
 			"체력: #{change_number_unit(@netPlayer.hp)}/#{change_number_unit(@netPlayer.maxhp)}",
 			"마력: #{change_number_unit(@netPlayer.sp)}/#{change_number_unit(@netPlayer.maxsp)}"
 		]
@@ -147,7 +147,7 @@ class Jindow_NetPlayer_Info < Jindow
 		new_labels = [
 			"이름: #{@netPlayer.name}",
 			"레벨: #{@netPlayer.level}",
-			"직업: #{@netPlayer.pci}",
+			"직업: #{@netPlayer.class_name}",
 			"체력: #{change_number_unit(@netPlayer.hp)}/#{change_number_unit(@netPlayer.maxhp)}",
 			"마력: #{change_number_unit(@netPlayer.sp)}/#{change_number_unit(@netPlayer.maxsp)}"
 		]

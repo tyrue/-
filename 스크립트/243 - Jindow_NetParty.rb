@@ -113,6 +113,18 @@ class PartyManager
 		
 		return in_map_player
 	end
+	
+	def find_in_map_players
+		in_map_player = []
+		Network::Main.mapplayers.values.each do |player|
+			next if player.nil?
+			next if player.name == $game_party.actors[0].name
+			
+			in_map_player << player if self.is_party_member?(player.name)
+		end
+		
+		return in_map_player
+	end
 end
 
 #==============================================================================

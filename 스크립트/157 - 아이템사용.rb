@@ -13,7 +13,8 @@ class MrMo_ABS
 				
 				Network::Main.socket.send("<item_summon>#{player.name},#{x},#{y}</item_summon>\n") if player.x == new_x and player.y == new_y
 			end
-		
+		when 21 # 산삼
+			rpg.buff_active(71) # 혼신의힘
 		when 67 # 갈색시약
 			rpg.buff_active(46) # 무장
 		when 68 # 초록시약

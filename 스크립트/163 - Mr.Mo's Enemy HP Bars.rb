@@ -9,7 +9,114 @@
 # Begin SDK Enabled Check
 #-------------------------------------------------------------------------------
 if SDK.state("Mr.Mo's ABS")
-	class Enemy_Bars < Sprite
+	class BaseBar < Sprite
+		#--------------------------------------------------------------------------
+		# * Constants
+		#--------------------------------------------------------------------------
+		OUTLINE = 1
+		BORDER = 1
+		
+		#--------------------------------------------------------------------------
+		# * Object Initialization
+		#--------------------------------------------------------------------------
+		def initialize(entity, v, hp_width, hp_height)
+			super(v)
+			@entity = entity
+			@old_hp = -1
+			@old_x = -1
+			@old_y = -1
+			@hp_width = hp_width
+			@hp_height = hp_height
+			@ch = 0
+			self.bitmap = Bitmap.new(@hp_width, @hp_height)
+			update
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Refresh
+		#--------------------------------------------------------------------------
+		def refresh
+			move_bar
+			return if @old_hp == current_hp
+			
+			#self.bitmap.clear
+			@old_hp = current_hp
+			draw_gradient_bar(0, 0, current_hp, max_hp, @hp_width, @hp_height)
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Move Bar
+		#--------------------------------------------------------------------------
+		def move_bar
+			@old_x = screen_x
+			@old_y = screen_y
+			
+			self.x = @old_x
+			self.y = @old_y
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Something Changed?
+		#--------------------------------------------------------------------------
+		def something_changed?
+			return dispose if map_changed_or_entity_missing?
+			
+			self.visible = visible_condition
+			
+			return true if @old_hp != current_hp
+			return true if @old_x != screen_x
+			return true if @old_y != screen_y 
+			false
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Update
+		#--------------------------------------------------------------------------
+		def update
+			refresh if something_changed?
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Draw Gradient Bar
+		#--------------------------------------------------------------------------
+		def draw_gradient_bar(x, y, min, max, width, height)
+			return if max == 0
+			
+			percent = min / max.to_f if max != 0
+			back = Bitmap.new(width, height)
+			back.fill_rect(back.rect, Color.new(0, 0, 0, 150)) # 꽉찬 네모
+			self.bitmap.stretch_blt(back.rect, back, back.rect)
+			
+			if (width * percent).to_i > 0 
+				cx = BORDER
+				cy = BORDER
+				n = 2
+				
+				bar = Bitmap.new((width * percent).to_i, height)
+				redVal = [(255 * (1 - percent) * n).to_i, 255].min
+				greenVal = redVal >= 255 ? [(255 * percent * n / (n - 1)).to_i, 0].max : 255
+				
+				bar.fill_rect(bar.rect, Color.new(redVal, greenVal, 0, 255)) # 꽉찬 네모
+				bar_dest_rect = Rect.new(cx, cy, (width * percent).to_i - cx * 2, height - cy * 2)
+				self.bitmap.stretch_blt(bar_dest_rect, bar, bar.rect)
+			end
+		end
+		
+		#--------------------------------------------------------------------------
+		# * Methods to be implemented by subclasses
+		#--------------------------------------------------------------------------
+		def current_hp; end
+		def max_hp; end
+		def screen_x; end
+		def screen_y; end
+		def x_offset; end
+		def y_offset; end
+		def bar_file; end
+		def visible_condition; end
+		def map_changed_or_entity_missing?; end
+	end
+	
+	class Enemy_Bars < BaseBar
 		#--------------------------------------------------------------------------
 		# * Constants Bar Types and Hues for parameters and parameter names
 		#--------------------------------------------------------------------------
@@ -26,270 +133,152 @@ if SDK.state("Mr.Mo's ABS")
 		# * Object Initialization
 		#--------------------------------------------------------------------------
 		def initialize(enemy, v)
-			super(v)
-			@enemy = enemy
-			@old_hp = 0
-			@old_x = 0
-			@old_y = 0
+			hp_width = boss?(enemy.id) ? HP_WIDTH_BOSS : HP_WIDTH
+			hp_height = boss?(enemy.id) ? HP_HEIGHT_BOSS : HP_HEIGHT
 			
-			@tesp = RPG::Cache.character(@enemy.event.character_name, @enemy.event.character_hue)
-			if ABS_ENEMY_HP[@enemy.id] != nil and ABS_ENEMY_HP[@enemy.id][1] == 1
-				self.bitmap = Bitmap.new(HP_WIDTH_BOSS, HP_HEIGHT_BOSS)
-				@ch = 0
-				@cw = HP_WIDTH_BOSS / 2
-			else
-				self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
-				@ch = 0
-				@cw = HP_WIDTH / 2
-			end
-			
+			super(enemy, v, hp_width, hp_height)
 			update    
 		end
-		#--------------------------------------------------------------------------
-		# * Refresh
-		#--------------------------------------------------------------------------
-		def refresh
-			#First move it
-			@old_x = @enemy.event.screen_x - @cw
-			@old_y = @enemy.event.screen_y - @ch
-			self.x = @old_x
-			self.y = @old_y
-			#HP Bar Check
-			return if @old_hp == @enemy.hp
-			self.bitmap.clear
-			@old_hp = @enemy.hp
-			
-			#Show the bar
-			if ABS_ENEMY_HP[@enemy.id] != nil and ABS_ENEMY_HP[@enemy.id][1] == 1
-				draw_gradient_bar2(0, 0, @enemy.hp, @enemy.maxhp, HP_WIDTH_BOSS, HP_HEIGHT_BOSS)
-			else
-				draw_gradient_bar2(0, 0, @enemy.hp, @enemy.maxhp, HP_WIDTH, HP_HEIGHT)
-			end
-		end  
-		#--------------------------------------------------------------------------
-		# * Something Changed?
-		#--------------------------------------------------------------------------
-		def something_changed?
-			return dispose unless @enemy 
-			return dispose if @enemy.dead?
-			return dispose unless @enemy.event_id 
-			return dispose unless $ABS.enemies[@enemy.event_id]
-				
-			return true if @old_hp != @enemy.hp
-			return true if @old_x != @enemy.event.screen_x - @cw
-			return true if @old_y != @enemy.event.screen_y - @ch
-			return false
+		
+		def boss?(id)
+			return (ABS_ENEMY_HP[id] && ABS_ENEMY_HP[id][1] == 1)
 		end
-		#--------------------------------------------------------------------------
-		# * Update
-		#--------------------------------------------------------------------------
-		def update
-			refresh if something_changed?
+		
+		def current_hp
+			@entity.hp
 		end
-		#--------------------------------------------------------------------------
-		# * Draw Gradient Bar 
-		#--------------------------------------------------------------------------
-		def draw_gradient_bar2(x, y, min, max, width = nil, height = nil)
-			return if max == 0
-			percent = min / max.to_f if max != 0
-			back = Bitmap.new(width, height)
-			back.fill_rect(back.rect, Color.new(0, 0, 0, 175)) # 꽉찬 네모
-			self.bitmap.stretch_blt(back.rect, back, back.rect)
-			
-			if (width * percent).to_i > 0 
-				cx = BORDER
-				cy = BORDER
-				n = 2
-				
-				bar = Bitmap.new((width * percent).to_i, height)
-				redVal = [(255 * (1 - percent) * n).to_i, 255].min
-				greenVal = redVal >= 255 ? [(255 * percent * n / (n - 1)).to_i, 0].max : 255
-				bar.fill_rect(bar.rect, Color.new(redVal, greenVal, 0, 255)) # 꽉찬 네모
-				bar_dest_rect = Rect.new(cx, cy, (width * percent).to_i - cx * 2, height - cy * 2)
-				self.bitmap.stretch_blt(bar_dest_rect, bar, bar.rect)
-			end
+		
+		def max_hp
+			@entity.maxhp
+		end
+		
+		def screen_x
+			@entity.event.screen_x + x_offset
+		end
+		
+		def screen_y
+			@entity.event.screen_y + y_offset
+		end
+		
+		def x_offset
+			-(@hp_width / 2)
+		end
+		
+		def y_offset
+			0
+		end
+		
+		def bar_file
+			HP_BAR
+		end
+		
+		def visible_condition
+			true
+		end
+		
+		def map_changed_or_entity_missing?
+			!@entity || @entity.dead? || !@entity.event_id || !$ABS.enemies[@entity.event_id]
 		end
 	end
 	
-	class NetPartyHP_Bars < Sprite
-		#--------------------------------------------------------------------------
-		# * Constants Bar Types and Hues for parameters and parameter names
-		#--------------------------------------------------------------------------
+	class NetPartyHP_Bars < BaseBar
 		HP_BAR = "014-Reds01"
-		# leave this alone if you don't know what you are doing
-		OUTLINE = 1
-		BORDER = 1
-		HP_WIDTH = 35         # WIDTH of the HP Bar
-		HP_HEIGHT = 6         # Height of the HP Bar
-		#--------------------------------------------------------------------------
-		# * Object Initialization
-		#--------------------------------------------------------------------------
+		HP_WIDTH = 35
+		HP_HEIGHT = 6
+		
 		def initialize(netPlayer, v)
-			super(v)
-			@netPlayer = netPlayer
-			@old_hp = -1
-			@old_x = -1
-			@old_y = -1
-			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
-			#~ @tesp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
-			#~ @ch = @tesp.height / 4 + 20
-			#~ @cw = 15
-			@ch = 0
-			update    
+			super(netPlayer, v, HP_WIDTH, HP_HEIGHT)
 		end
-		#--------------------------------------------------------------------------
-		# * Refresh
-		#--------------------------------------------------------------------------
-		def refresh
-			#First move it
-			@old_x = @netPlayer.screen_x - 15
-			@old_y = @netPlayer.screen_y - @ch
-			self.x = @old_x
-			self.y = @old_y
-			#HP Bar Check
-			return if @old_hp == @netPlayer.hp
-			self.bitmap.clear
-			@old_hp = @netPlayer.hp
-			#Show the bar
-			draw_gradient_bar(0,0,@netPlayer.hp,@netPlayer.maxhp,HP_BAR,HP_WIDTH,HP_HEIGHT)
-		end  
-		#--------------------------------------------------------------------------
-		# * Something Changed?
-		#--------------------------------------------------------------------------
-		def something_changed?
-			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
-				@netPlayer.bar_showing = false
-				return dispose 
-			end
-			
-			self.visible = (!@netPlayer.is_transparency) or ($net_party_manager.party_members.include?(@netPlayer.name.to_s))
-			
-			return true if @old_hp != @netPlayer.hp.to_i
-			return true if @old_x != @netPlayer.event.screen_x - 15
-			return true if @old_y != @netPlayer.event.screen_y - @ch
-			return false
+		
+		private
+		
+		def current_hp
+			@entity.hp
 		end
-		#--------------------------------------------------------------------------
-		# * Update
-		#--------------------------------------------------------------------------
-		def update
-			refresh if something_changed?
+		
+		def max_hp
+			@entity.maxhp
 		end
-		#--------------------------------------------------------------------------
-		# * Draw Gradient Bar 
-		#--------------------------------------------------------------------------
-		def draw_gradient_bar(x, y, min, max, file, width = nil, height = nil, hue = 0, back = "Back", back2 = "Back2")
-			bar = RPG::Cache.gradient(file, hue)
-			back = RPG::Cache.gradient(back)
-			back2 = RPG::Cache.gradient(back2)
-			cx = BORDER
-			cy = BORDER
-			dx = OUTLINE
-			dy = OUTLINE
-			zoom_x = width != nil ? width : back.width
-			zoom_y = height != nil ? height : back.height
-			percent = min / max.to_f if max != 0
-			percent = 0 if max == 0
-			back_dest_rect = Rect.new(x,y,zoom_x,zoom_y)
-			back2_dest_rect = Rect.new(x+dx,y+dy,zoom_x -dx*2,zoom_y-dy*2)
-			bar_dest_rect = Rect.new(x+cx,y+cy,zoom_x * percent-cx*2,zoom_y-cy*2)
-			back_source_rect = Rect.new(0,0,back.width,back.height)
-			back2_source_rect = Rect.new(0,0,back2.width,back2.height)
-			bar_source_rect = Rect.new(0,0,bar.width* percent,bar.height)
-			self.bitmap.stretch_blt(back_dest_rect, back, back_source_rect)
-			self.bitmap.stretch_blt(back2_dest_rect, back2, back2_source_rect)
-			self.bitmap.stretch_blt(bar_dest_rect, bar, bar_source_rect)
-		end  
+		
+		def screen_x
+			@entity.screen_x + x_offset
+		end
+		
+		def screen_y
+			@entity.screen_y + y_offset
+		end
+		
+		def x_offset
+			-(@hp_width / 2)
+		end
+		
+		def y_offset
+			-@ch
+		end
+		
+		def bar_file
+			HP_BAR
+		end
+		
+		def visible_condition
+			!@entity.is_transparency || $net_party_manager.party_members.include?(@entity.name.to_s)
+		end
+		
+		def map_changed_or_entity_missing?
+			@entity.map_id != $game_map.map_id || Network::Main.mapplayers[@entity.netid].nil?
+		end
 	end
 	
-	class NetPartyMP_Bars < Sprite
-		#--------------------------------------------------------------------------
-		# * Constants Bar Types and Hues for parameters and parameter names
-		#--------------------------------------------------------------------------
+	class NetPartyMP_Bars < BaseBar
 		HP_BAR = "013-Blues01"
-		# leave this alone if you don't know what you are doing
-		OUTLINE = 1
-		BORDER = 1
-		HP_WIDTH = 35         # WIDTH of the HP Bar
-		HP_HEIGHT = 6         # Height of the HP Bar
-		#--------------------------------------------------------------------------
-		# * Object Initialization
-		#--------------------------------------------------------------------------
+		HP_WIDTH = 35
+		HP_HEIGHT = 6
+		
 		def initialize(netPlayer, v)
-			super(v)
-			@netPlayer = netPlayer
-			@old_hp = -1
-			@old_x = -1
-			@old_y = -1
-			self.bitmap = Bitmap.new(HP_WIDTH, HP_HEIGHT)
-			#~ @temp = RPG::Cache.character(@netPlayer.character_name, @netPlayer.character_hue)
-			#~ @ch = @temp.height / 4 + 20
-			#~ @cw = 15
-			@ch = 0
-			update    
+			super(netPlayer, v, HP_WIDTH, HP_HEIGHT)
 		end
-		#--------------------------------------------------------------------------
-		# * Refresh
-		#--------------------------------------------------------------------------
-		def refresh
-			#First move it
-			@old_x = @netPlayer.screen_x - 15
-			@old_y = @netPlayer.screen_y + HP_HEIGHT
-			self.x = @old_x
-			self.y = @old_y
-			#HP Bar Check
-			return if @old_hp == @netPlayer.sp
-			self.bitmap.clear
-			@old_hp = @netPlayer.sp
-			#Show the bar
-			draw_gradient_bar(0,0,@netPlayer.sp,@netPlayer.maxsp,HP_BAR,HP_WIDTH,HP_HEIGHT)
-		end  
-		#--------------------------------------------------------------------------
-		# * Something Changed?
-		#--------------------------------------------------------------------------
-		def something_changed?
-			if (@netPlayer.map_id != $game_map.map_id) or (Network::Main.mapplayers[@netPlayer.netid] == nil)
-				@netPlayer.bar_showing = false
-				return dispose 
+		
+		private
+		
+		def current_hp
+			@entity.sp
+		end
+		
+		def max_hp
+			@entity.maxsp
+		end
+		
+		def screen_x
+			@entity.screen_x + x_offset
+		end
+		
+		def screen_y
+			@entity.screen_y + y_offset
+		end
+		
+		def x_offset
+			-(@hp_width / 2)
+		end
+		
+		def y_offset
+			-@ch + @hp_height
+		end
+		
+		def bar_file
+			HP_BAR
+		end
+		
+		def visible_condition
+			!@entity.is_transparency || $net_party_manager.party_members.include?(@entity.name.to_s)
+		end
+		
+		def map_changed_or_entity_missing?
+			if @entity.map_id != $game_map.map_id || Network::Main.mapplayers[@entity.netid].nil?
+				@entity.bar_showing = false
+				return true
 			end
-			
-			self.visible = (!@netPlayer.is_transparency) or ($net_party_manager.party_members.include?(@netPlayer.name.to_s))			
-			return true if @old_hp != @netPlayer.sp.to_i
-			return true if @old_x != @netPlayer.event.screen_x - 15
-			return true if @old_y != @netPlayer.event.screen_y + HP_HEIGHT
 			return false
 		end
-		#--------------------------------------------------------------------------
-		# * Update
-		#--------------------------------------------------------------------------
-		def update
-			refresh if something_changed?
-		end
-		#--------------------------------------------------------------------------
-		# * Draw Gradient Bar 
-		#--------------------------------------------------------------------------
-		def draw_gradient_bar(x, y, min, max, file, width = nil, height = nil, hue = 0, back = "Back", back2 = "Back2")
-			bar = RPG::Cache.gradient(file, hue)
-			back = RPG::Cache.gradient(back)
-			back2 = RPG::Cache.gradient(back2)
-			cx = BORDER
-			cy = BORDER
-			dx = OUTLINE
-			dy = OUTLINE
-			zoom_x = width != nil ? width : back.width
-			zoom_y = height != nil ? height : back.height
-			percent = min / max.to_f if max != 0
-			percent = 0 if max == 0
-			back_dest_rect = Rect.new(x,y,zoom_x,zoom_y)
-			back2_dest_rect = Rect.new(x+dx,y+dy,zoom_x -dx*2,zoom_y-dy*2)
-			bar_dest_rect = Rect.new(x+cx,y+cy,zoom_x * percent-cx*2,zoom_y-cy*2)
-			back_source_rect = Rect.new(0,0,back.width,back.height)
-			back2_source_rect = Rect.new(0,0,back2.width,back2.height)
-			bar_source_rect = Rect.new(0,0,bar.width* percent,bar.height)
-			self.bitmap.stretch_blt(back_dest_rect, back, back_source_rect)
-			self.bitmap.stretch_blt(back2_dest_rect, back2, back2_source_rect)
-			self.bitmap.stretch_blt(bar_dest_rect, bar, bar_source_rect)
-		end  
 	end
 	
 	
@@ -305,28 +294,29 @@ if SDK.state("Mr.Mo's ABS")
 		#--------------------------------------------------------------------------
 		def main_draw
 			@enemys_hp = {}
-			#Get Enemies
-			for e in $ABS.enemies.values
-				e.bar_showing = false
-			end
-			
 			@netPlayers_hp = {}
 			@netPlayers_sp = {}
-			#Get netplayers
-			for player in Network::Main.mapplayers.values
-				player.bar_showing = false
-			end
+			@show_range = 12
+			
+			initialize_bars($ABS.enemies.values)
+			initialize_bars(Network::Main.players.values)
+			
 			mrmo_hpeny_scene_map_main_draw
 		end
+		
+		def initialize_bars(entities)
+			entities.each { |entity| entity.bar_showing = false }
+		end
+		
 		#--------------------------------------------------------------------------
 		# * Update
 		#--------------------------------------------------------------------------
 		def update
 			#Get Enemies
 			for e in $ABS.enemies.values
-				next if e == nil
-				#if in screen
-				if $ABS.in_range?($game_player, e.event, 14)
+				next unless e 
+				
+				if $ABS.in_range?($game_player, e.event, @show_range)
 					next if e.bar_showing
 					
 					@enemys_hp[e.event.id] = Enemy_Bars.new(e, @spriteset.viewport3)
@@ -339,57 +329,46 @@ if SDK.state("Mr.Mo's ABS")
 				end
 			end
 			
-			#Update HP BARS
-			for bars in @enemys_hp.values
-				next if bars == nil or bars.disposed?
-				bars.update
-			end
-			
-			
 			#Get net Players
 			for player in Network::Main.mapplayers.values
-				next if player == nil
-				
-				if @netPlayers_hp[player.netid] == nil
-					if player.bar_showing
-						player.bar_showing = false 
-					end
-				end
+				next unless player
 				
 				#if in screen
-				if player.in_range?(14)
-					player.bar_showing = true
-					next if player.bar_showing and @netPlayers_hp[player.netid] != nil
-					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
-						
-					next if player.bar_showing and @netPlayers_sp[player.netid] != nil
-					@netPlayers_sp[player.netid] = NetPartyMP_Bars.new(player, @spriteset.viewport3)
+				if player.in_range?(@show_range)
+					next if player.bar_showing
 					
-				elsif player.bar_showing and @netPlayers_hp[player.netid] != nil
-					player.bar_showing = false
+					@netPlayers_hp[player.netid] = NetPartyHP_Bars.new(player, @spriteset.viewport3)
+					@netPlayers_sp[player.netid] = NetPartyMP_Bars.new(player, @spriteset.viewport3)
+					player.bar_showing = true
+					
+				elsif player.bar_showing && @netPlayers_hp[player.netid] != nil
 					@netPlayers_hp[player.netid].dispose if !@netPlayers_hp[player.netid].disposed?
 					@netPlayers_hp[player.netid] = nil
 					
 					@netPlayers_sp[player.netid].dispose if !@netPlayers_sp[player.netid].disposed?
 					@netPlayers_sp[player.netid] = nil
+					
+					player.bar_showing = false
 				end
 			end
 			
 			#Update HP BARS
-			for bars in @netPlayers_hp.values
-				next if bars == nil or bars.disposed?
-				bars.update
-			end
-			
-			#Update sp BARS
-			for bars in @netPlayers_sp.values
-				next if bars == nil or bars.disposed?
-				bars.update
-			end
+			update_bars(@enemys_hp.values)
+			update_bars(@netPlayers_hp.values)
+			update_bars(@netPlayers_sp.values)
 			
 			mrmo_hpeny_scene_map_update
 		end
+		
+		def update_bars(bars)
+			bars.each do |bar|
+				next if bar == nil or bar.disposed?
+				bar.update
+			end
+		end
 	end
+	
+	
 	#============================================================================
 	# * ABS Enemy
 	#============================================================================

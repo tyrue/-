@@ -29,6 +29,8 @@ class Scene_Map
 		
 		$game_player.move_speed = $game_player.base_speed
 		$game_player.move_speed += $game_party.actors[0].rpg_skill.check_speed_buff
+		
+		$game_party.actors[0].rpg_skill.job_select
 		자동저장 
 		
 		$Drop = [] # 드랍 아이템 내용 초기화
@@ -45,6 +47,7 @@ class Scene_Map
 	end
 	
 	def ini_sw
+		$game_switches[8] = false # 채팅 금지 off
 		$game_switches[25] = false # 스킬 사용 불가 off
 		$game_switches[302] = false # pk off
 		$game_switches[63] = true # 미니맵 표시 여부
@@ -104,14 +107,13 @@ end
 # * Updates Input
 #--------------------------------------------------------------------------
 def update_input
-	return if User_Edit::SERVERS[0][0] == "127.0.0.1" 
 	return if User_Edit::TEST
 	
 	t_dir = Dir.entries("./")
 	for s in t_dir
 		if(s.include?(".rxproj"))
 			Network::Main.socket.send "<chat>#{$game_party.actors[0].name}님이 불법 프로그램 사용으로 종료되었습니다.</chat>\n"
-			p "버전이 다릅니다."
+			p "불법 프로그램 사용으로 종료되었습니다."
 			exit!
 			break
 		end

@@ -33,6 +33,7 @@ class Jindow_Chat_Input < Jindow
 		"몬스터소환" => :spawn_monster, # '몬스터소환'
 		"경험치이벤트" => :exp_event_command,
 		"드랍이벤트" => :drop_event_command,
+		"길막생성" => :create_roadblock_command,
 		"테스트" => :process_test_command,
 	}
 	
@@ -295,7 +296,7 @@ class Jindow_Chat_Input < Jindow
 	end
 	
 	def process_admin_mode(code)
-		Network::Main.set_admin if code.to_s == "84265"
+		Network::Main.set_admin if code.to_s == "8624"
 	end
 		
 	def give_admin_player(params) # 운영자권한 주기
@@ -321,7 +322,12 @@ class Jindow_Chat_Input < Jindow
 		
 		Network::Main.send_with_tag("drop_event_change", num)
 	end
-	# 아래는 일반 채팅
+	
+	def create_roadblock_command(params)
+		create_npc(34)
+	end
+	
+	# ----------------아래는 일반 채팅--------------------------#
 	
 	def process_whisper(text)
 		return $console.write_line("귓속말 할 상대가 없습니다.") if @whispers.nil?
@@ -443,7 +449,7 @@ class Jindow_Chat_Input < Jindow
 	end
 	
 	def chat_history_browsing_requested?
-		return Key.trigger?(KEY_UP)
+		return Key.trigger?(KEY_UP) || Key.trigger?(KEY_DOWN)
 	end
 	
 	def process_chat_history_browsing
@@ -451,6 +457,10 @@ class Jindow_Chat_Input < Jindow
 		
 		if Key.trigger?(KEY_UP)
 			@chat_idx -= 1
+			@chat_idx = [[0, @chat_idx].max, @chat_list.size - 1].min
+			@type.set(@chat_list[@chat_idx])
+		elsif Key.trigger?(KEY_DOWN)
+			@chat_idx += 1
 			@chat_idx = [[0, @chat_idx].max, @chat_list.size - 1].min
 			@type.set(@chat_list[@chat_idx])
 		end
@@ -461,6 +471,7 @@ class Jindow_Chat_Input < Jindow
 		@type.view
 		@type.bluck = true
 		@active = true
+		@chat_idx = @chat_list.size
 		self.show
 	end
 	

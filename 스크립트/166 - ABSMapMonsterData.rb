@@ -5,7 +5,7 @@
 # [[몬스터 id, 개수], []....]
 MAP_MONSTER_DATA = {}
 # 부여성
-MAP_MONSTER_DATA[4] = [[1, 20], [2, 20]] # 왕초보사냥터1 : 토끼, 다람쥐
+MAP_MONSTER_DATA[4] = [[1, 25], [2, 25]] # 왕초보사냥터1 : 토끼, 다람쥐
 
 MAP_MONSTER_DATA[27] = [[24, 15]] # 사슴굴1 : 주홍사슴
 MAP_MONSTER_DATA[32] = [[24, 15]] # 사슴굴2 : 주홍사슴

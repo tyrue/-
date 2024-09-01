@@ -95,8 +95,8 @@ def create_abs_monsters(monster_id, num = 1, id = nil)
 		
 		event.list[1].parameters[0] = "ID #{monster_id}"
 		setup_event(event, e_id, 1, 1, dir)
-		
 		next unless $is_map_first
+		
 		$ABS.rand_spawn(event)
 		$ABS.send_network_monster($ABS.enemies[e_id])
 	end
@@ -127,6 +127,34 @@ def create_abs_monsters_admin(monster_id, num = 1, sw = false)
 		end
 	end
 end
+
+def create_npc(event_id, x = $game_player.x, y = $game_player.y, dir = 2)
+	id = check_create_monster_id
+	create_events(event_id, x, y, dir, id)
+	# 서버에 어떤 npc 생성했는지 알림
+	
+	data = {
+				"map_id" => $game_map.map_id,
+				"id" => id,
+				"x" => x,
+				"y" => y,
+				"direction" => dir,
+				"npc_id" => event_id
+	}
+	message = data.map { |key, value| "#{key}:#{value}" }.join("|")
+	Network::Main.send_with_tag("npc_create", message)
+end
+
+def delete_npc(id)
+	# 서버에 어떤 npc 생성했는지 알림
+	data = {
+				"map_id" => $game_map.map_id,
+				"id" => id,
+	}
+	message = data.map { |key, value| "#{key}:#{value}" }.join("|")
+	Network::Main.send_with_tag("npc_delete", message)
+end
+
 
 def create_events(event_id, x = 1, y = 1, dir = 2, id = nil)
 	temp = load_data("Data/Map022.rxdata").events[event_id]

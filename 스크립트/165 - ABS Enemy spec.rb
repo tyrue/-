@@ -1,3 +1,4 @@
+
 # 몬스터의 스펙을 저장해놓았습니다.
 class ABS_enemy_spec
 	attr_accessor :enemy

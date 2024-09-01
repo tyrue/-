@@ -20,29 +20,21 @@ class Scene_Map
 		#맵이름의 표시
 		if $game_map.map_id != nil
 			map_infos = load_data("Data/MapInfos.rxdata")
-			if map_infos[$game_map.map_id] != nil
-				mapname = map_infos[$game_map.map_id].name.to_s
-			end
+			mapname = map_infos[$game_map.map_id].name.to_s if map_infos[$game_map.map_id]
+			Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
 		end
-		Network::Main.socket.send "<map_name>#{$game_map.map_id},#{mapname}</map_name>\n" # 맵 정보 보냄
-		Network::Main.send_start
 		
 		$game_player.move_speed = $game_player.base_speed
 		$game_player.move_speed += $game_party.actors[0].rpg_skill.check_speed_buff
-		
 		$game_party.actors[0].rpg_skill.job_select
 		자동저장 
 		
+		Network::Main.send_start
 		$Drop = [] # 드랍 아이템 내용 초기화
 		# 현재 맵의 몬스터 정보를 요청
-		if PARTY_MAP[$game_map.map_id] == nil # 파티퀘 맵 제외
-			Network::Main.socket.send "<req_monster>#{$game_map.map_id}</req_monster>\n"
-		end
 		
-		Network::Main.socket.send "<req_item>#{$game_map.map_id}</req_item>\n" # 현재 맵의 아이템을 요청
 		$game_temp.spriteset_refresh == true
-		$chat_b.refresh
-		
+		$chat_b.refresh		
 		맵이동
 	end
 	

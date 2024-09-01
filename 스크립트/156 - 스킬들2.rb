@@ -660,7 +660,7 @@ class Rpg_Skill_Data
 		when 160 # 분혼경천
 			@hit_num = 10
 			@hit_back = 3
-			@mash_time = 0#60
+			@mash_time = 60
 			@show_effect = true
 			@power_arr = [2, 3.00, 3.00, 100] 
 		when 161 # 폭류유성
@@ -749,6 +749,7 @@ class Rpg_Skill_Data
 			@heal_value = 24
 			@is_party = true
 			@can_use_dead = true
+			@mash_time = 10
 			
 		when 140 # 운기
 			@heal_type = "sp"

@@ -191,17 +191,17 @@ if SDK.state("Mr.Mo's ABS") == true
 	# 파티 퀘스트
 	ENEMY_EXP[45] = [5_000, 0.5, 0.5] # 추격산적
 	
-	ENEMY_EXP[91] = [20_000, 0.5, 0.5] # 비류성창병
-	ENEMY_EXP[96] = [50_000, 0.5, 0.5] # 비류성자객
+	ENEMY_EXP[91] = [10_000, 0.5, 0.5] # 비류성창병
+	ENEMY_EXP[96] = [25_000, 0.5, 0.5] # 비류성자객
 	ENEMY_EXP[97] = [50_000, 0.5, 0.5] # 비류성수문장
-	ENEMY_EXP[90] = [100_000, 0.5, 0.5] # 비류성정예군
+	ENEMY_EXP[90] = [50_000, 0.5, 0.5] # 비류성정예군
 	ENEMY_EXP[98] = [5_000_000, 5.0, 5.0] # 비류장군
 	
-	ENEMY_EXP[254] = [200_000, 2.5, 2.5] # 뇌랑
-	ENEMY_EXP[255] = [250_000, 2.5, 2.5] # 왕가
-	ENEMY_EXP[256] = [350_000, 5.0, 5.0] # 조왕
-	ENEMY_EXP[257] = [2_500_000, 10.0, 10.0] # 태산
-	ENEMY_EXP[258] = [85_000_000, 50.0, 50.0] # 길림장군
+	ENEMY_EXP[254] = [80_000, 5.0, 5.0] # 뇌랑
+	ENEMY_EXP[255] = [100_000, 6.0, 6.0] # 왕가
+	ENEMY_EXP[256] = [150_000, 10.0, 10.0] # 조왕
+	ENEMY_EXP[257] = [2_000_000, 30.0, 30.0] # 태산
+	ENEMY_EXP[258] = [80_000_000, 200.0, 200.0] # 길림장군
 	
 	# 3차 퀘스트
 	ENEMY_EXP[61] = [45_000_000] # 주작
@@ -238,7 +238,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[228] = [36_000_000] # 뇌신왕
 	ENEMY_EXP[231] = [70_000_000] # 천구왕
 	
-	ENEMY_EXP[232] = [1_000_000_000] # 산신대왕
+	ENEMY_EXP[232] = [8_500_000_000] # 산신대왕
 	ENEMY_EXP[233] = [22_500_000] # 산신전사
 	ENEMY_EXP[234] = [21_000_000] # 산신도사
 	ENEMY_EXP[235] = [22_500_000] # 산신도적
@@ -1483,7 +1483,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return [0, 0] if enemy.hidden
 			
 			exp = ENEMY_EXP[enemy.id] || enemy.exp
-			exp = (exp[0] || 0) + (@actor.maxhp * (exp[1] || 0)) + (@actor.maxsp * (exp[2] || 0)) if exp.is_a?(Array)
+			exp = (exp[0] || 0) + (@actor.take_base_max_stat("hp") * (exp[1] || 0)) + (@actor.take_base_max_stat("sp") * (exp[2] || 0) * 2.0) if exp.is_a?(Array)
 			exp = exp.to_i			
 			gold = enemy.gold
 			
@@ -2282,6 +2282,13 @@ if SDK.state("Mr.Mo's ABS") == true
 		#--------------------------------------------------------------------------
 		def transfer_player
 			if $game_map.map_id != $game_temp.player_new_map_id
+				map_infos = load_data("Data/MapInfos.rxdata")
+				 
+				unless map_infos[$game_temp.player_new_map_id]
+					$game_temp.player_new_map_id = 1
+					$console.write_line("잘못된 map_id 입니다.")
+				end
+				
 				$ABS.enemies = {}
 				$ABS.hate_group = {}
 			end

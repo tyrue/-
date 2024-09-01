@@ -718,7 +718,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# (모두 또는 아이디, 메시지, 이름)
 				when /<over>(.*)<\/over>/
 					p $1.to_s
-					self.over
+					exit!
 					
 				when /<timer_v>(.*)<\/timer_v>/
 					t_dir = Dir.entries("./")
@@ -740,17 +740,12 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					# Kick All Command
 					target = $1.to_s
 					msg = $2.to_s
-					if target == "모두"
-						p "운영자의 명령어로 인해 모든 플레이어가 서버에서 강퇴당하였습니다."
-						p "#{msg}"
-						exit!
-						return true
-						# Kick Command
-					elsif target == $game_party.actors[0].name
-						p msg
-						exit!
-						return true
-					end
+					
+					return unless target == $game_party.actors[0].name
+					
+					p "#{msg}"
+					exit!
+					return true
 				end
 			end
 			
@@ -968,35 +963,65 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					x = data_hash["x"].to_i 
 					y = data_hash["y"].to_i 
 					d = data_hash["direction"].to_i 
-					res = data_hash["respawn"].to_i
 					mon_id = data_hash["mon_id"].to_i
 					dead = data_hash["dead"].downcase == "true"
 					return if mon_id == 0
-					return if dead 
 					
 					unless $ABS.enemies[id]
 						e = $game_map.events[id]
 						return if e && !e.list # 이벤트는 있지만 스위치등 무언가로 꺼져있는 상태
+						return if dead 
 						
 						create_abs_monsters(mon_id, 1, id) 
 					end
 					enemy = $ABS.enemies[id]
 					event = enemy.event
 					
+					if dead
+						event.erase
+						$ABS.enemies.delete(id)
+						return
+					end
+					
 					if hp <= 0 # 체력이 0이지만 dead가 아니라면 새로 리스폰된 상황
 						event.erased = false
 						event.refresh
 						$ABS.rand_spawn(event) # 랜덤 위치 스폰
-						return
+					else
+						# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
+						enemy.hp = hp
+						enemy.sp = sp
+						event.moveto(x, y) # 몹 방향과 좌표 적용
+						event.direction = d
+						enemy.aggro = $is_map_first
+						event.refresh
 					end
 					
-					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
-					enemy.hp = hp
-					enemy.sp = sp
-					event.moveto(x, y) # 몹 방향과 좌표 적용
-					event.direction = d
-					enemy.aggro = $is_map_first
-					event.refresh
+				when /<npc_create>(.*)<\/npc_create>/ # 서버로부터 저장된 몬스터 정보를 받아옴
+					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
+					data_hash = parseKeyValueData($1)
+					map_id = data_hash["map_id"].to_i
+					return unless map_id == $game_map.map_id
+					
+					id = data_hash["id"].to_i 
+					x = data_hash["x"].to_i 
+					y = data_hash["y"].to_i 
+					d = data_hash["direction"].to_i 
+					npc_id = data_hash["npc_id"].to_i
+					return if npc_id == 0
+					
+					create_events(npc_id, x, y, d, id)
+					
+				when /<npc_delete>(.*)<\/npc_delete>/ # 서버로부터 저장된 몬스터 정보를 받아옴
+					# 맵 id, 이벤트 id, 몹 hp, x, y, 방향, 딜레이 시간, 몹 id
+					data_hash = parseKeyValueData($1)
+					map_id = data_hash["map_id"].to_i
+					return unless map_id == $game_map.map_id
+					
+					id = data_hash["id"].to_i 
+					$game_map.events[id].erase
+					$game_map.events.delete(id)
+					
 					
 				when /<aggro>(.*)<\/aggro>/ # 어그로 공유
 					data = $1.split(',')
@@ -1447,15 +1472,15 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					
 					# 공지 메시지 받음
 				when /<chat>(.*)<\/chat>/
-					$chat.write($1.to_s, COLOR_WORLD) if $scene.is_a?(Scene_Map)
+					$chat.write($1.to_s, COLOR_WORLD) #if $scene.is_a?(Scene_Map)
 					
 					# 일반
 				when /<chat1>(.*)<\/chat1>/
-					$chat.write($1.to_s, COLOR_NORMAL) if $scene.is_a?(Scene_Map)
+					$chat.write($1.to_s, COLOR_NORMAL) #if $scene.is_a?(Scene_Map)
 					
 					# 도움말
 				when /<chat2>(.*)<\/chat2>/
-					$chat.write($1.to_s, COLOR_HELP) if $scene.is_a?(Scene_Map)
+					$chat.write($1.to_s, COLOR_HELP) #if $scene.is_a?(Scene_Map)
 					
 					# 말풍선
 				when /<map_chat>(.*)&(.*)&(.*)<\/map_chat>/
@@ -1578,7 +1603,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_temp.player_transferring = true
 					
 				when /<prison>(.*)<\/prison>/
-					Network::Main.socket.send "<chat>'#{$1.to_s}'님께서 감옥으로 갔습니다.</chat>\n"
 					if $1.to_s == $game_party.actors[0].name
 						$console.write_line("운영자님께서 당신을 감옥으로 보냈습니다.")
 						$game_temp.player_new_map_id = 98
@@ -1589,7 +1613,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					end
 					
 				when /<emancipation>(.*)<\/emancipation>/
-					Network::Main.socket.send "<chat>'#{$1.to_s}'님께서 감옥에서 석방 되셨습니다.</chat>\n"
 					if $1.to_s == $game_party.actors[0].name
 						$game_temp.player_new_map_id = 2
 						$game_temp.player_new_x = 3
@@ -1614,7 +1637,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					id = id.to_i
 					mon_id = mon_id.to_i
 					event = $ABS.enemies[id] ? $ABS.enemies[id].event : $game_map.events[id] # 몹 죽었을때 리스폰 시간 적용
-					 
+					
 					unless event
 						create_abs_monsters(mon_id, 1, id)
 						event = $ABS.enemies[id].event
@@ -1800,6 +1823,11 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					#-------------------------------------------------------------  
 					#---------------------------파티 시스템---------------------------  
 					#-------------------------------------------------------------      
+				when /^<party_switch>(.*)<\/party_switch>/
+					id, val = $1.split(",").map { |x| x.to_i }
+					$game_switches[id] = val == 1
+					$game_map.need_refresh = true
+					
 				when /<party_add>(.*)<\/party_add>/ # 파티원 추가
 					data_hash = parseKeyValueData($1)
 					member = data_hash["member"]

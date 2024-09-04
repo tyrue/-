@@ -12,9 +12,10 @@ class Sprite_Timer < Sprite
 	def initialize
 		super
 		self.bitmap = Bitmap.new(88, 48)
-		self.bitmap.font.name = "Arial"
-		self.bitmap.font.size = 32
-		self.x = 10
+		self.bitmap.font.name = "맑은 고딕"
+		self.bitmap.font.size = 40
+		self.bitmap.font.bold = true
+		self.x = 290
 		self.y = 10
 		self.z = 50000
 		update
@@ -47,6 +48,8 @@ class Sprite_Timer < Sprite
 			text = sprintf("%02d:%02d", min, sec)
 			# Draw timer
 			self.bitmap.font.color.set(255, 255, 255)
+			self.bitmap.font.alpha = 3
+			self.bitmap.font.beta = 1
 			self.bitmap.draw_text(self.bitmap.rect, text, 1)
 		end
 	end

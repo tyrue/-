@@ -35,6 +35,7 @@ class Scene_Map
 		
 		$game_temp.spriteset_refresh == true
 		$chat_b.refresh		
+		$is_map_first = false
 		맵이동
 	end
 	

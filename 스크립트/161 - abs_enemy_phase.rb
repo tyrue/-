@@ -238,7 +238,7 @@ ABS_ENEMY_CHAR[190] =	["(일본)망령"]  # 망령
 
 ABS_ENEMY_CHAR[191] =	["(일본)유성지"]  # 유성지
 ABS_ENEMY_CHAR[192] =	["(일본)해골왕"]  # 해골왕
-ABS_ENEMY_CHAR[193] =	["(일본)파괴왕"]  # 파괴왕
+ABS_ENEMY_CHAR[193] =	["(일본)파괴왕2"]  # 파괴왕
 
 ABS_ENEMY_CHAR[195] =	["(산적)청비", 250]  # 이가닌자'병
 ABS_ENEMY_CHAR[196] =	["(산적)겁살수", 120]  # 이가닌자'수

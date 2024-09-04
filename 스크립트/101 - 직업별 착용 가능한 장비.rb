@@ -102,7 +102,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_WEAPON[124] = [[0], 0, 99] # 얼음검
 	EQUIP_JOB_WEAPON[125] = [[0], 0] # 일월대도
 	EQUIP_JOB_WEAPON[126] = [[0], 0, 99] # 참마도
-	EQUIP_JOB_WEAPON[127] = [[0], 3] # 청룡신검
+	EQUIP_JOB_WEAPON[127] = [[0], 2] # 청룡신검
 	EQUIP_JOB_WEAPON[128] = [[0], 0] # 용량제구봉?
 	EQUIP_JOB_WEAPON[129] = [[0], 0, 80] # 도깨비방망이
 	EQUIP_JOB_WEAPON[130] = [[0], 0, 99] # 뇌령진도
@@ -182,7 +182,7 @@ module Equip_Job_Type # 직업별 장비 착용 가능 여부 확인
 	EQUIP_JOB_ARMOR[55] = [[0], 0, 89] # 망또4
 	EQUIP_JOB_ARMOR[56] = [[0], 0, 99] # 망또5
 	
-	EQUIP_JOB_ARMOR[50] = [[0], 3] # 용왕의반지'진
+	EQUIP_JOB_ARMOR[50] = [[0], 2] # 용왕의반지'진
 	EQUIP_JOB_ARMOR[51] = [[0], 3] # 용왕의투구'진
 	EQUIP_JOB_ARMOR[53] = [[0], 0] # 힘의투구1
 	

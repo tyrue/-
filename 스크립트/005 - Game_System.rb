@@ -36,6 +36,12 @@ class Game_System
 		@message_frame = 0
 		@save_count = 0
 		@magic_number = 0
+		
+		@not_send_net_data = 
+		[
+			
+			
+			]
 	end
 	#--------------------------------------------------------------------------
 	# * Play Background Music
@@ -138,6 +144,8 @@ class Game_System
 			file_name = se.name 
 			pitch = se.pitch
 		end
+		
+		is_net = false if file_name == "텝"
 		
 		Audio.se_play("Audio/SE/" + file_name, volume, pitch)
 		if $login_check

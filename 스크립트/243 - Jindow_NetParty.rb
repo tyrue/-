@@ -169,11 +169,11 @@ class Jindow_NetParty < Jindow
 	end
 	
 	def set_button_positions
-		@create_button.x = self.width - 120
+		@create_button.x = (self.width || 130) - 120
 		@create_button.y = @buttons.last ? @buttons.last.y : 0
 		@create_button.y = [120, @create_button.y].max
 		
-		@invite_button.x = self.width - 50
+		@invite_button.x = (self.width || 130) - 50
 		@invite_button.y = @create_button.y
 		
 		@leave_button.x = @invite_button.x

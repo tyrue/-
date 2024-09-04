@@ -99,8 +99,8 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[58] = [5_500_000, 1] # 수룡
 	ABS_ENEMY_HP[59] = [5_500_000, 1] # 화룡
 	
-	ABS_ENEMY_HP[61] = [550_000_000, 1] # 주작
-	ABS_ENEMY_HP[62] = [550_000_000, 1] # 백호
+	ABS_ENEMY_HP[61] = [300_000_000, 1] # 주작
+	ABS_ENEMY_HP[62] = [300_000_000, 1] # 백호
 	
 	ABS_ENEMY_HP[89] = [100_000_000, 1] # 시련의청룡
 	
@@ -108,9 +108,9 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[111] = [600_000, 1] # 산적왕
 	
-	ABS_ENEMY_HP[102] = [4_000_000_000, 1] # 반고
-	ABS_ENEMY_HP[112] = [1_500_000_000, 1] # 청룡
-	ABS_ENEMY_HP[113] = [1_500_000_000, 1] # 현무
+	ABS_ENEMY_HP[102] = [2_000_000_000, 1] # 반고
+	ABS_ENEMY_HP[112] = [700_000_000, 1] # 청룡
+	ABS_ENEMY_HP[113] = [700_000_000, 1] # 현무
 	
 	# 12 지신
 	ABS_ENEMY_HP[119] = [1_500_000, 1] # 백호왕
@@ -146,7 +146,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	
 	ABS_ENEMY_HP[191] = [40_000_000, 1] # 유성지
 	ABS_ENEMY_HP[192] = [50_000_000, 1] # 해골왕
-	ABS_ENEMY_HP[193] = [150_000_000, 1] # 파괴왕
+	ABS_ENEMY_HP[193] = [300_000_000, 1] # 파괴왕
 	
 	# 중국
 	ABS_ENEMY_HP[204] = [150_000, 1] # 인묘
@@ -163,7 +163,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[230] = [1_600_000, 0] # 연자천구
 	ABS_ENEMY_HP[231] = [30_000_000, 1] # 천구왕
 	
-	ABS_ENEMY_HP[232] = [4_500_000_000, 1] # 산신대왕
+	ABS_ENEMY_HP[232] = [2_000_000_000, 1] # 산신대왕
 	ABS_ENEMY_HP[233] = [5_000_000, 0] # 산신전사
 	ABS_ENEMY_HP[234] = [3_000_000, 0] # 산신도사
 	ABS_ENEMY_HP[235] = [4_000_000, 0] # 산신도적
@@ -180,7 +180,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ABS_ENEMY_HP[253] = [5_000_000, 1] # 현무
 	ABS_ENEMY_HP[257] = [5_000_000, 1] # 태산
 	ABS_ENEMY_HP[258] = [850_000_000, 1] # 길림장군
-	ABS_ENEMY_HP[259] = [8_000_000_000, 1] # 가릉빈가
+	ABS_ENEMY_HP[259] = [4_500_000_000, 1] # 가릉빈가
 	
 	# 한두고개
 	ABS_ENEMY_HP[268] = [7_777_777, 1] # 최강다람쥐
@@ -238,7 +238,7 @@ if SDK.state("Mr.Mo's ABS") == true
 	ENEMY_EXP[228] = [36_000_000] # 뇌신왕
 	ENEMY_EXP[231] = [70_000_000] # 천구왕
 	
-	ENEMY_EXP[232] = [8_500_000_000] # 산신대왕
+	ENEMY_EXP[232] = [4_500_000_000] # 산신대왕
 	ENEMY_EXP[233] = [22_500_000] # 산신전사
 	ENEMY_EXP[234] = [21_000_000] # 산신도사
 	ENEMY_EXP[235] = [22_500_000] # 산신도적
@@ -380,18 +380,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		def DAMAGE_FONT_COLOR
 			return DAMAGE_FONT_COLOR
 		end
-		#--------------------------------------------------------------------------
-		# * Range Skills
-		#--------------------------------------------------------------------------
-		def RANGE_SKILLS
-			return RANGE_SKILLS
-		end
-		#--------------------------------------------------------------------------
-		# * Range Explode
-		#--------------------------------------------------------------------------
-		def RANGE_EXPLODE
-			return RANGE_EXPLODE
-		end
+		
 		#--------------------------------------------------------------------------
 		# * Hotkey
 		#--------------------------------------------------------------------------
@@ -624,7 +613,6 @@ if SDK.state("Mr.Mo's ABS") == true
 				
 				update_enmey_state_time(enemy)
 				update_enemy_phase(enemy) # 적 체력에 따른 페이즈 관리
-				update_enemy_aggro(enemy) # 어그로 상태 확인
 				update_enemy_battle(enemy) # 적이 전투 중이면 전투 상태 업데이트
 				enemy.rpg_skill.update
 			end
@@ -644,8 +632,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		# 적 캐릭터의 상태 업데이트 : 버프, 디버프등 상태 
 		#--------------------------------------------------------------------------
 		def update_enmey_state_time(enemy)
-			update_enemy_buff(enemy) # 적 캐릭터의 버프 업데이트
-			update_enemy_skill_mash(enemy) # 적 캐릭터의 스킬 쿨타임 업데이트
+			update_enemy_buff(enemy) # 몬스터의 버프 업데이트
+			update_enemy_skill_mash(enemy) # 몬스터의 스킬 쿨타임 업데이트
 			update_casting_time(enemy)
 		end
 		
@@ -761,48 +749,12 @@ if SDK.state("Mr.Mo's ABS") == true
 			enemy.event.turn_to(target) if !in_direction?(enemy.event, target) && in_range?(enemy.event, target, 1)
 		end
 		
-		# 몬스터 어그로 설정
-		def update_enemy_aggro(enemy)
-			return unless enemy.hate_group.include?(0) && enemy.aggro
-			
-			enemy.aggro_mash -= 1 if enemy.aggro_mash > 0
-			return if enemy.aggro_mash > 0
-			
-			aggro_user = collect_aggro_users(enemy)
-			return if aggro_user.empty?
-			
-			aggro_name = aggro_user[rand(aggro_user.size)]
-			return unless aggro_name
-			
-			send_aggro_message(enemy, aggro_name)
-			set_enemy_aggro_state(enemy, aggro_name)
-		end
-		
-		def collect_aggro_users(enemy)
-			aggro_user = []
-			aggro_user.push(@actor.name) if in_range?(enemy.event, $game_player, enemy.see_range)
-			
-			Network::Main.mapplayers.values.each do |player|
-				aggro_user.push(player.name) if player && in_range?(enemy.event, player, enemy.see_range)
-			end
-			
-			aggro_user
-		end
-		
-		def send_aggro_message(enemy, aggro_name)
-			message = "#{enemy.event.id},#{aggro_name}"
+		def send_aggro_message(enemy)
+			enemy.aggro = true
+			message = "#{enemy.event.id},#{@actor.name}"
 			Network::Main.send_with_tag("aggro", message)
 		end
-		
-		def set_enemy_aggro_state(enemy, aggro_name)
-			if aggro_name == @actor.name
-				enemy.aggro = true
-				enemy.aggro_mash = 5 * @sec
-			else
-				enemy.aggro = false
-			end
-		end
-		
+			
 		#--------------------------------------------------------------------------
 		# * 적 캐릭터의 행동, 공격 또는 스킬
 		#--------------------------------------------------------------------------
@@ -1391,7 +1343,6 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			id = event.id
 			enemy_dead_process(e, event, true)
-			@enemies.delete(id) if ([0, nil].include?(e.respawn))
 			return true
 		end
 		
@@ -1416,7 +1367,7 @@ if SDK.state("Mr.Mo's ABS") == true
 				key = [$game_map.map_id, event.id, value]
 				$game_self_switches[key] = true
 			when 4 # 네트워크 스위치 공유
-				Network::Main.party_switch(id, 1)
+				Network::Main.party_switch(id, 1) if sw
 			end
 			
 			$game_map.need_refresh = true
@@ -1758,6 +1709,8 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		# 범위안에 이벤트 만들고 이펙트 내보기
 		def make_range_sprite(element, range, skill, sw = false)
+			return unless $scene.is_a?(Scene_Map)
+			
 			$scene.spriteset.make_range_sprite(element, range, skill, sw) # 이펙트 보여주는 스킬만 동작하도록 하자
 		end
 		
@@ -3018,11 +2971,9 @@ if SDK.state("Mr.Mo's ABS") == true
 				return true
 			end
 			
-			atk = (attacker.atk + attacker.str / 20.0)
-			temp = self.is_a?(Game_Actor) ? 10.0 : 100.0
-			
-			self.damage = atk * (1.0 + attacker.str / 20.0)
-			self.damage /= (1.0 + self.base_pdef / temp)
+			atk = attacker.atk
+			self.damage = atk * (1.0 + attacker.str / 10.0)
+			self.damage /= [(1.0 + self.base_pdef / 10.0), 0.1].max
 			self.damage = [self.damage.to_i, 1].max
 			
 			self.critical = "player_hit" if self.is_a?(Game_Actor)
@@ -3049,6 +3000,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			self.damage = self.rpg_skill.damage_calculation_defense(self.damage)			
 			self.damage = self.damage.to_i
 			self.hp -= self.damage
+			self.damage = "빗나감" if self.damage <= 0
 			
 			@damage_array.push(self.damage)
 			@critical_array.push(self.critical)
@@ -3071,10 +3023,7 @@ if SDK.state("Mr.Mo's ABS") == true
 			return unless $ABS.enemies[self.event.id]
 			
 			aggro_chance = (damage * 100 / self.maxhp) || rand(100) <= 40
-			if aggro_chance
-				$ABS.enemies[self.event.id].aggro = true
-				Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
-			end
+			$ABS.send_aggro_message(self) if aggro_chance
 			$ABS.send_network_monster(self)
 		end
 		
@@ -3145,12 +3094,13 @@ if SDK.state("Mr.Mo's ABS") == true
 			power = user.rpg_skill.skill_power_custom(skill.id, power)
 			power *= (1.0 + user.atk / 10.0)
 			rate = calculate_rate(user, skill)
-			self.damage = (power * rate / 40.0)
+			
+			self.damage = (power * (1.0 + rate / 10.0))
 			self.damage = self.damage.to_i
 		end
 		
 		def calculate_rate(user, skill)
-			rate = 40
+			rate = 0.0
 			rate += user.str * skill.str_f / 100.0
 			rate += user.dex * skill.dex_f / 100.0
 			rate += user.agi * skill.agi_f / 100.0
@@ -3179,8 +3129,9 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def apply_damage_reduction()
 			if self.damage > 0
-				limit = self.is_a?(Game_Actor) ? 100.0 : 400.0
-				self.damage /= 1.0 + (self.base_pdef + self.base_mdef * 4) / limit
+				#limit = self.is_a?(Game_Actor) ? 50.0 : 200.0
+				limit = 50.0
+				self.damage /= [1.0 + (self.base_pdef + self.base_mdef * 4) / limit, 0.1].max
 			end
 		end
 		
@@ -3193,6 +3144,7 @@ if SDK.state("Mr.Mo's ABS") == true
 		
 		def apply_damage(user, skill)
 			last_hp = self.hp
+			self.damage = self.damage.to_i
 			self.hp -= self.damage
 			self.damage = "빗나감!" if self.damage == 0
 			
@@ -3209,10 +3161,8 @@ if SDK.state("Mr.Mo's ABS") == true
 			
 			$ABS.send_network_monster(self)
 			r = rand(100)
-			if r <= [(self.damage * 100 / self.maxhp), 30].max
-				self.aggro = true
-				Network::Main.socket.send("<aggro>#{self.event.id},#{$game_party.actors[0].name}</aggro>\n")
-			end
+			aggro_chance = r <= [(self.damage * 100 / self.maxhp), 30].max
+			$ABS.send_aggro_message(self) if aggro_chance
 		end
 		
 		def process_player(user)

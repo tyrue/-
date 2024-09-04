@@ -1,970 +1,494 @@
-# 스킬 클래스 구조 확인용
-module RPG
-	class Skill
-		def initialize
-			@id = 0
-			@name = ""
-			@icon_name = ""
-			@description = ""
-			@scope = 0
-			@occasion = 1
-			@animation1_id = 0
-			@animation2_id = 0
-			@menu_se = RPG::AudioFile.new("", 80)
-			@common_event_id = 0
-			
-			@hp_cost = 0 # 체력 소모량
-			@sp_cost = 0
-			
-			@power = 0
-			@atk_f = 0
-			@eva_f = 0
-			@str_f = 0
-			@dex_f = 0
-			@agi_f = 0
-			@int_f = 100
-			@hit = 100
-			@pdef_f = 0
-			@mdef_f = 100
-			@variance = 15
-			@element_set = []
-			@plus_state_set = []
-			@minus_state_set = []
+# 신수 스킬 아이디
+SINSU_SKILL_ID = 
+[
+	1, # 신수마법
+	10, # 신수 1성
+	16, # 신수 2성
+	22, # 신수 3성
+	30, # 신수 4성
+	37 # 신수 5성
+]
+
+# 성황당 스킬 데이터
+SEONG_HWANG = {}
+SEONG_HWANG[0] = [17] # 부여성
+SEONG_HWANG[1] = [135] # 국내성
+SEONG_HWANG[2] = [135] # 국내성
+SEONG_HWANG[3] = [204] # 용궁
+SEONG_HWANG[4] = [85]  # 고균도
+SEONG_HWANG[5] = [234] # 일본
+SEONG_HWANG[6] = [298] # 대방성
+SEONG_HWANG[7] = [326] # 현도성
+SEONG_HWANG[8] = [369] # 장안성
+SEONG_HWANG[9] = [384] # 가릉도
+SEONG_HWANG[10] = [392] # 폭염도
+
+# 비영사천문 스킬 데이터
+BIYEONG = {}
+# d : 방향, 1 : 동, 2 : 서, 3 : 남, 4: 북
+BIYEONG[0] = [1, [66, 33], [5, 30], [34, 68], [34, 2]] # 부여성
+BIYEONG[1] = [123, [118, 60], [7, 60], [63, 109], [63, 12]] # 국내성
+BIYEONG[2] = [110, [35, 16], [1, 16], [17, 33], [17, 2]] # 12지신
+BIYEONG[3] = [203, [52, 23], [4, 24], [27, 43], [29, 8]] # 용궁
+BIYEONG[4] = [60, [56, 33], [4, 32], [39, 57], [29, 10]] # 고균도
+BIYEONG[5] = [230, [114, 30], [5, 31], [64, 90], [55, 2]] # 일본
+BIYEONG[6] = [276, [113, 61], [8, 61], [61, 108], [61, 10]] # 대방성
+BIYEONG[7] = [301, [113, 61], [8, 61], [61, 108], [61, 10]] # 현도성
+BIYEONG[8] = [303, [113, 61], [8, 61], [61, 108], [61, 10]] # 장안성
+BIYEONG[9] = [374, [58, 20], [12, 17], [28, 33], [27, 9]] # 가릉도
+BIYEONG[10] = [391, [43, 29], [7, 25], [24, 37], [26, 9]] # 폭염도
+
+# 업그레이드 하는 스킬들
+UPGRADE_SKILL_ID = {}
+UPGRADE_SKILL_ID[1] =	[1, 10, 16, 22, 30, 37] # 뢰진주류
+UPGRADE_SKILL_ID[2] =	[2, 11, 17, 23, 31, 38] # 백열주류
+UPGRADE_SKILL_ID[3] =	[3, 12, 18, 24, 32, 39] # 화염주류
+UPGRADE_SKILL_ID[4] =	[4, 13, 19, 25, 33, 40] # 자무주류
+
+UPGRADE_SKILL_ID[5]	= [64, 72, 76] # 십량분법류
+UPGRADE_SKILL_ID[6]	= [65, 75] # 뢰마도
+UPGRADE_SKILL_ID[7]	= [74, 78, 80, 102] # 십리건곤
+UPGRADE_SKILL_ID[8] = [131, 141, 142] # 투명
+UPGRADE_SKILL_ID[9] = [49, 52, 56] # 성려멸주
+
+# 0~15 : 도토리, 토끼고기, 사슴고기, 녹용
+# 15~25 : 쥐고기, 박쥐고기, 뱀고기
+# 25~35 : 웅담, 호랑이고기
+# 35~45 : 여우고기, 산돼지, 숲돼지고기
+# 45~55 : 짙은호랑이고기, 돼지의뿔
+# 55~85 : 호박, 진호박
+# 85~99 : 진호박, 불의혼, 불의결정
+
+# 3 도토리, 74 토끼고기, 5 사슴고기, 6 녹용
+REQ_SKILL_DATA = {}
+# data[스킬 아이디] : [스킬 필요레벨, [[재료 타입, 재료 아이디, 재료 개수], [...]]]
+# 전사
+REQ_SKILL_DATA[1] = {
+	5 => [5, [[0, 3, 30], [0, 74, 10]]],   # 누리의기원
+	26 => [6, [[0, 5, 5], [0, 6, 5]]],   # 누리의힘
+	62 => [10, [[0, 7, 5], [0, 8, 5]]],   # 수심각도, 쇠고기, 돼지고기
+	74 => [12, [[0, 9, 10], [0, 10, 7]]],  # 십리건곤
+	63 => [18, [[0, 10, 10], [0, 104, 10]]],# 반영대도
+	64 => [25, [[0, 11, 10], [0, 12, 10]]], # 십량분법
+	65 => [30, [[0, 12, 10], [0, 50, 10]]], # 뢰마도
+	27 => [35, [[0, 19, 10], [0, 20, 10]]], # 동해의기원
+	66 => [40, [[0, 19, 20], [0, 20, 15]]], # 신수둔각도
+	77 => [45, [[0, 22, 10], [0, 28, 3]]],  # 유비후타
+	67 => [50, [[0, 22, 20], [0, 59, 1]]],  # 건곤대나이
+	140 => [56, [[0, 29, 20], [0, 30, 10]]],# 운기
+	71 => [62, [[0, 29, 10], [0, 30, 10]]], # 혼신의힘
+	73 => [64, [[0, 29, 10], [0, 30, 30]]], # 광량돌격
+	29 => [67, [[0, 29, 5], [0, 30, 5]]],   # 천공의기원
+	72 => [70, [[0, 29, 20], [0, 30, 20]]], # 구량분법
+	43 => [78, [[0, 29, 10], [0, 30, 25]]], # 위태응기
+	78 => [80, [[0, 29, 15], [0, 30, 15]]], # 십리건곤 1성
+	75 => [82, [[0, 29, 10], [0, 30, 30]]], # 뢰마도 1성
+	80 => [89, [[0, 31, 3], [0, 37, 1]]],   # 십리건곤 2성
+	76 => [91, [[0, 30, 10], [0, 31, 3]]],  # 팔량분법
+	79 => [99, [[0, 99, 4], [0, 100, 4]]],  # 동귀어진
+}
+
+# 주술사
+REQ_SKILL_DATA[2] = {
+	5 => [5, [[0, 3, 30], [0, 74, 10]]],     # 누리의기원
+	1 => [6, [[0, 5, 4], [0, 6, 4]]],     # 신수마법
+	46 => [10, [[0, 7, 5], [0, 8, 10]]],     # 무장
+	10 => [15, [[0, 9, 20], [0, 10, 20]]],   # 신수 1성
+	15 => [20, [[0, 10, 15], [0, 104, 15]]], # 공력증강
+	16 => [23, [[0, 104, 10], [0, 11, 15]]], # 신수 2성
+	47 => [27, [[0, 11, 10], [0, 12, 10]]],  # 보호
+	21 => [30, [[0, 11, 10], [0, 50, 10]]],  # 바다의기원
+	22 => [35, [[0, 50, 20], [0, 19, 5]]],   # 신수 3성
+	20 => [40, [[0, 19, 7], [0, 20, 7]]],    # 마법집중
+	27 => [45, [[0, 19, 10], [0, 20, 10]]],  # 동해의기원
+	28 => [50, [[0, 20, 10], [0, 22, 10]]],  # 야수
+	29 => [54, [[0, 22, 10], [0, 28, 3]]],   # 천공의기원
+	182 => [56, [[0, 22, 10], [0, 28, 3]]],   # 저주
+	30 => [60, [[0, 29, 10], [0, 30, 5]]],   # 신수 4성
+	34 => [63, [[0, 29, 5], [0, 30, 5]]],    # 귀환
+	35 => [65, [[0, 29, 5], [0, 30, 5]]],    # 비호
+	36 => [70, [[0, 29, 15], [0, 30, 15]]],  # 구름의기원
+	37 => [76, [[0, 29, 10], [0, 30, 30]]],  # 신수 5성
+	41 => [85, [[0, 30, 10], [0, 31, 3]]],   # 체마혈식
+	42 => [90, [[0, 30, 10], [0, 31, 3]]],   # 주술마도
+	44 => [99, [[0, 99, 4], [0, 100, 4]]],   # 헬파이어
+}
+
+# 도사
+REQ_SKILL_DATA[3] = {
+	86 => [5, [[0, 3, 30], [0, 74, 10]]],   # 바다의희원
+	1 => [6, [[0, 5, 5], [0, 6, 5]]],       # 신수마법
+	46 => [8, [[0, 7, 2], [0, 8, 10]]],       # 무장
+	47 => [10, [[0, 9, 3], [0, 10, 3]]],    # 보호
+	15 => [13, [[0, 9, 10], [0, 10, 10]]],     # 공력증강
+	96 => [20, [[0, 11, 15], [0, 12, 15]]],    # 지진
+	81 => [23, [[0, 19, 5], [0, 20, 5]]],    # 동해의희원
+	83 => [30, [[0, 19, 10], [0, 20, 10]]],     # 천공의희원
+	90 => [35, [[0, 19, 20], [0, 20, 15]]],    # 분량방법
+	50 => [40, [[0, 28, 2], [0, 22, 10]]],     # 야수수금술
+	88 => [50, [[0, 29, 10], [0, 30, 10]]],    # 분량력법
+	89 => [55, [[0, 29, 15], [0, 30, 15]]],    # 구름의희원
+	92 => [60, [[0, 29, 10], [0, 30, 30]]],    # 공력주입
+	93 => [70, [[0, 29, 15], [0, 30, 15]]],    # 태양의희원
+	95 => [80, [[0, 29, 20], [0, 30, 20]]],     # 생명의희원
+	94 => [90, [[0, 31, 3], [0, 37, 3]]],      # 금강불체 
+	120 => [99, [[0, 99, 4], [0, 100, 4]]],    # 부활
+}
+
+# 도적
+REQ_SKILL_DATA[4] = {
+	5 => [5, [[0, 3, 30], [0, 74, 10]]],       # 누리의기원
+	26 => [6, [[0, 5, 10], [0, 6, 10]]],      # 누리의힘
+	1 => [10, [[0, 9, 15], [0, 10, 15]]],      # 신수마법
+	27 => [15, [[0, 10, 10], [0, 104, 20]]],   # 동해의기원
+	130 => [20, [[0, 11, 15], [0, 12, 15]]],   # 무영보법
+	131 => [23, [[0, 11, 10], [0, 12, 20]]],   # 투명
+	10 => [27, [[0, 12, 10], [0, 50, 10]]],    # 신수마법 1성
+	132 => [30, [[0, 50, 20], [0, 19, 10]]],   # 비영승보
+	16 => [35, [[0, 19, 10], [0, 20, 10]]],    # 신수마법 2성
+	29 => [40, [[0, 28, 5], [0, 22, 15]]],     # 천공의기원
+	140 => [50, [[0, 29, 20], [0, 30, 10]]],   # 운기
+	133 => [56, [[0, 29, 15], [0, 30, 5]]],    # 필살검무
+	64 => [64, [[0, 29, 10], [0, 30, 15]]],    # 십량분법
+	34 => [70, [[0, 29, 5], [0, 30, 5]]],      # 귀환
+	141 => [75, [[0, 29, 15], [0, 30, 20]]],   # 투명 1성
+	144 => [80, [[0, 29, 5], [0, 30, 5]]],     # 급소타격
+	43 => [81, [[0, 29, 10], [0, 30, 25]]],    # 위태응기
+	142 => [88, [[0, 30, 20], [0, 31, 3]]],    # 투명 2성
+	134 => [99, [[0, 99, 4], [0, 100, 4]]],    # 분신
+}
+
+
+# -------------END----------------- #
+
+
+# ----------------------------------#
+# ----- 직업별 승급 필요 체력, 마력---------#
+# ----------------------------------#
+NEED_ADVANCE_RESOURCE = {} # 각 요소는 승급시 필요 체/마
+NEED_ADVANCE_RESOURCE[0] = [
+	[15000, 10000], 
+	[50000, 80000], 
+	[150000, 250000], 
+	[300000, 600000]] # 주술사
+
+NEED_ADVANCE_RESOURCE[1] = [
+	[35000, 2000], 
+	[200000, 5000], 
+	[600000, 10000], 
+	[1400000, 150000]] # 전사
+
+NEED_ADVANCE_RESOURCE[2] = [
+	[12000, 8000], 
+	[40000, 70000], 
+	[100000, 200000], 
+	[250000, 500000]] # 도사
+
+NEED_ADVANCE_RESOURCE[3] = [
+	[35000, 2000], 
+	[200000, 5000], 
+	[600000, 10000], 
+	[1400000, 150000]] # 도적
+
+# 승급 차수당 경험치 판매 단위
+NEED_ADVANCE_EXP = [
+	[1_000_000, 1_000_000], 		# 0차 
+	[3_000_000, 3_000_000], # 1차 
+	[6_000_000, 6_000_000], # 2차 
+	[10_000_000, 10_000_000], # 3차 
+	[10_000_000, 10_000_000], # 4차
+]
+# -------------END----------------- #
+
+class Rpg_skill
+	# 직업별 배울 마법 찾기
+	def find_will_learn_skill(type) # 직업
+		# data[스킬 아이디] : [스킬 필요레벨, [[재료 타입, 재료 아이디, 재료 개수], [...]]]
+		actor = $game_party.actors[0]
+		sorted_skills = REQ_SKILL_DATA[type].sort_by { |_, data| data[0] }
+		
+		temp = case
+		when $game_switches[1] then 0
+		when $game_switches[2] then 1
+		when $game_switches[3] then 2
+		when $game_switches[4] then 3
+		else 0
 		end
-		attr_accessor :id
-		attr_accessor :name
-		attr_accessor :icon_name
-		attr_accessor :description
-		attr_accessor :scope
-		attr_accessor :occasion
-		attr_accessor :animation1_id
-		attr_accessor :animation2_id
-		attr_accessor :menu_se
-		attr_accessor :common_event_id
-		attr_accessor :hp_cost
-		attr_accessor :sp_cost
-		attr_accessor :power
-		attr_accessor :atk_f
-		attr_accessor :eva_f
-		attr_accessor :str_f
-		attr_accessor :dex_f
-		attr_accessor :agi_f
-		attr_accessor :int_f
-		attr_accessor :hit
-		attr_accessor :pdef_f
-		attr_accessor :mdef_f
-		attr_accessor :variance
-		attr_accessor :element_set
-		attr_accessor :plus_state_set
-		attr_accessor :minus_state_set
+		
+		sorted_skills.each do |id, data|
+			s_id = id + (SINSU_SKILL_ID.include?(id) ? temp : 0)
+			
+			# 업그레이드 되는 스킬이면 이전 하위 스킬을 건너뜀
+			next if UPGRADE_SKILL_ID.values.any? do |arr|
+				arr.include?(s_id) && arr.any? { |u_id| actor.skill_learn?(u_id) && (s_id <= u_id) }
+			end
+			
+			return id unless actor.skill_learn?(s_id)
+		end
+		
+		return nil
+	end
+	
+	# 해당 스킬을 배우는데 필요한 재료
+	def req_skill_item(type, id) # 직업, 배우려고하는 아이디
+		return nil unless id
+		
+		# data[스킬 아이디] : [스킬 필요레벨, [[재료 타입, 재료 아이디, 재료 개수], [...]]]
+		# type : 1 전사, 2 주술사, 3 도사, 4 도적
+		data = REQ_SKILL_DATA[type][id]
+		return nil unless data 
+		
+		temp = case
+		when $game_switches[1] then 0
+		when $game_switches[2] then 1
+		when $game_switches[3] then 2
+		when $game_switches[4] then 3
+		else 0
+		end
+		
+		id += temp if SINSU_SKILL_ID.include?(id)
+		
+		return {
+			"level" => data[0],
+			"skill_id" => id,
+			"req_data" => data[1]
+		}
+	end
+	
+	# 승급시 필요 체력, 마력 반환하는 함수
+	def need_advancement_resource
+		self.job_select # 현재 상태 초기화
+		# NEED_ADVANCE_RESOURCE[0] = [[4500, 4500], [10000, 15000], [25000, 40000], [70000, 120000]] # 주술사
+		idx = -1
+		idx = 0 if $game_switches[6] # 주술사
+		idx = 1 if $game_switches[156] # 전사
+		idx = 2 if $game_switches[144] # 도사	
+		idx = 3 if $game_switches[426] # 도적	
+		
+		return if idx == -1
+		return if NEED_ADVANCE_RESOURCE[idx] == nil
+		return if NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i] == nil
+		
+		$game_variables[195] = NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i][0] # 승급 필요 체
+		$game_variables[196] = NEED_ADVANCE_RESOURCE[idx][$job_degree.to_i][1] # 승급 필요 마
+	end
+	
+	# 자기 직업 스위치 온
+	def job_select
+		# 주술사, 전사, 도사, 도적
+		job_switches = [6, 156, 144, 426]  # 직업 스위치
+		degree_switches = [0, 143, 150, 155, 358]  # 승급 차수 스위치
+		job_data = {
+			0 => [2, 3, 5, 6, 14],    # 주술사
+			1 => [7, 8, 9, 10, 15],   # 전사
+			2 => [4, 11, 12, 13, 16], # 도사
+			3 => [17, 18, 19, 20, 21] # 도적
+		}
+		reset_switches(job_switches + degree_switches)
+		
+		c_id = $game_party.actors[0].class_id
+		my_job_type, $job_degree = find_job_and_degree(c_id, job_data)
+		return unless my_job_type
+		
+		job_switch = job_switches[my_job_type]
+		
+		$game_switches[job_switch] = true 
+		(1..$job_degree).each { |i| $game_switches[degree_switches[i]] = true }
+		
+		[my_job_type, $job_degree]
+	end
+	
+	def reset_switches(switches)
+		switches.each { |id| $game_switches[id] = false }
+	end
+	
+	def find_job_and_degree(c_id, job_data)
+		job_data.each do |type, ids|
+			ids.each_with_index do |val, degree|
+				return [type, degree] if c_id == val
+			end
+		end
+		[nil, 0]  # 기본값으로 반환
+	end
+	
+	def set_learn_skill_data(data)
+		$temp_level = data["level"]
+		$game_variables[32] = data["skill_id"]
+		$temp_req_string = build_requirements_string(data["req_data"], "다네.", "라네.")
+	end
+	
+	def build_requirements_string(req_data, msg1 = "습니다.", msg2 = "입니다.")
+		req_string_arr = []
+		req_string_arr << "필요한 재료는 다음과 같#{msg1}" # 시작 메시지
+		
+		temp_str = ""
+		i = 1
+		req_data.each do |type, id, num|
+			temp_str += "\n" if i % 4 == 0
+			
+			name = fetch_item_name(type, id)
+			num = change_number_unit(num)
+			temp_str += case type
+			when 0..2 then "[#{name} #{num}개] "
+			when 3 then "[#{num}전] "
+			end
+			i += 1
+		end
+		
+		req_string_arr << "#{temp_str}#{msg2}"
+		return req_string_arr.join("\n")
+	end
+	
+	def fetch_item_name(type, id)
+		case type
+		when 0 then $data_items[id].name
+		when 1 then $data_weapons[id].name
+		when 2 then $data_armors[id].name
+		when 3 then "금전"
+		end
+	end
+	
+	def check_learn_skill_data(data)
+		actor = $game_party.actors[0]
+		success, msg = check_need_item(data["req_data"], "하다네.")
+		unless success
+			$temp_req_string = msg
+			return false
+		end
+		
+		lose_need_item_data(data["req_data"])
+		actor.learn_skill(data["skill_id"])
+		return true
+	end
+	
+	# 스킬을 사용하기 위한 재료가 준비 됐는지 확인
+	def check_need_skill_item(id)
+		skill_data = $rpg_skill_data[id]
+		return true unless skill_data.need_item
+		
+		success, msg = check_need_item(skill_data.need_item) 
+		unless success
+			$console.write_line(msg)
+			return false
+		end
+		
+		lose_need_item_data(skill_data.need_item)
+		return true
+	end
+	
+	# 필효한 재료가 준비 됐는지 확인
+	def check_need_item(need_data, suffix = "합니다.")
+		msg = ""
+		return [false, msg] unless need_data
+		
+		need_data.each do |item_data|
+			sw, item, my_num = check_item_num(item_data)
+			unless sw
+				msg = build_missing_item_message(item_data, item, my_num)
+				msg += suffix
+				return [false, msg]
+			end
+		end
+		return [true, msg]
+	end
+	
+	def lose_need_item_data(need_data)
+		need_data.each { |item_data| lose_item_num(item_data) } # 재료 아이템 소모
+	end
+	
+	def check_item_num(data)
+		type, id, req_num = data
+		my_num, item = case type
+		when 0 then [$game_party.item_number(id), $data_items[id]]
+		when 1 then [$game_party.weapon_number(id), $data_weapons[id]]
+		when 2 then [$game_party.armor_number(id), $data_armors[id]]
+		when 3 then [$game_party.gold, nil]
+		end
+		
+		[my_num >= req_num, item, my_num]
+	end
+	
+	def lose_item_num(data)
+		type, id, num = data
+		case type
+		when 0 then $game_party.lose_item(id, num) # 아이템
+		when 1 then $game_party.lose_weapon(id, num) # 무기
+		when 2 then $game_party.lose_armor(id, num)# 방어구
+		when 3 then $game_party.lose_gold(num) # 금전
+		end
+	end
+	
+	def build_missing_item_message(data, item, my_num)
+		type, _, num = data
+		n = change_number_unit(num - my_num)
+		case type
+		when 0..2 then "#{item.name}(이)가 #{n}개 부족"
+		when 3 then "금전이 #{n}전 부족"
+		end
+	end
+	
+	def check_advance_resource(buy_type = "")
+		job_type, degree = job_select # 직업 타입과 승급 차수
+		actor = $game_party.actors[0]
+		
+		exp = actor.exp
+		base_hp = actor.take_base_max_stat("hp")
+		base_sp = actor.take_base_max_stat("sp")
+		
+		unit_hp, unit_sp = 100, 50 # 한 번당 오르는 체마 단위
+		limit_hp, limit_sp = MAXHP_LIMIT, MAXSP_LIMIT
+		limit_hp, limit_sp = NEED_ADVANCE_RESOURCE[job_type][degree].map {|val| val + 10000} if degree <= 3
+		unit_hp_exp, unit_sp_exp = NEED_ADVANCE_EXP[degree] # 한번당 필요한 경험치 단위
+		
+		if degree >= 4
+			val = 200000.0
+			unit_hp_exp = (unit_hp_exp * ((base_hp / val) + 1.0)).to_i
+			unit_sp_exp = (unit_sp_exp * ((base_sp / val) + 1.0)).to_i
+		end
+		
+		can_buy_hp = (exp / unit_hp_exp).to_i
+		can_buy_sp = (exp / unit_sp_exp).to_i
+		
+		msg = [
+			"자네의 경험치 #{change_number_unit(unit_hp_exp)}를 희생하여 체력 #{unit_hp} 또는",
+			"경험치 #{change_number_unit(unit_sp_exp)}를 희생하여 마력 #{unit_sp}을 증가 시킬 수 있다네..."
+		]
+		$temp_req_string = msg.join("\n")
+		
+		return [base_hp, unit_hp, limit_hp, unit_hp_exp, can_buy_hp] if buy_type == "hp"
+		return [base_sp, unit_sp, limit_sp, unit_sp_exp, can_buy_sp] if buy_type == "sp"
+		return []
 	end
 end
 
-class Rpg_Skill_Data
-	attr_accessor :type 
-	
-	# 원거리 스펙
-	attr_accessor :range_value # 이동 거리
-	attr_accessor :move_speed # 이동 속도
-	attr_accessor :character_name # 캐릭터이름
-	attr_accessor :explode_range # 폭발 범위
-	attr_accessor :hit_num # 타격 수
-	attr_accessor :hit_back # 넉백거리
-	attr_accessor :hit_skill_arr # 히트시 발생하는 스킬 배열
-	attr_accessor :after_mash_time # 후 딜레이
-	
-	# 버프 스펙
-	attr_accessor :is_party # 파티원에게 적용되나?
-	attr_accessor :mash_time # 스킬 쿨타임
-	attr_accessor :buff_time # 지속 시간
-	attr_accessor :buff_data # 버프 데이터
-	attr_accessor :is_move_stop # 움직이면 버프 끝?
-	attr_accessor :is_active # 엑티브 스킬인가
-	
-	attr_accessor :attack_power_per # 평타 최종뎀 퍼센트
-	attr_accessor :defense_per # 데미지 감소 퍼센트
-	attr_accessor :skill_power_per # 스킬 최종뎀 퍼센트
-	
-	attr_accessor :attack_critical # 평타 크리티컬 확률
-	attr_accessor :skill_critical # 스킬 크리티컬 확률
-	
-	attr_accessor :cycle_time # 주기적으로 실행하는 시간
-	attr_accessor :cycle_action # 주기적으로 실행하는 행동
-	attr_accessor :cycle_animation # 주기적으로 애니메이션
-	
-	# 스킬 스펙
-	attr_accessor :power # 기본 파워
-	attr_accessor :power_arr # 파워 비례 배열
-	attr_accessor :cost_arr # 비용 비례 배열
-	
-	# 기타
-	attr_accessor :show_effect # 범위 보이는 스위치
-	attr_accessor :need_item # 스킬 사용하기 위한 재료
-	attr_accessor :active_message # 스킬 사용시 대사
-	attr_accessor :move_direction # 스킬 이동방향 배열
-	
-	attr_accessor :heal_type # 회복 타입 : 체력, 마력
-	attr_accessor :heal_value # 회복량  
-	attr_accessor :heal_value_per # 비례 회복량 : [타입(현재, 전체), 체력, 마력]  
-	
-	attr_accessor :not_damage # 피해량 있는가
-	
-	attr_accessor :id # 아이디
-	attr_accessor :can_use_dead # 죽었을떄 사용 가능 여부
-	
-	attr_accessor :skill_data # rpg스킬 데이터
-	
-	def initialize(id)
-		@id = id
-		@skill_data = $data_skills[id]
-		@power = @skill_data.power
-		@is_party = false
-		@can_use_dead = false
-		@type = []
-		set_skill_attributes
-	end
-	
-	def set_skill_attributes
-		set_range_attributes if range_skill_ids.include?(@id)
-		set_explode_attributes if explode_skill_ids.include?(@id)
-		set_heal_attributes if heal_skill_ids.include?(@id)
-		set_active_attributes if active_skill_ids.include?(@id)
-		set_buff_attributes	 if buff_skill_ids.include?(@id)
-		set_debuff_attributes	 if debuff_skill_ids.include?(@id)
+class Game_Actor < Game_Battler
+	#--------------------------------------------------------------------------
+	# * Learn Skill
+	#     skill_id : skill ID
+	#--------------------------------------------------------------------------
+	alias rpg_skill_learn learn_skill
+	def learn_skill(skill_id)
+		rpg_skill_learn(skill_id) # 이전 함수 코드 실행
+		$console.write_line("마법 #{$data_skills[skill_id].name}을(를) 배웠다!") if $login_check
 		
-		set_default_attributes
-	end
-	
-	def range_skill_ids
-		[
-			# 주술사
-			1, 2, 3, 4,          # 뢰진주, 백열주, 화염주, 자무주
-			10, 11, 12, 13,      # 뢰진주, 백열주, 화염주, 자무주
-			16, 17, 18, 19,      # 뢰진주, 백열주, 화염주, 자무주
-			22, 23, 24, 25,      # 뢰진주, 백열주, 화염주, 자무주
-			30, 31, 32, 33,      # 뢰진주, 백열주, 화염주, 자무주
-			37, 38, 39, 40,      # 뢰진주 5성, 백열주 5성, 화염주 5성, 자무주 5성
-			14,                  # 뢰진주 첨
+		# 업그레이드 되는 스킬이면 이전 하위 스킬을 지움
+		UPGRADE_SKILL_ID.values.each do |u_skill|
+			next if !u_skill.include?(skill_id)
 			
-			44, 53, 57, 69,      # 헬파이어, 삼매진화, 삼매진화 2성, 삼매진화 3성
-			49, 52, 56,					 # 성려멸주, 성려멸주 1성, 성려멸주 2성
-			
-			58,                  # 지폭지술
-			68,                  # 폭류유성
-			181, 								 # 마비
-			184, 								 # 중독
-			
-			# 전사
-			65,                  # 뢰마도
-			67,                  # 건곤대나이
-			73,                  # 광량돌격
-			74, 75,              # 십리건곤, 뢰마도 2성
-			77,                  # 유비후타
-			78, 79, 80,          # 십리건곤 1성, 동귀어진, 십리건곤 2성
-			85,                  # 필살검무
-			
-			101,                 # 백호참
-			102,                 # 백리건곤 1성
-			103,                 # 어검술
-			104,                 # 포효검황
-			105,                 # 혈겁만파
-			106,                 # 초혼비무
-			
-			# 도사
-			96,                  # 지진
-			123,                 # 귀염추혼소
-			124,                 # 지진'첨
-			183,								 # 혼마술
-			
-			# 도적
-			133,                 # 필살검무
-			135,                 # 백호검무
-			137,                 # 이기어검
-			138,                 # 무형검
-			139,                 # 분혼경천
-			
-			# 적
-			45,                  # 산적 건곤
-			59,                  # 주작의 노도성황
-			61,                  # 백호의 건곤대나이
-			151,                 # 청룡의 포효
-			152,                 # 현무의 포효
-			153,                 # 백호검무
-			154,                 # 청룡마령참
-			155,                 # 암흑진파
-			156,                 # 흑룡광포
-			158,                 # 지옥겁화
-			159,                 # 혈겁만파
-			160,                 # 분혼경천
-			161,                  # 폭류유성
-			
-			# 기타
-			6,                   # 도토리 던지기
-		]
-	end
-	
-	def explode_skill_ids
-		[
-			6,   # 도토리 던지기
-			
-			53,  # 삼매진화
-			57,  # 삼매진화 2성
-			69,  # 삼매진화 3성
-			
-			103, # 어검술
-			
-			96,  # 지진
-			124, # 지진'첨
-			
-			135, # 백호검무
-			137  # 이기어검
-		]
-	end
-	
-	def heal_skill_ids
-		[
-			5,   # 누리의기원
-			21,  # 바다의기원
-			27,  # 동해의기원
-			29,  # 천공의기원
-			36,  # 구름의기원
-			41,  # 체마혈식
-			43,  # 위태응기
-			48,  # 태양의기원
-			54,  # 태양의기원 2성
-			55,  # 현인의기원
-			
-			81,  # 동해의희원
-			83,  # 천공의희원
-			86,  # 바다의희원
-			87,  # 천공의희원
-			89,  # 구름의희원
-			92,  # 공력주입
-			93,  # 태양의희원
-			95,  # 생명의희원
-			117, # 백호의희원
-			118, # 신령의희원
-			119, # 봉황의희원
-			120, # 부활
-			
-			140, # 운기
-			157,  # 적 회복 스킬
-			
-			184, # 중독
-		]
-	end
-	
-	
-	def active_skill_ids
-		[
-			15, 73, 132, 162
-		]
-	end
-	
-	def buff_skill_ids
-		[
-			# 주술사
-			20,  # 마법집중
-			26,  # 누리의힘
-			28,  # 야수
-			35,  # 비호
-			42,  # 주술마도
-			
-			# 도사
-			46,  # 무장
-			47,  # 보호
-			50,  # 야수수금술
-			51,  # 대지의힘
-			88,  # 분량력법
-			90,  # 분량방법
-			91,  # 석화기탄
-			94,  # 금강불체
-			121, # 신령지익진
-			122, # 파력무참진
-			
-			# 전사
-			62,  # 수심각도
-			63,  # 반영대도
-			64,  # 십량분법
-			66,  # 신수둔각도
-			71,  # 혼신의힘
-			72,  # 구량분법
-			76,  # 팔량분법
-			
-			# 도적
-			130, # 무영보법
-			131, # 투명 1성
-			134, # 분신
-			136, # 운상미보
-			140, # 운기
-			141, # 투명 2성
-			142, # 투명 3성
-			143, # 기문방술
-			144,  # 급소타격
-			
-			# 기타
-			99,  # 속도시약
-		]
-	end
-	
-	def debuff_skill_ids
-		[
-			# 주술사
-			181, # 마비
-			182, # 저주
-			184, # 중독
-			# 전사
-			
-			# 도적
-			
-			# 도사
-			183, # 혼마술
-			# 기타
-		]
-	end
-	
-	def set_range_attributes
-		@type << "range"
-		set_range_default
-	end
-	
-	def set_explode_attributes
-		@type << "explode"
-		@explode_range = 1 unless @explode_range
-		@show_effect = true
-	end
-	
-	def set_range_default
-		@range_value = 12
-		@move_speed = 10
-		@character_name = "공격스킬2"
-		@hit_num = 1
-		@hit_back = 0
-		@after_mash_time = 4
-		@hit_skill_arr = []
-		
-		case @id
-			# 주술사
-		when 1, 10, 16, 22, 30 # 뢰진주
-			@character_name = "(스킬)뢰진주"
-		when 2, 11, 17, 23, 31 # 백열주
-			@character_name = "(스킬)백열주"
-		when 3, 12, 18, 24, 32 # 화염주
-			@character_name = "(스킬)화염주"
-		when 4, 13, 19, 25, 33 # 자무주
-			@character_name = "(스킬)자무주"
-		when 6 # 도토리 던지기
-			@character_name = "도토리"
-			@explode_range = 3
-			@need_item = [[0, 3, 10]]
-			
-		when 14 # 뢰진주 첨
-			@range_value = 1
-			@character_name = "(스킬)뢰진주"
-			@move_direction = [2, 4, 6, 8]
-			
-		when 37 # 뢰진주 5성
-			@character_name = ["(스킬)뢰진주", 150]
-		when 38 # 백열주 5성
-			@character_name = ["(스킬)백열주", 180]
-		when 39 # 화염주 5성
-			@character_name = ["(스킬)화염주", 190]
-		when 40 # 자무주 5성
-			@character_name = ["(스킬)자무주", 90]
-			
-		when 44 # 헬파이어
-			@character_name = "(스킬)헬파이어"
-			@mash_time = 5
-			@power_arr = [0, 0, 0.7, 10] 
-			@cost_arr = [0, 0, 1.0]
-		when 53 # 삼매진화
-			@character_name = ["(스킬)헬파이어", 20]	
-			@mash_time = 5
-			@power_arr = [0, 0, 0.75, 10]
-			@cost_arr = [0, 0, 1.0]
-			@explode_range = 3
-		when 57 # 삼매진화 2성
-			@character_name = ["(스킬)헬파이어", 100]
-			@mash_time = 4
-			@power_arr = [0, 0, 0.8, 10]
-			@cost_arr = [0, 0, 1.0]
-			@explode_range = 3
-		when 69 # 삼매진화 3성
-			@character_name = ["(스킬)헬파이어", 190]
-			@hit_num = 2
-			@mash_time = 3.5
-			@power_arr = [0, 0, 1.0, 10]
-			@cost_arr = [0, 0, 1.0]
-			@explode_range = 4
-			
-		when 49 # 성려멸주
-			@range_value = 13
-			@character_name = "(스킬)성려멸주"
-			@power_arr = [1, 0, 0.03, 700] 
-			@cost_arr = [1, 0, 1.0 / 20.0]
-		when 52 # 성려멸주 1성
-			@range_value = 13
-			@character_name = ["(스킬)성려멸주", 30]
-			@power_arr = [1, 0, 0.04, 1000] 
-			@cost_arr = [1, 0, 1.0 / 20.0]
-		when 56 # 성려멸주 2성
-			@range_value = 13
-			@character_name = ["(스킬)성려멸주", 180]
-			@power_arr = [1, 0, 0.06, 1500] 
-			@cost_arr = [1, 0, 1.0 / 20.0]
-			
-		when 58 # 지폭지술
-			@hit_num = 3
-			@mash_time = 150
-			@power_arr = [0, 0, 0.75, 10]
-			@cost_arr = [0, 0, 1.0]
-		when 68 # 폭류유성
-			@hit_num = 3
-			@mash_time = 150
-			@power_arr = [0, 0.5, 1.0, 10]
-			@cost_arr = [0, 0.5, 1.0]
-			
-		when 181 # 마비
-			@hit_skill_arr = [[181, 1]]
-			
-		when 184 # 중독
-			@hit_skill_arr = [[184, 1]]
+			u_skill.each do |id|
+				return if id == skill_id
+				next if !skill_learn?(id)
 				
-			
-			# 전사 스킬
-		when 65 # 뢰마도
-			@range_value = 10
-			@character_name = "(스킬)뢰진주"
-			@mash_time = 2
-		when 75 # 뢰마도 2성
-			@range_value = 10
-			@character_name = ["(스킬)뢰진주", 180]
-			@mash_time = 1
-			
-		when 67 # 건곤대나이
-			@range_value = 1
-			@character_name = "(스킬)건곤2"
-			@mash_time = 1
-			@power_arr = [0, 0.9, 0, 70]
-			@cost_arr = [0, 2.0 / 3.0, 0]
-		when 73 # 광량돌격
-			@range_value = 1
-			@character_name = "(스킬)백호참"
-			@mash_time = 5
-			@power_arr = [0, 0.2, 0, 30]
-			@cost_arr = [0, 0.3, 0.10]
-		when 77 # 유비후타
-			@range_value = 2
-			@character_name = "(스킬)백열장"
-			@hit_back = 7
-			@mash_time = 1
-			
-		when 74 # 십리건곤
-			@range_value = 1
-			@character_name = "(스킬)검기"
-			@power_arr = [1, 0.01, 0, 40]
-			@cost_arr = [1, 1.0 / 20.0, 0]
-		when 78 # 십리건곤 1성
-			@range_value = 1
-			@character_name = "(스킬)검기"
-			@power_arr = [1, 0.02, 0.01, 60]
-			@cost_arr = [1, 1.0 / 20.0, 0]
-		when 80 # 십리건곤 2성
-			@range_value = 2
-			@character_name = "(스킬)검기2"
-			@power_arr = [1, 0.04, 0.01, 80]
-			@cost_arr = [1, 1.0 / 20.0, 0]
-		when 102 # 백리건곤 1성
-			@range_value = 3
-			@character_name = "(스킬)검기3"
-			@power_arr = [1, 0.06, 0.03, 100]
-			@cost_arr = [1, 1.0 / 20.0, 0.01]
-			
-		when 79 # 동귀어진
-			@range_value = 1
-			@character_name = "(스킬)동귀어진"
-			@hit_num = 10
-			@mash_time = 180
-			@power_arr = [0, 0.4, 0.01, 100]
-			@cost_arr = [0, 1.0, 1.0]
-		when 101 # 백호참
-			@range_value = 1
-			@hit_num = 2
-			@mash_time = 0.5
-			@power_arr = [0, 0.5, 0.1, 60]
-			@cost_arr = [0, 0.5, 0.05]
-			
-		when 103 # 어검술
-			@range_value = 1
-			@character_name = ["(스킬)검기3", 150]
-			@hit_num = 2
-			@mash_time = 8
-			@power_arr = [0, 0.3, 0.4, 60]
-			@cost_arr = [0, 0.3, 0.4]
-			@explode_range = 3
-		when 104 # 포효검황
-			@hit_num = 3
-			@mash_time = 150
-			@power_arr = [0, 0.3, 0.3, 20]
-			@cost_arr = [0, 0.4, 0.3]
-		when 105 # 혈겁만파
-			@hit_num = 3
-			@mash_time = 150
-			@power_arr = [0, 0.7, 0.7, 100] 
-			@cost_arr = [0, 0.5, 1.0]
-		when 106 # 초혼비무
-			@range_value = 4
-			@character_name = "(스킬)쇄혼비무"
-			@hit_num = 4
-			@hit_back = -3
-			@mash_time = 30
-			@power_arr = [0, 0.1, 0.7, 100] 
-			@cost_arr = [0, 0.3, 1.0]
-			
-			# 도사 스킬
-		when 96 # 지진
-			@range_value = 7
-			@character_name = "(스킬)지진"
-			@hit_num = 3
-			@power_arr = [1, 0, 0.03, 20]
-			@cost_arr = [1, 0, 1.0 / 10.0]
-			@explode_range = 2
-		when 123 # 귀염추혼소
-			@move_speed = 5
-			@hit_num = 3
-			@mash_time = 120
-			@power_arr = [0, 0.1, 0.1, 100] 
-			@cost_arr = [0, 0.2, 1.0]
-			@hit_skill_arr = [[183, 1]]
-		when 124 # 지진'첨
-			@range_value = 7
-			@character_name = ["(스킬)지진", 150]
-			@hit_num = 3
-			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
-			@mash_time = 25
-			@power_arr = [1, 0.01, 0.10, 150] 
-			@cost_arr = [1, 0.01, 0.8]
-			@explode_range = 2
-		when 183 # 혼마술
-			@hit_skill_arr = [[183, 1]]
-			
-			
-			# 도적 스킬
-		when 133 # 필살검무
-			@range_value = 1
-			@character_name = "(스킬)필살검무"
-			@mash_time = 1
-			@power_arr = [0, 1.2, 0.3, 20] 
-			@cost_arr = [0, 0.3, 1.0]
-		when 135 # 백호검무
-			@range_value = 0
-			@character_name = "(스킬)백호검무"
-			@mash_time = 3
-			@power_arr = [1, 0.10, 0.05, 70] 
-			@cost_arr = [1, 0.1, 0.1]
-			@explode_range = 2
-		when 137 # 이기어검
-			@range_value = 0
-			@character_name = "(스킬)검기"
-			@hit_num = 3
-			@mash_time = 18
-			@power_arr = [0, 0.2, 0.2, 20] 
-			@cost_arr = [0, 0.3, 0.3]
-			@explode_range = 4
-		when 138 # 무형검
-			@range_value = 15
-			@character_name = ["(스킬)검", 250]
-			@hit_num = 8
-			@mash_time = 1.5
-			@power_arr = [0, 0.07, 0.10, 50] 
-			@cost_arr = [0, 0.1, 0.15]
-			@hit_skill_arr = [[132, 0]]
-			
-		when 139 # 분혼경천
-			@hit_num = 3
-			@mash_time = 150
-			@power_arr = [0, 0.7, 0.7, 100] 
-			@cost_arr = [0, 0.5, 1.0]
-			
-			# 적 스킬
-		when 45 # 산적 건곤
-			@move_speed = 4.5
-			@character_name = ["(스킬)검기", 50]
-		when 59 # 주작의 노도성황
-			@range_value = 5
-		when 61 # 백호의 건곤대나이
-			@range_value = 5
-		when 85 # 필살검무
-			@move_speed = 3.5
-			@character_name = ["(스킬)필살검무", 150]
-			@range_value = 4
-			@mash_time = 1.5
-		when 151 # 청룡의 포효
-			@range_value = 10
-			@character_name = ["(몬)(승급)청룡", 90]
-			@hit_num = 1
-			@hit_back = 12
-			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
-			@mash_time = 10
-			@power_arr = [2, 0.05, 0.7, 100]
-		when 152 # 현무의 포효
-			@range_value = 10
-			@character_name = ["(몬)(승급)현무", 90]
-			@hit_num = 1
-			@hit_back = 12
-			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
-			@mash_time = 10
-			@power_arr = [2, 0.05, 0.7, 100]
-		when 153 # 백호검무
-			@range_value = 4
-			@character_name = "(스킬)검기3"
-			@hit_num = 2
-			@hit_back = 2
-			@move_direction = [2, 4, 6, 8]
-			@mash_time = 3
-		when 154 # 청룡마령참
-			@move_speed = 3
-			@range_value = 10
-			@character_name = "(몬)(승급)용"
-			@hit_num = 10
-			@hit_back = 6
-			@mash_time = 30
-			@show_effect = true
-			@power_arr = [2, 3.00, 3.00, 100]
-		when 155 # 암흑진파
-			@range_value = 6
-			@hit_num = 2
-			@hit_back = 1
-			@mash_time = 10
-			@show_effect = true
-			@power_arr = [2, 0.5, 0.5, 100] 
-		when 156 # 흑룡광포
-			@range_value = 8
-			@hit_num = 3
-			@hit_back = 1
-			@mash_time = 10
-			@show_effect = true
-			@power_arr = [2, 0.4, 0.3, 100] 
-		when 158 # 지옥겁화
-			@hit_num = 2
-			@hit_back = 1
-			@mash_time = 60
-			@show_effect = true
-			@power_arr = [2, 1.30, 0, 100] 
-		when 159 # 혈겁만파
-			@hit_num = 10
-			@hit_back = 3
-			@mash_time = 60
-			@show_effect = true
-			@power_arr = [2, 3.00, 3.00, 100] 
-		when 160 # 분혼경천
-			@hit_num = 10
-			@hit_back = 3
-			@mash_time = 60
-			@show_effect = true
-			@power_arr = [2, 3.00, 3.00, 100] 
-		when 161 # 폭류유성
-			@hit_num = 10
-			@hit_back = 3
-			@mash_time = 60
-			@show_effect = true
-			@power_arr = [2, 3.00, 3.00, 100] 
-			
-			
+				forget_skill(id) 
+				$console.write_line("이전 마법 #{$data_skills[id].name}은(는) 사라졌다!") if $login_check
+			end			
 		end
-	end
-	
-	def set_heal_attributes
-		@type << "heal"
-		@heal_type = "hp"
-		@heal_value = 0
 		
-		case @id
-		when 5 # 누리의기원
-			@heal_value = 50
-		when 21 # 바다의기원
-			@heal_value = 100
-		when 27 # 동해의기원
-			@heal_value = 160
-		when 29 # 천공의기원
-			@heal_value = 300
-		when 36 # 구름의기원
-			@heal_value = 500
-		when 41 # 체마혈식
-			@heal_type = "sp"
-			@heal_value_per = [1, 0.02, 0]
-			@cost_arr = [1, 0.20, 0]
-		when 43 # 위태응기
-			@heal_value_per = [0, 0, 2.1]
-			@cost_arr = [0, 0, 1.0]
-		when 48 # 태양의기원
-			@heal_value = 1000
-		when 54 # 태양의기원 1성
-			@heal_value = 2000
-		when 55 # 현인의기원
-			@heal_value = 5000
-			
-		when 81 # 동해의희원
-			@heal_value = 170
-			@is_party = true
-		when 83 # 천공의희원
-			@heal_value = 300
-			@is_party = true
-		when 86 # 바다의희원
-			@heal_value = 75
-			@is_party = true
-		when 87 # 천공의희원
-			@heal_value = 300
-			@is_party = true
-		when 89 # 구름의희원
-			@heal_value = 500
-			@is_party = true
-		when 92 # 공력주입
-			@heal_type = "sp"
-			@heal_value_per = [0, 0, 1.5]
-			@cost_arr = [0, 0, 0.99]
-			@is_party = true
-			
-		when 93 # 태양의희원
-			@heal_value = 1000
-			@is_party = true
-		when 95 # 생명의희원
-			@heal_value = 3000
-			@is_party = true
-		when 117 # 백호의희원
-			@heal_value_per = [0, 0, 4]
-			@cost_arr = [0, 0, 1.0]
-			@is_party = true
-			@mash_time = 5
-		when 118 # 신령의희원
-			@heal_value = 7000
-			@cost_arr = [1, 0, 0.02]
-			@is_party = true
-		when 119 # 봉황의희원
-			@heal_value = 15000
-			@cost_arr = [1, 0, 0.02]
-			@is_party = true
-		when 120 # 부활
-			@heal_type = "com"
-			@heal_value = 24
-			@is_party = true
-			@can_use_dead = true
-			@mash_time = 10
-			
-		when 140 # 운기
-			@heal_type = "sp"
-			@heal_value_per = [1, 0, 0.12]
-			@mash_time = 1
-			
-		when 157 # 적 회복 스킬
-			@heal_value_per = [1, 0.3, 0]
-			@mash_time = 10
-			
-		when 184 # 중독
-			@heal_value_per = [1, -0.01, 0]
-		end
-	end
-	
-	def set_buff_attributes
-		@type << "buff"
-		@buff_time = 180
-		@buff_data = []
-		
-		case @id
-			# 주술사
-		when 20 # 마법집중
-			@skill_critical = [15]
-		when 26 # 누리의힘
-			@buff_data = [["str", 20]]
-		when 28 # 야수
-			@buff_time = 60
-			@buff_data = [["com", 40]]
-		when 35 # 비호
-			@buff_time = 60
-			@buff_data = [["com", 42]]
-		when 42 # 주술마도
-			@buff_data = [["per_int", 1.2]]
-			@is_party = true
-			@skill_power_per = 1.2
-			
-			# 도사
-		when 50 # 야수수금술
-			@buff_time = 60
-			@buff_data = [["com", 40]]
-			@is_party = true
-		when 51 # 대지의힘
-			@buff_data = [["str", 30]]
-			@is_party = true
-		when 88 # 분량력법
-			@buff_time = 60
-			@buff_data = [["per_str", 1.2]]
-			@attack_power_per = 1.3
-			@skill_power_per = 1.2
-			@is_party = true
-		when 90 # 분량방법
-			@buff_time = 60
-			@buff_data = [["per_agi", 1.2]]
-			@defense_per = 0.2
-			@is_party = true
-		when 91 # 석화기탄
-			@buff_time = 60
-			@buff_data = [["com", 129]]
-		when 46 # 무장
-			@buff_data = [["mdef", 10], ["pdef", 10]]
-			@is_party = true
-		when 47 # 보호
-			@defense_per = 0.3
-			@is_party = true
-		when 94 # 금강불체
-			@buff_time = 5
-			@mash_time = 10
-			@defense_per = 0.99
-		when 121 # 신령지익진
-			@buff_time = 2
-			@mash_time = 2
-			@defense_per = 0.4
-			@is_party = true
-		when 122 # 파력무참진
-			@buff_time = 2
-			@mash_time = 2
-			@is_party = true
-			@attack_power_per = 1.5
-			@skill_power_per = 1.5
-			
-			# 전사
-		when 62 # 수심각도
-			@buff_data = [["agi", 50]]
-		when 63 # 반영대도
-			@buff_data = [["dex", 50]]
-		when 64 # 십량분법
-			@buff_data = [["per_str", 1.1]]
-			@attack_power_per = 1.1
-		when 66 # 신수둔각도
-			@buff_time = 60
-			@mash_time = 180
-			@buff_data = [["custom"]]
-		when 71 # 혼신의힘
-			@buff_time = 8
-			@mash_time = 90
-			@attack_power_per = 5
-			@skill_power_per = 2.0
-		when 72 # 구량분법
-			@buff_data = [["per_str", 1.2]]
-			@attack_power_per = 1.2
-		when 76 # 팔량분법
-			@buff_data = [["per_str", 1.3]]
-			@attack_power_per = 1.4
-			
-			# 도적
-		when 130 # 무영보법
-			@buff_data = [["dex", 50], ["agi", 50]]
-		when 131 # 투명 1성
-			@buff_time = 10
-			@buff_data = [["custom"]]
-			@attack_power_per = 6
-			@power_arr = [1, 0.01, 0, 0] 
-			@cost_arr = [1, 0.01, 0]
-		when 141 # 투명 2성
-			@buff_time = 10
-			@buff_data = [["custom"]]
-			@attack_power_per = 7
-			@power_arr = [1, 0.01, 0, 0] 
-			@cost_arr = [1, 0.01, 0]
-		when 142 # 투명 3성
-			@buff_time = 20
-			@buff_data = [["custom"]]
-			@attack_power_per = 8
-			@power_arr = [1, 0.02, 0.02, 0] 
-			@cost_arr = [1, 0.01, 0]
-			
-		when 134 # 분신
-			@buff_time = 60
-			@mash_time = 90
-			@buff_data = [["custom"]]
-			@attack_power_per = 3
-			@skill_power_per = 1.1
-		when 136 # 운상미보
-			@buff_data = [["speed", 0.5]]
-			@is_party = true
-		when 140 # 운기
-			@buff_time = 10
-			@buff_data = [["custom"]]
-			
-			@cycle_time = 1 # 주기적으로 실행하는 시간
-			@cycle_action = ["heal"] # 주기적으로 실행하는 행동
-			@is_move_stop = true
-		when 143 # 기문방술
-			@buff_time = 20
-			@mash_time = 120
-			@buff_data = [["custom"]]
-		when 144 # 급소타격
-			@attack_critical = [20]
-			# 기타
-		when 99 # 속도시약
-			@buff_time = 360
-			@buff_data = [["speed", 0.5]]
-			
-		end
-	end
-	
-	def set_debuff_attributes
-		@type << "debuff"
-		@buff_time = 180
-		@buff_data = []
-		
-		case @id
-		when 181 # 마비
-			@buff_time = 6
-			@buff_data = [["speed", -6]]
-			
-			@cycle_time = 2 # 주기적으로 실행하는 시간
-			@cycle_animation = 162
-			@not_damage = true
-		when 183 # 혼마술
-			@buff_time = 6
-			@buff_data = [["mdef", -30], ["pdef", -30]]
-			
-			@cycle_time = 2 # 주기적으로 실행하는 시간
-			@cycle_animation = 169
-			@not_damage = true
-		when 184 # 중독
-			@buff_time = 20
-			
-			@cycle_time = 3 # 주기적으로 실행하는 시간
-			@cycle_action = ["heal_debuff"] # 주기적으로 실행하는 행동
-			@cycle_animation = 161
-			@not_damage = true
-		end
-	end
-	
-	def set_active_attributes
-		@is_active = true
-		@type << "active"
-		
-		case @id
-		when 162 # 추격
-			@mash_time = 10
-		end
-	end
-	
-	def set_default_attributes
-		case @id
-		when 8 # 성황령
-			@can_use_dead = true
+		# 투명 등 숙련도 설정
+		$game_variables[10] = case skill_id
+		when 131 then 0
+		when 141 then 1
+		when 142 then 2
 		end
 	end
 end
-
-
-class Rpg_Skill_Initialize
-	attr_accessor :data
-	def initialize
-		@data = {}
-		
-		$data_skills.each_with_index do |skill, i|
-			next if skill == nil || skill.name == ""
-			@data[i] = Rpg_Skill_Data.new(i)
-		end
-	end
-end
-

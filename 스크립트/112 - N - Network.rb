@@ -54,6 +54,8 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 				@trade_conf = false
 				@servername = ""
 				@pm_getting = false
+				@receive_check = false
+				
 				@self_key1 = nil
 				@self_key2 = nil
 				@self_key3 = nil
@@ -913,7 +915,7 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					$game_map.update
 					return true
 					
-				when /<monster_save>(.*)<\/monster_save>/ # 서버로부터 몬스터 생성 명령어 받음
+				when /<monster_save>(.*)<\/monster_save>/ # 서버로부터 몬스터 데이터 받음
 					# 맵 id, 이벤트 id, 몹 id, x, y
 					data_hash = parseKeyValueData($1)
 					map_id = data_hash["map_id"].to_i
@@ -922,23 +924,23 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					id = data_hash["id"].to_i
 					hp = data_hash["hp"].to_i
 					sp = data_hash["sp"].to_i
-					x = data_hash["x"].to_i
-					y = data_hash["y"].to_i
 					direction = data_hash["direction"].to_i
-					respawn = data_hash["respawn"].to_i
 					mon_id = data_hash["mon_id"].to_i
 					return if mon_id == 0
 					
-					create_abs_monsters(mon_id, 1, id) unless $ABS.enemies[id]
+					unless $ABS.enemies[id]
+						e = $game_map.events[id]
+						return if e && !e.list # 이벤트는 있지만 스위치등 무언가로 꺼져있는 상태
+						
+						create_abs_monsters(mon_id, 1, id) 
+					end
 					
 					# 해당 맵에 있는 몹 id의 체력, x, y, 방향을 갱신
 					enemy = $ABS.enemies[id]
-					enemy.respawn = respawn
+					event = enemy.event
+					
 					enemy.hp = hp
 					enemy.sp = sp
-					
-					event = enemy.event
-					#event.moveto(x, y) # 몹 방향과 좌표 적용
 					event.direction = direction
 					
 					if enemy.hp <= 0
@@ -1027,14 +1029,16 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					data = $1.split(',')
 					# 몬스터 id, 유저 이름
 					id = data[0].to_i
-					name = data[1].to_s
+					name = data[1].to_s					
+					enemy = $ABS.enemies[id]
+					return unless enemy
 					
-					return if $ABS.enemies[id] == nil
-					
-					$ABS.enemies[id].aggro = false
 					if name == $game_party.actors[0].name
-						$ABS.enemies[id].aggro = true
-						$ABS.enemies[id].aggro_mash = 5 * 60	
+						enemy.aggro = true
+						enemy.aggro_mash = 5 * 60	
+					else
+						enemy.aggro = false
+						$ABS.reset_enemy_state(enemy)
 					end
 					
 				when /<mon_move>(.*)<\/mon_move>/ # 몹 이동 공유
@@ -1172,31 +1176,30 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					data = $1.split(",")
 					player = @players[data[0]]
 					skill = $data_skills[data[1].to_i]
+					skill_data = $rpg_skill_data[data[1].to_i]
 					
-					return if player == nil
-					return if skill == nil
+					return unless player 
+					return unless skill 
 					
 					actor = $game_party.actors[0]
 					actor.effect_skill(player, skill) if $game_switches[302]
-					range_skill = $ABS.RANGE_SKILLS[data[1].to_i]
-					
-					$ABS.jump($game_player, player, range_skill[4]) if actor.damage != "Miss" and actor.damage != 0 and range_skill != nil and range_skill[4] != 0
+					$ABS.jump($game_player, player, skill_data.hit_back) if skill_data.hit_back
 					
 					# 몬스터의 전체 공격에 의한 데미지 계산
 				when /<e_skill_effect>(.*)<\/e_skill_effect>/
 					data = $1.split(",")
 					enemy = $ABS.enemies[data[0].to_i]
 					skill = $data_skills[data[1].to_i]
+					skill_data = $rpg_skill_data[data[1].to_i]
 					
-					return if enemy == nil
-					return if skill == nil
+					return unless enemy
+					return unless skill 
 					
 					actor = $game_party.actors[0]
 					actor.effect_skill(enemy, skill)
-					range_skill = $ABS.RANGE_SKILLS[data[1].to_i]
 					
-					if actor.damage != "Miss" and actor.damage != 0
-						$ABS.jump($game_player, enemy.event, range_skill[4]) if range_skill != nil and range_skill[4] != 0
+					if actor.damage != 0
+						$ABS.jump($game_player, enemy.event, skill_data.hit_back) if skill_data.hit_back
 						ani_id = skill.animation2_id # 스킬 사용 측 애니메이션 id	
 						$game_player.animation_id = ani_id
 					end
@@ -1646,7 +1649,6 @@ if SDK.state('TCPSocket') == true and SDK.state('Network') #네트워크가 가�
 					event.erased = false
 					event.refresh
 					$ABS.rand_spawn(event) # 랜덤 위치 스폰
-					#$game_map.refresh
 					
 				when /<enemy_dead>(.*)<\/enemy_dead>/	
 					id = $1.to_i

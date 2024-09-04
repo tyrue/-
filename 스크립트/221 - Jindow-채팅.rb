@@ -34,6 +34,7 @@ class Jindow_Chat_Input < Jindow
 		"경험치이벤트" => :exp_event_command,
 		"드랍이벤트" => :drop_event_command,
 		"길막생성" => :create_roadblock_command,
+		"잠행" => :stealth_command,
 		"테스트" => :process_test_command,
 	}
 	
@@ -58,7 +59,8 @@ class Jindow_Chat_Input < Jindow
 		@sec = 0
 		@ox = 0
 		@oy = 0
-		@player_name = $game_party.actors[0].name
+		@actor = $game_party.actors[0]
+		@player_name = @actor.name
 		@map_infos = load_data("Data/MapInfos.rxdata")
 		@chat_list = []
 		@chat_idx = -1
@@ -325,6 +327,16 @@ class Jindow_Chat_Input < Jindow
 	
 	def create_roadblock_command(params)
 		create_npc(34)
+	end
+	
+	def stealth_command(params)
+		state = params[0]
+		
+		unless state
+			@actor.rpg_skill.buff_active(97) 
+		else
+			@actor.rpg_skill.buff_del(97)
+		end
 	end
 	
 	# ----------------아래는 일반 채팅--------------------------#

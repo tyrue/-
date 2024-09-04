@@ -1,512 +1,1014 @@
-# ///////////////////////////////설정 데이터들///////////////////////////////#
-sec = 60 # 1초
-SKILL_DIRECTION = {} # 범위 스킬 방향 및 개수
+# 스킬 클래스 구조 확인용
+module RPG
+	class Skill
+		def initialize
+			@id = 0
+			@name = ""
+			@icon_name = ""
+			@description = ""
+			@scope = 0
+			@occasion = 1
+			@animation1_id = 0
+			@animation2_id = 0
+			@menu_se = RPG::AudioFile.new("", 80)
+			@common_event_id = 0
+			
+			@hp_cost = 0 # 체력 소모량
+			@sp_cost = 0
+			
+			@power = 0
+			@atk_f = 0
+			@eva_f = 0
+			@str_f = 0
+			@dex_f = 0
+			@agi_f = 0
+			@int_f = 100
+			@hit = 100
+			@pdef_f = 0
+			@mdef_f = 100
+			@variance = 15
+			@element_set = []
+			@plus_state_set = []
+			@minus_state_set = []
+		end
+		attr_accessor :id
+		attr_accessor :name
+		attr_accessor :icon_name
+		attr_accessor :description
+		attr_accessor :scope
+		attr_accessor :occasion
+		attr_accessor :animation1_id
+		attr_accessor :animation2_id
+		attr_accessor :menu_se
+		attr_accessor :common_event_id
+		attr_accessor :hp_cost
+		attr_accessor :sp_cost
+		attr_accessor :power
+		attr_accessor :atk_f
+		attr_accessor :eva_f
+		attr_accessor :str_f
+		attr_accessor :dex_f
+		attr_accessor :agi_f
+		attr_accessor :int_f
+		attr_accessor :hit
+		attr_accessor :pdef_f
+		attr_accessor :mdef_f
+		attr_accessor :variance
+		attr_accessor :element_set
+		attr_accessor :plus_state_set
+		attr_accessor :minus_state_set
+	end
+end
+
+class Rpg_Skill_Data
+	attr_accessor :type 
+	
+	# 원거리 스펙
+	attr_accessor :range_value # 이동 거리
+	attr_accessor :move_speed # 이동 속도
+	attr_accessor :character_name # 캐릭터이름
+	attr_accessor :explode_range # 폭발 범위
+	attr_accessor :hit_num # 타격 수
+	attr_accessor :hit_back # 넉백거리
+	attr_accessor :hit_skill_arr # 히트시 발생하는 스킬 배열
+	attr_accessor :after_mash_time # 후 딜레이
+	
+	# 버프 스펙
+	attr_accessor :is_party # 파티원에게 적용되나?
+	attr_accessor :mash_time # 스킬 쿨타임
+	attr_accessor :buff_time # 지속 시간
+	attr_accessor :buff_data # 버프 데이터
+	attr_accessor :is_move_stop # 움직이면 버프 끝?
+	attr_accessor :is_active # 엑티브 스킬인가
+	
+	attr_accessor :attack_power_per # 평타 최종뎀 퍼센트
+	attr_accessor :defense_per # 데미지 감소 퍼센트
+	attr_accessor :skill_power_per # 스킬 최종뎀 퍼센트
+	
+	attr_accessor :attack_critical # 평타 크리티컬 확률
+	attr_accessor :skill_critical # 스킬 크리티컬 확률
+	
+	attr_accessor :cycle_time # 주기적으로 실행하는 시간
+	attr_accessor :cycle_action # 주기적으로 실행하는 행동
+	attr_accessor :cycle_animation # 주기적으로 애니메이션
+	
+	# 스킬 스펙
+	attr_accessor :power # 기본 파워
+	attr_accessor :power_arr # 파워 비례 배열
+	attr_accessor :cost_arr # 비용 비례 배열
+	
+	# 기타
+	attr_accessor :show_effect # 범위 보이는 스위치
+	attr_accessor :need_item # 스킬 사용하기 위한 재료
+	attr_accessor :active_message # 스킬 사용시 대사
+	attr_accessor :move_direction # 스킬 이동방향 배열
+	
+	attr_accessor :heal_type # 회복 타입 : 체력, 마력
+	attr_accessor :heal_value # 회복량  
+	attr_accessor :heal_value_per # 비례 회복량 : [타입(현재, 전체), 체력, 마력]  
+	
+	attr_accessor :not_damage # 피해량 있는가
+	
+	attr_accessor :id # 아이디
+	attr_accessor :can_use_dead # 죽었을떄 사용 가능 여부
+	
+	attr_accessor :skill_data # rpg스킬 데이터
+	
+	def initialize(id)
+		@id = id
+		@skill_data = $data_skills[id]
+		@power = @skill_data.power
+		@is_party = false
+		@can_use_dead = false
+		@type = []
+		set_skill_attributes
+	end
+	
+	def set_skill_attributes
+		set_range_attributes if range_skill_ids.include?(@id)
+		set_explode_attributes if explode_skill_ids.include?(@id)
+		set_heal_attributes if heal_skill_ids.include?(@id)
+		set_active_attributes if active_skill_ids.include?(@id)
+		set_buff_attributes	 if buff_skill_ids.include?(@id)
+		set_debuff_attributes	 if debuff_skill_ids.include?(@id)
+		
+		set_default_attributes
+	end
+	
+	def range_skill_ids
+		[
+			# 주술사
+			1, 2, 3, 4,          # 뢰진주, 백열주, 화염주, 자무주
+			10, 11, 12, 13,      # 뢰진주, 백열주, 화염주, 자무주
+			16, 17, 18, 19,      # 뢰진주, 백열주, 화염주, 자무주
+			22, 23, 24, 25,      # 뢰진주, 백열주, 화염주, 자무주
+			30, 31, 32, 33,      # 뢰진주, 백열주, 화염주, 자무주
+			37, 38, 39, 40,      # 뢰진주 5성, 백열주 5성, 화염주 5성, 자무주 5성
+			14,                  # 뢰진주 첨
+			
+			44, 53, 57, 69,      # 헬파이어, 삼매진화, 삼매진화 2성, 삼매진화 3성
+			49, 52, 56,					 # 성려멸주, 성려멸주 1성, 성려멸주 2성
+			
+			58,                  # 지폭지술
+			68,                  # 폭류유성
+			181, 								 # 마비
+			182,								 # 저주
+			184, 								 # 중독
+			
+			# 전사
+			65,                  # 뢰마도
+			67,                  # 건곤대나이
+			73,                  # 광량돌격
+			74, 75,              # 십리건곤, 뢰마도 2성
+			77,                  # 유비후타
+			78, 79, 80,          # 십리건곤 1성, 동귀어진, 십리건곤 2성
+			85,                  # 필살검무
+			
+			101,                 # 백호참
+			102,                 # 백리건곤 1성
+			103,                 # 어검술
+			104,                 # 포효검황
+			105,                 # 혈겁만파
+			106,                 # 초혼비무
+			
+			# 도사
+			96,                  # 지진
+			123,                 # 귀염추혼소
+			124,                 # 지진'첨
+			183,								 # 혼마술
+			
+			# 도적
+			133,                 # 필살검무
+			135,                 # 백호검무
+			137,                 # 이기어검
+			138,                 # 무형검
+			139,                 # 분혼경천
+			
+			# 적
+			45,                  # 산적 건곤
+			59,                  # 주작의 노도성황
+			61,                  # 백호의 건곤대나이
+			151,                 # 청룡의 포효
+			152,                 # 현무의 포효
+			153,                 # 백호검무
+			154,                 # 청룡마령참
+			155,                 # 암흑진파
+			156,                 # 흑룡광포
+			158,                 # 지옥겁화
+			159,                 # 혈겁만파
+			160,                 # 분혼경천
+			161,                  # 폭류유성
+			
+			# 기타
+			6,                   # 도토리 던지기
+			60,  # 운영자스킬
+		]
+	end
+	
+	def explode_skill_ids
+		[
+			6,   # 도토리 던지기
+			
+			53,  # 삼매진화
+			57,  # 삼매진화 2성
+			69,  # 삼매진화 3성
+			
+			103, # 어검술
+			
+			96,  # 지진
+			124, # 지진'첨
+			
+			135, # 백호검무
+			137  # 이기어검
+		]
+	end
+	
+	def heal_skill_ids
+		[
+			5,   # 누리의기원
+			21,  # 바다의기원
+			27,  # 동해의기원
+			29,  # 천공의기원
+			36,  # 구름의기원
+			41,  # 체마혈식
+			43,  # 위태응기
+			48,  # 태양의기원
+			54,  # 태양의기원 2성
+			55,  # 현인의기원
+			
+			81,  # 동해의희원
+			83,  # 천공의희원
+			86,  # 바다의희원
+			87,  # 천공의희원
+			89,  # 구름의희원
+			92,  # 공력주입
+			93,  # 태양의희원
+			95,  # 생명의희원
+			117, # 백호의희원
+			118, # 신령의희원
+			119, # 봉황의희원
+			120, # 부활
+			
+			140, # 운기
+			157,  # 적 회복 스킬
+			
+			184, # 중독
+		]
+	end
+	
+	
+	def active_skill_ids
+		[
+			15,  # 공력증강
+			73,  # 광량돌격
+			120, # 부활
+			132, # 비영승보
+			162, # 추격
+		]
+	end
+	
+	def buff_skill_ids
+		[
+			# 주술사
+			20,  # 마법집중
+			26,  # 누리의힘
+			28,  # 야수
+			35,  # 비호
+			42,  # 주술마도
+			
+			# 도사
+			46,  # 무장
+			47,  # 보호
+			50,  # 야수수금술
+			51,  # 대지의힘
+			88,  # 분량력법
+			90,  # 분량방법
+			91,  # 석화기탄
+			94,  # 금강불체
+			121, # 신령지익진
+			122, # 파력무참진
+			125, # 신령지익
+			126, # 파력무참
+			
+			# 전사
+			62,  # 수심각도
+			63,  # 반영대도
+			64,  # 십량분법
+			66,  # 신수둔각도
+			71,  # 혼신의힘
+			72,  # 구량분법
+			76,  # 팔량분법
+			
+			# 도적
+			130, # 무영보법
+			131, # 투명 1성
+			134, # 분신
+			136, # 운상미보
+			140, # 운기
+			141, # 투명 2성
+			142, # 투명 3성
+			143, # 기문방술
+			144,  # 급소타격
+			
+			# 기타
+			97,  # 잠행
+			99,  # 속도시약
+		]
+	end
+	
+	def debuff_skill_ids
+		[
+			# 주술사
+			181, # 마비
+			182, # 저주
+			184, # 중독
+			# 전사
+			
+			# 도적
+			
+			# 도사
+			183, # 혼마술
+			# 기타
+		]
+	end
+	
+	def set_range_attributes
+		@type << "range"
+		set_range_default
+	end
+	
+	def set_explode_attributes
+		@type << "explode"
+		@explode_range = 1 unless @explode_range
+		@show_effect = true
+	end
+	
+	def set_range_default
+		@range_value = 12
+		@move_speed = 10
+		@character_name = "공격스킬2"
+		@hit_num = 1
+		@hit_back = 0
+		@after_mash_time = 4
+		@hit_skill_arr = []
+		
+		case @id
+			# 주술사
+		when 1, 10, 16, 22, 30 # 뢰진주
+			@character_name = "(스킬)뢰진주"
+		when 2, 11, 17, 23, 31 # 백열주
+			@character_name = "(스킬)백열주"
+		when 3, 12, 18, 24, 32 # 화염주
+			@character_name = "(스킬)화염주"
+		when 4, 13, 19, 25, 33 # 자무주
+			@character_name = "(스킬)자무주"
+		when 6 # 도토리 던지기
+			@character_name = "도토리"
+			@explode_range = 3
+			@need_item = [[0, 3, 10]]
+			
+		when 14 # 뢰진주 첨
+			@range_value = 1
+			@character_name = "(스킬)뢰진주"
+			@move_direction = [2, 4, 6, 8]
+			
+		when 37 # 뢰진주 5성
+			@character_name = ["(스킬)뢰진주", 150]
+		when 38 # 백열주 5성
+			@character_name = ["(스킬)백열주", 180]
+		when 39 # 화염주 5성
+			@character_name = ["(스킬)화염주", 190]
+		when 40 # 자무주 5성
+			@character_name = ["(스킬)자무주", 90]
+			
+		when 44 # 헬파이어
+			@character_name = "(스킬)헬파이어"
+			@mash_time = 5
+			@power_arr = [0, 0, 0.7, 10] 
+			@cost_arr = [0, 0, 1.0]
+		when 53 # 삼매진화
+			@character_name = ["(스킬)헬파이어", 20]	
+			@mash_time = 5
+			@power_arr = [0, 0, 0.75, 10]
+			@cost_arr = [0, 0, 1.0]
+			@explode_range = 3
+		when 57 # 삼매진화 2성
+			@character_name = ["(스킬)헬파이어", 100]
+			@mash_time = 4
+			@power_arr = [0, 0, 0.8, 10]
+			@cost_arr = [0, 0, 1.0]
+			@explode_range = 3
+		when 69 # 삼매진화 3성
+			@character_name = ["(스킬)헬파이어", 190]
+			@hit_num = 2
+			@mash_time = 3.5
+			@power_arr = [0, 0, 1.0, 10]
+			@cost_arr = [0, 0, 1.0]
+			@explode_range = 4
+			
+		when 49 # 성려멸주
+			@range_value = 13
+			@character_name = "(스킬)성려멸주"
+			@power_arr = [1, 0, 0.03, 700] 
+			@cost_arr = [1, 0, 1.0 / 20.0]
+		when 52 # 성려멸주 1성
+			@range_value = 13
+			@character_name = ["(스킬)성려멸주", 30]
+			@power_arr = [1, 0, 0.04, 1000] 
+			@cost_arr = [1, 0, 1.0 / 20.0]
+		when 56 # 성려멸주 2성
+			@range_value = 13
+			@character_name = ["(스킬)성려멸주", 180]
+			@power_arr = [1, 0, 0.06, 1500] 
+			@cost_arr = [1, 0, 1.0 / 20.0]
+			
+		when 58 # 지폭지술
+			@hit_num = 3
+			@mash_time = 150
+			@power_arr = [0, 0, 0.75, 10]
+			@cost_arr = [0, 0, 1.0]
+		when 68 # 폭류유성
+			@hit_num = 3
+			@mash_time = 150
+			@power_arr = [0, 0.5, 1.0, 10]
+			@cost_arr = [0, 0.5, 1.0]
+			
+		when 181 # 마비
+			@hit_skill_arr = [[181, 1]]
+			
+		when 182 # 저주
+			@hit_skill_arr = [[182, 1]]
+			
+		when 184 # 중독
+			@hit_skill_arr = [[184, 1]]
+				
+			
+			# 전사 스킬
+		when 65 # 뢰마도
+			@range_value = 10
+			@character_name = "(스킬)뢰진주"
+			@mash_time = 5
+		when 75 # 뢰마도 2성
+			@range_value = 10
+			@character_name = ["(스킬)뢰진주", 180]
+			@mash_time = 3
+			
+		when 67 # 건곤대나이
+			@range_value = 1
+			@character_name = "(스킬)건곤2"
+			@mash_time = 1
+			@power_arr = [0, 0.9, 0, 70]
+			@cost_arr = [0, 2.0 / 3.0, 0]
+		when 73 # 광량돌격
+			@range_value = 1
+			@character_name = "(스킬)백호참"
+			@mash_time = 5
+			@power_arr = [0, 0.2, 0, 30]
+			@cost_arr = [0, 0.3, 0.10]
+		when 77 # 유비후타
+			@range_value = 2
+			@character_name = "(스킬)백열장"
+			@hit_back = 7
+			@mash_time = 1
+			
+		when 74 # 십리건곤
+			@range_value = 1
+			@character_name = "(스킬)검기"
+			@power_arr = [1, 0.01, 0, 50]
+			@cost_arr = [1, 1.0 / 25.0, 0]
+		when 78 # 십리건곤 1성
+			@range_value = 1
+			@character_name = "(스킬)검기"
+			@power_arr = [1, 0.02, 0.01, 65]
+			@cost_arr = [1, 1.0 / 25.0, 0]
+		when 80 # 십리건곤 2성
+			@range_value = 2
+			@character_name = "(스킬)검기2"
+			@power_arr = [1, 0.04, 0.01, 85]
+			@cost_arr = [1, 1.0 / 25.0, 0]
+		when 102 # 백리건곤 1성
+			@range_value = 3
+			@character_name = "(스킬)검기3"
+			@power_arr = [1, 0.06, 0.03, 100]
+			@cost_arr = [1, 1.0 / 25.0, 0.01]
+			
+		when 79 # 동귀어진
+			@range_value = 1
+			@character_name = "(스킬)동귀어진"
+			@hit_num = 10
+			@mash_time = 180
+			@power_arr = [0, 0.4, 0.01, 100]
+			@cost_arr = [0, 1.0, 1.0]
+		when 101 # 백호참
+			@range_value = 1
+			@hit_num = 2
+			@mash_time = 0.5
+			@power_arr = [0, 0.5, 0.1, 60]
+			@cost_arr = [0, 0.5, 0.05]
+			
+		when 103 # 어검술
+			@range_value = 1
+			@character_name = ["(스킬)검기3", 150]
+			@hit_num = 2
+			@mash_time = 8
+			@power_arr = [0, 0.3, 0.4, 60]
+			@cost_arr = [0, 0.3, 0.4]
+			@explode_range = 3
+		when 104 # 포효검황
+			@hit_num = 3
+			@mash_time = 150
+			@power_arr = [0, 0.3, 0.3, 20]
+			@cost_arr = [0, 0.4, 0.3]
+		when 105 # 혈겁만파
+			@hit_num = 3
+			@mash_time = 150
+			@power_arr = [0, 0.7, 0.7, 100] 
+			@cost_arr = [0, 0.5, 1.0]
+		when 106 # 초혼비무
+			@range_value = 4
+			@character_name = "(스킬)쇄혼비무"
+			@hit_num = 4
+			@hit_back = -3
+			@mash_time = 30
+			@power_arr = [0, 0.1, 0.7, 100] 
+			@cost_arr = [0, 0.3, 1.0]
+			
+			# 도사 스킬
+		when 96 # 지진
+			@range_value = 7
+			@character_name = "(스킬)지진"
+			@hit_num = 3
+			@power_arr = [1, 0, 0.03, 20]
+			@cost_arr = [1, 0, 1.0 / 15.0]
+			@explode_range = 2
+		when 123 # 귀염추혼소
+			@move_speed = 5
+			@hit_num = 3
+			@mash_time = 120
+			@power_arr = [0, 0.2, 0.4, 100] 
+			@cost_arr = [0, 0.2, 1.0]
+			@hit_skill_arr = [[183, 1]]
+		when 124 # 지진'첨
+			@range_value = 7
+			@character_name = ["(스킬)지진", 150]
+			@hit_num = 3
+			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
+			@mash_time = 25
+			@power_arr = [1, 0.01, 0.10, 150] 
+			@cost_arr = [1, 0.01, 0.8]
+			@explode_range = 2
+		when 183 # 혼마술
+			@hit_skill_arr = [[183, 1]]
+			
+			
+			# 도적 스킬
+		when 133 # 필살검무
+			@range_value = 1
+			@character_name = "(스킬)필살검무"
+			@mash_time = 1
+			@power_arr = [0, 1.2, 0.3, 20] 
+			@cost_arr = [0, 0.3, 1.0]
+		when 135 # 백호검무
+			@range_value = 0
+			@character_name = "(스킬)백호검무"
+			@mash_time = 3
+			@power_arr = [1, 0.10, 0.05, 70] 
+			@cost_arr = [1, 0.1, 0.1]
+			@explode_range = 2
+		when 137 # 이기어검
+			@range_value = 0
+			@character_name = "(스킬)검기"
+			@hit_num = 3
+			@mash_time = 18
+			@power_arr = [0, 0.2, 0.2, 20] 
+			@cost_arr = [0, 0.3, 0.3]
+			@explode_range = 4
+		when 138 # 무형검
+			@range_value = 15
+			@character_name = ["(스킬)검", 250]
+			@hit_num = 8
+			@mash_time = 1.5
+			@power_arr = [0, 0.07, 0.10, 50] 
+			@cost_arr = [0, 0.1, 0.15]
+			@hit_skill_arr = [[132, 0]]
+			
+		when 139 # 분혼경천
+			@hit_num = 3
+			@mash_time = 150
+			@power_arr = [0, 0.7, 0.7, 100] 
+			@cost_arr = [0, 0.5, 1.0]
+			
+			# 적 스킬
+		when 45 # 산적 건곤
+			@range_value = 10
+			@move_speed = 5
+			@character_name = ["(스킬)검기", 50]
+		when 59 # 주작의 노도성황
+			@range_value = 4
+		when 61 # 백호의 건곤대나이
+			@range_value = 4
+		when 85 # 필살검무
+			@range_value = 4
+			@move_speed = 4
+			@character_name = ["(스킬)필살검무", 150]
+			@mash_time = 1.5
+		when 151 # 청룡의 포효
+			@range_value = 10
+			@character_name = ["(몬)(승급)청룡", 90]
+			@hit_num = 1
+			@hit_back = 12
+			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
+			@mash_time = 10
+			@power_arr = [2, 0.3, 1.0, 100]
+		when 152 # 현무의 포효
+			@range_value = 10
+			@character_name = ["(몬)(승급)현무", 90]
+			@hit_num = 1
+			@hit_back = 12
+			@move_direction = [1, 2, 3, 4, 6, 7, 8, 9]
+			@mash_time = 10
+			@power_arr = [2, 0.3, 1.0, 100]
+		when 153 # 백호검무
+			@range_value = 4
+			@character_name = "(스킬)검기3"
+			@hit_num = 2
+			@hit_back = 2
+			@move_direction = [2, 4, 6, 8]
+			@mash_time = 3
+		when 154 # 청룡마령참
+			@move_speed = 3
+			@range_value = 10
+			@character_name = "(몬)(승급)용"
+			@hit_num = 10
+			@hit_back = 6
+			@mash_time = 30
+			@show_effect = true
+			@power_arr = [2, 3.00, 3.00, 100]
+		when 155 # 암흑진파
+			@range_value = 6
+			@hit_num = 2
+			@hit_back = 1
+			@mash_time = 10
+			@show_effect = true
+			@power_arr = [2, 0.5, 0.5, 100] 
+		when 156 # 흑룡광포
+			@range_value = 8
+			@hit_num = 3
+			@hit_back = 1
+			@mash_time = 10
+			@show_effect = true
+			@power_arr = [2, 0.4, 0.4, 100] 
+		when 158 # 지옥겁화
+			@hit_num = 1
+			@hit_back = 1
+			@mash_time = 60
+			@show_effect = true
+			@power_arr = [2, 1.50, 0, 100] 
+		when 159 # 혈겁만파
+			@hit_num = 10
+			@hit_back = 3
+			@mash_time = 60
+			@show_effect = true
+			@power_arr = [2, 3.00, 3.00, 100] 
+		when 160 # 분혼경천
+			@hit_num = 10
+			@hit_back = 3
+			@mash_time = 60
+			@show_effect = true
+			@power_arr = [2, 3.00, 3.00, 100] 
+		when 161 # 폭류유성
+			@hit_num = 10
+			@hit_back = 3
+			@mash_time = 60
+			@show_effect = true
+			@power_arr = [2, 3.00, 3.00, 100] 
+			
+			
+			# 기타
+			when 60 # 운영자스킬
+			@hit_num = 5
+			@hit_back = 3
+			@power_arr = [2, 5.00, 5.00, 100] 	
+		end
+	end
+	
+	def set_heal_attributes
+		@type << "heal"
+		@heal_type = "hp"
+		@heal_value = 0
+		
+		case @id
+		when 5 # 누리의기원
+			@heal_value = 50
+		when 21 # 바다의기원
+			@heal_value = 100
+		when 27 # 동해의기원
+			@heal_value = 160
+		when 29 # 천공의기원
+			@heal_value = 300
+		when 36 # 구름의기원
+			@heal_value = 500
+		when 41 # 체마혈식
+			@heal_type = "sp"
+			@heal_value_per = [1, 0.02, 0]
+			@cost_arr = [1, 0.20, 0]
+		when 43 # 위태응기
+			@heal_value_per = [0, 0, 2.1]
+			@cost_arr = [0, 0, 1.0]
+		when 48 # 태양의기원
+			@heal_value = 1000
+		when 54 # 태양의기원 1성
+			@heal_value = 2000
+		when 55 # 현인의기원
+			@heal_value = 5000
+			
+		when 81 # 동해의희원
+			@heal_value = 170
+			@is_party = true
+		when 83 # 천공의희원
+			@heal_value = 300
+			@is_party = true
+		when 86 # 바다의희원
+			@heal_value = 75
+			@is_party = true
+		when 87 # 천공의희원
+			@heal_value = 300
+			@is_party = true
+		when 89 # 구름의희원
+			@heal_value = 500
+			@is_party = true
+		when 92 # 공력주입
+			@heal_type = "sp"
+			@heal_value_per = [0, 0, 1.5]
+			@cost_arr = [0, 0, 0.99]
+			@is_party = true
+			
+		when 93 # 태양의희원
+			@heal_value = 1000
+			@is_party = true
+		when 95 # 생명의희원
+			@heal_value = 3000
+			@is_party = true
+		when 117 # 백호의희원
+			@heal_value_per = [0, 0, 4]
+			@cost_arr = [0, 0, 1.0]
+			@is_party = true
+			@mash_time = 5
+		when 118 # 신령의희원
+			@heal_value = 7000
+			@cost_arr = [1, 0, 0.02]
+			@is_party = true
+		when 119 # 봉황의희원
+			@heal_value = 15000
+			@cost_arr = [1, 0, 0.02]
+			@is_party = true
+		when 120 # 부활
+			@heal_type = "active"
+			@heal_value = 24
+			@is_party = true
+			@can_use_dead = true
+			@mash_time = 15
+			
+		when 140 # 운기
+			@heal_type = "sp"
+			@heal_value_per = [1, 0, 0.12]
+			@mash_time = 1
+			
+		when 157 # 적 회복 스킬
+			@heal_value_per = [1, 0.3, 0]
+			@mash_time = 10
+			
+		when 184 # 중독
+			@heal_value_per = [1, -0.01, 0]
+		end
+	end
+	
+	def set_buff_attributes
+		@type << "buff"
+		@buff_time = 180
+		@buff_data = []
+		
+		case @id
+			# 주술사
+		when 20 # 마법집중
+			@skill_critical = [15]
+		when 26 # 누리의힘
+			@buff_data = [["str", 20]]
+		when 28 # 야수
+			@buff_time = 60
+			@buff_data = [["com", 40]]
+		when 35 # 비호
+			@buff_time = 60
+			@buff_data = [["com", 42]]
+		when 42 # 주술마도
+			@buff_data = [["per_int", 1.2]]
+			@is_party = true
+			@skill_power_per = 1.2
+			
+			# 도사
+		when 50 # 야수수금술
+			@buff_time = 60
+			@buff_data = [["com", 40]]
+			@is_party = true
+		when 51 # 대지의힘
+			@buff_data = [["str", 30]]
+			@is_party = true
+		when 88 # 분량력법
+			@buff_data = [["per_str", 1.2]]
+			@attack_power_per = 1.3
+			@skill_power_per = 1.2
+			@is_party = true
+		when 90 # 분량방법
+			@buff_data = [["per_agi", 1.2]]
+			@defense_per = 0.2
+			@is_party = true
+		when 91 # 석화기탄
+			@buff_time = 60
+			@buff_data = [["com", 129]]
+		when 46 # 무장
+			@buff_data = [["mdef", 10], ["pdef", 10]]
+			@is_party = true
+		when 47 # 보호
+			@defense_per = 0.3
+			@is_party = true
+		when 94 # 금강불체
+			@buff_time = 5
+			@mash_time = 10
+			@defense_per = 0.99
+		when 121 # 신령지익진
+			@buff_time = 20
+			@mash_time = 20
+			@cycle_time = 3 # 주기적으로 실행하는 시간
+			@cycle_action = [["buff", 125]] # 주기적으로 실행하는 행동
+			
+		when 122 # 파력무참진
+			@buff_time = 20
+			@mash_time = 20
+			@cycle_time = 3 # 주기적으로 실행하는 시간
+			@cycle_action = [["buff", 126]] # 주기적으로 실행하는 행동
+			
+		when 125 # 신령지익
+			@is_party = true
+			@buff_time = 2
+			@defense_per = 0.4
+			
+		when 126 # 파력무참
+			@is_party = true
+			@buff_time = 2
+			@attack_power_per = 1.5
+			@skill_power_per = 1.5
+			
+			
+			# 전사
+		when 62 # 수심각도
+			@buff_data = [["agi", 50]]
+		when 63 # 반영대도
+			@buff_data = [["dex", 50]]
+		when 64 # 십량분법
+			@buff_data = [["per_str", 1.1]]
+			@attack_power_per = 1.1
+		when 66 # 신수둔각도
+			@buff_time = 60
+			@mash_time = 180
+			@buff_data = [["custom"]]
+		when 71 # 혼신의힘
+			@buff_time = 8
+			@mash_time = 90
+			@attack_power_per = 5
+			@skill_power_per = 2.0
+		when 72 # 구량분법
+			@buff_data = [["per_str", 1.2]]
+			@attack_power_per = 1.2
+		when 76 # 팔량분법
+			@buff_data = [["per_str", 1.3]]
+			@attack_power_per = 1.4
+			
+			# 도적
+		when 130 # 무영보법
+			@buff_data = [["dex", 50], ["agi", 50]]
+		when 131 # 투명 1성
+			@buff_time = 10
+			@buff_data = [["custom"]]
+			@attack_power_per = 6
+			@power_arr = [1, 0.01, 0, 0] 
+			@cost_arr = [1, 0.01, 0]
+		when 141 # 투명 2성
+			@buff_time = 10
+			@buff_data = [["custom"]]
+			@attack_power_per = 7
+			@power_arr = [1, 0.01, 0, 0] 
+			@cost_arr = [1, 0.01, 0]
+		when 142 # 투명 3성
+			@buff_time = 20
+			@buff_data = [["custom"]]
+			@attack_power_per = 8
+			@power_arr = [1, 0.02, 0.02, 0] 
+			@cost_arr = [1, 0.01, 0]
+			
+		when 134 # 분신
+			@buff_time = 60
+			@mash_time = 90
+			@buff_data = [["custom"]]
+			@attack_power_per = 3
+			@skill_power_per = 1.1
+		when 136 # 운상미보
+			@buff_data = [["speed", 0.5]]
+			@is_party = true
+		when 140 # 운기
+			@buff_time = 10
+			@buff_data = [["custom"]]
+			
+			@cycle_time = 1 # 주기적으로 실행하는 시간
+			@cycle_action = ["heal"] # 주기적으로 실행하는 행동
+			@is_move_stop = true
+		when 143 # 기문방술
+			@buff_time = 20
+			@mash_time = 120
+			@buff_data = [["custom"]]
+		when 144 # 급소타격
+			@attack_critical = [20]
+			
+			
+		# 기타
+		when 97 # 잠행
+			@buff_time = 1800
+			@buff_data = [["custom"]]
+			@defense_per = 1.0
+			
+		when 99 # 속도시약
+			@buff_time = 360
+			@buff_data = [["speed", 0.5]]
+			
+		end
+	end
+	
+	def set_debuff_attributes
+		@type << "debuff"
+		@buff_time = 180
+		@buff_data = []
+		
+		case @id
+		when 181 # 마비
+			@buff_time = 10
+			@buff_data = [["speed", -6]]
+			
+			@cycle_time = 2 # 주기적으로 실행하는 시간
+			@cycle_animation = 162
+			@not_damage = true
+			
+		when 182 # 저주
+			@buff_time = 15
+			@buff_data = [["mdef", -15], ["pdef", -15]]
+			
+			@cycle_time = 4 # 주기적으로 실행하는 시간
+			@cycle_animation = 160
+			@not_damage = true
+			
+		when 183 # 혼마술
+			@buff_time = 15
+			@buff_data = [["mdef", -40], ["pdef", -40]]
+			
+			@cycle_time = 4 # 주기적으로 실행하는 시간
+			@cycle_animation = 169
+			@not_damage = true
+		when 184 # 중독
+			@buff_time = 20
+			
+			@cycle_time = 3 # 주기적으로 실행하는 시간
+			@cycle_action = ["heal_debuff"] # 주기적으로 실행하는 행동
+			@cycle_animation = 161
+			@not_damage = true
+		end
+	end
+	
+	def set_active_attributes
+		@is_active = true
+		@type << "active"
+		
+		case @id
+		when 162 # 추격
+			@mash_time = 10
+		end
+	end
+	
+	def set_default_attributes
+		case @id
+		when 8 # 성황령
+			@can_use_dead = true
+		end
+	end
+end
+
+
+class Rpg_Skill_Initialize
+	attr_accessor :data
+	def initialize
+		@data = {}
+		
+		$data_skills.each_with_index do |skill, i|
+			next if skill == nil || skill.name == ""
+			@data[i] = Rpg_Skill_Data.new(i)
+		end
+	end
+end
 
-RANGE_SKILLS = {}	# 원거리 스킬
-RANGE_EXPLODE = {}	# 폭발 스킬
-
-SKILL_MASH_TIME = {} # 스킬 딜레이
-SKILL_BUFF_TIME = {} # 스킬 지속 시간 
-
-SKILL_POWER_CUSTOM = {} # 스킬 파워 설정
-SKILL_COST_CUSTOM = {} # 스킬 소모 자원 설정
-
-HEAL_SKILL = {} # 치유 마법 (기원류)
-PARTY_HEAL_SKILL = {} # 치유마법 (희원류)
-
-BUFF_SKILL = {} # 버프 스킬 값 저장
-PARTY_BUFF_SKILL = {} # 파티 버프 스킬 아이디 저장
-
-ACTIVE_SKILL = {} # 액티브 스킬 행동 커스텀
-
-NEED_SKILL_ACTIVE_ITEM = {} # 스킬 사용하기 위한 재료
-
-SKILL_ACTIVE_MESSAGE = {} # 스킬 사용시 메시지
-# //////////////////////////end///////////////////////////////#
-
-# /////////////////////////////// 회복 ///////////////////////////////#
-#HEAL_SKILL[id] = [힐 값, 파티 버프 여부] # 누리의힘
-
-HEAL_SKILL[5] = [75]  		# 누리의기원
-HEAL_SKILL[21] = [100]		# 바다의기원
-HEAL_SKILL[27] = [170]		# 동해의기원
-HEAL_SKILL[29] = [300]		# 천공의기원
-HEAL_SKILL[36] = [500]		# 구름의기원
-HEAL_SKILL[48] = [1000]		# 태양의기원
-HEAL_SKILL[54] = [2000]		# 태양의기원 1성
-HEAL_SKILL[55] = [5000]		# 현인의기원
-HEAL_SKILL[157] = [5000]	# 적 회복 스킬
-HEAL_SKILL[43] = [1]			# 위태응기
-# //////////////////////////end///////////////////////////////#
-
-# /////////////////////////////// 파티 회복 ///////////////////////////////#
-PARTY_HEAL_SKILL[81] = [170]  	# 동해의희원
-PARTY_HEAL_SKILL[83] = [200]  	# 천공의희원
-PARTY_HEAL_SKILL[86] = [75] 	 	# 바다의희원
-PARTY_HEAL_SKILL[87] = [200]  	# 천공의희원
-PARTY_HEAL_SKILL[89] = [500]  	# 구름의희원
-PARTY_HEAL_SKILL[93] = [1000] 	# 태양의희원
-PARTY_HEAL_SKILL[92] = [1]  		# 공력주입
-PARTY_HEAL_SKILL[95] = [3000]  	# 생명의희원
-PARTY_HEAL_SKILL[117] = [1]  		# 백호의희원
-PARTY_HEAL_SKILL[118] = [7000]  # 신령의희원
-PARTY_HEAL_SKILL[119] = [15000] # 봉황의희원
-PARTY_HEAL_SKILL[120] = [1]  		# 부활
-# //////////////////////////end///////////////////////////////#
-
-# /////////////////////////////// 버프 ///////////////////////////////#
-#BUFF_SKILL[id] = [time, 파티 버프 여부, [[스텟, 값, (버프 해제시 되돌릴 값)], []..]] # 누리의힘
-# 주술사
-BUFF_SKILL[20] = [180, false] # 마법집중
-BUFF_SKILL[26] = [180, false, [["str", 20]] ] # 누리의힘
-BUFF_SKILL[28] = [60, false, [["com", 40]] ] # 야수
-BUFF_SKILL[35] = [60, false, [["com", 42]] ] # 비호
-BUFF_SKILL[42] = [180, true, [["per_int", 1.2, 0]] ] # 주술마도
-
-# 도사
-BUFF_SKILL[50] = [60, true, [["com", 40]] ] # 야수수금술
-BUFF_SKILL[51] = [180, true, [["str", 30]] ] # 대지의힘
-BUFF_SKILL[88] = [60, true, [["per_str", 1.2, 0]] ] # 분량력법
-BUFF_SKILL[90] = [60, true, [["per_agi", 1.2, 0]] ] # 분량방법
-BUFF_SKILL[91] = [60, false, [["com", 129]] ] # 석화기탄
-BUFF_SKILL[46] = [180, true, [["mdef", 10], ["pdef", 10]] ] # 무장
-BUFF_SKILL[47] = [180, true] # 보호
-BUFF_SKILL[94] = [5, false] # 금강불체
-BUFF_SKILL[121] = [2, true] # 신령지익진
-BUFF_SKILL[122] = [2, true] # 파력무참진
-
-# 전사
-BUFF_SKILL[62] = [180, false, [["dex", 50]] ] # 수심각도
-BUFF_SKILL[63] = [180, false, [["agi", 50]] ] # 반영대도
-BUFF_SKILL[64] = [180, false, [["per_str", 1.1, 0]] ] # 십량분법
-BUFF_SKILL[66] = [60, false, [["custom", 1]] ] # 신수둔각도
-BUFF_SKILL[71] = [6, false, [["per_str", 1.6, 0]] ] # 혼신의힘
-BUFF_SKILL[72] = [180, false, [["per_str", 1.2, 0]] ] # 구량분법
-BUFF_SKILL[76] = [180, false, [["per_str", 1.3, 0]] ] # 팔량분법
-
-# 도적
-BUFF_SKILL[130] = [180, false, [["dex", 50], ["agi", 50]] ] # 무영보법
-BUFF_SKILL[131] = [10, false, [["custom", 1]] ] # 투명
-BUFF_SKILL[141] = [10, false, [["custom", 1]] ] # 투명 1성
-BUFF_SKILL[142] = [20, false, [["custom", 1]] ] # 투명 2성
-BUFF_SKILL[134] = [120, false, [["custom", 1]] ] # 분신
-BUFF_SKILL[136] = [180, true, [["speed", 0.5]] ] # 운상미보
-BUFF_SKILL[140] = [10, false, [["custom", 1]] ] # 운기
-BUFF_SKILL[143] = [20, false, [["custom", 1]] ] # 기문방술
-BUFF_SKILL[144] = [180, false] # 급소타격
-
-# 기타
-BUFF_SKILL[99] = [360, false, [["speed", 0.5]] ] # 속도시약
-# //////////////////////////end///////////////////////////////#
-
-# ///////////////////////////////디버프 스킬 ///////////////////////////////#
-DEBUFF_SKILL = {}
-# 주술사
-DEBUFF_SKILL[181] = [10, false, [["custom", 1]] ] # 마비
-DEBUFF_SKILL[182] = [10, false, [["mdef", -10], ["pdef", -10]] ] # 저주
-
-# 전사
-
-# 도적
-
-# 도사
-DEBUFF_SKILL[183] = [20, false, [["mdef", -20], ["pdef", -20]] ] # 혼마술
-
-# 적
-
-# //////////////////////////end///////////////////////////////#
-
-# ///////////////////////////////액티브 커스텀 스킬///////////////////////////////#
-# 주술사
-ACTIVE_SKILL[15] = [] # 공력증강
-
-# 전사
-ACTIVE_SKILL[73] = [] # 광량돌격
-
-# 도적
-ACTIVE_SKILL[132] = [] # 비영승보
-
-# 적
-ACTIVE_SKILL[162] = [] # 추격
-# //////////////////////////end///////////////////////////////#
-
-# ///////////////////////////////원거리 스킬///////////////////////////////#
-# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, 히트수
-# 주술사
-RANGE_SKILLS[1] = [12, 10, "(스킬)뢰진주", 4, 0] 	#뢰진주
-RANGE_SKILLS[2] = [12, 10, "(스킬)백열주", 4, 0] 	#백열주
-RANGE_SKILLS[3] = [12, 10, "(스킬)화염주", 4, 0] 	#화염주
-RANGE_SKILLS[4] = [12, 10, "(스킬)자무주", 4, 0] 	#자무주
-
-RANGE_SKILLS[10] = [12, 10, "(스킬)뢰진주", 4, 0] #뢰진주 1성
-RANGE_SKILLS[11] = [12, 10, "(스킬)백열주", 4, 0] #백열주 1성
-RANGE_SKILLS[12] = [12, 10, "(스킬)화염주", 4, 0] #화염주 1성
-RANGE_SKILLS[13] = [12, 10, "(스킬)자무주", 4, 0] #자무주 1성
-
-RANGE_SKILLS[14] = [10, 10, "(스킬)뢰진주", 4, 0] #뢰진주 첨
-
-RANGE_SKILLS[16] = [12, 10, "(스킬)뢰진주", 4, 0] #뢰진주 2성
-RANGE_SKILLS[17] = [12, 10, "(스킬)백열주", 4, 0] #백열주 2성
-RANGE_SKILLS[18] = [12, 10, "(스킬)화염주", 4, 0] #화염주 2성
-RANGE_SKILLS[19] = [12, 10, "(스킬)자무주", 4, 0] #자무주 2성
-
-RANGE_SKILLS[22] = [12, 10, "(스킬)뢰진주", 4, 0] #뢰진주 3성
-RANGE_SKILLS[23] = [12, 10, "(스킬)백열주", 4, 0] #백열주 3성
-RANGE_SKILLS[24] = [12, 10, "(스킬)화염주", 4, 0] #화염주 3성
-RANGE_SKILLS[25] = [12, 10, "(스킬)자무주", 4, 0] #자무주 3성
-
-RANGE_SKILLS[30] = [12, 10, "(스킬)뢰진주", 4, 0] #뢰진주 4성
-RANGE_SKILLS[31] = [12, 10, "(스킬)백열주", 4, 0] #백열주 4성
-RANGE_SKILLS[32] = [12, 10, "(스킬)화염주", 4, 0] #화염주 4성
-RANGE_SKILLS[33] = [12, 10, "(스킬)자무주", 4, 0] #자무주 4성
-
-RANGE_SKILLS[37] = [12, 10, ["(스킬)뢰진주", 150], 4, 0] #뢰진주 5성
-RANGE_SKILLS[38] = [12, 10, ["(스킬)백열주", 180], 4, 0] #백열주 5성
-RANGE_SKILLS[39] = [12, 10, ["(스킬)화염주", 190], 4, 0] #화염주 5성
-RANGE_SKILLS[40] = [12, 10, ["(스킬)자무주", 90], 4, 0] #자무주 5성
-
-RANGE_SKILLS[44] = [12, 10, "(스킬)헬파이어", 4, 0] #헬파이어
-
-RANGE_SKILLS[49] = [13, 10, "(스킬)성려멸주", 4, 0] #성려멸주
-RANGE_SKILLS[52] = [13, 10, ["(스킬)성려멸주", 30], 4, 0] #성려멸주 1성
-RANGE_SKILLS[56] = [13, 10, ["(스킬)성려멸주", 180], 4, 0] #성려멸주 2성
-
-RANGE_SKILLS[58] = [12, 6, "공격스킬2", 4, 0, 3] #지폭지술
-RANGE_SKILLS[68] = [12, 6, "공격스킬2", 4, 0, 3] #폭류유성
-
-RANGE_SKILLS[181] = [12, 10, ["(스킬)자무주", 90], 4, 0] # 마비
-RANGE_SKILLS[182] = [12, 10, ["(스킬)자무주", 90], 4, 0] # 저주
-
-# 전사
-# 범위, 이동속도, 캐릭터이름, 후 딜레이 시간, 넉백 범위, 히트수
-RANGE_SKILLS[65] = [10, 10, "(스킬)뢰진주", 4, 0] #뢰마도
-RANGE_SKILLS[67] = [0, 5, "(스킬)건곤2", 4, 0] #건곤대나이
-RANGE_SKILLS[73] = [0, 6, "(스킬)백호참", 4, 0] #광량돌격
-RANGE_SKILLS[74] = [1, 5, "(스킬)검기", 4, 0] #십리건곤
-RANGE_SKILLS[75] = [10, 10, ["(스킬)뢰진주", 180], 4, 0] #뢰마도 1성
-RANGE_SKILLS[77] = [1, 10, "(스킬)백열장", 4, 7] #유비후타
-RANGE_SKILLS[78] = [1, 5, "(스킬)검기", 4, 0] #십리건곤 1성
-RANGE_SKILLS[79] = [0, 5, "(스킬)동귀어진", 4, 0, 10] #동귀어진
-RANGE_SKILLS[80] = [1, 5, "(스킬)검기2", 4, 0] #십리건곤 2성
-RANGE_SKILLS[101] = [0, 5, "(스킬)백호참", 4, 0, 2] #백호참
-RANGE_SKILLS[102] = [2, 10, "(스킬)검기3", 4, 0] #백리건곤 1성
-RANGE_SKILLS[104] = [12, 5, "공격스킬2", 4, 0, 3] #포효검황
-RANGE_SKILLS[105] = [12, 5, "공격스킬2", 4, 0, 3] #혈겁만파
-RANGE_SKILLS[106] = [4, 10, "(스킬)쇄혼비무", 4, -3, 4] #초혼비무
-
-# 도사
-RANGE_SKILLS[123] = [12, 5, "공격스킬2", 4, 0, 3] #귀염추혼소
-RANGE_SKILLS[183] = [12, 10, ["(스킬)자무주", 90], 4, 0] # 혼마술
-
-# 도적
-RANGE_SKILLS[133] = [0, 5, "(스킬)필살검무", 4, 0] #필살검무
-RANGE_SKILLS[138] = [15, 10, ["(스킬)검", 250], 4, 0, 8] #무형검
-RANGE_SKILLS[139] = [12, 5, "", 4, 0, 3] #분혼경천
-
-# 적 스킬
-RANGE_SKILLS[45] = [12, 4.5, ["(스킬)검기", 50], 4, 0] #산적 건곤
-RANGE_SKILLS[59] = [5, 3, "공격스킬", 4, 0] #주작의 노도성황
-RANGE_SKILLS[61] = [5, 3, "공격스킬", 4, 0] #백호의 건곤대나이
-RANGE_SKILLS[85] = [4, 3, ["(스킬)필살검무", 150], 4, 0] # 필살검무
-RANGE_SKILLS[151] = [10, 10, ["(몬)(승급)청룡", 90], 4, 8, 3] # 청룡의 포효
-RANGE_SKILLS[152] = [10, 10, ["(몬)(승급)현무", 90], 4, 8, 3] # 현무의 포효
-RANGE_SKILLS[153] = [4, 10, "(스킬)검기3", 4, 2, 2] # 백호검무
-RANGE_SKILLS[154] = [12, 3, "(몬)(승급)용", 4, 6, 10] # 청룡마령참
-RANGE_SKILLS[155] = [6, 2, "공격스킬", 4, 1, 2] # 암흑진파
-RANGE_SKILLS[156] = [8, 2, "공격스킬", 4, 1, 3] # 흑룡광포
-
-RANGE_SKILLS[158] = [12, 4, "공격스킬", 4, 1, 2] # 지옥겁화
-RANGE_SKILLS[159] = [12, 3, "공격스킬", 4, 3, 10] # 혈겁만파
-RANGE_SKILLS[160] = [12, 3, "공격스킬", 4, 3, 10] # 분혼경천
-RANGE_SKILLS[161] = [12, 3, "공격스킬", 4, 3, 10] # 폭류유성
-# //////////////////////////end///////////////////////////////#
-
-# ///////////////////////////////폭발 스킬///////////////////////////////#
-# 범위, 이동속도, 이미지 이름, 폭발범위, 딜레이, 넉백, 히트수
-# 주술사
-RANGE_EXPLODE[53] = [12, 10, ["(스킬)헬파이어", 20], 3, 4, 0] #삼매진화
-RANGE_EXPLODE[57] = [12, 10, ["(스킬)헬파이어", 100], 3, 4, 0] #삼매진화 1성
-RANGE_EXPLODE[69] = [12, 10, ["(스킬)헬파이어", 190], 4, 4, 0, 2] # 삼매진화 2성
-
-# 전사
-RANGE_EXPLODE[103] = [1, 5, ["(스킬)검기3", 150], 3, 4, 0, 2] # 어검술
-
-# 도사
-RANGE_EXPLODE[96] = [7, 10, "(스킬)지진", 2, 4, 0, 5] # 지진
-RANGE_EXPLODE[124] = [7, 6, ["(스킬)지진", 150], 2, 4, 0, 5] # 지진'첨
-
-# 도적
-RANGE_EXPLODE[135] = [0, 5, "(스킬)백호검무", 2, 4, 0] # 백호검무
-RANGE_EXPLODE[137] = [0, 5, "(스킬)검기", 4, 4, 0, 3] #이기어검
-
-# 기타
-RANGE_EXPLODE[6] = [10, 10, "도토리", 3, 4, 0] 	# 도토리 던지기
-# //////////////////////////end///////////////////////////////#
-
-
-# ///////////////////////////////스킬 공격력 설정///////////////////////////////#
-# 주술사
-# [[타입(현재(0), 전체(1)), 체력, 마력, 기본값]]
-SKILL_POWER_CUSTOM[44] = [[0, 0, 0.9, 10]] # 헬파이어
-SKILL_POWER_CUSTOM[53] = [[0, 0, 1.1, 10]] # 삼매진화
-SKILL_POWER_CUSTOM[57] = [[0, 0, 1.2, 10]] # 삼매진화 1성
-SKILL_POWER_CUSTOM[69] = [[0, 0, 1.3, 10]] # 삼매진화 2성
-
-SKILL_POWER_CUSTOM[49] = [[1, 0, 0.03, 700]] # 성려멸주 1성
-SKILL_POWER_CUSTOM[52] = [[1, 0, 0.04, 1000]] # 성려멸주 2성
-SKILL_POWER_CUSTOM[56] = [[1, 0, 0.06, 1500]] # 성려멸주 3성
-
-SKILL_POWER_CUSTOM[58] = [[0, 0, 0.75, 10]] # 지폭지술
-SKILL_POWER_CUSTOM[68] = [[0, 0.5, 1.0, 10]] # 폭류유성
-
-# 전사
-# [[타입(현재(0), 전체(1)), 체력, 마력, 기본값]]
-SKILL_POWER_CUSTOM[67] = [[0, 0.9, 0, 70]] # 건곤대나이
-SKILL_POWER_CUSTOM[73] = [[0, 0.2, 0, 30]] # 광량돌격
-SKILL_POWER_CUSTOM[79] = [[0, 1.0, 0.01, 100]] # 동귀어진
-SKILL_POWER_CUSTOM[101] = [[0, 0.5, 0.1, 60]] # 백호참
-SKILL_POWER_CUSTOM[103] = [[0, 0.3, 0.4, 60]] # 어검술
-SKILL_POWER_CUSTOM[104] = [[0, 0.3, 0.3, 20]] # 포효검황
-SKILL_POWER_CUSTOM[105] = [[0, 0.7, 0.7, 100]] # 혈겁만파
-SKILL_POWER_CUSTOM[106] = [[0, 0.1, 0.7, 100]] # 초혼비무
-
-SKILL_POWER_CUSTOM[74] = [[1, 0.01, 0, 30]] # 십리건곤
-SKILL_POWER_CUSTOM[78] = [[1, 0.02, 0.01, 50]] # 십리건곤 2성
-SKILL_POWER_CUSTOM[80] = [[1, 0.04, 0.01, 70]] # 십리건곤 3성
-SKILL_POWER_CUSTOM[102] = [[1, 0.06, 0.03, 100]] # 백리건곤 1성
-
-# 도사
-SKILL_POWER_CUSTOM[96] = [[1, 0, 0.03, 20]] # 지진
-SKILL_POWER_CUSTOM[123] = [[0, 0.6, 0.6, 100]] # 귀염추혼소
-SKILL_POWER_CUSTOM[124] = [[1, 0.01, 0.20, 150]] # 지진'첨
-
-# 도적
-SKILL_POWER_CUSTOM[133] = [[0, 1.2, 0.3, 20]] # 필살검무
-SKILL_POWER_CUSTOM[137] = [[0, 0.2, 0.2, 20]] # 이기어검
-SKILL_POWER_CUSTOM[138] = [[0, 0.07, 0.10, 50]] # 무형검
-SKILL_POWER_CUSTOM[139] = [[0, 0.7, 0.7, 100]] # 분혼경천
-
-SKILL_POWER_CUSTOM[135] = [[1, 0.10, 0.05, 70]] # 백호검무
-SKILL_POWER_CUSTOM[131] = [[1, 0.01, 0, 0]] # 투명1성
-SKILL_POWER_CUSTOM[141] = [[1, 0.01, 0, 0]] # 투명2성
-SKILL_POWER_CUSTOM[142] = [[1, 0.02, 0.02, 0]] # 투명3성
-
-# 적 스킬
-# [[타입(2 : 몬스터), 전체 체력 피해 비율, 전체 마력 피해 비율, 기본값]]
-SKILL_POWER_CUSTOM[151] = [[2, 0.05, 0.05, 100]] # 청룡의포효
-SKILL_POWER_CUSTOM[152] = [[2, 0.05, 0.05, 100]] # 현무의포효
-SKILL_POWER_CUSTOM[154] = [[2, 3.00, 3.00, 100]] # 청룡마령참
-SKILL_POWER_CUSTOM[155] = [[2, 0.5, 0.5, 100]] # 암흑진파
-SKILL_POWER_CUSTOM[156] = [[2, 0.4, 0.3, 100]] # 흑룡광포
-SKILL_POWER_CUSTOM[158] = [[2, 1.30, 0, 100]] # 지옥겁화
-SKILL_POWER_CUSTOM[159] = [[2, 3.00, 3.00, 100]] # 혈겁만파
-SKILL_POWER_CUSTOM[160] = [[2, 3.00, 3.00, 100]] # 분혼경천
-SKILL_POWER_CUSTOM[161] = [[2, 3.00, 3.00, 100]] # 폭류유성
-# //////////////////////////end///////////////////////////////#
-
-# ///////////////////////////////스킬 소모 자원 설정///////////////////////////////#
-# 주술사
-# [[타입(현재(0), 전체(1)), 체력, 마력]]
-SKILL_COST_CUSTOM[44] = [[0, 0, 1.0]] # 헬파이어
-SKILL_COST_CUSTOM[53] = [[0, 0, 1.0]] # 삼매진화
-SKILL_COST_CUSTOM[57] = [[0, 0, 1.0]] # 삼매진화 1성
-SKILL_COST_CUSTOM[69] = [[0, 0, 1.0]] # 삼매진화 2성
-
-SKILL_COST_CUSTOM[49] = [[1, 0, 1.0 / 20.0]] # 성려멸주
-SKILL_COST_CUSTOM[52] = [[1, 0, 1.0 / 20.0]] # 성려멸주 1성
-SKILL_COST_CUSTOM[56] = [[1, 0, 1.0 / 20.0]] # 성려멸주 2성
-
-SKILL_COST_CUSTOM[58] = [[0, 0, 1.0]] # 지폭지술
-SKILL_COST_CUSTOM[68] = [[0, 0.5, 1.0]] # 폭류유성
-
-# 전사
-# [[타입(현재(0), 전체(1)), 체력, 마력]]
-SKILL_COST_CUSTOM[67] = [[0, 2.0 / 3.0, 0]] # 건곤대나이
-SKILL_COST_CUSTOM[73] = [[0, 0.3, 0.10]] # 광량돌격
-SKILL_COST_CUSTOM[79] = [[0, 1.0, 1.0]] # 동귀어진
-SKILL_COST_CUSTOM[101] = [[0, 0.5, 0.05]] # 백호참
-SKILL_COST_CUSTOM[103] = [[0, 0.3, 0.4]] # 어검술
-SKILL_COST_CUSTOM[104] = [[0, 0.4, 0.3]] # 포효검황
-SKILL_COST_CUSTOM[105] = [[0, 0.5, 1.0]] # 혈겁만파
-SKILL_COST_CUSTOM[106] = [[0, 0.3, 1.0]] # 초혼비무
-
-SKILL_COST_CUSTOM[74] = [[1, 1.0 / 20.0, 0]] # 십리건곤
-SKILL_COST_CUSTOM[78] = [[1, 1.0 / 20.0, 0]] # 십리건곤 1성
-SKILL_COST_CUSTOM[80] = [[1, 1.0 / 20.0, 0]] # 십리건곤 2성
-SKILL_COST_CUSTOM[102] = [[1, 1.0 / 20.0, 0.01]] # 백리건곤 1성
-
-# 도사
-# [[타입(현재(0), 전체(1)), 체력, 마력]]
-SKILL_COST_CUSTOM[43] = [[0, 0, 1.0]] # 위태응기
-SKILL_COST_CUSTOM[92] = [[0, 0, 0.99]] # 공력주입
-SKILL_COST_CUSTOM[117] = [[0, 0, 1.0]] # 백호의희원
-SKILL_COST_CUSTOM[123] = [[0, 0.3, 0.5]] # 귀염추혼소
-
-SKILL_COST_CUSTOM[118] = [[1, 0, 0.02]] # 신령의희원
-SKILL_COST_CUSTOM[119] = [[1, 0, 0.02]] # 봉황의희원
-SKILL_COST_CUSTOM[96] = [[1, 0, 1.0 / 10.0]] # 지진
-SKILL_COST_CUSTOM[124] = [[1, 0.01, 0.7]] # 지진'첨
-
-# 도적
-SKILL_COST_CUSTOM[131] = [[1, 0.01, 0]] # 투명1성
-SKILL_COST_CUSTOM[141] = [[1, 0.01, 0]] # 투명2성
-SKILL_COST_CUSTOM[142] = [[1, 0.01, 0]] # 투명3성
-SKILL_COST_CUSTOM[135] = [[1, 0.1, 0.1]] # 백호검무
-
-SKILL_COST_CUSTOM[133] = [[0, 0.3, 1.0]] # 필살검무
-SKILL_COST_CUSTOM[137] = [[0, 0.3, 0.3]] # 이기어검
-SKILL_COST_CUSTOM[138] = [[0, 0.1, 0.15]] # 무형검
-SKILL_COST_CUSTOM[139] = [[0, 0.5, 1.0]] # 분혼경천
-# //////////////////////////end///////////////////////////////#
-
-# -------------------------스킬 딜레이----------------------------#
-# 주술사
-# 스킬 딜레이 [원래 딜레이, 현재 남은 딜레이]
-SKILL_MASH_TIME[44] = [5 * sec, 0] # 헬파이어
-SKILL_MASH_TIME[53] = [5 * sec, 0] # 삼매진화
-SKILL_MASH_TIME[57] = [4 * sec, 0] # 삼매진화 2성
-SKILL_MASH_TIME[58] = [150 * sec, 0] # 지폭지술
-SKILL_MASH_TIME[68] = [150 * sec, 0] # 폭류유성
-SKILL_MASH_TIME[69] = [3.5 * sec, 0] # 삼매진화 3성
-
-# 전사
-SKILL_MASH_TIME[65] = [2 * sec, 0] # 뢰마도
-SKILL_MASH_TIME[66] = [180 * sec, 0] # 신수둔각도
-SKILL_MASH_TIME[67] = [1 * sec, 0] # 건곤대나이
-SKILL_MASH_TIME[71] = [80 * sec, 0] # 혼신의힘
-SKILL_MASH_TIME[73] = [5 * sec, 0] # 광량돌격
-SKILL_MASH_TIME[75] = [1 * sec, 0] # 뢰마도 2성
-SKILL_MASH_TIME[77] = [1 * sec, 0] # 유비후타
-SKILL_MASH_TIME[79] = [180 * sec, 0] # 동귀어진
-SKILL_MASH_TIME[101] = [0.5 * sec, 0] # 백호참
-SKILL_MASH_TIME[103] = [8 * sec, 0] # 어검술
-SKILL_MASH_TIME[104] = [150 * sec, 0] # 포효검황
-SKILL_MASH_TIME[105] = [150 * sec, 0] # 혈겁만파
-SKILL_MASH_TIME[106] = [30 * sec, 0] # 초혼비무
-
-# 도사
-SKILL_MASH_TIME[94] = [10 * sec, 0] # 금강불체
-SKILL_MASH_TIME[117] = [5 * sec, 0] # 백호의희원
-SKILL_MASH_TIME[121] = [2 * sec, 0] # 신령지익진
-SKILL_MASH_TIME[122] = [2 * sec, 0] # 파력무참진
-SKILL_MASH_TIME[123] = [120 * sec, 0] # 귀염추혼소
-SKILL_MASH_TIME[124] = [20 * sec, 0] # 지진'첨
-
-# 도적
-SKILL_MASH_TIME[133] = [1 * sec, 0] # 필살검무
-SKILL_MASH_TIME[134] = [150 * sec, 0] # 분신
-SKILL_MASH_TIME[135] = [3 * sec, 0] # 백호검무
-SKILL_MASH_TIME[137] = [18 * sec, 0] # 이기어검
-SKILL_MASH_TIME[138] = [1.5 * sec, 0] # 무형검
-SKILL_MASH_TIME[139] = [150 * sec, 0] # 분혼경천
-SKILL_MASH_TIME[143] = [120 * sec, 0] # 기문방술
-
-# 적 스킬
-SKILL_MASH_TIME[85] = [1.5 * sec, 0] # 필살검무
-SKILL_MASH_TIME[151] = [10 * sec, 0] # 청룡포효
-SKILL_MASH_TIME[152] = [10 * sec, 0] # 현무포효
-SKILL_MASH_TIME[153] = [3 * sec, 0] # 백호검무
-SKILL_MASH_TIME[154] = [30 * sec, 0] # 청룡마령참
-SKILL_MASH_TIME[155] = [10 * sec, 0] # 암흑진파
-SKILL_MASH_TIME[156] = [10 * sec, 0] # 흑룡광포
-SKILL_MASH_TIME[157] = [10 * sec, 0] # 회복스킬
-SKILL_MASH_TIME[158] = [60 * sec, 0] # 지옥겁화
-SKILL_MASH_TIME[159] = [60 * sec, 0] # 혈겁만파
-SKILL_MASH_TIME[160] = [60 * sec, 0] # 분혼경천
-SKILL_MASH_TIME[161] = [60 * sec, 0] # 폭류유성
-SKILL_MASH_TIME[162] = [5 * sec, 0] # 추격
-
-# 기타
-SKILL_MASH_TIME[6] = [1 * sec, 0] # 도토리 던지기
-# //////////////////////////end///////////////////////////////#
-
-# -----------------------방향 설정--------------------------------#
-# 스킬의 이동 방향 배열, 배열 원소의 개수가 동시에 나가는 스킬의 개수
-# 도사
-SKILL_DIRECTION[124] = [1, 2, 3, 4, 6, 7, 8, 9] # 지진'첨
-
-# 적 스킬
-SKILL_DIRECTION[151] = [1, 2, 3, 4, 6, 7, 8, 9] # 청룡의 포효
-SKILL_DIRECTION[152] = [1, 2, 3, 4, 6, 7, 8, 9] # 현무의 포효
-SKILL_DIRECTION[153] = [2, 4, 6, 8] # 백호검무
-
-# //////////////////////////end///////////////////////////////#
-
-# ----------------------- 필요한 아이템 ----------------------------#
-# [아이템 타입, 아이템 id, 개수], []....
-NEED_SKILL_ACTIVE_ITEM[6] = [[0, 3, 10]] # 도토리 던지기, 도토리 1개
-# //////////////////////////end///////////////////////////////#
-
-# ----------------------- 스킬 사용시 메시지 ----------------------------#
-# 											 [스킬 사용시 말할거, 말풍선 지속시간, 말풍선 타입]
-SKILL_ACTIVE_MESSAGE[44] = ["DEFAULT!!", 4, 3] # 헬파이어
-# //////////////////////////end///////////////////////////////#
-
-# ----------------------- 평타, 스킬 비례 데미지 설정 ----------------------------#
-DAMAGE_CAL_ATTACK = {}
-DAMAGE_CAL_ATTACK[64] = [1.1] # 십량분법
-DAMAGE_CAL_ATTACK[71] = [5] # 혼신의힘
-DAMAGE_CAL_ATTACK[72] = [1.2] # 구량분법
-DAMAGE_CAL_ATTACK[76] = [1.4] # 팔량분법
-DAMAGE_CAL_ATTACK[88] = [1.3] # 분량력법
-DAMAGE_CAL_ATTACK[134] = [3] # 분신
-DAMAGE_CAL_ATTACK[122] = [1.5] # 파력무참진
-DAMAGE_CAL_ATTACK[131] = [6] # 투명 1성
-DAMAGE_CAL_ATTACK[141] = [7] # 투명 2성
-DAMAGE_CAL_ATTACK[142] = [8] # 투명 3성
-
-
-DAMAGE_CAL_DEFENSE = {}
-DAMAGE_CAL_DEFENSE[47] = [0.3] # 보호
-DAMAGE_CAL_DEFENSE[90] = [0.2] # 분량방법
-DAMAGE_CAL_DEFENSE[94] = [0.99] # 금강불체
-DAMAGE_CAL_DEFENSE[121] = [0.4] # 신령지익진
-
-DAMAGE_CAL_SKILL = {}
-DAMAGE_CAL_SKILL[42] = [1.2] # 주술마도
-DAMAGE_CAL_SKILL[71] = [2.0] # 혼신의힘
-DAMAGE_CAL_SKILL[88] = [1.2] # 분량력법
-DAMAGE_CAL_SKILL[134] = [1.1] # 분신
-DAMAGE_CAL_SKILL[122] = [1.5] # 파력무참진
-# //////////////////////////end///////////////////////////////#
-
-# ----------------------- 평타, 스킬 크리티컬 버프 설정 ----------------------------#
-CRITICAL_BUFF_NORMAL = {} # 확률 절대 증가량, (크리티컬 데미지 증가량)
-CRITICAL_BUFF_NORMAL[144] = [20] # 급소타격
-
-CRITICAL_BUFF_SKILL = {} # 확률 절대 증가량, (크리티컬 데미지 증가량)
-CRITICAL_BUFF_SKILL[20] = [15] # 마법 집중
-
-# ----------------------- 범위 마법 범위 보여주기 ----------------------------#
-SHOW_SKILL_EFECT = {}
-# 주술
-SHOW_SKILL_EFECT[53] = 1 #삼매진화
-SHOW_SKILL_EFECT[57] = 1 #삼매진화 1성
-SHOW_SKILL_EFECT[69] = 1 # 삼매진화 2성
-
-# 전사
-SHOW_SKILL_EFECT[103] = 1 # 어검술
-
-# 도사
-SHOW_SKILL_EFECT[96] = 1 # 지진
-SHOW_SKILL_EFECT[124] = 1 # 지진'첨
-
-# 도적
-SHOW_SKILL_EFECT[135] = 1 # 백호검무
-SHOW_SKILL_EFECT[137] = 1 #이기어검
-
-# 기타
-SHOW_SKILL_EFECT[6] = 1 	# 도토리 던지기
-
-# 적 스킬
-SHOW_SKILL_EFECT[154] = 1
-SHOW_SKILL_EFECT[155] = 1
-SHOW_SKILL_EFECT[156] = 1
-SHOW_SKILL_EFECT[158] = 1
-SHOW_SKILL_EFECT[159] = 1
-SHOW_SKILL_EFECT[160] = 1
-SHOW_SKILL_EFECT[161] = 1
-SHOW_SKILL_EFECT[200] = 1
-
-# //////////////////////////end///////////////////////////////#
-# -------------------------설정 데이터 끝-----------------------------#
